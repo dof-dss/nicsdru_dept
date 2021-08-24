@@ -1,0 +1,68 @@
+recipe: drupal9
+config:
+  webroot: web
+  php: '7.4'
+  composer_version: '2.0.7'
+  via: apache:2.4
+  database: mariadb:10.4
+  # https://docs.lando.dev/config/drupal9.html#using-drush
+  # As of Drupal 9 and Drush 10 it is preferred you use a site-local install of Drush (opens new window). For that reason Lando will not globall install a version of Drush for Drupal 9 sites.
+  drush: false
+  # https://docs.lando.dev/config/drupal9.html#using-xdebug
+  xdebug: false
+  config:
+    php: .lando/config/php.ini
+    database: .lando/config/my.cnf
+compose:
+  - docker-compose.yml
+env_file:
+  - .lando/config/.env
+proxy:
+  appserver:
+    - dept.admin.lndo.site
+    - dept.alpha.lndo.site
+    - dept.beta.lndo.site
+services:
+  appserver:
+    build:
+      - composer install
+  redis:
+    type: redis:5.0
+    # Use persist: true to persist the cache's data between restarts and rebuilds.
+    persist: true
+  solr:
+    type: solr:7
+    portforward: true
+    core: default
+  mailhog:
+    type: mailhog
+    portforward: true
+    hogfrom:
+      - appserver
+tooling:
+  xdebug-on:
+    service: appserver
+    description: Enable xdebug
+    cmd: "docker-php-ext-enable xdebug && /etc/init.d/apache2 reload"
+    user: root
+  xdebug-off:
+    service: appserver
+    description: Disable xdebug
+    cmd: "rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && /etc/init.d/apache2 reload"
+    user: root
+  phpunit:
+    description: "Run PHPUnit tests. You can pass options, e.g. --group=sitename"
+    service: appserver
+    cmd: cd /app/web/core && /app/vendor/bin/phpunit -c /app/web/core/phpunit.xml
+  phpcs:
+    description: Run PHPCS checks against all custom Drupal code
+    service: appserver
+    # Add dirs to check below, as needed.
+    cmd: /app/phpcs.sh "/app" "/app/web/sites /app/web/modules/origins /app/web/modules/custom /app/web/themes/custom"
+  drck:
+    description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
+    service: appserver
+    cmd: /app/vendor/bin/drupal-check
+  drush:
+    server: appserver
+    cmd: /app/vendor/bin/drush -r /app/web

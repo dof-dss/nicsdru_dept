@@ -1,0 +1,16 @@
+# Each route describes how an incoming URL is going to be processed by Platform.sh.
+"https://www.{default}/":
+  type: upstream
+  upstream: "dept:http"
+  cache:
+    enabled: false
+  redirects:
+    paths:
+      '^(.*/)index\.php/(.*)':
+        to: https://{default}/$2
+        regexp: true
+        code: 301
+
+"https://{default}/":
+  type: redirect
+  to: "https://www.{default}/"
