@@ -1,0 +1,13 @@
+uuid: 08f67198-6e96-46b6-b10e-992b234f1758
+langcode: en
+status: true
+dependencies:
+  module:
+    - domain
+_core:
+  default_config_hash: DlfMeJotYBEDBKUfJoO_srd8rHic6XNYvF4esU-kJPw
+id: domain_disable_action
+label: 'Disable domain record'
+type: domain
+plugin: domain_disable_action
+configuration: {  }

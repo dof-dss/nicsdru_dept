@@ -1,0 +1,15 @@
+uuid: 127dc787-1eee-4bb4-855a-7669550166d6
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+id: department_site-member
+label: Member
+weight: -100
+internal: true
+audience: member
+group_type: department_site
+permissions_ui: true
+permissions:
+  - 'view group_node:article entity'

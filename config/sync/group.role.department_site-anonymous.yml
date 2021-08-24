@@ -1,0 +1,15 @@
+uuid: e80fbff4-4f7e-41a6-8fbb-e8bb037d538d
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+id: department_site-anonymous
+label: Anonymous
+weight: -102
+internal: true
+audience: anonymous
+group_type: department_site
+permissions_ui: true
+permissions:
+  - 'view group_node:article entity'

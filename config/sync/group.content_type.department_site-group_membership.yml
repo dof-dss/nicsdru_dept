@@ -1,0 +1,17 @@
+uuid: f63bde91-fa29-40ba-9bc7-da20f1d7886f
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+  module:
+    - user
+id: department_site-group_membership
+label: 'Department site: Group membership'
+description: 'Adds users to groups as members.'
+group_type: department_site
+content_plugin: group_membership
+plugin_config:
+  group_cardinality: 0
+  entity_cardinality: 1
+  use_creation_wizard: false

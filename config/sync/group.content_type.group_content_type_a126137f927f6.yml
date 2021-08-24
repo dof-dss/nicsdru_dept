@@ -1,0 +1,19 @@
+uuid: d2c3e5d3-0e53-4aba-97db-b80d33763f57
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+    - media.type.document
+  module:
+    - groupmedia
+    - media
+id: group_content_type_a126137f927f6
+label: 'Department site: Group media (Document)'
+description: 'Adds <em class="placeholder">Document</em> content to groups both publicly and privately.'
+group_type: department_site
+content_plugin: 'group_media:document'
+plugin_config:
+  group_cardinality: 1
+  entity_cardinality: 1
+  use_creation_wizard: false

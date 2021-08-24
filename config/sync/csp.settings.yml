@@ -1,0 +1,28 @@
+report-only:
+  enable: true
+  directives:
+    script-src:
+      base: self
+    script-src-attr:
+      base: self
+    script-src-elem:
+      base: self
+    style-src:
+      base: self
+    style-src-attr:
+      base: self
+    style-src-elem:
+      base: self
+    frame-ancestors:
+      base: self
+  reporting:
+    plugin: none
+enforce:
+  enable: true
+  directives:
+    frame-ancestors:
+      base: self
+  reporting:
+    plugin: sitelog
+_core:
+  default_config_hash: o4-eDkmTmVdUICtL1VxWD3S9Ze8kNq_lHj6DskF8U8o

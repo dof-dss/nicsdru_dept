@@ -1,0 +1,17 @@
+uuid: 1e3a3471-29df-4e8d-9b6d-003e548bc4da
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+  enforced:
+    config:
+      - user.role.site_editor
+id: department_site-2b051a6d2
+label: 'Site editor'
+weight: 3
+internal: true
+audience: outsider
+group_type: department_site
+permissions_ui: false
+permissions: {  }

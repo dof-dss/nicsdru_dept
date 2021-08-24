@@ -1,0 +1,35 @@
+uuid: d2ffa332-9f80-4b1a-b37b-1b223096c4bf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.group.department_site.field_description
+    - group.type.department_site
+  module:
+    - text
+id: group.department_site.default
+targetEntityType: group
+bundle: department_site
+mode: default
+content:
+  field_description:
+    weight: -4
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  label:
+    label: hidden
+    type: string
+    weight: -5
+    region: content
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  changed: true
+  created: true
+  langcode: true
+  search_api_excerpt: true
+  uid: true

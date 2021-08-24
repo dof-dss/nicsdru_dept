@@ -1,0 +1,24 @@
+uuid: 72baa52b-fb14-4e38-bed1-127746dfe5a7
+langcode: en
+status: true
+dependencies: {  }
+id: site_admin
+label: 'Site admin'
+weight: 5
+is_admin: null
+permissions:
+  - 'administer menu'
+  - 'administer taxonomy'
+  - 'create terms in tags'
+  - 'delete any article content'
+  - 'delete any audio media'
+  - 'delete any document media'
+  - 'delete any image media'
+  - 'delete any page content'
+  - 'delete any remote_video media'
+  - 'delete any video media'
+  - 'delete terms in tags'
+  - 'edit any audio media'
+  - 'edit terms in tags'
+  - 'update any media'
+  - 'use text format full_html'

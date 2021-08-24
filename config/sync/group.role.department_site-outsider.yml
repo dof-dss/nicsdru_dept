@@ -1,0 +1,15 @@
+uuid: 757d947c-79f8-4c2b-88da-d3436169f35b
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+id: department_site-outsider
+label: Outsider
+weight: -101
+internal: true
+audience: outsider
+group_type: department_site
+permissions_ui: true
+permissions:
+  - 'view group_node:article entity'
