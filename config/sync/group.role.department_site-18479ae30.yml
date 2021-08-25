@@ -1,0 +1,17 @@
+uuid: 502b681b-dcc3-4b38-a024-6f8abe78680a
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+  enforced:
+    config:
+      - user.role.admin_user
+id: department_site-18479ae30
+label: 'admin user'
+weight: 7
+internal: true
+audience: outsider
+group_type: department_site
+permissions_ui: false
+permissions: {  }

@@ -1,0 +1,20 @@
+uuid: e28220ac-48c6-4344-b365-2de45101fac3
+langcode: en
+status: true
+dependencies:
+  module:
+    - domain
+  theme:
+    - bartik
+id: domainswitcherforadminsandtesting
+theme: bartik
+region: sidebar_first
+weight: -5
+provider: null
+plugin: domain_switcher_block
+settings:
+  id: domain_switcher_block
+  label: 'Domain switcher (for admins and testing)'
+  provider: domain
+  label_display: visible
+visibility: {  }

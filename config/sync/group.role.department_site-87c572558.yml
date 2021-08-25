@@ -1,0 +1,17 @@
+uuid: 02b8f848-2d5f-460f-adf6-fd608d5b9011
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+  enforced:
+    config:
+      - user.role.author_user
+id: department_site-87c572558
+label: 'author user'
+weight: 3
+internal: true
+audience: outsider
+group_type: department_site
+permissions_ui: false
+permissions: {  }
