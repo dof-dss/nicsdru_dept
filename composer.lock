@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0877d966fe54bbea178413f94ee56379",
+    "content-hash": "2354891b4b3900157d73d95aab9311f9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4002,6 +4002,54 @@
                 "source": "https://cgit.drupalcode.org/pathauto",
                 "issues": "https://www.drupal.org/project/issues/pathauto",
                 "documentation": "https://www.drupal.org/docs/8/modules/pathauto"
+            }
+        },
+        {
+            "name": "drupal/permissions_filter",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/permissions_filter.git",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/permissions_filter-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "1ada16d1e641cc9e78c3ffd109d75cd6afe39ff3"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1607272352",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "DieterHolvoet",
+                    "homepage": "https://www.drupal.org/user/3567222"
+                },
+                {
+                    "name": "ajay_reddy",
+                    "homepage": "https://www.drupal.org/user/3261994"
+                }
+            ],
+            "description": "Create a filter for permission page.",
+            "homepage": "https://www.drupal.org/project/permissions_filter",
+            "support": {
+                "source": "https://git.drupalcode.org/project/permissions_filter"
             }
         },
         {
@@ -12404,18 +12452,18 @@
             }
         },
         {
-            "name": "drupal/permissions_filter",
-            "version": "1.2.0",
+            "name": "drupal/fpa",
+            "version": "2.0.0-beta1",
             "source": {
                 "type": "git",
-                "url": "https://git.drupalcode.org/project/permissions_filter.git",
-                "reference": "8.x-1.2"
+                "url": "https://git.drupalcode.org/project/fpa.git",
+                "reference": "8.x-2.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/permissions_filter-8.x-1.2.zip",
-                "reference": "8.x-1.2",
-                "shasum": "1ada16d1e641cc9e78c3ffd109d75cd6afe39ff3"
+                "url": "https://ftp.drupal.org/files/projects/fpa-8.x-2.0-beta1.zip",
+                "reference": "8.x-2.0-beta1",
+                "shasum": "64a998536a762089a22d3edcde01a10ba73083f4"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
@@ -12423,11 +12471,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.2",
-                    "datestamp": "1607272352",
+                    "version": "8.x-2.0-beta1",
+                    "datestamp": "1614307431",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -12437,18 +12485,22 @@
             ],
             "authors": [
                 {
-                    "name": "DieterHolvoet",
-                    "homepage": "https://www.drupal.org/user/3567222"
+                    "name": "HakS",
+                    "homepage": "https://www.drupal.org/user/1815198"
                 },
                 {
-                    "name": "ajay_reddy",
-                    "homepage": "https://www.drupal.org/user/3261994"
+                    "name": "VladimirAus",
+                    "homepage": "https://www.drupal.org/user/673120"
+                },
+                {
+                    "name": "corey.aufang",
+                    "homepage": "https://www.drupal.org/user/163737"
                 }
             ],
-            "description": "Create a filter for permission page.",
-            "homepage": "https://www.drupal.org/project/permissions_filter",
+            "description": "Fast filtering on permissions administration form.",
+            "homepage": "https://www.drupal.org/project/fpa",
             "support": {
-                "source": "https://git.drupalcode.org/project/permissions_filter"
+                "source": "https://git.drupalcode.org/project/fpa"
             }
         },
         {
@@ -15641,7 +15693,8 @@
         "drupal/flag": 10,
         "drupal/groupmedia": 15,
         "drupal/search_api_spellcheck": 10,
-        "drupal/ultimate_cron": 15
+        "drupal/ultimate_cron": 15,
+        "drupal/fpa": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
