@@ -1,6 +1,6 @@
-uuid: c82e30bb-ba5d-4b27-b9f0-899268cee981
+uuid: c886cdef-1fad-419d-9099-a52ccd12599b
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - image.style.thumbnail
@@ -9,11 +9,11 @@ dependencies:
     - media
     - user
 _core:
-  default_config_hash: XMFQya90W1qr0g4mSZ9p5TxBOCfn0aOs9pe17SKVTW0
+  default_config_hash: rRzAWaXpJGYA2gPG6BmGxy8gfFd4srCc-LQY3JB6tR8
 id: media
 label: Media
 module: views
-description: 'Find and manage media.'
+description: ''
 tag: ''
 base_table: media_field_data
 base_field: mid
@@ -21,7 +21,7 @@ display:
   default:
     display_plugin: default
     id: default
-    display_title: Default
+    display_title: Master
     position: 0
     display_options:
       access:
@@ -29,8 +29,12 @@ display:
         options:
           perm: 'access media overview'
       cache:
-        type: tag
-        options: {  }
+        type: time
+        options:
+          results_lifespan: 60
+          results_lifespan_custom: 0
+          output_lifespan: 60
+          output_lifespan_custom: 0
       query:
         type: views_query
         options:
@@ -499,6 +503,55 @@ display:
           entity_type: media
           entity_field: status
           plugin_id: field
+        nothing:
+          id: nothing
+          table: views
+          field: nothing
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 'Referenced from'
+          exclude: false
+          alter:
+            alter_text: true
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: true
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: false
+          plugin_id: custom
         changed:
           id: changed
           table: media_field_data
@@ -635,6 +688,8 @@ display:
             description: ''
             use_operator: false
             operator: name_op
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: name
             required: false
             remember: false
@@ -643,8 +698,18 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
-            operator_limit_selection: false
-            operator_list: {  }
+              gp_author_user: '0'
+              author_user: '0'
+              gp_supervisor_user: '0'
+              news_supervisor: '0'
+              supervisor_user: '0'
+              editor_user: '0'
+              admin_user: '0'
+              apps_user: '0'
+              health_condition_author_user: '0'
+              health_condition_supervisor_user: '0'
+              driving_instructor_supervisor_user: '0'
+            placeholder: 'Contains text...'
           is_grouped: false
           group_info:
             label: ''
@@ -752,87 +817,44 @@ display:
           entity_type: media
           entity_field: status
         status_extra:
-          id: status_extra
-          table: media_field_data
-          field: status_extra
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: '='
-          value: ''
+          group_info:
+            widget: select
+            group_items: {  }
+            multiple: false
+            description: ''
+            default_group_multiple: {  }
+            default_group: All
+            label: ''
+            identifier: ''
+            optional: true
+            remember: false
           group: 1
+          relationship: none
           exposed: false
           expose:
+            use_operator: false
+            remember: false
             operator_id: ''
-            label: ''
+            multiple: false
             description: ''
-            use_operator: false
+            required: false
+            label: ''
+            operator_limit_selection: false
             operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
             identifier: ''
-            required: false
-            remember: false
-            multiple: false
+            operator_list: {  }
             remember_roles:
               authenticated: authenticated
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
           entity_type: media
-          plugin_id: media_status
-        langcode:
-          id: langcode
-          table: media_field_data
-          field: langcode
-          relationship: none
-          group_type: group
+          value: ''
+          field: status_extra
+          is_grouped: false
           admin_label: ''
-          operator: in
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: langcode_op
-            label: Language
-            description: ''
-            use_operator: false
-            operator: langcode_op
-            identifier: langcode
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-            reduce: false
-            operator_limit_selection: false
-            operator_list: {  }
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: media
-          entity_field: langcode
-          plugin_id: language
+          operator: '='
+          table: media_field_data
+          plugin_id: media_status
+          id: status_extra
+          group_type: group
       sorts:
         created:
           id: created
@@ -850,20 +872,32 @@ display:
             label: ''
           granularity: second
       title: Media
-      header: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: false
+          content: 'Displaying @start - @end of @total'
+          plugin_id: result
       footer: {  }
       empty:
-        area_text_custom:
-          id: area_text_custom
+        area:
+          id: area
           table: views
-          field: area_text_custom
+          field: area
           relationship: none
           group_type: group
           admin_label: ''
           empty: true
           tokenize: false
-          content: 'No media available.'
-          plugin_id: text_custom
+          content:
+            value: 'No media available.'
+            format: basic_html
+          plugin_id: text
       relationships: {  }
       arguments: {  }
       display_extenders: {  }

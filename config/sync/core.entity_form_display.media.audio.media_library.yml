@@ -1,4 +1,4 @@
-uuid: 1716ac04-75fd-4741-8969-04ff2f34bf21
+uuid: d97df9a1-f433-4222-82d9-b823644c64bd
 langcode: en
 status: true
 dependencies:
@@ -6,24 +6,23 @@ dependencies:
     - core.entity_form_mode.media.media_library
     - field.field.media.audio.field_media_audio_file
     - media.type.audio
-_core:
-  default_config_hash: 28vwMIYtvyjPcD4RyciZXIztxtZgmuWRCNgYemr_SZE
 id: media.audio.media_library
 targetEntityType: media
 bundle: audio
 mode: media_library
 content:
-  langcode:
-    type: language_select
-    weight: 2
-    region: content
+  name:
+    type: string_textfield
     settings:
-      include_locked: true
+      size: 60
+      placeholder: ''
+    weight: 0
     third_party_settings: {  }
+    region: content
 hidden:
   created: true
   field_media_audio_file: true
-  name: true
+  langcode: true
   path: true
   status: true
   uid: true

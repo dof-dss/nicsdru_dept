@@ -1,25 +1,24 @@
-uuid: 2a974e68-ad11-4344-9b7f-c9e4b26873a5
+uuid: 50311e6b-a281-4adf-bb2b-01fd9235446f
 langcode: en
 status: true
 dependencies:
   config:
-    - field.field.media.document.field_media_document
+    - field.field.media.document.field_media_file
     - media.type.document
   module:
     - file
-_core:
-  default_config_hash: DXitcriWmE5QHvGvk2OzWouaSnXD5uipkRdAG6_pnkg
 id: media.document.default
 targetEntityType: media
 bundle: document
 mode: default
 content:
-  field_media_document:
+  field_media_file:
     label: visually_hidden
-    settings: {  }
+    weight: 0
+    settings:
+      use_description_as_link_text: true
     third_party_settings: {  }
     type: file_default
-    weight: 1
     region: content
 hidden:
   created: true

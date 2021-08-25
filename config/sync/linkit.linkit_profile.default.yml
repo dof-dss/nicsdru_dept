@@ -1,23 +1,35 @@
-uuid: 27723522-eb96-46eb-ad57-fbc0d917ee5e
+uuid: 87cfd17e-9e16-4a31-8124-12f6aa7936d6
 langcode: en
 status: true
 dependencies:
   module:
     - node
-_core:
-  default_config_hash: Tt8DtxZ3Nooo0PoWPpJvszA3R_5d8MmpUW7LM_R-BzY
+    - taxonomy
 id: default
 label: Default
-description: 'A default Linkit profile'
+description: ''
 matchers:
-  556010a3-e317-48b3-b4ed-854c10f4b950:
-    uuid: 556010a3-e317-48b3-b4ed-854c10f4b950
+  2df3d241-76a2-4692-be54-4bc8881abbe1:
+    uuid: 2df3d241-76a2-4692-be54-4bc8881abbe1
     id: 'entity:node'
     weight: 0
     settings:
-      metadata: 'by [node:author] | [node:created:medium]'
+      result_description: ''
       bundles: {  }
-      group_by_bundle: false
+      group_by_bundle: true
       include_unpublished: false
+      metadata: ''
+      substitution_type: canonical
+      limit: 100
+  494e7f56-8987-44de-9821-92a2e8ccd00b:
+    uuid: 494e7f56-8987-44de-9821-92a2e8ccd00b
+    id: 'entity:taxonomy_term'
+    weight: 0
+    settings:
+      result_description: ''
+      bundles:
+        site_themes: site_themes
+      group_by_bundle: true
+      metadata: ''
       substitution_type: canonical
       limit: 100

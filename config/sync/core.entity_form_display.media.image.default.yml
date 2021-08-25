@@ -1,16 +1,17 @@
-uuid: caf978a6-91a6-41e4-9e48-895934cc9bcd
+uuid: 5be36769-d429-420f-a8d7-3753e0b3fb41
 langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.image.field_caption
     - field.field.media.image.field_media_image
-    - image.style.thumbnail
+    - image.style.medium
     - media.type.image
   module:
     - image
     - path
 _core:
-  default_config_hash: WeM0d1VqhuyGELo4SRiDJfhDQSLqfKavISEbrnlcTaE
+  default_config_hash: gq3bovy8uSTqVRHoDwFOwJfaaAzyEE8Hzjk-CkPG4uU
 id: media.image.default
 targetEntityType: media
 bundle: image
@@ -18,28 +19,49 @@ mode: default
 content:
   created:
     type: datetime_timestamp
-    weight: 10
+    weight: 5
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_caption:
+    weight: 2
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
   field_media_image:
     settings:
+      preview_image_style: medium
       progress_indicator: throbber
-      preview_image_style: thumbnail
     third_party_settings: {  }
     type: image_image
-    weight: 0
+    weight: 1
     region: content
   langcode:
     type: language_select
-    weight: 2
+    weight: 3
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  replace_file:
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -47,18 +69,17 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 100
+    weight: 7
     region: content
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 4
     settings:
       match_operator: CONTAINS
-      match_limit: 10
       size: 60
       placeholder: ''
+      match_limit: 10
     region: content
     third_party_settings: {  }
-hidden:
-  name: true
+hidden: {  }

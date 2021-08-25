@@ -5,23 +5,23 @@ enable_click_consent_change: true
 consent_awareness:
   accepted:
     event:
-      name: ''
-      selector: ''
+      name: click
+      selector: .agree-button
     cookie:
-      operator: ''
-      name: ''
-      value: ''
+      operator: '==='
+      name: cookie-agreed
+      value: '2'
   declined:
     event:
-      name: ''
-      selector: ''
+      name: click
+      selector: .decline-button
     cookie:
-      operator: ''
-      name: ''
-      value: ''
+      operator: '==='
+      name: cookie-agreed
+      value: '0'
   change:
     event:
-      name: ''
-      selector: ''
+      name: click
+      selector: .agree-button
 _core:
   default_config_hash: rgXeqZIe6gop-4LsbTtqhiiLSvEQNTxpYg9wO02O-6Y
