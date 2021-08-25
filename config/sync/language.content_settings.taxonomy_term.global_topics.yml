@@ -1,0 +1,11 @@
+uuid: f193c22c-17ae-4d71-8d95-40ae259e6368
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.global_topics
+id: taxonomy_term.global_topics
+target_entity_type_id: taxonomy_term
+target_bundle: global_topics
+default_langcode: und
+language_alterable: false
