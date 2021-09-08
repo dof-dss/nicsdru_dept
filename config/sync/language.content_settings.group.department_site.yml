@@ -1,0 +1,11 @@
+uuid: 03f337b7-e8ed-4bd2-923a-32665445d212
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+id: group.department_site
+target_entity_type_id: group
+target_bundle: department_site
+default_langcode: site_default
+language_alterable: false

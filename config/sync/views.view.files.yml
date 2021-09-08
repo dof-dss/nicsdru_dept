@@ -1,4 +1,4 @@
-uuid: 13718c1f-a866-4c1f-a792-a984dcc7815f
+uuid: 3e716a54-a3ae-4cd1-85fd-98d38dd375fd
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - file
     - user
 _core:
-  default_config_hash: hfAVzEhCVBiV_vsgQ0UP4CfSHmh2YSiEUhfRz-LMYAQ
+  default_config_hash: rRWxAX-IQkJ5viACQRovRkC784EyCl9493GU_G23n2Q
 id: files
 label: Files
 module: file
@@ -18,7 +18,7 @@ display:
   default:
     display_plugin: default
     id: default
-    display_title: Default
+    display_title: Master
     position: 0
     display_options:
       access:

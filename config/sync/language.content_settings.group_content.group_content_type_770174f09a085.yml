@@ -1,0 +1,11 @@
+uuid: 39fe24a6-48c3-4350-9636-67c5b1677a89
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.content_type.group_content_type_770174f09a085
+id: group_content.group_content_type_770174f09a085
+target_entity_type_id: group_content
+target_bundle: group_content_type_770174f09a085
+default_langcode: site_default
+language_alterable: false

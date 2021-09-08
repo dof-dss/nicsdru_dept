@@ -2,6 +2,9 @@ uuid: d9278ee1-160d-42a3-b4f4-31ea527d58d4
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.article
+    - node.type.page
   module:
     - content_moderation
 _core:
@@ -93,5 +96,7 @@ type_settings:
       to: needs_review
       weight: 2
   entity_types:
-    node: null
+    node:
+      - article
+      - page
   default_moderation_state: draft

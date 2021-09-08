@@ -1,0 +1,14 @@
+uuid: a2c43d4a-5418-429b-9588-cce06def4edf
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+id: department_site-group_admin
+label: 'Group admin'
+weight: 8
+internal: false
+audience: member
+group_type: department_site
+permissions_ui: true
+permissions: {  }

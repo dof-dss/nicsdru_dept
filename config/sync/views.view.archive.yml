@@ -1,4 +1,4 @@
-uuid: 08c129b9-3dcf-4f50-a936-87fafbc028e1
+uuid: 930b55a3-e031-42a1-b976-ea99269bd165
 langcode: en
 status: false
 dependencies:
@@ -8,7 +8,7 @@ dependencies:
     - node
     - user
 _core:
-  default_config_hash: aVFSA0rdfiHbCTxD12qEFYHF3ZbwwRGa3KQsdHmK-Uo
+  default_config_hash: SRH1EhxAiIRj01P9xYv0h_LfIfWxjll0Yq-eDfjziFI
 id: archive
 label: Archive
 module: node
@@ -19,7 +19,7 @@ base_field: nid
 display:
   default:
     id: default
-    display_title: Default
+    display_title: Master
     display_plugin: default
     position: 0
     display_options:

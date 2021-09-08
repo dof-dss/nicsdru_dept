@@ -1,4 +1,4 @@
-uuid: 7392b71b-342f-4a04-90dc-f7d376a5fdcf
+uuid: 0af79454-fa13-43f2-8fed-816bc926548f
 langcode: en
 status: true
 dependencies:
@@ -18,17 +18,21 @@ settings:
           name: Formatting
           items:
             - Bold
-            - Italic
-            - Strike
-            - Superscript
-            - Subscript
             - '-'
+            - Blockquote
+            - Superscript
             - RemoveFormat
+        -
+          name: 'Block Formatting'
+          items:
+            - Format
+            - Styles
+            - Table
         -
           name: Linking
           items:
-            - DrupalLink
             - DrupalUnlink
+            - DrupalLink
         -
           name: Lists
           items:
@@ -37,27 +41,47 @@ settings:
         -
           name: Media
           items:
-            - Blockquote
-            - DrupalImage
-            - Table
-            - HorizontalRule
+            - DrupalMediaLibrary
+            - location
         -
-          name: 'Block Formatting'
+          name: Tasks
           items:
-            - Format
+            - Undo
+            - Redo
         -
           name: Tools
           items:
-            - ShowBlocks
+            - Cut
+            - Copy
+            - PasteText
+            - PasteFromWord
+            - SpecialChar
+            - Maximize
+            - CookieContentBlocker
             - Source
   plugins:
+    drupallink:
+      linkit_enabled: true
+      linkit_profile: default
+    language:
+      language_list: un
     stylescombo:
-      styles: ''
+      styles: |
+        p.info-notice|Information notice
+        p.info-notice--success|Success notice
+        p.info-notice--warning|Warning notice
+        p.info-notice--error|Error notice
+        ul.split-list|Split bulleted list
+        ol.split-list|Split numbered list
+        table.table-fixed-width|Equal table columns
+        a.btn--call-to-action|Big green button
+    tokenbrowser:
+      token_types: {  }
 image_upload:
   status: true
   scheme: public
   directory: inline-images
   max_size: ''
   max_dimensions:
-    width: 0
-    height: 0
+    width: null
+    height: null

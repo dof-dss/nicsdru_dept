@@ -1,0 +1,21 @@
+uuid: 5608cf16-55c3-45de-be81-3ea120d9a68e
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+    - group_content_menu.group_content_menu_type.site_nav_menu
+  module:
+    - group_content_menu
+id: group_content_type_54cf3744cd8f0
+label: 'Department site: Group menu (Site nav menu)'
+description: 'Adds <em class="placeholder">Site nav menu</em> menu items to groups.'
+group_type: department_site
+content_plugin: 'group_content_menu:site_nav_menu'
+plugin_config:
+  group_cardinality: 1
+  entity_cardinality: 1
+  use_creation_wizard: false
+  auto_create_group_menu: true
+  auto_create_home_link: false
+  auto_create_home_link_title: Home

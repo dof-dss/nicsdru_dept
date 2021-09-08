@@ -13,15 +13,21 @@ config:
   config:
     php: .lando/config/php.ini
     database: .lando/config/my.cnf
-compose:
-  - docker-compose.yml
 env_file:
   - .lando/config/.env
 proxy:
   appserver:
-    - dept.admin.lndo.site
-    - dept.alpha.lndo.site
-    - dept.beta.lndo.site
+    - dept.lndo.site
+    - communities.lndo.site
+    - daera.lndo.site
+    - economy.lndo.site
+    - education.lndo.site
+    - execoffice.lndo.site
+    - finance.lndo.site
+    - health.lndo.site
+    - infrastructure.lndo.site
+    - justice.lndo.site
+    - nigov.lndo.site
 services:
   appserver:
     build:

@@ -1,15 +1,13 @@
-uuid: 146c7d24-80ca-48af-946f-4f31841e5468
+uuid: f2105f73-bb74-401b-a27b-a74a0ace3393
 langcode: en
 status: true
 dependencies:
-  enforced:
-    module:
-      - content_moderation
   module:
+    - content_moderation
     - node
     - user
 _core:
-  default_config_hash: RKnL13CZ61m1tYbO5jkEJ9f8jhlmvQdBTMp6DucLS4A
+  default_config_hash: epCHwxXumnS0FQR7duKz2_r2nkW5CJxTracGsaPMuzE
 id: moderated_content
 label: 'Moderated content'
 module: views
@@ -21,7 +19,7 @@ display:
   default:
     display_plugin: default
     id: default
-    display_title: Default
+    display_title: Master
     position: 0
     display_options:
       access:
@@ -385,7 +383,7 @@ display:
           separator: ', '
           field_api_classes: false
           entity_type: node
-          plugin_id: field
+          plugin_id: moderation_state_field
         changed:
           id: changed
           table: node_field_revision
@@ -803,7 +801,7 @@ display:
         groups:
           1: AND
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -822,7 +820,7 @@ display:
       path: admin/content/moderated
       display_description: ''
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'

@@ -43,6 +43,7 @@
         "drupal/fastly": "^3.14",
         "drupal/flag": "^4.0@beta",
         "drupal/geolocation": "^3.7",
+        "drupal/group_content_menu": "^1.1",
         "drupal/groupmedia": "^2.0@alpha",
         "drupal/handy_cache_tags": "^1.1",
         "drupal/layout_builder_modal": "^1.1",
@@ -158,6 +159,19 @@
             },
             "drupal/domain_group": {
                 "Add missing frontpage field to Group Domain Settings form": "https://www.drupal.org/files/issues/2021-04-24/add-missing-frontpage-field-3210536-3.patch"
+            },
+            "drupal/group_content_menu": {
+                "Fatal error when un-checking the \"Provide a menu link\" checkbox on a node form": "https://git.drupalcode.org/project/group_content_menu/-/merge_requests/1.diff"
+            },
+            "drupal/fpa": {
+                "Remove @file tag docblock": "https://www.drupal.org/files/issues/2018-04-24/fpa_remove_file_tag_2795655_3.patch",
+                "entity.manager must be changed to entity_type.manager": "https://www.drupal.org/files/issues/2021-03-01/entity_type_manager_fix.patch"
+            },
+            "drupal/devel": {
+                "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://raw.githubusercontent.com/politsin/snipets/master/patch/kint.patch"
+            },
+            "drupal/cookie_content_blocker": {
+                "Disable XSS for tag settings to allow HTML output": "https://gist.githubusercontent.com/omahm/eb99bc8278b57798a7d82bf06c27b8d1/raw/d9d75e06300a102b072dd8166f82ec381f211b9d/cookie_content_blocker_disable_xss"
             }
         }
     }
