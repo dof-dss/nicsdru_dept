@@ -15,6 +15,12 @@ $settings['file_scan_ignore_directories'] = [
   'bower_components',
 ];
 
+// Trusted host configuration.
+// platform.sh hosts added dynamically in settings.platformsh.php.
+$settings['trusted_host_patterns'] = [
+  '^.+\.lndo\.site$',
+];
+
 // Site hash salt.
 $settings['hash_salt'] = getenv('HASH_SALT');
 
@@ -25,9 +31,9 @@ $settings['config_sync_directory'] = getenv('CONFIG_SYNC_DIRECTORY');
 $settings["file_temp_path"] = getenv('FILE_TEMP_PATH') ?? '/tmp';
 
 // Set config split environment; environment specific values is set near the end of this file.
-//$config['config_split.config_split.local']['status'] = FALSE;
-//$config['config_split.config_split.development']['status'] = FALSE;
-//$config['config_split.config_split.production']['status'] = FALSE;
+$config['config_split.config_split.local']['status'] = FALSE;
+$config['config_split.config_split.development']['status'] = FALSE;
+$config['config_split.config_split.production']['status'] = FALSE;
 
 // Config readonly settings; should be set to 1 or 0 due to type juggling in PHP unable to correctly interpret strings
 // such as 'true' or 'false' from envvars.
