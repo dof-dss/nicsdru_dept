@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * @file
+ * Provides code for domain config detection on platform.sh.
+ */
+
+/**
+ * Implements hook_domain_default_domains().
+ */
+function dept_domain_domain_default_domains() {
+  $domains = [];
+  $domains['wipe-domain-tables'] = 'wipe-domain-tables';
+
+  $routes = (array) json_decode(base64_decode(getenv('PLATFORM_ROUTES')));
+
+  if (!empty($routes) && is_array($routes)) {
+    $weight = -1;
+    foreach ($routes as $url => $route) {
+      if (
+        $route->upstream == 'drupal'
+        && preg_match('/^(https?):\/\/([a-z0-9\.-]+)\/$/', $url, $matches)
+        && preg_match('/^https?:\/\/([a-z]+).{default}\/$/', $route->original_url, $matches2)
+      ) {
+        $scheme = $matches[1];
+        $domain_name = $matches[2];
+        $machine_name = $matches2[1];
+
+        $domain = \Drupal::entityTypeManager()
+          ->getStorage('domain')
+          ->load($machine_name);
+
+        $domains[$machine_name] = [
+          'subdomain' => $domain_name,
+          'sitename' => $domain->label(),
+          'scheme' => $scheme,
+          'valid' => 1,
+          'weight' => $weight++,
+          'is_default' => ($machine_name == 'www' ? 1 : 0),
+          'machine_name' => $machine_name,
+        ];
+      }
+    }
+  }
+
+  return $domains;
+}

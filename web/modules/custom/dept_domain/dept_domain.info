@@ -1,0 +1,7 @@
+name: 'Domain negotation'
+type: module
+description: 'Bridges hosting configuration with Drupal domain configuration'
+core_version_requirement: ^8.8 || ^9
+package: 'NICS: Department'
+dependencies:
+  - domain
