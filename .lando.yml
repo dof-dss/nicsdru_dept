@@ -64,7 +64,7 @@ tooling:
     description: Run PHPCS checks against all custom Drupal code
     service: appserver
     # Add dirs to check below, as needed.
-    cmd: /app/phpcs.sh "/app" "/app/web/sites /app/web/modules/origins /app/web/modules/custom /app/web/themes/custom"
+    cmd: /app/phpcs.sh "/app" "/app/web/modules/origins /app/web/modules/custom /app/web/themes/custom"
   drck:
     description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
     service: appserver
