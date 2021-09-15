@@ -12,15 +12,15 @@ db:
     schemas:
       - main
     endpoints:
-      admin:
+      dept:
         default_schema: main
         privileges:
-          main: admin
+          main: dept
 
 # Fudging the service name forces a full rebuild with any new config.
 solr:
   type: solr:7.7
-  disk: 512
+  disk: 256
   configuration:
     cores:
       default:
