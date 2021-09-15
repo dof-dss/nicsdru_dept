@@ -5,7 +5,8 @@
 // This file overrides the hostname values held in config
 // for certain environments so a site can be identified.
 
-if (empty(getenv('LANDO')) || getenv('PLATFORM_ENVIRONMENT') === 'production') {
+if (empty(getenv('LANDO'))) {
+  // TODO: add production env check here when live.
   // Stop early if we don't need to change anything.
   return;
 }
