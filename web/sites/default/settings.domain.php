@@ -13,7 +13,7 @@
 //}
 
 foreach (glob(getenv('CONFIG_SYNC_DIRECTORY') . '/domain.record.group_*') as $domain_config_file) {
-  $config_id = pathinfo($domain_config_file, PATHINFO_BASENAME);
+  $config_id = pathinfo($domain_config_file, PATHINFO_FILENAME);
 
   // Pull the domain id from the hostname prefix
   // eg: finance-ni from financi-ni.env-hash-projectid.region.platformsh.site
@@ -25,20 +25,17 @@ foreach (glob(getenv('CONFIG_SYNC_DIRECTORY') . '/domain.record.group_*') as $do
   $site_id = $matches[1];
 
   if (empty($site_id)) {
-    var_dump('No match with ' . $domain_config_file);
     // Skip if we can't detect a site id/prefix.
     continue;
   }
 
-  $host = '.lndo.site';
+  $host = 'lndo.site';
 
   if (getenv('PLATFORM_ENVIRONMENT')) {
     // Fixed value (for now). Replace with env var if/when it becomes available.
     $region = 'uk-1.platformsh.site';
     $host = sprintf('%s-%s.%s', getenv('PLATFORM_ENVIRONMENT'), getenv('PLATFORM_PROJECT'), $region);
   }
-
-  var_dump($config_id . ' :: ' . sprintf('%s.%s', $site_id, $host));
 
   $config[$config_id]['hostname'] = sprintf('%s.%s', $site_id, $host);
 }
