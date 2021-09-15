@@ -78,12 +78,12 @@ hooks:
     php ./drush/platformsh_generate_drush_yml.php
     cd web
     # Rebuild caches, run db-updates and import config.
-    drush -y cache-rebuild
-    drush -y updatedb
+    ../vendor/bin/drush -y cache-rebuild
+    ../vendor/bin/drush -y updatedb
     # General config import
-    drush -y config-import
+    ../vendor/bin/drush -y config-import
     # Final cache rebuild.
-    drush -y cache-rebuild
+    ../vendor/bin/drush -y cache-rebuild
 # The configuration of app when it is exposed to the web.
 web:
   # Specific parameters for different URL prefixes.
