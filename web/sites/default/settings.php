@@ -80,6 +80,10 @@ if (!empty(getenv('PLATFORM_BRANCH'))) {
       // Default to use development settings/services for general platform.sh environments.
       $config['config_split.config_split.development']['status'] = TRUE;
   }
+
+  // Add domain config overrides here.
+  $config['domain.record.group_1']['hostname'] = 'www.nigov.gov.uk.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site';
+  $config['domain.record.group_2']['hostname'] = 'www.finance-ni.gov.uk.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site';
 }
 
 $settings['simple_environment_indicator'] = sprintf('%s %s', $env_colour, $env_name);
