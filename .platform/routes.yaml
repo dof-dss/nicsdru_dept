@@ -1,32 +1,16 @@
 # Each route describes how an incoming URL is going to be processed by Platform.sh.
 #---------------------------------
-"https://www.nigov.gov.uk/":
+"https:/nigov.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
     enabled: false
-
-"https://nigov.gov.uk.{default}/":
-  type: redirect
-  to: "https://www.nigov.gov.uk.{default}/"
-
-"https://nigov.gov.uk/":
-  type: redirect
-  to: "https://www.nigov.gov.uk/"
 #---------------------------------
-"https://www.finance-ni.gov.uk/":
+"https://finance-ni.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
     enabled: false
-
-"https://finance-ni.gov.uk.{default}/":
-  type: redirect
-  to: "https://www.finance-ni.gov.uk.{default}/"
-
-"https://finance-ni.gov.uk/":
-  type: redirect
-  to: "https://www.finance-ni.gov.uk/"
 #---------------------------------
 "https://www.{default}/":
   type: upstream

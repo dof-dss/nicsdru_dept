@@ -82,8 +82,8 @@ if (!empty(getenv('PLATFORM_BRANCH'))) {
   }
 
   // Add domain config overrides here.
-  $config['domain.record.group_1']['hostname'] = 'www.nigov.gov.uk.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site';
-  $config['domain.record.group_2']['hostname'] = 'www.finance-ni.gov.uk.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site';
+  $config['domain.record.group_1']['hostname'] = 'nigov.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site';
+  $config['domain.record.group_2']['hostname'] = 'finance-ni.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site';
 }
 
 $settings['simple_environment_indicator'] = sprintf('%s %s', $env_colour, $env_name);
