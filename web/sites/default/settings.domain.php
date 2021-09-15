@@ -5,11 +5,12 @@
 // This file overrides the hostname values held in config
 // for certain environments so a site can be identified.
 
-if (empty(getenv('LANDO'))) {
-  // TODO: add production env check here when live.
-  // Stop early if we don't need to change anything.
-  return;
-}
+// TODO: uncomment when live to avoid unecessary config overrides,
+// and rely on raw values from .yml files.
+//if (empty(getenv('LANDO')) || getenv('PLATFORM_ENVIRONMENT') === 'production') {
+//  // Stop early if we don't need to change anything.
+//  return;
+//}
 
 foreach (glob(getenv('CONFIG_SYNC_DIRECTORY') . '/domain.record.*') as $domain_config_file) {
   $config_id = pathinfo($domain_config_file, PATHINFO_BASENAME);
