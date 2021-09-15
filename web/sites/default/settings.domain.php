@@ -12,7 +12,7 @@
 //  return;
 //}
 
-foreach (glob(getenv('CONFIG_SYNC_DIRECTORY') . '/domain.record.*') as $domain_config_file) {
+foreach (glob(getenv('CONFIG_SYNC_DIRECTORY') . '/domain.record.group_*') as $domain_config_file) {
   $config_id = pathinfo($domain_config_file, PATHINFO_BASENAME);
 
   // Pull the domain id from the hostname prefix
