@@ -15,7 +15,7 @@ db:
       dept:
         default_schema: main
         privileges:
-          main: dept
+          main: admin
 
 # Fudging the service name forces a full rebuild with any new config.
 solr:
