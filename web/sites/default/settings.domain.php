@@ -25,6 +25,7 @@ foreach (glob(getenv('CONFIG_SYNC_DIRECTORY') . '/domain.record.*') as $domain_c
   $site_id = $matches[1];
 
   if (empty($site_id)) {
+    var_dump('No match with ' . $domain_config_file);
     // Skip if we can't detect a site id/prefix.
     continue;
   }
@@ -36,6 +37,8 @@ foreach (glob(getenv('CONFIG_SYNC_DIRECTORY') . '/domain.record.*') as $domain_c
     $region = 'uk-1.platformsh.site';
     $host = sprintf('%s-%s.%s', getenv('PLATFORM_ENVIRONMENT'), getenv('PLATFORM_PROJECT'), $region);
   }
+
+  var_dump($config_id . ' :: ' . sprintf('%s.%s', $site_id, $host));
 
   $config[$config_id]['hostname'] = sprintf('%s.%s', $site_id, $host);
 }
