@@ -80,13 +80,14 @@ if (!empty(getenv('PLATFORM_BRANCH'))) {
       // Default to use development settings/services for general platform.sh environments.
       $config['config_split.config_split.development']['status'] = TRUE;
   }
-
-  // Add domain config overrides here.
-  $config['domain.record.group_1']['hostname'] = 'nigov.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site';
-  $config['domain.record.group_2']['hostname'] = 'finance-ni.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site';
 }
 
 $settings['simple_environment_indicator'] = sprintf('%s %s', $env_colour, $env_name);
+
+// Domain hostname negotiation and overrides.
+if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+  include $app_root . '/' . $site_path . '/settings.domain.php';
+}
 
 // Local settings. These come last so that they can override anything.
 if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
