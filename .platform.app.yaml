@@ -152,7 +152,7 @@ web:
 crons:
   d7files:
     spec: '30 0 * * *'
-    cmd: 'migrate-scripts/sync-files.sh'
+    cmd: 'migrate-scripts/sync-files.sh $D7_PROJECT_ID $D7_PROJECT_ENV'
   d7db:
     spec: '0 1 * * *'
-    cmd: 'migrate-scripts/sync-db.sh'
+    cmd: 'migrate-scripts/sync-db.sh $D7_PROJECT_ID $D7_PROJECT_ENV'
