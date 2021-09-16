@@ -32,7 +32,7 @@ relationships:
   drupal7db: 'drupal7db:admin'
 
 # The size of the persistent disk of the application (in MB).
-disk: 20480
+disk: 10240
 
 # The 'mounts' describe writable, persistent filesystem mounts in the application.
 mounts:
