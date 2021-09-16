@@ -1,0 +1,19 @@
+uuid: da2a4a5d-fdb7-4b97-abf5-125de59b6056
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - text
+id: node.field_notes_to_editors
+field_name: field_notes_to_editors
+entity_type: node
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

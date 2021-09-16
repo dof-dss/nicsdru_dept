@@ -145,3 +145,13 @@ web:
         # Provide a longer TTL (2 weeks) for aggregated CSS and JS files.
         '^/sites/default/files/(css|js)':
           expires: 2w
+
+# Set up migration content refresh every night with 30 minute gap between
+# file sync and db restoration on this app.
+crons:
+  d7files:
+    spec: '30 0 * * *'
+    cmd: 'migrate-scripts/sync-files.sh'
+  d7db:
+    spec: '0 1 * * *'
+    cmd: 'migrate-scripts/sync-db.sh'
