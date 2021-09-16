@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 D7_PROJECT_ID=$1
 D7_PROJECT_ENV=$2
 
