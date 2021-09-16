@@ -1,0 +1,21 @@
+uuid: 0816f4d3-5ae9-40b4-ab60-0b8cb508f301
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_notes_to_editors
+    - node.type.news
+  module:
+    - text
+id: node.news.field_notes_to_editors
+field_name: field_notes_to_editors
+entity_type: node
+bundle: news
+label: 'Notes to editors'
+description: 'Enter some text as guidance for media editors.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

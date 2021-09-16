@@ -1,0 +1,20 @@
+uuid: 77cefafa-8cd8-441f-b1d4-0ad5ffbed827
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.field_global_topics
+field_name: field_global_topics
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
