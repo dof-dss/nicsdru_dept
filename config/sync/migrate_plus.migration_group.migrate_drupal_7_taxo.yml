@@ -1,0 +1,12 @@
+uuid: 85f15210-cc3a-4705-8d93-0e0c04a16e99
+langcode: en
+status: true
+dependencies: {  }
+id: migrate_drupal_7_taxo
+label: 'Departmental sites - Taxonomy'
+description: 'Drupal 7 taxonomies and terms'
+source_type: 'Drupal 7'
+module: null
+shared_configuration:
+  source:
+    key: drupal7db
