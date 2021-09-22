@@ -1,0 +1,17 @@
+uuid: 0bbb4b17-c858-41cb-a5fe-e8eeade59471
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+  enforced:
+    config:
+      - user.role.pfg_supervisor_user
+id: department_site-fb3865644
+label: 'PfG supervisor user'
+weight: 7
+internal: true
+audience: outsider
+group_type: department_site
+permissions_ui: false
+permissions: {  }

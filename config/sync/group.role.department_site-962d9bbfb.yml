@@ -1,0 +1,17 @@
+uuid: 98c4f960-fa33-44c7-a8e1-9e53bcc794a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+  enforced:
+    config:
+      - user.role.niexec_admin_user
+id: department_site-962d9bbfb
+label: 'niexec admin user'
+weight: 12
+internal: true
+audience: outsider
+group_type: department_site
+permissions_ui: false
+permissions: {  }

@@ -1,0 +1,17 @@
+uuid: 0375aceb-6bf6-4180-a391-8ab01e7765ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+  enforced:
+    config:
+      - user.role.landing_page_supervisor_user
+id: department_site-a9e959a2d
+label: 'landing page supervisor user'
+weight: 10
+internal: true
+audience: outsider
+group_type: department_site
+permissions_ui: false
+permissions: {  }

@@ -1,0 +1,17 @@
+uuid: 7cba6acc-54de-4574-b417-af80748bb5bc
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+  enforced:
+    config:
+      - user.role.stats_author_user
+id: department_site-6358a11e5
+label: 'stats author user'
+weight: 3
+internal: true
+audience: outsider
+group_type: department_site
+permissions_ui: false
+permissions: {  }
