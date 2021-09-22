@@ -1,0 +1,12 @@
+uuid: 80ae97eb-6cf8-4778-906c-fd5d215f7229
+langcode: en
+status: true
+dependencies: {  }
+id: migrate_group_users
+label: 'Departmental sites - Group :: users'
+description: 'Migrate users into Groups'
+source_type: 'Drupal 7'
+module: null
+shared_configuration:
+  source:
+    key: drupal7db

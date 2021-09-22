@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies: {  }
+id: group_users
+migration_tags:
+  - dept_sites
+migration_group: group_users
+label: 'Drupal 7 users to Group content'
+source:
+  plugin: d7_user
+process:
+  type:
+    plugin: default_value
+    default_value: department_site-group_membership
+  gid:
+    plugin: default_value
+    default_value: 1
+  label: name
+  entity_id:
+    plugin: migration_lookup
+    migration: d7_user
+    no_stub: true
+    source: uid
+destination:
+  plugin: 'entity:group_content'
+migration_dependencies:
+  required:
+    - d7_user

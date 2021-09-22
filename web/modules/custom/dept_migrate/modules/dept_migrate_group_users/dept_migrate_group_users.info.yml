@@ -1,0 +1,7 @@
+name: 'Department sites: migration -- Group :: users'
+type: module
+description: 'Group users migration module for departmental sites'
+core_version_requirement: ^8.8 || ^9
+package: 'NICS: Departmental'
+dependencies:
+  - dept_migrate
