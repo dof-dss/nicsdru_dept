@@ -1,0 +1,14 @@
+uuid: b7124967-89fc-4719-bf5d-2a4ae5f2cab1
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.brexit_supervisor_user
+  module:
+    - user
+id: user_remove_role_action.brexit_supervisor_user
+label: 'Remove the brexit supervisor user role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: brexit_supervisor_user

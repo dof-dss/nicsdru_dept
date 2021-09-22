@@ -1,0 +1,13 @@
+uuid: d9f9ce97-7662-4034-846f-1c7cce1d1933
+langcode: en
+status: true
+dependencies: {  }
+id: landing_page_author_user
+label: 'landing page author user'
+weight: 4
+is_admin: null
+permissions:
+  - 'create landing_page content on assigned domains'
+  - 'update landing_page content on assigned domains'
+  - 'use text format filtered_html_with_templates'
+  - 'view any unpublished landing_page content'

@@ -1,0 +1,26 @@
+uuid: ef04125e-e903-4b05-8cbe-fa2e7be604ca
+langcode: en
+status: true
+dependencies: {  }
+id: niexec_admin_user
+label: 'niexec admin user'
+weight: 12
+is_admin: null
+permissions:
+  - 'manipulate entityqueues'
+  - 'update niexec_homepage_news entityqueue'
+  - 'view any unpublished application content'
+  - 'view any unpublished article content'
+  - 'view any unpublished consultation content'
+  - 'view any unpublished contact content'
+  - 'view any unpublished gallery content'
+  - 'view any unpublished heritage_site content'
+  - 'view any unpublished irish_news content'
+  - 'view any unpublished link content'
+  - 'view any unpublished news content'
+  - 'view any unpublished page content'
+  - 'view any unpublished profile content'
+  - 'view any unpublished project content'
+  - 'view any unpublished protected_area content'
+  - 'view any unpublished publication content'
+  - 'view any unpublished ual content'

@@ -1,0 +1,12 @@
+uuid: 08a78e97-b607-4c2a-b9e7-5ce13d878eed
+langcode: en
+status: true
+dependencies: {  }
+id: brexit_supervisor_user
+label: 'brexit supervisor user'
+weight: 8
+is_admin: null
+permissions:
+  - 'create field_external_publication'
+  - 'edit field_external_publication'
+  - 'edit own field_external_publication'

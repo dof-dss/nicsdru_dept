@@ -1,0 +1,14 @@
+uuid: 8e34c5d1-ba2f-49b4-80cb-1bcb24fdf5b9
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.stats_author_user
+  module:
+    - user
+id: user_add_role_action.stats_author_user
+label: 'Add the stats author user role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: stats_author_user

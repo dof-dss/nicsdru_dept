@@ -1,0 +1,12 @@
+uuid: 5af6de02-4a47-4f5b-b1b4-93f620319e42
+langcode: en
+status: true
+dependencies: {  }
+id: stats_author_user
+label: 'stats author user'
+weight: 3
+is_admin: null
+permissions:
+  - 'create secure_publication content on assigned domains'
+  - 'update secure_publication content on assigned domains'
+  - 'view any unpublished secure_publication content'

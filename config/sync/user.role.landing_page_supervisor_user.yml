@@ -1,0 +1,14 @@
+uuid: 13357855-f386-4933-a53e-bef1368f7a1f
+langcode: en
+status: true
+dependencies: {  }
+id: landing_page_supervisor_user
+label: 'landing page supervisor user'
+weight: 10
+is_admin: null
+permissions:
+  - 'create landing_page content on assigned domains'
+  - 'delete landing_page content on assigned domains'
+  - 'update landing_page content on assigned domains'
+  - 'use text format filtered_html_with_templates'
+  - 'view any unpublished landing_page content'

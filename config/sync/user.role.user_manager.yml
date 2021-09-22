@@ -1,0 +1,18 @@
+uuid: c0f6e591-c622-4abe-8e73-d827fc609b62
+langcode: en
+status: true
+dependencies: {  }
+id: user_manager
+label: 'user manager'
+weight: 15
+is_admin: null
+permissions:
+  - 'access users overview'
+  - 'assign author user role'
+  - 'assign domain editors'
+  - 'assign supervisor user role'
+  - 'create users'
+  - 'edit users with role 2'
+  - 'edit users with role 3'
+  - 'edit users with role 4'
+  - 'force password change'

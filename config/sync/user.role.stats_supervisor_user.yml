@@ -1,0 +1,15 @@
+uuid: b71a4ef2-58b2-463f-9109-8f7ae4c0421c
+langcode: en
+status: true
+dependencies: {  }
+id: stats_supervisor_user
+label: 'stats supervisor user'
+weight: 9
+is_admin: null
+permissions:
+  - 'create secure_publication content on assigned domains'
+  - 'delete secure_publication content on assigned domains'
+  - 'schedule revisions'
+  - 'update secure_publication content on assigned domains'
+  - 'view any unpublished secure_publication content'
+  - 'view own private files'

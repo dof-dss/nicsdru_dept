@@ -1,0 +1,14 @@
+uuid: c7400f99-c3c3-4cd0-bcb6-c62900868569
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.pfg_supervisor_user
+  module:
+    - user
+id: user_add_role_action.pfg_supervisor_user
+label: 'Add the PfG supervisor user role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: pfg_supervisor_user

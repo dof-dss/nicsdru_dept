@@ -1,0 +1,14 @@
+uuid: 85c43780-f114-4b52-9460-8455b17649a4
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.landing_page_author_user
+  module:
+    - user
+id: user_add_role_action.landing_page_author_user
+label: 'Add the landing page author user role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: landing_page_author_user
