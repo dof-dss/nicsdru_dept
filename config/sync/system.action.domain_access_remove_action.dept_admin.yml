@@ -1,0 +1,14 @@
+uuid: 479cab8f-d3bf-4432-99b2-dbaccd6d96b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.dept_admin
+  module:
+    - domain_access
+id: domain_access_remove_action.dept_admin
+label: 'Remove selected content from the Dept admin domain'
+type: node
+plugin: domain_access_remove_action
+configuration:
+  domain_id: dept_admin

@@ -1,0 +1,14 @@
+uuid: 1aaf6cd8-e3f7-4b0b-8067-3ba69d563327
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.dept_admin
+  module:
+    - domain_access
+id: domain_access_add_editor_action.dept_admin
+label: 'Add editors to the Dept admin domain'
+type: user
+plugin: domain_access_add_editor_action
+configuration:
+  domain_id: dept_admin

@@ -1,0 +1,14 @@
+uuid: 7b37668a-62b7-4f87-9e8c-4e83605f82d6
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.group_1
+  module:
+    - domain_access
+id: domain_access_remove_editor_action.group_1
+label: 'Remove editors from the NIGov domain'
+type: user
+plugin: domain_access_remove_editor_action
+configuration:
+  domain_id: group_1

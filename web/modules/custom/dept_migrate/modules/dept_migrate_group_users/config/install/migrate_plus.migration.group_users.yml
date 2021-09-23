@@ -1,3 +1,17 @@
+### DOMAIN / GROUP MAPPINGS
+# - 1 # NI Gov ::: GID 1
+# - 2 # DAERA
+# - 3 # Old DEL
+# - 4 # Economy
+# - 5 # Exec office
+# - 6 # Education
+# - 7 # Finance ::: GID 2
+# - 8 # Health
+# - 9 # Infrastructure
+# - 10 # Old DCAL
+# - 11 # Old DOE
+# - 12 # Justice
+# - 13 # Communities
 langcode: en
 status: true
 dependencies: {  }
@@ -7,20 +21,52 @@ migration_tags:
 migration_group: group_users
 label: 'Drupal 7 users to Group content'
 source:
-  plugin: d7_user
+  plugin: d7_user_domain_access
 process:
   type:
     plugin: default_value
     default_value: department_site-group_membership
   gid:
-    plugin: default_value
-    default_value: 1
+    -
+      plugin: skip_on_value
+      method: row
+      source: uid
+      value:
+        - 1
+    -
+      plugin: skip_on_empty
+      method: row
+      source: domain_access_user/0/target_id
+    -
+      plugin: skip_on_value
+      method: row
+      source: domain_access_user/0/target_id
+      value:
+        - 'daera'
+        - 'del'
+        - 'economy'
+        - 'execoffice'
+        - 'education'
+        - 'health'
+        - 'infrastructure'
+        - 'dcal'
+        - 'doe'
+        - 'justice'
+        - 'communities'
+    -
+      plugin: static_map
+      bypass: true
+      source: domain_access_user/0/target_id
+      map:
+        'newnigov': 1
+        'dfp': 2
+    -
+      plugin: default_value
+      default_value: 1
   label: name
-  entity_id:
-    plugin: migration_lookup
-    migration: d7_user
-    no_stub: true
-    source: uid
+  entity_id: uid
+  uid: uid
+  created: created
 destination:
   plugin: 'entity:group_content'
 migration_dependencies:

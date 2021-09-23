@@ -1,0 +1,14 @@
+uuid: 8c23c967-beb3-444d-96ec-63bc6e605599
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.group_2
+  module:
+    - domain_access
+id: domain_access_remove_action.group_2
+label: 'Remove selected content from the Department of Finance domain'
+type: node
+plugin: domain_access_remove_action
+configuration:
+  domain_id: group_2

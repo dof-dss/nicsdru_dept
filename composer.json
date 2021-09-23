@@ -163,6 +163,9 @@
             "drupal/ultimate_cron": {
                 "Fix test function issue": "https://www.drupal.org/files/issues/2021-04-13/kernel_test-3208608-1.patch"
             },
+            "drupal/domain": {
+                "Migration path for domain": "https://www.drupal.org/files/issues/2020-02-27/domain-migration-path-for-domain-2882837-13.patch"
+            },
             "drupal/domain_group": {
                 "Add missing frontpage field to Group Domain Settings form": "https://www.drupal.org/files/issues/2021-04-24/add-missing-frontpage-field-3210536-3.patch",
                 "WSD in initial install - TypeError: Argument 1 passed to Drupal\\domain_group\\EventSubscriber\\LoginPageRedirect": "https://www.drupal.org/files/issues/2021-08-23/3229261-2.patch"
