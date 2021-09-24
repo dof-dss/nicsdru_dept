@@ -5,8 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.article.body
-    - field.field.node.article.field_domain_access
-    - field.field.node.article.field_domain_all_affiliates
     - field.field.node.article.field_image
     - field.field.node.article.field_tags
     - image.style.medium
@@ -56,8 +54,6 @@ content:
     weight: 100
     region: content
 hidden:
-  field_domain_access: true
-  field_domain_all_affiliates: true
   field_image: true
   field_tags: true
   langcode: true

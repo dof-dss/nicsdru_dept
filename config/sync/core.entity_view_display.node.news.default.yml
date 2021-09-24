@@ -4,8 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.news.body
-    - field.field.node.news.field_domain_access
-    - field.field.node.news.field_domain_all_affiliates
     - field.field.node.news.field_global_topics
     - field.field.node.news.field_notes_to_editors
     - field.field.node.news.field_original_domain
@@ -101,7 +99,5 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
-  field_domain_access: true
-  field_domain_all_affiliates: true
   langcode: true
   search_api_excerpt: true

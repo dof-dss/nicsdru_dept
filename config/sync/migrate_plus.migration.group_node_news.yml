@@ -1,8 +1,11 @@
-# D7 SQL: select d.domain_id, d.machine_name, count(da.nid) as nodes from domain d join domain_access da on d.domain_id = da.gid join node n on n.nid = da.nid where n.type = 'news' group by d.domain_id, d.machine_name order by nodes desc;
+uuid: 8ee8f7b1-a867-441f-9519-db06646e85a8
 langcode: en
 status: true
 dependencies: {  }
 id: group_node_news
+class: null
+field_plugin_method: null
+cck_plugin_method: null
 migration_tags:
   - dept_sites
 migration_group: group_nodes
@@ -24,24 +27,24 @@ process:
       method: row
       source: domain_node/0/target_id
       value:
-        - 'daera'
-        - 'del'
-        - 'economy'
-        - 'execoffice'
-        - 'education'
-        - 'health'
-        - 'infrastructure'
-        - 'dcal'
-        - 'doe'
-        - 'justice'
-        - 'communities'
+        - daera
+        - del
+        - economy
+        - execoffice
+        - education
+        - health
+        - infrastructure
+        - dcal
+        - doe
+        - justice
+        - communities
     -
       plugin: static_map
       bypass: false
       source: domain_node/0/target_id
       map:
-        'newnigov': 1
-        'dfp': 2
+        newnigov: 1
+        dfp: 2
       default_value: 1
   label: title
   entity_id: nid

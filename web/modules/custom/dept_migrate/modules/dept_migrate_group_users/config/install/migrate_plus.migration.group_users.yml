@@ -21,7 +21,7 @@ migration_tags:
 migration_group: group_users
 label: 'Drupal 7 users to Group content'
 source:
-  plugin: d7_user_domain_access
+  plugin: d7_user_domain
 process:
   type:
     plugin: default_value
@@ -36,11 +36,11 @@ process:
     -
       plugin: skip_on_empty
       method: row
-      source: domain_access_user/0/target_id
+      source: domain_user/0/target_id
     -
       plugin: skip_on_value
       method: row
-      source: domain_access_user/0/target_id
+      source: domain_user/0/target_id
       value:
         - 'daera'
         - 'del'
@@ -56,7 +56,7 @@ process:
     -
       plugin: static_map
       bypass: true
-      source: domain_access_user/0/target_id
+      source: domain_user/0/target_id
       map:
         'newnigov': 1
         'dfp': 2
