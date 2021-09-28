@@ -1,0 +1,14 @@
+uuid: 54533b0d-74cd-457f-a2b0-7d039d144cd0
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: AYxUseEZq1zy4pEfnqBHOzbrRW-X1MCzb2lRM5XhyFc
+id: migrate_group_files
+label: 'Departmental sites - Files'
+description: 'Migrate files into Groups'
+source_type: 'Drupal 7'
+module: null
+shared_configuration:
+  source:
+    key: drupal7db

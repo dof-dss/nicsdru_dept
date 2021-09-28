@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies: {  }
+id: group_media_image
+migration_tags:
+  - dept_sites
+migration_group: migrate_group_files
+label: 'Drupal 7 image files to Group content'
+source:
+  plugin: file_entity
+  type: image
+  batch_size: 1000
+  constants:
+    bundle: 'image'
+process:
+  type:
+    plugin: default_value
+    default_value: group_content_type_f3ac88217a4f6
+  gid:
+    -
+      plugin: default_value
+      default_value: 1
+  label: title
+  entity_id: fid
+  uid: uid
+  created: created
+destination:
+  plugin: 'entity:group_content'
+migration_dependencies:
+  required:
+    - d7_user
+    - d7_file_image
