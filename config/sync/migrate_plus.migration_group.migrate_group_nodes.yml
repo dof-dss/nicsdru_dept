@@ -1,9 +1,11 @@
-uuid: a1c57b92-a145-4919-a315-3aee51b60ab1
+uuid: 6684ec23-b2b9-4206-8096-d22a04026ab6
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: 1ezuu--3pdz98cFjNzaiCR5u-NWVrCM4mUdF_L5um8A
 id: migrate_group_nodes
-label: 'Departmental sites - Group :: nodes'
+label: 'Departmental sites - Nodes'
 description: 'Migrate nodes into Groups'
 source_type: 'Drupal 7'
 module: null

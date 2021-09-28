@@ -5,7 +5,7 @@ dependencies: {  }
 id: group_node_news
 migration_tags:
   - dept_sites
-migration_group: group_nodes
+migration_group: migrate_group_nodes
 label: 'Drupal 7 news nodes to Group content'
 source:
   plugin: d7_node_domain

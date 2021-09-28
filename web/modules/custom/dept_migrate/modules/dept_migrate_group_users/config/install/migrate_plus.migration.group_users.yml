@@ -18,7 +18,7 @@ dependencies: {  }
 id: group_users
 migration_tags:
   - dept_sites
-migration_group: group_users
+migration_group: migrate_group_users
 label: 'Drupal 7 users to Group content'
 source:
   plugin: d7_user_domain
