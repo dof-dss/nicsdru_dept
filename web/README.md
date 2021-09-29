@@ -1,75 +1,40 @@
-<img alt="Drupal Logo" src="https://www.drupal.org/files/Wordmark_blue_RGB.png" height="60px">
+# Departmental sites codebase
 
-Drupal is an open source content management platform supporting a variety of
-websites ranging from personal weblogs to large community-driven websites. For
-more information, visit the Drupal website, [Drupal.org][Drupal.org], and join
-the [Drupal community][Drupal community].
+This source code is for the Departmental sites. It is built with Drupal 9 using the domain access module.
 
-## Contributing
+It is hosted on platform.sh.
 
-Drupal is developed on [Drupal.org][Drupal.org], the home of the international
-Drupal community since 2001!
+Continuous Integration and Deployment services are provided by Circle CI.
 
-[Drupal.org][Drupal.org] hosts Drupal's [GitLab repository][GitLab repository],
-its [issue queue][issue queue], and its [documentation][documentation]. Before
-you start working on code, be sure to search the [issue queue][issue queue] and
-create an issue if your aren't able to find an existing issue.
+## Getting started
 
-Every issue on Drupal.org automatically creates a new community-accessible fork
-that you can contribute to. Learn more about the code contribution process on
-the [Issue forks & merge requests page][issue forks].
+We recommend Lando for local development. To get started, ensure you have the following installed:
 
-## Usage
+1. Lando [https://docs.devwithlando.io/](https://docs.devwithlando.io/)
+2. Composer [https://getcomposer.org/](https://getcomposer.org/)
+3. Platform CLI tool [https://docs.platform.sh/development/cli.html](https://docs.platform.sh/development/cli.html)
 
-For a brief introduction, see [USAGE.txt](/core/USAGE.txt). You can also find
-guides, API references, and more by visiting Drupal's [documentation
-page][documentation].
+- Clone this repo
+- at the command line, 'cd' into your new directory
+- `lando start`
 
-You can quickly extend Drupal's core feature set by installing any of its
-[thousands of free and open source modules][modules]. With Drupal and its
-module ecosystem, you can often build most or all of what your project needs
-before writing a single line of code.
+Your site should then run locally and should present you with a set of local URLs (thanks to the domain access module).
 
-## Changelog
+You should choose one of these URLs ('http://execoffice.lndo.site' for example) and run through the Drupal install,
+using the credentials shown for the 'database' service when running the 'lando info' command.
 
-Drupal keeps detailed [change records][changelog]. You can search Drupal's
-changes for a record of every notable breaking change and new feature since
-2011.
+Once this has finished, it is recommended that you download the databases from Platform.sh using the 'platform db:dump'
+command.
 
-## Security
+The 'main' database may be imported into your local Lando site as follows:
 
-For a list of security announcements, see the [Security advisories
-page][Security advisories] (available as [an RSS feed][security RSS]). This
-page also describes how to subscribe to these announcements via email.
+  lando db-import <downloaded file name>
 
-For information about the Drupal security process, or to find out how to report
-a potential security issue to the Drupal security team, see the [Security team
-page][security team].
+The 'drupal7db' database may be imported into your local Lando site as follows:
 
-## Need a helping hand?
+  lando db-import -h drupal7db <downloaded file name>
 
-Visit the [Support page][support] or browse [over a thousand Drupal
-providers][service providers] offering design, strategy, development, and
-hosting services.
+## Running migrations
 
-## Legal matters
-
-Know your rights when using Drupal by reading Drupal core's
-[license](/core/LICENSE.txt).
-
-Learn about the [Drupal trademark and logo policy here][trademark].
-
-[Drupal.org]: https://www.drupal.org
-[Drupal community]: https://www.drupal.org/community
-[GitLab repository]: https://git.drupalcode.org/project/drupal
-[issue queue]: https://www.drupal.org/project/issues/drupal
-[issue forks]: https://www.drupal.org/drupalorg/docs/gitlab-integration/issue-forks-merge-requests
-[documentation]: https://www.drupal.org/documentation
-[changelog]: https://www.drupal.org/list-changes/drupal
-[modules]: https://www.drupal.org/project/project_module
-[security advisories]: https://www.drupal.org/security
-[security RSS]: https://www.drupal.org/security/rss.xml
-[security team]: https://www.drupal.org/drupal-security-team
-[service providers]: https://www.drupal.org/drupal-services
-[support]: https://www.drupal.org/support
-[trademark]: https://www.drupal.com/trademark
+You will need to install modules that start with 'Department sites: migration' in order to run migrations to import Drupal 7
+content into your Drupal 9 database.
