@@ -2,8 +2,8 @@
 
 This source code is for the Departmental sites. It is built with Drupal 9 in a single codebase, single database manner using these key modules to control content and access across the sites:
 
-* group (for entity access control and management)
-* domain (for hostname negotiation and mapping to group entities)
+* [group](https://www.drupal.org/project/group) (for entity access control and management)
+* [domain](https://www.drupal.org/project/domain) (for hostname negotiation and mapping to group entities)
 
 It is hosted on platform.sh.
 
