@@ -1,14 +1,14 @@
 langcode: en
 status: true
 dependencies: {  }
-id: d7_file_image
+id: d7_file_media_image
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
 migration_group: migrate_group_files
-label: 'Public files'
+label: 'Migrate D7 files to media images'
 source:
   plugin: file_entity
   type: image

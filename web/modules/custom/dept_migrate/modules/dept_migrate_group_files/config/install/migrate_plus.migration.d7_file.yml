@@ -14,7 +14,7 @@ source:
   scheme: public
   batch_size: 1000
   constants:
-    source_base_path: 'https://www.northernireland.gov.uk/sites/default/files/'
+    source_base_path: 'https://www.northernireland.gov.uk'
 process:
   fid: fid
   filename: filename

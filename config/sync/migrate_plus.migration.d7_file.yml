@@ -1,7 +1,9 @@
-uuid: 38731a27-4381-4ab7-8bb2-afb1082d1a93
+uuid: 34fcc88f-b08c-4103-aea9-7f150633f5d8
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: u2KaVTtIQLlXggA9mEO157W2sSOiSnx-cG_bfhN_cVA
 id: d7_file
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -15,7 +17,7 @@ source:
   scheme: public
   batch_size: 1000
   constants:
-    source_base_path: 'https://www.northernireland.gov.uk/sites/default/files/'
+    source_base_path: 'https://www.northernireland.gov.uk'
 process:
   fid: fid
   filename: filename

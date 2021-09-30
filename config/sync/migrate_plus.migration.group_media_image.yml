@@ -1,7 +1,9 @@
-uuid: 23b00c43-9da7-44c5-bbf6-a6b802a3fa2e
+uuid: 9fdeb38d-b71b-46d1-b63a-da0985f470a6
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: n-qzJN-KUXvOYjvFoyq11k6PV-BIfcVCzi-_MUNYZg8
 id: group_media_image
 class: null
 field_plugin_method: null
@@ -33,4 +35,4 @@ destination:
 migration_dependencies:
   required:
     - d7_user
-    - d7_file_image
+    - d7_file_media_image
