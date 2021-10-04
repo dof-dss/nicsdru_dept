@@ -1,9 +1,7 @@
-uuid: 3e6fedfd-0c8d-4e38-9321-ca5bf3dcba96
+uuid: 17677044-3d14-4af9-8519-b5443fe09904
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: xP_5LW6fLQK_3UEHV2WUk7cZnsWzh1dx9kEs65bc704
 id: node_news
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -13,11 +11,14 @@ migration_tags:
 migration_group: migrate_group_nodes
 label: 'News content type nodes'
 source:
-  plugin: d7_node
+  plugin: d7_node_uuid
   node_type: news
+  track_changes: true
+  ids:
+    uuid:
+      type: string
+      max_length: 1024
 process:
-  nid: tnid
-  vid: vid
   langcode:
     -
       plugin: default_value
@@ -33,7 +34,6 @@ process:
   revision_uid: revision_uid
   revision_log: log
   revision_timestamp: timestamp
-  comment_node_news/0/status: comment
   body:
     -
       plugin: get

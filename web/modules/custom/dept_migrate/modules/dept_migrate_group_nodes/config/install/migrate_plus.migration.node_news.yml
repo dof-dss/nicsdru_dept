@@ -8,11 +8,14 @@ migration_tags:
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 source:
-  plugin: d7_node
+  plugin: d7_node_uuid
   node_type: news
+  track_changes: true
+  ids:
+    uuid:
+      type: string
+      max_length: 1024
 process:
-  nid: tnid
-  vid: vid
   langcode:
     -
       plugin: default_value
@@ -28,7 +31,6 @@ process:
   revision_uid: revision_uid
   revision_log: log
   revision_timestamp: timestamp
-  comment_node_news/0/status: comment
   body:
     -
       plugin: get
