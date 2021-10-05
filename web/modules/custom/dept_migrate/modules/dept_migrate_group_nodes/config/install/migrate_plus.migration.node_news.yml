@@ -11,10 +11,6 @@ source:
   plugin: d7_node_uuid
   node_type: news
   track_changes: true
-  ids:
-    uuid:
-      type: string
-      max_length: 1024
 process:
   langcode:
     -
