@@ -1,7 +1,9 @@
-uuid: 17677044-3d14-4af9-8519-b5443fe09904
+uuid: 3bc055c2-2cf9-4c55-a2cc-5441fbdcc56e
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: AdaljNca_KNwPdLqc7bniUtc_jHlmfySj5cGlE8yLq4
 id: node_news
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -14,10 +16,6 @@ source:
   plugin: d7_node_uuid
   node_type: news
   track_changes: true
-  ids:
-    uuid:
-      type: string
-      max_length: 1024
 process:
   langcode:
     -

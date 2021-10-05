@@ -10,6 +10,10 @@ label: 'Drupal 7 news nodes to Group content'
 source:
   plugin: d7_node_domain
   node_type: news
+  ids:
+    uuid:
+      type: string
+      max_length: 1024
 process:
   type:
     plugin: default_value
@@ -44,7 +48,11 @@ process:
         'dfp': 2
       default_value: 1
   label: title
-  entity_id: nid
+  entity_id:
+    -
+      plugin: migration_lookup
+      migration: node_news
+      source: uuid
   uid: uid
   created: created
 destination:
