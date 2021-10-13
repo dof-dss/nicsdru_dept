@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/dof-dss/nicsdru_dept/tree/development.svg?style=svg)](https://circleci.com/gh/dof-dss/nicsdru_dept/tree/development)
+
 # Departmental sites codebase
 
 This source code is for the Departmental sites. It is built with Drupal 9 in a single codebase, single database manner using these key modules to control content and access across the sites:
