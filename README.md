@@ -9,7 +9,7 @@ This source code is for the Departmental sites. It is built with Drupal 9 in a s
 
 It is hosted on platform.sh.
 
-Continuous Integration services are provided by Circle CI.
+Continuous Integration services are provided by [Circle CI](https://github.com/dof-dss/nicsdru_dept/blob/development/.circleci/config.yml).
 
 ## Getting started
 
