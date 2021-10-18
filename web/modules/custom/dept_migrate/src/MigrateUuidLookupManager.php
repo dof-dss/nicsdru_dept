@@ -184,6 +184,8 @@ class MigrateUuidLookupManager {
   /**
    * Gets a list of migrated content + metadata.
    *
+   * @param array $criteria
+   *   Key/value query criteria, eg: ['type'] = 'news'.
    * @param int $num_per_page
    *   Number of items per page of results.
    * @param int $offset
@@ -194,14 +196,36 @@ class MigrateUuidLookupManager {
    * @return array
    *   Array of content keyed by 'total' and 'rows'.
    */
-  public function getMigrationContent(int $num_per_page, int $offset, array $sort_options = []) {
-    $type = 'news';
-
+  public function getMigrationContent(array $criteria, int $num_per_page, int $offset, array $sort_options = []) {
     $query = $this->dbconn->select('node_field_data', 'nfd');
     $query->fields('nfd', ['nid', 'title', 'type']);
     $query->fields('n', ['uuid']);
     $query->innerJoin('node', 'n', 'nfd.nid = n.nid');
-    $query->condition('n.type', $type, '=');
+
+    // Process any supplied criteria.
+    if (!empty($criteria)) {
+      foreach ($criteria as $key => $value) {
+        switch ($key) {
+          case 'type':
+            $query->condition('n.type', $value, '=');
+            break;
+
+          case 'title':
+            $query->condition('nfd.title', "%${value}%", 'LIKE');
+            break;
+
+          case 'nid':
+            $query->condition('nfd.nid', $value, '=');
+            break;
+
+          case 'uuid':
+            $query->condition('n.uuid', $value, '=');
+            break;
+
+        }
+      }
+    }
+
     $query->extend('Drupal\Core\Database\Query\TableSortExtender')->orderByHeader($sort_options);
     $query->execute()->fetchAll();
 

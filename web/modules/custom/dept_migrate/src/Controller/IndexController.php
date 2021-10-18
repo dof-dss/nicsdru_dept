@@ -3,16 +3,34 @@
 namespace Drupal\dept_migrate\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Link;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Pager\PagerParametersInterface;
 use Drupal\Core\StringTranslation\Translator\TranslatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class IndexController extends ControllerBase {
 
   /**
+   * Form builder service.
+   *
+   * @var \Drupal\Core\Form\FormBuilderInterface
+   */
+  protected $formBuilder;
+
+  /**
+   * Symfony\Component\HttpFoundation\RequestStack definition.
+   *
+   * @var Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $request;
+
+  /**
+   * Migration lookup manager service.
+   *
    * @var \Drupal\dept_migrate\MigrateUuidLookupManager
    */
   protected $lookupManager;
@@ -41,7 +59,9 @@ class IndexController extends ControllerBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(MigrateUuidLookupManager $lookup_manager, TranslatorInterface $translator, PagerManagerInterface $pager_manager, PagerParametersInterface $pager_params) {
+  public function __construct(FormBuilderInterface $form_builder, RequestStack $request, MigrateUuidLookupManager $lookup_manager, TranslatorInterface $translator, PagerManagerInterface $pager_manager, PagerParametersInterface $pager_params) {
+    $this->formBuilder = $form_builder;
+    $this->request = $request;
     $this->lookupManager = $lookup_manager;
     $this->t = $translator;
     $this->pagerManager = $pager_manager;
@@ -53,6 +73,8 @@ class IndexController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
+      $container->get('form_builder'),
+      $container->get('request_stack'),
       $container->get('dept_migrate.migrate_uuid_lookup_manager'),
       $container->get('string_translation'),
       $container->get('pager.manager'),
@@ -68,6 +90,13 @@ class IndexController extends ControllerBase {
    */
   public function default() {
     $content = [];
+    $query_params = $this->request->getCurrentRequest()->query;
+
+    $filter_type = $query_params->get('filter_type') ?? '';
+    $filter_value = $query_params->get('filter_value') ?? '';
+    $criteria[$filter_type] = $filter_value;
+
+    $content['filter_form'] = $this->formBuilder->getForm('Drupal\dept_migrate\Form\MigrateIndexFilterForm');
 
     // Table header/sort options.
     $header = [
@@ -90,7 +119,7 @@ class IndexController extends ControllerBase {
     $offset = $num_per_page * $page;
 
     // Fetch migration content data.
-    $mig_data = $this->lookupManager->getMigrationContent($num_per_page, $offset);
+    $mig_data = $this->lookupManager->getMigrationContent($criteria, $num_per_page, $offset);
 
     // Now that we have the total number of results, initialize the pager.
     $this->pagerManager->createPager($mig_data['total'], $num_per_page);
