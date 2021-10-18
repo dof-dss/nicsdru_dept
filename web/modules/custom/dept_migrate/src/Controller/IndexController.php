@@ -90,7 +90,7 @@ class IndexController extends ControllerBase {
     $offset = $num_per_page * $page;
 
     // Fetch migration content data.
-    $mig_data = $this->lookupManager->getMigrationContentIds($num_per_page, $offset);
+    $mig_data = $this->lookupManager->getMigrationContent($num_per_page, $offset);
 
     // Now that we have the total number of results, initialize the pager.
     $this->pagerManager->createPager($mig_data['total'], $num_per_page);
