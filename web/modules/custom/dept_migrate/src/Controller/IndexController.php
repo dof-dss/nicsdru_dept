@@ -89,7 +89,15 @@ class IndexController extends ControllerBase {
    *   Render array.
    */
   public function default() {
-    $content = [];
+    $content[] = [
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' => $this->t->translate('Use this form to see the relationships
+        between nodes in this CMS against known migrated Drupal 7 (legacy) system
+        content. The filters are basic, but allow simple filtering on things such
+        as node title keywords, node ids and content types.'),
+    ];
+
     $query_params = $this->request->getCurrentRequest()->query;
 
     $filter_type = $query_params->get('filter_type') ?? '';
@@ -102,11 +110,7 @@ class IndexController extends ControllerBase {
     $header = [
       'uuid' => $this->t->translate('UUID'),
       'nid' => $this->t->translate('Node ID'),
-      'title' => [
-        'data' => $this->t->translate('Title'),
-        'field' => 'title',
-        'sort' => 'asc'
-      ],
+      'title' => $this->t->translate('Title'),
       'type' => $this->t->translate('Type'),
       'd7nid' => $this->t->translate('Drupal 7 Node ID'),
       'd7uuid' => $this->t->translate('Drupal 7 Node UUID'),

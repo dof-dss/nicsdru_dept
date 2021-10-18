@@ -43,9 +43,6 @@ class MigrateIndexFilterForm extends FormBase {
         'nid' => 'Node ID',
         'uuid' => 'UUID',
         'title' => 'Title',
-        'd7nid' => 'Drupal 7 Node ID',
-        'd7uuid' => 'Drupal 7 UUID',
-        'd7title' => 'Drupal 7 Title',
       ],
       '#default_value' => $this->request->getCurrentRequest()->query->get('filter_type'),
     ];

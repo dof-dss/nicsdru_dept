@@ -76,6 +76,11 @@ class MigrateUuidLookupManager {
     // Match up to D9 nodes using uuid as key from migrate table.
     foreach ($map as $d7nid => $node) {
       $table = 'migrate_map_node_' . $node['d7type'];
+      if ($this->dbconn->schema()->tableExists($table) === FALSE) {
+        // Skip the rest if this table doesn't exist.
+        continue;
+      }
+
       $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $node['d7uuid']]);
 
       foreach ($migrate_map as $row) {
@@ -120,6 +125,11 @@ class MigrateUuidLookupManager {
 
       // Look up the D7 details.
       $table = 'migrate_map_node_' . $node->bundle();
+      if ($this->dbconn->schema()->tableExists($table) === FALSE) {
+        // Skip the rest if this table doesn't exist.
+        continue;
+      }
+
       $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE destid1 = :nid", [':nid' => $node->id()]);
 
       foreach ($migrate_map as $row) {
@@ -164,6 +174,11 @@ class MigrateUuidLookupManager {
 
       // Look up the D7 details.
       $table = 'migrate_map_node_' . $node->bundle();
+      if ($this->dbconn->schema()->tableExists($table) === FALSE) {
+        // Skip the rest if this table doesn't exist.
+        continue;
+      }
+
       $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE destid1 = :nid", [':nid' => $node->id()]);
 
       foreach ($migrate_map as $row) {
@@ -190,13 +205,11 @@ class MigrateUuidLookupManager {
    *   Number of items per page of results.
    * @param int $offset
    *   The row offset to begin fetching results from.
-   * @param array $sort_options
-   *   Query support/ordering options; usually passed in format from table header.
    *
    * @return array
    *   Array of content keyed by 'total' and 'rows'.
    */
-  public function getMigrationContent(array $criteria, int $num_per_page, int $offset, array $sort_options = []) {
+  public function getMigrationContent(array $criteria, int $num_per_page, int $offset) {
     $query = $this->dbconn->select('node_field_data', 'nfd');
     $query->fields('nfd', ['nid', 'title', 'type']);
     $query->fields('n', ['uuid']);
@@ -226,7 +239,6 @@ class MigrateUuidLookupManager {
       }
     }
 
-    $query->extend('Drupal\Core\Database\Query\TableSortExtender')->orderByHeader($sort_options);
     $query->execute()->fetchAll();
 
     $mig_content = [
@@ -235,19 +247,20 @@ class MigrateUuidLookupManager {
 
     $query->range($offset, $num_per_page);
     $result = $query->execute()->fetchAllAssoc('nid');
+
     // Expand metadata with D7 migration data.
     $d7_data = $this->lookupByDestinationNodeIds(array_keys($result));
 
     foreach ($result as $record) {
       $mig_content['rows'][] = [
-        'd7nid' => $d7_data[$record->nid]['d7nid'],
-        'd7uuid' => $d7_data[$record->nid]['d7uuid'],
-        'd7title' => $d7_data[$record->nid]['d7title'],
-        'd7type' => $d7_data[$record->nid]['d7type'],
         'type' => $record->type,
         'title' => $record->title,
         'nid' => $record->nid,
         'uuid' => $record->uuid,
+        'd7nid' => $d7_data[$record->nid]['d7nid'],
+        'd7uuid' => $d7_data[$record->nid]['d7uuid'],
+        'd7title' => $d7_data[$record->nid]['d7title'],
+        'd7type' => $d7_data[$record->nid]['d7type'],
       ];
     }
 
