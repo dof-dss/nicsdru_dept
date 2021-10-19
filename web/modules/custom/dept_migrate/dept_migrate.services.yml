@@ -1,0 +1,4 @@
+services:
+  dept_migrate.migrate_uuid_lookup_manager:
+    class: 'Drupal\dept_migrate\MigrateUuidLookupManager'
+    arguments: ['@entity_type.manager', '@database']
