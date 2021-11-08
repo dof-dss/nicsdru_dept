@@ -13,8 +13,12 @@ use Drupal\Core\Form\FormStateInterface;
 
 function dept_ui_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $groups = \Drupal::entityTypeManager()->getStorage('group')->loadMultiple();
+  $group_membership = \Drupal::getContainer()->get('group.membership_loader');
 
-  foreach ($groups as $group) {
+  $user_memberships = $group_membership->loadByUser();
+
+  foreach ($user_memberships as $membership) {
+    $group = $membership->getGroup();
     $group_options[$group->id()] = $group->label();
   }
 
