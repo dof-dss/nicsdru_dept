@@ -1,0 +1,33 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * @file
+ * Primary module hooks for User Interface module.
+ *
+ * @DCG
+ * This file is no longer required in Drupal 8.
+ * @see https://www.drupal.org/node/2217931
+ */
+
+function dept_ui_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $groups = \Drupal::entityTypeManager()->getStorage('group')->loadMultiple();
+
+  foreach ($groups as $group) {
+    $group_options[$group->id()] = $group->label();
+  }
+
+  $form['group_publish'] = [
+    "#title" => t('Groups'),
+    "#type" => "details",
+    '#open' => TRUE,
+    "#group" => "advanced",
+    '#weight' => -50,
+  ];
+
+  $form['group_publish']['groups'] = [
+    "#type" => "checkboxes",
+    "#options" => $group_options,
+  ];
+}
