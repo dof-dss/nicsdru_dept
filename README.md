@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/dof-dss/nicsdru_dept/tree/development.svg?style=svg)](https://circleci.com/gh/dof-dss/nicsdru_dept/tree/development)
+
 # Departmental sites codebase
 
 This source code is for the Departmental sites. It is built with Drupal 9 in a single codebase, single database manner using these key modules to control content and access across the sites:
@@ -7,7 +9,7 @@ This source code is for the Departmental sites. It is built with Drupal 9 in a s
 
 It is hosted on platform.sh.
 
-Continuous Integration services are provided by Circle CI.
+Continuous Integration services are provided by [Circle CI](https://github.com/dof-dss/nicsdru_dept/blob/development/.circleci/config.yml).
 
 ## Getting started
 
