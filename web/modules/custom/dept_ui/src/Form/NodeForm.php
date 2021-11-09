@@ -106,11 +106,19 @@ class NodeForm extends CoreNodeForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
+    $content_groups = [];
+    $plugin_id = 'group_node:' . $this->entity->bundle();
     $user_memberships = $this->groupMembership->loadByUser();
 
     foreach ($user_memberships as $membership) {
       $group = $membership->getGroup();
       $group_options[$group->id()] = $group->label();
+
+      if (!$this->entity->isNew()) {
+        if ($group->getContentByEntityId($plugin_id, $this->entity->id())) {
+          $content_groups[] = $group->id();
+        }
+      }
     }
 
     $form['group_publish'] = [
@@ -136,7 +144,8 @@ class NodeForm extends CoreNodeForm {
       $form['group_publish']['groups'] = [
         '#type' => 'checkboxes',
         '#options' => $group_options,
-        '#disabled' => !$group->getGroupType()->hasContentPlugin('group_node:' . $this->entity->bundle()),
+        '#disabled' => !$group->getGroupType()->hasContentPlugin($plugin_id),
+        '#default_value' => $content_groups,
       ];
 
       if ($form['group_publish']['groups']['#disabled']) {
@@ -160,11 +169,12 @@ class NodeForm extends CoreNodeForm {
 
     foreach ($groups as $group) {
       $group = $group_storage->load($group);
+      $plugin_id = 'group_node:' . $this->entity->bundle();
       // Check if the content plugin is enabled for the current group.
-      if (!empty($group) && $group->getGroupType()->hasContentPlugin('group_node:' . $this->entity->bundle())) {
+      if (!empty($group) && $group->getGroupType()->hasContentPlugin($plugin_id)) {
         // If this content doesn't exist in the group, add it.
-        if (!$group->getContentByEntityId('group_node:' . $this->entity->bundle(), $this->entity->id())) {
-          $group->addContent($this->entity, 'group_node:' . $this->entity->bundle());
+        if (!$group->getContentByEntityId($plugin_id, $this->entity->id())) {
+          $group->addContent($this->entity, $plugin_id);
         }
       }
     }
