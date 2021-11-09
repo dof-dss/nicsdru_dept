@@ -9,6 +9,8 @@ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\group\Entity\Group;
+use Drupal\group\Entity\GroupContent;
 use Drupal\group\GroupMembershipLoaderInterface;
 use Drupal\node\NodeForm as CoreNodeForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -112,16 +114,19 @@ class NodeForm extends CoreNodeForm {
     }
 
     $form['group_publish'] = [
-      '#title' => t('Groups'),
+      '#title' => t('Publish to'),
       '#type' => 'details',
       '#open' => TRUE,
-      '#group' => 'advanced',
-      '#weight' => -50,
+      '#weight' => 500,
+      '#attributes' => [
+        'class' => ['container-inline'],
+      ],
     ];
 
     $form['group_publish']['groups'] = [
       '#type' => 'checkboxes',
       '#options' => $group_options,
+
     ];
 
     return $form;
@@ -131,9 +136,16 @@ class NodeForm extends CoreNodeForm {
   /**
    * {@inheritdoc}
    */
-  public function save(array $form, FormStateInterface $form_state) {
+  public function save($form, FormStateInterface $form_state) {
     parent::save($form, $form_state);
-  }
 
+    $groups = $form_state->getValue('groups');
+    $group_storage = $this->entityTypeManager->getStorage('group');
+
+    foreach ($groups as $group) {
+      $group = $group_storage->load($group);
+      $group->addContent($this->entity, 'group_node:article');
+    }
+  }
 
 }
