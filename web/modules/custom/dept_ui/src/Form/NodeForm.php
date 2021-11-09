@@ -114,7 +114,7 @@ class NodeForm extends CoreNodeForm {
     }
 
     $form['group_publish'] = [
-      '#title' => t('Publish to'),
+      '#title' => $this->t('Publish to'),
       '#type' => 'details',
       '#open' => TRUE,
       '#weight' => 500,
@@ -123,11 +123,20 @@ class NodeForm extends CoreNodeForm {
       ],
     ];
 
-    $form['group_publish']['groups'] = [
-      '#type' => 'checkboxes',
-      '#options' => $group_options,
+    if (empty($group_options)) {
+      $form['group_publish']['groups'] = [
+        '#markup' => $this->t("You are not a member of any groups to restrict where content is published."),
+      ];
+    }
+    else {
+      $form['group_publish']['groups'] = [
+        '#type' => 'checkboxes',
+        '#options' => $group_options,
 
-    ];
+      ];
+    }
+
+
 
     return $form;
   }
