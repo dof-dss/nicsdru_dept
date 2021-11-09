@@ -1,17 +1,12 @@
 <?php
 
+/**
+ * @file
+ * User Interface module for Departmental sites.
+ */
 
 use Drupal\dept_ui\Entity\Node;
 use Drupal\dept_ui\Form\NodeForm;
-
-/**
- * @file
- * Primary module hooks for User Interface module.
- *
- * @DCG
- * This file is no longer required in Drupal 8.
- * @see https://www.drupal.org/node/2217931
- */
 
 /**
  * Implements hook_entity_type_alter().
@@ -25,4 +20,3 @@ function dept_ui_entity_type_alter(&$entity_types) {
     }
   }
 }
-

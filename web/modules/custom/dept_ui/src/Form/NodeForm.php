@@ -9,8 +9,6 @@ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
-use Drupal\group\Entity\Group;
-use Drupal\group\Entity\GroupContent;
 use Drupal\group\GroupMembershipLoaderInterface;
 use Drupal\node\NodeForm as CoreNodeForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -44,7 +42,7 @@ class NodeForm extends CoreNodeForm {
   /**
    * The Group membership loader service.
    *
-   * @var \Drupal\group\GroupMembershipLoader
+   * @var \Drupal\group\GroupMembershipLoaderInterface
    */
   protected $groupMembership;
 
@@ -63,6 +61,8 @@ class NodeForm extends CoreNodeForm {
    *   The current user.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   The date formatter service.
+   * @param \Drupal\group\GroupMembershipLoaderInterface $group_membership
+   *   The Group membership loader service.
    */
   public function __construct(
     EntityRepositoryInterface $entity_repository,
@@ -71,7 +71,7 @@ class NodeForm extends CoreNodeForm {
     TimeInterface $time = NULL,
     AccountInterface $current_user,
     DateFormatterInterface $date_formatter,
-    GroupMemberShipLoaderInterface $group_membership
+    GroupMembershipLoaderInterface $group_membership
   ) {
     parent::__construct(
       $entity_repository,
@@ -136,19 +136,18 @@ class NodeForm extends CoreNodeForm {
       $form['group_publish']['groups'] = [
         '#type' => 'checkboxes',
         '#options' => $group_options,
-        '#disabled' => ! $group->getGroupType()->hasContentPlugin('group_node:' .  $this->entity->bundle()),
+        '#disabled' => !$group->getGroupType()->hasContentPlugin('group_node:' . $this->entity->bundle()),
       ];
 
       if ($form['group_publish']['groups']['#disabled']) {
         $form['group_publish']['info'] = [
-          '#markup' => '<p>' . $this->t('This content is not enabled for groups') . '</p>'
+          '#markup' => '<p>' . $this->t('This content is not enabled for groups') . '</p>',
         ];
       }
     }
 
     return $form;
   }
-
 
   /**
    * {@inheritdoc}
@@ -161,11 +160,12 @@ class NodeForm extends CoreNodeForm {
 
     foreach ($groups as $group) {
       $group = $group_storage->load($group);
-
       // Check if the content plugin is enabled for the current group.
-      if ($group->getGroupType()->hasContentPlugin('group_node:' .  $this->entity->bundle())) {
-        // TODO: Check if entity exists in group?
-        $group->addContent($this->entity, 'group_node:' .  $this->entity->bundle());
+      if (!empty($group) && $group->getGroupType()->hasContentPlugin('group_node:' . $this->entity->bundle())) {
+        // If this content doesn't exist in the group, add it.
+        if (!$group->getContentByEntityId('group_node:' . $this->entity->bundle(), $this->entity->id())) {
+          $group->addContent($this->entity, 'group_node:' . $this->entity->bundle());
+        }
       }
     }
   }
