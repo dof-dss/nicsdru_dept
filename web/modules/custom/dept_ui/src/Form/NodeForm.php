@@ -107,7 +107,7 @@ class NodeForm extends CoreNodeForm {
     $form = parent::form($form, $form_state);
 
     $content_groups = [];
-    $plugin_id = 'group_node:' . $this->entity->bundle();
+    $plugin_id = $this->entity->groupBundle();
     $user_memberships = $this->groupMembership->loadByUser();
 
     foreach ($user_memberships as $membership) {
@@ -169,7 +169,7 @@ class NodeForm extends CoreNodeForm {
 
     foreach ($groups as $group) {
       $group = $group_storage->load($group);
-      $plugin_id = 'group_node:' . $this->entity->bundle();
+      $plugin_id = $this->entity->groupBundle();
       // Check if the content plugin is enabled for the current group.
       if (!empty($group) && $group->getGroupType()->hasContentPlugin($plugin_id)) {
         // If this content doesn't exist in the group, add it.
