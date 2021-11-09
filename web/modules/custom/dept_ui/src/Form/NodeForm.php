@@ -129,14 +129,22 @@ class NodeForm extends CoreNodeForm {
       ];
     }
     else {
+      // TODO: Using the last group to determine the disabled state to prevent
+      // the user from selecting groups when we can't publish this content type
+      // to those. Do we need to look at the enabled entity types for each group
+      // and toggle the disabled state for each individual checkbox?
       $form['group_publish']['groups'] = [
         '#type' => 'checkboxes',
         '#options' => $group_options,
-
+        '#disabled' => ! $group->getGroupType()->hasContentPlugin('group_node:' .  $this->entity->bundle()),
       ];
+
+      if ($form['group_publish']['groups']['#disabled']) {
+        $form['group_publish']['info'] = [
+          '#markup' => '<p>' . $this->t('This content is not enabled for groups') . '</p>'
+        ];
+      }
     }
-
-
 
     return $form;
   }
