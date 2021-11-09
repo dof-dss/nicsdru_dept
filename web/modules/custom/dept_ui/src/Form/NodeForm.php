@@ -144,7 +144,10 @@ class NodeForm extends CoreNodeForm {
 
     foreach ($groups as $group) {
       $group = $group_storage->load($group);
-      $group->addContent($this->entity, 'group_node:article');
+
+      // TODO: Check if the plugin is enabled for the current group.
+      // TODO: Check if entity exists in group?
+      $group->addContent($this->entity, 'group_node:' .  $this->entity->bundle());
     }
   }
 
