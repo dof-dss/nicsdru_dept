@@ -1,6 +1,8 @@
 <?php
 
-use Drupal\Core\Form\FormStateInterface;
+
+use Drupal\dept_ui\Entity\Node;
+use Drupal\dept_ui\Form\NodeForm;
 
 /**
  * @file
@@ -11,27 +13,41 @@ use Drupal\Core\Form\FormStateInterface;
  * @see https://www.drupal.org/node/2217931
  */
 
-function dept_ui_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $groups = \Drupal::entityTypeManager()->getStorage('group')->loadMultiple();
-  $group_membership = \Drupal::getContainer()->get('group.membership_loader');
+//function dept_ui_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+//  $group_membership = \Drupal::getContainer()->get('group.membership_loader');
+//
+//  $user_memberships = $group_membership->loadByUser();
+//
+//  foreach ($user_memberships as $membership) {
+//    $group = $membership->getGroup();
+//    ksm($group);
+//    $group_options[$group->id()] = $group->label();
+//  }
+//
+//  $form['group_publish'] = [
+//    "#title" => t('Groups'),
+//    "#type" => "details",
+//    '#open' => TRUE,
+//    "#group" => "advanced",
+//    '#weight' => -50,
+//  ];
+//
+//  $form['group_publish']['groups'] = [
+//    "#type" => "checkboxes",
+//    "#options" => $group_options,
+//  ];
+//}
 
-  $user_memberships = $group_membership->loadByUser();
-
-  foreach ($user_memberships as $membership) {
-    $group = $membership->getGroup();
-    $group_options[$group->id()] = $group->label();
+/**
+ * Implements hook_entity_type_alter().
+ */
+function dept_ui_entity_type_alter(&$entity_types) {
+  if (isset($entity_types['node'])) {
+    $entity_types['node']->setClass(Node::class);
+    
+    foreach (['default', 'edit'] as $operation) {
+      $entity_types['node']->setFormClass($operation, NodeForm::class);
+    }
   }
-
-  $form['group_publish'] = [
-    "#title" => t('Groups'),
-    "#type" => "details",
-    '#open' => TRUE,
-    "#group" => "advanced",
-    '#weight' => -50,
-  ];
-
-  $form['group_publish']['groups'] = [
-    "#type" => "checkboxes",
-    "#options" => $group_options,
-  ];
 }
+
