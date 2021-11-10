@@ -10,7 +10,7 @@ use Drupal\node\Entity\Node as NodeBase;
 class Node extends NodeBase {
 
   /**
-   * Gets the Group bundle of the entity.
+   * Returns the Group bundle of the entity.
    *
    * @return string
    *   The Group bundle of the entity.
@@ -20,10 +20,10 @@ class Node extends NodeBase {
   }
 
   /**
-   * Returns the groups the node is published to.
+   * Returns the Groups the node is related to.
    *
    * @return array
-   *   An array of groups. Group ID as key and title as value.
+   *   An array of Groups. Group ID as key and title as value.
    */
   public function getGroups() {
     $all_groups = $this->entityTypeManager()->getStorage('group')->loadMultiple();
