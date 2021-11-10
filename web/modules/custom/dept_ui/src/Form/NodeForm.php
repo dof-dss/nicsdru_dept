@@ -113,12 +113,10 @@ class NodeForm extends CoreNodeForm {
     foreach ($user_memberships as $membership) {
       $group = $membership->getGroup();
       $group_options[$group->id()] = $group->label();
+    }
 
-      if (!$this->entity->isNew()) {
-        if ($group->getContentByEntityId($plugin_id, $this->entity->id())) {
-          $content_groups[] = $group->id();
-        }
-      }
+    if (!$this->entity->isNew()) {
+      $content_groups = array_keys($this->entity->getGroups());
     }
 
     $form['group_publish'] = [
