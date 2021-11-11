@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\dept_ui\Entity;
+namespace Drupal\dept_node\Entity;
 
 use Drupal\node\Entity\Node as NodeBase;
 
