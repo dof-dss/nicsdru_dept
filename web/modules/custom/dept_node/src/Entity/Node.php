@@ -2,28 +2,23 @@
 
 namespace Drupal\dept_node\Entity;
 
+use Drupal\dept_core\GroupContentEntityInterface;
 use Drupal\node\Entity\Node as NodeBase;
 
 /**
  * Node entity which integrates with Group module.
  */
-class Node extends NodeBase {
+class Node extends NodeBase implements GroupContentEntityInterface{
 
   /**
-   * Returns the Group bundle of the entity.
-   *
-   * @return string
-   *   The Group bundle of the entity.
+   * {@inheritdoc}
    */
   public function groupBundle() {
     return 'group_node:' . $this->bundle();
   }
 
   /**
-   * Returns the Groups the node is related to.
-   *
-   * @return array
-   *   An array of Groups. Group ID as key and title as value.
+   * {@inheritdoc}
    */
   public function getGroups() {
     $all_groups = $this->entityTypeManager()->getStorage('group')->loadMultiple();
