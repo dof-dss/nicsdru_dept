@@ -8,7 +8,7 @@ use Drupal\node\Entity\Node as NodeBase;
 /**
  * Node entity which integrates with Group module.
  */
-class Node extends NodeBase implements GroupContentEntityInterface{
+class Node extends NodeBase implements GroupContentEntityInterface {
 
   /**
    * {@inheritdoc}

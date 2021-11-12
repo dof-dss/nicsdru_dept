@@ -16,7 +16,6 @@ interface GroupContentEntityInterface {
    */
   public function groupBundle();
 
-
   /**
    * Returns the Groups the entity is related to.
    *
