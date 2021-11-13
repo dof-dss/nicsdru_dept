@@ -1,0 +1,7 @@
+entity.dept_example_group_entity.settings:
+  path: 'admin/structure/dept-example-group-entity'
+  defaults:
+    _form: '\Drupal\dept_example_group_entity\Form\DeptExampleGroupEntitySettingsForm'
+    _title: 'Departmental example group content entity'
+  requirements:
+    _permission: 'administer departmental example group content entity'
