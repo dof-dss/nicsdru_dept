@@ -53,8 +53,8 @@ class DeptExampleGroupEntityGroupEnabler extends GroupContentEnablerBase {
     // Add a 'view unpublished' permission by re-using most of the 'view' one.
     $original = $permissions["view $plugin_id entity"];
     $permissions["view unpublished $plugin_id entity"] = [
-        'title' => str_replace('View ', 'View unpublished ', $original['title']),
-      ] + $original;
+      'title' => str_replace('View ', 'View unpublished ', $original['title']),
+    ] + $original;
 
     return $permissions;
   }

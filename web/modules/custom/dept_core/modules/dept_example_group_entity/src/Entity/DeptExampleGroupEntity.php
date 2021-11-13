@@ -161,7 +161,6 @@ class DeptExampleGroupEntity extends ContentEntityBase implements DeptExampleGro
     return $node_groups;
   }
 
-
   /**
    * {@inheritdoc}
    */

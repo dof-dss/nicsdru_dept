@@ -34,7 +34,7 @@ class DeptExampleGroupEntityForm extends ContentEntityForm {
    * @param \Drupal\group\GroupMembershipLoaderInterface $group_membership
    *   The Group membership loader service.
    */
-  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info, TimeInterface $time,     GroupMembershipLoaderInterface $group_membership) {
+  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info, TimeInterface $time, GroupMembershipLoaderInterface $group_membership) {
     parent::__construct(
       $entity_repository,
       $entity_type_bundle_info,
