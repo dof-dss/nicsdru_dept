@@ -142,7 +142,7 @@ class DeptExampleGroupEntity extends ContentEntityBase implements DeptExampleGro
    * {@inheritdoc}
    */
   public function groupBundle() {
-    return 'group_node:' . $this->bundle();
+    return 'dept_example_group_entity_enabler:' . $this->bundle();
   }
 
   /**
