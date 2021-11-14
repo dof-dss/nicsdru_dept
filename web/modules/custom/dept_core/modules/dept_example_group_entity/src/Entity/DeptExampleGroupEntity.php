@@ -142,7 +142,14 @@ class DeptExampleGroupEntity extends ContentEntityBase implements DeptExampleGro
    * {@inheritdoc}
    */
   public function groupBundle() {
-    return 'dept_example_group_entity_enabler:' . $this->bundle();
+    $group_content_enabler = \Drupal::service('plugin.manager.group_content_enabler');
+    $plugins = $group_content_enabler->getAll();
+
+    foreach ($plugins as $plugin) {
+      if ($this->bundle() === $plugin->getDerivativeId()) {
+       return $plugin->getPluginId();
+      }
+    }
   }
 
   /**
