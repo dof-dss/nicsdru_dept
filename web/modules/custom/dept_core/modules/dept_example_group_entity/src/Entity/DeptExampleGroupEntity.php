@@ -10,6 +10,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\dept_core\GroupContentEntityInterface;
 use Drupal\dept_example_group_entity\DeptExampleGroupEntityInterface;
 use Drupal\user\UserInterface;
+use Drupal\dept_core\GroupableEntityTrait;
 
 /**
  * Defines the departmental example group content entity entity class.
@@ -50,7 +51,7 @@ use Drupal\user\UserInterface;
  */
 class DeptExampleGroupEntity extends ContentEntityBase implements DeptExampleGroupEntityInterface, GroupContentEntityInterface {
 
-  use EntityChangedTrait;
+  use EntityChangedTrait, GroupableEntityTrait;
 
   /**
    * {@inheritdoc}
@@ -136,36 +137,6 @@ class DeptExampleGroupEntity extends ContentEntityBase implements DeptExampleGro
   public function setOwner(UserInterface $account) {
     $this->set('uid', $account->id());
     return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function groupBundle() {
-    $group_content_enabler = \Drupal::service('plugin.manager.group_content_enabler');
-    $plugins = $group_content_enabler->getAll();
-
-    foreach ($plugins as $plugin) {
-      if ($this->bundle() === $plugin->getDerivativeId()) {
-       return $plugin->getPluginId();
-      }
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getGroups() {
-    $all_groups = $this->entityTypeManager()->getStorage('group')->loadMultiple();
-    $node_groups = [];
-
-    foreach ($all_groups as $group) {
-      if ($group->getContentByEntityId($this->groupBundle(), $this->id())) {
-        $node_groups[$group->id()] = $group->label();
-      }
-    }
-
-    return $node_groups;
   }
 
   /**
