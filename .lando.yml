@@ -10,7 +10,7 @@ config:
   # For that reason Lando will not globally install a version of Drush for Drupal 9 sites.
   drush: false
   # https://docs.lando.dev/config/drupal9.html#using-xdebug
-  xdebug: false
+  xdebug: 'debug'
   config:
     php: .lando/config/php.ini
     database: .lando/config/my.cnf
