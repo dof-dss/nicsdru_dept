@@ -11,6 +11,30 @@ workflows:
       - deprecated_code:
           requires:
             - build
+  build-edge:
+    triggers:
+      - schedule:
+          # At 02:00 every Mon-Fri
+          cron: "0 2 * * 1-5"
+          filters:
+            branches:
+              only:
+                - development
+    jobs:
+      - build_edge
+
+  # A separate scheduled workflow to sync the data after the edge build completes.
+  build-edge-post-build-tasks:
+    triggers:
+      - schedule:
+          # At 02:30 on every day-of-week from Monday through Friday
+          cron: "30 2 * * 1-5"
+          filters:
+            branches:
+              only:
+                - DEPT-edge
+    jobs:
+      - sync_data
 
 jobs:
   # Tests the integrity of the build, stores the results in a workspace for re-use in later jobs.
@@ -64,6 +88,57 @@ jobs:
             CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/modules/origins"
             CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/themes/custom"
             vendor/bin/drupal-check $CHECK_DIRS
+  # Task to build the edge site.
+  build_edge:
+    docker:
+      - image: circleci/php:7.4.15-apache-browsers
+    environment:
+      # git variables to avoid empty committer identity errors
+      EMAIL: "circleci@localhost"
+      GIT_COMMITTER_NAME: "Circle CI"
+      GIT_AUTHOR_NAME: "Circle CI"
+      EDGE_BUILD_BRANCH: "DEPT-edge"
+      PLATFORM_REGION: "uk-1.platform.sh"
+    steps:
+      - hosts_keyscan
+      - checkout_code
+      - install_php_os_extensions
+      - install_psh_cli
+      - run:
+          name: Switch to edge branch
+          # -b flag is important; this checkout won't have a local branch of that name
+          # (although origin/$EDGE_BUILD_BRANCH does exist) so this always works and
+          # lets us push -f to include everything at th end. If we use a plain checkout
+          # command we miss any recent config commits and only end up bumping the
+          # composer package versions after this step.
+          command: git checkout -b $EDGE_BUILD_BRANCH
+      - composer_tasks__edge_packages
+      - run:
+          name: Re-point dof-dss packages to use latest development code and push.
+          command: |
+            git add composer.*
+            git commit -m "Set dof-dss packages to HEAD development for build"
+      - run:
+          name: Push changes back to GitHub
+          command: |
+            git push -f origin $EDGE_BUILD_BRANCH
+  # Separate task to allow us to sync data on PSH environments, without pauses in other jobs.
+  sync_data:
+    docker:
+      - image: circleci/php:7.4.15-apache-browsers
+    steps:
+      - hosts_keyscan
+      - checkout_code
+      - install_php_os_extensions
+      - install_psh_cli
+      - run:
+          name: Trigger a data sync from production environment to an edge build.
+          command: |
+            platform sync data -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH -y
+      - run:
+          name: Refresh configuration as our db will contain active prod config after sync operation
+          command: |
+            platform environment:drush cim -y -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
 # Re-usable commands.
 commands:
   checkout_code:
@@ -113,7 +188,8 @@ commands:
       - run:
           name: Switch dof-dss packages to HEAD on develelopment branch
           command: |
-            composer require dof-dss/nicsdru_origins_theme:dev-development dof-dss/nicsdru_origins_modules:dev-development
+            composer require dof-dss/nicsdru_origins_theme:dev-development \
+                              dof-dss/nicsdru_origins_modules:dev-development
   install_php_os_extensions:
     description: "Install a standard group of extensions and packages"
     steps:
