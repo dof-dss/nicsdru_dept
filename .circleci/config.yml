@@ -24,7 +24,7 @@ workflows:
       - build_edge
 
   # A separate scheduled workflow to sync the data after the edge build completes.
-  build-edge-post-build-tasks:
+  build-edge-finalise:
     triggers:
       - schedule:
           # At 02:30 on every day-of-week from Monday through Friday
