@@ -7,9 +7,13 @@ dept_user.example:
     _permission: 'access content'
 
 dept_user.edit_user_group_membership_form:
-  path: '/admin/user/edit-group-membership'
+  path: '/admin/user/edit-group-membership/{user}'
   defaults:
     _title: 'Edit User to Group membership'
     _form: 'Drupal\dept_user\Form\EditUserGroupMembershipForm'
   requirements:
     _permission: 'administer users'
+  options:
+    parameters:
+      user:
+        type: entity:user

@@ -19,7 +19,7 @@ function dept_user_entity_operation(EntityInterface $entity) {
     $operations = [];
     $operations['edit_user_group_membership'] = [
       'title' => t('Group membership'),
-      'url' => \Drupal\Core\Url::fromRoute('dept_user.edit_user_group_membership_form'),
+      'url' => \Drupal\Core\Url::fromRoute('dept_user.edit_user_group_membership_form', ['user' => $entity->id()]),
       'weight' => 40,
     ];
     return $operations;
