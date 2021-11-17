@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Configure departmental users settings for this site.
  */
-class AddUserToGroupForm extends FormBase {
+class EditUserGroupMembershipForm extends FormBase {
 
   /**
    * {@inheritdoc}

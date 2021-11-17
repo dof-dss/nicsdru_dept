@@ -17,9 +17,9 @@ use Drupal\Core\Entity\EntityInterface;
 function dept_user_entity_operation(EntityInterface $entity) {
   if ($entity instanceof \Drupal\user\UserInterface) {
     $operations = [];
-    $operations['add_to_group'] = [
-      'title' => t('Add to Group(s)'),
-      'url' => \Drupal\Core\Url::fromRoute('dept_user.add_user_to_group_form'),
+    $operations['edit_user_group_membership'] = [
+      'title' => t('Group membership'),
+      'url' => \Drupal\Core\Url::fromRoute('dept_user.edit_user_group_membership_form'),
       'weight' => 40,
     ];
     return $operations;
