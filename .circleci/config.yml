@@ -134,13 +134,11 @@ jobs:
       - install_php_os_extensions
       - install_psh_cli
       - run:
+          # This task triggers a drush cim from the .platform.app.yaml build/deploy steps.
           name: Trigger a data sync from production environment to an edge build.
           command: |
             platform sync data -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH -y
-      - run:
-          name: Refresh configuration as our db will contain active prod config after sync operation
-          command: |
-            platform environment:drush cim -y -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
+
 # Re-usable commands.
 commands:
   checkout_code:
