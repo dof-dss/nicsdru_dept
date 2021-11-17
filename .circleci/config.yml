@@ -126,6 +126,8 @@ jobs:
   sync_data:
     docker:
       - image: circleci/php:7.4.15-apache-browsers
+    environment:
+      EDGE_BUILD_BRANCH: "DEPT-edge"
     steps:
       - hosts_keyscan
       - checkout_code
