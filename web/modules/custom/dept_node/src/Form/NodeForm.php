@@ -162,17 +162,38 @@ class NodeForm extends CoreNodeForm {
   public function save($form, FormStateInterface $form_state) {
     parent::save($form, $form_state);
 
-    $groups = $form_state->getValue('groups');
-    $group_storage = $this->entityTypeManager->getStorage('group');
 
-    foreach ($groups as $group) {
-      $group = $group_storage->load($group);
-      $plugin_id = $this->entity->groupBundle();
-      // Check if the content plugin is enabled for the current group.
-      if (!empty($group) && $group->getGroupType()->hasContentPlugin($plugin_id)) {
-        // If this content doesn't exist in the group, add it.
-        if (!$group->getContentByEntityId($plugin_id, $this->entity->id())) {
+    $groups = array_filter($form_state->getValue('groups'));
+    $group_storage = $this->entityTypeManager->getStorage('group');
+    $plugin_id = $this->entity->groupBundle();
+
+    if ($this->entity->isNew()) {
+      foreach ($groups as $group) {
+        $group = $group_storage->load($group);
+        // Check if the content plugin is enabled for the current group.
+        if (!empty($group) && $group->getGroupType()->hasContentPlugin($plugin_id)) {
           $group->addContent($this->entity, $plugin_id);
+        }
+      }
+    }
+    else {
+      $entity_groups = $this->entity->getGroups();
+
+      // Add entity to groups.
+      foreach (array_diff_key($groups, $entity_groups) as $id => $label) {
+        $group = $group_storage->load($id);
+        // Check if the content plugin is enabled for the current group.
+        if (!empty($group) && $group->getGroupType()->hasContentPlugin($plugin_id)) {
+          $group->addContent($this->entity, $plugin_id);
+        }
+      }
+
+      // Remove entity from groups.
+      foreach (array_diff_key($entity_groups, $groups) as $id => $label) {
+        $group = $group_storage->load($id);
+        $group_entity_relations = $group->getContentByEntityId($plugin_id, $this->entity->id());
+        foreach ($group_entity_relations as $relation) {
+          $relation->delete();
         }
       }
     }
