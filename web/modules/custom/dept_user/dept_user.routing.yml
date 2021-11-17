@@ -1,0 +1,15 @@
+dept_user.example:
+  path: '/dept-user/example'
+  defaults:
+    _title: 'Example'
+    _controller: '\Drupal\dept_user\Controller\DeptUserController::build'
+  requirements:
+    _permission: 'access content'
+
+dept_user.add_user_to_group_form:
+  path: '/admin/user/add-to-group'
+  defaults:
+    _title: 'Add User to Group(s)'
+    _form: 'Drupal\dept_user\Form\AddUserToGroupForm'
+  requirements:
+    _permission: 'administer users'
