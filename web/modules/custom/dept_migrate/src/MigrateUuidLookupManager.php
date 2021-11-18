@@ -53,6 +53,49 @@ class MigrateUuidLookupManager {
   }
 
   /**
+   * @param array $uuids
+   *   One or more source UUIDs.
+   *
+   * @return array
+   *   Associative array of node metdata, keyed by source UUID.
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function lookupBySourceUuId(array $uuids) {
+    $map = [];
+
+    $d7results = $this->d7conn->query("SELECT * FROM {node} WHERE uuid IN (:uuids[])", [':uuids[]' => $uuids]);
+    foreach ($d7results as $row) {
+      $map[$row->uuid] = [
+        'd7nid' => $row->nid,
+        'd7type' => $row->type,
+        'd7title' => $row->title,
+      ];
+    }
+
+    // Match up to D9 nodes using uuid as key from migrate table.
+    foreach ($map as $d7uuid => $node) {
+      $table = 'migrate_map_node_' . $node['d7type'];
+      if ($this->dbconn->schema()->tableExists($table) === FALSE) {
+        // Skip the rest if this table doesn't exist.
+        continue;
+      }
+
+      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $d7uuid]);
+
+      foreach ($migrate_map as $row) {
+        $node = $this->entityTypeManager->getStorage('node')->load($row->destid1);
+        $map[$d7uuid]['nid'] = $node->id();
+        $map[$d7uuid]['uuid'] = $node->uuid();
+        $map[$d7uuid]['title'] = $node->label();
+        $map[$d7uuid]['type'] = $node->bundle();
+      }
+    }
+
+    return $map;
+  }
+
+  /**
    * @param array $nids
    *   One or more source node ids.
    *
