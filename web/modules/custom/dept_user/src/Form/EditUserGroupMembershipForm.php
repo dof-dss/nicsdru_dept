@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\group\Entity\Group;
 use Drupal\group\GroupMembershipLoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -37,6 +38,16 @@ class EditUserGroupMembershipForm extends FormBase {
   protected $userAccount;
 
   /**
+   * All Group entities.
+   */
+  protected $allGroups;
+
+  /**
+   * The users group memberships.
+   */
+  protected $userMemberships;
+
+  /**
    * Class constructor.
    *
    * @param \Drupal\group\GroupMembershipLoaderInterface $group_membership
@@ -50,6 +61,8 @@ class EditUserGroupMembershipForm extends FormBase {
     $this->groupMembership = $group_membership;
     $this->entityTypeManager = $entity_type_manager;
     $this->userAccount = $user_account;
+    $this->allGroups = $this->entityTypeManager->getStorage('group')->loadMultiple();
+    $this->userMemberships = $this->groupMembership->loadByUser($this->userAccount);
   }
 
   /**
@@ -76,21 +89,26 @@ class EditUserGroupMembershipForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, AccountInterface $user = NULL) {
 
-    $group_entities = $this->entityTypeManager->getStorage('group')->loadMultiple();
-    $user_memberships = $this->groupMembership->loadByUser($this->userAccount);
-
-    foreach ($group_entities as $group) {
-      $all_groups[$group->id()] = $group->label();
+    foreach ($this->allGroups as $group) {
+      $groups_options[$group->id()] = $group->label();
     }
 
-    foreach ($user_memberships as $membership) {
+    foreach ($this->userMemberships as $membership) {
       $users_groups[] = $membership->getGroup()->id();
     }
 
     $form['groups'] = [
       '#type' => 'checkboxes',
-      '#options' => $all_groups,
+      '#options' => $groups_options,
       '#default_value' => $users_groups,
+    ];
+
+    $form['actions']['#type'] = 'actions';
+
+    $form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Save'),
+      '#button_type' => 'primary',
     ];
 
     return $form;
@@ -99,18 +117,25 @@ class EditUserGroupMembershipForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
-    parent::validateForm($form, $form_state);
-
-    if ($form_state->getValue('example') != 'example') {
-      $form_state->setErrorByName('example', $this->t('The value is not correct.'));
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+
+    $groups = array_filter($form_state->getValue('groups'));
+    $all_groups = $this->entityTypeManager->getStorage('group')->loadMultiple();
+
+    // Create an array indexed by group ID so we can compare
+    foreach ($this->userMemberships as $membership) {
+      $memberships[$membership->getGroup()->id()] = $membership;
+    }
+
+    // Add user to `groups.
+    foreach (array_diff_key($groups, $memberships) as $id) {
+      $all_groups[$id]->addMember($this->userAccount);
+    }
+
+    // Remove user from groups.
+    foreach (array_diff_key($memberships, $groups) as $id => $group) {
+      $all_groups[$id]->removeMember($this->userAccount);
+    }
   }
 
 }
