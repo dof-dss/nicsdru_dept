@@ -11,7 +11,7 @@ use Drupal\Core\Routing\RedirectDestinationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a list controller for the departmental example group content entity entity type.
+ * Provides a list controller for the dept example group content entities.
  */
 class DeptExampleGroupEntityListBuilder extends EntityListBuilder {
 
@@ -91,7 +91,6 @@ class DeptExampleGroupEntityListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /* @var $entity \Drupal\dept_example_group_entity\DeptExampleGroupEntityInterface */
     $row['id'] = $entity->id();
     $row['title'] = $entity->toLink();
     $row['status'] = $entity->isEnabled() ? $this->t('Enabled') : $this->t('Disabled');

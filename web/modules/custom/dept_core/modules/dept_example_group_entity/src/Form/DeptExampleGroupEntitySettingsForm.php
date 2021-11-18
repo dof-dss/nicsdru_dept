@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Configuration form for a departmental example group content entity entity type.
+ * Configuration form for a dept example group content entity type.
  */
 class DeptExampleGroupEntitySettingsForm extends FormBase {
 

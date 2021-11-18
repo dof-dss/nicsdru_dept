@@ -11,7 +11,7 @@ use Drupal\group\GroupMembershipLoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Form controller for the departmental example group content entity entity edit forms.
+ * Form controller for the dept example group content entity edit forms.
  */
 class DeptExampleGroupEntityForm extends ContentEntityForm {
 

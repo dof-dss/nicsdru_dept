@@ -56,8 +56,9 @@ class DeptExampleGroupEntity extends ContentEntityBase implements DeptExampleGro
   /**
    * {@inheritdoc}
    *
-   * When a new departmental example group content entity entity is created, set the uid entity reference to
-   * the current user as the creator of the entity.
+   * When a new departmental example group content entity entity is created,
+   * set the uid entity reference to the current user as the creator of the
+   * entity.
    */
   public static function preCreate(EntityStorageInterface $storage_controller, array &$values) {
     parent::preCreate($storage_controller, $values);

@@ -21,4 +21,3 @@ class DeptExampleGroupEntityPermissionProvider extends GroupContentPermissionPro
   }
 
 }
-

@@ -2,6 +2,9 @@
 
 namespace Drupal\dept_core;
 
+/**
+ * Provides methods to help integrate an entity into the Group module.
+ */
 trait GroupableEntityTrait {
 
   /**

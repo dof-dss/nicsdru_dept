@@ -7,7 +7,7 @@ use Drupal\user\EntityOwnerInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
 
 /**
- * Provides an interface defining a departmental example group content entity entity type.
+ * Provides an interface defining a dept example group content entity type.
  */
 interface DeptExampleGroupEntityInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
 
@@ -53,7 +53,8 @@ interface DeptExampleGroupEntityInterface extends ContentEntityInterface, Entity
    * Returns the departmental example group content entity status.
    *
    * @return bool
-   *   TRUE if the departmental example group content entity is enabled, FALSE otherwise.
+   *   TRUE if the departmental example group content entity is enabled,
+   *   FALSE otherwise.
    */
   public function isEnabled();
 
@@ -61,7 +62,8 @@ interface DeptExampleGroupEntityInterface extends ContentEntityInterface, Entity
    * Sets the departmental example group content entity status.
    *
    * @param bool $status
-   *   TRUE to enable this departmental example group content entity, FALSE to disable.
+   *   TRUE to enable this departmental example group content entity,
+   *   FALSE to disable.
    *
    * @return \Drupal\dept_example_group_entity\DeptExampleGroupEntityInterface
    *   The called departmental example group content entity entity.

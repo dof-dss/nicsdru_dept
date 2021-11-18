@@ -4,10 +4,13 @@ namespace Drupal\dept_example_group_entity\Plugin\GroupContentEnabler;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
 
+/**
+ * Deriver for Dept example group entities.
+ */
 class DeptExampleGroupEntityDeriver extends DeriverBase {
 
   /**
-   * {@inheritdoc}.
+   * {@inheritdoc}
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
     $this->derivatives['dept_example_group_entity'] = [

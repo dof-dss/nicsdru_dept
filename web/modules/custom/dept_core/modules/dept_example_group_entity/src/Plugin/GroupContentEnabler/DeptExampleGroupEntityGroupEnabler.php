@@ -24,7 +24,6 @@ use Drupal\Core\Form\FormStateInterface;
  *     "access" = "Drupal\group\Plugin\GroupContentAccessControlHandler",
  *     "permission_provider" = "Drupal\dept_example_group_entity\Plugin\DeptExampleGroupEntityPermissionProvider",
  *   }
-
  * )
  */
 class DeptExampleGroupEntityGroupEnabler extends GroupContentEnablerBase {
