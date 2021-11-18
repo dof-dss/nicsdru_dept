@@ -19,7 +19,12 @@ use Drupal\Core\Form\FormStateInterface;
  *   pretty_path_key = "node",
  *   reference_label = @Translation("Title"),
  *   reference_description = @Translation("The name of the dept example group entity to add to the group"),
- *   deriver = "Drupal\dept_example_group_entity\Plugin\GroupContentEnabler\DeptExampleGroupEntityDeriver"
+ *   deriver = "Drupal\dept_example_group_entity\Plugin\GroupContentEnabler\DeptExampleGroupEntityDeriver",
+ *   handlers = {
+ *     "access" = "Drupal\group\Plugin\GroupContentAccessControlHandler",
+ *     "permission_provider" = "Drupal\dept_example_group_entity\Plugin\DeptExampleGroupEntityPermissionProvider",
+ *   }
+
  * )
  */
 class DeptExampleGroupEntityGroupEnabler extends GroupContentEnablerBase {
@@ -41,22 +46,6 @@ class DeptExampleGroupEntityGroupEnabler extends GroupContentEnablerBase {
     }
 
     return $group_operations;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getTargetEntityPermissions() {
-    $permissions = parent::getTargetEntityPermissions();
-    $plugin_id = $this->getPluginId();
-
-    // Add a 'view unpublished' permission by re-using most of the 'view' one.
-    $original = $permissions["view $plugin_id entity"];
-    $permissions["view unpublished $plugin_id entity"] = [
-      'title' => str_replace('View ', 'View unpublished ', $original['title']),
-    ] + $original;
-
-    return $permissions;
   }
 
   /**
