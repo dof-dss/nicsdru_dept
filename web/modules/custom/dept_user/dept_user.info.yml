@@ -1,5 +1,8 @@
 name: 'Department sites: users'
 type: module
-description: 'Tweaks for users'
+description: 'Additional functionality and adjustments to User entities'
 core_version_requirement: ^8.8 || ^9
 package: 'NICS: Departmental'
+dependencies:
+  - drupal:user
+  - groups
