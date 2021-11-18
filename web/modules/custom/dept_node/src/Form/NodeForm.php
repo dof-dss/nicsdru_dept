@@ -162,7 +162,6 @@ class NodeForm extends CoreNodeForm {
   public function save($form, FormStateInterface $form_state) {
     parent::save($form, $form_state);
 
-
     $groups = array_filter($form_state->getValue('groups'));
     $group_storage = $this->entityTypeManager->getStorage('group');
     $plugin_id = $this->entity->groupBundle();
