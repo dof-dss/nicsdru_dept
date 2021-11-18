@@ -97,7 +97,14 @@ class EditUserGroupMembershipForm extends FormBase {
       $users_groups[] = $membership->getGroup()->id();
     }
 
-    $form['groups'] = [
+    $form['group_wrapper'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Group membership for @name (%email)', [
+        '@name' => $this->userAccount->getAccountName(),
+        '%email' => $this->userAccount->getEmail()]),
+    ];
+
+    $form['group_wrapper']['groups'] = [
       '#type' => 'checkboxes',
       '#options' => $groups_options,
       '#default_value' => $users_groups,
