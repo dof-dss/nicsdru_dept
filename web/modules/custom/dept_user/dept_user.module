@@ -10,16 +10,18 @@
  */
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
+use \Drupal\user\UserInterface;
 
 /**
  * Implements hook_entity_operation().
  */
 function dept_user_entity_operation(EntityInterface $entity) {
-  if ($entity instanceof \Drupal\user\UserInterface) {
+  if ($entity instanceof UserInterface) {
     $operations = [];
     $operations['edit_user_group_membership'] = [
       'title' => t('Group membership'),
-      'url' => \Drupal\Core\Url::fromRoute('dept_user.edit_user_group_membership_form', ['user' => $entity->id()]),
+      'url' => Url::fromRoute('dept_user.edit_user_group_membership_form', ['user' => $entity->id()]),
       'weight' => 40,
     ];
     return $operations;

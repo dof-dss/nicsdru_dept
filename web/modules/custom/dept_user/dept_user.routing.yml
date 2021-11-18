@@ -1,11 +1,3 @@
-dept_user.example:
-  path: '/dept-user/example'
-  defaults:
-    _title: 'Example'
-    _controller: '\Drupal\dept_user\Controller\DeptUserController::build'
-  requirements:
-    _permission: 'access content'
-
 dept_user.edit_user_group_membership_form:
   path: '/admin/user/edit-group-membership/{user}'
   defaults:
