@@ -14,6 +14,8 @@ config:
   config:
     php: .lando/config/php.ini
     database: .lando/config/my.cnf
+compose:
+  - docker-compose.yml
 env_file:
   - .lando/config/.env
 proxy:
@@ -31,8 +33,8 @@ proxy:
     - nigov.lndo.site
 services:
   appserver:
-    build:
-      - composer install
+    build_as_root:
+      - /app/.lando/scripts/appserver_build.sh
   redis:
     type: redis:5.0
     # Use persist: true to persist the cache's data between restarts and rebuilds.
@@ -80,3 +82,17 @@ tooling:
   drush:
     server: appserver
     cmd: /app/vendor/bin/drush -r /app/web
+  yarn:
+    service: appserver
+    cmd: yarn
+  nightwatch:
+    service: appserver
+    description: "Run Nightwatch.js functional tests.\n\n
+                  Usage:\n
+                  > Run a specific test with tag\n
+                  lando nightwatch --tag your-tag\n
+                  > Run a single test suite file, relative to Drupal core location\n
+                  lando nightwatch ../modules/custom/modulename/tests/src/Nightwatch/Tests/yourTestSuite.js\n
+                  > Run all tests except Core\n
+                  lando nightwatch --skiptags core\n"
+    cmd: "yarn --cwd=/app/web/core test:nightwatch"
