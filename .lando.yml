@@ -33,6 +33,7 @@ proxy:
     - nigov.lndo.site
 services:
   appserver:
+    scanner: false
     build_as_root:
       - /app/.lando/scripts/appserver_build.sh
   redis:
@@ -50,6 +51,7 @@ services:
     type: solr:7
     portforward: true
     core: default
+      dir: .lando/config/solr/7.x/default
   mailhog:
     type: mailhog
     portforward: true
