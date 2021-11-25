@@ -1,9 +1,5 @@
-name: 'Departmental sites: node'
+name: 'Departmental sites: core'
 type: module
-description: 'Enhances the core Node type with better integration to Groups etc.'
+description: 'Provides core functionality for departmental sites'
 package: 'NICS: Departmental'
 core_version_requirement: ^8 || ^9
-dependencies:
-  - drupal:node
-  - drupal:user
-  - dept_core
