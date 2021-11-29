@@ -1,0 +1,5 @@
+dept_dev.domain.lando_hostnames:
+  route_name: entity.domain.add
+  title: 'Set all hostnames to lando domains'
+  appears_on:
+    - domain.admin
