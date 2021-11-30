@@ -4,4 +4,4 @@ dept_dev.lando_hostnames:
     _controller: '\Drupal\dept_dev\Controller\LandoHostnamesController::setLandHostnames'
     _title: 'Set Lando hostnames'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer domains'
