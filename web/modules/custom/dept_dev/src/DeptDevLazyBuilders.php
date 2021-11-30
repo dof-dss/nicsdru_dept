@@ -47,7 +47,7 @@ class DeptDevLazyBuilders implements TrustedCallbackInterface {
   }
 
   /**
-   * #lazy_builder callback; builds departmental site links.
+   * Lazy builder callback to build departmental site links.
    *
    * @return array
    *   A renderable array of site links.
@@ -58,8 +58,8 @@ class DeptDevLazyBuilders implements TrustedCallbackInterface {
 
     foreach ($domains as $domain) {
       $links[$domain->id()] = [
-          'title' => $domain->label(),
-          'url' => Url::fromUri($domain->getPath())
+        'title' => $domain->label(),
+        'url' => Url::fromUri($domain->getPath()),
       ];
     }
 

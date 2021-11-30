@@ -37,6 +37,9 @@ class LandoHostnamesController extends ControllerBase {
     );
   }
 
+  /**
+   * Sets all Domain objects to use Lando domain and HTTP protocol.
+   */
   public function setLandHostnames() {
     $domains = $this->entityTypeManager->getStorage('domain')->loadMultiple();
 
@@ -50,7 +53,5 @@ class LandoHostnamesController extends ControllerBase {
 
     return $this->redirect('domain.admin');
   }
-
-
 
 }
