@@ -2,6 +2,6 @@ block.settings.dept_core_departmental_details:
   type: block_settings
   label: 'Departmental details block'
   mapping:
-    foo:
+    display_field:
       type: string
-      label: Foo
+      label: field
