@@ -12,4 +12,10 @@ audience: anonymous
 group_type: department_site
 permissions_ui: true
 permissions:
+  - 'view group_media:audio entity'
+  - 'view group_media:document entity'
+  - 'view group_media:image entity'
+  - 'view group_media:remote_video entity'
+  - 'view group_media:video entity'
   - 'view group_node:article entity'
+  - 'view group_node:news entity'
