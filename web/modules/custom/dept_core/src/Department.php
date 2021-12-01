@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_core;
 
+use Drupal\Core\Session\AccountInterface;
 use Drupal\group\Entity\Group;
 
 class Department {
@@ -118,5 +119,14 @@ class Department {
   public function setUrl(string $url): void {
     $this->url = $url;
   }
+
+  public function getMember(AccountInterface $account) {
+    return $this->group->getMember($account);
+  }
   
+  public function getMembers() {
+    return $this->group->getMembers();
+  }
+
+
 }
