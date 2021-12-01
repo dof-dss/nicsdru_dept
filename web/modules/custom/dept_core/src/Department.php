@@ -11,12 +11,12 @@ class Department {
   /**
    * @var \Drupal\group\Entity\GroupInterface
    */
-  protected $group;
+  private $group;
 
   /**
    * @var \Drupal\domain\Entity\Domain
    */
-  protected $domain;
+  private $domain;
 
   protected $group_id;
   protected $domain_id;
@@ -123,9 +123,13 @@ class Department {
   public function getMember(AccountInterface $account) {
     return $this->group->getMember($account);
   }
-  
+
   public function getMembers() {
     return $this->group->getMembers();
+  }
+
+  public function getManagementAndStructure() {
+    return $this->group->get('field_management_and_structure')->getString();
   }
 
 
