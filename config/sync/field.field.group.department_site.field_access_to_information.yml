@@ -1,0 +1,21 @@
+uuid: db7d6509-db37-4f41-92eb-39df71880fa3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.group.field_access_to_information
+    - group.type.department_site
+  module:
+    - text
+id: group.department_site.field_access_to_information
+field_name: field_access_to_information
+entity_type: group
+bundle: department_site
+label: 'Access to information'
+description: 'Enter the primary contact details for the department/agency/ndpb.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

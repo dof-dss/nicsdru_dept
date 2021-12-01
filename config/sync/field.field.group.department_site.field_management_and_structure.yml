@@ -1,0 +1,23 @@
+uuid: ed261c74-70b9-4a06-866a-6a6f08d6c598
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.group.field_management_and_structure
+    - group.type.department_site
+  module:
+    - text
+id: group.department_site.field_management_and_structure
+field_name: field_management_and_structure
+entity_type: group
+bundle: department_site
+label: 'Management and structure'
+description: 'This field renders the departmental management information, it also provides the main content when the page is selected'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

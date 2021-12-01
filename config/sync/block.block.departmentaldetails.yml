@@ -1,0 +1,21 @@
+uuid: 12a827d2-7b9e-4b67-8110-4ce39078110f
+langcode: en
+status: true
+dependencies:
+  module:
+    - dept_core
+  theme:
+    - bartik
+id: departmentaldetails
+theme: bartik
+region: content
+weight: -3
+provider: null
+plugin: dept_core_departmental_details
+settings:
+  id: dept_core_departmental_details
+  label: 'Departmental details'
+  provider: dept_core
+  label_display: '0'
+  display_field: group.field_management_and_structure
+visibility: {  }
