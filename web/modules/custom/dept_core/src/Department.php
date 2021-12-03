@@ -3,7 +3,6 @@
 namespace Drupal\dept_core;
 
 use Drupal\Core\Session\AccountInterface;
-use Drupal\group\Entity\Group;
 
 class Department {
 
@@ -28,10 +27,9 @@ class Department {
    *
    * @param $domain_id
    */
-  public function __construct($domain_id) {
+  public function __construct($entity_type_manager, $domain_id = null) {
     $this->domain_id = $domain_id;
 
-    $entity_type_manager = \Drupal::entityTypeManager();
     $this->domain = $entity_type_manager->getStorage('domain')->load($this->domain_id);
 
     if (!empty($this->domain)) {
@@ -42,8 +40,6 @@ class Department {
 
       $this->group = $entity_type_manager->getStorage('group')->load($this->group_id);
     }
-
-
   }
 
   /**
@@ -131,6 +127,5 @@ class Department {
   public function getManagementAndStructure() {
     return $this->group->get('field_management_and_structure')->getString();
   }
-
 
 }
