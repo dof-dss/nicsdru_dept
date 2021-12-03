@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_core;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\domain\DomainNegotiatorInterface;
@@ -50,11 +51,11 @@ class DepartmentManager {
   public function getCurrentDepartment() {
     $active_domain = $this->domainNegotiator->getActiveDomain();
 
-    $department = $this->cache->get('department_' . $active_domain->id());
+    $department = $this->cache->get('department_' . $active_domain->id())->data;
 
     if (empty($department)) {
      $department = new Department($this->entityTypeManager, $active_domain->id());
-     $this->cache->set('department_' . $active_domain->id(), $department);
+     $this->cache->set('department_' . $active_domain->id(), $department, CACHE::PERMANENT, ['url.site','group:' . $department->getGroupId()]);
     }
 
     return $department;

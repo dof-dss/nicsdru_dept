@@ -19,6 +19,7 @@ class Department {
 
   protected $group_id;
   protected $domain_id;
+  protected $id;
   protected $name;
   protected $status;
   protected $url;
@@ -28,15 +29,15 @@ class Department {
    * @param $domain_id
    */
   public function __construct($entity_type_manager, $domain_id = null) {
-    $this->domain_id = $domain_id;
+    $this->id = $domain_id;
 
-    $this->domain = $entity_type_manager->getStorage('domain')->load($this->domain_id);
+    $this->domain = $entity_type_manager->getStorage('domain')->load($this->id);
 
     if (!empty($this->domain)) {
-
       $this->setName($this->domain->label());
       $this->setUrl($this->domain->get('url'));
       $this->setGroupId($this->domain->id());
+      $this->setDomainId($this->domain->get('domain_id'));
 
       $this->group = $entity_type_manager->getStorage('group')->load($this->group_id);
     }
@@ -61,17 +62,31 @@ class Department {
   }
 
   /**
-   * @return string
+   * @return mixed
    */
-  public function getDomainId(): string {
+  public function getDomainId() {
     return $this->domain_id;
   }
 
   /**
-   * @param string $domain_id
+   * @param mixed $domain_id
    */
-  public function setDomainId(string $domain_id): void {
+  public function setDomainId($domain_id): void {
     $this->domain_id = $domain_id;
+  }
+
+  /**
+   * @return string
+   */
+  public function getId(): string {
+    return $this->id;
+  }
+
+  /**
+   * @param string $id
+   */
+  public function setId(string $id): void {
+    $this->id = $id;
   }
 
   /**
