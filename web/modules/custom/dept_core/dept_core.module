@@ -6,4 +6,5 @@
 function dept_core_preprocess_page(&$variables) {
   $dept_manager = \Drupal::service('department.manager');
   $variables['department'] = $dept_manager->getCurrentDepartment();
+
 }

@@ -2,10 +2,14 @@
 
 namespace Drupal\dept_core;
 
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Session\AccountInterface;
 
 /**
  * Class for bridging the gap between Domain and Group entities for Departments.
+ *
+ * This class should not be used to load Departments directly, instead the
+ * methods available in the DepartmentManager service should be used.
  */
 class Department {
 
@@ -50,13 +54,6 @@ class Department {
    * @var string
    */
   protected string $name;
-
-  /**
-   * Department published status.
-   *
-   * @var bool
-   */
-  protected bool $status;
 
   /**
    * URL for the department.
@@ -145,20 +142,6 @@ class Department {
   }
 
   /**
-   * Getter for Status.
-   */
-  public function getStatus() {
-    return $this->status;
-  }
-
-  /**
-   * Setter for Status.
-   */
-  public function setStatus($status): void {
-    $this->status = $status;
-  }
-
-  /**
    * Getter for URL.
    */
   public function getUrl(): string {
@@ -190,7 +173,28 @@ class Department {
    * Returns Management and Structure details.
    */
   public function getManagementAndStructure() {
-    return $this->group->get('field_management_and_structure')->getString();
+    return render($this->group->field_management_and_structure->view('full'));
+  }
+
+  /**
+   * Returns Access to information details.
+   */
+  public function getAccessToInformation() {
+    return render($this->group->field_access_to_information->view('full'));
+  }
+
+  /**
+   * Returns Contact Information details.
+   */
+  public function getContactInformation() {
+    return render($this->group->field_contact_information->view('full'));
+  }
+
+  /**
+   * Returns Social media links.
+   */
+  public function getSocialMediaLinks() {
+    return render($this->group->field_social_media_links->view('full'));
   }
 
 }
