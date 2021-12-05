@@ -4,31 +4,71 @@ namespace Drupal\dept_core;
 
 use Drupal\Core\Session\AccountInterface;
 
+/**
+ * Class for bridging the gap between Domain and Group entities for Departments.
+ */
 class Department {
 
-
   /**
+   * The Departments Group entity.
+   *
    * @var \Drupal\group\Entity\GroupInterface
    */
   private $group;
 
   /**
+   * The Departments Domain entity.
+   *
    * @var \Drupal\domain\Entity\Domain
    */
   private $domain;
 
-  protected $group_id;
-  protected $domain_id;
-  protected $id;
-  protected $name;
-  protected $status;
+  /**
+   * The Group identifier.
+   *
+   * @var int
+   */
+  protected int $groupId;
+
+  /**
+   * The Domain identifier.
+   *
+   * @var int
+   */
+  protected int $domainId;
+
+  /**
+   * The Department identifier.
+   *
+   * @var string
+   */
+  protected string $id;
+
+  /**
+   * The name of the Department.
+   *
+   * @var string
+   */
+  protected string $name;
+
+  /**
+   * Department published status.
+   *
+   * @var bool
+   */
+  protected bool $status;
+
+  /**
+   * URL for the department.
+   *
+   * @var string
+   */
   protected $url;
 
   /**
-   *
-   * @param $domain_id
+   * Class constructor.
    */
-  public function __construct($entity_type_manager, $domain_id = null) {
+  public function __construct($entity_type_manager, $domain_id = NULL) {
     $this->id = $domain_id;
 
     $this->domain = $entity_type_manager->getStorage('domain')->load($this->id);
@@ -39,106 +79,116 @@ class Department {
       $this->setGroupId($this->domain->id());
       $this->setDomainId($this->domain->get('domain_id'));
 
-      $this->group = $entity_type_manager->getStorage('group')->load($this->group_id);
+      $this->group = $entity_type_manager->getStorage('group')->load($this->groupId);
     }
   }
 
   /**
-   * @return string
+   * Getter for Domain ID.
    */
   public function getGroupId(): string {
-    return $this->group_id;
+    return $this->groupId;
   }
 
   /**
-   * @param mixed $group_id
+   * Setter for Group ID.
    */
-  public function setGroupId($group_id): void {
-    if (is_int($group_id)) {
-      $this->group_id = $group_id;
-    } else {
-      $this->group_id = substr($group_id, strpos($group_id, "_") + 1);
+  public function setGroupId($groupId): void {
+    if (is_int($groupId)) {
+      $this->groupId = $groupId;
+    }
+    else {
+      $this->groupId = substr($groupId, strpos($groupId, "_") + 1);
     }
   }
 
   /**
-   * @return mixed
+   * Getter for Domain ID.
    */
   public function getDomainId() {
-    return $this->domain_id;
+    return $this->domainId;
   }
 
   /**
-   * @param mixed $domain_id
+   * Setter for Domain ID.
    */
-  public function setDomainId($domain_id): void {
-    $this->domain_id = $domain_id;
+  public function setDomainId($domainId): void {
+    $this->domainId = $domainId;
   }
 
   /**
-   * @return string
+   * Getter for ID.
    */
   public function getId(): string {
     return $this->id;
   }
 
   /**
-   * @param string $id
+   * Setter for ID.
    */
   public function setId(string $id): void {
     $this->id = $id;
   }
 
   /**
-   * @return string
+   * Getter for Name.
    */
   public function getName(): string {
     return $this->name;
   }
 
   /**
-   * @param mixed $name
+   * Setter for Name.
    */
   public function setName($name): void {
     $this->name = $name;
   }
 
   /**
-   * @return mixed
+   * Getter for Status.
    */
   public function getStatus() {
     return $this->status;
   }
 
   /**
-   * @param mixed $status
+   * Setter for Status.
    */
   public function setStatus($status): void {
     $this->status = $status;
   }
 
   /**
-   * @return string
+   * Getter for URL.
    */
   public function getUrl(): string {
     return $this->url;
   }
 
   /**
-   * @param string $url
+   * Setter for URL.
    */
   public function setUrl(string $url): void {
     $this->url = $url;
   }
 
+  /**
+   * Returns a User account for the Department.
+   */
   public function getMember(AccountInterface $account) {
     return $this->group->getMember($account);
   }
 
+  /**
+   * Returns User accounts belonging to the Department.
+   */
   public function getMembers() {
     return $this->group->getMembers();
   }
 
+  /**
+   * Returns Management and Structure details.
+   */
   public function getManagementAndStructure() {
     return $this->group->get('field_management_and_structure')->getString();
   }

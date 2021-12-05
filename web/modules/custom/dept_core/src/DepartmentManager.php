@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\domain\DomainNegotiatorInterface;
 
 /**
- * DepartmentManager service.
+ * Service class for managing Department objects.
  */
 class DepartmentManager {
 
@@ -40,6 +40,8 @@ class DepartmentManager {
    *   The Domain negotiator service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   The default cache service.
    */
   public function __construct(DomainNegotiatorInterface $domain_negotiator, EntityTypeManagerInterface $entity_type_manager, CacheBackendInterface $cache) {
     $this->domainNegotiator = $domain_negotiator;
@@ -47,6 +49,9 @@ class DepartmentManager {
     $this->cache = $cache;
   }
 
+  /**
+   * Returns the Department for the current domain.
+   */
   public function getCurrentDepartment() {
     $active_domain = $this->domainNegotiator->getActiveDomain();
 
@@ -55,20 +60,24 @@ class DepartmentManager {
 
   /**
    * Returns a department.
-   * @param $id
+   *
+   * @param string $id
    *   The domain ID to load a department.
    */
-  public function getDepartment($id) {
+  public function getDepartment(string $id) {
     $department = $this->cache->get('department_' . $id)->data;
 
     if (empty($department)) {
       $department = new Department($this->entityTypeManager, $id);
-      // Add to cache and use tags that will invalidate when the Domain or Group entities change.
-      $this->cache->set('department_' . $id, $department, CACHE::PERMANENT, ['url.site','group:' . $department->getGroupId()]);
+      // Add to cache and use tags that will invalidate when the Domain or
+      // Group entities change.
+      $this->cache->set('department_' . $id, $department, CACHE::PERMANENT, [
+        'url.site',
+        'group:' . $department->getGroupId(),
+      ]);
     }
 
     return $department;
   }
-
 
 }
