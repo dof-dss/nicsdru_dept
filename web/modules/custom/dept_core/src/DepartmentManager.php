@@ -6,7 +6,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\domain\DomainNegotiatorInterface;
-use Drupal\example\ExampleInterface;
 
 /**
  * DepartmentManager service.
@@ -51,17 +50,25 @@ class DepartmentManager {
   public function getCurrentDepartment() {
     $active_domain = $this->domainNegotiator->getActiveDomain();
 
-    $department = $this->cache->get('department_' . $active_domain->id())->data;
+    return $this->getDepartment($active_domain->id());
+  }
+
+  /**
+   * Returns a department.
+   * @param $id
+   *   The domain ID to load a department.
+   */
+  public function getDepartment($id) {
+    $department = $this->cache->get('department_' . $id)->data;
 
     if (empty($department)) {
-     $department = new Department($this->entityTypeManager, $active_domain->id());
-     $this->cache->set('department_' . $active_domain->id(), $department, CACHE::PERMANENT, ['url.site','group:' . $department->getGroupId()]);
+      $department = new Department($this->entityTypeManager, $id);
+      // Add to cache and use tags that will invalidate when the Domain or Group entities change.
+      $this->cache->set('department_' . $id, $department, CACHE::PERMANENT, ['url.site','group:' . $department->getGroupId()]);
     }
 
     return $department;
   }
 
-  public function getDepartment($id) {
-    return new Department($id);
-  }
+
 }
