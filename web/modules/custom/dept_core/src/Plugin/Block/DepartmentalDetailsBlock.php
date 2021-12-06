@@ -20,7 +20,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * @var Drupal\dept_core/DepartmentManager
+   * The Department manager service.
+   *
+   * @var \Drupal\dept_core\DepartmentManager
    */
   protected $departmentManager;
 
@@ -54,6 +56,9 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function defaultConfiguration() {
     return [];
   }
@@ -63,6 +68,7 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
    */
   public function blockForm($form, FormStateInterface $form_state) {
 
+    // Methods of the Department class to call.
     $options = [
       'accessToInformation' => 'Access to information',
       'contactInformation' => 'Contact Information',
@@ -94,7 +100,10 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
     $dept = $this->departmentManager->getCurrentDepartment();
 
     $build['content'] = [
-      '#markup' =>  call_user_func([$dept, $this->getConfiguration()['display_field']]),
+      '#markup' => call_user_func([
+        $dept,
+        $this->getConfiguration()['display_field'],
+      ]),
     ];
     return $build;
   }
