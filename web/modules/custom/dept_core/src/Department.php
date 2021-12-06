@@ -72,16 +72,13 @@ class Department {
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, string $domain_id = NULL) {
     $this->id = $domain_id;
-
     $this->domain = $entity_type_manager->getStorage('domain')->load($this->id);
 
     if (!empty($this->domain)) {
       $this->name = $this->domain->label();
-      $this->url = $this->domain->get('url');
+      $this->url = $this->domain->getPath();
       $this->domainId = $this->domain->get('domain_id');
-
       $this->setGroupId($this->domain->id());
-
       $this->group = $entity_type_manager->getStorage('group')->load($this->groupId);
     }
   }
