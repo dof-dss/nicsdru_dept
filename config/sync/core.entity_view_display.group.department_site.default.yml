@@ -18,14 +18,22 @@ bundle: department_site
 mode: default
 content:
   field_access_to_information:
+<<<<<<< HEAD
     weight: 3
+=======
+    weight: -2
+>>>>>>> DEPT-56
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
     region: content
   field_contact_information:
+<<<<<<< HEAD
     weight: 4
+=======
+    weight: -1
+>>>>>>> DEPT-56
     label: above
     settings: {  }
     third_party_settings: {  }
@@ -39,14 +47,22 @@ content:
     type: text_default
     region: content
   field_management_and_structure:
+<<<<<<< HEAD
     weight: 2
+=======
+    weight: -3
+>>>>>>> DEPT-56
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
     region: content
   field_social_media_links:
+<<<<<<< HEAD
     weight: 5
+=======
+    weight: 0
+>>>>>>> DEPT-56
     label: above
     settings:
       trim_length: 80

@@ -108,7 +108,7 @@ jobs:
     docker:
       - image: circleci/php:7.4.15-apache-node-browsers
         environment:
-          TEST_TAGS: "origins_workflow"
+          TEST_TAGS: "dept_core"
           EDGE_BUILD_BRANCH: "DEPT-edge"
       - image: drupalci/chromedriver:production
         environment:

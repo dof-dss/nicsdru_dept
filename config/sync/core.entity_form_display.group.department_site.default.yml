@@ -19,7 +19,11 @@ bundle: department_site
 mode: default
 content:
   field_access_to_information:
+<<<<<<< HEAD
     weight: 32
+=======
+    weight: 27
+>>>>>>> DEPT-56
     settings:
       rows: 5
       placeholder: ''
@@ -27,7 +31,11 @@ content:
     type: text_textarea
     region: content
   field_contact_information:
+<<<<<<< HEAD
     weight: 33
+=======
+    weight: 28
+>>>>>>> DEPT-56
     settings:
       rows: 5
       placeholder: ''
@@ -43,7 +51,11 @@ content:
     type: text_textarea
     region: content
   field_management_and_structure:
+<<<<<<< HEAD
     weight: 31
+=======
+    weight: 26
+>>>>>>> DEPT-56
     settings:
       rows: 9
       summary_rows: 3
@@ -53,7 +65,11 @@ content:
     type: text_textarea_with_summary
     region: content
   field_social_media_links:
+<<<<<<< HEAD
     weight: 34
+=======
+    weight: 29
+>>>>>>> DEPT-56
     settings:
       placeholder_url: ''
       placeholder_title: ''

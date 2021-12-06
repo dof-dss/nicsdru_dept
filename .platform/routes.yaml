@@ -6,7 +6,55 @@
   cache:
     enabled: false
 #---------------------------------
+"https://communities-ni.{default}":
+  type: upstream
+  upstream: "dept:http"
+  cache:
+    enabled: false
+#---------------------------------
+"https://daera-ni.{default}":
+  type: upstream
+  upstream: "dept:http"
+  cache:
+    enabled: false
+#---------------------------------
+"https://economy-ni.{default}":
+  type: upstream
+  upstream: "dept:http"
+  cache:
+    enabled: false
+#---------------------------------
+"https://education-ni.{default}":
+  type: upstream
+  upstream: "dept:http"
+  cache:
+    enabled: false
+#---------------------------------
+"https://executiveoffice-ni.{default}":
+  type: upstream
+  upstream: "dept:http"
+  cache:
+    enabled: false
+#---------------------------------
 "https://finance-ni.{default}":
+  type: upstream
+  upstream: "dept:http"
+  cache:
+    enabled: false
+#---------------------------------
+"https://health-ni.{default}":
+  type: upstream
+  upstream: "dept:http"
+  cache:
+    enabled: false
+#---------------------------------
+"https://infrastructure-ni.{default}":
+  type: upstream
+  upstream: "dept:http"
+  cache:
+    enabled: false
+#---------------------------------
+"https://justice-ni.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
