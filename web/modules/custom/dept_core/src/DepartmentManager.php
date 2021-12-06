@@ -65,6 +65,10 @@ class DepartmentManager {
    *   The domain ID to load a department.
    */
   public function getDepartment(string $id) {
+    // Return if we have a Domain that is not related to a Group.
+    if (!preg_match('/group_\d+/', $id)) {
+      return NULL;
+    }
     $department = $this->cache->get('department_' . $id)->data;
 
     if (empty($department)) {
