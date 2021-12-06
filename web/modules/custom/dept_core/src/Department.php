@@ -175,4 +175,11 @@ class Department {
     return render($this->group->field_social_media_links->view('full'));
   }
 
+  /**
+   * Point of contact map location.
+   */
+  public function location() {
+    return render($this->group->field_location->view('full'));
+  }
+
 }
