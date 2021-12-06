@@ -2,7 +2,6 @@
 
 namespace Drupal\dept_core;
 
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Session\AccountInterface;
 
 /**
@@ -64,134 +63,115 @@ class Department {
 
   /**
    * Class constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param string $domain_id
+   *   The Domain Identifier.
    */
-  public function __construct($entity_type_manager, $domain_id = NULL) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, string $domain_id = NULL) {
     $this->id = $domain_id;
 
     $this->domain = $entity_type_manager->getStorage('domain')->load($this->id);
 
     if (!empty($this->domain)) {
-      $this->setName($this->domain->label());
-      $this->setUrl($this->domain->get('url'));
+      $this->name = $this->domain->label();
+      $this->url = $this->domain->get('url');
+      $this->domainId = $this->domain->get('domain_id');
+
       $this->setGroupId($this->domain->id());
-      $this->setDomainId($this->domain->get('domain_id'));
 
       $this->group = $entity_type_manager->getStorage('group')->load($this->groupId);
     }
   }
 
   /**
-   * Getter for Domain ID.
+   * Group Identifier.
    */
-  public function getGroupId(): string {
+  public function groupId(): string {
     return $this->groupId;
   }
 
   /**
-   * Setter for Group ID.
+   * Setter for Group Identifier.
+   *
+   * @param mixed $group_id
+   *   The Group Identifier.
    */
-  public function setGroupId($groupId): void {
-    if (is_int($groupId)) {
-      $this->groupId = $groupId;
+  protected function setGroupId($group_id): void {
+    if (is_int($group_id)) {
+      $this->groupId = $group_id;
     }
     else {
-      $this->groupId = substr($groupId, strpos($groupId, "_") + 1);
+      $this->groupId = substr($group_id, strpos($group_id, "_") + 1);
     }
   }
 
   /**
-   * Getter for Domain ID.
+   * Domain Identifier.
    */
-  public function getDomainId() {
+  public function domainId() {
     return $this->domainId;
   }
 
   /**
-   * Setter for Domain ID.
+   * Departmental Identifier.
    */
-  public function setDomainId($domainId): void {
-    $this->domainId = $domainId;
-  }
-
-  /**
-   * Getter for ID.
-   */
-  public function getId(): string {
+  public function id(): string {
     return $this->id;
   }
 
   /**
-   * Setter for ID.
+   * Name.
    */
-  public function setId(string $id): void {
-    $this->id = $id;
-  }
-
-  /**
-   * Getter for Name.
-   */
-  public function getName(): string {
+  public function name(): string {
     return $this->name;
   }
 
   /**
-   * Setter for Name.
+   * URL.
    */
-  public function setName($name): void {
-    $this->name = $name;
-  }
-
-  /**
-   * Getter for URL.
-   */
-  public function getUrl(): string {
+  public function url(): string {
     return $this->url;
   }
 
   /**
-   * Setter for URL.
-   */
-  public function setUrl(string $url): void {
-    $this->url = $url;
-  }
-
-  /**
-   * Returns a User account for the Department.
+   * User account for the Department.
    */
   public function getMember(AccountInterface $account) {
     return $this->group->getMember($account);
   }
 
   /**
-   * Returns User accounts belonging to the Department.
+   * User accounts belonging to the Department.
    */
   public function getMembers() {
     return $this->group->getMembers();
   }
 
   /**
-   * Returns Management and Structure details.
+   * Management and Structure details.
    */
   public function getManagementAndStructure() {
     return render($this->group->field_management_and_structure->view('full'));
   }
 
   /**
-   * Returns Access to information details.
+   * Access to information details.
    */
   public function getAccessToInformation() {
     return render($this->group->field_access_to_information->view('full'));
   }
 
   /**
-   * Returns Contact Information details.
+   * Contact Information details.
    */
   public function getContactInformation() {
     return render($this->group->field_contact_information->view('full'));
   }
 
   /**
-   * Returns Social media links.
+   * Social media links.
    */
   public function getSocialMediaLinks() {
     return render($this->group->field_social_media_links->view('full'));
