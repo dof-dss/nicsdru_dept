@@ -73,7 +73,7 @@ class DepartmentManager {
       // Group entities change.
       $this->cache->set('department_' . $id, $department, CACHE::PERMANENT, [
         'url.site',
-        'group:' . $department->getGroupId(),
+        'group:' . $department->groupId(),
       ]);
     }
 

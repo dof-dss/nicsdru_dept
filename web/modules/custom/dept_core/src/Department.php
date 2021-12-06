@@ -153,28 +153,28 @@ class Department {
   /**
    * Management and Structure details.
    */
-  public function getManagementAndStructure() {
+  public function managementAndStructure() {
     return render($this->group->field_management_and_structure->view('full'));
   }
 
   /**
    * Access to information details.
    */
-  public function getAccessToInformation() {
+  public function accessToInformation() {
     return render($this->group->field_access_to_information->view('full'));
   }
 
   /**
    * Contact Information details.
    */
-  public function getContactInformation() {
+  public function contactInformation() {
     return render($this->group->field_contact_information->view('full'));
   }
 
   /**
    * Social media links.
    */
-  public function getSocialMediaLinks() {
+  public function socialMediaLinks() {
     return render($this->group->field_social_media_links->view('full'));
   }
 
