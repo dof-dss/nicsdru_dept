@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-uuid: ed261c74-70b9-4a06-866a-6a6f08d6c598
-=======
 uuid: a64b4565-4793-4052-ad9b-ce096bb6175e
->>>>>>> DEPT-56
 langcode: en
 status: true
 dependencies:
@@ -16,21 +12,12 @@ field_name: field_management_and_structure
 entity_type: group
 bundle: department_site
 label: 'Management and structure'
-<<<<<<< HEAD
-description: 'This field renders the departmental management information, it also provides the main content when the page is selected'
-required: true
-=======
 description: ''
 required: false
->>>>>>> DEPT-56
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-<<<<<<< HEAD
-  display_summary: true
-=======
   display_summary: false
->>>>>>> DEPT-56
   required_summary: false
 field_type: text_with_summary
