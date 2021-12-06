@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_core;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
@@ -71,16 +72,13 @@ class Department {
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, string $domain_id = NULL) {
     $this->id = $domain_id;
-
     $this->domain = $entity_type_manager->getStorage('domain')->load($this->id);
 
     if (!empty($this->domain)) {
       $this->name = $this->domain->label();
-      $this->url = $this->domain->get('url');
+      $this->url = $this->domain->getPath();
       $this->domainId = $this->domain->get('domain_id');
-
       $this->setGroupId($this->domain->id());
-
       $this->group = $entity_type_manager->getStorage('group')->load($this->groupId);
     }
   }
@@ -152,28 +150,28 @@ class Department {
   /**
    * Management and Structure details.
    */
-  public function getManagementAndStructure() {
+  public function managementAndStructure() {
     return render($this->group->field_management_and_structure->view('full'));
   }
 
   /**
    * Access to information details.
    */
-  public function getAccessToInformation() {
+  public function accessToInformation() {
     return render($this->group->field_access_to_information->view('full'));
   }
 
   /**
    * Contact Information details.
    */
-  public function getContactInformation() {
+  public function contactInformation() {
     return render($this->group->field_contact_information->view('full'));
   }
 
   /**
    * Social media links.
    */
-  public function getSocialMediaLinks() {
+  public function socialMediaLinks() {
     return render($this->group->field_social_media_links->view('full'));
   }
 
