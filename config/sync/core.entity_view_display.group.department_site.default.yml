@@ -3,21 +3,59 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.group.department_site.field_access_to_information
+    - field.field.group.department_site.field_contact_information
     - field.field.group.department_site.field_description
+    - field.field.group.department_site.field_management_and_structure
+    - field.field.group.department_site.field_social_media_links
     - group.type.department_site
   module:
+    - link
     - text
 id: group.department_site.default
 targetEntityType: group
 bundle: department_site
 mode: default
 content:
+  field_access_to_information:
+    weight: -2
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_contact_information:
+    weight: -1
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
   field_description:
     weight: -4
     label: above
     settings: {  }
     third_party_settings: {  }
     type: text_default
+    region: content
+  field_management_and_structure:
+    weight: -3
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_social_media_links:
+    weight: 0
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
     region: content
   label:
     label: hidden
