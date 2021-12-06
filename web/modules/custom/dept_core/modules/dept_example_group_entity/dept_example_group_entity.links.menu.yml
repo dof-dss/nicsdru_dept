@@ -1,0 +1,10 @@
+entity.dept_example_group_entity.settings:
+  title: Departmental example group content entity
+  description: Configure a Departmental example group content entity entity type
+  route_name:  entity.dept_example_group_entity.settings
+  parent: system.admin_structure
+entity.dept_example_group_entity.collection:
+  title: Departmental example group content entities
+  description: List of departmental example group content entities
+  route_name: entity.dept_example_group_entity.collection
+  parent: system.admin_content

@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Departmental Node module for Departmental sites.
+ */
+
+use Drupal\dept_node\Entity\Node;
+use Drupal\dept_node\Form\NodeForm;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function dept_node_entity_type_alter(&$entity_types) {
+  if (isset($entity_types['node'])) {
+    $entity_types['node']->setClass(Node::class);
+
+    foreach (['default', 'edit'] as $operation) {
+      $entity_types['node']->setFormClass($operation, NodeForm::class);
+    }
+  }
+}
