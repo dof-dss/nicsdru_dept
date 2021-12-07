@@ -15,6 +15,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form handler for the node add/edit forms.
+ *
+ * Handles the 'Publish to' display and relationship of nodes to Group entities.
  */
 class NodeForm extends CoreNodeForm {
 
@@ -119,6 +121,9 @@ class NodeForm extends CoreNodeForm {
       $content_groups = array_keys($this->entity->getGroups());
     }
 
+    // If the user is a member of more than one Group/Department then we
+    // display a 'Publish to' option, otherwise publish to the sole Group they
+    // are a member of or warn if no Group memberships are present.
     if (count($group_options) > 1) {
       $form['group_publish'] = [
         '#title' => $this->t('Publish to'),
@@ -160,8 +165,6 @@ class NodeForm extends CoreNodeForm {
       ];
     }
 
-
-
     return $form;
   }
 
@@ -172,11 +175,13 @@ class NodeForm extends CoreNodeForm {
     // Set this variable before the parent save which will assign the node
     // an id and thus isNew() will return false even if this is a new item.
     $is_new = $this->entity->isNew();
+
     parent::save($form, $form_state);
 
     $group_form_values = $form_state->getValue('groups');
 
     if (is_array($group_form_values)) {
+      // Use array filter to remove an unchecked groups from the values.
       $groups = array_filter($group_form_values);
     }
     else {
