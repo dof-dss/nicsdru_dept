@@ -1,0 +1,19 @@
+uuid: ef079a1d-73da-4018-88d1-7aa150a0f7a2
+langcode: en
+status: true
+dependencies:
+  module:
+    - group
+    - text
+id: group.field_access_to_information
+field_name: field_access_to_information
+entity_type: group
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
