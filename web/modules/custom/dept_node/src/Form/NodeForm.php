@@ -119,22 +119,17 @@ class NodeForm extends CoreNodeForm {
       $content_groups = array_keys($this->entity->getGroups());
     }
 
-    $form['group_publish'] = [
-      '#title' => $this->t('Publish to'),
-      '#type' => 'details',
-      '#open' => TRUE,
-      '#weight' => 500,
-      '#attributes' => [
-        'class' => ['container-inline'],
-      ],
-    ];
-
-    if (empty($group_options)) {
-      $form['group_publish']['groups'] = [
-        '#markup' => $this->t("You are not a member of any groups to restrict where content is published."),
+    if (count($group_options) > 1) {
+      $form['group_publish'] = [
+        '#title' => $this->t('Publish to'),
+        '#type' => 'details',
+        '#open' => TRUE,
+        '#weight' => 500,
+        '#attributes' => [
+          'class' => ['container-inline'],
+        ],
       ];
-    }
-    else {
+
       // TODO: Using the last group to determine the disabled state to prevent
       // the user from selecting groups when we can't publish this content type
       // to those. Do we need to look at the enabled entity types for each group
@@ -152,6 +147,19 @@ class NodeForm extends CoreNodeForm {
         ];
       }
     }
+    elseif (count($group_options) === 1) {
+      $form['groups'] = [
+        '#type' => 'hidden',
+        '#value' => array_key_first($group_options),
+      ];
+    }
+    else {
+      $form['warning'] = [
+        '#markup' => $this->t("You are not a member of any groups to restrict where content is published."),
+      ];
+    }
+
+
 
     return $form;
   }
@@ -165,7 +173,15 @@ class NodeForm extends CoreNodeForm {
     $is_new = $this->entity->isNew();
     parent::save($form, $form_state);
 
-    $groups = array_filter($form_state->getValue('groups'));
+    $group_form_values = $form_state->getValue('groups');
+
+    if (is_array($group_form_values)) {
+      $groups = array_filter($group_form_values);
+    }
+    else {
+      $groups[$group_form_values] = $group_form_values;
+    }
+
     $group_storage = $this->entityTypeManager->getStorage('group');
     $plugin_id = $this->entity->groupBundle();
 
