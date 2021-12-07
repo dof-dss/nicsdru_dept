@@ -101,7 +101,8 @@ class Department {
       $this->groupId = $group_id;
     }
     else {
-      $this->groupId = substr($group_id, strpos($group_id, "_") + 1);
+      preg_match('/(\d+)/', $group_id, $matches);
+      $this->groupId = $matches[0];
     }
   }
 
