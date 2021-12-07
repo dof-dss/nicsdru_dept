@@ -155,7 +155,8 @@ class NodeForm extends CoreNodeForm {
     }
     else {
       $form['warning'] = [
-        '#markup' => $this->t("You are not a member of any groups to restrict where content is published."),
+        '#markup' => '<b>' . $this->t("WARNING: You are not a member of any Departments and this content will not be visible on any sites.") . '</b>',
+        '#weight' => -500,
       ];
     }
 
