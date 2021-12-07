@@ -33,11 +33,14 @@ console/
 # Ignore raw SQL files, potentially dangerous.
 *.sql
 
+# Local dev outputs.
+.lando/exports
+
 # Misc tooling files to ingore.
 .swp
 .vscode
 .DS_Store
-
 *.sql.gz
 imports
 .htpasswd
+web/modules/*/package-lock.json
