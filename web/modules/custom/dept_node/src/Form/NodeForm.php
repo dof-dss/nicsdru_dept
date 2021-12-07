@@ -160,13 +160,16 @@ class NodeForm extends CoreNodeForm {
    * {@inheritdoc}
    */
   public function save($form, FormStateInterface $form_state) {
+    // Set this variable before the parent save which will assign the node
+    // an id and thus isNew() will return false even if this is a new item.
+    $is_new = $this->entity->isNew();
     parent::save($form, $form_state);
 
     $groups = array_filter($form_state->getValue('groups'));
     $group_storage = $this->entityTypeManager->getStorage('group');
     $plugin_id = $this->entity->groupBundle();
 
-    if ($this->entity->isNew()) {
+    if ($is_new) {
       foreach ($groups as $group) {
         $group = $group_storage->load($group);
         // Check if the content plugin is enabled for the current group.
