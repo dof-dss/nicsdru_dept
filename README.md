@@ -2,7 +2,7 @@
 
 # Departmental sites codebase
 
-This source code is for the Departmental sites. It is built with Drupal 9 in a single codebase, single database manner using these key modules to control content and access across the sites:
+This source code is for the Departmental sites. It is built with Drupal 9 in a single codebase, single database manner using these key contrib modules to control content and access across the sites:
 
 * [group](https://www.drupal.org/project/group) (for entity access control and management)
 * [domain](https://www.drupal.org/project/domain) (for hostname negotiation and mapping to group entities)
@@ -28,11 +28,28 @@ command.
 
 The 'main' database may be imported into your local Lando site as follows:
 
-  `lando db-import <downloaded file name>`
+`lando db-import <downloaded file name>`
 
 The 'drupal7db' database may be imported into your local Lando site as follows:
 
-  `lando db-import -h drupal7db <downloaded file name>`
+`lando db-import -h drupal7db <downloaded file name>`
+
+## Project goals
+
+* Provide non-admin users with an editorial experience that:
+  * Makes the complexity around domain/group architecture visible or a conscious consideration when operating the site for routine content tasks.
+  * Is consistent with NIDirect and Unity sites for editorial tasks, with the exception of form elements to share content across multiple sites.
+* Permit rolling content migrations from Drupal 7 for sites yet to launch without irregularities, content id clashes or service interruptions to either D7 or D9 applications.
+  * We use D7 UUIDs rather than node ids to help with this, the tradeoff is that a D7 node will have a different node id in D9. This won't affect path aliases but migrate lookups will be needed for any migration plugin config, in favour of verbatim node id values from D7.
+  * A D7 site will have a D9 domain + group record from the start. As migrations run, content will be added and updated for all sites. In short: we will get updates for all D7 sites for the migration configurations we have completed, on a rolling basis, until a site is launched on D9.
+  * When a site launches to D9, we add the site id to the relevant migration config ignore list.
+  * A site launch to D9 will involve (precise steps TBC):
+    * Brief content embargo/freeze on D7.
+    * DNS record updates, if not already resolving to Platform.sh IPs.
+    * Platform.sh application config updates for D7 and D9; routes/domain bindings, for example.
+    * Fastly config, as required.
+    * Migrate config updates to exclude the new site from rolling D7 content updates.
+
 
 ### Domain hostnames
 
@@ -41,13 +58,59 @@ See `.lando.yml` and the `proxy` configuration section for local hostnames to re
 * For administrators, we recommend using `https://dept.lndo.site` for general site administration.
 * All other authenticated users should sign in to the site that they are managing content for, eg: `https://finance.lndo.site`
 
-## Running migrations
+## Site/content negotiation and detection
 
-You will need to install modules that start with 'Department sites: migration' in order to run migrations to import Drupal 7
+The project serves content for a number of websites. We can split the process of determining which site is being asked for (detection) and how we isolate and present the content (negotiation).
+
+### Summary of typical request handling
+
+![Architecture diagram](dept-arch.png)
+
+### Site detection
+
+> Which site is being asked for in this request?
+
+We use hostname patterns to determine which site is relevant to a given request. Requests to www.daera-ni.gov.uk and www.executiveoffice-ni.gov.uk both resolve (point) to the same underlying IP address which the services running Drupal are listening to.
+
+By looking at the hostname, we can assess which site we need to use for creating the response. The hostname changes across different application environments, but they are predictable and share a common site id key. See `web/sites/default/settings.domain.php` for how this site id key is detected and used.
+
+#### Production
+
+* Hostname pattern: `https://(www).SITE_ID.gov.uk`
+* Configuration files for domain records use this pattern by default.
+
+#### Platform.sh
+
+* Pre-production environments such as: feature branches, edge build, and staging.
+* Hostname pattern: `https://SITE_ID.{default}` where `{default}` is the internal, platform.sh specific string. Example: `https://daera-ni.dept-edge-3e7cfpi-dnvkwx4xjhiza.uk-1.platformsh.site`
+* See `.platform/routes.yaml` and `web/sites/default/settings.domain.php` for details.
+
+#### Local development
+
+We use Lando for this, see `.lando.yml` for the structure and configuration of the services involved.
+
+* Hostname pattern: `https://SITE_ID.lndo.site`
+* See `web/sites/default/settings.domain.php` for how the SITE_ID key is extracted.
+
+### Content negotiation
+
+> What content should be displayed for the current detected site?
+
+Once we have determined the site that a request is being made for, we need to assess how to present content for this. Internally, Drupal uses `domain`, `group` and `domain_group` modules to work out:
+
+* Domain module permits us to identify a site by hostname pattern.
+* Group gives us a strong, robust internal framework to isolate content and entities by group type and instance.
+* Domain group module bridges the two, somewhat, but we help it along with some custom modules (`web/modules/custom`) and services to bring together domain and group data.
+
+## Migrations
+
+You will need to install modules that start with `Department sites: migration` in order to run migrations to import Drupal 7
 content into your Drupal 9 database.
 
 Listing key migrations: `lando drush migrate:status --tag=dept_sites`
 
-NB: migration order is important. A script will be written to be either run as-is, or executed step-by-step as needed.
+> NB: migration order is important. A script will be written to be either run as-is, or executed step-by-step as needed.
 
-Migrations will be progressive and incremental over time as sites move across from Drupal 7 to this codebase. ID clashes are expected as content is added at both sides. Migrate API will track source IDs to destination IDs by itself. This does *not* extend to revisions which is why revisions are not included in the scope of migrations.
+Migrations will be progressive and incremental over time as sites move across from Drupal 7 to this codebase. ID clashes are expected as content is added at both sides. Migrate API will track source IDs to destination IDs by itself.
+
+**This does *not* extend to revisions which is why revisions are not included in the scope of migrations.**
