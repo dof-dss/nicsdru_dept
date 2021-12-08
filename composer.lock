@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3281fbe0b20b7d21f333ef7bf6e1957",
+    "content-hash": "558f3bc20cae94f8f002b8e92d28af8b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1081,6 +1081,15 @@
                 "source": "https://github.com/cweagans/composer-patches/tree/1.7.1"
             },
             "time": "2021-06-08T15:12:46+00:00"
+        },
+        {
+            "name": "deaemth/easychart",
+            "version": "3.1.3",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/daemth/easychart/archive/master.zip"
+            },
+            "type": "drupal-library"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -2931,6 +2940,77 @@
             }
         },
         {
+            "name": "drupal/easychart",
+            "version": "3.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/easychart.git",
+                "reference": "8.x-3.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/easychart-8.x-3.5.zip",
+                "reference": "8.x-3.5",
+                "shasum": "ca5fd0336358abd57397e18b42dc1f0f8f4b2730"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-3.5",
+                    "datestamp": "1637673798",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Jan-Yves Vanhaverbeke",
+                    "homepage": "https://www.drupal.org/user/1823074",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Thomas Daem",
+                    "homepage": "https://www.drupal.org/user/1947616",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Kristof De Jaeger",
+                    "homepage": "http://realize.be/",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Patrick Kannekens",
+                    "homepage": "https://www.web-beest.nl",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "thomas_rz",
+                    "homepage": "https://www.drupal.org/user/1142210"
+                }
+            ],
+            "description": "A visual editor for the world's best web charting tool: Highcharts.",
+            "homepage": "https://www.drupal.org/project/easychart",
+            "keywords": [
+                "Highcharts",
+                "chart",
+                "drupal"
+            ],
+            "support": {
+                "source": "http://git.drupal.org/project/easychart.git",
+                "issues": "https://www.drupal.org/project/issues/easychart",
+                "irc": "irc://irc.freenode.org/drupal-contribute"
+            }
+        },
+        {
             "name": "drupal/embed",
             "version": "1.4.0",
             "source": {
@@ -4193,6 +4273,10 @@
                     "name": "Lucas Hedding",
                     "homepage": "https://www.drupal.org/u/heddn",
                     "role": "Maintainer"
+                },
+                {
+                    "name": "mikeryan",
+                    "homepage": "https://www.drupal.org/user/4420"
                 }
             ],
             "description": "Enhancements to core migration support.",
@@ -4212,7 +4296,7 @@
                 "reference": "56d82b4fc111dd26f2c3a1e53c06015eb854df20"
             },
             "require": {
-                "drupal/core": "^8.8 | ^9",
+                "drupal/core": "^9.1",
                 "drupal/migrate_plus": "^5",
                 "php": ">=7.1"
             },
@@ -4229,8 +4313,8 @@
                     "dev-5.x": "5.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-5.0+13-dev",
-                    "datestamp": "1618603463",
+                    "version": "8.x-5.0+20-dev",
+                    "datestamp": "1637259316",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -4676,7 +4760,7 @@
             "extra": {
                 "drupal": {
                     "version": "2.1.0",
-                    "datestamp": "1623294905",
+                    "datestamp": "1623294967",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4730,7 +4814,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.4",
-                    "datestamp": "1626702090",
+                    "datestamp": "1637145565",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6517,6 +6601,15 @@
                 "source": "https://github.com/guzzle/psr7/tree/1.8.2"
             },
             "time": "2021-04-26T09:17:50+00:00"
+        },
+        {
+            "name": "highcharts/highcharts",
+            "version": "4.2.7",
+            "dist": {
+                "type": "zip",
+                "url": "https://code.highcharts.com/zips/Highcharts-4.2.7.zip"
+            },
+            "type": "drupal-library"
         },
         {
             "name": "laminas/laminas-diactoros",
