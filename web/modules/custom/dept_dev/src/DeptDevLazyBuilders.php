@@ -61,7 +61,13 @@ class DeptDevLazyBuilders implements TrustedCallbackInterface {
 
       $url = $domain->getPath();
       if ($lando_hostnames) {
+       // Exception for Dept Admin domain, otherwise just replace gov.uk host.
+       if ($url === 'https://www.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site/') {
+         $url = 'http://dept.lndo.site/';
+       }
+       else {
         $url = preg_replace('/https?:\/\/(www.)?(.*)(gov.uk)/', 'http://$2lndo.site', $url);
+       }
       }
 
       $links[$domain->id()] = [
