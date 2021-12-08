@@ -28,6 +28,8 @@ foreach (glob(getenv('CONFIG_SYNC_DIRECTORY') . '/domain.record.group_*') as $do
     // Skip if we can't detect a site id/prefix.
     continue;
   }
+  // Strip any www prefixes.
+  $site_id = preg_replace('|www\.|', '', $site_id);
 
   $host = 'lndo.site';
 

@@ -1,0 +1,9 @@
+name: Departmental example group content entity
+type: module
+description: 'Provides a departmental example group content entity entity.'
+package: 'NICS: Departmental'
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:text
+  - dept_core
+configure: entity.dept_example_group_entity.settings

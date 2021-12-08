@@ -4,13 +4,13 @@ config:
   php: '7.4'
   composer_version: '2.0.7'
   via: apache:2.4
-  database: mariadb:10.4
+  database: mariadb:10.5
   # https://docs.lando.dev/config/drupal9.html#using-drush
   # As of Drupal 9 and Drush 10 it is preferred you use a site-local install of Drush.
   # For that reason Lando will not globally install a version of Drush for Drupal 9 sites.
   drush: false
   # https://docs.lando.dev/config/drupal9.html#using-xdebug
-  xdebug: 'debug'
+  xdebug: false
   config:
     php: .lando/config/php.ini
     database: .lando/config/my.cnf
@@ -19,20 +19,23 @@ compose:
 env_file:
   - .lando/config/.env
 proxy:
+  # Proxy patterns here are matched on naming structure found under
+  # config/sync/domain.record.group_*.yml + overridden in web/sites/default/settings.domain.php
   appserver:
     - dept.lndo.site
-    - communities.lndo.site
-    - daera.lndo.site
-    - economy.lndo.site
-    - education.lndo.site
-    - execoffice.lndo.site
-    - finance-ni.lndo.site
-    - health.lndo.site
-    - infrastructure.lndo.site
-    - justice.lndo.site
     - nigov.lndo.site
+    - communities-ni.lndo.site
+    - daera-ni.lndo.site
+    - economy-ni.lndo.site
+    - education-ni.lndo.site
+    - executiveoffice-ni.lndo.site
+    - finance-ni.lndo.site
+    - health-ni.lndo.site
+    - infrastructure-ni.lndo.site
+    - justice-ni.lndo.site
 services:
   appserver:
+    scanner: false
     build_as_root:
       - /app/.lando/scripts/appserver_build.sh
   redis:
@@ -50,6 +53,8 @@ services:
     type: solr:7
     portforward: true
     core: default
+    config:
+      dir: .lando/config/solr/7.x/default
   mailhog:
     type: mailhog
     portforward: true
