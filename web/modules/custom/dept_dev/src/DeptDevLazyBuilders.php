@@ -55,21 +55,22 @@ class DeptDevLazyBuilders implements TrustedCallbackInterface {
   public function lazyLinks() {
     $domains = $this->entityTypeManager->getStorage('domain')->loadMultiple();
     $lando_hostnames = \Drupal::config('dept_dev.settings')->get('toolbar_sites_lando_hostname');
+    $lando_protocol = \Drupal::config('dept_dev.settings')->get('toolbar_sites_lando_protocol');
     $links = [];
 
     foreach ($domains as $domain) {
-
       $url = $domain->getPath();
       if ($lando_hostnames) {
+        $protocol = ($lando_protocol) ? 'http' : 'https';
+
         // Exception for Dept Admin domain, otherwise just replace gov.uk host.
         if ($url === 'https://www.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site/') {
-          $url = 'http://dept.lndo.site/';
+          $url = "$protocol://dept.lndo.site/";
         }
         else {
-          $url = preg_replace('/https?:\/\/(www.)?(.*)(gov.uk)/', 'https://$2lndo.site', $url);
+          $url = preg_replace('/https?:\/\/(www.)?(.*)(gov.uk)/', "$protocol://$2lndo.site", $url);
         }
       }
-
       $links[$domain->id()] = [
         'title' => $domain->label(),
         'url' => Url::fromUri($url),
