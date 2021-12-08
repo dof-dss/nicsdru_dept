@@ -1,18 +1,15 @@
-uuid: 07b271e6-1c07-4c18-ab2d-236158e18355
-langcode: en
+id: node_easychart
+label: 'Easychart content type nodes'
 status: true
 dependencies: {  }
-id: node_news
-class: Drupal\migrate\Plugin\Migration
-field_plugin_method: alterFieldInstanceMigration
-cck_plugin_method: null
+migration_group: migrate_group_nodes
 migration_tags:
   - dept_sites
-migration_group: migrate_group_nodes
-label: 'News content type nodes'
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: alterFieldInstanceMigration
 source:
   plugin: d7_node_uuid
-  node_type: news
+  node_type: easychart
   track_changes: true
 process:
   langcode:
@@ -37,7 +34,7 @@ process:
     -
       plugin: str_replace
       regex: true
-      search: '/(<p>[<br>|\s]*&nbsp;<\/p>)/im'
+      search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
       replace: ''
   body/0/format:
     -
@@ -52,14 +49,13 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  field_summary:
+  easychart:
     -
       plugin: get
-      source: field_summary
-  field_teaser: field_teaser
+      source: easychart
 destination:
   plugin: 'entity:node'
-  default_bundle: news
+  default_bundle: easychart
 migration_dependencies:
   required:
     - d7_user
