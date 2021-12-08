@@ -126,24 +126,33 @@ class EditUserGroupMembershipForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-
     $groups = array_filter($form_state->getValue('groups'));
     $all_groups = $this->entityTypeManager->getStorage('group')->loadMultiple();
 
-    // Create an array indexed by group ID so we can compare.
-    foreach ($this->userMemberships as $membership) {
-      $memberships[$membership->getGroup()->id()] = $membership;
+    // If the user doesn't have any current memberships, simply join the
+    // selected Groups.
+    if (count($this->userMemberships) == 0) {
+      foreach ($groups as $group) {
+        $all_groups[$group]->addMember($this->userAccount);
+      }
+    }
+    else {
+      // Create an array indexed by group ID so we can compare.
+      foreach ($this->userMemberships as $membership) {
+        $memberships[$membership->getGroup()->id()] = $membership;
+      }
+
+      // Add user to groups.
+      foreach (array_diff_key($groups, $memberships) as $id) {
+        $all_groups[$id]->addMember($this->userAccount);
+      }
+
+      // Remove user from groups.
+      foreach (array_diff_key($memberships, $groups) as $id => $group) {
+        $all_groups[$id]->removeMember($this->userAccount);
+      }
     }
 
-    // Add user to groups.
-    foreach (array_diff_key($groups, $memberships) as $id) {
-      $all_groups[$id]->addMember($this->userAccount);
-    }
-
-    // Remove user from groups.
-    foreach (array_diff_key($memberships, $groups) as $id => $group) {
-      $all_groups[$id]->removeMember($this->userAccount);
-    }
   }
 
 }

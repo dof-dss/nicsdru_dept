@@ -6,10 +6,9 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\domain\DomainNegotiatorInterface;
-use Drupal\example\ExampleInterface;
 
 /**
- * DepartmentManager service.
+ * Service class for managing Department objects.
  */
 class DepartmentManager {
 
@@ -41,6 +40,8 @@ class DepartmentManager {
    *   The Domain negotiator service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   The default cache service.
    */
   public function __construct(DomainNegotiatorInterface $domain_negotiator, EntityTypeManagerInterface $entity_type_manager, CacheBackendInterface $cache) {
     $this->domainNegotiator = $domain_negotiator;
@@ -48,20 +49,39 @@ class DepartmentManager {
     $this->cache = $cache;
   }
 
+  /**
+   * Returns the Department for the current domain.
+   */
   public function getCurrentDepartment() {
     $active_domain = $this->domainNegotiator->getActiveDomain();
 
-    $department = $this->cache->get('department_' . $active_domain->id())->data;
+    return $this->getDepartment($active_domain->id());
+  }
+
+  /**
+   * Returns a department.
+   *
+   * @param string $id
+   *   The domain ID to load a department.
+   */
+  public function getDepartment(string $id) {
+    // Return if we have a Domain that is not related to a Group.
+    if (!preg_match('/group_\d+/', $id)) {
+      return NULL;
+    }
+    $department = $this->cache->get('department_' . $id)->data;
 
     if (empty($department)) {
-     $department = new Department($this->entityTypeManager, $active_domain->id());
-     $this->cache->set('department_' . $active_domain->id(), $department, CACHE::PERMANENT, ['url.site','group:' . $department->getGroupId()]);
+      $department = new Department($this->entityTypeManager, $id);
+      // Add to cache and use tags that will invalidate when the Domain or
+      // Group entities change.
+      $this->cache->set('department_' . $id, $department, CACHE::PERMANENT, [
+        'url.site',
+        'group:' . $department->groupId(),
+      ]);
     }
 
     return $department;
   }
 
-  public function getDepartment($id) {
-    return new Department($id);
-  }
 }
