@@ -34,6 +34,13 @@ function dept_dev_toolbar() {
         '#lazy_builder' => ['dept_dev.lazy_builders:lazyLinks', []],
         '#create_placeholder' => TRUE,
       ],
+      'configuration' => [
+        '#type' => 'link',
+        '#title' => 'Configure',
+        '#url' => Url::fromRoute('dept_dev.settings'),
+        // Just borrowing 'Shortcuts' class to move this link to the right.
+        '#attributes' => ['class' => ['edit-shortcuts']],
+      ],
     ],
     '#weight' => 100,
   ];
