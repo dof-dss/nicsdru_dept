@@ -41,6 +41,19 @@ class DevToolsSettingsForm extends ConfigFormBase {
       '#default_value' => $this->config('dept_dev.settings')->get('toolbar_sites_lando_hostname'),
     ];
 
+    $form['toolbar_sites']['toolbar_sites_lando_protocol'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Lando protocol'),
+      '#description' => $this->t('Rewrites the protocol for the lando hostname'),
+      '#options' => ['HTTPS', 'HTTP'],
+      '#default_value' => $this->config('dept_dev.settings')->get('toolbar_sites_lando_protocol') ?? '0',
+      '#states' => [
+        'invisible' => [
+          ':input[name="toolbar_sites_lando_hostname"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -48,9 +61,10 @@ class DevToolsSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->config('dept_dev.settings')
-      ->set('toolbar_sites_lando_hostname', $form_state->getValue('toolbar_sites_lando_hostname'))
-      ->save();
+    $config = $this->config('dept_dev.settings');
+    $config->set('toolbar_sites_lando_hostname', $form_state->getValue('toolbar_sites_lando_hostname'));
+    $config->set('toolbar_sites_lando_protocol', $form_state->getValue('toolbar_sites_lando_protocol'));
+    $config->save();
     parent::submitForm($form, $form_state);
   }
 
