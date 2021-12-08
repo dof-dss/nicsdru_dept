@@ -66,7 +66,7 @@ class DeptDevLazyBuilders implements TrustedCallbackInterface {
           $url = 'http://dept.lndo.site/';
         }
         else {
-          $url = preg_replace('/https?:\/\/(www.)?(.*)(gov.uk)/', 'http://$2lndo.site', $url);
+          $url = preg_replace('/https?:\/\/(www.)?(.*)(gov.uk)/', 'https://$2lndo.site', $url);
         }
       }
 
