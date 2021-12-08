@@ -61,13 +61,13 @@ class DeptDevLazyBuilders implements TrustedCallbackInterface {
 
       $url = $domain->getPath();
       if ($lando_hostnames) {
-       // Exception for Dept Admin domain, otherwise just replace gov.uk host.
-       if ($url === 'https://www.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site/') {
-         $url = 'http://dept.lndo.site/';
-       }
-       else {
-        $url = preg_replace('/https?:\/\/(www.)?(.*)(gov.uk)/', 'http://$2lndo.site', $url);
-       }
+        // Exception for Dept Admin domain, otherwise just replace gov.uk host.
+        if ($url === 'https://www.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site/') {
+          $url = 'http://dept.lndo.site/';
+        }
+        else {
+          $url = preg_replace('/https?:\/\/(www.)?(.*)(gov.uk)/', 'http://$2lndo.site', $url);
+        }
       }
 
       $links[$domain->id()] = [
@@ -75,14 +75,6 @@ class DeptDevLazyBuilders implements TrustedCallbackInterface {
         'url' => Url::fromUri($url),
       ];
     }
-
-
-    $configure_link = [
-      '#type' => 'link',
-      '#title' => t('Edit shortcuts'),
-      '#url' => Url::fromRoute('domain.admin'),
-      '#options' => ['attributes' => ['class' => ['edit-shortcuts']]],
-      ];
 
     return [
       '#theme' => 'links__toolbar_sites',
