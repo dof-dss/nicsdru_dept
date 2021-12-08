@@ -54,14 +54,29 @@ class DeptDevLazyBuilders implements TrustedCallbackInterface {
    */
   public function lazyLinks() {
     $domains = $this->entityTypeManager->getStorage('domain')->loadMultiple();
+    $lando_hostnames = \Drupal::config('dept_dev.settings')->get('toolbar_sites_lando_hostname');
     $links = [];
 
     foreach ($domains as $domain) {
+
+      $url = $domain->getPath();
+      if ($lando_hostnames) {
+        $url = preg_replace('/https?:\/\/(www.)?(.*)(gov.uk)/', 'http://$2lndo.site', $url);
+      }
+
       $links[$domain->id()] = [
         'title' => $domain->label(),
-        'url' => Url::fromUri($domain->getPath()),
+        'url' => Url::fromUri($url),
       ];
     }
+
+
+    $configure_link = [
+      '#type' => 'link',
+      '#title' => t('Edit shortcuts'),
+      '#url' => Url::fromRoute('domain.admin'),
+      '#options' => ['attributes' => ['class' => ['edit-shortcuts']]],
+      ];
 
     return [
       '#theme' => 'links__toolbar_sites',
