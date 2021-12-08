@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for dept_dev module.
+ *
+ * @DCG
+ * This file is no longer required in Drupal 8.
+ * @see https://www.drupal.org/node/2217931
+ */
+
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_toolbar().
+ */
+function dept_dev_toolbar() {
+  $items = [];
+
+  $items['sites'] = [
+    '#type' => 'toolbar_item',
+    'tab' => [
+      '#type' => 'link',
+      '#title' => t('Sites'),
+      '#url' => Url::fromRoute('domain.admin'),
+      '#attributes' => [
+        'title' => t('Departmental sites'),
+        'class' => ['toolbar-icon', 'toolbar-icon-menu'],
+      ],
+    ],
+    'tray' => [
+      '#heading' => t('Departmental sites'),
+      'children' => [
+        '#lazy_builder' => ['dept_dev.lazy_builders:lazyLinks', []],
+        '#create_placeholder' => TRUE,
+      ],
+      'configuration' => [
+        '#type' => 'link',
+        '#title' => 'Configure',
+        '#url' => Url::fromRoute('dept_dev.settings'),
+        // Just borrowing 'Shortcuts' class to move this link to the right.
+        '#attributes' => ['class' => ['edit-shortcuts']],
+      ],
+    ],
+    '#weight' => 100,
+  ];
+
+  return $items;
+}

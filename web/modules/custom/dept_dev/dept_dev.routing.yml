@@ -1,0 +1,7 @@
+dept_dev.settings:
+  path: '/admin/config/nics/devtools'
+  defaults:
+    _title: 'Devtools settings'
+    _form: 'Drupal\dept_dev\Form\DevtoolsSettingsForm'
+  requirements:
+    _permission: 'administer content'
