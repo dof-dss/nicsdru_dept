@@ -1,18 +1,18 @@
-uuid: 656b9af2-7d33-4293-a76b-b3381a311735
+uuid: 0ce016cc-86b6-4a2e-bcc9-cd4b1d522736
 langcode: en
 status: true
 dependencies: {  }
-id: group_node_news
+id: group_node_easychart
 class: null
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
   - dept_sites
 migration_group: migrate_group_nodes
-label: 'Drupal 7 news nodes to Group content'
+label: 'Drupal 7 easychart nodes to Group content'
 source:
   plugin: d7_node_domain
-  node_type: news
+  node_type: easychart
   ids:
     uuid:
       type: string
@@ -20,7 +20,7 @@ source:
 process:
   type:
     plugin: default_value
-    default_value: department_site-group_node-news
+    default_value: group_content_type_85765319814ca
   gid:
     -
       plugin: skip_on_empty
@@ -54,7 +54,7 @@ process:
   entity_id:
     -
       plugin: migration_lookup
-      migration: node_news
+      migration: node_easychart
       source: uuid
   uid: uid
   created: created
@@ -63,4 +63,4 @@ destination:
 migration_dependencies:
   required:
     - d7_user
-    - node_news
+    - node_easychart
