@@ -41,6 +41,18 @@
                     "type": "zip"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "harvesthq/chosen",
+                "version": "1.8.7",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/harvesthq/chosen/releases/download/v1.8.7/chosen_v1.8.7.zip",
+                    "type": "zip"
+                }
+            }
         }
     ],
     "require": {
@@ -50,6 +62,7 @@
         "dof-dss/nicsdru_origins_modules": "^0.9",
         "drupal/admin_toolbar": "^3.0",
         "drupal/adminimal_theme": "^1.6",
+        "drupal/chosen": "^3.0",
         "drupal/config_delete": "^1.17",
         "drupal/config_filter": "^2.2",
         "drupal/config_ignore": "^2.3",
@@ -112,6 +125,7 @@
         "drupal/webform": "^6.1",
         "drupal/whatlinkshere": "^2.1",
         "drush/drush": "^10.5",
+        "harvesthq/chosen": "^1.8",
         "highcharts/highcharts": "^4.2",
         "platformsh/config-reader": "^2.4"
     },
