@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "61dfbeaefa6f8927779c6f635a6bc13c",
+    "content-hash": "96cbf4ba7079cc772ae361f609a8de30",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3311,6 +3311,62 @@
             }
         },
         {
+            "name": "drupal/entityqueue",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/entityqueue.git",
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/entityqueue-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "ef579fde4fbed75be2b9728ee3167d6a32beb527"
+            },
+            "require": {
+                "drupal/core": "^8.7.7 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.2",
+                    "datestamp": "1606297907",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Andrei Mateescu",
+                    "homepage": "https://www.drupal.org/u/amateescu",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Jonathan Jordan",
+                    "homepage": "https://www.drupal.org/u/jojonaloha",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "quicksketch",
+                    "homepage": "https://www.drupal.org/user/35821"
+                }
+            ],
+            "description": "The Entityqueue module allows users to create queues of any entity type.",
+            "homepage": "https://www.drupal.org/project/entityqueue",
+            "support": {
+                "source": "http://cgit.drupalcode.org/entityqueue",
+                "issues": "https://www.drupal.org/project/issues/entityqueue",
+                "irc": "irc://irc.freenode.org/drupal-contribute"
+            }
+        },
+        {
             "name": "drupal/eu_cookie_compliance",
             "version": "1.19.0",
             "source": {
@@ -3744,6 +3800,52 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/group_content_menu",
                 "issues": "https://www.drupal.org/project/issues/group_content_menu"
+            }
+        },
+        {
+            "name": "drupal/group_entityqueue",
+            "version": "1.0.0-beta3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/group_entityqueue.git",
+                "reference": "8.x-1.0-beta3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/group_entityqueue-8.x-1.0-beta3.zip",
+                "reference": "8.x-1.0-beta3",
+                "shasum": "2ec8c11e6ffbd2eec1f5a35a4e0b365c23bec3ba"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/entityqueue": "*",
+                "drupal/group": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-beta3",
+                    "datestamp": "1598330916",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "carolpettirossi",
+                    "homepage": "https://www.drupal.org/user/1907988"
+                }
+            ],
+            "description": "Allows adding entityqueue to a group",
+            "homepage": "https://www.drupal.org/project/group_entityqueue",
+            "support": {
+                "source": "https://git.drupalcode.org/project/group_entityqueue"
             }
         },
         {
@@ -16643,6 +16745,7 @@
         "drupal/config_readonly": 10,
         "drupal/domain_path": 10,
         "drupal/flag": 10,
+        "drupal/group_entityqueue": 10,
         "drupal/groupmedia": 15,
         "drupal/search_api_spellcheck": 10,
         "drupal/ultimate_cron": 15,
