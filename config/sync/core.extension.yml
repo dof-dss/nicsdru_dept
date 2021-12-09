@@ -50,6 +50,7 @@ module:
   entityqueue: 0
   fastly: 0
   field: 0
+  field_group: 0
   field_ui: 0
   file: 0
   filter: 0
@@ -98,6 +99,10 @@ module:
   origins_toc: 0
   origins_translations: 0
   page_cache: 0
+  password_policy_character_types: 0
+  password_policy_history: 0
+  password_policy_length: 0
+  password_policy_username: 0
   path: 0
   path_alias: 0
   permissions_filter: 0
@@ -136,6 +141,7 @@ module:
   workflows: 0
   pathauto: 1
   origins_workflow: 2
+  password_policy: 10
   views: 10
   minimal: 1000
   eu_cookie_compliance: 1001
