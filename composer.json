@@ -60,6 +60,7 @@
         "cweagans/composer-patches": "^1.7",
         "deaemth/easychart": "^3.1",
         "dof-dss/nicsdru_origins_modules": "^0.9",
+        "dof-dss/nicsdru_origins_theme": "^0.4.0",
         "drupal/admin_toolbar": "^3.0",
         "drupal/adminimal_theme": "^1.6",
         "drupal/chosen": "^3.0",
@@ -85,7 +86,6 @@
         "drupal/field_group": "^3.2",
         "drupal/flag": "^4.0@beta",
         "drupal/geolocation": "^3.7",
-        "drupal/group_content_menu": "^1.1",
         "drupal/group_entityqueue": "^1.0@beta",
         "drupal/groupmedia": "^2.0@alpha",
         "drupal/handy_cache_tags": "^1.1",
@@ -170,6 +170,9 @@
             ],
             "web/profiles/origins/{$name}": [
                 "dof-dss/nicsdru_origins_profile"
+            ],
+            "web/themes/origins": [
+                "dof-dss/nicsdru_origins_theme"
             ],
             "web/modules/contrib/{$name}": [
                 "type:drupal-module"
