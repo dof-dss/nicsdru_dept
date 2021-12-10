@@ -41,6 +41,18 @@
                     "type": "zip"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "harvesthq/chosen",
+                "version": "1.8.7",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/harvesthq/chosen/releases/download/v1.8.7/chosen_v1.8.7.zip",
+                    "type": "zip"
+                }
+            }
         }
     ],
     "require": {
@@ -50,6 +62,7 @@
         "dof-dss/nicsdru_origins_modules": "^0.9",
         "drupal/admin_toolbar": "^3.0",
         "drupal/adminimal_theme": "^1.6",
+        "drupal/chosen": "^3.0",
         "drupal/config_delete": "^1.17",
         "drupal/config_filter": "^2.2",
         "drupal/config_ignore": "^2.3",
@@ -66,11 +79,14 @@
         "drupal/easychart": "^3.5",
         "drupal/entity_browser": "^2.6",
         "drupal/entity_embed": "^1.1",
+        "drupal/entityqueue": "^1.2",
         "drupal/eu_cookie_compliance": "^1.14",
         "drupal/fastly": "^3.14",
+        "drupal/field_group": "^3.2",
         "drupal/flag": "^4.0@beta",
         "drupal/geolocation": "^3.7",
         "drupal/group_content_menu": "^1.1",
+        "drupal/group_entityqueue": "^1.0@beta",
         "drupal/groupmedia": "^2.0@alpha",
         "drupal/handy_cache_tags": "^1.1",
         "drupal/layout_builder_modal": "^1.1",
@@ -104,9 +120,13 @@
         "drupal/twig_tweak": "^3.1",
         "drupal/ultimate_cron": "^2.0@alpha",
         "drupal/upgrade_status": "^3.8",
+        "drupal/views_conditional": "^1.4",
+        "drupal/views_contextual_filters_or": "^1.2",
         "drupal/views_custom_cache_tag": "^1.2",
+        "drupal/webform": "^6.1",
         "drupal/whatlinkshere": "^2.1",
         "drush/drush": "^10.5",
+        "harvesthq/chosen": "^1.8",
         "highcharts/highcharts": "^4.2",
         "platformsh/config-reader": "^2.4"
     },
