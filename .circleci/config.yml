@@ -198,6 +198,20 @@ jobs:
           name: Trigger a data sync from production environment to an edge build.
           command: |
             platform sync data -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH -y
+      - run:
+          name: Force purge of Solr index
+          command: |
+            platform ssh -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH \
+              "curl http://${PLATFORM_SOLR_HOST}/solr/default/update --data '<delete><query>*:*</query></delete>' -H 'Content-type:text/xml; charset=utf-8' && curl http://${PLATFORM_SOLR_HOST}/solr/default/update --data '<commit/>' -H 'Content-type:text/xml; charset=utf-8'"
+          when: always
+      - run:
+          name: Rebuild the Solr index
+          command: |
+            platform environment:drush sapi-rt -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
+            platform environment:drush sapi-c -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
+            platform environment:drush sapi-r -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
+            platform environment:drush sapi-i -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
+          when: always
 
 # Re-usable commands.
 commands:
