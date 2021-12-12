@@ -4,3 +4,37 @@
  * @file
  * Primary module hooks for Dept Publications module.
  */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function dept_publications_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /* @var Drupal\Core\Entity\FieldableEntityInterface $node */
+  $node = $form_state->getFormObject()->getEntity();
+
+  // Toggle the display of the media fields depending on the required
+  // attachment type.
+  if ($node->bundle() === 'publication') {
+    $form['publication_attachment_type'] = [
+      '#type' => 'radios',
+      '#title' => t('Attachment(s) type'),
+      '#options' => ['Public', 'Secure'],
+      '#default_value' => '0',
+      '#weight' => 1,
+    ];
+
+    $form['field_publication_files']['#states'] = [
+      'invisible' => [
+        ':input[name="publication_attachment_type"]' => ['value' => 1],
+      ],
+    ];
+
+    $form['field_publication_secure_files']['#states'] = [
+      'invisible' => [
+        ':input[name="publication_attachment_type"]' => ['value' => 0],
+      ],
+    ];
+  }
+}
