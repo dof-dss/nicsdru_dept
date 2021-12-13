@@ -54,6 +54,15 @@ process:
       plugin: get
       source: field_summary
   field_teaser: field_teaser
+  field_photo:
+    -
+      plugin: sub_process
+      source: field_photo
+      process:
+        target_id:
+          plugin: migration_lookup
+          migration: d7_file_media_image
+          source: fid
 destination:
   plugin: 'entity:node'
   default_bundle: news

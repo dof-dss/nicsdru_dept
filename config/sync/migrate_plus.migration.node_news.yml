@@ -1,4 +1,4 @@
-uuid: 07b271e6-1c07-4c18-ab2d-236158e18355
+uuid: 33f8bd6a-5a5e-49dd-9b32-610c356fc717
 langcode: en
 status: true
 dependencies: {  }
@@ -57,6 +57,15 @@ process:
       plugin: get
       source: field_summary
   field_teaser: field_teaser
+  field_photo:
+    -
+      plugin: sub_process
+      source: field_photo
+      process:
+        target_id:
+          plugin: migration_lookup
+          migration: d7_file_media_image
+          source: fid
 destination:
   plugin: 'entity:node'
   default_bundle: news
