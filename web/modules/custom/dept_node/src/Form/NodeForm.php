@@ -106,13 +106,13 @@ class NodeForm extends CoreNodeForm {
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
-    $form = parent::form($form, $form_state);
-    
+    $form = parent::form($form, $form_state);    
+
     // Return if the bundle isn't present as a Group content plugin.
     if (!method_exists($this->entity, 'groupBundle')) {
       return $form;
     }
-    
+
     $content_groups = [];
     $plugin_id = $this->entity->groupBundle();
     $user_memberships = $this->groupMembership->loadByUser();
