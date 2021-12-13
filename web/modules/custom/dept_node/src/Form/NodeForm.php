@@ -112,7 +112,7 @@ class NodeForm extends CoreNodeForm {
     if (!method_exists($this->entity, 'groupBundle')) {
       return $form;
     }
-
+    
     $content_groups = [];
     $plugin_id = $this->entity->groupBundle();
     $user_memberships = $this->groupMembership->loadByUser();
