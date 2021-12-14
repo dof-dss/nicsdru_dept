@@ -11,7 +11,7 @@ trait GroupableEntityTrait {
    * {@inheritdoc}
    */
   public function groupBundle() {
-    /* @var \Drupal\group\Plugin\GroupContentEnablerManager $group_content_enabler */
+    /** @var \Drupal\group\Plugin\GroupContentEnablerManager $group_content_enabler */
     $group_content_enabler = \Drupal::service('plugin.manager.group_content_enabler');
     $plugins = $group_content_enabler->getInstalled();
 

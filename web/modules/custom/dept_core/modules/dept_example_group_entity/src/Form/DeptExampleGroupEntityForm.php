@@ -68,7 +68,7 @@ class DeptExampleGroupEntityForm extends ContentEntityForm {
     if (!method_exists($this->entity, 'groupBundle')) {
       return $form;
     }
-    
+
     $plugin_id = $this->entity->groupBundle();
     $user_memberships = $this->groupMembership->loadByUser();
 
