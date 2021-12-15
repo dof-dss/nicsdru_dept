@@ -13,7 +13,6 @@ label: 'News content type nodes'
 source:
   plugin: d7_node_uuid
   node_type: news
-  track_changes: true
 process:
   langcode:
     -
@@ -66,9 +65,20 @@ process:
           plugin: migration_lookup
           migration: d7_file_media_image
           source: fid
+  field_video:
+    -
+      plugin: sub_process
+      source: field_video
+      process:
+        target_id:
+          plugin: migration_lookup
+          migration: d7_file_media_video
+          source: fid
 destination:
   plugin: 'entity:node'
   default_bundle: news
 migration_dependencies:
   required:
     - d7_user
+    - d7_file_media_image
+    - d7_file_media_video

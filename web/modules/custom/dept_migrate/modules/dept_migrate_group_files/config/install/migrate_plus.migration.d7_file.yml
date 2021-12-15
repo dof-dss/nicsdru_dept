@@ -38,7 +38,11 @@ process:
   status: status
   created: timestamp
   changed: timestamp
-  uid: uid
+  uid:
+    -
+      plugin: default_value
+      source: uid
+      default_value: 1
 destination:
   plugin: 'entity:file'
 migration_dependencies:

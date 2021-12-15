@@ -1,25 +1,25 @@
-uuid: 62801c51-0618-4086-aca4-cb51600f54bd
+uuid: 10e8d510-8862-4736-9c8a-1f45b91831a1
 langcode: en
 status: true
 dependencies: {  }
-id: group_media_image
+id: group_media_video
 class: null
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
   - dept_sites
 migration_group: migrate_group_files
-label: 'Drupal 7 image files to Group content'
+label: 'Drupal 7 video content to Group content'
 source:
   plugin: file_entity
-  type: image
+  type: video
   batch_size: 1000
   constants:
-    bundle: image
+    bundle: remote_video
 process:
   type:
     plugin: default_value
-    default_value: group_content_type_f3ac88217a4f6
+    default_value: group_content_type_7d15138adb66b
   gid:
     -
       plugin: default_value
@@ -33,4 +33,4 @@ destination:
 migration_dependencies:
   required:
     - d7_user
-    - d7_file_media_image
+    - d7_file_media_video

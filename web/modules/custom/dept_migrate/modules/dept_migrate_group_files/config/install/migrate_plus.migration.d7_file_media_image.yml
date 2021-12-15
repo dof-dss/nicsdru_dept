@@ -24,13 +24,18 @@ process:
     default_value: "und"
   name: field_file_image_title_text/0/value
   uid:
-    - plugin: skip_on_empty
-      method: process
-      source: uid
+    -
+      plugin: migration_lookup
+      migration: d7_file
+      source: fid
     -
       plugin: migration_lookup
       migration: d7_user
       source: uid
+    -
+      plugin: default_value
+      source: uid
+      default_value: 1
   status: status
   created: timestamp
   changed: timestamp
