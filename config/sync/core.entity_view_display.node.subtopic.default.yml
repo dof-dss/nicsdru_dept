@@ -1,0 +1,76 @@
+uuid: 8fee9929-10c4-4516-90cb-495cddb59088
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.subtopic.body
+    - field.field.node.subtopic.field_banner_image
+    - field.field.node.subtopic.field_banner_link
+    - field.field.node.subtopic.field_parent_subtopic
+    - field.field.node.subtopic.field_parent_topic
+    - field.field.node.subtopic.field_summary
+    - node.type.subtopic
+  module:
+    - link
+    - text
+    - user
+id: node.subtopic.default
+targetEntityType: node
+bundle: subtopic
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_banner_image:
+    type: entity_reference_entity_view
+    weight: 4
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    region: content
+  field_banner_link:
+    weight: 5
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_parent_subtopic:
+    weight: 1
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_parent_topic:
+    weight: 0
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_summary:
+    weight: 2
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+hidden:
+  langcode: true
+  links: true
+  search_api_excerpt: true
