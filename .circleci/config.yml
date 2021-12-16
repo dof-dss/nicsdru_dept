@@ -261,7 +261,8 @@ commands:
           name: Switch dof-dss packages to HEAD on develelopment branch
           command: |
             composer require dof-dss/nicsdru_origins_theme:dev-development \
-                              dof-dss/nicsdru_origins_modules:dev-development
+                              dof-dss/nicsdru_origins_modules:dev-development \
+                                dof-dss/nicsdru_origins_theme:dev-development
   install_php_os_extensions:
     description: "Install a standard group of extensions and packages"
     steps:
