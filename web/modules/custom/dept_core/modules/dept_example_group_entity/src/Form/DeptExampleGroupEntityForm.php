@@ -63,6 +63,12 @@ class DeptExampleGroupEntityForm extends ContentEntityForm {
     $form = parent::form($form, $form_state);
 
     $content_groups = [];
+
+    // Return if the bundle isn't present as a Group content plugin.
+    if (!method_exists($this->entity, 'groupBundle')) {
+      return $form;
+    }
+
     $plugin_id = $this->entity->groupBundle();
     $user_memberships = $this->groupMembership->loadByUser();
 
