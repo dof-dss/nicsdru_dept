@@ -22,7 +22,7 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
       '#title' => t('Attachment(s) type'),
       '#options' => ['Public', 'Secure'],
       '#default_value' => '0',
-      '#weight' => 1,
+      '#weight' => 0,
     ];
 
     $form['field_publication_files']['#states'] = [
