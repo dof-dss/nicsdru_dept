@@ -59,6 +59,20 @@ class DepartmentManager {
   }
 
   /**
+   * Returns the Department for the current domain.
+   */
+  public function getAllDepartments() {
+    $domains = $this->entityTypeManager->getStorage('domain')->loadMultiple();
+    foreach ($domains as $id => $domain) {
+      if (strpos($id, 'group_') === 0) {
+        $departments[] = $this->getDepartment($id);
+      }
+    }
+
+    return $departments;
+  }
+
+  /**
    * Returns a department.
    *
    * @param string $id
