@@ -1,7 +1,9 @@
-uuid: f180c122-fe25-49be-b516-0ce177bb1c6a
+uuid: e79571b8-a9e5-4a0f-8040-db6557f41829
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: _QVzkKqaIIxDjS_qxwaGbXF7ZvLyH5SMKOSVtmh3FLE
 id: d7_file_media_image
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -17,18 +19,17 @@ source:
   constants:
     bundle: image
 process:
-  mid: fid
   bundle: constants/bundle
   langcode:
     plugin: default_value
     source: language
     default_value: und
-  name: field_file_image_title_text/0/value
+  name: filename
   uid:
     -
       plugin: migration_lookup
       migration: d7_file
-      source: fid
+      source: uuid
     -
       plugin: migration_lookup
       migration: d7_user
@@ -40,7 +41,11 @@ process:
   status: status
   created: timestamp
   changed: timestamp
-  field_media_image/target_id: fid
+  field_media_image/target_id:
+    -
+      plugin: migration_lookup
+      migration: d7_file
+      source: uuid
   field_media_image/alt: field_file_image_alt_text/0/value
   field_media_image/title: field_file_image_title_text/0/value
   field_caption: field_file_image_caption_text

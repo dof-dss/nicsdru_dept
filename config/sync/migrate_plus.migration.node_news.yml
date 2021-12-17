@@ -1,4 +1,4 @@
-uuid: 33f8bd6a-5a5e-49dd-9b32-610c356fc717
+uuid: 5823ed89-143b-408b-a47f-2a0e625cc424
 langcode: en
 status: true
 dependencies: {  }
@@ -62,18 +62,27 @@ process:
       source: field_photo
       process:
         target_id:
-          plugin: migration_lookup
-          migration: d7_file_media_image
-          source: fid
+          -
+            plugin: d7_file_lookup
+            source: fid
   field_video:
     -
       plugin: sub_process
       source: field_video
       process:
         target_id:
-          plugin: migration_lookup
-          migration: d7_file_media_video
+          plugin: d7_file_lookup
           source: fid
+  field_global_topics:
+    -
+      plugin: sub_process
+      source: field_global_topics
+      process:
+        target_id: tid
+  field_original_domain:
+    -
+      plugin: get
+      source: field_original_domain
 destination:
   plugin: 'entity:node'
   default_bundle: news
