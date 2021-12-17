@@ -67,18 +67,13 @@ function validate_publication(&$form, FormStateInterface $form_state) {
   }
 
   // Validate that external publications point to a departmental domain.
-  $allowed_domains = [
-    'northernireland.gov.uk',
-    'executiveoffice-ni.gov.uk',
-    'finance-ni.gov.uk',
-    'health-ni.gov.uk',
-    'daera-ni.gov.uk',
-    'justice-ni.gov.uk',
-    'education-ni.gov.uk',
-    'communities-ni.gov.uk',
-    'infrastructure-ni.gov.uk',
-    'economy-ni.gov.uk',
-  ];
+  $department_manager = \Drupal::service('department.manager');
+  $departments = $department_manager->getAllDepartments();
+
+  // Build a list of allowed urls.
+  foreach ($departments as $department) {
+    $allowed_domains[] = $department->hostname();
+  }
 
   $regex = '/https?:\/\/(?:www.)?(' . rtrim(implode('|', $allowed_domains), '|') . ')\/publications\/.+/m';
 
