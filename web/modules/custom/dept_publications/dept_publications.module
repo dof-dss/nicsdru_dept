@@ -47,9 +47,23 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
   }
 }
 
+/**
+ * Form validation callback.
+ */
 function validate_publication(&$form, FormStateInterface $form_state) {
-
   $values = $form_state->getValues();
 
+  // Validate public and secure file attachments.
+  if ($values['publication_attachment_type'] == 0) {
+    if (empty($values['field_publication_files']["selection"][0]) && empty($values['field_external_publication'][0]['uri'])) {
+      $form_state->setErrorByName('field_publication_files', t('You must provide an attachement or external link'));
+      $form_state->setErrorByName('field_external_publication', t('You must provide an attachement or external link'));
+    }
+  }
+  else {
+    if (empty($values['field_publication_secure_files'])) {
+      $form_state->setErrorByName('field_publication_secure_files', t('You must provide a secure attachment'));
+    }
+  }
 
 }
