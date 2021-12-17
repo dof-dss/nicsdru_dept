@@ -1,0 +1,23 @@
+uuid: 9ca44ff3-e681-4f19-83e4-a2d2bbf80fc5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.subtopic
+  module:
+    - text
+id: node.subtopic.body
+field_name: body
+entity_type: node
+bundle: subtopic
+label: 'Long description'
+description: 'Enter an optional long description for this subtopic to be displayed on the subtopic home page.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+  required_summary: false
+field_type: text_with_summary
