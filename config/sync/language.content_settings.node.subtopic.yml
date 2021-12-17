@@ -1,0 +1,11 @@
+uuid: 4f1d76b8-4fdc-4721-860d-22e8e854ee81
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.subtopic
+id: node.subtopic
+target_entity_type_id: node
+target_bundle: subtopic
+default_langcode: site_default
+language_alterable: false
