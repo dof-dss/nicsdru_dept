@@ -56,14 +56,34 @@ function validate_publication(&$form, FormStateInterface $form_state) {
   // Validate public and secure file attachments.
   if ($values['publication_attachment_type'] == 0) {
     if (empty($values['field_publication_files']["selection"][0]) && empty($values['field_external_publication'][0]['uri'])) {
-      $form_state->setErrorByName('field_publication_files', t('You must provide an attachement or external link'));
-      $form_state->setErrorByName('field_external_publication', t('You must provide an attachement or external link'));
+      $form_state->setErrorByName('field_publication_files', t('You must provide an attachment or external link'));
+      $form_state->setErrorByName('field_external_publication', t('You must provide an attachment or external link'));
     }
   }
   else {
     if (empty($values['field_publication_secure_files'])) {
       $form_state->setErrorByName('field_publication_secure_files', t('You must provide a secure attachment'));
     }
+  }
+
+  // Validate that external publications point to a departmental domain.
+  $allowed_domains = [
+    'northernireland.gov.uk',
+    'executiveoffice-ni.gov.uk',
+    'finance-ni.gov.uk',
+    'health-ni.gov.uk',
+    'daera-ni.gov.uk',
+    'justice-ni.gov.uk',
+    'education-ni.gov.uk',
+    'communities-ni.gov.uk',
+    'infrastructure-ni.gov.uk',
+    'economy-ni.gov.uk',
+  ];
+
+  $regex = '/https?:\/\/(?:www.)?(' . rtrim(implode('|', $allowed_domains), '|') . ')\/publications\/.+/m';
+
+  if (preg_match($regex, $values['field_external_publication'][0]['uri']) !== 1) {
+    $form_state->setErrorByName('field_external_publication', t('External publications links can only be to departmental websites e.g http://www.health-ni.gov.uk/publications/alternative-languages-and-accessible-formats'));
   }
 
 }
