@@ -16,26 +16,35 @@ source:
   constants:
     bundle: 'image'
 process:
-  mid: fid
   bundle: 'constants/bundle'
   langcode:
     plugin: default_value
     source: language
     default_value: "und"
-  name: field_file_image_title_text/0/value
+#  name: field_file_image_title_text/0/value
+  name: filename
   uid:
-    - plugin: skip_on_empty
-      method: process
-      source: uid
+    -
+      plugin: migration_lookup
+      migration: d7_file
+      source: uuid
     -
       plugin: migration_lookup
       migration: d7_user
       source: uid
+    -
+      plugin: default_value
+      source: uid
+      default_value: 1
   status: status
   created: timestamp
   changed: timestamp
   # Image field see media_entity.bundle.image.yml.
-  field_media_image/target_id: fid
+  field_media_image/target_id:
+    -
+      plugin: migration_lookup
+      migration: d7_file
+      source: uuid
   field_media_image/alt: field_file_image_alt_text/0/value
   field_media_image/title: field_file_image_title_text/0/value
   field_caption: field_file_image_caption_text

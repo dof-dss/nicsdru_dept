@@ -1,24 +1,25 @@
-uuid: e79571b8-a9e5-4a0f-8040-db6557f41829
+uuid: 3b6710d5-01b8-4d24-bcc9-e94eadc11c81
 langcode: en
 status: true
 dependencies: {  }
 _core:
-  default_config_hash: _QVzkKqaIIxDjS_qxwaGbXF7ZvLyH5SMKOSVtmh3FLE
-id: d7_file_media_image
+  default_config_hash: FBnCRglx-w6WvpGPy6nfzXPoCMWgULvstZW5Q9SkTHA
+id: d7_file_media_video
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
 migration_group: migrate_group_files
-label: 'Migrate D7 files to media images'
+label: 'Migrate D7 files to media video entities'
 source:
   plugin: file_entity
-  type: image
+  type: video
   batch_size: 1000
   constants:
-    bundle: image
+    bundle: remote_video
 process:
+  mid: fid
   bundle: constants/bundle
   langcode:
     plugin: default_value
@@ -29,7 +30,7 @@ process:
     -
       plugin: migration_lookup
       migration: d7_file
-      source: uuid
+      source: fid
     -
       plugin: migration_lookup
       migration: d7_user
@@ -41,16 +42,10 @@ process:
   status: status
   created: timestamp
   changed: timestamp
-  field_media_image/target_id:
+  field_media_oembed_video:
     -
-      plugin: migration_lookup
-      migration: d7_file
-      source: uuid
-  field_media_image/alt: field_file_image_alt_text/0/value
-  field_media_image/title: field_file_image_title_text/0/value
-  field_caption: field_file_image_caption_text
-  field_media_image_alt_text: field_file_image_alt_text
-  field_media_image_title_text: field_file_image_title_text
+      source: uri
+      plugin: video_url
 destination:
   plugin: 'entity:media'
 migration_dependencies:
