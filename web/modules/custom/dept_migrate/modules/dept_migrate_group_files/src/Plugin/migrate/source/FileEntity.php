@@ -60,6 +60,7 @@ class FileEntity extends FieldableEntity {
       $fid = $row->getSourceProperty('fid');
       $row->setSourceProperty($field, $this->getFieldValues('file', $field, $fid));
     }
+
     return parent::prepareRow($row);
   }
 
@@ -76,6 +77,7 @@ class FileEntity extends FieldableEntity {
       'status' => $this->t('The published status of a file.'),
       'timestamp' => $this->t('The time that the file was added.'),
       'type' => $this->t('The type of this file.'),
+      'uuid' => $this->t('The unique identifier for this item of content.'),
     ];
   }
 
@@ -83,7 +85,7 @@ class FileEntity extends FieldableEntity {
    * {@inheritdoc}
    */
   public function getIds() {
-    $ids['fid']['type'] = 'integer';
+    $ids['uuid']['type'] = 'string';
     return $ids;
   }
 
