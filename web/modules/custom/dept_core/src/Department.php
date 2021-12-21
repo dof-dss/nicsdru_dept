@@ -135,6 +135,13 @@ class Department {
   }
 
   /**
+   * Domain.
+   */
+  public function hostname(): string {
+    return str_replace('www.', '', $this->domain->getHostname());
+  }
+
+  /**
    * User account for the Department.
    */
   public function getMember(AccountInterface $account) {

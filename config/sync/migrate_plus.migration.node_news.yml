@@ -1,4 +1,4 @@
-uuid: 07b271e6-1c07-4c18-ab2d-236158e18355
+uuid: ce120bb8-ce68-4704-a8a6-439995a98dac
 langcode: en
 status: true
 dependencies: {  }
@@ -21,13 +21,19 @@ process:
       source: language
       default_value: en
   title: title
-  uid: node_uid
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: node_uid
   status: status
   created: created
   changed: changed
   promote: promote
   sticky: sticky
-  revision_uid: revision_uid
+  revision_uid:
+    -
+      plugin: d7_user_lookup
+      source: revision_uid
   revision_log: log
   revision_timestamp: timestamp
   body:
@@ -57,9 +63,38 @@ process:
       plugin: get
       source: field_summary
   field_teaser: field_teaser
+  field_photo:
+    -
+      plugin: sub_process
+      source: field_photo
+      process:
+        target_id:
+          -
+            plugin: d7_file_lookup
+            source: fid
+  field_video:
+    -
+      plugin: sub_process
+      source: field_video
+      process:
+        target_id:
+          plugin: d7_file_lookup
+          source: fid
+  field_global_topics:
+    -
+      plugin: sub_process
+      source: field_global_topics
+      process:
+        target_id: tid
+  field_original_domain:
+    -
+      plugin: get
+      source: field_original_domain
 destination:
   plugin: 'entity:node'
   default_bundle: news
 migration_dependencies:
   required:
-    - d7_user
+    - users
+    - d7_file_media_image
+    - d7_file_media_video

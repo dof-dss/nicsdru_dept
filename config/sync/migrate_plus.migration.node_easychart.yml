@@ -1,4 +1,4 @@
-uuid: 6bdb8d90-5062-4d90-aff9-ada22676701d
+uuid: 5e58c12a-c443-493f-bb04-80a435518702
 langcode: en
 status: true
 dependencies: {  }
@@ -21,13 +21,19 @@ process:
       source: language
       default_value: en
   title: title
-  uid: node_uid
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: node_uid
   status: status
   created: created
   changed: changed
   promote: promote
   sticky: sticky
-  revision_uid: revision_uid
+  revision_uid:
+    -
+      plugin: d7_user_lookup
+      source: revision_uid
   revision_log: log
   revision_timestamp: timestamp
   body:
@@ -61,4 +67,4 @@ destination:
   default_bundle: easychart
 migration_dependencies:
   required:
-    - d7_user
+    - users

@@ -1,0 +1,84 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Dept Publications module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function dept_publications_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var Drupal\Core\Entity\FieldableEntityInterface $node */
+  $node = $form_state->getFormObject()->getEntity();
+
+  // Toggle the display of the media fields depending on the required
+  // attachment type.
+  if ($node->bundle() === 'publication') {
+    $form['publication_attachment_type'] = [
+      '#type' => 'radios',
+      '#title' => t('Attachment(s) type'),
+      '#options' => ['Public', 'Secure'],
+      '#default_value' => '0',
+      '#weight' => 0,
+    ];
+
+    $form['field_publication_files']['#states'] = [
+      'invisible' => [
+        ':input[name="publication_attachment_type"]' => ['value' => 1],
+      ],
+    ];
+
+    $form['field_external_publication']['#states'] = [
+      'invisible' => [
+        ':input[name="publication_attachment_type"]' => ['value' => 1],
+      ],
+    ];
+
+    $form['field_publication_secure_files']['#states'] = [
+      'invisible' => [
+        ':input[name="publication_attachment_type"]' => ['value' => 0],
+      ],
+    ];
+
+    $form['#validate'][] = 'validate_publication';
+  }
+}
+
+/**
+ * Form validation callback.
+ */
+function validate_publication(&$form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+
+  // Validate public and secure file attachments.
+  if ($values['publication_attachment_type'] == 0) {
+    if (empty($values['field_publication_files']["selection"][0]) && empty($values['field_external_publication'][0]['uri'])) {
+      $form_state->setErrorByName('field_publication_files', t('You must provide an attachment or external link'));
+      $form_state->setErrorByName('field_external_publication', t('You must provide an attachment or external link'));
+    }
+  }
+  else {
+    if (empty($values['field_publication_secure_files'])) {
+      $form_state->setErrorByName('field_publication_secure_files', t('You must provide a secure attachment'));
+    }
+  }
+
+  // Validate that external publications point to a departmental domain.
+  $department_manager = \Drupal::service('department.manager');
+  $departments = $department_manager->getAllDepartments();
+
+  // Build a list of allowed urls.
+  foreach ($departments as $department) {
+    $allowed_domains[] = $department->hostname();
+  }
+
+  $regex = '/https?:\/\/(?:www.)?(' . rtrim(implode('|', $allowed_domains), '|') . ')\/publications\/.+/m';
+
+  if (preg_match($regex, $values['field_external_publication'][0]['uri']) !== 1) {
+    $form_state->setErrorByName('field_external_publication', t('External publications links can only be to departmental websites e.g http://www.health-ni.gov.uk/publications/alternative-languages-and-accessible-formats'));
+  }
+
+}

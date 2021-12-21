@@ -1,0 +1,39 @@
+uuid: a43b1d6c-b0e4-48aa-93d6-b404f0b0cb9c
+langcode: en
+status: true
+dependencies: {  }
+id: group_media_video
+class: null
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - dept_sites
+migration_group: migrate_group_files
+label: 'Drupal 7 video content to Group content'
+source:
+  plugin: file_entity
+  type: video
+  batch_size: 1000
+  constants:
+    bundle: remote_video
+process:
+  type:
+    plugin: default_value
+    default_value: group_content_type_7d15138adb66b
+  gid:
+    -
+      plugin: default_value
+      default_value: 1
+  label: title
+  entity_id: fid
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: uid
+  created: created
+destination:
+  plugin: 'entity:group_content'
+migration_dependencies:
+  required:
+    - users
+    - d7_file_media_video
