@@ -1,9 +1,7 @@
-uuid: 8976ec0b-1a60-43ff-99c8-29ad43f2b8b4
+uuid: f2799c87-0999-4aa0-914e-83d29b3eabda
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: Bi05OfUmRvkcQpDQhExjf31NptC1Ci4mhXloYNC-gpc
 id: group_users
 class: null
 field_plugin_method: null
@@ -30,22 +28,6 @@ process:
       method: row
       source: domain_user/0/target_id
     -
-      plugin: skip_on_value
-      method: row
-      source: domain_user/0/target_id
-      value:
-        - daera
-        - del
-        - economy
-        - execoffice
-        - education
-        - health
-        - infrastructure
-        - dcal
-        - doe
-        - justice
-        - communities
-    -
       plugin: static_map
       bypass: true
       source: domain_user/0/target_id
@@ -63,4 +45,4 @@ destination:
   plugin: 'entity:group_content'
 migration_dependencies:
   required:
-    - d7_user
+    - users

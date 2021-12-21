@@ -25,12 +25,7 @@ process:
   name: filename
   uid:
     -
-      plugin: migration_lookup
-      migration: d7_file
-      source: uuid
-    -
-      plugin: migration_lookup
-      migration: d7_user
+      plugin: d7_user_lookup
       source: uid
     -
       plugin: default_value

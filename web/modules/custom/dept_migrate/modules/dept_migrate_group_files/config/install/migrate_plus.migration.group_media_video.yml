@@ -22,11 +22,14 @@ process:
       default_value: 1
   label: title
   entity_id: fid
-  uid: uid
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: uid
   created: created
 destination:
   plugin: 'entity:group_content'
 migration_dependencies:
   required:
-    - d7_user
+    - users
     - d7_file_media_video

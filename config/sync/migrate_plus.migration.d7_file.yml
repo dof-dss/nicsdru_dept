@@ -1,9 +1,7 @@
-uuid: 05f61a4c-c0a2-4722-a72b-6098948a7dfd
+uuid: 62a42c02-62e9-4f17-84dd-cd87d8bc7e49
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: eaSfIzPhjusoXfxFip2yFRVCvZHo4nyMwC5ImDhZcwA
 id: d7_file
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -42,12 +40,11 @@ process:
   changed: timestamp
   uid:
     -
-      plugin: default_value
+      plugin: d7_user_lookup
       source: uid
-      default_value: 1
 destination:
   plugin: 'entity:file'
 migration_dependencies:
   required:
-    - d7_user
+    - users
   optional: {  }
