@@ -1,9 +1,7 @@
-uuid: 3b6710d5-01b8-4d24-bcc9-e94eadc11c81
+uuid: 3bec3fce-e15a-4527-8d6c-3a1ec9d6f5bc
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: FBnCRglx-w6WvpGPy6nfzXPoCMWgULvstZW5Q9SkTHA
 id: d7_file_media_video
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -28,12 +26,7 @@ process:
   name: filename
   uid:
     -
-      plugin: migration_lookup
-      migration: d7_file
-      source: fid
-    -
-      plugin: migration_lookup
-      migration: d7_user
+      plugin: d7_user_lookup
       source: uid
     -
       plugin: default_value

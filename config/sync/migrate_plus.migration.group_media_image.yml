@@ -1,4 +1,4 @@
-uuid: 62801c51-0618-4086-aca4-cb51600f54bd
+uuid: 5a351dcc-203e-4f3f-970a-5bfccbe36560
 langcode: en
 status: true
 dependencies: {  }
@@ -26,11 +26,14 @@ process:
       default_value: 1
   label: title
   entity_id: fid
-  uid: uid
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: uid
   created: created
 destination:
   plugin: 'entity:group_content'
 migration_dependencies:
   required:
-    - d7_user
+    - users
     - d7_file_media_image

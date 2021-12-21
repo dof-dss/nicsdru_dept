@@ -6,6 +6,7 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -140,6 +141,55 @@ class MigrateUuidLookupManager {
   }
 
   /**
+   * @param array $uids
+   *   One or more source user ids.
+   *
+   * @return array
+   *   Associative array of user metdata, keyed by source user id
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function lookupBySourceUserId(array $uids) {
+    $map = [];
+
+    $d7results = $this->d7conn->query("SELECT * FROM {users} WHERE uid IN (:ids[])", [':ids[]' => $uids]);
+    foreach ($d7results as $row) {
+      $map[$row->uid] = [
+        'd7uuid' => $row->uuid,
+        'd7name' => $row->name,
+        'd7mail' => $row->mail,
+      ];
+    }
+
+    // Match up to D9 users using uuid as key from migrate table.
+    foreach ($map as $d7uid => $user_data) {
+      $table = 'migrate_map_users';
+      if ($this->dbconn->schema()->tableExists($table) === FALSE) {
+        // Skip the rest if this table doesn't exist.
+        continue;
+      }
+
+      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $user_data['d7uuid']]);
+
+      foreach ($migrate_map as $row) {
+        // UID 1 might give some odd results, so look it up by username instead.
+        $lookup_uid = $row->destid1 ?? 1;
+        $user = $this->entityTypeManager->getStorage('user')
+          ->load($lookup_uid);
+
+        if ($user instanceof UserInterface) {
+          $map[$d7uid]['uid'] = $user->id();
+          $map[$d7uid]['uuid'] = $user->uuid();
+          $map[$d7uid]['name'] = $user->getAccountName();
+          $map[$d7uid]['mail'] = $user->getEmail();
+        }
+      }
+    }
+
+    return $map;
+  }
+
+  /**
    * @param array $fids
    *   One or more source file ids.
    *
@@ -188,6 +238,10 @@ class MigrateUuidLookupManager {
       $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
 
       foreach ($migrate_map as $row) {
+        if (empty($row->destid1)) {
+          continue;
+        }
+
         $file = $this->entityTypeManager->getStorage($d9_entity)->load($row->destid1);
 
         if ($file instanceof EntityInterface) {

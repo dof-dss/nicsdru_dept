@@ -1,4 +1,4 @@
-uuid: 5823ed89-143b-408b-a47f-2a0e625cc424
+uuid: ce120bb8-ce68-4704-a8a6-439995a98dac
 langcode: en
 status: true
 dependencies: {  }
@@ -13,6 +13,7 @@ label: 'News content type nodes'
 source:
   plugin: d7_node_uuid
   node_type: news
+  track_changes: true
 process:
   langcode:
     -
@@ -20,13 +21,19 @@ process:
       source: language
       default_value: en
   title: title
-  uid: node_uid
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: node_uid
   status: status
   created: created
   changed: changed
   promote: promote
   sticky: sticky
-  revision_uid: revision_uid
+  revision_uid:
+    -
+      plugin: d7_user_lookup
+      source: revision_uid
   revision_log: log
   revision_timestamp: timestamp
   body:
@@ -88,6 +95,6 @@ destination:
   default_bundle: news
 migration_dependencies:
   required:
-    - d7_user
+    - users
     - d7_file_media_image
     - d7_file_media_video

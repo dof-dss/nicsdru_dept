@@ -53,11 +53,14 @@ process:
       plugin: migration_lookup
       migration: node_news
       source: uuid
-  uid: uid
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: node_uid
   created: created
 destination:
   plugin: 'entity:group_content'
 migration_dependencies:
   required:
-    - d7_user
+    - users
     - node_news
