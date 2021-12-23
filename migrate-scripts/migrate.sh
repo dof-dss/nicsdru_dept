@@ -36,8 +36,7 @@ then
   echo "Migrating D7 files and media entities"
   $DRUSH migrate:import d7_file --force
   for type in image video
-
-  }do
+  do
     echo "Migrating D7 ${type} to corresponding media entities"
     $DRUSH migrate:import d7_file_media_$type --force
     echo "... associate ${type} media entities with Group entities"
