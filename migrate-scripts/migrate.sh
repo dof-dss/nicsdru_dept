@@ -1,30 +1,56 @@
 #!/usr/bin/env bash
 export DRUSH=/app/vendor/bin/drush
+export MIGRATIONS=d7_taxonomy_term_chart_type d7_taxonomy_term_global_topics d7_taxonomy_term_indicators \
+        d7_taxonomy_term_outcomes users d7_file d7_file_media_image d7_file_media_video node_easychart \
+        node_news group_users group_media_image group_media_video group_node_easychart group_node_news
 
-echo "Resetting all migrations"
-for m in d7_user_role d7_user d7_taxonomy_term_chart_type d7_taxonomy_term_global_topics d7_taxonomy_term_indicators d7_taxonomy_term_outcomes d7_file d7_file_media_image group_media_image node_news group_node_news group_users
-do
-  $DRUSH migrate:reset $m
-done
+if [ -z ${PLATFORM_BRANCH} ]
+then
+  # Not running on a platform environment, exit.
+  exit 1
+fi
 
-echo "Migrating D7 user and roles"
-$DRUSH migrate:import d7_users --execute-dependencies --force
-echo "... associate User entities with Group entities"
-$DRUSH migrate:import group_users --force
+# Only execute on the main environment.
+if [ "${PLATFORM_BRANCH}" == "main" ]
+then
+  echo "Resetting all migrations"
+  for m in $MIGRATIONS
+  do
+    $DRUSH migrate:reset $m
+  done
 
-echo "Migrating D7 taxonomy data"
-$DRUSH migrate:import --group=migrate_drupal_7_taxo --force
+  echo "Make sure active config matches that from migrate modules"
+  for type in users files nodes taxo
+  do
+    $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_group_$type/config/install -y
+  done
 
-echo "Migrating D7 files"
-$DRUSH migrate:import d7_file --force
-echo "Migrating D7 images to Image media entities"
-$DRUSH migrate:import d7_file_media_image --force
-echo "... associate Image media entities with Group entities"
-$DRUSH migrate:import group_media_image --force
+  echo "Migrating D7 taxonomy data"
+  $DRUSH migrate:import --group=migrate_drupal_7_taxo --force
 
-echo "Migrate D7 news nodes"
-$DRUSH migrate:import node_news --force
-echo "... associate News nodes with Group entities"
-$DRUSH migrate:import group_node_news --force
+  echo "Migrating D7 user and roles"
+  $DRUSH migrate:import users --force
+  echo "... associate User entities with Group entities"
+  $DRUSH migrate:import group_users --force
 
-echo ".... DONE"
+  echo "Migrating D7 files and media entities"
+  $DRUSH migrate:import d7_file --force
+  for type in image video
+
+  }do
+    echo "Migrating D7 ${type} to corresponding media entities"
+    $DRUSH migrate:import d7_file_media_$type --force
+    echo "... associate ${type} media entities with Group entities"
+    $DRUSH migrate:import group_media_$type --force
+  done
+
+  for type in easychart news
+  do
+    echo "Migrate D7 ${type} nodes"
+    $DRUSH migrate:import node_$type --force
+    echo "... associate ${type} nodes with Group entities"
+    $DRUSH migrate:import group_node_$type --force
+  done
+
+  echo ".... DONE"
+fi
