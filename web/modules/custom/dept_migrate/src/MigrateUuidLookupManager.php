@@ -3,8 +3,10 @@
 namespace Drupal\dept_migrate;
 
 use Drupal\Core\Database\Database;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -132,6 +134,122 @@ class MigrateUuidLookupManager {
         $map[$d7nid]['uuid'] = $node->uuid();
         $map[$d7nid]['title'] = $node->label();
         $map[$d7nid]['type'] = $node->bundle();
+      }
+    }
+
+    return $map;
+  }
+
+  /**
+   * @param array $uids
+   *   One or more source user ids.
+   *
+   * @return array
+   *   Associative array of user metdata, keyed by source user id
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function lookupBySourceUserId(array $uids) {
+    $map = [];
+
+    $d7results = $this->d7conn->query("SELECT * FROM {users} WHERE uid IN (:ids[])", [':ids[]' => $uids]);
+    foreach ($d7results as $row) {
+      $map[$row->uid] = [
+        'd7uuid' => $row->uuid,
+        'd7name' => $row->name,
+        'd7mail' => $row->mail,
+      ];
+    }
+
+    // Match up to D9 users using uuid as key from migrate table.
+    foreach ($map as $d7uid => $user_data) {
+      $table = 'migrate_map_users';
+      if ($this->dbconn->schema()->tableExists($table) === FALSE) {
+        // Skip the rest if this table doesn't exist.
+        continue;
+      }
+
+      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $user_data['d7uuid']]);
+
+      foreach ($migrate_map as $row) {
+        // UID 1 might give some odd results, so look it up by username instead.
+        $lookup_uid = $row->destid1 ?? 1;
+        $user = $this->entityTypeManager->getStorage('user')
+          ->load($lookup_uid);
+
+        if ($user instanceof UserInterface) {
+          $map[$d7uid]['uid'] = $user->id();
+          $map[$d7uid]['uuid'] = $user->uuid();
+          $map[$d7uid]['name'] = $user->getAccountName();
+          $map[$d7uid]['mail'] = $user->getEmail();
+        }
+      }
+    }
+
+    return $map;
+  }
+
+  /**
+   * @param array $fids
+   *   One or more source file ids.
+   *
+   * @return array
+   *   Associative array of file metadata, keyed by source file id
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function lookupBySourceFileId(array $fids) {
+    $map = [];
+
+    $d7results = $this->d7conn->query("SELECT * FROM {file_managed} WHERE fid IN (:ids[])", [':ids[]' => $fids]);
+    foreach ($d7results as $row) {
+      $map[$row->fid] = [
+        'd7uuid' => $row->uuid,
+        'd7type' => $row->type,
+        'd7filename' => $row->filename,
+      ];
+    }
+
+    // Match up to D9 files using uuid as key from migrate table.
+    foreach ($map as $d7fid => $file) {
+      $table = 'migrate_map_d7_file';
+      $d9_entity = 'file';
+
+      // Switch table if there's a specified type for this file.
+      switch ($file['d7type']) {
+        case 'image':
+          $table .= '_media_image';
+          $d9_entity = 'media';
+          break;
+
+        case 'video':
+        case 'remote_video':
+          $table .= '_media_video';
+          $d9_entity = 'media';
+          break;
+
+      }
+
+      if ($this->dbconn->schema()->tableExists($table) === FALSE) {
+        // Skip the rest if this table doesn't exist.
+        continue;
+      }
+
+      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
+
+      foreach ($migrate_map as $row) {
+        if (empty($row->destid1)) {
+          continue;
+        }
+
+        $file = $this->entityTypeManager->getStorage($d9_entity)->load($row->destid1);
+
+        if ($file instanceof EntityInterface) {
+          $map[$d7fid]['id'] = $file->id();
+          $map[$d7fid]['uuid'] = $file->uuid();
+          $map[$d7fid]['filename'] = $file->label();
+          $map[$d7fid]['type'] = $file->bundle();
+        }
       }
     }
 

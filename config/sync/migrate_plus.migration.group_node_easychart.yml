@@ -1,4 +1,4 @@
-uuid: 1919c8cd-6afe-42fd-a55e-3f84880cee4e
+uuid: 2bf446e2-6856-4d21-bee2-57a211cfcaf3
 langcode: en
 status: true
 dependencies: {  }
@@ -27,22 +27,6 @@ process:
       method: row
       source: domain_node/0/target_id
     -
-      plugin: skip_on_value
-      method: row
-      source: domain_node/0/target_id
-      value:
-        - daera
-        - del
-        - economy
-        - execoffice
-        - education
-        - health
-        - infrastructure
-        - dcal
-        - doe
-        - justice
-        - communities
-    -
       plugin: static_map
       bypass: false
       source: domain_node/0/target_id
@@ -56,11 +40,14 @@ process:
       plugin: migration_lookup
       migration: node_easychart
       source: uuid
-  uid: uid
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: node_uid
   created: created
 destination:
   plugin: 'entity:group_content'
 migration_dependencies:
   required:
-    - d7_user
+    - users
     - node_easychart

@@ -1,4 +1,4 @@
-uuid: 656b9af2-7d33-4293-a76b-b3381a311735
+uuid: 6d21916f-4cfe-49d9-80cb-4877cf72bb5f
 langcode: en
 status: true
 dependencies: {  }
@@ -56,11 +56,14 @@ process:
       plugin: migration_lookup
       migration: node_news
       source: uuid
-  uid: uid
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: node_uid
   created: created
 destination:
   plugin: 'entity:group_content'
 migration_dependencies:
   required:
-    - d7_user
+    - users
     - node_news
