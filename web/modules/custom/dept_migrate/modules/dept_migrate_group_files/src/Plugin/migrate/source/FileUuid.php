@@ -3,7 +3,7 @@
 namespace Drupal\dept_migrate_group_files\Plugin\migrate\source;
 
 use Drupal\migrate\Row;
-use Drupal\migrate_drupal\Plugin\migrate\source\DrupalSqlBase;
+use Drupal\migrate_drupal\Plugin\migrate\source\d7\FieldableEntity;
 
 /**
  * Drupal 7 file source from database.
@@ -13,7 +13,7 @@ use Drupal\migrate_drupal\Plugin\migrate\source\DrupalSqlBase;
  *   source_module = "file"
  * )
  */
-class FileUuid extends DrupalSqlBase {
+class FileUuid extends FieldableEntity {
 
   /**
    * The public file directory path.
