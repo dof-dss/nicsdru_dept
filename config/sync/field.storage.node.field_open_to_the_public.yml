@@ -1,0 +1,33 @@
+uuid: 6b260b0e-d044-4e6f-acaa-f92ac2ad478a
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_open_to_the_public
+field_name: field_open_to_the_public
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: yes_public
+      label: 'Yes, entry is free (Sometimes public access is restricted due to works for example. Check before you visit)'
+    -
+      value: 'no'
+      label: 'No'
+    -
+      value: arrangement
+      label: 'By arrangement (via contact details above, charges may apply)'
+    -
+      value: during_oh
+      label: 'During opening hours (please check DiscoverNI website, charges may apply)'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,23 @@
+uuid: a7390441-8692-44cc-82ed-d862e3e1fd33
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_chart_taxonomy
+    - node.type.infogram
+id: node.infogram.field_chart_taxonomy
+field_name: field_chart_taxonomy
+entity_type: node
+bundle: infogram
+label: 'Chart type'
+description: 'Choose a type for this chart.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler_settings:
+    sort:
+      field: _none
+  handler: 'default:taxonomy_term'
+field_type: entity_reference

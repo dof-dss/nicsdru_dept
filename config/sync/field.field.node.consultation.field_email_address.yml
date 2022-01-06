@@ -1,0 +1,19 @@
+uuid: 7d368903-4334-45e3-b26e-33276312c89c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_email_address
+    - node.type.consultation
+id: node.consultation.field_email_address
+field_name: field_email_address
+entity_type: node
+bundle: consultation
+label: 'Email address'
+description: 'Enter the email address to be used for responses to this consultation.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

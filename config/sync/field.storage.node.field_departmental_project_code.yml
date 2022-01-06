@@ -1,0 +1,21 @@
+uuid: 14625dc9-6a60-4988-9d34-3e395d644199
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_departmental_project_code
+field_name: field_departmental_project_code
+entity_type: node
+type: string
+settings:
+  max_length: 255
+  is_ascii: false
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,17 @@
+uuid: 77e1deaf-b4ed-496a-9735-494d61d8ad87
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Collection
+type: book
+description: 'Use this content type to create a collection of other content pages.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

@@ -1,0 +1,23 @@
+uuid: c9aa0350-1804-47cf-8636-a7c10273a1fb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_link
+    - node.type.application
+  module:
+    - link
+id: node.application.field_link
+field_name: field_link
+entity_type: node
+bundle: application
+label: Link
+description: 'Paste in the URL to the application and the text to be displayed. Remember to include http:// or https://'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

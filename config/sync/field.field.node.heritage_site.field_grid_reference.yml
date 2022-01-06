@@ -1,0 +1,19 @@
+uuid: 7a1da01c-4787-42b1-a6e5-cfa111023ae4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_grid_reference
+    - node.type.heritage_site
+id: node.heritage_site.field_grid_reference
+field_name: field_grid_reference
+entity_type: node
+bundle: heritage_site
+label: 'Grid reference'
+description: 'Please enter the grid reference of the heritage site.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

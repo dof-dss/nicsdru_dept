@@ -1,0 +1,23 @@
+uuid: a1316c1c-a6a6-4a5c-aae7-d4add89b25fa
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_age
+    - node.type.ual
+id: node.ual.field_age
+field_name: field_age
+entity_type: node
+bundle: ual
+label: Age
+description: 'Please enter the age of this person.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  max: 99
+  min: 1
+  prefix: ''
+  suffix: ''
+field_type: integer

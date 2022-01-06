@@ -1,0 +1,21 @@
+uuid: c6fdb72b-c67e-48b1-978a-0d9d036ed2ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_ual_from
+    - node.type.ual
+  module:
+    - datetime
+id: node.ual.field_ual_from
+field_name: field_ual_from
+entity_type: node
+bundle: ual
+label: 'UAL from'
+description: 'Please select the date this person became unlawfully at large.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

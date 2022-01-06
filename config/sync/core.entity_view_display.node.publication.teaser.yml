@@ -5,13 +5,16 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.publication.body
+    - field.field.node.publication.field_attachment
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
+    - field.field.node.publication.field_original_domain
     - field.field.node.publication.field_publication_files
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
     - field.field.node.publication.field_published_date
+    - field.field.node.publication.field_site_subtopics
     - field.field.node.publication.field_site_topics
     - field.field.node.publication.field_summary
     - node.type.publication
@@ -37,13 +40,16 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
+  field_attachment: true
   field_external_publication: true
   field_global_topics: true
   field_last_updated: true
+  field_original_domain: true
   field_publication_files: true
   field_publication_secure_files: true
   field_publication_type: true
   field_published_date: true
+  field_site_subtopics: true
   field_site_topics: true
   field_summary: true
   langcode: true

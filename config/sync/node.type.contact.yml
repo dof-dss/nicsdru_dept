@@ -1,0 +1,17 @@
+uuid: 863f9b83-3c66-4230-a050-1cbb47523c61
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Contact
+type: contact
+description: 'Use this content type for pages containing contact information.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

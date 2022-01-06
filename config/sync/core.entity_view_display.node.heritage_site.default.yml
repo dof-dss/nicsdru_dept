@@ -1,0 +1,127 @@
+uuid: e2fb6cd8-2e99-4176-9be2-d71334e2e68a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.heritage_site.body
+    - field.field.node.heritage_site.field_address_line_1
+    - field.field.node.heritage_site.field_address_line_2
+    - field.field.node.heritage_site.field_county
+    - field.field.node.heritage_site.field_email
+    - field.field.node.heritage_site.field_grid_reference
+    - field.field.node.heritage_site.field_open_to_the_public
+    - field.field.node.heritage_site.field_phone
+    - field.field.node.heritage_site.field_photo
+    - field.field.node.heritage_site.field_postcode
+    - field.field.node.heritage_site.field_site_subtopics
+    - field.field.node.heritage_site.field_site_topics
+    - field.field.node.heritage_site.field_sm_number
+    - field.field.node.heritage_site.field_town
+    - node.type.heritage_site
+  module:
+    - options
+    - text
+    - user
+id: node.heritage_site.default
+targetEntityType: node
+bundle: heritage_site
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 11
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_address_line_1:
+    type: string
+    weight: 1
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_address_line_2:
+    type: string
+    weight: 2
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_county:
+    type: list_default
+    weight: 5
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_email:
+    type: basic_string
+    weight: 7
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_grid_reference:
+    type: string
+    weight: 9
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_open_to_the_public:
+    type: list_default
+    weight: 8
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_phone:
+    type: string
+    weight: 6
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_photo:
+    type: entity_reference_label
+    weight: 0
+    region: content
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+  field_postcode:
+    type: string
+    weight: 4
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_sm_number:
+    type: string
+    weight: 10
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_town:
+    type: string
+    weight: 3
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  field_site_subtopics: true
+  field_site_topics: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

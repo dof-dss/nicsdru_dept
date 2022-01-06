@@ -1,0 +1,30 @@
+uuid: ea5fbc50-56fd-43b8-95ae-9ab03bb6200b
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_prison
+field_name: field_prison
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: maghaberry
+      label: 'HMP Maghaberry'
+    -
+      value: magilligan
+      label: 'HMP Magilligan'
+    -
+      value: hydebank
+      label: 'HMP Hydebank Wood'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

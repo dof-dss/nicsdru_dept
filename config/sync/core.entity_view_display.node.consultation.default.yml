@@ -1,0 +1,56 @@
+uuid: c86685f5-53af-489f-b63c-eba9a3c5fd7f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.consultation.body
+    - field.field.node.consultation.field_attachment
+    - field.field.node.consultation.field_consultation_dates
+    - field.field.node.consultation.field_email_address
+    - field.field.node.consultation.field_global_topics
+    - field.field.node.consultation.field_postal
+    - field.field.node.consultation.field_published_date
+    - field.field.node.consultation.field_respond_online
+    - field.field.node.consultation.field_site_subtopics
+    - field.field.node.consultation.field_site_topics
+    - field.field.node.consultation.field_summary
+    - node.type.consultation
+  module:
+    - text
+    - user
+id: node.consultation.default
+targetEntityType: node
+bundle: consultation
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_summary:
+    weight: 102
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_attachment: true
+  field_consultation_dates: true
+  field_email_address: true
+  field_global_topics: true
+  field_postal: true
+  field_published_date: true
+  field_respond_online: true
+  field_site_subtopics: true
+  field_site_topics: true
+  langcode: true
+  search_api_excerpt: true

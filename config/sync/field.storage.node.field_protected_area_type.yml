@@ -1,0 +1,42 @@
+uuid: 55047a03-d280-4b90-ba3e-d648f983e1f6
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_protected_area_type
+field_name: field_protected_area_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: sac
+      label: 'Special Areas of Conservation'
+    -
+      value: spa
+      label: 'Special Protection Areas'
+    -
+      value: assi
+      label: 'Areas of Special Scientific Interest'
+    -
+      value: ramsar
+      label: 'Ramsar Sites'
+    -
+      value: nr
+      label: 'Nature Reserves'
+    -
+      value: aonb
+      label: 'Areas of Outstanding Natural Beauty'
+    -
+      value: mcz
+      label: 'Marine Conservation Zones'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
