@@ -1,0 +1,27 @@
+uuid: 0a3194a2-f6f6-494f-8b21-fba64e1b4f45
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_attachment
+    - node.type.consultation
+  module:
+    - file
+id: node.consultation.field_attachment
+field_name: field_attachment
+entity_type: node
+bundle: consultation
+label: Attachment
+description: 'Choose individual files to attach to this consultation.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  description_field: false
+  file_directory: 'consultations/[current-domain:machine-name]'
+  file_extensions: 'pdf doc docx xls xlsx ppt pptx odt ods odp dot csv zip'
+  max_filesize: '30 MB'
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file

@@ -16,10 +16,19 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: views
+  handler: 'default:taxonomy_term'
   handler_settings:
+    behaviors:
+      entityqueue:
+        status: 0
+      views-select-list:
+        status: 0
     view:
-      view_name: site_topics
-      display_name: entity_reference_topics
-      arguments: {  }
+      args: {  }
+      display_name: entityreference_1
+      view_name: topics
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
 field_type: entity_reference

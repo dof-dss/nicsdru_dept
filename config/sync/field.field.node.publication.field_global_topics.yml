@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.storage.node.field_global_topics
     - node.type.publication
-    - taxonomy.vocabulary.global_topics
 id: node.publication.field_global_topics
 field_name: field_global_topics
 entity_type: node
@@ -13,17 +12,12 @@ bundle: publication
 label: 'Global topics'
 description: 'Choose relevant global topic(s) for this publication. Hold down Ctrl to choose multiple topics.'
 required: true
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:taxonomy_term'
   handler_settings:
-    target_bundles:
-      global_topics: global_topics
     sort:
-      field: name
-      direction: asc
-    auto_create: false
-    auto_create_bundle: ''
+      field: _none
+  handler: 'default:taxonomy_term'
 field_type: entity_reference

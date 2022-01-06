@@ -1,0 +1,54 @@
+uuid: 57acc22f-86fd-4ae7-97f6-fd5a2b1b8193
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_council
+field_name: field_council
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: an
+      label: 'Antrim and Newtownabbey'
+    -
+      value: and
+      label: 'Ards and North Down'
+    -
+      value: abc
+      label: 'Armagh, Banbridge and Craigavon'
+    -
+      value: bt
+      label: Belfast
+    -
+      value: ccg
+      label: 'Causeway Coast and Glens'
+    -
+      value: ds
+      label: 'Derry and Strabane'
+    -
+      value: fo
+      label: 'Fermanagh and Omagh'
+    -
+      value: lc
+      label: 'Lisburn and Castlereagh'
+    -
+      value: mea
+      label: 'Mid and East Antrim'
+    -
+      value: mu
+      label: Mid-Ulster
+    -
+      value: nmd
+      label: 'Newry, Mourne and Down'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

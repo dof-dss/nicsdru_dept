@@ -1,0 +1,23 @@
+uuid: 6de3173a-415d-4aa9-8fbf-56b9d036c301
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.protected_area
+  module:
+    - text
+id: node.protected_area.body
+field_name: body
+entity_type: node
+bundle: protected_area
+label: Body
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

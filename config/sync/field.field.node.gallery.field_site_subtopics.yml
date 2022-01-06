@@ -1,0 +1,34 @@
+uuid: 3e5fb850-b169-43d9-8587-c8137e9ca745
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_site_subtopics
+    - node.type.gallery
+id: node.gallery.field_site_subtopics
+field_name: field_site_subtopics
+entity_type: node
+bundle: gallery
+label: 'Site subtopics'
+description: 'Choose relevant site subtopic(s) for this gallery. Hold down Ctrl to choose multiple site subtopics.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    behaviors:
+      entityqueue:
+        status: 0
+      views-select-list:
+        status: 0
+    view:
+      args: {  }
+      display_name: entityreference_1
+      view_name: site_subtopics
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+field_type: entity_reference

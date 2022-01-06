@@ -1,0 +1,21 @@
+uuid: f3d06d89-afb1-41f8-afb8-8bc78657193e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_chart_type
+    - node.type.easychart
+  module:
+    - options
+id: node.easychart.field_chart_type
+field_name: field_chart_type
+entity_type: node
+bundle: easychart
+label: 'Chart type'
+description: 'Choose a type for this chart.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
