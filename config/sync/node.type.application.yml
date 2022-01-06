@@ -1,0 +1,17 @@
+uuid: cee10721-0e64-4cf5-88f8-3cde04145e43
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Application
+type: application
+description: 'Use this content type as a gateway page to launch an external application.'
+help: 'Use this content type as a launch page to link to an external application.'
+new_revision: true
+preview_mode: 1
+display_submitted: false

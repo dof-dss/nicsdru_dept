@@ -1,0 +1,40 @@
+uuid: d24cb9b6-5a2f-4176-b212-bd1de2db41b8
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.infogram.body
+    - field.field.node.infogram.field_chart_taxonomy
+    - field.field.node.infogram.field_chart_type
+    - field.field.node.infogram.field_indicators
+    - field.field.node.infogram.field_infogram
+    - node.type.infogram
+  module:
+    - text
+    - user
+id: node.infogram.teaser
+targetEntityType: node
+bundle: infogram
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_chart_taxonomy: true
+  field_chart_type: true
+  field_indicators: true
+  field_infogram: true
+  langcode: true
+  search_api_excerpt: true

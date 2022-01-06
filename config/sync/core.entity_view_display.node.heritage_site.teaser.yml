@@ -1,0 +1,58 @@
+uuid: e48ffe33-3851-4e6d-9ccc-528bf323fdc7
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.heritage_site.body
+    - field.field.node.heritage_site.field_address_line_1
+    - field.field.node.heritage_site.field_address_line_2
+    - field.field.node.heritage_site.field_county
+    - field.field.node.heritage_site.field_email
+    - field.field.node.heritage_site.field_grid_reference
+    - field.field.node.heritage_site.field_open_to_the_public
+    - field.field.node.heritage_site.field_phone
+    - field.field.node.heritage_site.field_photo
+    - field.field.node.heritage_site.field_postcode
+    - field.field.node.heritage_site.field_site_subtopics
+    - field.field.node.heritage_site.field_site_topics
+    - field.field.node.heritage_site.field_sm_number
+    - field.field.node.heritage_site.field_town
+    - node.type.heritage_site
+  module:
+    - text
+    - user
+id: node.heritage_site.teaser
+targetEntityType: node
+bundle: heritage_site
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_address_line_1: true
+  field_address_line_2: true
+  field_county: true
+  field_email: true
+  field_grid_reference: true
+  field_open_to_the_public: true
+  field_phone: true
+  field_photo: true
+  field_postcode: true
+  field_site_subtopics: true
+  field_site_topics: true
+  field_sm_number: true
+  field_town: true
+  langcode: true
+  search_api_excerpt: true

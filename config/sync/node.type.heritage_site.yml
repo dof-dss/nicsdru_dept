@@ -1,0 +1,17 @@
+uuid: 82288888-f78b-4456-bcb0-331b90700aa2
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Heritage site'
+type: heritage_site
+description: 'A content type for State care heritage.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false
