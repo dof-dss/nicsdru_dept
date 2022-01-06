@@ -1,0 +1,20 @@
+uuid: ac3d9ba6-cf21-48b6-8690-cef523ddcf88
+langcode: en
+status: true
+dependencies: {  }
+name: 'Filtered HTML with tokens'
+format: filtered_html_with_tokens
+weight: 0
+filters:
+  filter_autop:
+    id: filter_autop
+    provider: filter
+    status: true
+    weight: -49
+    settings: {  }
+  filter_null:
+    id: filter_null
+    provider: filter
+    status: true
+    weight: -45
+    settings: {  }
