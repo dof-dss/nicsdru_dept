@@ -1,0 +1,21 @@
+uuid: fbc6481c-fcfc-4611-a58c-34de0f0b9d80
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_county
+    - node.type.protected_area
+  module:
+    - options
+id: node.protected_area.field_county
+field_name: field_county
+entity_type: node
+bundle: protected_area
+label: County
+description: 'Choose a county for this protected area.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

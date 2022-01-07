@@ -1,0 +1,23 @@
+uuid: 5c9de1f1-0ce9-4a67-98c6-1a7f097def05
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_open_to_the_public
+    - node.type.heritage_site
+  module:
+    - options
+id: node.heritage_site.field_open_to_the_public
+field_name: field_open_to_the_public
+entity_type: node
+bundle: heritage_site
+label: 'Open to the public'
+description: 'Please add the opening status to the public for the heritage site.'
+required: false
+translatable: false
+default_value:
+  -
+    value: yes_public
+default_value_callback: ''
+settings: {  }
+field_type: list_string

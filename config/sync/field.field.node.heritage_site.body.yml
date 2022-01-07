@@ -1,0 +1,23 @@
+uuid: 1e7567d0-6083-471f-98dd-fdfb76f93f7b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.heritage_site
+  module:
+    - text
+id: node.heritage_site.body
+field_name: body
+entity_type: node
+bundle: heritage_site
+label: Body
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

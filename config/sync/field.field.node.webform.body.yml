@@ -14,9 +14,9 @@ field_name: body
 entity_type: node
 bundle: webform
 label: Body
-description: ''
+description: 'Enter some preamble text for this webform.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

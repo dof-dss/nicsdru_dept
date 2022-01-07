@@ -1,0 +1,19 @@
+uuid: 1ef3a4a5-bda7-4f42-ab2b-96e4dc9c2463
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_town
+    - node.type.heritage_site
+id: node.heritage_site.field_town
+field_name: field_town
+entity_type: node
+bundle: heritage_site
+label: Town
+description: 'Please enter the town of the heritage site address.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

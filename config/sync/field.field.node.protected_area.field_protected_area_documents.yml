@@ -1,0 +1,32 @@
+uuid: 4d3fa275-0c6d-474d-9472-c60ffa59df91
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_protected_area_documents
+    - node.type.protected_area
+    - node.type.publication
+id: node.protected_area.field_protected_area_documents
+field_name: field_protected_area_documents
+entity_type: node
+bundle: protected_area
+label: Document
+description: 'Type the title of an existing publication to be linked from this protected area.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    behaviors:
+      entityqueue:
+        status: 0
+      views-select-list:
+        status: 0
+    sort:
+      field: _none
+      direction: ASC
+    target_bundles:
+      publication: publication
+field_type: entity_reference

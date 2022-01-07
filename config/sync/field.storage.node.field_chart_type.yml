@@ -1,0 +1,60 @@
+uuid: 91b64f68-f9b8-466f-83d1-b4a36de57080
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_chart_type
+field_name: field_chart_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '0'
+      label: 'Northern Ireland'
+    -
+      value: '10'
+      label: 'Local Government Districts'
+    -
+      value: '20'
+      label: 'Deprivation Quintile'
+    -
+      value: '30'
+      label: Urban/Rural
+    -
+      value: '40'
+      label: Age
+    -
+      value: '50'
+      label: Dependants
+    -
+      value: '60'
+      label: Disability
+    -
+      value: '70'
+      label: Gender
+    -
+      value: '80'
+      label: 'Marital Status'
+    -
+      value: '90'
+      label: 'Political Opinion'
+    -
+      value: '100'
+      label: Race
+    -
+      value: '110'
+      label: Religion
+    -
+      value: '120'
+      label: 'Sexual Orientation'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

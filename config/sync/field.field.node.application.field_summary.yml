@@ -1,0 +1,21 @@
+uuid: 7d043d16-52d3-48d9-843d-56642b48d7b0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_summary
+    - node.type.application
+  module:
+    - text
+id: node.application.field_summary
+field_name: field_summary
+entity_type: node
+bundle: application
+label: Summary
+description: 'Enter a summary about this application page.'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

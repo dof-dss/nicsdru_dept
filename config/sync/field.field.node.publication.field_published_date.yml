@@ -14,7 +14,7 @@ bundle: publication
 label: 'Published date'
 description: 'Please select the published date for this publication, or accept the default value of today.'
 required: true
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }

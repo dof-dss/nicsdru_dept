@@ -1,0 +1,17 @@
+uuid: 78efc0a1-ca63-46c2-b03a-954c4cbecb0f
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Case study'
+type: case_study
+description: 'A content type to add case studies.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

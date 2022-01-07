@@ -1,0 +1,50 @@
+uuid: d72e3564-dec2-482c-b0df-04aac73a03af
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.landing_page.body
+    - field.field.node.landing_page.field_banner_image
+    - field.field.node.landing_page.field_banner_image_overlay
+    - field.field.node.landing_page.field_enable_title
+    - field.field.node.landing_page.field_facebook_user
+    - field.field.node.landing_page.field_site_subtopics
+    - field.field.node.landing_page.field_site_topics
+    - field.field.node.landing_page.field_teaser
+    - field.field.node.landing_page.field_tweet_count
+    - field.field.node.landing_page.field_twitter_user
+    - node.type.landing_page
+  module:
+    - text
+    - user
+id: node.landing_page.teaser
+targetEntityType: node
+bundle: landing_page
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_banner_image: true
+  field_banner_image_overlay: true
+  field_enable_title: true
+  field_facebook_user: true
+  field_site_subtopics: true
+  field_site_topics: true
+  field_teaser: true
+  field_tweet_count: true
+  field_twitter_user: true
+  langcode: true
+  search_api_excerpt: true

@@ -1,0 +1,23 @@
+uuid: 9641f950-6c95-405c-bba2-444f09920781
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_indicators
+    - node.type.infogram
+id: node.infogram.field_indicators
+field_name: field_indicators
+entity_type: node
+bundle: infogram
+label: Indicator
+description: 'Choose an indicator to associate with this infogram.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler_settings:
+    sort:
+      field: _none
+  handler: 'default:taxonomy_term'
+field_type: entity_reference

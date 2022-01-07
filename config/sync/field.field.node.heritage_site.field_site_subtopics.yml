@@ -1,0 +1,36 @@
+uuid: e6005222-e019-43c9-b754-97215928288d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_site_subtopics
+    - node.type.heritage_site
+id: node.heritage_site.field_site_subtopics
+field_name: field_site_subtopics
+entity_type: node
+bundle: heritage_site
+label: 'Site subtopics'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    target_id: '38075'
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    behaviors:
+      entityqueue:
+        status: 0
+      views-select-list:
+        status: 0
+    view:
+      args: {  }
+      display_name: entityreference_1
+      view_name: site_subtopics
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+field_type: entity_reference

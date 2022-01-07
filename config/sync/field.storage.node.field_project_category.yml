@@ -1,0 +1,33 @@
+uuid: 189ffcb0-4f2b-4d99-86b3-a10498abfb48
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_project_category
+field_name: field_project_category
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: commercialisation
+      label: '1 - Commercialisation'
+    -
+      value: ruraldevelopment
+      label: '2 - Rural Development'
+    -
+      value: welfare
+      label: '3 - Welfare'
+    -
+      value: environment
+      label: '4 - Environment'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

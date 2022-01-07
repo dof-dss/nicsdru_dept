@@ -1,0 +1,21 @@
+uuid: c2709080-3a08-43f9-b463-2f7aa1f90053
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_prison
+    - node.type.ual
+  module:
+    - options
+id: node.ual.field_prison
+field_name: field_prison
+entity_type: node
+bundle: ual
+label: Prison
+description: 'Please choose the prison where this person was held.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

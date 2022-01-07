@@ -4,13 +4,16 @@ status: true
 dependencies:
   config:
     - field.field.node.publication.body
+    - field.field.node.publication.field_attachment
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
+    - field.field.node.publication.field_original_domain
     - field.field.node.publication.field_publication_files
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
     - field.field.node.publication.field_published_date
+    - field.field.node.publication.field_site_subtopics
     - field.field.node.publication.field_site_topics
     - field.field.node.publication.field_summary
     - node.type.publication
@@ -116,5 +119,8 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
+  field_attachment: true
+  field_original_domain: true
+  field_site_subtopics: true
   langcode: true
   search_api_excerpt: true

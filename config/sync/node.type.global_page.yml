@@ -1,0 +1,17 @@
+uuid: 118c1de6-7c03-49a2-baae-8de92a3cb9c9
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Global page'
+type: global_page
+description: 'Use this content type for general purpose pages to be displayed on all sites.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

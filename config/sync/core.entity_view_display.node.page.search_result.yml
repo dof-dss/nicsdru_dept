@@ -5,6 +5,8 @@ dependencies:
   config:
     - core.entity_view_mode.node.search_result
     - field.field.node.page.body
+    - field.field.node.page.field_enable_toc
+    - field.field.node.page.field_original_domain
     - node.type.page
   module:
     - layout_builder
@@ -28,5 +30,7 @@ content:
 hidden:
   body: true
   content_moderation_control: true
+  field_enable_toc: true
+  field_original_domain: true
   langcode: true
   links: true

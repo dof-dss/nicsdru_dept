@@ -1,0 +1,19 @@
+uuid: 55c7c071-6d38-492e-82e8-052441b61149
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_infogram
+    - node.type.infogram
+id: node.infogram.field_infogram
+field_name: field_infogram
+entity_type: node
+bundle: infogram
+label: 'Infogram Data ID'
+description: 'Paste in the infogram data-id value.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
