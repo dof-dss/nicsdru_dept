@@ -1,0 +1,19 @@
+uuid: e762d013-c286-486d-b38d-ff7b4d38a188
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_email
+    - node.type.heritage_site
+id: node.heritage_site.field_email
+field_name: field_email
+entity_type: node
+bundle: heritage_site
+label: Email
+description: 'Please enter the email address of the heritage site.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

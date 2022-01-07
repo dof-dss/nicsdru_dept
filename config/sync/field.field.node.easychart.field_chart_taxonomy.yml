@@ -1,0 +1,23 @@
+uuid: e7001867-df32-42da-8639-d835c4884241
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_chart_taxonomy
+    - node.type.easychart
+id: node.easychart.field_chart_taxonomy
+field_name: field_chart_taxonomy
+entity_type: node
+bundle: easychart
+label: 'Chart type'
+description: 'Choose a type for this chart.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler_settings:
+    sort:
+      field: _none
+  handler: 'default:taxonomy_term'
+field_type: entity_reference

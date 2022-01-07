@@ -13,13 +13,13 @@ id: node.easychart.body
 field_name: body
 entity_type: node
 bundle: easychart
-label: Body
+label: 'Chart description'
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  display_summary: false
+  display_summary: true
   required_summary: false
 field_type: text_with_summary

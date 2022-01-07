@@ -16,7 +16,6 @@ source:
   constants:
     bundle: 'remote_video'
 process:
-  mid: fid
   bundle: 'constants/bundle'
   langcode:
     plugin: default_value

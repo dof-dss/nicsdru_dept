@@ -1,0 +1,21 @@
+uuid: f737aea9-8f0e-46e9-81b9-e0a3de00a9fb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_photo
+    - node.type.ual
+id: node.ual.field_photo
+field_name: field_photo
+entity_type: node
+bundle: ual
+label: Photo
+description: 'Please upload or choose a photo of this person.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings: {  }
+field_type: entity_reference

@@ -1,0 +1,21 @@
+uuid: db0d8ed1-a2a5-4f8b-ac83-173d739dfc5e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_protected_area_feature
+    - node.type.protected_area
+  module:
+    - options
+id: node.protected_area.field_protected_area_feature
+field_name: field_protected_area_feature
+entity_type: node
+bundle: protected_area
+label: 'Feature type'
+description: 'Select a feature type for this protected area.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

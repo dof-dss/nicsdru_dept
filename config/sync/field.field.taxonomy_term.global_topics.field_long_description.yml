@@ -1,0 +1,21 @@
+uuid: 5f251cd2-190e-40dc-b1c8-918acf5aeeda
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_long_description
+    - taxonomy.vocabulary.global_topics
+  module:
+    - text
+id: taxonomy_term.global_topics.field_long_description
+field_name: field_long_description
+entity_type: taxonomy_term
+bundle: global_topics
+label: 'Long description'
+description: 'Enter a long description for this term which will be displayed on the term listing page.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

@@ -1,0 +1,21 @@
+uuid: 866ca58c-e17a-4f81-9f2c-9732fba66dac
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_county
+    - node.type.heritage_site
+  module:
+    - options
+id: node.heritage_site.field_county
+field_name: field_county
+entity_type: node
+bundle: heritage_site
+label: County
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

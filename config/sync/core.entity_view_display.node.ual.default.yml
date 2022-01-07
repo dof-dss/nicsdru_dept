@@ -1,0 +1,107 @@
+uuid: 5ae9bfaf-6ba3-4b2f-b278-cf496ed66693
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.ual.field_age
+    - field.field.node.ual.field_description
+    - field.field.node.ual.field_distinguishing_marks
+    - field.field.node.ual.field_eye_colour
+    - field.field.node.ual.field_hair_colour
+    - field.field.node.ual.field_offence
+    - field.field.node.ual.field_photo
+    - field.field.node.ual.field_prison
+    - field.field.node.ual.field_release_type
+    - field.field.node.ual.field_ual_from
+    - node.type.ual
+  module:
+    - datetime
+    - options
+    - user
+id: node.ual.default
+targetEntityType: node
+bundle: ual
+mode: default
+content:
+  field_age:
+    type: number_integer
+    weight: 2
+    region: content
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+  field_description:
+    type: basic_string
+    weight: 5
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_distinguishing_marks:
+    type: basic_string
+    weight: 8
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_eye_colour:
+    type: string
+    weight: 6
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_hair_colour:
+    type: string
+    weight: 7
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_offence:
+    type: basic_string
+    weight: 4
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_photo:
+    type: entity_reference_label
+    weight: 0
+    region: content
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+  field_prison:
+    type: list_default
+    weight: 3
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_release_type:
+    type: string
+    weight: 9
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_ual_from:
+    type: datetime_default
+    weight: 1
+    region: content
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+hidden:
+  langcode: true
+  links: true
+  search_api_excerpt: true

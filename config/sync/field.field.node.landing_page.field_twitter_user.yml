@@ -1,0 +1,19 @@
+uuid: 45ef54b4-1cf2-43b4-b126-3461b5ceb2cb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_twitter_user
+    - node.type.landing_page
+id: node.landing_page.field_twitter_user
+field_name: field_twitter_user
+entity_type: node
+bundle: landing_page
+label: 'Twitter user'
+description: 'The name of the twitter account to follow, note, only need the part after twitter.com/...'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

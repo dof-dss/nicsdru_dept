@@ -1,0 +1,33 @@
+uuid: eb527161-d7bc-44aa-82ce-6db5f9def2c7
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_protected_area_feature
+field_name: field_protected_area_feature
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: habitat
+      label: Habitat
+    -
+      value: species
+      label: Species
+    -
+      value: earth
+      label: 'Earth Science'
+    -
+      value: marine
+      label: Marine
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

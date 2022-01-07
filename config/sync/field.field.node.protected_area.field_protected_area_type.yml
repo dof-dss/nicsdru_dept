@@ -1,0 +1,21 @@
+uuid: 5dfb1b39-3dda-43b7-9d02-add1d93e6b0a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_protected_area_type
+    - node.type.protected_area
+  module:
+    - options
+id: node.protected_area.field_protected_area_type
+field_name: field_protected_area_type
+entity_type: node
+bundle: protected_area
+label: 'Protected area type'
+description: 'Choose a type for this protected area.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

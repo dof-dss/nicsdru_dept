@@ -1,0 +1,19 @@
+uuid: 9f31dcb7-cb9c-400e-a5f9-c1ba49e3f7e8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_release_type
+    - node.type.ual
+id: node.ual.field_release_type
+field_name: field_release_type
+entity_type: node
+bundle: ual
+label: 'Release type'
+description: 'Please indicate why this person was released.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

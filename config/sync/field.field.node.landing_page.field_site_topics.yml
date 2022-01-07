@@ -1,0 +1,34 @@
+uuid: 6840cf3e-e0f9-48e1-9884-10645f3eea5a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_site_topics
+    - node.type.landing_page
+id: node.landing_page.field_site_topics
+field_name: field_site_topics
+entity_type: node
+bundle: landing_page
+label: 'Site topic'
+description: 'To add a recent news items feed for a given topic, select the Site topic for which you the most recent news items.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    behaviors:
+      entityqueue:
+        status: 0
+      views-select-list:
+        status: 0
+    view:
+      args: {  }
+      display_name: entityreference_1
+      view_name: topics
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+field_type: entity_reference

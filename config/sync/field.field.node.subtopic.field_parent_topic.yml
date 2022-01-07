@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.storage.node.field_parent_topic
     - node.type.subtopic
-    - node.type.topic
 id: node.subtopic.field_parent_topic
 field_name: field_parent_topic
 entity_type: node
@@ -19,11 +18,15 @@ default_value_callback: ''
 settings:
   handler: 'default:node'
   handler_settings:
-    target_bundles:
-      topic: topic
+    behaviors:
+      views-select-list:
+        status: 0
+    view:
+      args: {  }
+      display_name: entityreference_1
+      view_name: topics
+    target_bundles: null
     sort:
       field: _none
       direction: ASC
-    auto_create: false
-    auto_create_bundle: ''
 field_type: entity_reference

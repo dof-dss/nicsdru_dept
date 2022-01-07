@@ -5,8 +5,12 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.article.body
+    - field.field.node.article.field_enable_toc
+    - field.field.node.article.field_global_topics
     - field.field.node.article.field_image
-    - field.field.node.article.field_tags
+    - field.field.node.article.field_site_subtopics
+    - field.field.node.article.field_site_topics
+    - field.field.node.article.field_summary
     - image.style.medium
     - node.type.article
   module:
@@ -42,19 +46,15 @@ content:
       image_link: content
     third_party_settings: {  }
     label: hidden
-  field_tags:
-    type: entity_reference_label
-    weight: 10
-    region: content
-    settings:
-      link: true
-    third_party_settings: {  }
-    label: above
   links:
     weight: 100
     region: content
 hidden:
+  field_enable_toc: true
+  field_global_topics: true
   field_image: true
-  field_tags: true
+  field_site_subtopics: true
+  field_site_topics: true
+  field_summary: true
   langcode: true
   search_api_excerpt: true

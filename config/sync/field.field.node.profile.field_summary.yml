@@ -1,0 +1,21 @@
+uuid: 45c08fc0-6c90-4b1e-8c6a-331563f7e7c7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_summary
+    - node.type.profile
+  module:
+    - text
+id: node.profile.field_summary
+field_name: field_summary
+entity_type: node
+bundle: profile
+label: Summary
+description: 'Enter an optional summary for this profile to be displayed on listing pages.'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long
