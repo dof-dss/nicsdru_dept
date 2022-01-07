@@ -1,4 +1,4 @@
-uuid: 85243076-bd65-4c86-875f-83fc107ff40d
+uuid: 4abc2d3a-1811-43e6-95c6-4d896b881fff
 langcode: en
 status: true
 dependencies: {  }
@@ -17,7 +17,6 @@ source:
   constants:
     bundle: remote_video
 process:
-  mid: fid
   bundle: constants/bundle
   langcode:
     plugin: default_value
