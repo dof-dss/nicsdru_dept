@@ -15,13 +15,20 @@ source:
 process:
   type:
     plugin: default_value
-    default_value: group_content_type_7d15138adb66b
+    default_value: group_content_type_770174f09a085
   gid:
     -
       plugin: default_value
       default_value: 1
-  label: title
-  entity_id: fid
+  label: filename
+  entity_id:
+    -
+      plugin: d7_file_lookup
+      source: fid
+    -
+      plugin: skip_on_empty
+      method: row
+      message: 'Entity lookup for video media was empty'
   uid:
     -
       plugin: d7_user_lookup
