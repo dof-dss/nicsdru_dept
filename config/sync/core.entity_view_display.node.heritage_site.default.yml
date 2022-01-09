@@ -17,8 +17,10 @@ dependencies:
     - field.field.node.heritage_site.field_site_topics
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
+    - field.field.node.heritage_site.field_website
     - node.type.heritage_site
   module:
+    - link
     - options
     - text
     - user
@@ -119,6 +121,18 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+  field_website:
+    weight: 12
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
 hidden:
   field_site_subtopics: true
   field_site_topics: true

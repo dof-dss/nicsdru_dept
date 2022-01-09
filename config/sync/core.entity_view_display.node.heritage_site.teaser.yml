@@ -18,6 +18,7 @@ dependencies:
     - field.field.node.heritage_site.field_site_topics
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
+    - field.field.node.heritage_site.field_website
     - node.type.heritage_site
   module:
     - text
@@ -54,5 +55,6 @@ hidden:
   field_site_topics: true
   field_sm_number: true
   field_town: true
+  field_website: true
   langcode: true
   search_api_excerpt: true
