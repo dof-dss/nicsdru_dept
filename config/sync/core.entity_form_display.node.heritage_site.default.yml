@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.heritage_site.field_county
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
+    - field.field.node.heritage_site.field_nismr_link
     - field.field.node.heritage_site.field_open_to_the_public
     - field.field.node.heritage_site.field_phone
     - field.field.node.heritage_site.field_photo
@@ -69,6 +70,7 @@ third_party_settings:
         - field_open_to_the_public
         - field_grid_reference
         - field_sm_number
+        - field_nismr_link
       parent_name: ''
       weight: 6
       format_type: details
@@ -140,6 +142,14 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_nismr_link:
+    weight: 12
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
   field_open_to_the_public:
     type: options_select
     weight: 9

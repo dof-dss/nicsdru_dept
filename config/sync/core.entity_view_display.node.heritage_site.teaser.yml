@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.heritage_site.field_county
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
+    - field.field.node.heritage_site.field_nismr_link
     - field.field.node.heritage_site.field_open_to_the_public
     - field.field.node.heritage_site.field_phone
     - field.field.node.heritage_site.field_photo
@@ -47,6 +48,7 @@ hidden:
   field_county: true
   field_email: true
   field_grid_reference: true
+  field_nismr_link: true
   field_open_to_the_public: true
   field_phone: true
   field_photo: true

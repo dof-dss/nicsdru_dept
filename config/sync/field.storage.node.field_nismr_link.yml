@@ -1,0 +1,19 @@
+uuid: e45f87c4-3a27-4218-8f47-3d7d6a8bb999
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - node
+id: node.field_nismr_link
+field_name: field_nismr_link
+entity_type: node
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
