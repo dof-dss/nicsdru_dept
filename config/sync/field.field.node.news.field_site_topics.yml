@@ -1,4 +1,4 @@
-uuid: e31e554e-9d3e-4aa2-8271-6467974afb3b
+uuid: 1547e523-e868-4bf7-8547-e946f0e106dd
 langcode: en
 status: true
 dependencies:
@@ -12,23 +12,14 @@ bundle: news
 label: 'Site topics'
 description: 'Choose relevant site topic(s) for this news item. Hold down Ctrl to choose multiple site topics.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:taxonomy_term'
+  handler: views
   handler_settings:
-    behaviors:
-      entityqueue:
-        status: 0
-      views-select-list:
-        status: 0
     view:
-      args: {  }
-      display_name: entityreference_1
-      view_name: topics
-    target_bundles: null
-    sort:
-      field: _none
-      direction: ASC
+      view_name: site_topics
+      display_name: entity_reference_topics
+      arguments: {  }
 field_type: entity_reference

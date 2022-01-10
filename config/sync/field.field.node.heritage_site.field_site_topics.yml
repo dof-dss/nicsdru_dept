@@ -1,4 +1,4 @@
-uuid: 6bbaff59-9c1b-445e-8157-2cafc9f8e286
+uuid: 292b9cf9-2073-4e9b-9ced-1f2efa284ad6
 langcode: en
 status: true
 dependencies:
@@ -12,25 +12,14 @@ bundle: heritage_site
 label: 'Site topics'
 description: ''
 required: false
-translatable: false
-default_value:
-  -
-    target_id: '10295'
+translatable: true
+default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:taxonomy_term'
+  handler: views
   handler_settings:
-    behaviors:
-      entityqueue:
-        status: 0
-      views-select-list:
-        status: 0
     view:
-      args: {  }
-      display_name: entityreference_1
-      view_name: topics
-    target_bundles: null
-    sort:
-      field: _none
-      direction: ASC
+      view_name: site_topics
+      display_name: entity_reference_topics
+      arguments: {  }
 field_type: entity_reference

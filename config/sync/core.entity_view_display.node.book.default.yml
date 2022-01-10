@@ -6,8 +6,6 @@ dependencies:
     - field.field.node.book.body
     - field.field.node.book.field_global_topics
     - field.field.node.book.field_original_domain
-    - field.field.node.book.field_site_subtopics
-    - field.field.node.book.field_site_topics
     - node.type.book
   module:
     - text
@@ -32,7 +30,5 @@ content:
 hidden:
   field_global_topics: true
   field_original_domain: true
-  field_site_subtopics: true
-  field_site_topics: true
   langcode: true
   search_api_excerpt: true

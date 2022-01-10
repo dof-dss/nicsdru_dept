@@ -21,10 +21,48 @@ dependencies:
     - field.field.node.heritage_site.field_website
     - node.type.heritage_site
   module:
+    - field_group
     - link
     - options
     - text
     - user
+third_party_settings:
+  field_group:
+    group_contact:
+      children:
+        - field_phone
+        - field_email
+        - field_website
+      parent_name: ''
+      weight: 6
+      format_type: details
+      region: content
+      format_settings:
+        show_empty_fields: false
+        id: ''
+        classes: ''
+        description: ''
+        open: false
+        required_fields: false
+      label: Contact
+    group_additional_info:
+      children:
+        - field_open_to_the_public
+        - field_grid_reference
+        - field_sm_number
+        - field_nismr_link
+      parent_name: ''
+      weight: 7
+      format_type: details
+      region: content
+      format_settings:
+        show_empty_fields: false
+        id: ''
+        classes: ''
+        description: ''
+        open: false
+        required_fields: false
+      label: 'Additional Information'
 id: node.heritage_site.default
 targetEntityType: node
 bundle: heritage_site
@@ -33,7 +71,7 @@ content:
   body:
     label: hidden
     type: text_default
-    weight: 11
+    weight: 8
     settings: {  }
     third_party_settings: {  }
     region: content
@@ -41,7 +79,7 @@ content:
     type: string
     weight: 1
     region: content
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -49,7 +87,7 @@ content:
     type: string
     weight: 2
     region: content
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -57,27 +95,27 @@ content:
     type: list_default
     weight: 5
     region: content
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
   field_email:
     type: basic_string
-    weight: 7
+    weight: 8
     region: content
-    label: above
+    label: inline
     settings: {  }
     third_party_settings: {  }
   field_grid_reference:
     type: string
     weight: 9
     region: content
-    label: above
+    label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
   field_nismr_link:
-    weight: 13
-    label: above
+    weight: 11
+    label: inline
     settings:
       trim_length: 80
       url_only: false
@@ -91,14 +129,14 @@ content:
     type: list_default
     weight: 8
     region: content
-    label: above
+    label: inline
     settings: {  }
     third_party_settings: {  }
   field_phone:
     type: string
-    weight: 6
+    weight: 7
     region: content
-    label: above
+    label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -106,7 +144,7 @@ content:
     type: entity_reference_label
     weight: 0
     region: content
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
@@ -114,7 +152,7 @@ content:
     type: string
     weight: 4
     region: content
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -122,7 +160,7 @@ content:
     type: string
     weight: 10
     region: content
-    label: above
+    label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -130,13 +168,13 @@ content:
     type: string
     weight: 3
     region: content
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
   field_website:
-    weight: 12
-    label: above
+    weight: 9
+    label: inline
     settings:
       trim_length: 80
       url_only: false

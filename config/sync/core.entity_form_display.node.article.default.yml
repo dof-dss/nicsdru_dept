@@ -66,25 +66,17 @@ content:
       preview_image_style: thumbnail
     third_party_settings: {  }
   field_site_subtopics:
-    type: entity_reference_autocomplete
     weight: 3
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
+    type: chosen_select
+    region: content
   field_site_topics:
-    type: entity_reference_autocomplete
     weight: 2
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
+    type: chosen_select
+    region: content
   field_summary:
     weight: 4
     settings:

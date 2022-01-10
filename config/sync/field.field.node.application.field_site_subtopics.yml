@@ -1,4 +1,4 @@
-uuid: 4feabfd8-525d-4665-8267-0fcdebe2282e
+uuid: 3fd52990-8986-44f3-b4f8-d497c87dec4b
 langcode: en
 status: true
 dependencies:
@@ -16,19 +16,10 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:node'
+  handler: views
   handler_settings:
-    behaviors:
-      entityqueue:
-        status: 0
-      views-select-list:
-        status: 0
     view:
-      args: {  }
-      display_name: entityreference_1
       view_name: site_subtopics
-    target_bundles: null
-    sort:
-      field: _none
-      direction: ASC
+      display_name: entity_reference_subtopic
+      arguments: {  }
 field_type: entity_reference
