@@ -1,0 +1,17 @@
+uuid: fb50cadd-0695-46d8-9d5f-c380baf235db
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Unlawfully at large'
+type: ual
+description: 'Use this content type for profiles of persons who are currently unlawfully at large. This content type is only available on the Department of Justice website.'
+help: 'Fill in the details for this person who is unlawfully at large.'
+new_revision: true
+preview_mode: 1
+display_submitted: false

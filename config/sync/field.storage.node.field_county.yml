@@ -1,0 +1,39 @@
+uuid: 0f971020-e7af-464c-9aa2-65bb54385ef4
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_county
+field_name: field_county
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: an
+      label: Antrim
+    -
+      value: ar
+      label: Armagh
+    -
+      value: dn
+      label: Down
+    -
+      value: fh
+      label: Fermanagh
+    -
+      value: dy
+      label: Londonderry
+    -
+      value: ty
+      label: Tyrone
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

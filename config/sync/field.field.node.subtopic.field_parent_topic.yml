@@ -1,0 +1,32 @@
+uuid: 97035f0a-88be-42ed-8ef3-38d37a6fe34e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_parent_topic
+    - node.type.subtopic
+id: node.subtopic.field_parent_topic
+field_name: field_parent_topic
+entity_type: node
+bundle: subtopic
+label: 'Parent topic'
+description: 'Choose a relevant site topic for this subtopic.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    behaviors:
+      views-select-list:
+        status: 0
+    view:
+      args: {  }
+      display_name: entityreference_1
+      view_name: topics
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+field_type: entity_reference

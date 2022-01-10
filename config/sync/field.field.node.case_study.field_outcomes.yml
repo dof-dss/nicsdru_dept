@@ -1,0 +1,23 @@
+uuid: 177ca42f-ac0e-4675-9b8b-13c15a0e89cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_outcomes
+    - node.type.case_study
+id: node.case_study.field_outcomes
+field_name: field_outcomes
+entity_type: node
+bundle: case_study
+label: Outcomes
+description: 'Choose relevant outcome(s) for this collection.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler_settings:
+    sort:
+      field: _none
+  handler: 'default:taxonomy_term'
+field_type: entity_reference

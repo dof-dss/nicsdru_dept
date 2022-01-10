@@ -5,15 +5,19 @@ dependencies:
   config:
     - field.field.node.news.body
     - field.field.node.news.field_global_topics
+    - field.field.node.news.field_news_type
     - field.field.node.news.field_notes_to_editors
     - field.field.node.news.field_original_domain
     - field.field.node.news.field_photo
     - field.field.node.news.field_published_date
+    - field.field.node.news.field_site_subtopics
+    - field.field.node.news.field_site_topics
     - field.field.node.news.field_summary
     - field.field.node.news.field_teaser
     - field.field.node.news.field_video
     - node.type.news
   module:
+    - chosen_field
     - content_moderation
     - datetime
     - media_library
@@ -44,13 +48,9 @@ content:
     third_party_settings: {  }
   field_global_topics:
     weight: 129
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
-    type: entity_reference_autocomplete
+    type: chosen_select
     region: content
   field_notes_to_editors:
     weight: 127
@@ -106,9 +106,9 @@ content:
     region: content
   flag:
     weight: 10
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
   langcode:
     type: language_select
     weight: 2
@@ -193,7 +193,10 @@ content:
     third_party_settings: {  }
   url_redirects:
     weight: 50
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
-hidden: {  }
+hidden:
+  field_news_type: true
+  field_site_subtopics: true
+  field_site_topics: true

@@ -1,0 +1,13 @@
+uuid: 51578167-a4b9-4956-aa18-1302cce7ec6d
+langcode: en
+status: true
+dependencies: {  }
+id: secure_file
+label: 'Secure file'
+description: 'A secure file whereby access is granted under certain conditions.'
+source: file
+queue_thumbnail_downloads: false
+new_revision: true
+source_configuration:
+  source_field: field_media_file_1
+field_map: {  }

@@ -1,0 +1,20 @@
+uuid: 069e0774-a452-4f0e-a009-984a11c20533
+langcode: en
+status: true
+dependencies: {  }
+name: 'Filtered HTML with templates'
+format: filtered_html_with_templates
+weight: 0
+filters:
+  filter_autop:
+    id: filter_autop
+    provider: filter
+    status: true
+    weight: -49
+    settings: {  }
+  filter_null:
+    id: filter_null
+    provider: filter
+    status: true
+    weight: -48
+    settings: {  }

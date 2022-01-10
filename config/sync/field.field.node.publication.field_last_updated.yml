@@ -1,0 +1,21 @@
+uuid: abceb096-e3ba-46a4-b761-c70bb35335c9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_last_updated
+    - node.type.publication
+  module:
+    - datetime
+id: node.publication.field_last_updated
+field_name: field_last_updated
+entity_type: node
+bundle: publication
+label: 'Last updated'
+description: 'Please select the last published date for this document, leave blank if there is no updated published date.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

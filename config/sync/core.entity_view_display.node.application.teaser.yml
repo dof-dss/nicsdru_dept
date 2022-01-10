@@ -1,0 +1,44 @@
+uuid: 4d262db2-b068-467c-bebe-639092c259d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.application.body
+    - field.field.node.application.field_additional_info
+    - field.field.node.application.field_global_topics
+    - field.field.node.application.field_link
+    - field.field.node.application.field_site_subtopics
+    - field.field.node.application.field_site_topics
+    - field.field.node.application.field_summary
+    - node.type.application
+  module:
+    - text
+    - user
+id: node.application.teaser
+targetEntityType: node
+bundle: application
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_additional_info: true
+  field_global_topics: true
+  field_link: true
+  field_site_subtopics: true
+  field_site_topics: true
+  field_summary: true
+  langcode: true
+  search_api_excerpt: true

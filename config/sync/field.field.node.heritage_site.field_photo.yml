@@ -1,0 +1,21 @@
+uuid: a2ba22b6-4a0d-4712-8af6-4b55c4ec6215
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_photo
+    - node.type.heritage_site
+id: node.heritage_site.field_photo
+field_name: field_photo
+entity_type: node
+bundle: heritage_site
+label: Photo
+description: 'Please choose an image to be displayed with this heritage site item. '
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings: {  }
+field_type: entity_reference

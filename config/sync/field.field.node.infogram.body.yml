@@ -1,0 +1,23 @@
+uuid: 3cab285a-d40a-4436-9f09-68d1db2ca9e0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.infogram
+  module:
+    - text
+id: node.infogram.body
+field_name: body
+entity_type: node
+bundle: infogram
+label: 'Chart description'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

@@ -1,0 +1,21 @@
+uuid: db02294a-89e8-4ca3-a090-f80112b2cdf5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_last_update
+    - taxonomy.vocabulary.indicators
+  module:
+    - datetime
+id: taxonomy_term.indicators.field_last_update
+field_name: field_last_update
+entity_type: taxonomy_term
+bundle: indicators
+label: 'Last update'
+description: 'Choose the date this indicator was last updated.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

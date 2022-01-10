@@ -1,0 +1,21 @@
+uuid: 23ffd528-14ac-4f53-9ad5-dbfc89e2ba2a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_council
+    - node.type.protected_area
+  module:
+    - options
+id: node.protected_area.field_council
+field_name: field_council
+entity_type: node
+bundle: protected_area
+label: Council
+description: 'Choose a council for this protected area.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

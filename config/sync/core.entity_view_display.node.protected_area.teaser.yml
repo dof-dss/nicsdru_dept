@@ -1,0 +1,46 @@
+uuid: f34635e1-a710-4605-9c87-b843800eb246
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.protected_area.body
+    - field.field.node.protected_area.field_council
+    - field.field.node.protected_area.field_county
+    - field.field.node.protected_area.field_protected_area_documents
+    - field.field.node.protected_area.field_protected_area_feature
+    - field.field.node.protected_area.field_protected_area_type
+    - field.field.node.protected_area.field_site_subtopics
+    - field.field.node.protected_area.field_site_topics
+    - node.type.protected_area
+  module:
+    - text
+    - user
+id: node.protected_area.teaser
+targetEntityType: node
+bundle: protected_area
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_council: true
+  field_county: true
+  field_protected_area_documents: true
+  field_protected_area_feature: true
+  field_protected_area_type: true
+  field_site_subtopics: true
+  field_site_topics: true
+  langcode: true
+  search_api_excerpt: true

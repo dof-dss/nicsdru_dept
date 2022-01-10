@@ -1,0 +1,23 @@
+uuid: 217181c4-ddc6-417b-b475-e312dd78c54f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_global_topics
+    - node.type.book
+id: node.book.field_global_topics
+field_name: field_global_topics
+entity_type: node
+bundle: book
+label: 'Global topics'
+description: 'Choose relevant global topic(s) for this book. Hold down Ctrl to choose multiple topics.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler_settings:
+    sort:
+      field: _none
+  handler: 'default:taxonomy_term'
+field_type: entity_reference

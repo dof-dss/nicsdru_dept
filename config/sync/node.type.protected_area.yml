@@ -1,0 +1,17 @@
+uuid: 6023d3f1-cb37-4a7b-bef1-2344d8e78933
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Protected area'
+type: protected_area
+description: 'Use this content type to describe a protected area.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

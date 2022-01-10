@@ -1,0 +1,56 @@
+uuid: 739ff768-1042-4aec-9928-98eacf7e8ed7
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: r42pUGejzS5QS-hmY73-CWAesrb_qodwPIhQcVo3QJA
+id: users
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: alterFieldInstanceMigration
+cck_plugin_method: null
+migration_tags:
+  - dept_sites
+migration_group: migrate_group_users
+label: Users
+source:
+  plugin: d7_user_uuid
+  track_changes: true
+process:
+  uid:
+    -
+      plugin: skip_on_value
+      method: row
+      source: uid
+      value:
+        - 0
+        - 1
+  name: name
+  pass: pass
+  mail: mail
+  created: created
+  access: access
+  login: login
+  status: status
+  timezone: timezone
+  langcode:
+    plugin: user_langcode
+    source: entity_language
+    fallback_to_site_default: false
+  preferred_langcode:
+    plugin: user_langcode
+    source: language
+    fallback_to_site_default: true
+  preferred_admin_langcode:
+    plugin: user_langcode
+    source: language
+    fallback_to_site_default: true
+  init: init
+  roles:
+    plugin: migration_lookup
+    migration: d7_user_role
+    source: roles
+destination:
+  plugin: 'entity:user'
+migration_dependencies:
+  required:
+    - d7_user_role

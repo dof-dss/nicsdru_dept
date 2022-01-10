@@ -1,0 +1,23 @@
+uuid: 45898f94-b0ea-4042-854b-9d3445bdaa91
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_respond_online
+    - node.type.consultation
+  module:
+    - link
+id: node.consultation.field_respond_online
+field_name: field_respond_online
+entity_type: node
+bundle: consultation
+label: 'Respond Online'
+description: 'Paste in the URL for online responses. Remember to include http:// or https://'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 17
+field_type: link

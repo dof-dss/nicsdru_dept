@@ -22,22 +22,23 @@ process:
       plugin: skip_on_empty
       method: row
       source: domain_node/0/target_id
-    -
-      plugin: skip_on_value
-      method: row
-      source: domain_node/0/target_id
-      value:
-        - 'daera'
-        - 'del'
-        - 'economy'
-        - 'execoffice'
-        - 'education'
-        - 'health'
-        - 'infrastructure'
-        - 'dcal'
-        - 'doe'
-        - 'justice'
-        - 'communities'
+#    -
+#      plugin: skip_on_value
+#      method: row
+#      source: domain_user/0/target_id
+#      # Whenever a site goes live (prod in D9), add its key to this list.
+#      value:
+#        - 'daera'
+#        - 'del'
+#        - 'economy'
+#        - 'execoffice'
+#        - 'education'
+#        - 'health'
+#        - 'infrastructure'
+#        - 'dcal'
+#        - 'doe'
+#        - 'justice'
+#        - 'communities'
     -
       plugin: static_map
       bypass: false
@@ -52,11 +53,14 @@ process:
       plugin: migration_lookup
       migration: node_easychart
       source: uuid
-  uid: uid
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: node_uid
   created: created
 destination:
   plugin: 'entity:group_content'
 migration_dependencies:
   required:
-    - d7_user
+    - users
     - node_easychart

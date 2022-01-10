@@ -1,0 +1,19 @@
+uuid: 18ddc294-2892-4bdb-820d-2fc5e897df7b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_eye_colour
+    - node.type.ual
+id: node.ual.field_eye_colour
+field_name: field_eye_colour
+entity_type: node
+bundle: ual
+label: 'Eye colour'
+description: 'Please enter the eye colour for this person.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,19 @@
+uuid: 59633964-444b-46b9-9cab-66493530e7a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_address_line_2
+    - node.type.heritage_site
+id: node.heritage_site.field_address_line_2
+field_name: field_address_line_2
+entity_type: node
+bundle: heritage_site
+label: 'Address line 2'
+description: 'Please enter the 2nd line of the heritage site address.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,34 @@
+uuid: d392b69c-738e-4f91-9640-72b420cb9644
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_site_topics
+    - node.type.book
+id: node.book.field_site_topics
+field_name: field_site_topics
+entity_type: node
+bundle: book
+label: 'Site topics'
+description: 'Choose relevant site topic(s) for this book. Hold down Ctrl to choose multiple site topics.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    behaviors:
+      entityqueue:
+        status: 0
+      views-select-list:
+        status: 0
+    view:
+      args: {  }
+      display_name: entityreference_1
+      view_name: topics
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+field_type: entity_reference

@@ -1,9 +1,7 @@
-uuid: 471d7fc8-5e75-4e1c-b91b-456742d63f70
+uuid: 4e96a47b-8965-4707-b1b4-6fbaec088208
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: u2KaVTtIQLlXggA9mEO157W2sSOiSnx-cG_bfhN_cVA
 id: d7_file
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -13,13 +11,12 @@ migration_tags:
 migration_group: migrate_group_files
 label: 'Public files'
 source:
-  plugin: d7_file
+  plugin: d7_file_uuid
   scheme: public
   batch_size: 1000
   constants:
     source_base_path: 'https://www.northernireland.gov.uk'
 process:
-  fid: fid
   filename: filename
   source_full_path:
     -
@@ -41,10 +38,13 @@ process:
   status: status
   created: timestamp
   changed: timestamp
-  uid: uid
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: uid
 destination:
   plugin: 'entity:file'
 migration_dependencies:
   required:
-    - d7_user
+    - users
   optional: {  }

@@ -1,0 +1,21 @@
+uuid: b108b802-fb16-491b-86fd-3450d0340f69
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_banner_image
+    - node.type.subtopic
+id: node.subtopic.field_banner_image
+field_name: field_banner_image
+entity_type: node
+bundle: subtopic
+label: 'Thin banner image'
+description: 'Select an optional thin banner image to be displayed on articles tagged with this term.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings: {  }
+field_type: entity_reference

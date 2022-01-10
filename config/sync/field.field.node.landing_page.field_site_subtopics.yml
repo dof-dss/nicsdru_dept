@@ -1,0 +1,34 @@
+uuid: 796757de-ad55-4c6f-bf4b-0443c930e656
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_site_subtopics
+    - node.type.landing_page
+id: node.landing_page.field_site_subtopics
+field_name: field_site_subtopics
+entity_type: node
+bundle: landing_page
+label: 'Site subtopic'
+description: 'Note this optional, but if you want to add news items for a given sub-topic, you must enter the site topic which is the parent of the given sub-topic.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    behaviors:
+      entityqueue:
+        status: 0
+      views-select-list:
+        status: 0
+    view:
+      args: {  }
+      display_name: entityreference_1
+      view_name: site_subtopics
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+field_type: entity_reference

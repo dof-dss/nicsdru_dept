@@ -1,0 +1,19 @@
+uuid: cea952bb-89d9-46de-81b2-51199fb3fc8d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_hair_colour
+    - node.type.ual
+id: node.ual.field_hair_colour
+field_name: field_hair_colour
+entity_type: node
+bundle: ual
+label: 'Hair colour'
+description: 'Please enter the hair colour for this person.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

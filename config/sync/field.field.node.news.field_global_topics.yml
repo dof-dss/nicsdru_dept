@@ -11,7 +11,7 @@ field_name: field_global_topics
 entity_type: node
 bundle: news
 label: 'Global topics'
-description: 'Choose relevant global topic(s) for this news item. Hold down Ctrl/Cmd to choose multiple topics.'
+description: 'Choose relevant global topic(s) for this news item. Hold down Ctrl to choose multiple topics.'
 required: true
 translatable: false
 default_value: {  }
@@ -22,7 +22,7 @@ settings:
     target_bundles:
       global_topics: global_topics
     sort:
-      field: name
+      field: _none
       direction: asc
     auto_create: false
     auto_create_bundle: ''
