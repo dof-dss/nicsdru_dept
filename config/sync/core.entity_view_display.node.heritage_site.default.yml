@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.heritage_site.field_county
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
+    - field.field.node.heritage_site.field_historic_map_viewer_link
     - field.field.node.heritage_site.field_location
     - field.field.node.heritage_site.field_nismr_link
     - field.field.node.heritage_site.field_open_to_the_public
@@ -116,6 +117,18 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+  field_historic_map_viewer_link:
+    weight: 13
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
   field_location:
     weight: 12
     label: above
