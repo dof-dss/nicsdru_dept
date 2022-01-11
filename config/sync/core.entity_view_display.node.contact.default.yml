@@ -4,10 +4,12 @@ status: true
 dependencies:
   config:
     - field.field.node.contact.body
+    - field.field.node.contact.field_location
     - field.field.node.contact.field_site_subtopics
     - field.field.node.contact.field_site_topics
     - node.type.contact
   module:
+    - geolocation
     - text
     - user
 id: node.contact.default
@@ -21,6 +23,13 @@ content:
     weight: 0
     settings: {  }
     third_party_settings: {  }
+    region: content
+  field_location:
+    weight: 3
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: geolocation_latlng
     region: content
   field_site_subtopics:
     weight: 2

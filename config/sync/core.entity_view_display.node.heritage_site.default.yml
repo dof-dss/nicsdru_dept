@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.heritage_site.field_county
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
+    - field.field.node.heritage_site.field_location
     - field.field.node.heritage_site.field_nismr_link
     - field.field.node.heritage_site.field_open_to_the_public
     - field.field.node.heritage_site.field_phone
@@ -19,9 +20,11 @@ dependencies:
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
     - field.field.node.heritage_site.field_website
+    - filter.format.plain_text
     - node.type.heritage_site
   module:
     - field_group
+    - geolocation
     - link
     - options
     - text
@@ -113,6 +116,32 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+  field_location:
+    weight: 12
+    label: above
+    settings:
+      title: ''
+      set_marker: true
+      show_label: false
+      show_delta_label: false
+      common_map: true
+      data_provider_settings: {  }
+      map_provider_id: google_maps
+      centre:
+        fit_bounds:
+          enable: true
+          weight: -101
+          map_center_id: fit_bounds
+          settings:
+            reset_zoom: true
+      map_provider_settings: {  }
+      info_text:
+        value: ''
+        format: plain_text
+      use_overridden_map_settings: false
+    third_party_settings: {  }
+    type: geolocation_map
+    region: content
   field_nismr_link:
     weight: 11
     label: inline
