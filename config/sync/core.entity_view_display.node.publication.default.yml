@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
-    - field.field.node.publication.field_original_domain
     - field.field.node.publication.field_publication_files
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
@@ -128,6 +127,5 @@ content:
     third_party_settings: {  }
 hidden:
   field_attachment: true
-  field_original_domain: true
   langcode: true
   search_api_excerpt: true

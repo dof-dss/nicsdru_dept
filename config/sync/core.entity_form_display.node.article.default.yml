@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.article.body
-    - field.field.node.article.field_enable_toc
     - field.field.node.article.field_global_topics
     - field.field.node.article.field_image
     - field.field.node.article.field_site_subtopics
@@ -43,13 +42,6 @@ content:
     weight: 9
     region: content
     settings: {  }
-    third_party_settings: {  }
-  field_enable_toc:
-    type: boolean_checkbox
-    weight: 21
-    region: content
-    settings:
-      display_label: true
     third_party_settings: {  }
   field_global_topics:
     type: chosen_select

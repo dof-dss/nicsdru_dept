@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.topic.body
-    - field.field.node.topic.field_enable_toc
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
     - node.type.topic
@@ -31,7 +30,6 @@ content:
     type: text_default
     region: content
 hidden:
-  field_enable_toc: true
   field_photo: true
   langcode: true
   links: true

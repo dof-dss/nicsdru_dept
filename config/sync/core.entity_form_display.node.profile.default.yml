@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.field.node.profile.body
     - field.field.node.profile.field_department
-    - field.field.node.profile.field_original_domain
     - field.field.node.profile.field_photo
     - field.field.node.profile.field_summary
     - node.type.profile
@@ -154,5 +153,4 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden:
-  field_original_domain: true
+hidden: {  }

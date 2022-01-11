@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.news.field_global_topics
     - field.field.node.news.field_news_type
     - field.field.node.news.field_notes_to_editors
-    - field.field.node.news.field_original_domain
     - field.field.node.news.field_photo
     - field.field.node.news.field_published_date
     - field.field.node.news.field_site_subtopics
@@ -46,14 +45,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: text_default
-    region: content
-  field_original_domain:
-    weight: 108
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
     region: content
   field_photo:
     type: entity_reference_entity_view

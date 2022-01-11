@@ -6,7 +6,9 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.node.book.body
     - field.field.node.book.field_global_topics
-    - field.field.node.book.field_original_domain
+    - field.field.node.book.field_site_subtopics
+    - field.field.node.book.field_site_topics
+    - field.field.node.book.field_summary
     - node.type.book
   module:
     - text
@@ -31,6 +33,8 @@ content:
     region: content
 hidden:
   field_global_topics: true
-  field_original_domain: true
+  field_site_subtopics: true
+  field_site_topics: true
+  field_summary: true
   langcode: true
   search_api_excerpt: true
