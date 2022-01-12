@@ -30,29 +30,18 @@ function dept_core_preprocess_menu(&$variables) {
       return;
     }
 
-    $group = Group::load($dept->groupId());
+    if (($accessibility_statement = $dept->accessibilityStatement()) !== NULL && $accessibility_statement instanceof NodeInterface) {
+      // See MenuLinkTree->buildItems() which this imitates.
+      $menu_link = [
+        'title' => $accessibility_statement->getTitle(),
+        'url' => Url::fromRoute('entity.node.canonical', ['node' => $accessibility_statement->id()]),
+        'is_collapsed' => FALSE,
+        'is_expanded' => FALSE,
+        'in_active_trail' => FALSE,
+        'attributes' => new Attribute(),
+      ];
 
-    if (empty($group)) {
-      return;
-    }
-
-    $accessibility_statement_node = $group->field_accessibility_statement->referencedEntities();
-    if (!empty($accessibility_statement_node)) {
-      $accessibility_statement_node = $accessibility_statement_node[0];
-
-      if ($accessibility_statement_node instanceof NodeInterface) {
-        // See MenuLinkTree->buildItems() which this imitates.
-        $menu_link = [
-          'title' => $accessibility_statement_node->getTitle(),
-          'url' => Url::fromRoute('entity.node.canonical', ['node' => $accessibility_statement_node->id()]),
-          'is_collapsed' => FALSE,
-          'is_expanded' => FALSE,
-          'in_active_trail' => FALSE,
-          'attributes' => new Attribute(),
-        ];
-
-        $variables['items'][] = $menu_link;
+      $variables['items'][] = $menu_link;
       }
     }
-  }
 }

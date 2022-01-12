@@ -71,7 +71,6 @@ class Department {
    *   The Domain Identifier.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, string $domain_id = NULL) {
-    $this->renderer = $renderer;
     $this->id = $domain_id;
     $this->domain = $entity_type_manager->getStorage('domain')->load($this->id);
 
@@ -189,6 +188,13 @@ class Department {
    */
   public function location() {
     return $this->group->field_location->view('full');
+  }
+
+  /**
+   * Accessibility statement.
+   */
+  public function accessibilityStatement() {
+    return (empty($this->group->field_accessibility_statement->referencedEntities())) ? NULL : $this->group->field_accessibility_statement->referencedEntities()[0];
   }
 
 }
