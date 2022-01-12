@@ -5,6 +5,7 @@
  * Core functionality for Departmental sites.
  */
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\group\Entity\Group;
@@ -40,6 +41,17 @@ function dept_core_preprocess_menu(&$variables) {
         'in_active_trail' => FALSE,
         'attributes' => new Attribute(),
       ];
+
+      $cache_tags = [
+        'group:' . $dept->groupId(),
+        'node:' . $accessibility_statement->id()
+      ];
+
+      if (!empty($variables['#cache']['tags'])) {
+        $variables['#cache']['tags'] = Cache::mergeTags($cache_tags, $variables['#cache']['keys']);
+      } else {
+        $variables['#cache']['tags'] = $cache_tags;
+      }
 
       $variables['items'][] = $menu_link;
       }
