@@ -1,9 +1,7 @@
-uuid: dcddfed0-0dd0-4fb8-b061-a5b8a1bbf3a7
+uuid: c8b24d66-e0d9-4fa2-a3e7-213e369fcb5d
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: zcHfufdORuN5h5xwvnT7MAOUAop4jsf6DWCyDmXm7NY
 id: d7_taxonomy_term_chart_type
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldFormatterMigration
@@ -15,6 +13,7 @@ label: 'Taxonomy terms (Chart type)'
 source:
   plugin: d7_taxonomy_term
   bundle: chart_type
+  track_changes: true
   batch_size: 1000
 process:
   tid: tid

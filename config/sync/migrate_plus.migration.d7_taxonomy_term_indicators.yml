@@ -1,9 +1,7 @@
-uuid: 2b8f81ca-2f83-46a2-ad46-f8a75908e9c8
+uuid: 926baf0a-7ffc-4ab4-be77-5561b2116c59
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: H1rjml5jFUaV-2EoZRJTUUTHvbAyfHPV60eRgNsrB5U
 id: d7_taxonomy_term_indicators
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldFormatterMigration
@@ -15,6 +13,7 @@ label: 'Taxonomy terms (indicators)'
 source:
   plugin: d7_taxonomy_term
   bundle: indicators
+  track_changes: true
   batch_size: 1000
 process:
   tid: tid

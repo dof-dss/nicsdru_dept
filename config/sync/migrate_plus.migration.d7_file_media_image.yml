@@ -1,4 +1,4 @@
-uuid: 111d2d21-4013-4f36-a750-f903b433d6d2
+uuid: 9ffc726f-8956-4b08-b554-96ecfa666489
 langcode: en
 status: true
 dependencies: {  }
@@ -12,6 +12,7 @@ migration_group: migrate_group_files
 label: 'Migrate D7 files to media images'
 source:
   plugin: file_entity
+  track_changes: true
   type: image
   batch_size: 1000
   constants:
