@@ -67,10 +67,11 @@ class Department {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param string $domain_id
+   * @param string|null $domain_id
    *   The Domain Identifier.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, string $domain_id = NULL) {
+    $this->renderer = $renderer;
     $this->id = $domain_id;
     $this->domain = $entity_type_manager->getStorage('domain')->load($this->id);
 
@@ -159,35 +160,35 @@ class Department {
    * Management and Structure details.
    */
   public function managementAndStructure() {
-    return render($this->group->field_management_and_structure->view('full'));
+    return $this->group->field_management_and_structure->view('full');
   }
 
   /**
    * Access to information details.
    */
   public function accessToInformation() {
-    return render($this->group->field_access_to_information->view('full'));
+    return $this->group->field_access_to_information->view('full');
   }
 
   /**
    * Contact Information details.
    */
   public function contactInformation() {
-    return render($this->group->field_contact_information->view('full'));
+    return $this->group->field_contact_information->view('full');
   }
 
   /**
    * Social media links.
    */
   public function socialMediaLinks() {
-    return render($this->group->field_social_media_links->view('full'));
+    return $this->group->field_social_media_links->view('full');
   }
 
   /**
    * Point of contact map location.
    */
   public function location() {
-    return render($this->group->field_location->view('full'));
+    return $this->group->field_location->view('full');
   }
 
 }
