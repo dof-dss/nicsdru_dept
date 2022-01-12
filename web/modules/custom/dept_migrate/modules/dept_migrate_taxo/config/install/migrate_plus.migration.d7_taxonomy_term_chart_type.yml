@@ -12,6 +12,7 @@ label: 'Taxonomy terms (Chart type)'
 source:
   plugin: d7_taxonomy_term
   bundle: chart_type
+  track_changes: true
   batch_size: 1000
 process:
   tid: tid

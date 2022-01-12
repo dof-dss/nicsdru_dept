@@ -12,6 +12,7 @@ migration_group: migrate_group_files
 label: 'Public files'
 source:
   plugin: d7_file_uuid
+  track_changes: true
   scheme: public
   batch_size: 1000
   constants:
