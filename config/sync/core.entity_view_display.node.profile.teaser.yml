@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.node.profile.body
     - field.field.node.profile.field_department
-    - field.field.node.profile.field_original_domain
     - field.field.node.profile.field_photo
     - field.field.node.profile.field_summary
     - node.type.profile
@@ -19,21 +18,20 @@ bundle: profile
 mode: teaser
 content:
   body:
-    label: hidden
     type: text_summary_or_trimmed
-    weight: 101
+    label: hidden
     settings:
       trim_length: 600
     third_party_settings: {  }
+    weight: 101
     region: content
   links:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   field_department: true
-  field_original_domain: true
   field_photo: true
   field_summary: true
   langcode: true

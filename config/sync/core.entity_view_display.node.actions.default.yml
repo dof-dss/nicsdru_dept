@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.actions.body
-    - field.field.node.actions.field_enable_toc
     - field.field.node.actions.field_outcomes
     - node.type.actions
   module:
@@ -16,19 +15,18 @@ bundle: actions
 mode: default
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 101
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 101
     region: content
   links:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
-  field_enable_toc: true
   field_outcomes: true
   langcode: true
   search_api_excerpt: true

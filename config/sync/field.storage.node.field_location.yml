@@ -1,15 +1,16 @@
-uuid: 491c210b-5391-4b0f-8c77-cfbc4278442c
-langcode: und
+uuid: 27f6671d-70af-4e05-b19e-3b6d85cedd77
+langcode: en
 status: true
 dependencies:
   module:
+    - geolocation
     - node
-id: node.field_enable_toc
-field_name: field_enable_toc
+id: node.field_location
+field_name: field_location
 entity_type: node
-type: boolean
+type: geolocation
 settings: {  }
-module: core
+module: geolocation
 locked: false
 cardinality: 1
 translatable: true

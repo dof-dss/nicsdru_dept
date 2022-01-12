@@ -7,9 +7,7 @@ dependencies:
     - field.field.node.subtopic.body
     - field.field.node.subtopic.field_banner_image
     - field.field.node.subtopic.field_banner_link
-    - field.field.node.subtopic.field_enable_toc
     - field.field.node.subtopic.field_link
-    - field.field.node.subtopic.field_original_domain
     - field.field.node.subtopic.field_parent_subtopic
     - field.field.node.subtopic.field_parent_topic
     - field.field.node.subtopic.field_summary
@@ -23,24 +21,22 @@ bundle: subtopic
 mode: teaser
 content:
   body:
-    label: hidden
     type: text_summary_or_trimmed
-    weight: 101
+    label: hidden
     settings:
       trim_length: 600
     third_party_settings: {  }
+    weight: 101
     region: content
   links:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   field_banner_image: true
   field_banner_link: true
-  field_enable_toc: true
   field_link: true
-  field_original_domain: true
   field_parent_subtopic: true
   field_parent_topic: true
   field_summary: true

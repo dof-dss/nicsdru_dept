@@ -10,6 +10,8 @@ dependencies:
     - field.field.node.heritage_site.field_county
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
+    - field.field.node.heritage_site.field_historic_map_viewer_link
+    - field.field.node.heritage_site.field_location
     - field.field.node.heritage_site.field_nismr_link
     - field.field.node.heritage_site.field_open_to_the_public
     - field.field.node.heritage_site.field_phone
@@ -30,17 +32,17 @@ bundle: heritage_site
 mode: teaser
 content:
   body:
-    label: hidden
     type: text_summary_or_trimmed
-    weight: 101
+    label: hidden
     settings:
       trim_length: 600
     third_party_settings: {  }
+    weight: 101
     region: content
   links:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   field_address_line_1: true
@@ -48,6 +50,8 @@ hidden:
   field_county: true
   field_email: true
   field_grid_reference: true
+  field_historic_map_viewer_link: true
+  field_location: true
   field_nismr_link: true
   field_open_to_the_public: true
   field_phone: true

@@ -18,6 +18,10 @@ default_value_callback: ''
 settings:
   handler: 'default:node'
   handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
     behaviors:
       views-select-list:
         status: 0
@@ -25,8 +29,4 @@ settings:
       args: {  }
       display_name: entityreference_1
       view_name: topics
-    target_bundles: null
-    sort:
-      field: _none
-      direction: ASC
 field_type: entity_reference

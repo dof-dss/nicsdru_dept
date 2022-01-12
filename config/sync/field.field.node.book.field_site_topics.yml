@@ -1,0 +1,25 @@
+uuid: aec46aa0-10f4-4151-bcd9-cc8c6324b4b3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_site_topics
+    - node.type.book
+id: node.book.field_site_topics
+field_name: field_site_topics
+entity_type: node
+bundle: book
+label: 'Site topics'
+description: 'Choose relevant site topic(s) for this book. Hold down Ctrl to choose multiple site topics.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: site_topics
+      display_name: entity_reference_topics
+      arguments: {  }
+field_type: entity_reference

@@ -8,7 +8,6 @@ dependencies:
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
-    - field.field.node.publication.field_original_domain
     - field.field.node.publication.field_publication_files
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
@@ -35,13 +34,13 @@ content:
   body:
     type: text_textarea_with_summary
     weight: 8
+    region: content
     settings:
       rows: 9
       summary_rows: 3
       placeholder: ''
       show_summary: false
     third_party_settings: {  }
-    region: content
   created:
     type: datetime_timestamp
     weight: 14
@@ -49,71 +48,71 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_external_publication:
+    type: link_default
     weight: 9
+    region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-    type: link_default
-    region: content
   field_global_topics:
-    weight: 1
-    settings: {  }
-    third_party_settings: {  }
     type: chosen_select
+    weight: 1
     region: content
-  field_last_updated:
-    weight: 6
     settings: {  }
     third_party_settings: {  }
+  field_last_updated:
     type: datetime_default
+    weight: 6
     region: content
+    settings: {  }
+    third_party_settings: {  }
   field_publication_files:
     type: media_library_widget
     weight: 10
+    region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
-    region: content
   field_publication_secure_files:
     type: media_library_widget
     weight: 11
+    region: content
     settings:
       media_types: {  }
     third_party_settings: {  }
-    region: content
   field_publication_type:
-    weight: 4
-    settings: {  }
-    third_party_settings: {  }
     type: options_select
+    weight: 4
     region: content
+    settings: {  }
+    third_party_settings: {  }
   field_published_date:
-    weight: 5
-    settings: {  }
-    third_party_settings: {  }
     type: datetime_default
+    weight: 5
     region: content
+    settings: {  }
+    third_party_settings: {  }
   field_site_subtopics:
+    type: chosen_select
     weight: 3
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: chosen_select
-    region: content
   field_site_topics:
+    type: chosen_select
     weight: 2
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: chosen_select
-    region: content
   field_summary:
+    type: text_textarea
     weight: 7
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
   flag:
     weight: 15
     region: content
@@ -129,8 +128,8 @@ content:
   moderation_state:
     type: moderation_state_default
     weight: 24
-    settings: {  }
     region: content
+    settings: {  }
     third_party_settings: {  }
   path:
     type: path
@@ -140,10 +139,10 @@ content:
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 16
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   publish_on:
     type: datetime_timestamp_no_default
@@ -159,17 +158,17 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 25
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 17
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   title:
     type: string_textfield
@@ -182,12 +181,12 @@ content:
   uid:
     type: entity_reference_autocomplete
     weight: 13
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
-    region: content
     third_party_settings: {  }
   unpublish_on:
     type: datetime_timestamp_no_default
@@ -208,4 +207,3 @@ content:
     third_party_settings: {  }
 hidden:
   field_attachment: true
-  field_original_domain: true

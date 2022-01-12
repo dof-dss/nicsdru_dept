@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.case_study.body
-    - field.field.node.case_study.field_enable_toc
     - field.field.node.case_study.field_outcomes
     - node.type.case_study
   module:
@@ -16,14 +15,13 @@ bundle: case_study
 mode: default
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 0
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
-  field_enable_toc: true
   field_outcomes: true
   langcode: true
   links: true

@@ -5,16 +5,14 @@ dependencies:
   config:
     - core.entity_view_mode.node.search_result
     - field.field.node.page.body
-    - field.field.node.page.field_enable_toc
-    - field.field.node.page.field_original_domain
     - node.type.page
   module:
     - layout_builder
     - user
 third_party_settings:
   layout_builder:
-    allow_custom: false
     enabled: false
+    allow_custom: false
 _core:
   default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
 id: node.page.search_result
@@ -23,14 +21,12 @@ bundle: page
 mode: search_result
 content:
   search_api_excerpt:
-    weight: 0
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   body: true
   content_moderation_control: true
-  field_enable_toc: true
-  field_original_domain: true
   langcode: true
   links: true

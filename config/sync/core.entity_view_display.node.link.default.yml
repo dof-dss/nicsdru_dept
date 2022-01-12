@@ -1,0 +1,48 @@
+uuid: fb329028-ab79-4d95-98dc-c483eab5a116
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.link.field_file_language
+    - field.field.node.link.field_link_type
+    - field.field.node.link.field_link_url
+    - node.type.link
+  module:
+    - link
+    - options
+    - user
+id: node.link.default
+targetEntityType: node
+bundle: link
+mode: default
+content:
+  field_file_language:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_link_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_link_url:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true
+  links: true
+  search_api_excerpt: true

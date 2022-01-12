@@ -4,8 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.global_page.body
-    - field.field.node.global_page.field_enable_toc
-    - field.field.node.global_page.field_original_domain
     - node.type.global_page
   module:
     - text
@@ -16,19 +14,17 @@ bundle: global_page
 mode: default
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 101
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 101
     region: content
   links:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
-  field_enable_toc: true
-  field_original_domain: true
   langcode: true
   search_api_excerpt: true

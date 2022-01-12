@@ -1,0 +1,23 @@
+uuid: 5c2b15cc-d451-4c1d-8035-9b8f5ac10253
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_historic_map_viewer_link
+    - node.type.heritage_site
+  module:
+    - link
+id: node.heritage_site.field_historic_map_viewer_link
+field_name: field_historic_map_viewer_link
+entity_type: node
+bundle: heritage_site
+label: 'Historic Map Viewer Link'
+description: 'Please add the full URL of the Historic Map Viewer Link address e.g. http://www.example.com or https://www.example.com.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 16
+field_type: link

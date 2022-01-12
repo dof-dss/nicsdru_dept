@@ -9,6 +9,9 @@ dependencies:
     - field.field.node.landing_page.field_banner_image_overlay
     - field.field.node.landing_page.field_enable_title
     - field.field.node.landing_page.field_facebook_user
+    - field.field.node.landing_page.field_site_subtopics
+    - field.field.node.landing_page.field_site_topics
+    - field.field.node.landing_page.field_summary
     - field.field.node.landing_page.field_teaser
     - field.field.node.landing_page.field_tweet_count
     - field.field.node.landing_page.field_twitter_user
@@ -22,23 +25,26 @@ bundle: landing_page
 mode: teaser
 content:
   body:
-    label: hidden
     type: text_summary_or_trimmed
-    weight: 101
+    label: hidden
     settings:
       trim_length: 600
     third_party_settings: {  }
+    weight: 101
     region: content
   links:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   field_banner_image: true
   field_banner_image_overlay: true
   field_enable_title: true
   field_facebook_user: true
+  field_site_subtopics: true
+  field_site_topics: true
+  field_summary: true
   field_teaser: true
   field_tweet_count: true
   field_twitter_user: true

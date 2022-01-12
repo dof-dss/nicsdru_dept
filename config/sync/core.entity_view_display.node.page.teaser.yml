@@ -5,8 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
-    - field.field.node.page.field_enable_toc
-    - field.field.node.page.field_original_domain
     - node.type.page
   module:
     - text
@@ -19,23 +17,21 @@ bundle: page
 mode: teaser
 content:
   body:
-    label: hidden
     type: text_summary_or_trimmed
-    weight: 100
-    region: content
+    label: hidden
     settings:
       trim_length: 600
     third_party_settings: {  }
+    weight: 100
+    region: content
   content_moderation_control:
-    weight: -20
     settings: {  }
     third_party_settings: {  }
+    weight: -20
     region: content
   links:
     weight: 101
     region: content
 hidden:
-  field_enable_toc: true
-  field_original_domain: true
   langcode: true
   search_api_excerpt: true

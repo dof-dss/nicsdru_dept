@@ -9,7 +9,6 @@ dependencies:
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
-    - field.field.node.publication.field_original_domain
     - field.field.node.publication.field_publication_files
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
@@ -27,24 +26,23 @@ bundle: publication
 mode: teaser
 content:
   body:
-    label: hidden
     type: text_summary_or_trimmed
-    weight: 101
+    label: hidden
     settings:
       trim_length: 600
     third_party_settings: {  }
+    weight: 101
     region: content
   links:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   field_attachment: true
   field_external_publication: true
   field_global_topics: true
   field_last_updated: true
-  field_original_domain: true
   field_publication_files: true
   field_publication_secure_files: true
   field_publication_type: true
