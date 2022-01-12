@@ -4,8 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
-    - field.field.node.page.field_enable_toc
-    - field.field.node.page.field_original_domain
     - node.type.page
     - workflows.workflow.nics_editorial_workflow
   module:
@@ -129,6 +127,4 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: content
-hidden:
-  field_enable_toc: true
-  field_original_domain: true
+hidden: {  }

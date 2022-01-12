@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.rss
     - field.field.node.article.body
-    - field.field.node.article.field_enable_toc
     - field.field.node.article.field_global_topics
     - field.field.node.article.field_image
     - field.field.node.article.field_site_subtopics
@@ -31,7 +30,6 @@ content:
     region: content
 hidden:
   body: true
-  field_enable_toc: true
   field_global_topics: true
   field_image: true
   field_site_subtopics: true

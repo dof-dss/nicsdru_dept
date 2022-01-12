@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.case_study.body
-    - field.field.node.case_study.field_enable_toc
     - field.field.node.case_study.field_outcomes
     - node.type.case_study
   module:
@@ -23,7 +22,6 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
-  field_enable_toc: true
   field_outcomes: true
   langcode: true
   links: true

@@ -1,4 +1,4 @@
-uuid: a3cd7300-75bc-4eca-aaed-d000ae429098
+uuid: a7f06ac9-a049-4d7f-8e39-fda224ee48ca
 langcode: en
 status: true
 dependencies:
@@ -12,23 +12,14 @@ bundle: consultation
 label: 'Site subtopics'
 description: 'Choose relevant site subtopic(s) for this consultation. Hold down Ctrl to choose multiple site subtopics.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:node'
+  handler: views
   handler_settings:
-    behaviors:
-      entityqueue:
-        status: 0
-      views-select-list:
-        status: 0
     view:
-      args: {  }
-      display_name: entityreference_1
       view_name: site_subtopics
-    target_bundles: null
-    sort:
-      field: _none
-      direction: ASC
+      display_name: entity_reference_subtopic
+      arguments: {  }
 field_type: entity_reference

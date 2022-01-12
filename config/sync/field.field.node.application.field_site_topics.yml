@@ -1,4 +1,4 @@
-uuid: 34709f21-d823-4ee3-a275-5582a2c84b32
+uuid: 596c77c2-e9fe-4e14-bc3e-e47949d55f92
 langcode: en
 status: true
 dependencies:
@@ -10,25 +10,16 @@ field_name: field_site_topics
 entity_type: node
 bundle: application
 label: 'Site topics'
-description: 'Choose relevant site topic(s) for this application. Hold down Ctrl to choose multiple site topics.'
+description: 'hoose relevant site topic(s) for this application. Hold down Ctrl to choose multiple site topics.'
 required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:taxonomy_term'
+  handler: views
   handler_settings:
-    behaviors:
-      entityqueue:
-        status: 0
-      views-select-list:
-        status: 0
     view:
-      args: {  }
-      display_name: entityreference_1
-      view_name: topics
-    target_bundles: null
-    sort:
-      field: _none
-      direction: ASC
+      view_name: site_topics
+      display_name: entity_reference_topics
+      arguments: {  }
 field_type: entity_reference

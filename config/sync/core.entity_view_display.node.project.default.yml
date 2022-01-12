@@ -7,11 +7,13 @@ dependencies:
     - field.field.node.project.field_departmental_project_code
     - field.field.node.project.field_project_category
     - field.field.node.project.field_project_date
+    - field.field.node.project.field_project_duration
     - field.field.node.project.field_project_status
     - field.field.node.project.field_provider_project_code
     - node.type.project
   module:
     - datetime
+    - interval
     - options
     - text
     - user
@@ -23,7 +25,7 @@ content:
   body:
     label: hidden
     type: text_default
-    weight: 4
+    weight: 5
     settings: {  }
     third_party_settings: {  }
     region: content
@@ -37,7 +39,7 @@ content:
     third_party_settings: {  }
   field_project_category:
     type: list_default
-    weight: 5
+    weight: 6
     region: content
     label: above
     settings: {  }
@@ -51,9 +53,16 @@ content:
       format_type: medium
       timezone_override: ''
     third_party_settings: {  }
+  field_project_duration:
+    weight: 3
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: interval_default
+    region: content
   field_project_status:
     type: list_default
-    weight: 3
+    weight: 4
     region: content
     label: above
     settings: {  }

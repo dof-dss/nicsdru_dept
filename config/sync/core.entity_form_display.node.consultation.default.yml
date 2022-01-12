@@ -96,17 +96,17 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
   field_site_subtopics:
-    type: chosen_select
     weight: 3
-    region: content
     settings: {  }
     third_party_settings: {  }
-  field_site_topics:
     type: chosen_select
-    weight: 2
     region: content
+  field_site_topics:
+    weight: 2
     settings: {  }
     third_party_settings: {  }
+    type: chosen_select
+    region: content
   field_summary:
     weight: 6
     settings:
