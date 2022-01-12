@@ -11,6 +11,7 @@ migration_group: migrate_group_files
 label: 'Migrate D7 files to media images'
 source:
   plugin: file_entity
+  track_changes: true
   type: image
   batch_size: 1000
   constants:

@@ -2,8 +2,6 @@ uuid: 76ebe774-9157-492a-ba1e-73b25eaa4c36
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: Wz_qQZsWFNM_nZ7tfZOS1a4vDBg8LacsUfWQkKk0McQ
 id: d7_taxonomy_term_global_topics
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldFormatterMigration
@@ -15,6 +13,7 @@ label: 'Taxonomy terms (Global topics)'
 source:
   plugin: d7_taxonomy_term
   bundle: global_topics
+  track_changes: true
   batch_size: 1000
 process:
   tid: tid
