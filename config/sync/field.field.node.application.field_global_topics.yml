@@ -1,4 +1,4 @@
-uuid: 8a99c83a-982f-497b-a010-f7da77c4995c
+uuid: 560bd5f3-3de8-499e-82f9-f480ef18412f
 langcode: en
 status: true
 dependencies:
@@ -13,7 +13,7 @@ bundle: application
 label: 'Global topics'
 description: 'Choose relevant global topic(s) for this application page. Hold down Ctrl to choose multiple topics.'
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
@@ -22,7 +22,7 @@ settings:
     target_bundles:
       global_topics: global_topics
     sort:
-      field: _none
+      field: name
       direction: asc
     auto_create: false
     auto_create_bundle: ''

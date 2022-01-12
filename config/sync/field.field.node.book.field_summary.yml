@@ -1,0 +1,21 @@
+uuid: cb462dd3-0813-431d-a576-f3a9dcb87c68
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_summary
+    - node.type.book
+  module:
+    - text
+id: node.book.field_summary
+field_name: field_summary
+entity_type: node
+bundle: book
+label: Summary
+description: 'Enter a summary of this article.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

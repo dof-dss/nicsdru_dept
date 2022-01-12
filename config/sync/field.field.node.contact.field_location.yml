@@ -1,0 +1,21 @@
+uuid: bcd7dbcd-f5c1-410b-b2f7-d6259ce65584
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_location
+    - node.type.contact
+  module:
+    - geolocation
+id: node.contact.field_location
+field_name: field_location
+entity_type: node
+bundle: contact
+label: Location
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: geolocation

@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.article.body
-    - field.field.node.article.field_enable_toc
     - field.field.node.article.field_global_topics
     - field.field.node.article.field_image
     - field.field.node.article.field_site_subtopics
@@ -44,13 +43,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_enable_toc:
-    type: boolean_checkbox
-    weight: 21
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
   field_global_topics:
     type: chosen_select
     weight: 1
@@ -66,25 +58,17 @@ content:
       preview_image_style: thumbnail
     third_party_settings: {  }
   field_site_subtopics:
-    type: entity_reference_autocomplete
     weight: 3
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
+    type: chosen_select
+    region: content
   field_site_topics:
-    type: entity_reference_autocomplete
     weight: 2
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
+    type: chosen_select
+    region: content
   field_summary:
     weight: 4
     settings:
