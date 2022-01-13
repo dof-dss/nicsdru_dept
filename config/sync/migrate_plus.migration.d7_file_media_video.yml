@@ -12,6 +12,7 @@ migration_group: migrate_group_files
 label: 'Migrate D7 files to media video entities'
 source:
   plugin: file_entity
+  track_changes: true
   type: video
   batch_size: 1000
   constants:

@@ -89,6 +89,7 @@
         "drupal/group_entityqueue": "^1.0@beta",
         "drupal/groupmedia": "^2.0@alpha",
         "drupal/handy_cache_tags": "^1.1",
+        "drupal/interval": "^1.9",
         "drupal/layout_builder_modal": "^1.1",
         "drupal/layout_builder_restrictions": "^2.9",
         "drupal/linkit": "^6.0.0",
@@ -151,7 +152,12 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "drupal/core-composer-scaffold": true
+        }
     },
     "extra": {
         "drupal-scaffold": {

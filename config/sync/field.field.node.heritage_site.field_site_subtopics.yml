@@ -1,4 +1,4 @@
-uuid: e6005222-e019-43c9-b754-97215928288d
+uuid: d2050804-c606-4436-8896-288081a971b6
 langcode: en
 status: true
 dependencies:
@@ -12,25 +12,14 @@ bundle: heritage_site
 label: 'Site subtopics'
 description: ''
 required: false
-translatable: false
-default_value:
-  -
-    target_id: '38075'
+translatable: true
+default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:node'
+  handler: views
   handler_settings:
-    behaviors:
-      entityqueue:
-        status: 0
-      views-select-list:
-        status: 0
     view:
-      args: {  }
-      display_name: entityreference_1
       view_name: site_subtopics
-    target_bundles: null
-    sort:
-      field: _none
-      direction: ASC
+      display_name: entity_reference_subtopic
+      arguments: {  }
 field_type: entity_reference

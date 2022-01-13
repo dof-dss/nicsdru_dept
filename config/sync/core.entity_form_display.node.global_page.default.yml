@@ -4,8 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.global_page.body
-    - field.field.node.global_page.field_enable_toc
-    - field.field.node.global_page.field_original_domain
     - node.type.global_page
   module:
     - content_moderation
@@ -126,6 +124,4 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: content
-hidden:
-  field_enable_toc: true
-  field_original_domain: true
+hidden: {  }

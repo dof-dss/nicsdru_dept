@@ -9,6 +9,9 @@ dependencies:
     - field.field.node.heritage_site.field_county
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
+    - field.field.node.heritage_site.field_historic_map_viewer_link
+    - field.field.node.heritage_site.field_location
+    - field.field.node.heritage_site.field_nismr_link
     - field.field.node.heritage_site.field_open_to_the_public
     - field.field.node.heritage_site.field_phone
     - field.field.node.heritage_site.field_photo
@@ -17,10 +20,14 @@ dependencies:
     - field.field.node.heritage_site.field_site_topics
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
+    - field.field.node.heritage_site.field_website
     - node.type.heritage_site
   module:
+    - chosen_field
     - content_moderation
     - field_group
+    - geolocation_google_maps
+    - link
     - path
     - scheduler
     - scheduler_content_moderation_integration
@@ -49,6 +56,7 @@ third_party_settings:
       children:
         - field_phone
         - field_email
+        - field_website
       parent_name: ''
       weight: 5
       format_type: details
@@ -65,7 +73,9 @@ third_party_settings:
       children:
         - field_open_to_the_public
         - field_grid_reference
+        - field_historic_map_viewer_link
         - field_sm_number
+        - field_nismr_link
       parent_name: ''
       weight: 6
       format_type: details
@@ -85,7 +95,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 25
+    weight: 8
     settings:
       rows: 9
       summary_rows: 3
@@ -95,7 +105,7 @@ content:
     region: content
   created:
     type: datetime_timestamp
-    weight: 12
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -137,6 +147,57 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_historic_map_viewer_link:
+    weight: 11
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+  field_location:
+    weight: 10
+    settings:
+      centre:
+        fit_bounds:
+          enable: true
+      auto_client_location: ''
+      auto_client_location_marker: ''
+      allow_override_map_settings: 0
+      hide_textfield_form: false
+      google_map_settings:
+        map_features:
+          marker_infowindow:
+            enabled: true
+          control_locate:
+            enabled: true
+          control_zoom:
+            enabled: true
+          control_maptype:
+            enabled: true
+          control_geocoder:
+            enabled: true
+            weight: -100
+          control_recenter:
+            enabled: true
+        type: ROADMAP
+        zoom: 10
+        height: 400px
+        width: 100%
+        minZoom: 0
+        maxZoom: 20
+        gestureHandling: auto
+    third_party_settings: {  }
+    type: geolocation_googlegeocoder
+    region: content
+  field_nismr_link:
+    weight: 13
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
   field_open_to_the_public:
     type: options_select
     weight: 9
@@ -153,7 +214,7 @@ content:
     third_party_settings: {  }
   field_photo:
     type: entity_reference_autocomplete
-    weight: 24
+    weight: 7
     region: content
     settings:
       match_operator: CONTAINS
@@ -170,28 +231,20 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_site_subtopics:
-    type: entity_reference_autocomplete
     weight: 2
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
+    type: chosen_select
+    region: content
   field_site_topics:
-    type: entity_reference_autocomplete
     weight: 1
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
+    type: chosen_select
+    region: content
   field_sm_number:
     type: string_textfield
-    weight: 11
+    weight: 12
     region: content
     settings:
       size: 60
@@ -205,27 +258,35 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_website:
+    weight: 10
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
   flag:
-    weight: 13
+    weight: 14
     region: content
     settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 7
+    weight: 11
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 22
+    weight: 23
     settings: {  }
     region: content
     third_party_settings: {  }
   path:
     type: path
-    weight: 16
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -233,18 +294,18 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 14
+    weight: 15
     region: content
     third_party_settings: {  }
   publish_on:
     type: datetime_timestamp_no_default
-    weight: 17
+    weight: 18
     region: content
     settings: {  }
     third_party_settings: {  }
   publish_state:
     type: scheduler_moderation
-    weight: 19
+    weight: 20
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -252,14 +313,14 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 23
+    weight: 24
     region: content
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 15
+    weight: 16
     region: content
     third_party_settings: {  }
   title:
@@ -272,7 +333,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 8
+    weight: 12
     settings:
       match_operator: CONTAINS
       size: 60
@@ -282,18 +343,18 @@ content:
     third_party_settings: {  }
   unpublish_on:
     type: datetime_timestamp_no_default
-    weight: 18
+    weight: 19
     region: content
     settings: {  }
     third_party_settings: {  }
   unpublish_state:
     type: scheduler_moderation
-    weight: 20
+    weight: 21
     region: content
     settings: {  }
     third_party_settings: {  }
   url_redirects:
-    weight: 21
+    weight: 22
     region: content
     settings: {  }
     third_party_settings: {  }

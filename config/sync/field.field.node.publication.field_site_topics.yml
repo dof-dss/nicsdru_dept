@@ -1,4 +1,4 @@
-uuid: b8490d73-3465-4ef8-8c26-4d1480f7a961
+uuid: 92199bec-49de-4593-b7cd-205fb3a487e2
 langcode: en
 status: true
 dependencies:
@@ -12,23 +12,14 @@ bundle: publication
 label: 'Site topics'
 description: 'Choose relevant site topic(s) for this publication. Hold down Ctrl to choose multiple site topic'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:taxonomy_term'
+  handler: views
   handler_settings:
-    behaviors:
-      entityqueue:
-        status: 0
-      views-select-list:
-        status: 0
     view:
-      args: {  }
-      display_name: entityreference_1
-      view_name: topics
-    target_bundles: null
-    sort:
-      field: _none
-      direction: ASC
+      view_name: site_topics
+      display_name: entity_reference_topics
+      arguments: {  }
 field_type: entity_reference

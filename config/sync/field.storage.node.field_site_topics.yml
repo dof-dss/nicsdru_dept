@@ -1,16 +1,15 @@
-uuid: a2212636-df01-4580-b2e6-4ee7ec0077d3
+uuid: c2c30245-7273-4241-9854-750ed54fcc02
 langcode: en
 status: true
 dependencies:
   module:
     - node
-    - taxonomy
 id: node.field_site_topics
 field_name: field_site_topics
 entity_type: node
 type: entity_reference
 settings:
-  target_type: taxonomy_term
+  target_type: node
 module: core
 locked: false
 cardinality: -1

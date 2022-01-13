@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.project.field_departmental_project_code
     - field.field.node.project.field_project_category
     - field.field.node.project.field_project_date
+    - field.field.node.project.field_project_duration
     - field.field.node.project.field_project_status
     - field.field.node.project.field_provider_project_code
     - node.type.project
@@ -36,6 +37,7 @@ hidden:
   field_departmental_project_code: true
   field_project_category: true
   field_project_date: true
+  field_project_duration: true
   field_project_status: true
   field_provider_project_code: true
   langcode: true

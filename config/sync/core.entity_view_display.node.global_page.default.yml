@@ -4,8 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.global_page.body
-    - field.field.node.global_page.field_enable_toc
-    - field.field.node.global_page.field_original_domain
     - node.type.global_page
   module:
     - text
@@ -28,7 +26,5 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
-  field_enable_toc: true
-  field_original_domain: true
   langcode: true
   search_api_excerpt: true

@@ -1,4 +1,4 @@
-uuid: ef37ab6d-e70f-4240-bfe7-24466c4598f6
+uuid: ef354ea8-9965-4d69-9920-d515081939ed
 langcode: en
 status: true
 dependencies:
@@ -12,23 +12,14 @@ bundle: book
 label: 'Site subtopics'
 description: 'Choose relevant site subtopic(s) for this book. Hold down Ctrl to choose multiple site subtopics.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:node'
+  handler: views
   handler_settings:
-    behaviors:
-      entityqueue:
-        status: 0
-      views-select-list:
-        status: 0
     view:
-      args: {  }
-      display_name: entityreference_1
       view_name: site_subtopics
-    target_bundles: null
-    sort:
-      field: _none
-      direction: ASC
+      display_name: entity_reference_subtopic
+      arguments: {  }
 field_type: entity_reference

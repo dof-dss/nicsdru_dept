@@ -1,0 +1,19 @@
+uuid: ed318229-5d0b-4628-9ac1-78c9e5ace8f5
+langcode: en
+status: true
+dependencies:
+  module:
+    - interval
+    - node
+id: node.field_project_duration
+field_name: field_project_duration
+entity_type: node
+type: interval
+settings: {  }
+module: interval
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

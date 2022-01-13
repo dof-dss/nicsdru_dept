@@ -12,6 +12,7 @@ label: 'Taxonomy terms (Outcomes)'
 source:
   plugin: d7_taxonomy_term
   bundle: outcomes
+  track_changes: true
   batch_size: 1000
 process:
   tid: tid
