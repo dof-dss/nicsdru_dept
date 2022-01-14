@@ -32,7 +32,18 @@ process:
       source: domain_node/0/target_id
       map:
         newnigov: 1
+        del: 1
+        dcal: 1
+        doe: 1
         dfp: 2
+        daera: 3
+        communities: 4
+        economy: 5
+        education: 6
+        execoffice: 7
+        health: 8
+        infrastructure: 9
+        justice: 10
       default_value: 1
   label: title
   entity_id:
