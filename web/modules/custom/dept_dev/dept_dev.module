@@ -10,12 +10,45 @@
  */
 
 use Drupal\Core\Url;
+use Drupal\dept_dev\DeptDevLazyBuilders;
 
 /**
  * Implements hook_toolbar().
  */
 function dept_dev_toolbar() {
   $items = [];
+
+  $domains = \Drupal::service('entity_type.manager')->getStorage('domain')->loadMultiple();
+  $lando_hostnames = \Drupal::config('dept_dev.settings')->get('toolbar_sites_lando_hostname');
+  $lando_protocol = \Drupal::config('dept_dev.settings')->get('toolbar_sites_lando_protocol');
+  $links = [];
+
+  foreach ($domains as $domain) {
+    $url = $domain->getPath();
+    if ($lando_hostnames) {
+      $protocol = ($lando_protocol) ? 'http' : 'https';
+
+      // Exception for Dept Admin domain, otherwise just replace gov.uk host.
+      if ($url === 'https://www.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site/') {
+        $url = "$protocol://dept.lndo.site/";
+      }
+      else {
+        $url = preg_replace('/https?:\/\/(www.)?(.*)(gov.uk)/', "$protocol://$2lndo.site", $url);
+      }
+    }
+    $links[$domain->id()] = [
+      'title' => $domain->label(),
+      'url' => Url::fromUri($url),
+    ];
+  }
+
+  $menu_links =[
+    '#theme' => 'links__toolbar_sites',
+    '#links' => $links,
+    '#attributes' => [
+      'class' => ['toolbar-menu'],
+    ],
+  ];
 
   $items['sites'] = [
     '#type' => 'toolbar_item',
@@ -30,10 +63,7 @@ function dept_dev_toolbar() {
     ],
     'tray' => [
       '#heading' => t('Departmental sites'),
-      'children' => [
-        '#lazy_builder' => ['dept_dev.lazy_builders:lazyLinks', []],
-        '#create_placeholder' => TRUE,
-      ],
+      'children' => $menu_links,
       'configuration' => [
         '#type' => 'link',
         '#title' => 'Configure',
