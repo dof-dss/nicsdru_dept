@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * Handles the 'Publish to' display and relationship of nodes to Group entities.
  *
- * #internal Drupal\node\NodeForm
+ * #internal Drupal\node\NodeForm.
  *
  */
 class NodeForm extends ContentEntityForm {
