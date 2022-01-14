@@ -42,7 +42,7 @@ function dept_dev_toolbar() {
     ];
   }
 
-  $menu_links =[
+  $menu_links = [
     '#theme' => 'links__toolbar_sites',
     '#links' => $links,
     '#attributes' => [

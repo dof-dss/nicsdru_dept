@@ -1,7 +1,4 @@
 <?php
-/**
- * #internal Drupal\node\NodeForm
- */
 
 namespace Drupal\dept_node\Form;
 
@@ -20,6 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Form handler for the node add/edit forms.
  *
  * Handles the 'Publish to' display and relationship of nodes to Group entities.
+ *
+ * #internal Drupal\node\NodeForm
+ *
  */
 class NodeForm extends ContentEntityForm {
 
@@ -326,9 +326,9 @@ class NodeForm extends ContentEntityForm {
   /**
    * Form submission handler for the 'preview' action.
    *
-   * @param $form
+   * @param array $form
    *   An associative array containing the structure of the form.
-   * @param $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
   public function preview(array $form, FormStateInterface $form_state) {
@@ -358,9 +358,15 @@ class NodeForm extends ContentEntityForm {
     $insert = $node->isNew();
     $node->save();
     $node_link = $node->toLink($this->t('View'))->toString();
-    $context = ['@type' => $node->getType(), '%title' => $node->label(), 'link' => $node_link];
-    $t_args = ['@type' => node_get_type_label($node), '%title' => $node->toLink()->toString()];
-
+    $context = [
+      '@type' => $node->getType(),
+      '%title' => $node->label(),
+      'link' => $node_link
+    ];
+    $t_args = [
+      '@type' => node_get_type_label($node),
+      '%title' => $node->toLink()->toString()
+    ];
 
     $group_form_values = $form_state->getValue('groups');
 
@@ -438,4 +444,3 @@ class NodeForm extends ContentEntityForm {
   }
 
 }
-
