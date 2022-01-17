@@ -36,6 +36,11 @@ function dept_core_preprocess_menu(&$variables) {
       return;
     }
 
+    // Footer menu doesn't vary much at all so use a very broad context.
+    // See https://www.drupal.org/docs/drupal-apis/cache-api/cache-contexts#core-contexts
+    $variables['#cache']['contexts'] = ['theme'];
+    $variables['#cache']['tags'][] = 'group:' . $group->id();
+
     $accessibility_statement_node = $group->field_accessibility_statement->referencedEntities();
     if (!empty($accessibility_statement_node)) {
       $accessibility_statement_node = $accessibility_statement_node[0];
@@ -52,6 +57,7 @@ function dept_core_preprocess_menu(&$variables) {
         ];
 
         $variables['items'][] = $menu_link;
+        $variables['#cache']['tags'][] = 'node:' . $accessibility_statement_node->id();
       }
     }
   }
