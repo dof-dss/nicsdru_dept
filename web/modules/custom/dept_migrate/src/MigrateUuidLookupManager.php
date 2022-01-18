@@ -372,29 +372,45 @@ class MigrateUuidLookupManager {
    */
   public function getMigrationContent(array $criteria, int $num_per_page, int $offset) {
 
-    // TODO: TEMP -- Fix migration - bundle naming
-    $criteria['type'] = 'news';
+    if (empty($criteria['type'])) {
+      $mig_map_tables = $this->dbconn->schema()->findTables('migrate_map_node_%');
+    } else {
+      $mig_map_tables = ['migrate_map_node_' . $criteria['type']];
+    }
 
-    $query = $this->dbconn->select('migrate_map_node_' . $criteria['type'], 'mm');
-    $query->addField('mm', 'sourceid1', 'd7uuid');
-    $query->addField('mm', 'destid1', 'd9nid');
-    $query->addField('n', 'uuid', 'd9uuid');
-    $query->innerJoin('node', 'n', 'mm.destid1 = n.nid');
+    $d9_data = [];
 
-    $d9_data = $query->execute()->fetchAllAssoc('d7uuid');
+    foreach ($mig_map_tables as $mig_map_table) {
+      $query = $this->dbconn->select($mig_map_table, 'mm');
+      $query->addField('mm', 'sourceid1', 'd7uuid');
+      $query->addField('mm', 'destid1', 'd9nid');
+      $query->addField('n', 'uuid', 'd9uuid');
+      $query->addField('n', 'type', 'd9type');
+      $query->addField('nfd', 'title', 'd9title');
+      $query->innerJoin('node', 'n', 'mm.destid1 = n.nid');
+      $query->innerJoin('node_field_data', 'nfd', 'n.nid = nfd.nid');
+
+      $d9_results[] = $query->execute()->fetchAllAssoc('d7uuid');
+    }
+
+    // TODO: Maybe cache this dataset?
+    $d9_data = array_merge([], ...$d9_results);
+
+    $mig_content = [
+      'total' => count($d9_data),
+    ];
 
     $query = $this->d7conn->select('node', 'n');
     $query->fields('n', ['nid', 'title', 'type', 'uuid']);
     $query->condition('uuid', array_keys($d9_data), 'IN');
+    $query->range($offset, $num_per_page);
 
     $d7_data = $query->execute()->fetchAllAssoc('uuid');
 
-    $migrated_data = [];
-
     foreach ($d7_data as $d7_uuid => $d7_item) {
       $mig_content['rows'][]  = [
-        'type' => $d7_item->type,
-        'title' => $d7_item->title,
+        'type' => $d9_data[$d7_uuid]->d9type,
+        'title' => $d9_data[$d7_uuid]->d9title,
         'nid' => $d9_data[$d7_uuid]->d9nid,
         'uuid' => $d9_data[$d7_uuid]->d9uuid,
         'd7nid' => $d7_item->nid,
@@ -405,67 +421,6 @@ class MigrateUuidLookupManager {
     }
 
     return $mig_content;
-
-    /**
-     * =======================================================
-     */
-
-
-//    $query = $this->dbconn->select('node_field_data', 'nfd');
-//    $query->fields('nfd', ['nid', 'title', 'type']);
-//    $query->fields('n', ['uuid']);
-//    $query->innerJoin('node', 'n', 'nfd.nid = n.nid');
-//
-//    // Process any supplied criteria.
-//    if (!empty($criteria)) {
-//      foreach ($criteria as $key => $value) {
-//        switch ($key) {
-//          case 'type':
-//            $query->condition('n.type', $value, '=');
-//            break;
-//
-//          case 'title':
-//            $query->condition('nfd.title', "%${value}%", 'LIKE');
-//            break;
-//
-//          case 'nid':
-//            $query->condition('nfd.nid', $value, '=');
-//            break;
-//
-//          case 'uuid':
-//            $query->condition('n.uuid', $value, '=');
-//            break;
-//
-//        }
-//      }
-//    }
-//
-//    $query->execute()->fetchAll();
-//
-//    $mig_content = [
-//      'total' => count($query->execute()->fetchAll()),
-//    ];
-//
-//    $query->range($offset, $num_per_page);
-//    $result = $query->execute()->fetchAllAssoc('nid');
-//
-//    // Expand metadata with D7 migration data.
-//    $d7_data = $this->lookupByDestinationNodeIds(array_keys($result));
-//
-//    foreach ($result as $record) {
-//      $mig_content['rows'][] = [
-//        'type' => $record->type,
-//        'title' => $record->title,
-//        'nid' => $record->nid,
-//        'uuid' => $record->uuid,
-//        'd7nid' => $d7_data[$record->nid]['d7nid'],
-//        'd7uuid' => $d7_data[$record->nid]['d7uuid'],
-//        'd7title' => $d7_data[$record->nid]['d7title'],
-//        'd7type' => $d7_data[$record->nid]['d7type'],
-//      ];
-//    }
-
-//    return $mig_content;
   }
 
   /**
