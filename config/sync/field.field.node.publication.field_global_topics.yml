@@ -16,8 +16,8 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
+  handler: 'default:taxonomy_term'
   handler_settings:
     sort:
       field: _none
-  handler: 'default:taxonomy_term'
 field_type: entity_reference

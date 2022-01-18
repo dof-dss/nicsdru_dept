@@ -18,10 +18,10 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  description_field: false
+  handler: 'default:file'
+  handler_settings: {  }
   file_directory: 'consultations/[current-domain:machine-name]'
   file_extensions: 'pdf doc docx xls xlsx ppt pptx odt ods odp dot csv zip'
   max_filesize: '30 MB'
-  handler: 'default:file'
-  handler_settings: {  }
+  description_field: false
 field_type: file
