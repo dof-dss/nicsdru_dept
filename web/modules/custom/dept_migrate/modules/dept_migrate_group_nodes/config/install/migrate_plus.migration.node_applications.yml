@@ -1,4 +1,4 @@
-id: node_application
+id: node_applications
 label: 'Application content type nodes'
 status: true
 dependencies: {  }
@@ -8,14 +8,15 @@ migration_tags:
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 source:
-  plugin: d7_node_complete
+  plugin: d7_node_uuid
   node_type: application
+  track_changes: true
 process:
   langcode:
     -
       plugin: default_value
       source: language
-      default_value: und
+      default_value: en
   title: title
   uid:
     -
@@ -68,8 +69,7 @@ process:
       plugin: field_link
       source: field_link
 destination:
-  plugin: 'entity_complete:node'
-  translations: true
+  plugin: 'entity:node'
   default_bundle: application
 migration_dependencies:
   required:
