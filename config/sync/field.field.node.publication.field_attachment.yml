@@ -18,10 +18,10 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
+  handler: 'default:file'
+  handler_settings: {  }
   file_directory: 'publications/[current-domain:machine-name]'
   file_extensions: 'pdf doc docx xls xlsx xlsm ppt pptx odt ods odp dot csv zip html htm'
   max_filesize: '30 MB'
   description_field: false
-  handler: 'default:file'
-  handler_settings: {  }
 field_type: file

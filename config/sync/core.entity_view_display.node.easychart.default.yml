@@ -20,11 +20,11 @@ bundle: easychart
 mode: default
 content:
   easychart:
-    weight: 1
+    type: easychart_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: easychart_default
+    weight: 1
     region: content
 hidden:
   body: true

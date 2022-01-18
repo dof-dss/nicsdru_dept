@@ -5,6 +5,7 @@
  * Core functionality for Departmental sites.
  */
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\group\Entity\Group;
@@ -36,23 +37,31 @@ function dept_core_preprocess_menu(&$variables) {
       return;
     }
 
-    $accessibility_statement_node = $group->field_accessibility_statement->referencedEntities();
-    if (!empty($accessibility_statement_node)) {
-      $accessibility_statement_node = $accessibility_statement_node[0];
+    // Footer menu doesn't vary much at all so use a very broad context.
+    // See https://www.drupal.org/docs/drupal-apis/cache-api/cache-contexts#core-contexts
+    $variables['#cache']['contexts'] = ['theme'];
+    $cache_tags = ['group:' . $group->id()];
 
-      if ($accessibility_statement_node instanceof NodeInterface) {
-        // See MenuLinkTree->buildItems() which this imitates.
-        $menu_link = [
-          'title' => $accessibility_statement_node->getTitle(),
-          'url' => Url::fromRoute('entity.node.canonical', ['node' => $accessibility_statement_node->id()]),
-          'is_collapsed' => FALSE,
-          'is_expanded' => FALSE,
-          'in_active_trail' => FALSE,
-          'attributes' => new Attribute(),
-        ];
+    if (($accessibility_statement = $dept->accessibilityStatement()) !== NULL && $accessibility_statement instanceof NodeInterface) {
+      // See MenuLinkTree->buildItems() which this imitates.
+      $menu_link = [
+        'title' => $accessibility_statement->getTitle(),
+        'url' => Url::fromRoute('entity.node.canonical', ['node' => $accessibility_statement->id()]),
+        'is_collapsed' => FALSE,
+        'is_expanded' => FALSE,
+        'in_active_trail' => FALSE,
+        'attributes' => new Attribute(),
+      ];
 
-        $variables['items'][] = $menu_link;
+      $cache_tags[] = 'node:' . $accessibility_statement->id();
+
+      if (!empty($variables['#cache']['tags'])) {
+        $variables['#cache']['tags'] = Cache::mergeTags($cache_tags, $variables['#cache']['keys']);
       }
+
+      $variables['items'][] = $menu_link;
     }
+
+    $variables['#cache']['tags'] = $cache_tags;
   }
 }
