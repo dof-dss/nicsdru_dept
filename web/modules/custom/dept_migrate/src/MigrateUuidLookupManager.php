@@ -371,61 +371,145 @@ class MigrateUuidLookupManager {
    *   Array of content keyed by 'total' and 'rows'.
    */
   public function getMigrationContent(array $criteria, int $num_per_page, int $offset) {
-    $query = $this->dbconn->select('node_field_data', 'nfd');
-    $query->fields('nfd', ['nid', 'title', 'type']);
-    $query->fields('n', ['uuid']);
-    $query->innerJoin('node', 'n', 'nfd.nid = n.nid');
 
-    // Process any supplied criteria.
-    if (!empty($criteria)) {
-      foreach ($criteria as $key => $value) {
-        switch ($key) {
-          case 'type':
-            $query->condition('n.type', $value, '=');
-            break;
+    // TODO: TEMP -- Fix migration - bundle naming
+    $criteria['type'] = 'news';
 
-          case 'title':
-            $query->condition('nfd.title', "%${value}%", 'LIKE');
-            break;
+    $query = $this->dbconn->select('migrate_map_node_' . $criteria['type'], 'mm');
+    $query->addField('mm', 'sourceid1', 'd7uuid');
+    $query->addField('mm', 'destid1', 'd9nid');
+    $query->addField('n', 'uuid', 'd9uuid');
+    $query->innerJoin('node', 'n', 'mm.destid1 = n.nid');
 
-          case 'nid':
-            $query->condition('nfd.nid', $value, '=');
-            break;
+    $d9_data = $query->execute()->fetchAllAssoc('d7uuid');
 
-          case 'uuid':
-            $query->condition('n.uuid', $value, '=');
-            break;
+    $query = $this->d7conn->select('node', 'n');
+    $query->fields('n', ['nid', 'title', 'type', 'uuid']);
+    $query->condition('uuid', array_keys($d9_data), 'IN');
 
-        }
-      }
-    }
+    $d7_data = $query->execute()->fetchAllAssoc('uuid');
 
-    $query->execute()->fetchAll();
+    $migrated_data = [];
 
-    $mig_content = [
-      'total' => count($query->execute()->fetchAll()),
-    ];
-
-    $query->range($offset, $num_per_page);
-    $result = $query->execute()->fetchAllAssoc('nid');
-
-    // Expand metadata with D7 migration data.
-    $d7_data = $this->lookupByDestinationNodeIds(array_keys($result));
-
-    foreach ($result as $record) {
-      $mig_content['rows'][] = [
-        'type' => $record->type,
-        'title' => $record->title,
-        'nid' => $record->nid,
-        'uuid' => $record->uuid,
-        'd7nid' => $d7_data[$record->nid]['d7nid'],
-        'd7uuid' => $d7_data[$record->nid]['d7uuid'],
-        'd7title' => $d7_data[$record->nid]['d7title'],
-        'd7type' => $d7_data[$record->nid]['d7type'],
+    foreach ($d7_data as $d7_uuid => $d7_item) {
+      $mig_content['rows'][]  = [
+        'type' => $d7_item->type,
+        'title' => $d7_item->title,
+        'nid' => $d9_data[$d7_uuid]->d9nid,
+        'uuid' => $d9_data[$d7_uuid]->d9uuid,
+        'd7nid' => $d7_item->nid,
+        'd7uuid' => $d7_uuid,
+        'd7title' => $d7_item->title,
+        'd7type' => $d7_item->type,
       ];
     }
 
     return $mig_content;
+
+    /**
+     * =======================================================
+     */
+
+
+//    $query = $this->dbconn->select('node_field_data', 'nfd');
+//    $query->fields('nfd', ['nid', 'title', 'type']);
+//    $query->fields('n', ['uuid']);
+//    $query->innerJoin('node', 'n', 'nfd.nid = n.nid');
+//
+//    // Process any supplied criteria.
+//    if (!empty($criteria)) {
+//      foreach ($criteria as $key => $value) {
+//        switch ($key) {
+//          case 'type':
+//            $query->condition('n.type', $value, '=');
+//            break;
+//
+//          case 'title':
+//            $query->condition('nfd.title', "%${value}%", 'LIKE');
+//            break;
+//
+//          case 'nid':
+//            $query->condition('nfd.nid', $value, '=');
+//            break;
+//
+//          case 'uuid':
+//            $query->condition('n.uuid', $value, '=');
+//            break;
+//
+//        }
+//      }
+//    }
+//
+//    $query->execute()->fetchAll();
+//
+//    $mig_content = [
+//      'total' => count($query->execute()->fetchAll()),
+//    ];
+//
+//    $query->range($offset, $num_per_page);
+//    $result = $query->execute()->fetchAllAssoc('nid');
+//
+//    // Expand metadata with D7 migration data.
+//    $d7_data = $this->lookupByDestinationNodeIds(array_keys($result));
+//
+//    foreach ($result as $record) {
+//      $mig_content['rows'][] = [
+//        'type' => $record->type,
+//        'title' => $record->title,
+//        'nid' => $record->nid,
+//        'uuid' => $record->uuid,
+//        'd7nid' => $d7_data[$record->nid]['d7nid'],
+//        'd7uuid' => $d7_data[$record->nid]['d7uuid'],
+//        'd7title' => $d7_data[$record->nid]['d7title'],
+//        'd7type' => $d7_data[$record->nid]['d7type'],
+//      ];
+//    }
+
+//    return $mig_content;
   }
 
+  /**
+   * Gets a list of migrated content + metadata.
+   *
+   * @param array $criteria
+   *   Key/value query criteria, eg: ['type'] = 'news'.
+   * @param int $num_per_page
+   *   Number of items per page of results.
+   * @param int $offset
+   *   The row offset to begin fetching results from.
+   *
+   * @return array
+   *   Array of content keyed by 'total' and 'rows'.
+   */
+  public function getMigratedContent(array $criteria, int $num_per_page, int $offset) {
+
+//    $mig_map_tables = $this->dbconn->schema()->findTables('migrate_map_node%');
+//
+//    if (!empty($criteria['type']) && !in_array('migrate_map_node_' . $criteria['type'])) {
+//      return;
+//    }
+//
+//    $query = $this->dbconn->select('migrate_map_node_' . $criteria['type'], 'mm');
+//    $query->addField('mm', 'sourceid1', 'd7uuid');
+//    $query->addField('mm', 'destid1', 'd9nid');
+//
+//    $d9_data = $query->execute()->fetchAllAssoc('d7uuid');
+////    $query->fields('nfd', ['nid', 'title', 'type']);
+////    $query->fields('n', ['uuid']);
+////    $query->innerJoin('node', 'n', 'nfd.nid = n.nid');
+//
+//
+//
+//    if (in_array('migrate_map_node_' . $criteria['type'])) {
+//
+//
+//      SELECT sourceid1 as d7uuid, destid1 as nid FROM migrate_map_node_[TYPE]
+//INNER JOIN node
+//ON destid1 = node.nid
+//
+//
+//    }
+
+//}
+  }
 }
