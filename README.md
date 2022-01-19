@@ -37,7 +37,7 @@ The 'drupal7db' database may be imported into your local Lando site as follows:
 ## Project goals
 
 * Provide non-admin users with an editorial experience that:
-  * Makes the complexity around domain/group architecture visible or a conscious consideration when operating the site for routine content tasks.
+  * Masks the complexity around domain/group architecture when operating the site for routine content tasks.
   * Is consistent with NIDirect and Unity sites for editorial tasks, with the exception of form elements to share content across multiple sites.
 * Permit rolling content migrations from Drupal 7 for sites yet to launch without irregularities, content id clashes or service interruptions to either D7 or D9 applications.
   * We use D7 UUIDs rather than node ids to help with this, the tradeoff is that a D7 node will have a different node id in D9. This won't affect path aliases but migrate lookups will be needed for any migration plugin config, in favour of verbatim node id values from D7.
