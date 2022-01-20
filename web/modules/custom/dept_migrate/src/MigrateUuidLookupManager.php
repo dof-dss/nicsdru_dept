@@ -384,13 +384,25 @@ class MigrateUuidLookupManager {
 
       if (is_array($map_file[$criteria['type']])) {
         foreach ($map_file[$criteria['type']] as $entry) {
-          $mig_map_tables[] = ['migrate_map_node_' . $entry];
+          $mig_map_tables[] = 'migrate_map_node_' . $entry;
         }
       }
       else {
         $mig_map_tables[] = 'migrate_map_node_' . $map_file[$criteria['type']];
       }
+
+      $mig_table_count = 0;
+      foreach ($mig_map_tables as $table) {
+        $mig_table_count += $this->dbconn->schema()->tableExists($table);
+      }
+
+      if ($mig_table_count < count($mig_map_tables)) {
+        // TODO: Log a warning about missing tables.
+        return;
+      }
     }
+
+
     $d9_data = [];
 
     foreach ($mig_map_tables as $mig_map_table) {
