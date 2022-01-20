@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_migrate;
 
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -371,13 +372,25 @@ class MigrateUuidLookupManager {
    *   Array of content keyed by 'total' and 'rows'.
    */
   public function getMigrationContent(array $criteria, int $num_per_page, int $offset) {
-
+    
     if (empty($criteria['type'])) {
       $mig_map_tables = $this->dbconn->schema()->findTables('migrate_map_node_%');
-    } else {
-      $mig_map_tables = ['migrate_map_node_' . $criteria['type']];
     }
+    else {
+      // As some content types are merged we need to check that we are querying
+      // all original content types (see Secure/Publications for example).
+      $map_file_path = \Drupal::service('extension.list.module')->getPath('dept_migrate') . '/d7_content_type_map.yaml';
+      $map_file = Yaml::decode(file_get_contents($map_file_path));
 
+      if (is_array($map_file[$criteria['type']])) {
+        foreach ($map_file[$criteria['type']] as $entry) {
+          $mig_map_tables[] = ['migrate_map_node_' . $entry];
+        }
+      }
+      else {
+        $mig_map_tables[] = 'migrate_map_node_' . $map_file[$criteria['type']];
+      }
+    }
     $d9_data = [];
 
     foreach ($mig_map_tables as $mig_map_table) {
@@ -421,50 +434,5 @@ class MigrateUuidLookupManager {
     }
 
     return $mig_content;
-  }
-
-  /**
-   * Gets a list of migrated content + metadata.
-   *
-   * @param array $criteria
-   *   Key/value query criteria, eg: ['type'] = 'news'.
-   * @param int $num_per_page
-   *   Number of items per page of results.
-   * @param int $offset
-   *   The row offset to begin fetching results from.
-   *
-   * @return array
-   *   Array of content keyed by 'total' and 'rows'.
-   */
-  public function getMigratedContent(array $criteria, int $num_per_page, int $offset) {
-
-//    $mig_map_tables = $this->dbconn->schema()->findTables('migrate_map_node%');
-//
-//    if (!empty($criteria['type']) && !in_array('migrate_map_node_' . $criteria['type'])) {
-//      return;
-//    }
-//
-//    $query = $this->dbconn->select('migrate_map_node_' . $criteria['type'], 'mm');
-//    $query->addField('mm', 'sourceid1', 'd7uuid');
-//    $query->addField('mm', 'destid1', 'd9nid');
-//
-//    $d9_data = $query->execute()->fetchAllAssoc('d7uuid');
-////    $query->fields('nfd', ['nid', 'title', 'type']);
-////    $query->fields('n', ['uuid']);
-////    $query->innerJoin('node', 'n', 'nfd.nid = n.nid');
-//
-//
-//
-//    if (in_array('migrate_map_node_' . $criteria['type'])) {
-//
-//
-//      SELECT sourceid1 as d7uuid, destid1 as nid FROM migrate_map_node_[TYPE]
-//INNER JOIN node
-//ON destid1 = node.nid
-//
-//
-//    }
-
-//}
   }
 }
