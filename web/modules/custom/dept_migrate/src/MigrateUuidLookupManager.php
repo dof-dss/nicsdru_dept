@@ -6,6 +6,7 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -372,7 +373,7 @@ class MigrateUuidLookupManager {
    *   Array of content keyed by 'total' and 'rows'.
    */
   public function getMigrationContent(array $criteria, int $num_per_page, int $offset) {
-    
+
     if (empty($criteria['type'])) {
       $mig_map_tables = $this->dbconn->schema()->findTables('migrate_map_node_%');
     }
@@ -397,7 +398,7 @@ class MigrateUuidLookupManager {
       }
 
       if ($mig_table_count < count($mig_map_tables)) {
-        // TODO: Log a warning about missing tables.
+        \Drupal::messenger()->addMessage(t("Unable to process due to missing migration map tables. Check the database for: @tables ", ['@tables' => implode(', ', $mig_map_tables)]), MessengerInterface::TYPE_ERROR);
         return;
       }
     }
