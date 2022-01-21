@@ -380,7 +380,7 @@ class MigrateUuidLookupManager {
     else {
       // As some content types are merged we need to check that we are querying
       // all original content types (see Secure/Publications for example).
-      $map_file_path = \Drupal::service('extension.list.module')->getPath('dept_migrate') . '/d7_content_type_map.yaml';
+      $map_file_path = \Drupal::service('extension.list.module')->getPath('dept_migrate') . '/d7_content_type_map.yml';
       $map_file = Yaml::decode(file_get_contents($map_file_path));
 
       if (is_array($map_file[$criteria['type']])) {
