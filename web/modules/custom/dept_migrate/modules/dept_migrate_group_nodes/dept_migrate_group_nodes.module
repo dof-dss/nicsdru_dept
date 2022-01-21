@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Departmental group node module for Departmental sites.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_entity_insert().
+ */
+function dept_migrate_group_nodes_entity_insert(EntityInterface $entity) {
+  if (PHP_SAPI !== 'cli') {
+    return;
+  }
+
+  // Interface is drush/CLI so can assume it's a migration.
+  // TODO: back up with settings variable set in premigrate/row prepare?
+  \Drupal::service('dept_migrate.migrate_support')->syncDomainsToGroups($entity);
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function dept_migrate_group_nodes_entity_update(EntityInterface $entity) {
+  dump(PHP_SAPI);
+  dump($entity);
+  if (PHP_SAPI !== 'cli') {
+    return;
+  }
+
+  \Drupal::service('dept_migrate.migrate_support')->syncDomainsToGroups($entity);
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function dept_migrate_group_nodes_entity_delete(EntityInterface $entity) {
+  if (PHP_SAPI !== 'cli') {
+    return;
+  }
+
+  \Drupal::service('dept_migrate.migrate_support')->syncDomainsToGroups($entity);
+}
