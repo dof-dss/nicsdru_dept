@@ -373,7 +373,7 @@ class MigrateUuidLookupManager {
    *   Array of content keyed by 'total' and 'rows'.
    */
   public function getMigrationContent(array $criteria, int $num_per_page, int $offset) {
-
+    // If we don't have a 'type' fetch all the migrate_map_node tables.
     if (empty($criteria['type'])) {
       $mig_map_tables = $this->dbconn->schema()->findTables('migrate_map_node_%');
     }
@@ -392,6 +392,8 @@ class MigrateUuidLookupManager {
         $mig_map_tables[] = 'migrate_map_node_' . $map_file[$criteria['type']];
       }
 
+      // If the number of mapped tables for the type doesn't match the database,
+      // warn the user they are missing some migrations.
       $mig_table_count = 0;
       foreach ($mig_map_tables as $table) {
         $mig_table_count += $this->dbconn->schema()->tableExists($table);
@@ -399,10 +401,9 @@ class MigrateUuidLookupManager {
 
       if ($mig_table_count < count($mig_map_tables)) {
         \Drupal::messenger()->addMessage(t("Unable to process due to missing migration map tables. Check the database for: @tables ", ['@tables' => implode(', ', $mig_map_tables)]), MessengerInterface::TYPE_ERROR);
-        return;
+        return [];
       }
     }
-
 
     $d9_data = [];
 
@@ -419,13 +420,14 @@ class MigrateUuidLookupManager {
       $d9_results[] = $query->execute()->fetchAllAssoc('d7uuid');
     }
 
-    // TODO: Maybe cache this dataset?
     $d9_data = array_merge([], ...$d9_results);
 
     $mig_content = [
       'total' => count($d9_data),
     ];
 
+    // Fetch Drupal 7 node data for the corresponding UUID imported into
+    // Drupal 9.
     $query = $this->d7conn->select('node', 'n');
     $query->fields('n', ['nid', 'title', 'type', 'uuid']);
     $query->condition('uuid', array_keys($d9_data), 'IN');
@@ -434,7 +436,7 @@ class MigrateUuidLookupManager {
     $d7_data = $query->execute()->fetchAllAssoc('uuid');
 
     foreach ($d7_data as $d7_uuid => $d7_item) {
-      $mig_content['rows'][]  = [
+      $mig_content['rows'][] = [
         'type' => $d9_data[$d7_uuid]->d9type,
         'title' => $d9_data[$d7_uuid]->d9title,
         'nid' => $d9_data[$d7_uuid]->d9nid,
@@ -447,5 +449,7 @@ class MigrateUuidLookupManager {
     }
 
     return $mig_content;
+
   }
+
 }
