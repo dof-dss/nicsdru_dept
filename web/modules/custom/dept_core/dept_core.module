@@ -31,6 +31,17 @@ function dept_core_preprocess_menu(&$variables) {
       return;
     }
 
+    $group = Group::load($dept->groupId());
+
+    if (empty($group)) {
+      return;
+    }
+
+    // Footer menu doesn't vary much at all so use a very broad context.
+    // See https://www.drupal.org/docs/drupal-apis/cache-api/cache-contexts#core-contexts
+    $variables['#cache']['contexts'] = ['theme'];
+    $cache_tags = ['group:' . $group->id()];
+
     if (($accessibility_statement = $dept->accessibilityStatement()) !== NULL && $accessibility_statement instanceof NodeInterface) {
       // See MenuLinkTree->buildItems() which this imitates.
       $menu_link = [
@@ -42,19 +53,15 @@ function dept_core_preprocess_menu(&$variables) {
         'attributes' => new Attribute(),
       ];
 
-      $cache_tags = [
-        'group:' . $dept->groupId(),
-        'node:' . $accessibility_statement->id(),
-      ];
+      $cache_tags[] = 'node:' . $accessibility_statement->id();
 
       if (!empty($variables['#cache']['tags'])) {
         $variables['#cache']['tags'] = Cache::mergeTags($cache_tags, $variables['#cache']['keys']);
       }
-      else {
-        $variables['#cache']['tags'] = $cache_tags;
-      }
 
       $variables['items'][] = $menu_link;
     }
+
+    $variables['#cache']['tags'] = $cache_tags;
   }
 }
