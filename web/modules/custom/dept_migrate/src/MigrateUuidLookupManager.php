@@ -2,9 +2,11 @@
 
 namespace Drupal\dept_migrate;
 
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -371,61 +373,83 @@ class MigrateUuidLookupManager {
    *   Array of content keyed by 'total' and 'rows'.
    */
   public function getMigrationContent(array $criteria, int $num_per_page, int $offset) {
-    $query = $this->dbconn->select('node_field_data', 'nfd');
-    $query->fields('nfd', ['nid', 'title', 'type']);
-    $query->fields('n', ['uuid']);
-    $query->innerJoin('node', 'n', 'nfd.nid = n.nid');
+    // If we don't have a 'type' fetch all the migrate_map_node tables.
+    if (empty($criteria['type'])) {
+      $mig_map_tables = $this->dbconn->schema()->findTables('migrate_map_node_%');
+    }
+    else {
+      // As some content types are merged we need to check that we are querying
+      // all original content types (see Secure/Publications for example).
+      $map_file_path = \Drupal::service('extension.list.module')->getPath('dept_migrate') . '/d7_content_type_map.yml';
+      $map_file = Yaml::decode(file_get_contents($map_file_path));
 
-    // Process any supplied criteria.
-    if (!empty($criteria)) {
-      foreach ($criteria as $key => $value) {
-        switch ($key) {
-          case 'type':
-            $query->condition('n.type', $value, '=');
-            break;
-
-          case 'title':
-            $query->condition('nfd.title', "%${value}%", 'LIKE');
-            break;
-
-          case 'nid':
-            $query->condition('nfd.nid', $value, '=');
-            break;
-
-          case 'uuid':
-            $query->condition('n.uuid', $value, '=');
-            break;
-
+      if (is_array($map_file[$criteria['type']])) {
+        foreach ($map_file[$criteria['type']] as $entry) {
+          $mig_map_tables[] = 'migrate_map_node_' . $entry;
         }
+      }
+      else {
+        $mig_map_tables[] = 'migrate_map_node_' . $map_file[$criteria['type']];
+      }
+
+      // If the number of mapped tables for the type doesn't match the database,
+      // warn the user they are missing some migrations.
+      $mig_table_count = 0;
+      foreach ($mig_map_tables as $table) {
+        $mig_table_count += $this->dbconn->schema()->tableExists($table);
+      }
+
+      if ($mig_table_count < count($mig_map_tables)) {
+        \Drupal::messenger()->addMessage(t("Unable to process due to missing migration map tables. Check the database for: @tables ", ['@tables' => implode(', ', $mig_map_tables)]), MessengerInterface::TYPE_ERROR);
+        return [];
       }
     }
 
-    $query->execute()->fetchAll();
+    $d9_data = [];
+
+    foreach ($mig_map_tables as $mig_map_table) {
+      $query = $this->dbconn->select($mig_map_table, 'mm');
+      $query->addField('mm', 'sourceid1', 'd7uuid');
+      $query->addField('mm', 'destid1', 'd9nid');
+      $query->addField('n', 'uuid', 'd9uuid');
+      $query->addField('n', 'type', 'd9type');
+      $query->addField('nfd', 'title', 'd9title');
+      $query->innerJoin('node', 'n', 'mm.destid1 = n.nid');
+      $query->innerJoin('node_field_data', 'nfd', 'n.nid = nfd.nid');
+
+      $d9_results[] = $query->execute()->fetchAllAssoc('d7uuid');
+    }
+
+    $d9_data = array_merge([], ...$d9_results);
 
     $mig_content = [
-      'total' => count($query->execute()->fetchAll()),
+      'total' => count($d9_data),
     ];
 
+    // Fetch Drupal 7 node data for the corresponding UUID imported into
+    // Drupal 9.
+    $query = $this->d7conn->select('node', 'n');
+    $query->fields('n', ['nid', 'title', 'type', 'uuid']);
+    $query->condition('uuid', array_keys($d9_data), 'IN');
     $query->range($offset, $num_per_page);
-    $result = $query->execute()->fetchAllAssoc('nid');
 
-    // Expand metadata with D7 migration data.
-    $d7_data = $this->lookupByDestinationNodeIds(array_keys($result));
+    $d7_data = $query->execute()->fetchAllAssoc('uuid');
 
-    foreach ($result as $record) {
+    foreach ($d7_data as $d7_uuid => $d7_item) {
       $mig_content['rows'][] = [
-        'type' => $record->type,
-        'title' => $record->title,
-        'nid' => $record->nid,
-        'uuid' => $record->uuid,
-        'd7nid' => $d7_data[$record->nid]['d7nid'],
-        'd7uuid' => $d7_data[$record->nid]['d7uuid'],
-        'd7title' => $d7_data[$record->nid]['d7title'],
-        'd7type' => $d7_data[$record->nid]['d7type'],
+        'type' => $d9_data[$d7_uuid]->d9type,
+        'title' => $d9_data[$d7_uuid]->d9title,
+        'nid' => $d9_data[$d7_uuid]->d9nid,
+        'uuid' => $d9_data[$d7_uuid]->d9uuid,
+        'd7nid' => $d7_item->nid,
+        'd7uuid' => $d7_uuid,
+        'd7title' => $d7_item->title,
+        'd7type' => $d7_item->type,
       ];
     }
 
     return $mig_content;
+
   }
 
 }

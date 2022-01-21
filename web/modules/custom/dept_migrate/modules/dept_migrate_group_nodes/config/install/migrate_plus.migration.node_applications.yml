@@ -1,0 +1,78 @@
+id: node_applications
+label: 'Application content type nodes'
+status: true
+dependencies: {  }
+migration_group: migrate_group_nodes
+migration_tags:
+  - dept_sites
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: alterFieldInstanceMigration
+source:
+  plugin: d7_node_uuid
+  node_type: application
+  track_changes: true
+process:
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: en
+  title: title
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  revision_uid:
+    -
+      plugin: d7_user_lookup
+      source: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  body:
+    -
+      plugin: get
+      source: body
+    -
+      plugin: str_replace
+      regex: true
+      search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
+      replace: ''
+  body/0/format:
+    - plugin: static_map
+      bypass: true
+      source: body/0/format
+      map:
+        filtered_html: basic_html
+        filtered_html_with_no_images: basic_html
+        filtered_html_with_templates: basic_html
+        filtered_html_with_tokens: basic_html
+        html_for_admins: full_html
+        paste_format: plain_text
+        plain_text: plain_text
+  field_summary: field_summary
+  field_global_topics:
+    -
+      plugin: sub_process
+      source: field_global_topics
+      process:
+        target_id: tid
+  field_additional_info: field_additional_info
+  field_site_topics: field_site_topics
+  field_site_subtopics: field_site_subtopics
+  field_link:
+    -
+      plugin: field_link
+      source: field_link
+destination:
+  plugin: 'entity:node'
+  default_bundle: application
+migration_dependencies:
+  required:
+    - users
+
+
