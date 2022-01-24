@@ -68,48 +68,53 @@ class MigrateSupport {
     }
 
     // Fetch the map/details of the D7 entity.
-    if ($entity->isNew()) {
-      $d7_entity = reset(\Drupal::service('dept_migrate.migrate_uuid_lookup_manager')->lookupBySourceNodeId($entity->d7_nid()));
-    }
-    else {
-      $d7_entity = reset(\Drupal::service('dept_migrate.migrate_uuid_lookup_manager')->lookupByDestinationNodeIds([$entity->id()]));
-    }
+    $d7_entity = reset(\Drupal::service('dept_migrate.migrate_uuid_lookup_manager')->lookupByDestinationNodeIds([$entity->id()]));
 
-    // For each domain, assign it to the corresponding group entity.
     if (!empty($d7_entity['domains'])) {
-      $all_groups = $this->entityTypeManager->getStorage('group')->loadByProperties(['type' => 'department_site']);
+      $group_content_data = $this->dbconn->query("
+          SELECT * FROM {group_content_field_data} WHERE entity_id = :id", [
+            ':id' => $entity->id()
+          ])->fetchAllAssoc('gid');
+
+      $entity_group_ids = [];
+      foreach ($group_content_data as $gc_id => $row) {
+        $entity_group_ids[] = $row->gid;
+      }
 
       // Compare current groups to current domains, if they differ then
       // update group content entity values.
       $d7_mapped_group_ids = [];
-      $entity_group_ids = [];
-
-      foreach (GroupContent::loadByEntity($entity) as $content_item) {
-        $entity_group_ids[] = $content_item->getGroup()->id();
-      }
 
       foreach ($d7_entity['domains'] as $domain_machine_name) {
         $d7_mapped_group_ids[] = $this->domainToGroupId($domain_machine_name);
       }
 
       if (empty(array_diff($d7_mapped_group_ids, $entity_group_ids))) {
+        // No changes, stop and return here.
         return;
       }
 
+      // From here, we know we need to update group values, so we begin by
+      // removing all known group content values for this entity type and plugin
+      // then re-inserting the group content entities to the groups needed.
       $plugin_id = 'group_' . $entity->getEntityTypeId() . ':' . $entity->bundle();
 
-      foreach ($all_groups as $group) {
-        // Search for this entity in the group.
-        $group_content_search = $group->getContent($plugin_id, ['entity_id' => $entity->id()]);
+      // Using static queries rather than the entity API for speed.
+      // Entity API equivalent requires multiple stages of group content
+      // entity lookups, empty checks, explicit entity delete commands etc.
+      // Here, we know we have two tables and need to junk it out by entity
+      // id and content/plugin type which we can do with a single SQL query.
+      $this->dbconn->query("
+        DELETE g, gfd
+        FROM {group_content} g
+        JOIN {group_content_field_data} gfd ON g.id = gfd.id
+        WHERE gfd.entity_id = :entity_id AND g.type = :plugin", [
+          ':entity_id' => $entity->id(),
+          ':plugin' => 'department_site-' . $plugin_id,
+        ]);
 
-        if (!empty($group_content_search)) {
-          $group_content = reset($group_content_search);
-          // Remove entity from group.
-          $group_content->delete();
-        }
-
-      }
-
+      // Need to load the group entity to allow us to insert
+      // new values for the entity/plugin type.
       foreach ($d7_entity['domains'] as $domain_machine_name) {
         $group = Group::load($this->domainToGroupId($domain_machine_name));
         // Add entity to group.

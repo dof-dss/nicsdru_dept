@@ -41,12 +41,13 @@ class NodeEntityMigrateSubscriber implements EventSubscriberInterface {
    *   The migrate post row save event.
    */
   public function onPostRowSave(MigratePostRowSaveEvent $event) {
-    // Check migration id, otherwise it'll trigger for anything!
-    $map = $event->getRow()->getIdMap();
-    $node_id = $map['destid1'];
+    if (preg_match('/^node_/', $event->getMigration()->id())) {
+      $map = $event->getRow()->getIdMap();
+      $node_id = $map['destid1'];
 
-    $node = $this->entityTypeManager->getStorage('node')->load($node_id);
-    $this->migrateSupport->syncDomainsToGroups($node);
+      $node = $this->entityTypeManager->getStorage('node')->load($node_id);
+      $this->migrateSupport->syncDomainsToGroups($node);
+    }
   }
 
   /**
