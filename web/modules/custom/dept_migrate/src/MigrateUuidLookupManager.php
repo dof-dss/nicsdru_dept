@@ -168,7 +168,8 @@ class MigrateUuidLookupManager {
         FROM {users} u
         LEFT JOIN {domain_editor} de ON de.uid = u.uid
         INNER JOIN {domain} d ON d.domain_id = de.domain_id
-        WHERE u.uid IN (:ids[])", [':ids[]' => $uids]);
+        WHERE u.uid IN (:ids[])
+        GROUP BY u.uid", [':ids[]' => $uids]);
 
     foreach ($d7results as $row) {
       $map[$row->uid] = [

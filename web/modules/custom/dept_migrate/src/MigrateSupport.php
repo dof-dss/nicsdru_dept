@@ -63,63 +63,14 @@ class MigrateSupport {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function syncDomainsToGroups(EntityInterface $entity) {
-    if ($entity instanceof NodeInterface === FALSE) {
-      return;
+    if ($entity instanceof NodeInterface) {
+      $this->syncNodeDomainsToGroups($entity);
     }
-
-    // Fetch the map/details of the D7 entity.
-    $d7_entity = reset(\Drupal::service('dept_migrate.migrate_uuid_lookup_manager')->lookupByDestinationNodeIds([$entity->id()]));
-
-    if (!empty($d7_entity['domains'])) {
-      $group_content_data = $this->dbconn->query("
-          SELECT * FROM {group_content_field_data} WHERE entity_id = :id", [
-            ':id' => $entity->id()
-          ])->fetchAllAssoc('gid');
-
-      $entity_group_ids = [];
-      foreach ($group_content_data as $gc_id => $row) {
-        $entity_group_ids[] = $row->gid;
-      }
-
-      // Compare current groups to current domains, if they differ then
-      // update group content entity values.
-      $d7_mapped_group_ids = [];
-
-      foreach ($d7_entity['domains'] as $domain_machine_name) {
-        $d7_mapped_group_ids[] = $this->domainToGroupId($domain_machine_name);
-      }
-
-      if (empty(array_diff($d7_mapped_group_ids, $entity_group_ids))) {
-        // No changes, stop and return here.
-        return;
-      }
-
-      // From here, we know we need to update group values, so we begin by
-      // removing all known group content values for this entity type and plugin
-      // then re-inserting the group content entities to the groups needed.
-      $plugin_id = 'group_' . $entity->getEntityTypeId() . ':' . $entity->bundle();
-
-      // Using static queries rather than the entity API for speed.
-      // Entity API equivalent requires multiple stages of group content
-      // entity lookups, empty checks, explicit entity delete commands etc.
-      // Here, we know we have two tables and need to junk it out by entity
-      // id and content/plugin type which we can do with a single SQL query.
-      $this->dbconn->query("
-        DELETE g, gfd
-        FROM {group_content} g
-        JOIN {group_content_field_data} gfd ON g.id = gfd.id
-        WHERE gfd.entity_id = :entity_id AND g.type = :plugin", [
-          ':entity_id' => $entity->id(),
-          ':plugin' => 'department_site-' . $plugin_id,
-        ]);
-
-      // Need to load the group entity to allow us to insert
-      // new values for the entity/plugin type.
-      foreach ($d7_entity['domains'] as $domain_machine_name) {
-        $group = Group::load($this->domainToGroupId($domain_machine_name));
-        // Add entity to group.
-        $group->addContent($entity, $plugin_id);
-      }
+    elseif ($entity instanceof UserInterface) {
+      $this->syncUserDomainsToGroups($entity);
+    }
+    else {
+      throw new \Exception('Unhandled entity type for ' . $entity->getEntityTypeId());
     }
   }
 
@@ -178,6 +129,141 @@ class MigrateSupport {
     }
 
     return $group_id;
+  }
+
+  /**
+   * @param \Drupal\node\NodeInterface $node
+   *   The node object.
+   */
+  protected function syncNodeDomainsToGroups(NodeInterface $node) {
+    // Fetch the map/details of the D7 entity.
+    $d7_entity = reset(\Drupal::service('dept_migrate.migrate_uuid_lookup_manager')->lookupByDestinationNodeIds([$node->id()]));
+
+    if (!empty($d7_entity['domains'])) {
+      $plugin_id = 'group_node-' . $node->bundle();
+
+      $group_content_data = $this->dbconn->query("
+          SELECT *
+          FROM {group_content_field_data}
+          WHERE entity_id = :id
+          AND type = :type", [
+            ':id' => $node->id(),
+            ':type' => 'department_site-' . $plugin_id,
+          ])->fetchAllAssoc('gid');
+
+      $node_group_ids = [];
+      foreach ($group_content_data as $gc_id => $row) {
+        $node_group_ids[] = $row->gid;
+      }
+
+      // Compare current groups to current domains, if they differ then
+      // update group content entity values.
+      $d7_mapped_group_ids = [];
+
+      foreach ($d7_entity['domains'] as $domain_machine_name) {
+        $d7_mapped_group_ids[] = $this->domainToGroupId($domain_machine_name);
+      }
+
+      $d7_mapped_group_ids = array_unique($d7_mapped_group_ids);
+
+      if (empty(array_diff($d7_mapped_group_ids, $node_group_ids))) {
+        // No changes, stop and return here.
+        return;
+      }
+
+      // From here, we know we need to update group values, so we begin by
+      // removing all known group content values for this entity type and plugin
+      // then re-inserting the group content entities to the groups needed.
+      // Using static queries rather than the entity API for speed.
+      // Entity API equivalent requires multiple stages of group content
+      // entity lookups, empty checks, explicit entity delete commands etc.
+      // Here, we know we have two tables and need to junk it out by entity
+      // id and content/plugin type which we can do with a single SQL query.
+      $this->dbconn->query("
+        DELETE g, gfd
+        FROM {group_content} g
+        JOIN {group_content_field_data} gfd ON g.id = gfd.id
+        WHERE gfd.entity_id = :entity_id AND g.type = :plugin", [
+          ':entity_id' => $node->id(),
+          ':plugin' => 'department_site-' . $plugin_id,
+        ]);
+
+      // Need to load the group entity to allow us to insert
+      // new values for the entity/plugin type.
+      foreach ($d7_mapped_group_ids as $gid) {
+        $group = Group::load($gid);
+        // Add entity to group.
+        $group->addContent($node, 'group_node:' . $node->bundle());
+      }
+    }
+  }
+
+  /**
+   * @param \Drupal\user\UserInterface $user
+   *   The user entity.
+   */
+  protected function syncUserDomainsToGroups(UserInterface $user) {
+    // Fetch the map/details of the D7 entity.
+    $d7_entity = reset(\Drupal::service('dept_migrate.migrate_uuid_lookup_manager')->lookupBySourceUserId([$user->id()]));
+
+    if (!empty($d7_entity['domains'])) {
+      $plugin_id = 'department_site-group_membership';
+
+      $group_content_data = $this->dbconn->query("
+          SELECT *
+          FROM {group_content_field_data}
+          WHERE entity_id = :id
+          AND type = :type", [
+            ':id' => $user->id(),
+            ':type' => $plugin_id,
+          ])->fetchAllAssoc('gid');
+
+      $user_group_ids = [];
+      foreach ($group_content_data as $gc_id => $row) {
+        $user_group_ids[] = $row->gid;
+      }
+
+      // Compare current groups to current domains, if they differ then
+      // update group content entity values.
+      $d7_mapped_group_ids = [];
+
+      foreach ($d7_entity['domains'] as $domain_machine_name) {
+        $d7_mapped_group_ids[] = $this->domainToGroupId($domain_machine_name);
+      }
+
+      // Dedupe.
+      $d7_mapped_group_ids = array_unique($d7_mapped_group_ids);
+
+      if (empty(array_diff($d7_mapped_group_ids, $user_group_ids))) {
+        // No changes, stop and return here.
+        return;
+      }
+
+      // From here, we know we need to update group values, so we begin by
+      // removing all known group content values for this entity type and plugin
+      // then re-inserting the group content entities to the groups needed.
+      // Using static queries rather than the entity API for speed.
+      // Entity API equivalent requires multiple stages of group content
+      // entity lookups, empty checks, explicit entity delete commands etc.
+      // Here, we know we have two tables and need to junk it out by entity
+      // id and content/plugin type which we can do with a single SQL query.
+      $this->dbconn->query("
+        DELETE g, gfd
+        FROM {group_content} g
+        JOIN {group_content_field_data} gfd ON g.id = gfd.id
+        WHERE gfd.entity_id = :entity_id AND g.type = :plugin", [
+          ':entity_id' => $user->id(),
+          ':plugin' => $plugin_id,
+        ]);
+
+      // Need to load the group entity to allow us to insert
+      // new values for the entity/plugin type.
+      foreach ($d7_mapped_group_ids as $gid) {
+        $group = Group::load($gid);
+        // Add entity to group.
+        $group->addContent($user, 'group_membership');
+      }
+    }
   }
 
 }
