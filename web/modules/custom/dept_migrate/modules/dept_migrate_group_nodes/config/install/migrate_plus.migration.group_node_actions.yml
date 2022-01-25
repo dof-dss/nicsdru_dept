@@ -1,14 +1,15 @@
+# D7 SQL: select d.domain_id, d.machine_name, count(da.nid) as nodes from domain d join domain_access da on d.domain_id = da.gid join node n on n.nid = da.nid where n.type = 'actions' group by d.domain_id, d.machine_name order by nodes desc;
 langcode: en
 status: true
 dependencies: {  }
-id: group_node_easychart
+id: group_node_actions
 migration_tags:
   - dept_sites
 migration_group: migrate_group_nodes
-label: 'Drupal 7 easychart nodes to Group content'
+label: 'Drupal 7 actions nodes to Group content'
 source:
   plugin: d7_node_domain
-  node_type: easychart
+  node_type: actions
   ids:
     uuid:
       type: string
@@ -16,29 +17,28 @@ source:
 process:
   type:
     plugin: default_value
-    default_value: group_content_type_85765319814ca
+    default_value: department_site-group_node-actions
   gid:
     -
       plugin: skip_on_empty
       method: row
       source: domain_node/0/target_id
-#    -
-#      plugin: skip_on_value
-#      method: row
-#      source: domain_user/0/target_id
-#      # Whenever a site goes live (prod in D9), add its key to this list.
-#      value:
-#        - 'daera'
-#        - 'del'
-#        - 'economy'
-#        - 'execoffice'
-#        - 'education'
-#        - 'health'
-#        - 'infrastructure'
-#        - 'dcal'
-#        - 'doe'
-#        - 'justice'
-#        - 'communities'
+    -
+      plugin: skip_on_value
+      method: row
+      source: domain_node/0/target_id
+      value:
+        - 'daera'
+        - 'del'
+        - 'economy'
+        - 'execoffice'
+        - 'education'
+        - 'health'
+        - 'infrastructure'
+        - 'dcal'
+        - 'doe'
+        - 'justice'
+        - 'communities'
     -
       plugin: static_map
       bypass: false
@@ -51,7 +51,7 @@ process:
   entity_id:
     -
       plugin: migration_lookup
-      migration: node_easychart
+      migration: node_actions
       source: uuid
   uid:
     -
@@ -63,4 +63,4 @@ destination:
 migration_dependencies:
   required:
     - users
-    - node_easychart
+    - node_actions
