@@ -13,7 +13,7 @@ use Drupal\Core\Logger\LoggerChannelFactory;
 /**
  * Post migration event handler for Topic and Subtopic bundles.
  */
-class PostMigrationTopicsSubTopics implements EventSubscriberInterface {
+class PostMigrationSubTopics implements EventSubscriberInterface {
 
   /**
    * Drupal\Core\Logger\LoggerChannelFactory definition.
@@ -46,8 +46,6 @@ class PostMigrationTopicsSubTopics implements EventSubscriberInterface {
    *   Drupal logger.
    * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookup_manager
    *   Lookup_manager.
-   * @param \Drupal\redirect\RedirectRepository $redirect_repository
-   *   Redirect repository service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LoggerChannelFactory $logger,
@@ -79,7 +77,21 @@ class PostMigrationTopicsSubTopics implements EventSubscriberInterface {
     if ($event_id === 'node_topic' || $event_id === 'node_subtopic') {
 
       $dbconn_default = Database::getConnection('default', 'default');
-      $dbconn_migrate = Database::getConnection('default', 'migrate');
+
+      $query = $dbconn_default->select('node__field_parent_topic', 'pt');
+      $query->fields('pt', ['field_parent_topic_target_id']);
+      $d7nids = $query->distinct()->execute()->fetchCol('field_parent_topic_target_id');
+
+      $d9data = $this->lookupManager->lookupBySourceNodeId($d7nids);
+
+      foreach ($d9data as $d7nid => $data) {
+        $num_updated = $dbconn_default->update('node__field_parent_topic')
+          ->fields(['field_parent_topic_target_id' => $data['nid'],])
+          ->condition('field_parent_topic_target_id', $d7nid, '=')
+          ->execute();
+        $this->logger->notice("Updated $num_updated entries for $d7nid");
+      }
+
     }
   }
 
