@@ -36,7 +36,6 @@ class PostMigrationSubTopics implements EventSubscriberInterface {
    */
   protected $entityTypeManager;
 
-
   /**
    * PostMigrationSubscriber constructor.
    *
@@ -96,7 +95,7 @@ class PostMigrationSubTopics implements EventSubscriberInterface {
 
         foreach ($d9data as $d7nid => $data) {
           $num_updated = $dbconn_default->update('node__field_' . $ref)
-            ->fields(['field_' . $ref . '_target_id' => $data['nid'],])
+            ->fields(['field_' . $ref . '_target_id' => $data['nid']])
             ->condition('field_' . $ref . '_target_id', $d7nid, '=')
             ->execute();
           $this->logger->notice("Updated $num_updated entries for $d7nid");

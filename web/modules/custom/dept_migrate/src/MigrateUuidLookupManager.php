@@ -400,7 +400,9 @@ class MigrateUuidLookupManager {
       }
 
       if ($mig_table_count < count($mig_map_tables)) {
-        \Drupal::messenger()->addMessage(t("Unable to process due to missing migration map tables. Check the database for: @tables ", ['@tables' => implode(', ', $mig_map_tables)]), MessengerInterface::TYPE_ERROR);
+        \Drupal::messenger()->addMessage(t("Unable to process due to missing migration map tables. Check the database for: @tables", [
+          '@tables' => implode(', ', $mig_map_tables)
+        ]), MessengerInterface::TYPE_ERROR);
         return [];
       }
     }
