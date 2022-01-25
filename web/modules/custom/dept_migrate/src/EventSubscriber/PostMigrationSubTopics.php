@@ -84,6 +84,10 @@ class PostMigrationSubTopics implements EventSubscriberInterface {
 
       $d9data = $this->lookupManager->lookupBySourceNodeId($d7nids);
 
+      if (!empty($d9data)) {
+        $this->logger->notice("Updating Parent Topic references.");
+      }
+
       foreach ($d9data as $d7nid => $data) {
         $num_updated = $dbconn_default->update('node__field_parent_topic')
           ->fields(['field_parent_topic_target_id' => $data['nid'],])
@@ -92,6 +96,24 @@ class PostMigrationSubTopics implements EventSubscriberInterface {
         $this->logger->notice("Updated $num_updated entries for $d7nid");
       }
 
+
+      $query = $dbconn_default->select('node__field_parent_subtopic', 'pst');
+      $query->fields('pst', ['field_parent_subtopic_target_id']);
+      $d7nids = $query->distinct()->execute()->fetchCol('field_parent_subtopic_target_id');
+
+      $d9data = $this->lookupManager->lookupBySourceNodeId($d7nids);
+
+      if (!empty($d9data)) {
+        $this->logger->notice("Updating Parent Subtopic references.");
+      }
+
+      foreach ($d9data as $d7nid => $data) {
+        $num_updated = $dbconn_default->update('node__field_parent_subtopic')
+          ->fields(['field_parent_subtopic_target_id' => $data['nid'],])
+          ->condition('field_parent_subtopic_target_id', $d7nid, '=')
+          ->execute();
+        $this->logger->notice("Updated $num_updated entries for $d7nid");
+      }
     }
   }
 
