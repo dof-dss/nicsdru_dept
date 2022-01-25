@@ -71,11 +71,10 @@ process:
       plugin: sub_process
       source: field_banner_image
       process:
-        target_id: fid
-        alt: alt
-        title: title
-        width: width
-        height: height
+        target_id:
+          -
+            plugin: d7_file_lookup
+            source: fid
   field_link:
     -
       plugin: field_link
