@@ -7,3 +7,6 @@ services:
       arguments: [ '@entity_type.manager', '@logger.factory', '@dept_migrate.migrate_uuid_lookup_manager']
       tags:
         - { name: 'event_subscriber' }
+  dept_migrate.migrate_support:
+    class: 'Drupal\dept_migrate\MigrateSupport'
+    arguments: ['@entity_type.manager', '@database']
