@@ -18,22 +18,20 @@ mode: default
 content:
   field_file_language:
     type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
     weight: 2
     region: content
-    label: above
-    settings: {  }
-    third_party_settings: {  }
   field_link_type:
     type: list_default
-    weight: 1
-    region: content
     label: above
     settings: {  }
     third_party_settings: {  }
+    weight: 1
+    region: content
   field_link_url:
     type: link
-    weight: 0
-    region: content
     label: above
     settings:
       trim_length: 80
@@ -42,6 +40,8 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   langcode: true
   links: true

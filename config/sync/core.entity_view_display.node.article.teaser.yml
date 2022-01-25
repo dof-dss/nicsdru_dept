@@ -25,26 +25,26 @@ mode: teaser
 content:
   body:
     type: text_summary_or_trimmed
-    weight: 0
-    region: content
+    label: hidden
     settings:
       trim_length: 600
     third_party_settings: {  }
-    label: hidden
+    weight: 0
+    region: content
   content_moderation_control:
-    weight: -20
     settings: {  }
     third_party_settings: {  }
+    weight: -20
     region: content
   field_image:
     type: image
+    label: hidden
+    settings:
+      image_link: content
+      image_style: medium
+    third_party_settings: {  }
     weight: -1
     region: content
-    settings:
-      image_style: medium
-      image_link: content
-    third_party_settings: {  }
-    label: hidden
   links:
     weight: 100
     region: content

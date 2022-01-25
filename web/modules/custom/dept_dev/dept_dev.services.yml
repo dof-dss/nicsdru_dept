@@ -1,4 +1,0 @@
-services:
-  dept_dev.lazy_builders:
-    class: Drupal\dept_dev\DeptDevLazyBuilders
-    arguments: ['@entity_type.manager', '@renderer']

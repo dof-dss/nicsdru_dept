@@ -40,35 +40,35 @@ third_party_settings:
         - field_address_line_2
         - field_town
         - field_postcode
+      label: Address
+      region: content
       parent_name: ''
       weight: 3
       format_type: details
-      region: content
       format_settings:
+        classes: ''
         show_empty_fields: false
         id: ''
-        classes: ''
-        description: ''
         open: false
+        description: ''
         required_fields: true
-      label: Address
     group_contact:
       children:
         - field_phone
         - field_email
         - field_website
+      label: Contact
+      region: content
       parent_name: ''
       weight: 5
       format_type: details
-      region: content
       format_settings:
+        classes: ''
         show_empty_fields: false
         id: ''
-        classes: ''
-        description: ''
         open: false
+        description: ''
         required_fields: true
-      label: Contact
     group_additional_info:
       children:
         - field_open_to_the_public
@@ -76,18 +76,18 @@ third_party_settings:
         - field_historic_map_viewer_link
         - field_sm_number
         - field_nismr_link
+      label: 'Additional Information'
+      region: content
       parent_name: ''
       weight: 6
       format_type: details
-      region: content
       format_settings:
+        classes: ''
         show_empty_fields: false
         id: ''
-        classes: ''
-        description: ''
         open: false
+        description: ''
         required_fields: true
-      label: 'Additional Information'
 id: node.heritage_site.default
 targetEntityType: node
 bundle: heritage_site
@@ -96,13 +96,13 @@ content:
   body:
     type: text_textarea_with_summary
     weight: 8
+    region: content
     settings:
       rows: 9
       summary_rows: 3
       placeholder: ''
       show_summary: false
     third_party_settings: {  }
-    region: content
   created:
     type: datetime_timestamp
     weight: 13
@@ -136,8 +136,8 @@ content:
     weight: 7
     region: content
     settings:
-      size: 60
       placeholder: ''
+      size: 60
     third_party_settings: {  }
   field_grid_reference:
     type: string_textfield
@@ -148,23 +148,25 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_historic_map_viewer_link:
+    type: link_default
     weight: 11
+    region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-    type: link_default
-    region: content
   field_location:
+    type: geolocation_googlegeocoder
     weight: 10
+    region: content
     settings:
-      centre:
-        fit_bounds:
-          enable: true
       auto_client_location: ''
       auto_client_location_marker: ''
       allow_override_map_settings: 0
       hide_textfield_form: false
+      centre:
+        fit_bounds:
+          enable: true
       google_map_settings:
         map_features:
           marker_infowindow:
@@ -176,28 +178,26 @@ content:
           control_maptype:
             enabled: true
           control_geocoder:
-            enabled: true
             weight: -100
+            enabled: true
           control_recenter:
             enabled: true
         type: ROADMAP
         zoom: 10
-        height: 400px
-        width: 100%
         minZoom: 0
         maxZoom: 20
+        height: 400px
+        width: 100%
         gestureHandling: auto
     third_party_settings: {  }
-    type: geolocation_googlegeocoder
-    region: content
   field_nismr_link:
+    type: link_default
     weight: 13
+    region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-    type: link_default
-    region: content
   field_open_to_the_public:
     type: options_select
     weight: 9
@@ -231,17 +231,17 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_site_subtopics:
+    type: chosen_select
     weight: 2
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: chosen_select
-    region: content
   field_site_topics:
+    type: chosen_select
     weight: 1
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: chosen_select
-    region: content
   field_sm_number:
     type: string_textfield
     weight: 12
@@ -259,13 +259,13 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_website:
+    type: link_default
     weight: 10
+    region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-    type: link_default
-    region: content
   flag:
     weight: 14
     region: content
@@ -281,8 +281,8 @@ content:
   moderation_state:
     type: moderation_state_default
     weight: 23
-    settings: {  }
     region: content
+    settings: {  }
     third_party_settings: {  }
   path:
     type: path
@@ -292,10 +292,10 @@ content:
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 15
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   publish_on:
     type: datetime_timestamp_no_default
@@ -311,17 +311,17 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 24
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 16
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   title:
     type: string_textfield
@@ -334,12 +334,12 @@ content:
   uid:
     type: entity_reference_autocomplete
     weight: 12
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
-    region: content
     third_party_settings: {  }
   unpublish_on:
     type: datetime_timestamp_no_default
