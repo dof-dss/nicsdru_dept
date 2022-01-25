@@ -78,41 +78,29 @@ class PostMigrationSubTopics implements EventSubscriberInterface {
 
       $dbconn_default = Database::getConnection('default', 'default');
 
-      $query = $dbconn_default->select('node__field_parent_topic', 'pt');
-      $query->fields('pt', ['field_parent_topic_target_id']);
-      $d7nids = $query->distinct()->execute()->fetchCol('field_parent_topic_target_id');
+      $ent_ref_field = [
+        'parent_topic' => 'Parent topic',
+        'parent_subtopic' => 'Parent subtopic',
+      ];
 
-      $d9data = $this->lookupManager->lookupBySourceNodeId($d7nids);
+      foreach ($ent_ref_field as $ref => $name) {
+        $query = $dbconn_default->select('node__field_' . $ref, 'entrf');
+        $query->fields('entrf', ['field_' . $ref . '_target_id']);
+        $d7nids = $query->distinct()->execute()->fetchCol('field_' . $ref . '_target_id');
 
-      if (!empty($d9data)) {
-        $this->logger->notice("Updating Parent Topic references.");
-      }
+        $d9data = $this->lookupManager->lookupBySourceNodeId($d7nids);
 
-      foreach ($d9data as $d7nid => $data) {
-        $num_updated = $dbconn_default->update('node__field_parent_topic')
-          ->fields(['field_parent_topic_target_id' => $data['nid'],])
-          ->condition('field_parent_topic_target_id', $d7nid, '=')
-          ->execute();
-        $this->logger->notice("Updated $num_updated entries for $d7nid");
-      }
+        if (!empty($d9data)) {
+          $this->logger->notice("Updating $name references.");
+        }
 
-
-      $query = $dbconn_default->select('node__field_parent_subtopic', 'pst');
-      $query->fields('pst', ['field_parent_subtopic_target_id']);
-      $d7nids = $query->distinct()->execute()->fetchCol('field_parent_subtopic_target_id');
-
-      $d9data = $this->lookupManager->lookupBySourceNodeId($d7nids);
-
-      if (!empty($d9data)) {
-        $this->logger->notice("Updating Parent Subtopic references.");
-      }
-
-      foreach ($d9data as $d7nid => $data) {
-        $num_updated = $dbconn_default->update('node__field_parent_subtopic')
-          ->fields(['field_parent_subtopic_target_id' => $data['nid'],])
-          ->condition('field_parent_subtopic_target_id', $d7nid, '=')
-          ->execute();
-        $this->logger->notice("Updated $num_updated entries for $d7nid");
+        foreach ($d9data as $d7nid => $data) {
+          $num_updated = $dbconn_default->update('node__field_' . $ref)
+            ->fields(['field_' . $ref . '_target_id' => $data['nid'],])
+            ->condition('field_' . $ref . '_target_id', $d7nid, '=')
+            ->execute();
+          $this->logger->notice("Updated $num_updated entries for $d7nid");
+        }
       }
     }
   }
