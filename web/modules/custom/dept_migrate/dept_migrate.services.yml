@@ -2,11 +2,6 @@ services:
   dept_migrate.migrate_uuid_lookup_manager:
     class: 'Drupal\dept_migrate\MigrateUuidLookupManager'
     arguments: ['@entity_type.manager', '@database']
-  dept_migrate.eventsubscriber.migrate.subtopic.post:
-      class: 'Drupal\dept_migrate\EventSubscriber\PostMigrationSubTopics'
-      arguments: [ '@entity_type.manager', '@logger.factory', '@dept_migrate.migrate_uuid_lookup_manager']
-      tags:
-        - { name: 'event_subscriber' }
   dept_migrate.migrate_support:
     class: 'Drupal\dept_migrate\MigrateSupport'
     arguments: ['@entity_type.manager', '@database']
