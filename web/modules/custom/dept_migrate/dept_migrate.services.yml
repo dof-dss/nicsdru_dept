@@ -2,6 +2,11 @@ services:
   dept_migrate.migrate_uuid_lookup_manager:
     class: 'Drupal\dept_migrate\MigrateUuidLookupManager'
     arguments: ['@entity_type.manager', '@database']
+  dept_migrate.eventsubscriber.migrate.entity_ref_update:
+    class: Drupal\dept_migrate\EventSubscriber\PostMigrationEntityRefUpdateSubscriber
+    arguments: ['@entity_field.manager', '@dept_migrate.migrate_uuid_lookup_manager', '@logger.factory']
+    tags:
+      - { name: event_subscriber }
   dept_migrate.migrate_support:
     class: 'Drupal\dept_migrate\MigrateSupport'
     arguments: ['@entity_type.manager', '@database']
