@@ -152,8 +152,10 @@ class MigrateSupport {
           ])->fetchAllAssoc('gid');
 
       $node_group_ids = [];
-      foreach ($group_content_data as $gc_id => $row) {
-        $node_group_ids[] = $row->gid;
+      if (!empty($group_content_data)) {
+        foreach ($group_content_data as $gc_id => $row) {
+          $node_group_ids[] = $row->gid;
+        }
       }
 
       // Compare current groups to current domains, if they differ then

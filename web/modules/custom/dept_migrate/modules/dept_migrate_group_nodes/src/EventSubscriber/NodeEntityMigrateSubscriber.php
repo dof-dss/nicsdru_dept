@@ -3,6 +3,7 @@
 namespace Drupal\dept_migrate_group_nodes\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\dept_migrate\MigrateSupport;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigratePostRowSaveEvent;
@@ -24,14 +25,27 @@ class NodeEntityMigrateSubscriber implements EventSubscriberInterface {
   protected $migrateSupport;
 
   /**
+   * Drupal\Core\Logger\LoggerChannelFactory definition.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   */
+  protected $logger;
+
+  /**
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager service.
    * @param \Drupal\dept_migrate\MigrateSupport $migrate_support
    *   Migrate support service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
+   *   Drupal logger.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MigrateSupport $migrate_support) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              MigrateSupport $migrate_support,
+                              LoggerChannelFactory $logger) {
+
     $this->entityTypeManager = $entity_type_manager;
     $this->migrateSupport = $migrate_support;
+    $this->logger = $logger->get('dept_migrate');
   }
 
   /**
@@ -42,11 +56,16 @@ class NodeEntityMigrateSubscriber implements EventSubscriberInterface {
    */
   public function onPostRowSave(MigratePostRowSaveEvent $event) {
     if (preg_match('/^node_/', $event->getMigration()->id())) {
-      $map = $event->getRow()->getIdMap();
-      $node_id = $map['destid1'];
+      $node_id = $event->getDestinationIdValues()[0];
 
       $node = $this->entityTypeManager->getStorage('node')->load($node_id);
-      $this->migrateSupport->syncDomainsToGroups($node);
+
+      if (!empty($node)) {
+        $this->migrateSupport->syncDomainsToGroups($node);
+      }
+      else {
+        $this->logger->error("Couldn't load node for destination id ${node_id}");
+      }
     }
   }
 
