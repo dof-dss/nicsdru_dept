@@ -3,6 +3,8 @@
 namespace Drupal\dept_migrate\EventSubscriber;
 
 use Drupal\Core\Database\Database;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\migrate\Event\MigrateEvents;
@@ -15,6 +17,20 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface {
 
   /**
+   * Drupal\Core\Entity\EntityFieldManager definition.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManager
+   */
+  protected $fieldManager;
+
+  /**
+   * Lookup manager.
+   *
+   * @var \Drupal\dept_migrate\MigrateUuidLookupManager
+   */
+  protected $lookupManager;
+
+  /**
    * Drupal\Core\Logger\LoggerChannelFactory definition.
    *
    * @var \Drupal\Core\Logger\LoggerChannelFactory
@@ -24,10 +40,16 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
   /**
    * Constructs event subscriber.
    *
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $field_manager
+   *   Entity Field Manager.
+   * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookup_manager
+   *   Lookup Manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
    *   Drupal logger.
    */
-  public function __construct(LoggerChannelFactory $logger) {
+  public function __construct(EntityFieldManagerInterface $field_manager, MigrateUuidLookupManager $lookup_manager, LoggerChannelFactory $logger) {
+    $this->fieldManager = $field_manager;
+    $this->lookupManager = $lookup_manager;
     $this->logger = $logger->get('dept_migrate');
   }
 
@@ -51,9 +73,11 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
     $event_id = $event->getMigration()->getBaseId();
 
     if (strpos($event_id, 'node_') === 0) {
+      $bundle = substr($event_id, 5);
       $dbconn_default = Database::getConnection('default', 'default');
-      $fields = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', 'subtopic');
+      $fields = $this->fieldManager->getFieldDefinitions('node', $bundle);
 
+      $this->logger->notice("Updating entity reference fields for $bundle");
       foreach ($fields as $field) {
         if ($field instanceof FieldConfig && $field->getType() === 'entity_reference') {
 
