@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\group\GroupMembershipLoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Render\RendererInterface;
 
 /**
  * Form controller for the dept example group content entity edit forms.
@@ -23,6 +24,13 @@ class DeptExampleGroupEntityForm extends ContentEntityForm {
   protected $groupMembership;
 
   /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * Constructs a ContentEntityForm object.
    *
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
@@ -33,8 +41,10 @@ class DeptExampleGroupEntityForm extends ContentEntityForm {
    *   The time service.
    * @param \Drupal\group\GroupMembershipLoaderInterface $group_membership
    *   The Group membership loader service.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    */
-  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info, TimeInterface $time, GroupMembershipLoaderInterface $group_membership) {
+  public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info, TimeInterface $time, GroupMembershipLoaderInterface $group_membership, RendererInterface $renderer) {
     parent::__construct(
       $entity_repository,
       $entity_type_bundle_info,
@@ -42,6 +52,7 @@ class DeptExampleGroupEntityForm extends ContentEntityForm {
     );
 
     $this->groupMembership = $group_membership;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -163,9 +174,9 @@ class DeptExampleGroupEntityForm extends ContentEntityForm {
     }
 
     $message_arguments = ['%label' => $this->entity->label()];
-    $logger_arguments = $message_arguments + ['link' => render($link)];
+    $logger_arguments = $message_arguments + ['link' => $this->renderer($link)];
 
-    if ($result == SAVED_NEW) {
+    if ($result === SAVED_NEW) {
       $this->messenger()->addStatus($this->t('New departmental example group content entity %label has been created.', $message_arguments));
       $this->logger('dept_example_group_entity')->notice('Created new departmental example group content entity %label', $logger_arguments);
     }

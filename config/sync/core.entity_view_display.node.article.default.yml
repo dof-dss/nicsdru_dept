@@ -21,11 +21,11 @@ bundle: article
 mode: default
 content:
   field_summary:
-    weight: 0
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 0
     region: content
 hidden:
   body: true

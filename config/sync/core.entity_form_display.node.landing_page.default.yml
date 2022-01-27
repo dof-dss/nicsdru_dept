@@ -32,61 +32,61 @@ third_party_settings:
         - group_related_news_items
         - group_facebook_details
         - group_twitter_details
+      label: 'Social media feeds'
+      region: content
       parent_name: ''
       weight: 7
       format_type: fieldset
-      region: content
       format_settings:
+        classes: ''
         show_empty_fields: false
         id: ''
-        classes: ''
         description: ''
         required_fields: true
-      label: 'Social media feeds'
     group_related_news_items:
       children:
         - field_site_topics
         - field_site_subtopics
+      label: 'Related news items'
+      region: content
       parent_name: group_social_media_feeds
       weight: 25
       format_type: fieldset
-      region: content
       format_settings:
+        classes: ''
         show_empty_fields: false
         id: ''
-        classes: ''
         description: ''
         required_fields: true
-      label: 'Related news items'
     group_facebook_details:
       children:
         - field_facebook_user
+      label: 'Facebook details'
+      region: hidden
       parent_name: group_social_media_feeds
       weight: 26
       format_type: fieldset
-      region: hidden
       format_settings:
+        classes: ''
         show_empty_fields: false
         id: ''
-        classes: ''
         description: ''
         required_fields: true
-      label: 'Facebook details'
     group_twitter_details:
       children:
         - field_twitter_user
         - field_tweet_count
+      label: 'Twitter details'
+      region: hidden
       parent_name: group_social_media_feeds
       weight: 27
       format_type: fieldset
-      region: hidden
       format_settings:
+        classes: ''
         show_empty_fields: false
         id: ''
-        classes: ''
         description: ''
         required_fields: true
-      label: 'Twitter details'
 id: node.landing_page.default
 targetEntityType: node
 bundle: landing_page
@@ -95,13 +95,13 @@ content:
   body:
     type: text_textarea_with_summary
     weight: 6
+    region: content
     settings:
       rows: 9
       summary_rows: 3
       placeholder: ''
       show_summary: false
     third_party_settings: {  }
-    region: content
   created:
     type: datetime_timestamp
     weight: 10
@@ -142,25 +142,25 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_site_subtopics:
+    type: chosen_select
     weight: 25
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: chosen_select
-    region: content
   field_site_topics:
+    type: chosen_select
     weight: 24
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: chosen_select
-    region: content
   field_summary:
+    type: text_textarea
     weight: 5
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
   field_teaser:
     type: string_textarea
     weight: 4
@@ -199,8 +199,8 @@ content:
   moderation_state:
     type: moderation_state_default
     weight: 22
-    settings: {  }
     region: content
+    settings: {  }
     third_party_settings: {  }
   path:
     type: path
@@ -210,10 +210,10 @@ content:
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 14
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   publish_on:
     type: datetime_timestamp_no_default
@@ -229,17 +229,17 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 23
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 15
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   title:
     type: string_textfield
@@ -252,12 +252,12 @@ content:
   uid:
     type: entity_reference_autocomplete
     weight: 9
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
-      match_limit: 10
-    region: content
     third_party_settings: {  }
   unpublish_on:
     type: datetime_timestamp_no_default

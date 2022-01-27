@@ -23,58 +23,58 @@ bundle: project
 mode: default
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 5
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 5
     region: content
   field_departmental_project_code:
     type: string
-    weight: 0
-    region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
+    region: content
   field_project_category:
     type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
     weight: 6
     region: content
-    label: above
-    settings: {  }
-    third_party_settings: {  }
   field_project_date:
     type: datetime_default
-    weight: 2
-    region: content
     label: above
     settings:
-      format_type: medium
       timezone_override: ''
+      format_type: medium
     third_party_settings: {  }
+    weight: 2
+    region: content
   field_project_duration:
-    weight: 3
+    type: interval_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: interval_default
+    weight: 3
     region: content
   field_project_status:
     type: list_default
-    weight: 4
-    region: content
     label: above
     settings: {  }
     third_party_settings: {  }
+    weight: 4
+    region: content
   field_provider_project_code:
     type: string
-    weight: 1
-    region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
   langcode: true
   links: true
