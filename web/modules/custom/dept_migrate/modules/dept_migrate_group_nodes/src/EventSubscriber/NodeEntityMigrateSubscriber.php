@@ -57,7 +57,6 @@ class NodeEntityMigrateSubscriber implements EventSubscriberInterface {
   public function onPostRowSave(MigratePostRowSaveEvent $event) {
     if (preg_match('/^node_/', $event->getMigration()->id())) {
       $node_id = $event->getDestinationIdValues()[0];
-
       $node = $this->entityTypeManager->getStorage('node')->load($node_id);
 
       if (!empty($node)) {
