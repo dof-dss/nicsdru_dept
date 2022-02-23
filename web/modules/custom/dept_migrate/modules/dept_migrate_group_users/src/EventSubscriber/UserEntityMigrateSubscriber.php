@@ -42,11 +42,15 @@ class UserEntityMigrateSubscriber implements EventSubscriberInterface {
    */
   public function onPostRowSave(MigratePostRowSaveEvent $event) {
     if ($event->getMigration()->id() === 'users') {
-      $map = $event->getRow()->getIdMap();
-      $user_id = $map['destid1'];
-
+      $user_id = $event->getDestinationIdValues()[0];
       $user = $this->entityTypeManager->getStorage('user')->load($user_id);
-      $this->migrateSupport->syncDomainsToGroups($user);
+
+      if (!empty($user)) {
+        $this->migrateSupport->syncDomainsToGroups($user);
+      }
+      else {
+        $this->logger->error("Couldn't load user for destination id ${user_id}");
+      }
     }
   }
 

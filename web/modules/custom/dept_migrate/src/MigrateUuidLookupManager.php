@@ -109,6 +109,10 @@ class MigrateUuidLookupManager {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function lookupBySourceNodeId(array $nids) {
+    if (empty($nids)) {
+      return [];
+    }
+
     $map = [];
 
     $d7results = $this->d7conn->query("
@@ -163,6 +167,10 @@ class MigrateUuidLookupManager {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function lookupBySourceUserId(array $uids) {
+    if (empty($uids)) {
+      return [];
+    }
+
     $map = [];
 
     $d7results = $this->d7conn->query("
@@ -224,6 +232,10 @@ class MigrateUuidLookupManager {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function lookupBySourceFileId(array $fids) {
+    if (empty($fids)) {
+      return [];
+    }
+
     $map = [];
 
     $d7results = $this->d7conn->query("SELECT * FROM {file_managed} WHERE fid IN (:ids[])", [':ids[]' => $fids]);
@@ -290,6 +302,10 @@ class MigrateUuidLookupManager {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function lookupByDestinationNodeIds(array $nids) {
+    if (empty($nids)) {
+      return [];
+    }
+
     $map = [];
 
     $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
@@ -352,6 +368,10 @@ class MigrateUuidLookupManager {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function lookupByDestinationUuid(array $uuids) {
+    if (empty($uuids)) {
+      return [];
+    }
+
     $map = [];
 
     foreach ($uuids as $uuid) {

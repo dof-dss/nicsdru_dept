@@ -89,6 +89,11 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
           $query->fields('entrf', [$column]);
           $d7nids = $query->distinct()->execute()->fetchCol($column);
 
+          if (empty($d7nids)) {
+            $this->logger->error("Couldn't find any d7 nids for ${column}");
+            continue;
+          }
+
           $d9data = $this->lookupManager->lookupBySourceNodeId($d7nids);
 
           if (!empty($d9data)) {
@@ -96,6 +101,11 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
           }
 
           foreach ($d9data as $d7nid => $data) {
+            if (empty($data['nid']) || empty($d7nid)) {
+              $this->logger->error("Couldn't set an empty value for ${column} in ${table}. data[nid] was ${data['nid']} and d7nid was ${d7nid}");
+              continue;
+            }
+
             $num_updated = $dbconn_default->update($table)
               ->fields([$column => $data['nid']])
               ->condition($column, $d7nid, '=')
