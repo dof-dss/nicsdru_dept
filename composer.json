@@ -74,6 +74,8 @@
         "drupal/core-composer-scaffold": "^9.2",
         "drupal/core-recommended": "^9.2",
         "drupal/csp": "^1.15",
+        "drupal/devel": "^4.1",
+        "drupal/devel_entity_updates": "^3.0",
         "drupal/diff": "^1.0",
         "drupal/domain_group": "^2.0",
         "drupal/domain_path": "^1.0@beta",
@@ -136,7 +138,6 @@
         "drupal/coder": "^8.3",
         "drupal/config_override_warn": "^1.3",
         "drupal/core-dev": "^9.2",
-        "drupal/devel": "^4.1",
         "drupal/easy_install": "^10.5",
         "drupal/fpa": "^2.0@beta",
         "drupal/masquerade": "^2.0@beta",
@@ -156,7 +157,8 @@
         "allow-plugins": {
             "composer/installers": true,
             "cweagans/composer-patches": true,
-            "drupal/core-composer-scaffold": true
+            "drupal/core-composer-scaffold": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "extra": {

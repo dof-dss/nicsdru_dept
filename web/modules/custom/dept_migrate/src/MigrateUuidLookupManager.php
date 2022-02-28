@@ -109,15 +109,30 @@ class MigrateUuidLookupManager {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function lookupBySourceNodeId(array $nids) {
+    if (empty($nids)) {
+      return [];
+    }
+
     $map = [];
 
-    $d7results = $this->d7conn->query("SELECT * FROM {node} WHERE nid IN (:ids[])", [':ids[]' => $nids]);
+    $d7results = $this->d7conn->query("
+        SELECT n.*, GROUP_CONCAT(d.machine_name) AS domains
+        FROM {node} n
+        LEFT JOIN {domain_access} da ON da.nid = n.nid
+        INNER JOIN {domain} d ON d.domain_id = da.gid
+        WHERE n.nid IN (:ids[])", [':ids[]' => $nids]);
+
     foreach ($d7results as $row) {
       $map[$row->nid] = [
         'd7uuid' => $row->uuid,
         'd7type' => $row->type,
         'd7title' => $row->title,
       ];
+
+      // Add any domain ids, if they're present.
+      if (!empty($row->domains)) {
+        $map[$row->nid]['domains'] = explode(',', $row->domains);
+      }
     }
 
     // Match up to D9 nodes using uuid as key from migrate table.
@@ -152,15 +167,31 @@ class MigrateUuidLookupManager {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function lookupBySourceUserId(array $uids) {
+    if (empty($uids)) {
+      return [];
+    }
+
     $map = [];
 
-    $d7results = $this->d7conn->query("SELECT * FROM {users} WHERE uid IN (:ids[])", [':ids[]' => $uids]);
+    $d7results = $this->d7conn->query("
+        SELECT u.*, GROUP_CONCAT(d.machine_name) AS domains
+        FROM {users} u
+        LEFT JOIN {domain_editor} de ON de.uid = u.uid
+        INNER JOIN {domain} d ON d.domain_id = de.domain_id
+        WHERE u.uid IN (:ids[])
+        GROUP BY u.uid", [':ids[]' => $uids]);
+
     foreach ($d7results as $row) {
       $map[$row->uid] = [
         'd7uuid' => $row->uuid,
         'd7name' => $row->name,
         'd7mail' => $row->mail,
       ];
+
+      // Add any domain ids, if they're present.
+      if (!empty($row->domains)) {
+        $map[$row->uid]['domains'] = explode(',', $row->domains);
+      }
     }
 
     // Match up to D9 users using uuid as key from migrate table.
@@ -201,6 +232,10 @@ class MigrateUuidLookupManager {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function lookupBySourceFileId(array $fids) {
+    if (empty($fids)) {
+      return [];
+    }
+
     $map = [];
 
     $d7results = $this->d7conn->query("SELECT * FROM {file_managed} WHERE fid IN (:ids[])", [':ids[]' => $fids]);
@@ -267,6 +302,10 @@ class MigrateUuidLookupManager {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function lookupByDestinationNodeIds(array $nids) {
+    if (empty($nids)) {
+      return [];
+    }
+
     $map = [];
 
     $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
@@ -296,13 +335,23 @@ class MigrateUuidLookupManager {
       $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE destid1 = :nid", [':nid' => $node->id()]);
 
       foreach ($migrate_map as $row) {
-        $d7results = $this->d7conn->query("SELECT * FROM {node} WHERE uuid = :uuid", [':uuid' => $row->sourceid1]);
+        $d7results = $this->d7conn->query("
+            SELECT n.*, GROUP_CONCAT(d.machine_name) AS domains
+            FROM {node} n
+            LEFT JOIN {domain_access} da ON da.nid = n.nid
+            INNER JOIN {domain} d ON d.domain_id = da.gid
+            WHERE n.uuid = :uuid", [':uuid' => $row->sourceid1]);
 
         foreach ($d7results as $d7node) {
           $map[$node->id()]['d7nid'] = $d7node->nid;
           $map[$node->id()]['d7uuid'] = $d7node->uuid;
           $map[$node->id()]['d7title'] = $d7node->title;
           $map[$node->id()]['d7type'] = $d7node->type;
+
+          // Add any domain ids, if they're present.
+          if (!empty($d7node->domains)) {
+            $map[$node->id()]['domains'] = explode(',', $d7node->domains);
+          }
         }
       }
     }
@@ -319,6 +368,10 @@ class MigrateUuidLookupManager {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function lookupByDestinationUuid(array $uuids) {
+    if (empty($uuids)) {
+      return [];
+    }
+
     $map = [];
 
     foreach ($uuids as $uuid) {
@@ -345,13 +398,23 @@ class MigrateUuidLookupManager {
       $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE destid1 = :nid", [':nid' => $node->id()]);
 
       foreach ($migrate_map as $row) {
-        $d7results = $this->d7conn->query("SELECT * FROM {node} WHERE uuid = :uuid", [':uuid' => $row->sourceid1]);
+        $d7results = $this->d7conn->query("
+            SELECT n.*, GROUP_CONCAT(d.machine_name) AS domains
+            FROM {node} n
+            LEFT JOIN {domain_access} da ON da.nid = n.nid
+            INNER JOIN {domain} d ON d.domain_id = da.gid
+            WHERE n.uuid = :uuid", [':uuid' => $row->sourceid1]);
 
         foreach ($d7results as $d7node) {
           $map[$node->id()]['d7nid'] = $d7node->nid;
           $map[$node->id()]['d7uuid'] = $d7node->uuid;
           $map[$node->id()]['d7title'] = $d7node->title;
           $map[$node->id()]['d7type'] = $d7node->type;
+
+          // Add any domain ids, if they're present.
+          if (!empty($d7row->domains)) {
+            $map[$node->id()]['domains'] = explode(',', $d7row->domains);
+          }
         }
       }
     }
@@ -400,7 +463,9 @@ class MigrateUuidLookupManager {
       }
 
       if ($mig_table_count < count($mig_map_tables)) {
-        \Drupal::messenger()->addMessage(t("Unable to process due to missing migration map tables. Check the database for: @tables ", ['@tables' => implode(', ', $mig_map_tables)]), MessengerInterface::TYPE_ERROR);
+        \Drupal::messenger()->addMessage(t("Unable to process due to missing migration map tables. Check the database for: @tables", [
+          '@tables' => implode(', ', $mig_map_tables)
+        ]), MessengerInterface::TYPE_ERROR);
         return [];
       }
     }

@@ -19,7 +19,7 @@ fi
 # If we don't have a Drupal install, download it.
 if [ ! -d "/app/web/core" ]; then
   echo "Installing Drupal"
-  composer -d/app install
+  composer -d /app install
 fi
 
 # Create Drupal public files directory and set IO permissions.
@@ -32,7 +32,7 @@ fi
 # Create Drupal private file directory above web root.
 if [ ! -d "/app/.lando/private" ]; then
   echo "Creating private Drupal files directory"
-  mkdir -p /app.lando//private
+  mkdir -p /app/.lando/private
 fi
 
 #echo "Copying Redis service overrides"
@@ -53,7 +53,7 @@ if [ ! -f "${DRUPAL_ROOT}/core/phpunit.xml" ]; then
 fi
 
 # Add yarn/nodejs packages to allow functional testing on this service.
-if [ ! -f "$NODE_YARN_INSTALLED" ]; then
+if [ ! -f "${NODE_YARN_INSTALLED}" ]; then
   # Update packages and add gnupg and https for apt to fetch yarn packages.
   apt update
   apt install -y gnupg apt-transport-https
