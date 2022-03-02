@@ -9,6 +9,7 @@ use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigrateImportEvent;
+use Drupal\views\Views;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -78,6 +79,7 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
       $fields = $this->fieldManager->getFieldDefinitions('node', $bundle);
 
       $this->logger->notice("Updating entity reference fields for $bundle");
+
       foreach ($fields as $field) {
         if ($field instanceof FieldConfig && $field->getType() === 'entity_reference') {
 
@@ -85,36 +87,19 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
           $table = 'node__' . $field->getName();
           $column = $field->getName() . '_target_id';
 
-          $query = $dbconn_default->select($table, 'entrf');
-          $query->fields('entrf', [$column]);
-          $d7nids = $query->distinct()->execute()->fetchCol($column);
+          $field_settings = $field->getSettings();
 
-          if (empty($d7nids)) {
-            $this->logger->error("Couldn't find any d7 nids for ${column}");
-            continue;
+          // Determine the reference types the field targets.
+          if ($field_settings['handler'] === 'views') {
+            $view = Views::getView($field_settings['handler_settings']['view']['view_name']);
+            $display = $view->getDisplay($field_settings['handler_settings']['view']['display_name']);
+            $targets = array_keys($display->options['filters']['type']['value']);
           }
-
-          $d9data = $this->lookupManager->lookupBySourceNodeId($d7nids);
-
-          if (!empty($d9data)) {
-            $this->logger->notice("Updating $name references.");
-          }
-
-          foreach ($d9data as $d7nid => $data) {
-            if (empty($data['nid']) || empty($d7nid)) {
-              $this->logger->error("Couldn't set an empty value for ${column} in ${table}. data[nid] was ${data['nid']} and d7nid was ${d7nid}");
-              continue;
-            }
-
-            $num_updated = $dbconn_default->update($table)
-              ->fields([$column => $data['nid']])
-              ->condition($column, $d7nid, '=')
-              ->execute();
-            $this->logger->notice("Updated $num_updated entries for $d7nid");
+          else {
+            $targets = array_keys($field_settings['handler_settings']['target_bundles']);
           }
         }
       }
     }
   }
-
 }

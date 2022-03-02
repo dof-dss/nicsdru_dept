@@ -206,6 +206,7 @@ class NodeUuid extends FieldableEntity {
    */
   public function getIds() {
     $ids['uuid']['type'] = 'string';
+    $ids['nid']['type'] = 'integer';
     return $ids;
   }
 
