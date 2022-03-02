@@ -101,9 +101,20 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
 
           // Iterate each target bundle and update the reference ID.
           foreach ($target_bundles as $target_bundle) {
+            // TODO: Not all migrations follow this naming structure and some include 'd7' after 'map_'
             $migration_table = 'migrate_map_' . $target_entity . '_' . $target_bundle;
 
-            $dbconn_default->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.field_site_topics_target_id = mt.destid1 WHERE ft.field_site_topics_target_id = mt.sourceid2");
+            // Check the database has the correct schema and update table.
+            if ($dbconn_default->schema()->tableExists($migration_table)) {
+              if ($dbconn_default->schema()->fieldExists($migration_table, 'sourceid2')) {
+                $dbconn_default->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.field_site_topics_target_id = mt.destid1 WHERE ft.field_site_topics_target_id = mt.sourceid2");
+              } else {
+                $this->logger->notice("sourceid2 column missing from $migration_table, unable to lookup D7 nids.");
+              }
+            } else {
+              $this->logger->notice("Migration map table missing for $target_entity:$target_bundle");
+            }
+
           }
         }
       }
