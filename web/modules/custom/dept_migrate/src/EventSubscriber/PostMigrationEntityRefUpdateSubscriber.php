@@ -84,19 +84,26 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
         if ($field instanceof FieldConfig && $field->getType() === 'entity_reference') {
 
           $name = $field->getLabel();
-          $table = 'node__' . $field->getName();
+          $field_table = 'node__' . $field->getName();
           $column = $field->getName() . '_target_id';
-
           $field_settings = $field->getSettings();
 
           // Determine the reference types the field targets.
           if ($field_settings['handler'] === 'views') {
             $view = Views::getView($field_settings['handler_settings']['view']['view_name']);
             $display = $view->getDisplay($field_settings['handler_settings']['view']['display_name']);
-            $targets = array_keys($display->options['filters']['type']['value']);
+            $target_bundles = array_keys($display->options['filters']['type']['value']);
+          } else {
+            $target_bundles = array_keys($field_settings['handler_settings']['target_bundles']);
           }
-          else {
-            $targets = array_keys($field_settings['handler_settings']['target_bundles']);
+
+          $target_entity = $field_settings['target_type'];
+
+          // Iterate each target bundle and update the reference ID.
+          foreach ($target_bundles as $target_bundle) {
+            $migration_table = 'migrate_map_' . $target_entity . '_' . $target_bundle;
+
+            $dbconn_default->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.field_site_topics_target_id = mt.destid1 WHERE ft.field_site_topics_target_id = mt.sourceid2");
           }
         }
       }
