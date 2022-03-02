@@ -1,51 +1,57 @@
-uuid: ea91a6b7-3cfb-46ba-8619-15fbe87a5790
+uuid: acf35969-02c6-4bfb-8e59-5217af8b037e
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: 48gXj21xtylDHax8yIXC_-9MalNxyir6k3wuqGi3-F0
-id: url_aliases
+id: url_aliases_nodes
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
   - dept_sites
 migration_group: migrate_group_url_aliases
-label: 'URL aliases'
+label: 'URL aliases - Nodes'
 source:
-  plugin: d7_url_alias
+  plugin: d7_url_alias_filter
+  filter_patterns:
+    - node/%
   constants:
     slash: /
+    path_prefix: /node/
 process:
   source:
     plugin: concat
     source:
       - constants/slash
       - source
+  langcode: language
   alias:
     plugin: concat
     source:
       - constants/slash
       - alias
-  langcode: language
-  node_translation:
+  d7id:
     -
       plugin: explode
       source: source
       delimiter: /
     -
       plugin: extract
-      default: INVALID_ID
+      default: '0'
       index:
         - 1
+  d9id:
     -
-      plugin: skip_on_value
+      plugin: d7_node_lookup
+      source: '@d7id'
+    -
+      plugin: skip_on_empty
       method: row
-      value:
-        - INVALID_ID
-    -
-      plugin: migration_lookup
-      migration: d7_node_translation
+      message: 'D9ID pseudo-field was empty, skipping row.'
+  path:
+    plugin: concat
+    source:
+      - constants/path_prefix
+      - '@d9id'
 destination:
-  plugin: url_alias
+  plugin: 'entity:path_alias'
 migration_dependencies: null

@@ -7,7 +7,10 @@ migration_tags:
   - dept_sites
 class: Drupal\migrate\Plugin\Migration
 source:
-  plugin: d7_url_alias
+  plugin: d7_url_alias_filter
+  filter_patterns:
+    - 'node/%'
+    - 'taxonomy/term/%'
   constants:
     slash: '/'
 process:
@@ -24,6 +27,9 @@ process:
   langcode: language
   node_translation:
     -
+      plugin: callback
+      callable: var_dump
+    -
       plugin: explode
       source: source
       delimiter: /
@@ -34,6 +40,9 @@ process:
       index:
         - 1
     -
+      plugin: callback
+      callable: var_dump
+    -
       plugin: skip_on_value
       method: row
       value:
@@ -42,4 +51,4 @@ process:
       plugin: migration_lookup
       migration: d7_node_translation
 destination:
-  plugin: url_alias
+  plugin: entity:path_alias
