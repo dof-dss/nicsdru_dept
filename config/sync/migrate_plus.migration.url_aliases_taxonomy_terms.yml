@@ -1,18 +1,22 @@
-id: url_aliases_taxonomy_terms
-label: URL aliases - Taxonomy Terms
+uuid: 27917b53-9e53-4e9f-9c80-d206249f7353
+langcode: en
 status: true
 dependencies: {  }
-migration_group: migrate_group_url_aliases
+id: url_aliases_taxonomy_terms
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
 migration_tags:
   - dept_sites
-class: Drupal\migrate\Plugin\Migration
+migration_group: migrate_group_url_aliases
+label: 'URL aliases - Taxonomy Terms'
 source:
   plugin: d7_url_alias_filter
   filter_patterns:
-    - 'taxonomy/term/%'
+    - taxonomy/term/%
   constants:
-    slash: '/'
-    path_prefix: '/taxonomy/term/'
+    slash: /
+    path_prefix: /taxonomy/term/
 process:
   source:
     plugin: concat
@@ -45,4 +49,5 @@ process:
       - constants/path_prefix
       - '@d7id'
 destination:
-  plugin: entity:path_alias
+  plugin: 'entity:path_alias'
+migration_dependencies: null
