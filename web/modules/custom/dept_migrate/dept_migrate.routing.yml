@@ -7,11 +7,3 @@ dept_migrate.default:
     _permission: 'administer nodes'
   options:
     _admin_route: TRUE
-
-dept_migrate.entityreferencecontroller:
-  path: 'admin/content/entityreferences'
-  defaults:
-    _title: 'Entity References'
-    _controller: '\Drupal\dept_migrate\Controller\EntityReferenceController::build'
-  requirements:
-    _permission: 'administer content'

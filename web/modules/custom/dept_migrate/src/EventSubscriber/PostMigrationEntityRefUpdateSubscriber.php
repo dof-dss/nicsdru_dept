@@ -93,7 +93,8 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
             $view = Views::getView($field_settings['handler_settings']['view']['view_name']);
             $display = $view->getDisplay($field_settings['handler_settings']['view']['display_name']);
             $target_bundles = array_keys($display->options['filters']['type']['value']);
-          } else {
+          }
+          else {
             $target_bundles = array_keys($field_settings['handler_settings']['target_bundles']);
           }
 
@@ -101,14 +102,14 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
 
           // Iterate each target bundle and update the reference ID.
           foreach ($target_bundles as $target_bundle) {
-            // TODO: Not all migrations follow this naming structure and some include 'd7' after 'map_'
             // Check the database has the correct schema and update table.
             if ($dbconn_default->schema()->tableExists($migration_table = 'migrate_map_' . $target_entity . '_' . $target_bundle)) {
               $this->updateEntityReferences($migration_table, $field_table);
             }
-            elseif($dbconn_default->schema()->tableExists($migration_table = 'migrate_map_d7_' . $target_entity . '_' . $target_bundle)) {
+            elseif ($dbconn_default->schema()->tableExists($migration_table = 'migrate_map_d7_' . $target_entity . '_' . $target_bundle)) {
               $this->updateEntityReferences($migration_table, $field_table);
-            } else {
+            }
+            else {
               $this->logger->notice("Migration map table missing for $target_entity:$target_bundle");
             }
           }
@@ -117,13 +118,23 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
     }
   }
 
+  /**
+   * Updates entity reference field targets from their D7 to the new D9 id.
+   *
+   * @param string $migration_table
+   *   The migration mapping table to extract the destination node from.
+   * @param string $field_table
+   *   The entity reference field table to update.
+   */
   private function updateEntityReferences($migration_table, $field_table) {
     $dbconn_default = Database::getConnection('default', 'default');
 
     if ($dbconn_default->schema()->fieldExists($migration_table, 'sourceid2')) {
       $dbconn_default->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.field_site_topics_target_id = mt.destid1 WHERE ft.field_site_topics_target_id = mt.sourceid2");
-    } else {
+    }
+    else {
       $this->logger->notice("sourceid2 column missing from $migration_table, unable to lookup D7 nids.");
     }
   }
+
 }
