@@ -122,12 +122,12 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
    *   The migration mapping table to extract the destination node from.
    * @param string $field_table
    *   The entity reference field table to update.
+   * @param string $column
+   *   The table column to update.
    */
-  private function updateEntityReferences($migration_table, $field_table) {
-    $dbconn_default = Database::getConnection('default', 'default');
-
-    if ($dbconn_default->schema()->fieldExists($migration_table, 'sourceid2')) {
-      $dbconn_default->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.field_site_topics_target_id = mt.destid1 WHERE ft.field_site_topics_target_id = mt.sourceid2");
+  private function updateEntityReferences($migration_table, $field_table, $column) {
+    if ($this->dbconn->schema()->fieldExists($migration_table, 'sourceid2')) {
+      $this->dbconn->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.$column = mt.destid1 WHERE ft.$column_id = mt.sourceid2");
     }
     else {
       $this->logger->notice("sourceid2 column missing from $migration_table, unable to lookup D7 nids.");
