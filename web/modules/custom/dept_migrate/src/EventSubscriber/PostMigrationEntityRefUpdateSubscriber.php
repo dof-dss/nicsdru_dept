@@ -129,7 +129,7 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
    */
   private function updateEntityReferences($migration_table, $field_table, $column) {
     if ($this->dbconn->schema()->fieldExists($migration_table, 'sourceid2')) {
-      $this->dbconn->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.$column = mt.destid1 WHERE ft.$column_id = mt.sourceid2");
+      $this->dbconn->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.$column = mt.destid1 WHERE ft.$column = mt.sourceid2");
     }
     else {
       $this->logger->notice("sourceid2 column missing from $migration_table, unable to lookup D7 nids.");
