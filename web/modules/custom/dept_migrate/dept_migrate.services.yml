@@ -4,7 +4,7 @@ services:
     arguments: ['@entity_type.manager', '@database']
   dept_migrate.eventsubscriber.migrate.entity_ref_update:
     class: Drupal\dept_migrate\EventSubscriber\PostMigrationEntityRefUpdateSubscriber
-    arguments: ['@entity_field.manager', '@logger.factory']
+    arguments: ['@entity_field.manager', '@logger.factory', '@database']
     tags:
       - { name: event_subscriber }
   dept_migrate.migrate_support:

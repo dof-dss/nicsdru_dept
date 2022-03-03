@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_migrate\EventSubscriber;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -31,6 +32,13 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
   protected $logger;
 
   /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $dbconn;
+
+  /**
    * Constructs event subscriber.
    *
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $field_manager
@@ -38,9 +46,10 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
    *   Drupal logger.
    */
-  public function __construct(EntityFieldManagerInterface $field_manager, LoggerChannelFactory $logger) {
+  public function __construct(EntityFieldManagerInterface $field_manager, LoggerChannelFactory $logger, Connection $connection) {
     $this->fieldManager = $field_manager;
     $this->logger = $logger->get('dept_migrate');
+    $this->dbconn = $connection;
   }
 
   /**
@@ -64,7 +73,6 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
 
     if (strpos($event_id, 'node_') === 0) {
       $bundle = substr($event_id, 5);
-      $dbconn_default = Database::getConnection('default', 'default');
       $fields = $this->fieldManager->getFieldDefinitions('node', $bundle);
 
       $this->logger->notice("Updating entity reference fields for $bundle");
@@ -92,11 +100,11 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
           // Iterate each target bundle and update the reference ID.
           foreach ($target_bundles as $target_bundle) {
             // Check the database has the correct schema and update table.
-            if ($dbconn_default->schema()->tableExists($migration_table = 'migrate_map_' . $target_entity . '_' . $target_bundle)) {
-              $this->updateEntityReferences($migration_table, $field_table);
+            if ($this->dbconn->schema()->tableExists($migration_table = 'migrate_map_' . $target_entity . '_' . $target_bundle)) {
+              $this->updateEntityReferences($migration_table, $field_table, $column);
             }
-            elseif ($dbconn_default->schema()->tableExists($migration_table = 'migrate_map_d7_' . $target_entity . '_' . $target_bundle)) {
-              $this->updateEntityReferences($migration_table, $field_table);
+            elseif ($this->dbconn->schema()->tableExists($migration_table = 'migrate_map_d7_' . $target_entity . '_' . $target_bundle)) {
+              $this->updateEntityReferences($migration_table, $field_table, $column);
             }
             else {
               $this->logger->notice("Migration map table missing for $target_entity:$target_bundle");
