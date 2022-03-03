@@ -4,7 +4,6 @@ namespace Drupal\dept_migrate\EventSubscriber;
 
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\migrate\Event\MigrateEvents;
@@ -25,13 +24,6 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
   protected $fieldManager;
 
   /**
-   * Lookup manager.
-   *
-   * @var \Drupal\dept_migrate\MigrateUuidLookupManager
-   */
-  protected $lookupManager;
-
-  /**
    * Drupal\Core\Logger\LoggerChannelFactory definition.
    *
    * @var \Drupal\Core\Logger\LoggerChannelFactory
@@ -43,14 +35,11 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
    *
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $field_manager
    *   Entity Field Manager.
-   * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookup_manager
-   *   Lookup Manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
    *   Drupal logger.
    */
-  public function __construct(EntityFieldManagerInterface $field_manager, MigrateUuidLookupManager $lookup_manager, LoggerChannelFactory $logger) {
+  public function __construct(EntityFieldManagerInterface $field_manager, LoggerChannelFactory $logger) {
     $this->fieldManager = $field_manager;
-    $this->lookupManager = $lookup_manager;
     $this->logger = $logger->get('dept_migrate');
   }
 
