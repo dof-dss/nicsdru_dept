@@ -45,6 +45,8 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
    *   Entity Field Manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
    *   Drupal logger.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   Database connection.
    */
   public function __construct(EntityFieldManagerInterface $field_manager, LoggerChannelFactory $logger, Connection $connection) {
     $this->fieldManager = $field_manager;
