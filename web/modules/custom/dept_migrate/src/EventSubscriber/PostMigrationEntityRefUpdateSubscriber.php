@@ -81,10 +81,6 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
 
       foreach ($fields as $field) {
         if ($field instanceof FieldConfig && $field->getType() === 'entity_reference') {
-
-          $name = $field->getLabel();
-          $field_table = 'node__' . $field->getName();
-          $column = $field->getName() . '_target_id';
           $field_settings = $field->getSettings();
 
           // Determine the reference types the field targets.
@@ -99,14 +95,14 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
 
           $target_entity = $field_settings['target_type'];
 
-          // Iterate each target bundle and update the reference ID.
+          // Iterate each target bundle and update the reference id.
           foreach ($target_bundles as $target_bundle) {
             // Check the database has the correct schema and update table.
             if ($this->dbconn->schema()->tableExists($migration_table = 'migrate_map_' . $target_entity . '_' . $target_bundle)) {
-              $this->updateEntityReferences($migration_table, $field_table, $column);
+              $this->updateEntityReferences($migration_table, $field);
             }
             elseif ($this->dbconn->schema()->tableExists($migration_table = 'migrate_map_d7_' . $target_entity . '_' . $target_bundle)) {
-              $this->updateEntityReferences($migration_table, $field_table, $column);
+              $this->updateEntityReferences($migration_table, $field);
             }
             else {
               $this->logger->notice("Migration map table missing for $target_entity:$target_bundle");
@@ -122,14 +118,23 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
    *
    * @param string $migration_table
    *   The migration mapping table to extract the destination node from.
-   * @param string $field_table
-   *   The entity reference field table to update.
-   * @param string $column
-   *   The table column to update.
+   * @param string $field
+   *   The entity reference field.
    */
-  private function updateEntityReferences($migration_table, $field_table, $column) {
+  private function updateEntityReferences($migration_table, $field) {
+    // Check we have the D7 nid values in the migration mapping table.
     if ($this->dbconn->schema()->fieldExists($migration_table, 'sourceid2')) {
-      $this->dbconn->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.$column = mt.destid1 WHERE ft.$column = mt.sourceid2");
+      $name = $field->getLabel();
+      $field_table = 'node__' . $field->getName();
+      $column = $field->getName() . '_target_id';
+
+      // Update the entity reference target id with the migration map
+      // destination id by matching the entity reference target id to the D7
+      // id in the mapping table.
+      $options['return'] = Database::RETURN_AFFECTED;
+      $count = $this->dbconn->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.$column = mt.destid1 WHERE ft.$column = mt.sourceid2", [], $options);
+
+      $this->logger->notice("Updated " . $count . " target ids for $name");
     }
     else {
       $this->logger->notice("sourceid2 column missing from $migration_table, unable to lookup D7 nids.");
