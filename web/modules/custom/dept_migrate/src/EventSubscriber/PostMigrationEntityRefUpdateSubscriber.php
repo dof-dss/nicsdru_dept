@@ -105,7 +105,7 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
               $this->updateEntityReferences($migration_table, $field);
             }
             else {
-              $this->logger->notice("Migration map table missing for $target_entity:$target_bundle");
+              $this->logger->warning("Migration map table missing for $target_entity:$target_bundle");
             }
           }
         }
@@ -134,10 +134,10 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
       $options['return'] = Database::RETURN_AFFECTED;
       $count = $this->dbconn->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.$column = mt.destid1 WHERE ft.$column = mt.sourceid2", [], $options);
 
-      $this->logger->notice("Updated " . $count . " target ids for $name");
+      $this->logger->info("Updated " . $count . " target ids for $name");
     }
     else {
-      $this->logger->notice("sourceid2 column missing from $migration_table, unable to lookup D7 nids.");
+      $this->logger->warning("sourceid2 column missing from $migration_table, unable to lookup D7 nids.");
     }
   }
 
