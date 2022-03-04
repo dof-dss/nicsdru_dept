@@ -12,6 +12,11 @@ services:
     arguments: ['@entity_field.manager', '@logger.factory', '@database']
     tags:
       - { name: event_subscriber }
+  dept_migrate.eventsubscriber.migrate.entity_ref_check:
+    class: Drupal\dept_migrate\EventSubscriber\PreMigrationEntityReferenceCheck
+    arguments: [ '@entity_field.manager', '@logger.factory', '@database' ]
+    tags:
+      - { name: event_subscriber }
   dept_migrate.migrate_support:
     class: 'Drupal\dept_migrate\MigrateSupport'
     arguments: ['@entity_type.manager', '@database']
