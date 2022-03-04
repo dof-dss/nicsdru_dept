@@ -12,7 +12,7 @@ use Drupal\migrate\Plugin\MigrationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Drupal 7 node source from database using UUID as identifer.
+ * Drupal 7 node source from database.
  *
  * Available configuration keys:
  * - node_type: The node_types to get from the source - can be a string or
@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @code
  * source:
- *   plugin: d7_node_uuid
+ *   plugin: d7_dept_node
  *   node_type: page
  * @endcode
  *
@@ -30,7 +30,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @code
  * source:
- *   plugin: d7_node_uuid
+ *   plugin: d7_dept_node
  *   node_type: [page, test]
  * @endcode
  *
@@ -43,11 +43,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @see \Drupal\migrate\Plugin\migrate\source\SourcePluginBase
  *
  * @MigrateSource(
- *   id = "d7_node_uuid",
+ *   id = "d7_dept_node",
  *   source_module = "node"
  * )
  */
-class NodeUuid extends FieldableEntity {
+class Node extends FieldableEntity {
   /**
    * The module handler.
    *
