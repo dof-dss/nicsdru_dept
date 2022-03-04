@@ -2,13 +2,14 @@
 
 namespace Drupal\dept_migrate\EventSubscriber;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigrateImportEvent;
+use Drupal\views\Views;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -24,13 +25,6 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
   protected $fieldManager;
 
   /**
-   * Lookup manager.
-   *
-   * @var \Drupal\dept_migrate\MigrateUuidLookupManager
-   */
-  protected $lookupManager;
-
-  /**
    * Drupal\Core\Logger\LoggerChannelFactory definition.
    *
    * @var \Drupal\Core\Logger\LoggerChannelFactory
@@ -38,19 +32,26 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
   protected $logger;
 
   /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $dbconn;
+
+  /**
    * Constructs event subscriber.
    *
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $field_manager
    *   Entity Field Manager.
-   * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookup_manager
-   *   Lookup Manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
    *   Drupal logger.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   Database connection.
    */
-  public function __construct(EntityFieldManagerInterface $field_manager, MigrateUuidLookupManager $lookup_manager, LoggerChannelFactory $logger) {
+  public function __construct(EntityFieldManagerInterface $field_manager, LoggerChannelFactory $logger, Connection $connection) {
     $this->fieldManager = $field_manager;
-    $this->lookupManager = $lookup_manager;
     $this->logger = $logger->get('dept_migrate');
+    $this->dbconn = $connection;
   }
 
   /**
@@ -74,46 +75,69 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
 
     if (strpos($event_id, 'node_') === 0) {
       $bundle = substr($event_id, 5);
-      $dbconn_default = Database::getConnection('default', 'default');
       $fields = $this->fieldManager->getFieldDefinitions('node', $bundle);
 
       $this->logger->notice("Updating entity reference fields for $bundle");
+
       foreach ($fields as $field) {
         if ($field instanceof FieldConfig && $field->getType() === 'entity_reference') {
+          $field_settings = $field->getSettings();
 
-          $name = $field->getLabel();
-          $table = 'node__' . $field->getName();
-          $column = $field->getName() . '_target_id';
-
-          $query = $dbconn_default->select($table, 'entrf');
-          $query->fields('entrf', [$column]);
-          $d7nids = $query->distinct()->execute()->fetchCol($column);
-
-          if (empty($d7nids)) {
-            $this->logger->error("Couldn't find any d7 nids for ${column}");
-            continue;
+          // Determine the reference types the field targets.
+          if ($field_settings['handler'] === 'views') {
+            $view = Views::getView($field_settings['handler_settings']['view']['view_name']);
+            $display = $view->getDisplay($field_settings['handler_settings']['view']['display_name']);
+            $target_bundles = array_keys($display->options['filters']['type']['value']);
+          }
+          else {
+            $target_bundles = array_keys($field_settings['handler_settings']['target_bundles']);
           }
 
-          $d9data = $this->lookupManager->lookupBySourceNodeId($d7nids);
+          $target_entity = $field_settings['target_type'];
 
-          if (!empty($d9data)) {
-            $this->logger->notice("Updating $name references.");
-          }
-
-          foreach ($d9data as $d7nid => $data) {
-            if (empty($data['nid']) || empty($d7nid)) {
-              $this->logger->error("Couldn't set an empty value for ${column} in ${table}. data[nid] was ${data['nid']} and d7nid was ${d7nid}");
-              continue;
+          // Iterate each target bundle and update the reference id.
+          foreach ($target_bundles as $target_bundle) {
+            // Check the database has the correct schema and update table.
+            if ($this->dbconn->schema()->tableExists($migration_table = 'migrate_map_' . $target_entity . '_' . $target_bundle)) {
+              $this->updateEntityReferences($migration_table, $field);
             }
-
-            $num_updated = $dbconn_default->update($table)
-              ->fields([$column => $data['nid']])
-              ->condition($column, $d7nid, '=')
-              ->execute();
-            $this->logger->notice("Updated $num_updated entries for $d7nid");
+            elseif ($this->dbconn->schema()->tableExists($migration_table = 'migrate_map_d7_' . $target_entity . '_' . $target_bundle)) {
+              $this->updateEntityReferences($migration_table, $field);
+            }
+            else {
+              $this->logger->warning("Migration map table missing for $target_entity:$target_bundle");
+            }
           }
         }
       }
+    }
+  }
+
+  /**
+   * Updates entity reference field targets from their D7 to the new D9 id.
+   *
+   * @param string $migration_table
+   *   The migration mapping table to extract the destination node from.
+   * @param string $field
+   *   The entity reference field.
+   */
+  private function updateEntityReferences($migration_table, $field) {
+    // Check we have the D7 nid values in the migration mapping table.
+    if ($this->dbconn->schema()->fieldExists($migration_table, 'sourceid2')) {
+      $name = $field->getLabel();
+      $field_table = 'node__' . $field->getName();
+      $column = $field->getName() . '_target_id';
+
+      // Update the entity reference target id with the migration map
+      // destination id by matching the entity reference target id to the D7
+      // id in the mapping table.
+      $options['return'] = Database::RETURN_AFFECTED;
+      $count = $this->dbconn->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.$column = mt.destid1 WHERE ft.$column = mt.sourceid2", [], $options);
+
+      $this->logger->info("Updated " . $count . " target ids for $name");
+    }
+    else {
+      $this->logger->warning("sourceid2 column missing from $migration_table, unable to lookup D7 nids.");
     }
   }
 
