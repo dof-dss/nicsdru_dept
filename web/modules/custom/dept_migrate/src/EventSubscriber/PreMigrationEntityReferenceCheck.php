@@ -4,7 +4,9 @@ namespace Drupal\dept_migrate\EventSubscriber;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigrateImportEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -13,6 +15,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Pre migration subscriber to validate entity reference field targets ids.
  */
 class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
 
   /**
    * Drupal\Core\Entity\EntityFieldManager definition.
@@ -38,6 +47,8 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
   /**
    * Constructs event subscriber.
    *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface
+   *   Entity Type Manager.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $field_manager
    *   Entity Field Manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
@@ -45,7 +56,8 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
    */
-  public function __construct(EntityFieldManagerInterface $field_manager, LoggerChannelFactory $logger, Connection $connection) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $field_manager, LoggerChannelFactory $logger, Connection $connection) {
+    $this->entityTypeManager = $entity_type_manager;
     $this->fieldManager = $field_manager;
     $this->logger = $logger->get('dept_migrate');
     $this->db7conn = $connection;
@@ -72,6 +84,21 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
 
     if (strpos($event_id, 'node_') === 0) {
       $bundle = substr($event_id, 5);
+
+      $fields = $this->fieldManager->getFieldDefinitions('node', $bundle);
+
+      $this->logger->notice("Updating entity reference fields for $bundle");
+
+      $table_mapping = \Drupal::service('entity_type.manager')->getStorage('node')->getTableMapping();
+
+      // Iterate each bundle field and check for entity references.
+      foreach ($fields as $field) {
+        if ($field instanceof FieldConfig && $field->getType() === 'entity_reference') {
+          // Determine the db table name and target id column name.
+          $target_column_name = $table_mapping->getColumnNames($field->getName());
+          $field_table_name = $table_mapping->getAllFieldTableNames($field->getName())[0];
+        }
+      }
 
     }
   }
