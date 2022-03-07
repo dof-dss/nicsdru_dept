@@ -31,6 +31,15 @@ content:
     third_party_settings: {  }
     weight: 101
     region: content
+  field_attachment:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 106
+    region: content
   field_consultation_dates:
     type: daterange_default
     label: above
@@ -70,7 +79,6 @@ content:
     weight: 100
     region: content
 hidden:
-  field_attachment: true
   field_email_address: true
   field_global_topics: true
   field_postal: true
