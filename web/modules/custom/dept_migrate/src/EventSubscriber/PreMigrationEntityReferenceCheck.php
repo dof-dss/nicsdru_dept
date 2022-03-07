@@ -4,7 +4,6 @@ namespace Drupal\dept_migrate\EventSubscriber;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\migrate\Event\MigrateEvents;
@@ -15,13 +14,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Pre migration subscriber to validate entity reference field targets ids.
  */
 class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
 
   /**
    * Drupal\Core\Entity\EntityFieldManager definition.
@@ -47,8 +39,6 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
   /**
    * Constructs event subscriber.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface
-   *   Entity Type Manager.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $field_manager
    *   Entity Field Manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
@@ -56,8 +46,7 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $field_manager, LoggerChannelFactory $logger, Connection $connection) {
-    $this->entityTypeManager = $entity_type_manager;
+  public function __construct(EntityFieldManagerInterface $field_manager, LoggerChannelFactory $logger, Connection $connection) {
     $this->fieldManager = $field_manager;
     $this->logger = $logger->get('dept_migrate');
     $this->db7conn = $connection;
@@ -94,7 +83,7 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
         if ($field instanceof FieldConfig && $field->getType() === 'entity_reference') {
           $field_name = $field->getName();
           $field_settings = $field->getSettings();
-          // Drupal 7 field table name
+          // Drupal 7 field table name.
           $field_table = 'field_data_' . $field_name;
           // Reference field target id column name.
           if ($field_settings['target_type'] == 'node') {
@@ -115,4 +104,5 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
       }
     }
   }
+
 }
