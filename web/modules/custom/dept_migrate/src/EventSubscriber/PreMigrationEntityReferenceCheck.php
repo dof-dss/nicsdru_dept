@@ -89,14 +89,20 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
 
       $this->logger->notice("Updating entity reference fields for $bundle");
 
-      $table_mapping = \Drupal::service('entity_type.manager')->getStorage('node')->getTableMapping();
-
       // Iterate each bundle field and check for entity references.
       foreach ($fields as $field) {
         if ($field instanceof FieldConfig && $field->getType() === 'entity_reference') {
-          // Determine the db table name and target id column name.
-          $target_column_name = $table_mapping->getColumnNames($field->getName());
-          $field_table_name = $table_mapping->getAllFieldTableNames($field->getName())[0];
+          $field_name = $field->getName();
+          $field_settings = $field->getSettings();
+          // Drupal 7 field table name
+          $field_table = 'field_data_' . $field_name;
+          // Reference field target id column name.
+          if ($field_settings['target_type'] == 'node') {
+            $target_column = 'field_' . $field_name . '_id';
+          }
+          elseif ($field_settings['target_type'] == 'taxonomy_term') {
+            $target_column = 'field_' . $field_name . '_tid';
+          }
         }
       }
 
