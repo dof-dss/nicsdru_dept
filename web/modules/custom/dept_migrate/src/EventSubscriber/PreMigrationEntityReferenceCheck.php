@@ -91,6 +91,8 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
             $target_column = 'field_' . $field_name . '_id';
 
             if ($this->db7conn->schema()->fieldExists($field_table, $target_column)) {
+              // Delete any entity reference rows with a target id that points
+              // to missing nodes.
               $this->db7conn->query("DELETE FROM {$field_table} WHERE $field_table.$target_column NOT IN (SELECT nid FROM {node}) AND $field_table.bundle = '$bundle'");
               $this->logger->notice("Deleted missing node references for $bundle field $field_name");
             }
@@ -99,6 +101,8 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
             $target_column = 'field_' . $field_name . '_tid';
 
             if ($this->db7conn->schema()->fieldExists($field_table, $target_column)) {
+              // Delete any entity reference rows with a target id that points
+              // to missing terms.
               $this->db7conn->query("DELETE FROM {$field_table} WHERE $field_table.$target_column NOT IN (SELECT tid FROM {taxonomy_term_data}) AND $field_table.bundle = '$bundle'");
               $this->logger->notice("Deleted missing term references for $bundle field $field_name");
             }
