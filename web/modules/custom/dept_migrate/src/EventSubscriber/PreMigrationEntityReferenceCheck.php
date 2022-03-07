@@ -87,7 +87,7 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
 
       $fields = $this->fieldManager->getFieldDefinitions('node', $bundle);
 
-      $this->logger->notice("Updating entity reference fields for $bundle");
+      $this->logger->notice("Checking entity reference fields for $bundle");
 
       // Iterate each bundle field and check for entity references.
       foreach ($fields as $field) {
@@ -103,10 +103,16 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
           elseif ($field_settings['target_type'] == 'taxonomy_term') {
             $target_column = 'field_' . $field_name . '_tid';
           }
+          else {
+            return;
+          }
+
+          if ($this->db7conn->schema()->fieldExists($field_table, $target_column)) {
+            $this->db7conn->query("DELETE FROM {$field_table} WHERE $field_table.$target_column NOT IN (SELECT nid FROM {node}) AND $field_table.bundle = '$bundle'");
+            $this->logger->notice("Deleted missing entity references for $bundle field $field_name");
+          }
         }
       }
-
     }
   }
-
 }
