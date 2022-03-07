@@ -76,7 +76,6 @@ process:
         source: value2
         from_format: 'Y-m-d H:i:s'
         to_format: 'Y-m-d\TH:i:s'
-  field_email_address: field_email_address
   field_global_topics:
     -
       plugin: sub_process
@@ -107,7 +106,21 @@ process:
       uri: url
       title: title
       attributes: attributes
+  field_email_address:
+    -
+      plugin: sub_process
+      source: field_email_address
+      process:
+        value: email
   field_original_domain: field_original_domain
+  field_attachment:
+    -
+      plugin: sub_process
+      source: field_attachment
+      process:
+        target_id:
+          plugin: d7_file_lookup
+          source: fid
 destination:
   plugin: 'entity:node'
   default_bundle: consultation
