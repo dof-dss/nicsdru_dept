@@ -19,6 +19,7 @@ dependencies:
     - chosen_field
     - content_moderation
     - datetime
+    - datetime_range
     - file
     - link
     - path
@@ -54,7 +55,7 @@ content:
       progress_indicator: throbber
     third_party_settings: {  }
   field_consultation_dates:
-    type: datetime_default
+    type: daterange_default
     weight: 5
     region: content
     settings: {  }
