@@ -85,20 +85,26 @@ class PreMigrationEntityReferenceCheck implements EventSubscriberInterface {
           $field_settings = $field->getSettings();
           // Drupal 7 field table name.
           $field_table = 'field_data_' . $field_name;
-          // Reference field target id column name.
+
+          // Determine if the target bundles are nodes or terms.
           if ($field_settings['target_type'] == 'node') {
             $target_column = 'field_' . $field_name . '_id';
+
+            if ($this->db7conn->schema()->fieldExists($field_table, $target_column)) {
+              $this->db7conn->query("DELETE FROM {$field_table} WHERE $field_table.$target_column NOT IN (SELECT nid FROM {node}) AND $field_table.bundle = '$bundle'");
+              $this->logger->notice("Deleted missing node references for $bundle field $field_name");
+            }
           }
           elseif ($field_settings['target_type'] == 'taxonomy_term') {
             $target_column = 'field_' . $field_name . '_tid';
+
+            if ($this->db7conn->schema()->fieldExists($field_table, $target_column)) {
+              $this->db7conn->query("DELETE FROM {$field_table} WHERE $field_table.$target_column NOT IN (SELECT tid FROM {taxonomy_term_data}) AND $field_table.bundle = '$bundle'");
+              $this->logger->notice("Deleted missing term references for $bundle field $field_name");
+            }
           }
           else {
             return;
-          }
-
-          if ($this->db7conn->schema()->fieldExists($field_table, $target_column)) {
-            $this->db7conn->query("DELETE FROM {$field_table} WHERE $field_table.$target_column NOT IN (SELECT nid FROM {node}) AND $field_table.bundle = '$bundle'");
-            $this->logger->notice("Deleted missing entity references for $bundle field $field_name");
           }
         }
       }
