@@ -1,4 +1,8 @@
 services:
+  dept_migrate.database_d7:
+    class: Drupal\Core\Database\Connection
+    factory: Drupal\Core\Database\Database::getConnection
+    arguments: [default, migrate]
   dept_migrate.migrate_uuid_lookup_manager:
     class: 'Drupal\dept_migrate\MigrateUuidLookupManager'
     arguments: ['@entity_type.manager', '@database']
@@ -10,6 +14,11 @@ services:
   dept_migrate.eventsubscriber.migrate.entity_ref_update:
     class: Drupal\dept_migrate\EventSubscriber\PostMigrationEntityRefUpdateSubscriber
     arguments: ['@entity_field.manager', '@logger.factory', '@database']
+    tags:
+      - { name: event_subscriber }
+  dept_migrate.eventsubscriber.migrate.entity_ref_check:
+    class: Drupal\dept_migrate\EventSubscriber\PreMigrationEntityReferenceCheck
+    arguments: ['@entity_field.manager', '@logger.factory', '@dept_migrate.database_d7']
     tags:
       - { name: event_subscriber }
   dept_migrate.migrate_support:
