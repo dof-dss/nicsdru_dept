@@ -114,7 +114,7 @@ class Node extends FieldableEntity {
     $query->addField('da', 'gid', 'domains');
     $query->innerJoin('node', 'n', static::JOIN);
     $query->innerJoin('domain_access', 'da', 'n.nid = da.nid');
-    // Group the domains the node belongs into a csv column.
+    // Group the domains the node belongs to into a csv column.
     $query->addExpression('GROUP_CONCAT(gid)', 'domains');
 
     // If the content_translation module is enabled, get the source langcode
@@ -203,7 +203,7 @@ class Node extends FieldableEntity {
       'tnid' => $this->t('The translation set id for this node'),
       'timestamp' => $this->t('The timestamp the latest revision of this node was created.'),
       'uuid' => $this->t('The unique identifier for this item of content.'),
-      'domains' => $this->t('list of domains for the content'),
+      'domains' => $this->t('CSV list of domains for the node'),
     ];
     return $fields;
   }
