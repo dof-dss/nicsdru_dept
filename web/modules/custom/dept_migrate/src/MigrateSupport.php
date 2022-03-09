@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\group\Entity\Group;
 use Drupal\group\Entity\GroupContent;
+use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -53,6 +54,23 @@ class MigrateSupport {
     $this->entityTypeManager = $entity_type_manager;
     $this->dbconn = Database::getConnection('default', 'default');
     $this->d7conn = Database::getConnection('default', 'migrate');
+  }
+
+  /**
+   * @param \Drupal\media\MediaInterface $media
+   *   The media entity.
+   */
+  public function addMediaToDefaultGroup(MediaInterface $media) {
+    $relation = GroupContent::loadByEntity($media);
+
+    if (!empty($relation)) {
+      return;
+    }
+
+    // Default group (NIGOV) has group id 1.
+    $group = Group::load(1);
+    // Add entity to group.
+    $group->addContent($media, 'group_media:' . $media->bundle());
   }
 
   /**

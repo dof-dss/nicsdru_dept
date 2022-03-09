@@ -1,0 +1,59 @@
+uuid: a2370256-c702-4129-8e0e-72aefb8dcace
+langcode: en
+status: true
+dependencies: {  }
+id: d7_file_media_document
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: alterFieldInstanceMigration
+cck_plugin_method: null
+migration_tags:
+  - dept_sites
+migration_group: migrate_group_files
+label: 'Migrate D7 files to media document entities'
+source:
+  plugin: file_entity
+  track_changes: true
+  type: document
+  batch_size: 1000
+  constants:
+    bundle: document
+process:
+  bundle: constants/bundle
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: und
+  name:
+    -
+      plugin: get
+      source:
+        - field_file_title
+        - filename
+    -
+      plugin: callback
+      callable: array_filter
+    -
+      plugin: callback
+      callable: current
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: uid
+    -
+      plugin: default_value
+      source: uid
+      default_value: 1
+  status: status
+  created: timestamp
+  changed: timestamp
+  field_media_file/target_id:
+    -
+      plugin: migration_lookup
+      migration: d7_file
+      source: uuid
+destination:
+  plugin: 'entity:media'
+migration_dependencies:
+  required:
+    - d7_file
+  optional: {  }
