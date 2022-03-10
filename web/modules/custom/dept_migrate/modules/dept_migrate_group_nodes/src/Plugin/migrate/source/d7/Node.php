@@ -111,7 +111,11 @@ class Node extends FieldableEntity {
       ]);
     $query->addField('n', 'uid', 'node_uid');
     $query->addField('nr', 'uid', 'revision_uid');
+    $query->addField('da', 'gid', 'domains');
     $query->innerJoin('node', 'n', static::JOIN);
+    $query->innerJoin('domain_access', 'da', 'n.nid = da.nid');
+    // Group the domains the node belongs to into a csv column.
+    $query->addExpression('GROUP_CONCAT(gid)', 'domains');
 
     // If the content_translation module is enabled, get the source langcode
     // to fill the content_translation_source field.
@@ -124,6 +128,8 @@ class Node extends FieldableEntity {
     if (isset($this->configuration['node_type'])) {
       $query->condition('n.type', (array) $this->configuration['node_type'], 'IN');
     }
+
+    $query->groupBy('n.nid');
 
     return $query;
   }
@@ -197,6 +203,7 @@ class Node extends FieldableEntity {
       'tnid' => $this->t('The translation set id for this node'),
       'timestamp' => $this->t('The timestamp the latest revision of this node was created.'),
       'uuid' => $this->t('The unique identifier for this item of content.'),
+      'domains' => $this->t('CSV list of domains for the node'),
     ];
     return $fields;
   }
@@ -207,6 +214,7 @@ class Node extends FieldableEntity {
   public function getIds() {
     $ids['uuid']['type'] = 'string';
     $ids['nid']['type'] = 'integer';
+    $ids['domains']['type'] = 'string';
     return $ids;
   }
 
