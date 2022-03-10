@@ -43,7 +43,8 @@ process:
       search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
       replace: ''
   body/0/format:
-    - plugin: static_map
+    -
+      plugin: static_map
       bypass: true
       source: body/0/format
       map:

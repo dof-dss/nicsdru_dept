@@ -6,14 +6,11 @@ dependencies:
     - core.entity_view_mode.node.search_result
     - field.field.node.article.body
     - field.field.node.article.field_global_topics
-    - field.field.node.article.field_image
     - field.field.node.article.field_site_subtopics
     - field.field.node.article.field_site_topics
     - field.field.node.article.field_summary
-    - image.style.large
     - node.type.article
   module:
-    - image
     - layout_builder
     - text
     - user
@@ -39,15 +36,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: -20
-    region: content
-  field_image:
-    type: image
-    label: hidden
-    settings:
-      image_link: ''
-      image_style: large
-    third_party_settings: {  }
-    weight: -1
     region: content
   links:
     settings: {  }
