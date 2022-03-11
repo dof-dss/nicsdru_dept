@@ -1,17 +1,17 @@
-uuid: 28602612-0fcb-415f-aa10-af5b792a47d4
-langcode: und
+uuid: 82fdb60a-f0fa-4262-9448-43e4be2f22cc
+langcode: en
 status: true
 dependencies:
   module:
-    - datetime
+    - datetime_range
     - node
 id: node.field_consultation_dates
 field_name: field_consultation_dates
 entity_type: node
-type: datetime
+type: daterange
 settings:
   datetime_type: datetime
-module: datetime
+module: datetime_range
 locked: false
 cardinality: 1
 translatable: true

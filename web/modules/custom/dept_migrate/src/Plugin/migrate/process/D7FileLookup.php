@@ -67,11 +67,13 @@ class D7FileLookup extends ProcessPluginBase implements ContainerFactoryPluginIn
       $value = (array) $value;
     }
 
-    $node_metadata = $this->lookupManager->lookupBySourceFileId($value);
+    $file_metadata = $this->lookupManager->lookupBySourceFileId($value);
 
-    if (!empty($node_metadata)) {
-      return reset($node_metadata)['id'];
+    if (!empty($file_metadata)) {
+      $value = reset($file_metadata)['id'];
     }
+
+    return $value ?? [];
   }
 
 }
