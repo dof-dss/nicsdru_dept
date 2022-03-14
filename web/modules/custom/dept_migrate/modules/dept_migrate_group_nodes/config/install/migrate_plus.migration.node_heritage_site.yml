@@ -61,7 +61,10 @@ process:
   field_county: field_county
   field_postcode: field_postcode
   field_sm_number: field_sm_number
-  field_website: field_website
+  field_website:
+    -
+      plugin: field_link
+      source: field_website
   field_phone: field_phone
   field_email:
     -
@@ -70,8 +73,14 @@ process:
       process:
         value: email
   field_grid_reference: field_grid_reference
-  field_historic_map_viewer_link: field_historic_map_viewer_link
-  field_nismr_link: field_nismr_link
+  field_historic_map_viewer_link:
+    -
+      plugin: field_link
+      source: field_historic_map_viewer_link
+  field_nismr_link:
+    -
+      plugin: field_link
+      source: field_nismr_link
   field_open_to_the_public: field_open_to_the_public
   field_photo:
     -
