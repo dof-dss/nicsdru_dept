@@ -5,7 +5,7 @@ dependencies: { }
 migration_group: migrate_group_nodes
 migration_tags:
   - dept_sites
-class: Drupal\node\Plugin\migrate\D7NodeTranslation
+class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 source:
   plugin: d7_dept_node
