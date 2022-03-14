@@ -57,7 +57,6 @@ process:
         plain_text: plain_text
   field_site_subtopics: field_site_subtopics
   field_site_topics: field_site_topics
-  field_map: field_map
   field_original_domain: field_original_domain
 destination:
   plugin: 'entity:node'
@@ -67,5 +66,3 @@ migration_dependencies:
     - users
     - node_subtopic
     - node_topic
-
-
