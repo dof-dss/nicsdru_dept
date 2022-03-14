@@ -1,12 +1,11 @@
-uuid: 8c58cf05-781a-4871-b3cb-1dfdc8db3dbb
+uuid: f19c4d62-9c3b-4b8a-a611-4dc9f9d1ab96
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_attachment
+    - media.type.document
     - node.type.publication
-  module:
-    - file
 id: node.publication.field_attachment
 field_name: field_attachment
 entity_type: node
@@ -14,14 +13,17 @@ bundle: publication
 label: Attachment
 description: 'Choose one or more individual files to attach to this publication.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:file'
-  handler_settings: {  }
-  file_directory: 'publications/[current-domain:machine-name]'
-  file_extensions: 'pdf doc docx xls xlsx xlsm ppt pptx odt ods odp dot csv zip html htm'
-  max_filesize: '30 MB'
-  description_field: false
-field_type: file
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      document: document
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

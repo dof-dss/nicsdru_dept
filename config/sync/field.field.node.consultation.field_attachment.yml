@@ -1,27 +1,29 @@
-uuid: 0a3194a2-f6f6-494f-8b21-fba64e1b4f45
+uuid: 331bd2cf-252b-4322-9f0a-c00a7abc2102
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_attachment
+    - media.type.document
     - node.type.consultation
-  module:
-    - file
 id: node.consultation.field_attachment
 field_name: field_attachment
 entity_type: node
 bundle: consultation
 label: Attachment
-description: 'Choose individual files to attach to this consultation.'
+description: 'Choose individual media items to attach to this consultation.'
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:file'
-  handler_settings: {  }
-  file_directory: 'consultations/[current-domain:machine-name]'
-  file_extensions: 'pdf doc docx xls xlsx ppt pptx odt ods odp dot csv zip'
-  max_filesize: '30 MB'
-  description_field: false
-field_type: file
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      document: document
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
