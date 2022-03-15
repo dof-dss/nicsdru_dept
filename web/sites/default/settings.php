@@ -29,6 +29,8 @@ $settings['config_sync_directory'] = getenv('CONFIG_SYNC_DIRECTORY');
 
 // Temp directory.
 $settings["file_temp_path"] = getenv('FILE_TEMP_PATH') ?? '/tmp';
+// Private files location.
+$settings['file_private_path'] = getenv('FILE_PRIVATE_PATH');
 
 // Set config split environment; environment specific values is set near the end of this file.
 $config['config_split.config_split.local']['status'] = FALSE;
