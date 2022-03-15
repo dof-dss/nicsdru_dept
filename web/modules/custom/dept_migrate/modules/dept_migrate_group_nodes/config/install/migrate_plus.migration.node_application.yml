@@ -66,17 +66,18 @@ process:
   field_site_subtopics: field_site_subtopics
   field_link:
     -
-    plugin: sub_process
-    source: field_link
-    process:
-      uri: value
-      title: title
-      options: attributes
+      plugin: sub_process
+      source: field_link
+      process:
+        uri: value
+        title: title
+        options: attributes
 destination:
   plugin: 'entity:node'
   default_bundle: application
 migration_dependencies:
   required:
     - users
-
-
+    - node_subtopic
+    - node_topic
+    - d7_taxonomy_term_global_topics
