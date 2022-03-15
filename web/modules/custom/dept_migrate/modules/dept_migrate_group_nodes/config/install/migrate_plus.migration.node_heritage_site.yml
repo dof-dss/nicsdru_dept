@@ -63,8 +63,12 @@ process:
   field_sm_number: field_sm_number
   field_website:
     -
-      plugin: field_link
+      plugin: sub_process
       source: field_website
+      process:
+        uri: value
+        title: title
+        options: attributes
   field_phone: field_phone
   field_email:
     -
@@ -75,12 +79,20 @@ process:
   field_grid_reference: field_grid_reference
   field_historic_map_viewer_link:
     -
-      plugin: field_link
+      plugin: sub_process
       source: field_historic_map_viewer_link
+      process:
+        uri: value
+        title: title
+        options: attributes
   field_nismr_link:
     -
-      plugin: field_link
+      plugin: sub_process
       source: field_nismr_link
+      process:
+        uri: value
+        title: title
+        options: attributes
   field_open_to_the_public: field_open_to_the_public
   field_photo:
     -
