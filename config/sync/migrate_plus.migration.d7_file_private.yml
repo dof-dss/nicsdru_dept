@@ -30,6 +30,7 @@ process:
     source:
       - '@source_full_path'
       - uri
+    move: false
   filemime: filemime
   status: status
   created: timestamp

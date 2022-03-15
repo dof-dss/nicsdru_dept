@@ -10,10 +10,11 @@ source:
   scheme: private
   track_changes: true
   constants:
-    # source_base_path must be set by the tool configuring this migration.
-    # It represents the fully qualified path relative to which uris in the files
-    # table are specified, and must end with a /. See source_full_path
-    # configuration in this migration's process pipeline as an example.
+    # source_base_path can't use HTTP to download the file
+    # because it would need an authenticated session to do it.
+    # We therefore use platform CLI tool to sync the files from
+    # the D7 application into the D9 filespace so we can copy them
+    # into the private filesystem directory.
     source_base_path: '/app/imports/files/private/'
 process:
   filename: filename
@@ -29,7 +30,9 @@ process:
     source:
       - '@source_full_path'
       - uri
-#    move: TRUE
+    # We copy files so we don't end up replacing previously migrated
+    # files in the next rsync run.
+    move: FALSE
   filemime: filemime
   status: status
   # Drupal 7 didn't keep track of the file's creation or update time -- all it
