@@ -66,8 +66,12 @@ process:
   field_site_subtopics: field_site_subtopics
   field_link:
     -
-      plugin: field_link
-      source: field_link
+    plugin: sub_process
+    source: field_link
+    process:
+      uri: value
+      title: title
+      options: attributes
 destination:
   plugin: 'entity:node'
   default_bundle: application
