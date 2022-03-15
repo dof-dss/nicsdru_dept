@@ -1,7 +1,7 @@
-id: node_application
-label: 'Application content type nodes'
+id: node_landing_page
+label: 'Landing page nodes'
 status: true
-dependencies: {  }
+dependencies: { }
 migration_group: migrate_group_nodes
 migration_tags:
   - dept_sites
@@ -9,7 +9,7 @@ class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 source:
   plugin: d7_dept_node
-  node_type: application
+  node_type: landing_page
   track_changes: true
 process:
   langcode:
@@ -43,7 +43,8 @@ process:
       search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
       replace: ''
   body/0/format:
-    - plugin: static_map
+    -
+      plugin: static_map
       bypass: true
       source: body/0/format
       map:
@@ -54,30 +55,37 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
+  field_banner_image:
+    -
+      plugin: sub_process
+      source: field_banner_image
+      process:
+        target_id:
+          - plugin: d7_file_lookup
+            source: fid
+  field_banner_image_overlay:
+    -
+      plugin: sub_process
+      source: field_banner_image_overlay
+      process:
+        target_id:
+          - plugin: d7_file_lookup
+            source: fid
+  field_enable_title: field_enable_title
   field_summary: field_summary
-  field_global_topics:
-    -
-      plugin: sub_process
-      source: field_global_topics
-      process:
-        target_id: tid
-  field_additional_info: field_additional_info
-  field_site_topics: field_site_topics
+  field_teaser: field_teaser
   field_site_subtopics: field_site_subtopics
-  field_link:
-    -
-      plugin: sub_process
-      source: field_link
-      process:
-        uri: value
-        title: title
-        options: attributes
+  field_site_topics: field_site_topics
+  field_facebook_user: field_facebook_user
+  field_tweet_count: field_tweet_count
+  field_twitter_user: field_twitter_user
 destination:
   plugin: 'entity:node'
-  default_bundle: application
+  default_bundle: landing_page
 migration_dependencies:
   required:
     - users
+    - d7_file_media_image
     - node_subtopic
     - node_topic
-    - d7_taxonomy_term_global_topics
+

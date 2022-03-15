@@ -1,5 +1,5 @@
-id: node_application
-label: 'Application content type nodes'
+id: node_contact
+label: 'Contact content type nodes'
 status: true
 dependencies: {  }
 migration_group: migrate_group_nodes
@@ -9,7 +9,7 @@ class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 source:
   plugin: d7_dept_node
-  node_type: application
+  node_type: contact
   track_changes: true
 process:
   langcode:
@@ -24,7 +24,7 @@ process:
       source: node_uid
   status: status
   created: created
-  changed: changed
+  changed: timestamp
   promote: promote
   sticky: sticky
   revision_uid:
@@ -43,7 +43,8 @@ process:
       search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
       replace: ''
   body/0/format:
-    - plugin: static_map
+    -
+      plugin: static_map
       bypass: true
       source: body/0/format
       map:
@@ -54,30 +55,14 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  field_summary: field_summary
-  field_global_topics:
-    -
-      plugin: sub_process
-      source: field_global_topics
-      process:
-        target_id: tid
-  field_additional_info: field_additional_info
-  field_site_topics: field_site_topics
   field_site_subtopics: field_site_subtopics
-  field_link:
-    -
-      plugin: sub_process
-      source: field_link
-      process:
-        uri: value
-        title: title
-        options: attributes
+  field_site_topics: field_site_topics
+  field_original_domain: field_original_domain
 destination:
   plugin: 'entity:node'
-  default_bundle: application
+  default_bundle: contact
 migration_dependencies:
   required:
     - users
     - node_subtopic
     - node_topic
-    - d7_taxonomy_term_global_topics
