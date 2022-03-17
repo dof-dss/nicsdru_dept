@@ -10,7 +10,7 @@ dependencies:
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
     - field.field.node.heritage_site.field_historic_map_viewer_link
-    - field.field.node.heritage_site.field_location
+    - field.field.node.heritage_site.field_map
     - field.field.node.heritage_site.field_nismr_link
     - field.field.node.heritage_site.field_open_to_the_public
     - field.field.node.heritage_site.field_phone
@@ -26,7 +26,7 @@ dependencies:
     - chosen_field
     - content_moderation
     - field_group
-    - geolocation_google_maps
+    - google_map_field
     - link
     - path
     - scheduler
@@ -155,40 +155,11 @@ content:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-  field_location:
-    type: geolocation_googlegeocoder
-    weight: 10
+  field_map:
+    type: google_map_field_default
+    weight: 26
     region: content
-    settings:
-      auto_client_location: ''
-      auto_client_location_marker: ''
-      allow_override_map_settings: 0
-      hide_textfield_form: false
-      centre:
-        fit_bounds:
-          enable: true
-      google_map_settings:
-        map_features:
-          marker_infowindow:
-            enabled: true
-          control_locate:
-            enabled: true
-          control_zoom:
-            enabled: true
-          control_maptype:
-            enabled: true
-          control_geocoder:
-            weight: -100
-            enabled: true
-          control_recenter:
-            enabled: true
-        type: ROADMAP
-        zoom: 10
-        minZoom: 0
-        maxZoom: 20
-        height: 400px
-        width: 100%
-        gestureHandling: auto
+    settings: {  }
     third_party_settings: {  }
   field_nismr_link:
     type: link_default
