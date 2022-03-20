@@ -10,7 +10,7 @@ dependencies:
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
     - field.field.node.heritage_site.field_historic_map_viewer_link
-    - field.field.node.heritage_site.field_location
+    - field.field.node.heritage_site.field_map
     - field.field.node.heritage_site.field_nismr_link
     - field.field.node.heritage_site.field_open_to_the_public
     - field.field.node.heritage_site.field_phone
@@ -21,11 +21,10 @@ dependencies:
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
     - field.field.node.heritage_site.field_website
-    - filter.format.plain_text
     - node.type.heritage_site
   module:
     - field_group
-    - geolocation
+    - google_map_field
     - link
     - options
     - text
@@ -129,31 +128,12 @@ content:
     third_party_settings: {  }
     weight: 13
     region: content
-  field_location:
-    type: geolocation_map
+  field_map:
+    type: google_map_field_default
     label: above
-    settings:
-      set_marker: true
-      show_label: false
-      common_map: true
-      show_delta_label: false
-      use_overridden_map_settings: false
-      title: ''
-      info_text:
-        value: ''
-        format: plain_text
-      centre:
-        fit_bounds:
-          enable: true
-          weight: -101
-          settings:
-            reset_zoom: true
-          map_center_id: fit_bounds
-      map_provider_id: google_maps
-      map_provider_settings: {  }
-      data_provider_settings: {  }
+    settings: {  }
     third_party_settings: {  }
-    weight: 12
+    weight: 14
     region: content
   field_nismr_link:
     type: link

@@ -105,6 +105,7 @@ process:
             source: fid
   field_site_subtopics: field_site_subtopics
   field_site_topics: field_site_topics
+  field_map: field_map
 destination:
   plugin: 'entity:node'
   default_bundle: heritage_site
