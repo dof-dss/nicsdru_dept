@@ -55,6 +55,9 @@ $config['geolocation_google_maps.settings']['google_map_api_server_key'] = geten
 // Geocoder module API key.
 $config['geocoder.settings']['plugins_options']['googlemaps']['apikey'] = getenv('GOOGLE_MAP_API_SERVER_KEY');
 
+// Google Map Field config settings.
+$config['google_map_field.settings']['google_map_field_apikey'] = getenv('GOOGLE_MAP_API_KEY');
+
 // Environment indicator defaults.
 $env_colour = !empty(getenv('SIMPLEI_ENV_COLOR')) ? getenv('SIMPLEI_ENV_COLOR') : '#000000';;
 $env_name = !empty(getenv('SIMPLEI_ENV_NAME')) ? getenv('SIMPLEI_ENV_NAME') : getenv('PLATFORM_BRANCH');
