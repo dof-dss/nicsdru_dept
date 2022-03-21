@@ -1,16 +1,16 @@
-uuid: 27f6671d-70af-4e05-b19e-3b6d85cedd77
+uuid: 55d70342-e7ea-444e-8b79-be628871fe7f
 langcode: en
 status: true
 dependencies:
   module:
-    - geolocation
+    - google_map_field
     - node
-id: node.field_location
-field_name: field_location
+id: node.field_map
+field_name: field_map
 entity_type: node
-type: geolocation
+type: google_map_field
 settings: {  }
-module: geolocation
+module: google_map_field
 locked: false
 cardinality: 1
 translatable: true
