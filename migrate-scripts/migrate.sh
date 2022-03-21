@@ -38,7 +38,7 @@ then
   $DRUSH migrate:import d7_file --force
   $DRUSH migrate:import d7_file_private --force
 
-  for type in image video
+  for type in image video document
   do
     echo "Migrating D7 ${type} to corresponding media entities"
     $DRUSH migrate:import d7_file_media_$type --force
