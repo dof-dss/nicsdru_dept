@@ -17,7 +17,15 @@ source:
     # into the private filesystem directory.
     source_base_path: '/app/imports/files/private/'
 process:
-  filename: filename
+  filename:
+    - plugin: get
+      source:
+        - field_file_title
+        - filename
+    - plugin: callback
+      callable: array_filter
+    - plugin: callback
+      callable: current
   source_full_path:
     -
       plugin: concat
@@ -35,8 +43,6 @@ process:
     move: FALSE
   filemime: filemime
   status: status
-  # Drupal 7 didn't keep track of the file's creation or update time -- all it
-  # had was the vague "timestamp" column. So we'll use it for both.
   created: timestamp
   changed: timestamp
   uid:
