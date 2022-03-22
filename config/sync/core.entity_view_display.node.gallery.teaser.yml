@@ -8,6 +8,9 @@ dependencies:
     - field.field.node.gallery.field_gallery_images
     - field.field.node.gallery.field_global_topics
     - field.field.node.gallery.field_original_domain
+    - field.field.node.gallery.field_site_subtopics
+    - field.field.node.gallery.field_site_topics
+    - field.field.node.gallery.field_summary
     - node.type.gallery
   module:
     - text
@@ -34,5 +37,8 @@ hidden:
   field_gallery_images: true
   field_global_topics: true
   field_original_domain: true
+  field_site_subtopics: true
+  field_site_topics: true
+  field_summary: true
   langcode: true
   search_api_excerpt: true
