@@ -32,7 +32,7 @@ class ToolbarSitesSettingsForm extends ConfigFormBase {
 
     $form['toolbar_sites'] = [
       '#type' => 'fieldset',
-      '#title' => $this->t('Toolbar: Sites'),
+      '#title' => $this->t('URL settings'),
     ];
 
     $form['toolbar_sites']['lando_hostname'] = [
