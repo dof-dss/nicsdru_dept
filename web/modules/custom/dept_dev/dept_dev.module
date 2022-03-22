@@ -19,8 +19,8 @@ function dept_dev_toolbar() {
   $items = [];
 
   $domains = \Drupal::service('entity_type.manager')->getStorage('domain')->loadMultiple();
-  $lando_hostnames = \Drupal::config('dept_dev.settings')->get('toolbar_sites_lando_hostname');
-  $lando_protocol = \Drupal::config('dept_dev.settings')->get('toolbar_sites_lando_protocol');
+  $lando_hostnames = \Drupal::config('departmental_devtools.settings.toolbar_sites')->get('lando_hostname');
+  $lando_protocol = \Drupal::config('departmental_devtools.settings.toolbar_sites')->get('lando_protocol');
   $links = [];
 
   foreach ($domains as $domain) {
@@ -67,7 +67,7 @@ function dept_dev_toolbar() {
       'configuration' => [
         '#type' => 'link',
         '#title' => 'Configure',
-        '#url' => Url::fromRoute('dept_dev.settings'),
+        '#url' => Url::fromRoute('departmental_devtools.settings.toolbar.sites'),
         // Just borrowing 'Shortcuts' class to move this link to the right.
         '#attributes' => ['class' => ['edit-shortcuts']],
       ],
