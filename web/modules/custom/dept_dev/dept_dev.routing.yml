@@ -5,3 +5,10 @@ departmental_devtools.settings.toolbar.sites:
     _form: 'Drupal\dept_dev\Form\ToolbarSitesSettingsForm'
   requirements:
     _permission: 'administer content'
+departmental_devtools.settings:
+  path: '/admin/config/development/departmental'
+  defaults:
+    _form: 'Drupal\dept_dev\Form\SettingsForm'
+    _title: 'Settings'
+  requirements:
+    _permission: 'administer content'
