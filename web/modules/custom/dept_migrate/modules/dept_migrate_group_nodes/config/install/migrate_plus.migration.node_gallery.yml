@@ -60,7 +60,7 @@ process:
   field_gallery_images:
     -
       plugin: sub_process
-      source: field_photo
+      source: field_gallery_images
       process:
         target_id:
           -
