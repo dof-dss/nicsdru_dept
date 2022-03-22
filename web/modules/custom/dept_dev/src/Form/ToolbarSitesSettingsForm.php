@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_dev\Form;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -65,6 +66,7 @@ class ToolbarSitesSettingsForm extends ConfigFormBase {
     $config->set('lando_hostname', $form_state->getValue('lando_hostname'));
     $config->set('lando_protocol', $form_state->getValue('lando_protocol'));
     $config->save();
+    Cache::invalidateTags(['departmental_devtools_tools_sites']);
     parent::submitForm($form, $form_state);
   }
 

@@ -72,6 +72,9 @@ function dept_dev_toolbar() {
         '#attributes' => ['class' => ['edit-shortcuts']],
       ],
     ],
+    '#cache' => [
+      'tags' => ['departmental_devtools_tools_sites'],
+    ],
     '#weight' => 100,
   ];
 
