@@ -142,6 +142,7 @@
         "drupal/easy_install": "^10.5",
         "drupal/fpa": "^2.0@beta",
         "drupal/masquerade": "^2.0@beta",
+        "drupal/migrate_devel": "2.x",
         "drupal/stage_file_proxy": "^1.1",
         "kint-php/kint": "^3.3",
         "mglaman/drupal-check": "^1.1",
@@ -246,6 +247,7 @@
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://raw.githubusercontent.com/politsin/snipets/master/patch/kint.patch"
             },
             "drupal/migrate_tools": {
+                "Swap idlist delimiter to pipe instead of comma to prevent group id clash in migrate:import commands": "https://gist.githubusercontent.com/johangant/10cb5aa514ea4e9e23c27ea137d1dda9/raw/9f7f2524cd5b42e349339cb125d59c08e0c037e8/migrate_tools_delimiter.patch",
                 "Provide a drush wrapper to destroy/delete migration tables": "https://www.drupal.org/files/issues/2021-08-23/migrate_tools-drush-command-to-remove-tables-5.x-2997576-16.patch"
             },
             "drupal/migrate_plus": {

@@ -1,4 +1,4 @@
-uuid: a2370256-c702-4129-8e0e-72aefb8dcace
+uuid: 3cbfe24b-0e71-467b-ac02-b33dcb152c15
 langcode: en
 status: true
 dependencies: {  }
@@ -48,9 +48,8 @@ process:
   changed: timestamp
   field_media_file/target_id:
     -
-      plugin: migration_lookup
-      migration: d7_file
-      source: uuid
+      plugin: d7_file_lookup
+      source: fid
 destination:
   plugin: 'entity:media'
 migration_dependencies:
