@@ -1,4 +1,4 @@
-uuid: c750b30f-32ed-4637-ad8d-0f56f8238172
+uuid: 70a8eb00-7562-445e-b765-ae2d348ec689
 langcode: en
 status: true
 dependencies: {  }
@@ -18,7 +18,18 @@ source:
   constants:
     source_base_path: 'https://www.northernireland.gov.uk'
 process:
-  filename: filename
+  filename:
+    -
+      plugin: get
+      source:
+        - field_file_title
+        - filename
+    -
+      plugin: callback
+      callable: array_filter
+    -
+      plugin: callback
+      callable: current
   source_full_path:
     -
       plugin: concat
