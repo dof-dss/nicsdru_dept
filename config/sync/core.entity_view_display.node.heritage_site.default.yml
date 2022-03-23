@@ -126,14 +126,14 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 13
+    weight: 9
     region: content
   field_map:
     type: google_map_field_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 14
+    weight: 10
     region: content
   field_nismr_link:
     type: link
@@ -163,10 +163,11 @@ content:
     weight: 7
     region: content
   field_photo:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: hidden
     settings:
-      link: true
+      view_mode: default
+      link: false
     third_party_settings: {  }
     weight: 0
     region: content

@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
-    - field.storage.node.field_photo
     - field.storage.node.field_summary
     - field.storage.node.field_video
     - search_api.server.default
@@ -83,14 +82,6 @@ field_settings:
     dependencies:
       module:
         - node
-  field_photo:
-    label: Photo
-    datasource_id: 'entity:node'
-    property_path: field_photo
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_photo
   field_summary:
     label: 'Introductory paragraph'
     datasource_id: 'entity:node'

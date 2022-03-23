@@ -1,9 +1,10 @@
-uuid: a2ba22b6-4a0d-4712-8af6-4b55c4ec6215
+uuid: a6ac36ec-edc3-4709-8747-860a657c5480
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_photo
+    - media.type.image
     - node.type.heritage_site
 id: node.heritage_site.field_photo
 field_name: field_photo
@@ -17,5 +18,12 @@ default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:media'
-  handler_settings: {  }
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
 field_type: entity_reference

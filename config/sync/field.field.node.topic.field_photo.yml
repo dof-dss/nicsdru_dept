@@ -1,9 +1,10 @@
-uuid: 17b2dde2-6900-4be3-aff0-89bc0e0ab18d
+uuid: de5d0d2d-98c1-404d-9c9d-0e082ab9f610
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_photo
+    - media.type.image
     - node.type.topic
 id: node.topic.field_photo
 field_name: field_photo
@@ -12,10 +13,17 @@ bundle: topic
 label: Photo
 description: 'If appropriate, you can insert a photo or logo here to be associated to this topic.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:media'
-  handler_settings: {  }
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
 field_type: entity_reference

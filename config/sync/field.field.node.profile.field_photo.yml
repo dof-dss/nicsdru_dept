@@ -1,21 +1,29 @@
-uuid: 7dddbd59-9b2c-4e07-9a9a-883aeafd6b16
+uuid: 18748ca1-2a8b-4ae2-abb8-bd0757e92800
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_photo
+    - media.type.image
     - node.type.profile
 id: node.profile.field_photo
 field_name: field_photo
 entity_type: node
 bundle: profile
 label: Photo
-description: 'Please choose an image  to be displayed with this profile. '
+description: 'Please choose an image to be displayed with this profile. '
 required: true
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:media'
-  handler_settings: {  }
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
 field_type: entity_reference
