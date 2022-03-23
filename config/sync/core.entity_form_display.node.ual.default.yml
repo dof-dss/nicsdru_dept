@@ -17,6 +17,7 @@ dependencies:
   module:
     - content_moderation
     - datetime
+    - media_library
     - path
     - scheduler
     - scheduler_content_moderation_integration
@@ -79,14 +80,11 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_photo:
-    type: entity_reference_autocomplete
+    type: media_library_widget
     weight: 3
     region: content
     settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      media_types: {  }
     third_party_settings: {  }
   field_prison:
     type: options_select
