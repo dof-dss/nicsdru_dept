@@ -17,43 +17,20 @@ dependencies:
     - node.type.news
   module:
     - datetime
-    - text
     - user
 id: node.news.default
 targetEntityType: node
 bundle: news
 mode: default
 content:
-  body:
-    type: text_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 101
-    region: content
-  field_global_topics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 109
-    region: content
-  field_notes_to_editors:
-    type: text_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 107
-    region: content
   field_photo:
     type: entity_reference_entity_view
     label: above
     settings:
       view_mode: default
-      link: false
+      link: true
     third_party_settings: {  }
-    weight: 105
+    weight: 1
     region: content
   field_published_date:
     type: datetime_default
@@ -62,53 +39,24 @@ content:
       timezone_override: ''
       format_type: medium
     third_party_settings: {  }
-    weight: 102
-    region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 111
-    region: content
-  field_site_topics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 110
-    region: content
-  field_summary:
-    type: text_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 104
+    weight: 0
     region: content
   field_teaser:
     type: basic_string
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 103
-    region: content
-  field_video:
-    type: entity_reference_entity_view
-    label: above
-    settings:
-      view_mode: default
-      link: false
-    third_party_settings: {  }
-    weight: 106
-    region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
+    weight: 2
     region: content
 hidden:
+  body: true
+  field_global_topics: true
   field_news_type: true
+  field_notes_to_editors: true
+  field_site_subtopics: true
+  field_site_topics: true
+  field_summary: true
+  field_video: true
   langcode: true
+  links: true
   search_api_excerpt: true

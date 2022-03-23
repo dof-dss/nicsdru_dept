@@ -1,0 +1,18 @@
+uuid: 9761aa2e-fc39-4e05-9699-537a511e45ad
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.contact
+id: node.contact.title
+field_name: title
+entity_type: node
+bundle: contact
+label: 'Point of contact'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

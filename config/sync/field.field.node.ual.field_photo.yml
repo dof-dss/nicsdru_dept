@@ -1,9 +1,10 @@
-uuid: f737aea9-8f0e-46e9-81b9-e0a3de00a9fb
+uuid: 26ea4827-2283-4dc4-bb83-f9a849255e10
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_photo
+    - media.type.image
     - node.type.ual
 id: node.ual.field_photo
 field_name: field_photo
@@ -12,10 +13,17 @@ bundle: ual
 label: Photo
 description: 'Please upload or choose a photo of this person.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:media'
-  handler_settings: {  }
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
 field_type: entity_reference
