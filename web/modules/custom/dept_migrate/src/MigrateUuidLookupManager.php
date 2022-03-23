@@ -223,11 +223,82 @@ class MigrateUuidLookupManager {
   }
 
   /**
-   * @param array $fids
-   *   One or more source file ids.
+   * @param array $uuids
+   *   One or more source file uuids.
    *
    * @return array
-   *   Associative array of file metadata, keyed by source file id
+   *   Associative array of file metadata, keyed by source file id.
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function lookupBySourceFileUuid(array $uuids) {
+    if (empty($uuids)) {
+      return [];
+    }
+
+    $map = [];
+
+    $d7results = $this->d7conn->query("SELECT * FROM {file_managed} WHERE uuid IN (:uuids[])", [':uuids[]' => $uuids]);
+    foreach ($d7results as $row) {
+      $map[$row->fid] = [
+        'd7uuid' => $row->uuid,
+        'd7type' => $row->type,
+        'd7filename' => $row->filename,
+      ];
+    }
+
+    // Match up to D9 files using uuid as key from migrate table.
+    foreach ($map as $d7fid => $file) {
+      $table = 'migrate_map_d7_file';
+      $d9_entity = 'file';
+
+      // Switch table if there's a specified type for this file.
+      switch ($file['d7type']) {
+        case 'image':
+          $table .= '_media_image';
+          $d9_entity = 'media';
+          break;
+
+        case 'video':
+        case 'remote_video':
+          $table .= '_media_video';
+          $d9_entity = 'media';
+          break;
+
+      }
+
+      if ($this->dbconn->schema()->tableExists($table) === FALSE) {
+        // Skip the rest if this table doesn't exist.
+        continue;
+      }
+
+      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
+
+      foreach ($migrate_map as $row) {
+        if (empty($row->destid1)) {
+          continue;
+        }
+
+        $file = $this->entityTypeManager->getStorage($d9_entity)->load($row->destid1);
+
+        if ($file instanceof EntityInterface) {
+          $map[$d7fid]['id'] = $file->id();
+          $map[$d7fid]['uuid'] = $file->uuid();
+          $map[$d7fid]['filename'] = $file->label();
+          $map[$d7fid]['type'] = $file->bundle();
+        }
+      }
+    }
+
+    return $map;
+  }
+
+  /**
+   * @param array $fids
+   *   One or more source file file ids.
+   *
+   * @return array
+   *   Associative array of file metadata, keyed by source file id.
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */

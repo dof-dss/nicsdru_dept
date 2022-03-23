@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.publication.body
-    - field.field.node.publication.field_attachment
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
@@ -39,7 +38,6 @@ content:
     weight: 100
     region: content
 hidden:
-  field_attachment: true
   field_external_publication: true
   field_global_topics: true
   field_last_updated: true
