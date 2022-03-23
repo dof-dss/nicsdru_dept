@@ -82,7 +82,7 @@ function dept_dev_toolbar() {
 }
 
 
-function dept_dev_preprocess_page() {
+function dept_dev_preprocess_page($variables) {
   $node_source_link = \Drupal::config('departmental_devtools.settings')->get('node_source_link');
 
   if ($node_source_link) {
@@ -101,8 +101,12 @@ function dept_dev_preprocess_page() {
       $query->addField('mt', 'sourceid3', 'domains');
 
       $result = $query->execute();
+      $node_migration_data = $result->fetch();
 
-      ksm($result->fetch());
+      $dept_manager = \Drupal::service('department.manager');
+      // TODO: Iterate all domains and generate links.
+      $dept = $dept_manager->getDepartment('group_' . $node_migration_data->domains);
+      $node_link = $dept->url() . 'node/' . $node_migration_data->d7nid;
     }
   }
 }
