@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.publication.body
-    - field.field.node.publication.field_attachment
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
@@ -46,16 +45,6 @@ content:
     weight: 14
     region: content
     settings: {  }
-    third_party_settings: {  }
-  field_attachment:
-    type: entity_reference_autocomplete
-    weight: 26
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   field_external_publication:
     type: link_default
