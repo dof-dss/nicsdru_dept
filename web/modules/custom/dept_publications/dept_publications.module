@@ -43,6 +43,10 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
       ],
     ];
 
+    if (!empty($node->field_publication_secure_files->getValue())) {
+      $form['publication_attachment_type']['#default_value'] = 1;
+    }
+
     $form['#validate'][] = 'validate_publication';
   }
 }
