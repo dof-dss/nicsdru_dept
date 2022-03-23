@@ -80,3 +80,16 @@ function dept_dev_toolbar() {
 
   return $items;
 }
+
+
+function dept_dev_preprocess_page() {
+
+  $node_source_link = \Drupal::config('departmental_devtools.settings')->get('node_source_link');
+
+  if ($node_source_link) {
+    $node = \Drupal::routeMatch()->getParameter('node');
+    if ($node instanceof \Drupal\node\NodeInterface) {
+      // Lookup D7 node id and group
+    }
+  }
+}
