@@ -9,6 +9,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\dept_core\DepartmentManager;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -107,7 +108,7 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
     if ($node_source_link) {
       /** @var \Drupal\node\NodeInterface $node */
       $node = $this->routeMatch->getParameter('node');
-      if ($node instanceof \Drupal\node\NodeInterface) {
+      if ($node instanceof NodeInterface) {
         $mapping_table = 'migrate_map_node_' . $node->bundle();
         // Check mapping table exists for the current bundle.
         if ($this->dbConn->schema()->tableExists($mapping_table)) {
