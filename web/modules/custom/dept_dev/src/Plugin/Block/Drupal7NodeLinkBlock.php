@@ -14,6 +14,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a drupal 7 node link block.
  *
+ * Displays a list of links to each original Drupal 7 site that the
+ * current node is associated with.
+ *
  * @Block(
  *   id = "dept_dev_drupal_7_node_link",
  *   admin_label = @Translation("Drupal 7 node link"),
@@ -108,7 +111,8 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
         $mapping_table = 'migrate_map_node_' . $node->bundle();
         // Check mapping table exists for the current bundle.
         if ($this->dbConn->schema()->tableExists($mapping_table)) {
-          // Lookup Destination node using current nid and extract D7 nid and group
+          // Lookup Destination node using current nid and extract D7
+          // nid and group.
           $query = $this->dbConn->select($mapping_table, 'mt')
             ->condition('destid1', $node->id(), '=');
           $query->addField('mt', 'sourceid2', 'd7nid');
@@ -118,7 +122,7 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
           $node_migration_data = $result->fetch();
 
           // Iterate all domains and generate links.
-          $domains = explode('-',$node_migration_data->domains);
+          $domains = explode('-', $node_migration_data->domains);
 
           foreach ($domains as $domain) {
             // Skip 0 based domain id as this denotes 'all sites'.
@@ -129,9 +133,9 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
             $node_link = $dept->url() . 'node/' . $node_migration_data->d7nid;
 
             $links[] = [
-              '#title' => 'D7 link: ' . $dept->name() . ' : ' . $node->label(),
+              '#title' => $dept->name() . ' : ' . $node->label(),
               '#type' => 'link',
-              '#url' => Url::fromUri($node_link)
+              '#url' => Url::fromUri($node_link),
             ];
           }
 
@@ -140,7 +144,6 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
             '#list_type' => 'ul',
             '#items' => $links,
           ];
-
         }
       }
     }
