@@ -115,7 +115,7 @@ class Node extends FieldableEntity {
     $query->innerJoin('node', 'n', static::JOIN);
     $query->innerJoin('domain_access', 'da', 'n.nid = da.nid');
     // Group the domains the node belongs to into a csv column.
-    $query->addExpression('GROUP_CONCAT(gid)', 'domains');
+    $query->addExpression("GROUP_CONCAT(gid SEPARATOR '-')", 'domains');
 
     // If the content_translation module is enabled, get the source langcode
     // to fill the content_translation_source field.
