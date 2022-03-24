@@ -80,35 +80,3 @@ function dept_dev_toolbar() {
 
   return $items;
 }
-
-
-
-function dept_dev_page_attachments_alter(&$attachments) {
-  $node_source_link = \Drupal::config('departmental_devtools.settings')->get('node_source_link');
-
-  if ($node_source_link) {
-    $dbcon = \Drupal::database();
-
-    /** @var \Drupal\node\NodeInterface $node */
-    $node = \Drupal::routeMatch()->getParameter('node');
-    if ($node instanceof \Drupal\node\NodeInterface) {
-      $mapping_table = 'migrate_map_node_' . $node->bundle();
-      // Check mapping table exists for the current bundle.
-      if ($dbcon->schema()->tableExists($mapping_table)) {
-        // Lookup Destination node using current nid and extract D7 nid and group
-        $query = $dbcon->select($mapping_table, 'mt')
-          ->condition('destid1', $node->id(), '=');
-        $query->addField('mt', 'sourceid2', 'd7nid');
-        $query->addField('mt', 'sourceid3', 'domains');
-
-        $result = $query->execute();
-        $node_migration_data = $result->fetch();
-
-        $dept_manager = \Drupal::service('department.manager');
-        // TODO: Iterate all domains and generate links.
-        $dept = $dept_manager->getDepartment('group_' . $node_migration_data->domains);
-        $node_link = $dept->url() . 'node/' . $node_migration_data->d7nid;
-      }
-    }
-  }
-}
