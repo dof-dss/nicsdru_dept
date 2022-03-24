@@ -7,8 +7,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
 use Drupal\dept_core\DepartmentManager;
-use Drupal\example\ExampleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,7 +25,7 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
   /**
    * The department.manager service.
    *
-   * @var \Drupal\example\ExampleInterface
+   * @var \Drupal\dept_core\DepartmentManager
    */
   protected $departmentManager;
 
@@ -117,15 +117,30 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
           $result = $query->execute();
           $node_migration_data = $result->fetch();
 
-          // TODO: Iterate all domains and generate links.
-          $dept = $this->departmentManager->getDepartment('group_' . $node_migration_data->domains);
-          $node_link = $dept->url() . 'node/' . $node_migration_data->d7nid;
+          // Iterate all domains and generate links.
+          $domains = explode('-',$node_migration_data->domains);
 
-          $build['d7_link'] = [
-            '#title' => 'D7 link: ' . $dept->name() . ' : ' . $node->label(),
-            '#type' => 'link',
-            '#url' => \Drupal\Core\Url::fromUri($node_link)
+          foreach ($domains as $domain) {
+            // Skip 0 based domain id as this denotes 'all sites'.
+            if ($domain == 0) {
+              continue;
+            }
+            $dept = $this->departmentManager->getDepartment('group_' . $domain);
+            $node_link = $dept->url() . 'node/' . $node_migration_data->d7nid;
+
+            $links[] = [
+              '#title' => 'D7 link: ' . $dept->name() . ' : ' . $node->label(),
+              '#type' => 'link',
+              '#url' => Url::fromUri($node_link)
+            ];
+          }
+
+          $build['d7_links'] = [
+            '#theme' => 'item_list',
+            '#list_type' => 'ul',
+            '#items' => $links,
           ];
+
         }
       }
     }
