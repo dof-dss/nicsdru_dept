@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.field.node.infogram.body
     - field.field.node.infogram.field_chart_taxonomy
-    - field.field.node.infogram.field_chart_type
     - field.field.node.infogram.field_indicators
     - field.field.node.infogram.field_infogram
     - node.type.infogram
@@ -41,7 +40,6 @@ content:
     weight: 0
     region: content
 hidden:
-  field_chart_type: true
   field_indicators: true
   langcode: true
   links: true
