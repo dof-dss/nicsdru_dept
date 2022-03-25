@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.node.infogram.body
     - field.field.node.infogram.field_chart_taxonomy
-    - field.field.node.infogram.field_chart_type
     - field.field.node.infogram.field_indicators
     - field.field.node.infogram.field_infogram
     - node.type.infogram
@@ -33,7 +32,6 @@ content:
     region: content
 hidden:
   field_chart_taxonomy: true
-  field_chart_type: true
   field_indicators: true
   field_infogram: true
   langcode: true
