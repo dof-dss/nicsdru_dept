@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.field.node.article.body
     - field.field.node.article.field_global_topics
-    - field.field.node.article.field_image
     - field.field.node.article.field_site_subtopics
     - field.field.node.article.field_site_topics
     - field.field.node.article.field_summary
@@ -48,14 +47,6 @@ content:
     weight: 1
     region: content
     settings: {  }
-    third_party_settings: {  }
-  field_image:
-    type: image_image
-    weight: 7
-    region: content
-    settings:
-      progress_indicator: throbber
-      preview_image_style: thumbnail
     third_party_settings: {  }
   field_site_subtopics:
     type: chosen_select

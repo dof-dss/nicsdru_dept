@@ -19,8 +19,9 @@ dependencies:
     - chosen_field
     - content_moderation
     - datetime
-    - file
+    - datetime_range
     - link
+    - media_library
     - path
     - scheduler
     - scheduler_content_moderation_integration
@@ -47,14 +48,14 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_attachment:
-    type: file_generic
-    weight: 8
+    type: media_library_widget
+    weight: 26
     region: content
     settings:
-      progress_indicator: throbber
+      media_types: {  }
     third_party_settings: {  }
   field_consultation_dates:
-    type: datetime_default
+    type: daterange_default
     weight: 5
     region: content
     settings: {  }

@@ -8,7 +8,7 @@ migration_tags:
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 source:
-  plugin: d7_node_uuid
+  plugin: d7_dept_node
   node_type: application
   track_changes: true
 process:
@@ -66,13 +66,18 @@ process:
   field_site_subtopics: field_site_subtopics
   field_link:
     -
-      plugin: field_link
+      plugin: sub_process
       source: field_link
+      process:
+        uri: value
+        title: title
+        options: attributes
 destination:
   plugin: 'entity:node'
   default_bundle: application
 migration_dependencies:
   required:
     - users
-
-
+    - node_subtopic
+    - node_topic
+    - d7_taxonomy_term_global_topics

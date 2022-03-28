@@ -17,7 +17,15 @@ source:
   constants:
     source_base_path: 'https://www.northernireland.gov.uk'
 process:
-  filename: filename
+  filename:
+    - plugin: get
+      source:
+        - field_file_title
+        - filename
+    - plugin: callback
+      callable: array_filter
+    - plugin: callback
+      callable: current
   source_full_path:
     -
       plugin: concat

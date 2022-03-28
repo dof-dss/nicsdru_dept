@@ -2,7 +2,7 @@
 
 namespace Drupal\dept_migrate\Plugin\migrate\source\d7;
 
-use Drupal\dept_migrate_group_nodes\Plugin\migrate\source\d7\NodeUuid;
+use Drupal\dept_migrate_group_nodes\Plugin\migrate\source\d7\Node;
 use Drupal\migrate\Row;
 
 /**
@@ -13,7 +13,7 @@ use Drupal\migrate\Row;
  *   source_module = "node"
  * )
  */
-class NodeDomain extends NodeUuid {
+class NodeDomain extends Node {
 
   /**
    * {@inheritdoc}

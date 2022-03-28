@@ -1,0 +1,12 @@
+uuid: 99fb14dc-fe44-413d-93c4-c51213b4f69b
+langcode: en
+status: true
+dependencies: {  }
+id: migrate_group_url_aliases
+label: 'Departmental sites - URL aliases'
+description: 'Migrate URL aliases'
+source_type: 'Drupal 7'
+module: null
+shared_configuration:
+  source:
+    key: drupal7db

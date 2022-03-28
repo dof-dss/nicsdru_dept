@@ -109,8 +109,11 @@ content into your Drupal 9 database.
 
 Listing key migrations: `lando drush migrate:status --tag=dept_sites`
 
-> NB: migration order is important. A script will be written to be either run as-is, or executed step-by-step as needed.
+NB: migration order is important. The `migrate-scripts/migrate.sh` script outlines the correct sequence of migrations to run and is executed via platform.sh cron every night for a progressive top-up of changes.
 
-Migrations will be progressive and incremental over time as sites move across from Drupal 7 to this codebase. ID clashes are expected as content is added at both sides. Migrate API will track source IDs to destination IDs by itself.
+> Do NOT use the `--sync` flag on migrate import tasks. This causes a full migration rollback and re-import which can cause confusion for site users, irregularities with other content and can be tricky and time consuming to correct.
 
-**This does *not* extend to revisions which is why revisions are not included in the scope of migrations.**
+### Points of interest
+
+* Revisions: these are deemed too complex to track/import on a rolling basis. Access to older content will be available on the D7 application, running on platform.sh on an internal hostname.
+* Negative numbers of unprocessed source items: This sometimes occurs when source items (in D7) are removed. The removals are not replicated on the destination (D9) resulting in a natural imbalance to the way unprocessed items are calculated by Migrate API. This is acknowledged/documented here: https://www.drupal.org/project/migrate_tools/issues/2843383. It is possible to re-sync the counts with the `--sync` flag but this isn't recommended, as the process involes a full rollback (removal of prior migrated D9 content) followed by a full import. This can be very time consuming and result in a confusing experience for any site users. It could also lead to inconsistencies in data if executed in an incorrect sequence. **Where possible, irregularities should be investigated on a case-by-case basis and a bulk update or sync operation carried out where there is a clear trend or pattern of inconsistencies to correct.**

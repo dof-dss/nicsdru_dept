@@ -1,0 +1,64 @@
+id: node_page
+label: 'Page nodes'
+status: true
+dependencies: { }
+migration_group: migrate_group_nodes
+migration_tags:
+  - dept_sites
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: alterFieldInstanceMigration
+source:
+  plugin: d7_dept_node
+  node_type: page
+  track_changes: true
+process:
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: und
+  title: title
+  uid:
+    -
+      plugin: d7_user_lookup
+      source: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  revision_uid:
+    -
+      plugin: d7_user_lookup
+      source: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  body:
+    -
+      plugin: get
+      source: body
+    -
+      plugin: str_replace
+      regex: true
+      search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
+      replace: ''
+  body/0/format:
+    -
+      plugin: static_map
+      bypass: true
+      source: body/0/format
+      map:
+        filtered_html: basic_html
+        filtered_html_with_no_images: basic_html
+        filtered_html_with_templates: basic_html
+        filtered_html_with_tokens: basic_html
+        html_for_admins: full_html
+        paste_format: plain_text
+        plain_text: plain_text
+  field_original_domain: field_original_domain
+destination:
+  plugin: 'entity:node'
+  default_bundle: page
+migration_dependencies:
+  required:
+    - users

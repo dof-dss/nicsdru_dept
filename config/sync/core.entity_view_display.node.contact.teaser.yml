@@ -5,7 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.contact.body
-    - field.field.node.contact.field_location
+    - field.field.node.contact.field_map
     - field.field.node.contact.field_site_subtopics
     - field.field.node.contact.field_site_topics
     - node.type.contact
@@ -31,7 +31,7 @@ content:
     weight: 100
     region: content
 hidden:
-  field_location: true
+  field_map: true
   field_site_subtopics: true
   field_site_topics: true
   langcode: true

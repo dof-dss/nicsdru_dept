@@ -8,7 +8,7 @@ migration_tags:
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 source:
-  plugin: d7_node_uuid
+  plugin: d7_dept_node
   node_type: news
   track_changes: true
 process:
@@ -105,3 +105,4 @@ migration_dependencies:
     - users
     - d7_file_media_image
     - d7_file_media_video
+    - d7_taxonomy_term_global_topics

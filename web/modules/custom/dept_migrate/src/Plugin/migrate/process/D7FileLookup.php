@@ -2,8 +2,10 @@
 
 namespace Drupal\dept_migrate\Plugin\migrate\process;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
+use Drupal\media\MediaInterface;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\ProcessPluginBase;
 use Drupal\migrate\Row;
@@ -20,9 +22,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @code
  * process:
  *   field_name:
- *      -
- *        plugin: d7_file_lookup
+ *      - plugin: d7_file_lookup
  *        source: fid
+ *        entity_type: file OR media
  * @endcode
  *
  * @see \Drupal\migrate\Plugin\MigrateProcessInterface
@@ -39,11 +41,17 @@ class D7FileLookup extends ProcessPluginBase implements ContainerFactoryPluginIn
   protected $lookupManager;
 
   /**
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrateUuidLookupManager $lookup_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrateUuidLookupManager $lookup_manager, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->lookupManager = $lookup_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -54,7 +62,8 @@ class D7FileLookup extends ProcessPluginBase implements ContainerFactoryPluginIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('dept_migrate.migrate_uuid_lookup_manager')
+      $container->get('dept_migrate.migrate_uuid_lookup_manager'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -67,11 +76,27 @@ class D7FileLookup extends ProcessPluginBase implements ContainerFactoryPluginIn
       $value = (array) $value;
     }
 
-    $node_metadata = $this->lookupManager->lookupBySourceFileId($value);
+    $entity_type = $this->configuration['entity_type'] ?? 'file';
+    $file_metadata = $this->lookupManager->lookupBySourceFileId($value);
 
-    if (!empty($node_metadata)) {
-      return reset($node_metadata)['id'];
+    if (!empty($file_metadata)) {
+      $value = reset($file_metadata)['id'];
+
+      if ($entity_type === 'media') {
+        // Lookup the correct media entity id, based on the file entity id.
+        $result = $this->entityTypeManager->getStorage('media')->loadByProperties([
+          'field_media_file' => $value,
+        ]);
+
+        $media = reset($result);
+
+        if ($media instanceof MediaInterface) {
+          $value = $media->id();
+        }
+      }
     }
+
+    return $value ?? [];
   }
 
 }

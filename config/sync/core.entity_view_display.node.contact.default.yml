@@ -4,12 +4,12 @@ status: true
 dependencies:
   config:
     - field.field.node.contact.body
-    - field.field.node.contact.field_location
+    - field.field.node.contact.field_map
     - field.field.node.contact.field_site_subtopics
     - field.field.node.contact.field_site_topics
     - node.type.contact
   module:
-    - geolocation
+    - google_map_field
     - text
     - user
 id: node.contact.default
@@ -24,30 +24,16 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  field_location:
-    type: geolocation_latlng
+  field_map:
+    type: google_map_field_default
     label: above
     settings: {  }
-    third_party_settings: {  }
-    weight: 3
-    region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  field_site_topics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
     third_party_settings: {  }
     weight: 1
     region: content
 hidden:
+  field_site_subtopics: true
+  field_site_topics: true
   langcode: true
   links: true
   search_api_excerpt: true

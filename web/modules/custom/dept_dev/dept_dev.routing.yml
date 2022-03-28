@@ -1,7 +1,14 @@
-dept_dev.settings:
-  path: '/admin/config/nics/devtools'
+departmental_devtools.settings.toolbar.sites:
+  path: '/admin/config/departmental/devtools/toolbar/sites'
   defaults:
-    _title: 'Devtools settings'
-    _form: 'Drupal\dept_dev\Form\DevtoolsSettingsForm'
+    _title: 'Toolbar: Sites settings'
+    _form: 'Drupal\dept_dev\Form\ToolbarSitesSettingsForm'
+  requirements:
+    _permission: 'administer content'
+departmental_devtools.settings:
+  path: '/admin/config/development/departmental'
+  defaults:
+    _form: 'Drupal\dept_dev\Form\SettingsForm'
+    _title: 'Settings'
   requirements:
     _permission: 'administer content'

@@ -29,6 +29,8 @@ $settings['config_sync_directory'] = getenv('CONFIG_SYNC_DIRECTORY');
 
 // Temp directory.
 $settings["file_temp_path"] = getenv('FILE_TEMP_PATH') ?? '/tmp';
+// Private files location.
+$settings['file_private_path'] = getenv('FILE_PRIVATE_PATH');
 
 // Set config split environment; environment specific values is set near the end of this file.
 $config['config_split.config_split.local']['status'] = FALSE;
@@ -54,6 +56,9 @@ $config['geolocation_google_maps.settings']['google_map_api_key'] = getenv('GOOG
 $config['geolocation_google_maps.settings']['google_map_api_server_key'] = getenv('GOOGLE_MAP_API_SERVER_KEY');
 // Geocoder module API key.
 $config['geocoder.settings']['plugins_options']['googlemaps']['apikey'] = getenv('GOOGLE_MAP_API_SERVER_KEY');
+
+// Google Map Field config settings.
+$config['google_map_field.settings']['google_map_field_apikey'] = getenv('GOOGLE_MAP_API_KEY');
 
 // Environment indicator defaults.
 $env_colour = !empty(getenv('SIMPLEI_ENV_COLOR')) ? getenv('SIMPLEI_ENV_COLOR') : '#000000';;
