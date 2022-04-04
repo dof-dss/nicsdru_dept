@@ -325,6 +325,11 @@ class MigrateUuidLookupManager {
 
       // Switch table if there's a specified type for this file.
       switch ($file['d7type']) {
+        case 'document':
+          $table .= '_media_document';
+          $d9_entity = 'media';
+          break;
+
         case 'image':
           $table .= '_media_image';
           $d9_entity = 'media';

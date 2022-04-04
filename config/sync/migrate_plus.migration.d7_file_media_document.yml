@@ -1,4 +1,4 @@
-uuid: 3cbfe24b-0e71-467b-ac02-b33dcb152c15
+uuid: ecd0d55f-76a4-4c6a-a751-3aec63a8e678
 langcode: en
 status: true
 dependencies: {  }
@@ -50,6 +50,9 @@ process:
     -
       plugin: d7_file_lookup
       source: fid
+    -
+      plugin: default_value
+      default_value: 99316
 destination:
   plugin: 'entity:media'
 migration_dependencies:
