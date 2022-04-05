@@ -6,6 +6,7 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\user\UserInterface;
@@ -39,19 +40,28 @@ class MigrateUuidLookupManager {
   protected $entityTypeManager;
 
   /**
+   * Drupal\Core\Logger\LoggerChannelFactory definition.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   */
+  protected $logger;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('logger.factory')
     );
   }
 
   /**
    * Constructs a new instance of this object.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactory $logger) {
     $this->entityTypeManager = $entity_type_manager;
+    $this->logger = $logger->get('dept_migrate');
     $this->dbconn = Database::getConnection('default', 'default');
     $this->d7conn = Database::getConnection('default', 'migrate');
   }
@@ -146,6 +156,11 @@ class MigrateUuidLookupManager {
       $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $node['d7uuid']]);
 
       foreach ($migrate_map as $row) {
+        if (empty($row->destid1)) {
+          $this->logger->error('No destination match for D7 node id ' . $row->sourceid2);
+          continue;
+        }
+
         $node = $this->entityTypeManager->getStorage('node')->load($row->destid1);
         $map[$d7nid]['nid'] = $node->id();
         $map[$d7nid]['uuid'] = $node->uuid();
