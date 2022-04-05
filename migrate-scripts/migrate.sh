@@ -44,11 +44,15 @@ then
     $DRUSH migrate:import d7_file_media_$type --force
   done
 
-  for type in easychart news publication
+  for type in topic subtopic application article consultation contact easychart gallery heritage_site infogram landing_page link news page profile protected_area publication ual
   do
     echo "Migrate D7 ${type} nodes"
     $DRUSH migrate:import node_$type --force
   done
+
+  echo "Migrating URL aliases and redirects"
+  $DRUSH migrate:import url_aliases_nodes --force
+  $DRUSH migrate:import redirects --force
 
   echo ".... DONE"
 fi
