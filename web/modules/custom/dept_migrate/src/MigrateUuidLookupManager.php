@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -338,26 +339,6 @@ class MigrateUuidLookupManager {
       $table = 'migrate_map_d7_file';
       $d9_entity = 'file';
 
-      // Switch table if there's a specified type for this file.
-      switch ($file['d7type']) {
-        case 'document':
-          $table .= '_media_document';
-          $d9_entity = 'media';
-          break;
-
-        case 'image':
-          $table .= '_media_image';
-          $d9_entity = 'media';
-          break;
-
-        case 'video':
-        case 'remote_video':
-          $table .= '_media_video';
-          $d9_entity = 'media';
-          break;
-
-      }
-
       if ($this->dbconn->schema()->tableExists($table) === FALSE) {
         // Skip the rest if this table doesn't exist.
         continue;
@@ -377,6 +358,79 @@ class MigrateUuidLookupManager {
           $map[$d7fid]['uuid'] = $file->uuid();
           $map[$d7fid]['filename'] = $file->label();
           $map[$d7fid]['type'] = $file->bundle();
+        }
+      }
+    }
+
+    return $map;
+  }
+
+  /**
+   * @param array $fids
+   *   One or more D7 file ids.
+   *
+   * @return array
+   *   Associative array of media metadata, keyed by source file id.
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  public function lookupMediaBySourceFileId(array $fids) {
+    if (empty($fids)) {
+      return [];
+    }
+
+    $map = [];
+
+    $d7results = $this->d7conn->query("SELECT * FROM {file_managed} WHERE fid IN (:ids[])", [':ids[]' => $fids]);
+    foreach ($d7results as $row) {
+      $map[$row->fid] = [
+        'd7uuid' => $row->uuid,
+        'd7type' => $row->type,
+        'd7filename' => $row->filename,
+      ];
+    }
+
+    // Match up to D9 media entity using D7 file uuid as key from migrate table.
+    foreach ($map as $d7fid => $file) {
+      $table = 'migrate_map_d7_file';
+
+      // Switch table if there's a specified type for this file.
+      switch ($file['d7type']) {
+        case 'document':
+          $table .= '_media_document';
+          break;
+
+        case 'image':
+          $table .= '_media_image';
+          break;
+
+        case 'video':
+        case 'remote_video':
+          $table .= '_media_video';
+          break;
+
+      }
+
+      if ($this->dbconn->schema()->tableExists($table) === FALSE) {
+        // Skip the rest if this table doesn't exist.
+        $this->logger->error('Could not find table ' . $table);
+        continue;
+      }
+
+      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
+
+      foreach ($migrate_map as $row) {
+        if (empty($row->destid1)) {
+          continue;
+        }
+
+        $media = $this->entityTypeManager->getStorage('media')->load($row->destid1);
+
+        if ($media instanceof MediaInterface) {
+          $map[$d7fid]['id'] = $media->id();
+          $map[$d7fid]['uuid'] = $media->uuid();
+          $map[$d7fid]['filename'] = $media->label();
+          $map[$d7fid]['type'] = $media->bundle();
         }
       }
     }

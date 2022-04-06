@@ -77,23 +77,16 @@ class D7FileLookup extends ProcessPluginBase implements ContainerFactoryPluginIn
     }
 
     $entity_type = $this->configuration['entity_type'] ?? 'file';
-    $file_metadata = $this->lookupManager->lookupBySourceFileId($value);
 
-    if (!empty($file_metadata)) {
-      $value = reset($file_metadata)['id'];
+    if ($entity_type === 'file') {
+      $entity_metadata = $this->lookupManager->lookupBySourceFileId($value);
+    }
+    else {
+      $entity_metadata = $this->lookupManager->lookupMediaBySourceFileId($value);
+    }
 
-      if ($entity_type === 'media') {
-        // Lookup the correct media entity id, based on the file entity id.
-        $result = $this->entityTypeManager->getStorage('media')->loadByProperties([
-          'field_media_file' => $value,
-        ]);
-
-        $media = reset($result);
-
-        if ($media instanceof MediaInterface) {
-          $value = $media->id();
-        }
-      }
+    if (!empty($entity_metadata)) {
+      $value = reset($entity_metadata)['id'];
     }
 
     return $value ?? [];
