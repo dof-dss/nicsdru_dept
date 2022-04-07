@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
+echo ">>> Started at: $(date -u +"%Y-%m-%d %H:%M:%S")"
+
 export DRUSH=/app/vendor/bin/drush
 export MIGRATIONS="d7_taxonomy_term_chart_type d7_taxonomy_term_global_topics d7_taxonomy_term_indicators \
         d7_taxonomy_term_outcomes users d7_file d7_file_private d7_file_media_image d7_file_media_video \
-          node_easychart node_news node_publication"
+          node_actions node_subtopic node_topic node_application node_article node_consultation node_contact \
+          node_easychart node_gallery node_heritage_site node_infogram node_link node_news node_page \
+          node_profile node_protected_area node_publication node_ual url_aliases_nodes url_aliases_taxonomy_terms \
+          redirects "
 
 if [ -z ${PLATFORM_BRANCH} ] && [ -z ${LANDO} ];
 then
@@ -38,16 +43,35 @@ then
   $DRUSH migrate:import d7_file_private --force
   $DRUSH migrate:import d7_file --force
 
-  for type in image video document
+  for type in image video
   do
     echo "Migrating D7 ${type} to corresponding media entities"
     $DRUSH migrate:import d7_file_media_$type --force
   done
 
-  for type in topic subtopic application article consultation contact easychart gallery heritage_site infogram landing_page link news page profile protected_area publication ual
+  echo "Migrating D7 file documents to corresponding media entities"
+  for i in {1..10}
+  do
+    $DRUSH migrate:import d7_file_media_document --force --limit=10000
+  done
+
+  for type in topic subtopic actions application article consultation contact easychart gallery heritage_site infogram landing_page link page profile protected_area ual
   do
     echo "Migrate D7 ${type} nodes"
     $DRUSH migrate:import node_$type --force
+  done
+
+  # Handle the larger quantity types independently, in batches, to avoid PHP timeouts.
+  echo "Migrate D7 news nodes"
+  for i in {1..2}
+  do
+    $DRUSH migrate:import node_news --force --limit=10000
+  done
+
+  echo "Migrate D7 publication nodes"
+  for i in {1..3}
+  do
+    $DRUSH migrate:import node_news --force --limit=10000
   done
 
   echo "Migrating URL aliases and redirects"
@@ -56,3 +80,5 @@ then
 
   echo ".... DONE"
 fi
+
+echo ">>> Finished at: $(date -u +"%Y-%m-%d %H:%M:%S")"
