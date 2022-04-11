@@ -140,8 +140,6 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
               '#type' => 'link',
               '#url' => Url::fromUri($node_link),
             ];
-
-
           }
         }
       }
@@ -158,7 +156,5 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
 
     return $build;
   }
-
-
 
 }
