@@ -102,7 +102,9 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function build() {
-    $build = [];
+
+    $links = [];
+
     $node_source_link = $this->configFactory->get('departmental_devtools.settings')->get('node_source_link');
 
     if ($node_source_link) {
@@ -138,18 +140,25 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
               '#type' => 'link',
               '#url' => Url::fromUri($node_link),
             ];
-          }
 
-          $build['d7_links'] = [
-            '#theme' => 'item_list',
-            '#list_type' => 'ul',
-            '#items' => $links,
-          ];
+
+          }
         }
       }
     }
 
+    $build['d7_links'] = [
+      '#theme' => 'item_list',
+      '#list_type' => 'ul',
+      '#items' => $links,
+      '#cache' => [
+        'contexts' => ['url'],
+      ],
+    ];
+
     return $build;
   }
+
+
 
 }
