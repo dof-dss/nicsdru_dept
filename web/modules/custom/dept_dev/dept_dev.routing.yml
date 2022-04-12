@@ -1,11 +1,11 @@
-dept_devtools.settings.toolbar.sites:
+dept_dev.settings.toolbar.sites:
   path: '/admin/config/departmental/devtools/toolbar/sites'
   defaults:
     _title: 'Toolbar: Sites settings'
     _form: 'Drupal\dept_dev\Form\ToolbarSitesSettingsForm'
   requirements:
     _permission: 'administer content'
-dept_devtools.settings:
+dept_dev.settings:
   path: '/admin/config/development/departmental'
   defaults:
     _form: 'Drupal\dept_dev\Form\SettingsForm'
