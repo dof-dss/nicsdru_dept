@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_migrate_dashboard\Controller;
 
+use _PHPStan_ae8980142\React\Socket\ConnectionInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\dept_core\DepartmentManager;
@@ -27,6 +28,12 @@ class MigrationDashboardController extends ControllerBase {
    */
   protected $entityTypeManager;
 
+  /**
+   * The database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $dbConn;
 
   /**
    * Migrations dashboard constructor.
@@ -35,10 +42,13 @@ class MigrationDashboardController extends ControllerBase {
    *   The DepartmentManager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   The database connection.
    */
-  public function __construct(DepartmentManager $department_manager, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(DepartmentManager $department_manager, EntityTypeManagerInterface $entity_type_manager, ConnectionInterface $connection) {
     $this->departmentManager = $department_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->dbConn = $connection;
   }
 
   /**
@@ -52,7 +62,8 @@ class MigrationDashboardController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('department.manager'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('database'),
     );
   }
 
@@ -85,6 +96,11 @@ class MigrationDashboardController extends ControllerBase {
       ];
 
       foreach ($node_bundles as $bundle) {
+
+        // TODO: Query the D9 'group_content' table to count the relationships.
+        // $this->dbConn->select("")
+        // TODO: Query the D7 'domain_access' table to count the relationships.
+
         $rows[] = [$bundle, 10, 10];
       }
 
