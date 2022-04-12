@@ -12,6 +12,8 @@ class EntityToGroupRelationshipManagerService {
 
   /**
    * The type of database operation to perform.
+   *
+   * @var string
    */
   protected $action;
 
@@ -29,7 +31,6 @@ class EntityToGroupRelationshipManagerService {
    */
   protected $dbConn;
 
-
   /**
    * Constructs an EntityToGroupRelationshipManagerService object.
    *
@@ -43,16 +44,29 @@ class EntityToGroupRelationshipManagerService {
     $this->dbConn = $connection;
   }
 
+  /**
+   * Set the database operation to create relationships.
+   *
+   * @return $this
+   */
   public function create() {
     $this->action = 'create';
     return $this;
   }
 
+  /**
+   * Set the database operation to remove relationships.
+   *
+   * @return $this
+   */
   public function remove() {
     $this->action = 'remove';
     return $this;
   }
 
+  /**
+   * Create or remove all relationships.
+   */
   public function all() {
     if ($this->action === 'remove') {
       $this->dbConn->truncate('group_content')->execute();
@@ -62,6 +76,5 @@ class EntityToGroupRelationshipManagerService {
 
     }
   }
-
 
 }
