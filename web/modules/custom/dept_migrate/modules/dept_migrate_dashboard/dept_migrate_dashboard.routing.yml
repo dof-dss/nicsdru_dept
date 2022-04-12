@@ -1,0 +1,7 @@
+dept_migrate_dashboard.example:
+  path: '/admin/migration-dashboard'
+  defaults:
+    _title: 'Migrations dashboard'
+    _controller: '\Drupal\dept_migrate_dashboard\Controller\MigrationDashboardController::build'
+  requirements:
+    _permission: 'access content'
