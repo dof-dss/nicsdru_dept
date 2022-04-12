@@ -14,14 +14,14 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'dept_devtools_settings';
+    return 'dept_dev_settings';
   }
 
   /**
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
-    return ['dept_devtools.settings'];
+    return ['dept_dev.settings'];
   }
 
   /**
@@ -33,7 +33,7 @@ class SettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Display link to source node'),
       '#description' => $this->t('Provides a link to the original Drupal 7 page for the current node'),
-      '#default_value' => $this->config('dept_devtools.settings')->get('node_source_link'),
+      '#default_value' => $this->config('dept_dev.settings')->get('node_source_link'),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -43,7 +43,7 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('dept_devtools.settings');
+    $config = $this->config('dept_dev.settings');
     $config->set('node_source_link', $form_state->getValue('node_source_link'));
     $config->save();
     parent::submitForm($form, $form_state);

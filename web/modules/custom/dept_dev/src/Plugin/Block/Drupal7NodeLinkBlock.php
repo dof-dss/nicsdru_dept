@@ -105,7 +105,7 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
 
     $links = [];
 
-    $node_source_link = $this->configFactory->get('dept_devtools.settings')->get('node_source_link');
+    $node_source_link = $this->configFactory->get('dept_dev.settings')->get('node_source_link');
 
     if ($node_source_link) {
       /** @var \Drupal\node\NodeInterface $node */
