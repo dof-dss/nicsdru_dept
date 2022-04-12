@@ -1,0 +1,7 @@
+dept_etgrm.example:
+  path: '/dept-etgrm/example'
+  defaults:
+    _title: 'Example'
+    _controller: '\Drupal\dept_etgrm\Controller\DeptEtgrmController::build'
+  requirements:
+    _permission: 'access content'
