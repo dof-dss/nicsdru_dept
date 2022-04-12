@@ -1,0 +1,4 @@
+services:
+  etgrm.manager:
+    class: Drupal\dept_etgrm\EntityToGroupRelationshipManagerService
+    arguments: ['@entity_type.manager', '@database']

@@ -55,8 +55,8 @@ class EntityToGroupRelationshipManagerService {
 
   public function all() {
     if ($this->action === 'remove') {
-      $this->dbConn->truncate(['group_content'])->execute();
-      $this->dbConn->truncate(['group_content_field_data'])->execute();
+      $this->dbConn->truncate('group_content')->execute();
+      $this->dbConn->truncate('group_content_field_data')->execute();
     }
     else {
 
