@@ -1,0 +1,12 @@
+uuid: 5c102326-3fe9-414f-889e-31445645fa16
+langcode: en
+status: true
+dependencies: {  }
+id: migrate_group_book
+label: 'Departmental sites - Book'
+description: 'Migrate book'
+source_type: 'Drupal 7'
+module: null
+shared_configuration:
+  source:
+    key: drupal7db
