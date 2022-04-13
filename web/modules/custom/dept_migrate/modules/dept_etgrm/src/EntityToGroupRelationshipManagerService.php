@@ -48,6 +48,38 @@ class EntityToGroupRelationshipManagerService {
   }
 
   /**
+   * Maps Drupal 7 domain ID's to Drupal 9 group ID's.
+   *
+   * @param int $domain_id
+   *  A domain id.
+   * @return int
+   *  Corresponding group id, 0 for retired site and -1 for not found.
+   */
+  public static function domainIDtoGroupId(int $domain_id) {
+    $map = [
+      1 => 1,   // nigov.site
+      2 => 3,   // daera.site
+      3 => 0,   // del.vm
+      4 => 5,   // economy.site
+      5 => 7,   // execoffice.site
+      6 => 6,   // education.site
+      7 => 2,   // finance.site
+      8 => 8,   // health.site
+      9 => 9,   // infrastructure.site
+      10 => 0,  // dcal.vm
+      11 => 0,  // doe.vm
+      12 => 10, // justice.site
+      13 => 4,  // communities.site
+    ];
+
+    if (array_key_exists($domain_id, $map)) {
+      return $map[$domain_id];
+    }
+
+    return -1;
+  }
+
+  /**
    * Set the database operation to create relationships.
    *
    * @return $this
