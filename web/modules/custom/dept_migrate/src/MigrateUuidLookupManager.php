@@ -163,6 +163,12 @@ class MigrateUuidLookupManager {
         }
 
         $node = $this->entityTypeManager->getStorage('node')->load($row->destid1);
+
+        if (!$node instanceof NodeInterface) {
+          $this->logger->error('No node found with id ' . $row->destid1);
+          continue;
+        }
+
         $map[$d7nid]['nid'] = $node->id();
         $map[$d7nid]['uuid'] = $node->uuid();
         $map[$d7nid]['title'] = $node->label();
