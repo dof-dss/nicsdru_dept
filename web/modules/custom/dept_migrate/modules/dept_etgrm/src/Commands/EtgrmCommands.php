@@ -36,4 +36,15 @@ class EtgrmCommands extends DrushCommands {
     $this->io()->success('Removed all relationships');
   }
 
+  /**
+   * Create all relationships.
+   *
+   * @command etgrm:createAll
+   * @aliases etgrm:ca
+   */
+  public function createAllCommand() {
+    $count = $this->etgrmMananger->create()->all();
+    $this->io()->success('Created ' . $count . ' relationships');
+  }
+
 }

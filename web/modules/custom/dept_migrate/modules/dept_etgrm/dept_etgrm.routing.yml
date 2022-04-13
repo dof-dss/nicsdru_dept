@@ -1,7 +1,7 @@
-dept_etgrm.example:
-  path: '/dept-etgrm/example'
+dept_etgrm.admin:
+  path: '/admin/etgrm'
   defaults:
-    _title: 'Example'
+    _title: 'Departmental Entity To Group Relationship Manager'
     _controller: '\Drupal\dept_etgrm\Controller\DeptEtgrmController::build'
   requirements:
     _permission: 'access content'
