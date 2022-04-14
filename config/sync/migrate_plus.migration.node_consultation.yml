@@ -1,4 +1,4 @@
-uuid: 27a63053-b31f-48d7-95c5-90cb0b7eca7a
+uuid: dddadd3d-4d93-4429-9ea8-fc4fb0e6dc50
 langcode: en
 status: true
 dependencies: {  }
@@ -121,9 +121,13 @@ process:
         target_id:
           plugin: d7_file_lookup
           source: fid
+          entity_type: media
 destination:
   plugin: 'entity:node'
   default_bundle: consultation
 migration_dependencies:
   required:
     - users
+    - node_subtopic
+    - node_topic
+    - d7_taxonomy_term_global_topics
