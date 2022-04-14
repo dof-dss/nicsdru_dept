@@ -3,8 +3,9 @@
 namespace Drupal\dept_etgrm;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\dept_core\DepartmentManager;
+use Drupal\Core\Messenger\Messenger;
 use Drupal\group\Entity\Group;
 use Drupal\group\Entity\GroupContent;
 
@@ -12,6 +13,8 @@ use Drupal\group\Entity\GroupContent;
  * EntityToGroupRelationshipManagerService service.
  */
 class EntityToGroupRelationshipManagerService {
+
+  use DependencySerializationTrait;
 
   /**
    * The type of database operation to perform.
@@ -35,6 +38,14 @@ class EntityToGroupRelationshipManagerService {
   protected $dbConn;
 
   /**
+   * Drupal\Core\Messenger\MessengerInterface definition.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+
+  /**
    * Constructs an EntityToGroupRelationshipManagerService object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -42,9 +53,10 @@ class EntityToGroupRelationshipManagerService {
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, Connection $connection) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, Connection $connection, Messenger $messenger) {
     $this->entityTypeManager = $entity_type_manager;
     $this->dbConn = $connection;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -99,6 +111,27 @@ class EntityToGroupRelationshipManagerService {
     return $this;
   }
 
+  public function single($nid, $group_ids = []) {
+    $node = $this->entityTypeManager->getStorage('node')->load($nid);
+
+    if ($node) {
+      // Load the node group relationships.
+      $relationships = GroupContent::loadByEntity($node);
+
+      foreach ($relationships as $relation) {
+        $node_group_ids[] = $relation->getGroup()->id();
+      }
+
+      foreach ($group_ids as $gid) {
+        if (!array_key_exists($gid, $node_group_ids)) {
+          $group = Group::load($gid);
+          $group->addContent($node, 'group_node:' . $node->bundle());
+        }
+      }
+    }
+  }
+
+
   /**
    * Create or remove all relationships.
    */
@@ -112,11 +145,16 @@ class EntityToGroupRelationshipManagerService {
       // Iterate each group, lookup the mapping table, for each row
       // create a relationship based on the data from sourceid3 and destid1
       $departments = $this->entityTypeManager->getStorage('group_type')->load('department_site');
+      $groups = Group::loadMultiple(range(1, 10));
 
       foreach ($departments->getInstalledContentPlugins() as $plugin) {
         if ($plugin->getEntityTypeId() === 'node') {
           $bundle = $plugin->getEntityBundle();
           $counter = 0;
+
+          if ($bundle != 'news') {
+            continue;
+          }
 
           $migration_table = 'migrate_map_node_' . $bundle;
 
@@ -126,37 +164,36 @@ class EntityToGroupRelationshipManagerService {
             $query->addField('mt', 'destid1', 'nid');
             $result = $query->execute();
 
-            foreach ($result->fetchAll() as $row) {
+            $rows = $result->fetchAllAssoc('nid');
 
-              $node = $this->entityTypeManager->getStorage('node')->load($row->nid);
+            $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple(array_keys($rows));
 
-              if (empty($node)) {
-                continue;
-              }
+            foreach ($nodes as $node) {
               $relationships = GroupContent::loadByEntity($node);
-              $groups = [];
+              $node_groups = [];
 
               foreach ($relationships as $relation) {
-                $groups[] = $relation->getGroup()->id();
+                $node_groups[] = $relation->getGroup()->id();
               }
 
-              foreach (explode('-', $row->domains) as $domain) {
-                if (!in_array($domain, $groups)) {
-                  $group = Group::load($domain);
+              foreach (explode('-', $rows[$node->id()]->domains) as $domain) {
+                $domain_group = self::domainIDtoGroupId($domain);
 
-                  if (empty($group)) {
-                    continue;
-                  }
-                  $group->addContent($node, 'group_node:' . $node->bundle());
+                if ($domain_group < 1) {
+                  continue;
+                }
+
+                if (!in_array($domain_group, $node_groups)) {
+                  $groups[$domain_group]->addContent($node, 'group_node:' . $node->bundle());
                   $counter++;
                 }
               }
+
             }
           }
         }
-
-        return $counter;
       }
+      return $counter;
     }
   }
 

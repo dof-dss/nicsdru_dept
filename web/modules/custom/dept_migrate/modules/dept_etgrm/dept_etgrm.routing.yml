@@ -5,3 +5,11 @@ dept_etgrm.admin:
     _controller: '\Drupal\dept_etgrm\Controller\DeptEtgrmController::build'
   requirements:
     _permission: 'access content'
+
+dept_etgrm.admin.createall:
+  path: '/admin/etgrm/create-all'
+  defaults:
+    _title: 'Create all node to group relations'
+    _form: '\Drupal\dept_etgrm\Form\CreateAllRelationshipsForm'
+  requirements:
+    _permission: 'access content'
