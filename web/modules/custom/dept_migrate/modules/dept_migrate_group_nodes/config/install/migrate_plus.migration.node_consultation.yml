@@ -33,6 +33,7 @@ process:
   body:
     - plugin: get
       source: body
+    - plugin: media_wysiwyg_filter
     - plugin: str_replace
       regex: true
       search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
