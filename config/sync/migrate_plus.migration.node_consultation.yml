@@ -1,4 +1,4 @@
-uuid: 27a63053-b31f-48d7-95c5-90cb0b7eca7a
+uuid: e493f192-c75d-4f50-b8f1-99d6c68ab516
 langcode: en
 status: true
 dependencies: {  }
@@ -40,6 +40,8 @@ process:
     -
       plugin: get
       source: body
+    -
+      plugin: media_wysiwyg_filter
     -
       plugin: str_replace
       regex: true
@@ -127,3 +129,6 @@ destination:
 migration_dependencies:
   required:
     - users
+    - node_subtopic
+    - node_topic
+    - d7_taxonomy_term_global_topics

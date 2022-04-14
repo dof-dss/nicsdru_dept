@@ -1,18 +1,18 @@
-uuid: 9fc375be-626c-4a21-8b30-e393d55ad84a
+uuid: 56eef071-743c-4bd1-acb0-7748af4dfc58
 langcode: en
 status: true
 dependencies: {  }
-id: node_easychart
+id: node_landing_page
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
 migration_group: migrate_group_nodes
-label: 'Easychart content type nodes'
+label: 'Landing page nodes'
 source:
   plugin: d7_dept_node
-  node_type: easychart
+  node_type: landing_page
   track_changes: true
 process:
   langcode:
@@ -60,13 +60,38 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  easychart:
+  field_banner_image:
     -
-      plugin: get
-      source: easychart
+      plugin: sub_process
+      source: field_banner_image
+      process:
+        target_id:
+          -
+            plugin: d7_file_lookup
+            source: fid
+  field_banner_image_overlay:
+    -
+      plugin: sub_process
+      source: field_banner_image_overlay
+      process:
+        target_id:
+          -
+            plugin: d7_file_lookup
+            source: fid
+  field_enable_title: field_enable_title
+  field_summary: field_summary
+  field_teaser: field_teaser
+  field_site_subtopics: field_site_subtopics
+  field_site_topics: field_site_topics
+  field_facebook_user: field_facebook_user
+  field_tweet_count: field_tweet_count
+  field_twitter_user: field_twitter_user
 destination:
   plugin: 'entity:node'
-  default_bundle: easychart
+  default_bundle: landing_page
 migration_dependencies:
   required:
     - users
+    - d7_file_media_image
+    - node_subtopic
+    - node_topic

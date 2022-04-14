@@ -1,25 +1,25 @@
-uuid: 9fc375be-626c-4a21-8b30-e393d55ad84a
+uuid: 17b0c908-61ac-45b8-a938-b5ec9d92fbb0
 langcode: en
 status: true
 dependencies: {  }
-id: node_easychart
+id: node_page
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
 migration_group: migrate_group_nodes
-label: 'Easychart content type nodes'
+label: 'Page nodes'
 source:
   plugin: d7_dept_node
-  node_type: easychart
+  node_type: page
   track_changes: true
 process:
   langcode:
     -
       plugin: default_value
       source: language
-      default_value: en
+      default_value: und
   title: title
   uid:
     -
@@ -60,13 +60,10 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  easychart:
-    -
-      plugin: get
-      source: easychart
+  field_original_domain: field_original_domain
 destination:
   plugin: 'entity:node'
-  default_bundle: easychart
+  default_bundle: page
 migration_dependencies:
   required:
     - users

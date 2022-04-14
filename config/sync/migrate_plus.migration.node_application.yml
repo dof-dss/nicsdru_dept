@@ -1,18 +1,18 @@
-uuid: 9fc375be-626c-4a21-8b30-e393d55ad84a
+uuid: b2b7ec89-594b-4596-b0b6-49a987639f84
 langcode: en
 status: true
 dependencies: {  }
-id: node_easychart
+id: node_application
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
 migration_group: migrate_group_nodes
-label: 'Easychart content type nodes'
+label: 'Application content type nodes'
 source:
   plugin: d7_dept_node
-  node_type: easychart
+  node_type: application
   track_changes: true
 process:
   langcode:
@@ -60,13 +60,30 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  easychart:
+  field_summary: field_summary
+  field_global_topics:
     -
-      plugin: get
-      source: easychart
+      plugin: sub_process
+      source: field_global_topics
+      process:
+        target_id: tid
+  field_additional_info: field_additional_info
+  field_site_topics: field_site_topics
+  field_site_subtopics: field_site_subtopics
+  field_link:
+    -
+      plugin: sub_process
+      source: field_link
+      process:
+        uri: value
+        title: title
+        options: attributes
 destination:
   plugin: 'entity:node'
-  default_bundle: easychart
+  default_bundle: application
 migration_dependencies:
   required:
     - users
+    - node_subtopic
+    - node_topic
+    - d7_taxonomy_term_global_topics
