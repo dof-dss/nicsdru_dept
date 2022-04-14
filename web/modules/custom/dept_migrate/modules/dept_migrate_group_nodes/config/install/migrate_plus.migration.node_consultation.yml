@@ -107,6 +107,7 @@ process:
         target_id:
           plugin: d7_file_lookup
           source: fid
+          entity_type: media
 destination:
   plugin: 'entity:node'
   default_bundle: consultation
