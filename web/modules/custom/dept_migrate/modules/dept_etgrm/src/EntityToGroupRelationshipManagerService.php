@@ -44,6 +44,21 @@ class EntityToGroupRelationshipManagerService {
    */
   protected $messenger;
 
+  /**
+   * An array containing arrays of nids and group ids to process.
+   *
+   * @var array
+   */
+  public $batch;
+
+  /**
+   * Current batch index.
+   *
+   * @var int
+   */
+  protected $batchIndex;
+
+
 
   /**
    * Constructs an EntityToGroupRelationshipManagerService object.
@@ -194,6 +209,32 @@ class EntityToGroupRelationshipManagerService {
         }
       }
       return $counter;
+    }
+  }
+
+  public function addToBatch($bundle) {
+
+    $migration_table = 'migrate_map_node_' . $bundle;
+
+    if (\Drupal::database()->schema()->tableExists($migration_table)) {
+      $query = \Drupal::database()->select($migration_table, 'mt');
+      $query->addField('mt', 'sourceid3', 'domains');
+      $query->addField('mt', 'destid1', 'nid');
+      $result = $query->execute();
+
+      $rows = $result->fetchAllAssoc('nid');
+
+      // Create an array indexed by nid with a value array of the correct
+      // group ids.
+      foreach ($rows as $row) {
+        $items[$row->nid] = array_map(fn($domain) => self::domainIDtoGroupId($domain[0]), explode('-', $row->domains));
+      }
+
+      if (is_array($this->batch)) {
+        $this->batch = array_merge($this->batch, array_chunk($items, 500, true));
+      } else {
+        $this->batch = array_chunk($items, 500, true);
+      }
     }
   }
 
