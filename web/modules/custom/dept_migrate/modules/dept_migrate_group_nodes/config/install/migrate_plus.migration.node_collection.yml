@@ -1,5 +1,5 @@
-id: node_easychart
-label: 'Easychart content type nodes'
+id: node_collection
+label: 'Collection content type nodes'
 status: true
 dependencies: {  }
 migration_group: migrate_group_nodes
@@ -9,7 +9,7 @@ class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 source:
   plugin: d7_dept_node
-  node_type: easychart
+  node_type: book
   track_changes: true
 process:
   langcode:
@@ -54,13 +54,9 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  easychart:
-    -
-      plugin: get
-      source: easychart
 destination:
   plugin: 'entity:node'
-  default_bundle: easychart
+  default_bundle: book
 migration_dependencies:
   required:
     - users

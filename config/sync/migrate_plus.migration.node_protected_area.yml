@@ -1,22 +1,25 @@
-id: node_easychart
-label: 'Easychart content type nodes'
+uuid: 5fb5851e-7438-49c8-83f4-f538f0b0b576
+langcode: en
 status: true
 dependencies: {  }
-migration_group: migrate_group_nodes
-migration_tags:
-  - dept_sites
+id: node_protected_area
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
+cck_plugin_method: null
+migration_tags:
+  - dept_sites
+migration_group: migrate_group_nodes
+label: 'Protected area nodes'
 source:
   plugin: d7_dept_node
-  node_type: easychart
+  node_type: protected_area
   track_changes: true
 process:
   langcode:
     -
       plugin: default_value
       source: language
-      default_value: en
+      default_value: und
   title: title
   uid:
     -
@@ -34,12 +37,15 @@ process:
   revision_log: log
   revision_timestamp: timestamp
   body:
-    - plugin: get
+    -
+      plugin: get
       source: body
-    - plugin: media_wysiwyg_filter
-    - plugin: str_replace
+    -
+      plugin: media_wysiwyg_filter
+    -
+      plugin: str_replace
       regex: true
-      search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
+      search: '/(<p>[<br>|\s]*&nbsp;<\/p>)/im'
       replace: ''
   body/0/format:
     -
@@ -54,13 +60,17 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  easychart:
-    -
-      plugin: get
-      source: easychart
+  field_council: field_council
+  field_county: field_county
+  field_protected_area_feature: field_protected_area_feature
+  field_site_subtopics: field_site_subtopics
+  field_site_topics: field_site_topics
+  field_protected_area_type: field_protected_area_type
 destination:
   plugin: 'entity:node'
-  default_bundle: easychart
+  default_bundle: protected_area
 migration_dependencies:
   required:
     - users
+    - node_subtopic
+    - node_topic

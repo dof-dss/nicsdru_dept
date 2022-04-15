@@ -33,11 +33,10 @@ process:
   revision_log: log
   revision_timestamp: timestamp
   body:
-    -
-      plugin: get
+    - plugin: get
       source: body
-    -
-      plugin: str_replace
+    - plugin: media_wysiwyg_filter
+    - plugin: str_replace
       regex: true
       search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
       replace: ''

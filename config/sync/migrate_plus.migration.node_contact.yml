@@ -1,15 +1,18 @@
-id: node_easychart
-label: 'Easychart content type nodes'
+uuid: b0ba6ac6-f4bc-44e6-a491-0abe60cb741b
+langcode: en
 status: true
 dependencies: {  }
-migration_group: migrate_group_nodes
-migration_tags:
-  - dept_sites
+id: node_contact
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
+cck_plugin_method: null
+migration_tags:
+  - dept_sites
+migration_group: migrate_group_nodes
+label: 'Contact content type nodes'
 source:
   plugin: d7_dept_node
-  node_type: easychart
+  node_type: contact
   track_changes: true
 process:
   langcode:
@@ -24,7 +27,7 @@ process:
       source: node_uid
   status: status
   created: created
-  changed: changed
+  changed: timestamp
   promote: promote
   sticky: sticky
   revision_uid:
@@ -34,12 +37,15 @@ process:
   revision_log: log
   revision_timestamp: timestamp
   body:
-    - plugin: get
+    -
+      plugin: get
       source: body
-    - plugin: media_wysiwyg_filter
-    - plugin: str_replace
+    -
+      plugin: media_wysiwyg_filter
+    -
+      plugin: str_replace
       regex: true
-      search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
+      search: '/(<p>[<br>|\s]*&nbsp;<\/p>)/im'
       replace: ''
   body/0/format:
     -
@@ -54,13 +60,15 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  easychart:
-    -
-      plugin: get
-      source: easychart
+  field_map: field_map
+  field_site_subtopics: field_site_subtopics
+  field_site_topics: field_site_topics
+  field_original_domain: field_original_domain
 destination:
   plugin: 'entity:node'
-  default_bundle: easychart
+  default_bundle: contact
 migration_dependencies:
   required:
     - users
+    - node_subtopic
+    - node_topic

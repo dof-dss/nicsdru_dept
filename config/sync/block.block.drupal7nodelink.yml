@@ -1,0 +1,20 @@
+uuid: 7c296ba6-7d49-4bc7-9bba-e6007da03876
+langcode: en
+status: true
+dependencies:
+  module:
+    - dept_dev
+  theme:
+    - bartik
+id: drupal7nodelink
+theme: bartik
+region: content
+weight: -7
+provider: null
+plugin: dept_dev_drupal_7_node_link
+settings:
+  id: dept_dev_drupal_7_node_link
+  label: 'Drupal 7 node link'
+  label_display: visible
+  provider: dept_dev
+visibility: {  }
