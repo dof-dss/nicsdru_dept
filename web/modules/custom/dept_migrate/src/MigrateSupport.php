@@ -77,16 +77,16 @@ class MigrateSupport {
    */
   public function prefixForExternalMigrationUrls(array $value) {
     if (!empty($value['url'])) {
+      if (!preg_match('|^http?s:\/\/|', $value['url'])) {
+        // Add the protocol in case it's been missed; force HTTPS.
+        $value['url'] = 'https://' . $value['url'];
+      }
+
       // If there's an email address (weird historical data)
       // log it and strip it out as we can't use it.
       if (preg_match('/.+@.+/', $value['url'])) {
         $this->logger->error($value['url'] . ' was supplied for a URL field and cannot be used');
         $value['url'] = '';
-      }
-
-      if (!preg_match('|^http?s:\/\/|', $value['url'])) {
-        // Add the protocol in case it's been missed; force HTTPS.
-        $value['url'] = 'https://' . $value['url'];
       }
     }
 
