@@ -23,4 +23,4 @@ services:
       - { name: event_subscriber }
   dept_migrate.migrate_support:
     class: 'Drupal\dept_migrate\MigrateSupport'
-    arguments: ['@entity_type.manager', '@database']
+    arguments: ['@entity_type.manager', '@logger.factory']
