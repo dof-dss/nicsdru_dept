@@ -84,11 +84,14 @@ class MigrateSupport {
         $value['url'] = '';
       }
 
-      if (preg_match('|^http(?s)://|', $value['url']) === FALSE) {
+      if (!preg_match('|^http?s:\/\/|', $value['url'])) {
         // Add the protocol in case it's been missed; force HTTPS.
         $value['url'] = 'https://' . $value['url'];
       }
     }
+
+    // Subtle difference in attribute from D7 to D9.
+    $value['uri'] = $value['url'];
 
     return $value;
   }
