@@ -146,6 +146,34 @@ class EntityToGroupRelationshipManagerService {
     }
   }
 
+  public function process($items) {
+    $counter = 0;
+    // TODO: Replace hardcoded with lookup against dept type groups.
+    $groups = Group::loadMultiple(range(1, 10));
+
+    foreach ($items as $nid => $group_ids) {
+      $node = $this->entityTypeManager->getStorage('node')->load($nid);
+
+      $relationships = GroupContent::loadByEntity($node);
+      $node_groups = [];
+
+      foreach ($relationships as $relation) {
+        $node_groups[] = $relation->getGroup()->id();
+      }
+
+      foreach ($group_ids as $group_id) {
+        if ($group_ids < 1) {
+          continue;
+        }
+        else if (!in_array($group_id, $node_groups)) {
+          $groups[$group_id]->addContent($node, 'group_node:' . $node->bundle());
+          $counter++;
+        }
+      }
+    }
+    return $counter;
+  }
+
 
   /**
    * Create or remove all relationships.
@@ -156,6 +184,35 @@ class EntityToGroupRelationshipManagerService {
       $this->dbConn->truncate('group_content_field_data')->execute();
     }
     else {
+
+    $departments =  $this->entityTypeManager->getStorage('group_type')->load('department_site');
+
+    foreach ($departments->getInstalledContentPlugins() as $plugin) {
+      if ($plugin->getEntityTypeId() === 'node') {
+        $bundle = $plugin->getEntityBundle();
+        $migration_table = 'migrate_map_node_' . $bundle;
+
+        if ($this->dbConn->schema()->tableExists($migration_table)) {
+          $query = $this->dbConn->select($migration_table, 'mt');
+          $query->addField('mt', 'sourceid3', 'domains');
+          $query->addField('mt', 'destid1', 'nid');
+          $result = $query->execute();
+
+          $rows = $result->fetchAllAssoc('nid');
+
+          // Create an array indexed by nid with a value array of the correct
+          // group ids.
+          foreach ($rows as $row) {
+            $items[$row->nid] = array_map(fn($domain) => self::domainIDtoGroupId($domain[0]), explode('-', $row->domains));
+          }
+
+        }
+        }
+
+      }
+
+
+
       // Get a list of content types used by the departmental group
       // Iterate each group, lookup the mapping table, for each row
       // create a relationship based on the data from sourceid3 and destid1
@@ -166,10 +223,6 @@ class EntityToGroupRelationshipManagerService {
         if ($plugin->getEntityTypeId() === 'node') {
           $bundle = $plugin->getEntityBundle();
           $counter = 0;
-
-          if ($bundle != 'news') {
-            continue;
-          }
 
           $migration_table = 'migrate_map_node_' . $bundle;
 
@@ -203,7 +256,6 @@ class EntityToGroupRelationshipManagerService {
                   $counter++;
                 }
               }
-
             }
           }
         }
@@ -235,6 +287,8 @@ class EntityToGroupRelationshipManagerService {
       } else {
         $this->batch = array_chunk($items, 500, true);
       }
+
+      return count($rows);
     }
   }
 
