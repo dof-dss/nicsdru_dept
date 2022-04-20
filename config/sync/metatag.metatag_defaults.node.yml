@@ -7,6 +7,19 @@ _core:
 id: node
 label: Content
 tags:
-  title: '[node:title] | [site:name]'
-  description: '[node:summary]'
-  canonical_url: '[node:url]'
+  shortlink: '[current-page:url:unaliased]'
+  canonical_url: '[current-page:url:absolute]'
+  title: '[current-page:title] | [site:slogan]'
+  description: '[node:field_summary]'
+  article_published_time: '[node:created:custom:c]'
+  og_updated_time: '[node:changed:custom:c]'
+  article_modified_time: '[node:changed:custom:c]'
+  og_description: '[node:field_summary]'
+  og_type: article
+  og_title: '[node:title]'
+  article_tag: '[node:field-site-topics],[node:field-site-subtopics]'
+  og_url: '[current-page:url:absolute]'
+  twitter_cards_description: '[node:field_summary]'
+  twitter_cards_type: summary
+  twitter_cards_page_url: '[current-page:url:absolute]'
+  twitter_cards_title: '[node:title]'
