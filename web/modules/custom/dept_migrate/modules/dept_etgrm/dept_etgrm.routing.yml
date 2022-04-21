@@ -6,10 +6,10 @@ dept_etgrm.admin:
   requirements:
     _permission: 'access content'
 
-dept_etgrm.admin.createall:
-  path: '/admin/etgrm/create-all'
+dept_etgrm.admin.create:
+  path: '/admin/etgrm/create'
   defaults:
     _title: 'Create all node to group relations'
-    _form: '\Drupal\dept_etgrm\Form\CreateAllRelationshipsForm'
+    _form: '\Drupal\dept_etgrm\Form\CreateGroupRelationshipsForm'
   requirements:
     _permission: 'access content'
