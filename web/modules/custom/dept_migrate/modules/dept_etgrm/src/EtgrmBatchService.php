@@ -144,7 +144,11 @@ class EtgrmBatchService {
 
         // All groups.
         if ($group === 0) {
-          // TODO: add to all.
+          // Hardcoded the groups to load, not ideal.
+          $all_groups = Group::loadMultiple(range(1,10));
+          foreach ($all_groups as $gr) {
+            $gr->addContent($node);
+          }
           continue;
         }
 
