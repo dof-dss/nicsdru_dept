@@ -1,6 +1,5 @@
 services:
   dept_etgrm.commands:
     class: \Drupal\dept_etgrm\Commands\EtgrmCommands
-    arguments: ['@etgrm.manager']
     tags:
       - { name: drush.command }

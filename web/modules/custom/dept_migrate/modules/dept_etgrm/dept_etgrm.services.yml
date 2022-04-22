@@ -1,4 +1,3 @@
 services:
   etgrm.manager:
-    class: Drupal\dept_etgrm\EntityToGroupRelationshipManagerService
-    arguments: ['@entity_type.manager', '@database', '@messenger']
+    class: Drupal\dept_etgrm\EtgrmBatchService

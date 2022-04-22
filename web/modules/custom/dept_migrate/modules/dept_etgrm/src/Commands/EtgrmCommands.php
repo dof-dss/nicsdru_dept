@@ -2,7 +2,10 @@
 
 namespace Drupal\dept_etgrm\Commands;
 
-use Drupal\dept_etgrm\EntityToGroupRelationshipManagerService;
+use Drupal\Core\Batch\BatchBuilder;
+use Drupal\Core\Database\Database;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\dept_etgrm\EtgrmBatchService;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -10,20 +13,7 @@ use Drush\Commands\DrushCommands;
  */
 class EtgrmCommands extends DrushCommands {
 
-  /**
-   * The ETGRM service.
-   *
-   * @var \Drupal\dept_etgrm\EntityToGroupRelationshipManagerService
-   */
-  protected $etgrmMananger;
-
-  /**
-   *
-   */
-  public function __construct(EntityToGroupRelationshipManagerService $etgrm_mananger) {
-    parent::__construct();
-    $this->etgrmMananger = $etgrm_mananger;
-  }
+  use StringTranslationTrait;
 
   /**
    * Remove all relationships.
@@ -32,19 +22,31 @@ class EtgrmCommands extends DrushCommands {
    * @aliases etgrm:ra
    */
   public function removeAllCommand() {
-    $this->etgrmMananger->remove()->all();
+    $dbConn = Database::getConnection('default', 'default');
+    $dbConn->truncate('group_content');
+    $dbConn->truncate('group_content_field_data');
     $this->io()->success('Removed all relationships');
   }
 
   /**
-   * Create all relationships.
+   * Create relationships by bundle id.
    *
-   * @command etgrm:createAll
-   * @aliases etgrm:ca
+   * @command etgrm:createByBundle
+   * @aliases etgrm:cb
    */
-  public function createAllCommand() {
-    $count = $this->etgrmMananger->create()->all();
-    $this->io()->success('Created ' . $count . ' relationships');
-  }
+  public function createCommand($bundle = '') {
+    if (empty($bundle)) {
+      $this->io->error('Please provide a bundle id to process');
+    }
 
+    $batch_builder = (new BatchBuilder())
+      ->setTitle($this->t('Creating group relationships for @bundle nodes', ['@bundle' => $bundle]))
+      ->addOperation([EtgrmBatchService::class, 'createNodeData'], [['bundle' => $bundle, 'limit' => 100],])
+      ->addOperation([EtgrmBatchService::class, 'createNodeRelationships'], [['bundle' => $bundle, 'limit' => 100],])
+      ->setFinishCallback([EtgrmBatchService::class, 'finishProcess']);
+
+    batch_set($batch_builder->toArray());
+    drush_backend_batch_process();
+    $this->io()->success('Created relationships for ' . $bundle);
+  }
 }

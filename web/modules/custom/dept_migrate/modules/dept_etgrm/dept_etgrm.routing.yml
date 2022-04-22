@@ -1,11 +1,3 @@
-dept_etgrm.admin:
-  path: '/admin/etgrm'
-  defaults:
-    _title: 'Departmental Entity To Group Relationship Manager'
-    _controller: '\Drupal\dept_etgrm\Controller\DeptEtgrmController::build'
-  requirements:
-    _permission: 'access content'
-
 dept_etgrm.admin.create:
   path: '/admin/etgrm/create'
   defaults:

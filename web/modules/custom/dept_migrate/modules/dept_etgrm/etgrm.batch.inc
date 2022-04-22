@@ -1,12 +1,17 @@
 <?php
 
+use Drupal\dept_etgrm\EtgrmBatchService;
 use Drupal\group\Entity\Group;
 use Drupal\group\Entity\GroupContent;
 use Drupal\node\Entity\Node;
 
-function buildGroupRelationships($row, $bundle, &$etgrm_manager, &$context) {
+function buildGroupRelationships($row, $bundle, &$context) {
 
   $node = Node::load($row->nid);
+
+  if (empty($node)) {
+    return;
+  }
   $relationships = GroupContent::loadByEntity($node);
 
   foreach ($relationships as $relation) {
@@ -14,18 +19,21 @@ function buildGroupRelationships($row, $bundle, &$etgrm_manager, &$context) {
   }
 
   foreach (explode('-', $row->domains) as $domain) {
-    $node_group = $etgrm_manager::domainIDtoGroupId($domain);
-    if (!in_array($node_group, $node_groups)) {
-      $group = Group::load($node_group);
-      $group->addContent($node, 'group_node:' . $bundle);
-      $count++;
+    $node_group = EtgrmBatchService::domainIDtoGroupId($domain);
+
+    if ($node_group == 0) {
+      continue;
+    } else {
+      if (empty($node_groups) || !in_array($node_group, $node_groups)) {
+        $group = Group::load($node_group);
+        $group->addContent($node, 'group_node:' . $bundle);
+        $count++;
+      }
     }
   }
 
   $context['results']['total'] += $count;
   $context['results']['bundle'] = $bundle;
-  $context['results']['etgrm'] = $etgrm_manager;
-
 }
 
 function buildGroupRelationshipsFinished($success, $results, $operations) {
