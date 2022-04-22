@@ -65,7 +65,13 @@ class EtgrmBatchService {
     $bundle = $args['bundle'];
     $migration_table = 'migrate_map_node_' . $bundle;
     $limit = $args['limit'];
+    $dbConn = \Drupal::database();
     $offset = (!empty($context['sandbox']['offset'])) ? $context['sandbox']['offset'] : 0;
+
+    // Check the mapping table for the bundle exists.
+    if (!$dbConn->schema()->tableExists($migration_table)) {
+      throw new \Exception("$migration_table table not found");
+    }
 
     // Determine the dataset size.
     if (!isset($context['sandbox']['total'])) {
@@ -77,7 +83,7 @@ class EtgrmBatchService {
     }
 
     // Retrieve the nid and domains from the migration map table for the bundle.
-    $query = \Drupal::database()->select($migration_table, 'mt');
+    $query = $dbConn->select($migration_table, 'mt');
     $query->addField('mt', 'sourceid3', 'domains');
     $query->addField('mt', 'destid1', 'nid');
     $query->range($offset, $limit);
@@ -173,11 +179,21 @@ class EtgrmBatchService {
    * Batch finish callback.
    */
   public static function finishProcess($success, $results, $operations) {
-    $message = ($success) ?
-      t('Update process of @count articles was completed.',
-        ['@count' => $results]) :
-      t('Finished with an error.');
-    \Drupal::messenger()->addMessage($message);
+
+    if($success) {
+      $message = t('Update process of @count articles was completed.', [
+        '@count' => $results
+      ]);
+      \Drupal::messenger()->addMessage($message);
+    }
+    else {
+      $error_operation = reset($operations);
+      $message = t('An error occurred while processing %error_operation with arguments: @arguments', [
+        '%error_operation' => $error_operation[0],
+        '@arguments' => print_r($error_operation[1], TRUE),
+      ]);
+      \Drupal::messenger()->addError($message);
+    }
   }
 
 }
