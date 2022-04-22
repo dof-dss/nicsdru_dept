@@ -16,16 +16,18 @@ class EtgrmBatchService {
    * @param int $domain_id
    *   A domain id.
    * @return int
-   *   Corresponding group id, 0 for retired site and -1 for not found.
+   *   Corresponding group id, 0 for all sites and -1 for retired/not found.
    */
   public static function domainIdtoGroupId(int $domain_id) {
     $map = [
+      // All sites.
+      0 => 0,
       // nigov.site.
       1 => 1,
       // daera.site.
       2 => 3,
       // del.vm.
-      3 => 0,
+      3 => -1,
       // economy.site.
       4 => 5,
       // execoffice.site.
@@ -39,9 +41,9 @@ class EtgrmBatchService {
       // infrastructure.site.
       9 => 9,
       // dcal.vm.
-      10 => 0,
+      10 => -1,
       // doe.vm.
-      11 => 0,
+      11 => -1,
       // justice.site.
       12 => 10,
       // communities.site.
@@ -65,7 +67,7 @@ class EtgrmBatchService {
     $limit = $args['limit'];
     $offset = (!empty($context['sandbox']['offset'])) ? $context['sandbox']['offset'] : 0;
 
-    // Define total on first call.
+    // Determine the dataset size.
     if (!isset($context['sandbox']['total'])) {
       $context['sandbox']['total'] = \Drupal::database()
         ->select($migration_table)
@@ -74,6 +76,7 @@ class EtgrmBatchService {
         ->fetchField();
     }
 
+    // Retrieve the nid and domains from the migration map table for the bundle.
     $query = \Drupal::database()->select($migration_table, 'mt');
     $query->addField('mt', 'sourceid3', 'domains');
     $query->addField('mt', 'destid1', 'nid');
@@ -82,25 +85,21 @@ class EtgrmBatchService {
 
     $results = $result->fetchAll();
 
-    // Setup results based on retrieved objects.
+    // Add to the results array, mapping nid and converting domains to groups.
     $context['results'] = array_reduce($results,
       function ($carry, $object) {
-        // Map object results extracted from previous query.
         $carry[$object->nid] = array_map(fn($domain) => self::domainIdtoGroupId($domain[0]), explode('-', $object->domains));
         return $carry;
       }, $context['results']
     );
 
-    // Redefine offset value.
+    // Update offset and current batch.
     $context['sandbox']['offset'] = $offset + $limit;
-
-    // Set current step as unfinished until offset is greater than total.
     $context['finished'] = 0;
     if ($context['sandbox']['offset'] >= $context['sandbox']['total']) {
       $context['finished'] = 1;
     }
 
-    // Setup info message to notify about current progress.
     $context['message'] = t(
       'Processed @offset nodes of @total',
       [
@@ -114,7 +113,6 @@ class EtgrmBatchService {
    * Batch callback to create Node to Group relationships.
    */
   public static function createNodeRelationships($args, &$context) {
-
     if (!isset($context['sandbox']['total'])) {
       $context['sandbox']['total'] = count($context['results']);
     }
@@ -128,29 +126,35 @@ class EtgrmBatchService {
 
       $node = Node::load($nid);
 
-      if (empty($node)) {
+      if ($node === null) {
         continue;
       }
 
       foreach ($groups as $group) {
-        if ($group === 0) {
+        // Retired or not found domain/group.
+        if ($group < 0) {
           continue;
         }
+
+        // All groups.
+        if ($group === 0) {
+          // TODO: add to all.
+          continue;
+        }
+
         $group = Group::load($group);
         $group->addContent($node, 'group_node:' . $bundle);
       }
 
-      // Increment count at one.
       $count++;
 
-      // Remove current result.
+      // Remove processed item from the dataset.
       unset($context['results'][$nid]);
       if ($count >= $limit) {
         break;
       }
     }
 
-    // Setup message to notify how many remaining articles.
     $context['message'] = t(
       'Creating @bundle relationships, @total remaining.', [
         '@bundle' => $bundle,
@@ -158,10 +162,8 @@ class EtgrmBatchService {
       ]
     );
 
-    // Set current step as unfinished until there's not results.
-    $context['finished'] = (empty($context['results']));
+    $context['finished'] = empty($context['results']);
 
-    // When it is completed, then setup result as total amount updated.
     if ($context['finished']) {
       $context['results'] = $context['sandbox']['total'];
     }
@@ -171,7 +173,6 @@ class EtgrmBatchService {
    * Batch finish callback.
    */
   public static function finishProcess($success, $results, $operations) {
-    // Setup final message after process is done.
     $message = ($success) ?
       t('Update process of @count articles was completed.',
         ['@count' => $results]) :
