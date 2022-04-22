@@ -2,15 +2,8 @@
 
 namespace Drupal\dept_etgrm;
 
-use Drupal\Core\Batch\BatchBuilder;
-use Drupal\Core\Database\Connection;
-use Drupal\Core\DependencyInjection\DependencySerializationTrait;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Messenger\Messenger;
 use Drupal\group\Entity\Group;
-use Drupal\group\Entity\GroupContent;
 use Drupal\node\Entity\Node;
-
 
 /**
  * Entity To Group Relationship Manager batch service.
@@ -21,25 +14,38 @@ class EtgrmBatchService {
    * Maps Drupal 7 domain ID's to Drupal 9 group ID's.
    *
    * @param int $domain_id
-   *  A domain id.
+   *   A domain id.
    * @return int
-   *  Corresponding group id, 0 for retired site and -1 for not found.
+   *   Corresponding group id, 0 for retired site and -1 for not found.
    */
-  public static function domainIDtoGroupId(int $domain_id) {
+  public static function domainIdtoGroupId(int $domain_id) {
     $map = [
-      1 => 1,   // nigov.site
-      2 => 3,   // daera.site
-      3 => 0,   // del.vm
-      4 => 5,   // economy.site
-      5 => 7,   // execoffice.site
-      6 => 6,   // education.site
-      7 => 2,   // finance.site
-      8 => 8,   // health.site
-      9 => 9,   // infrastructure.site
-      10 => 0,  // dcal.vm
-      11 => 0,  // doe.vm
-      12 => 10, // justice.site
-      13 => 4,  // communities.site
+      // nigov.site.
+      1 => 1,
+      // daera.site.
+      2 => 3,
+      // del.vm.
+      3 => 0,
+      // economy.site.
+      4 => 5,
+      // execoffice.site.
+      5 => 7,
+      // education.site.
+      6 => 6,
+      // finance.site.
+      7 => 2,
+      // health.site.
+      8 => 8,
+      // infrastructure.site.
+      9 => 9,
+      // dcal.vm.
+      10 => 0,
+      // doe.vm.
+      11 => 0,
+      // justice.site.
+      12 => 10,
+      // communities.site.
+      13 => 4,
     ];
 
     if (array_key_exists($domain_id, $map)) {
@@ -50,10 +56,8 @@ class EtgrmBatchService {
   }
 
   /**
-   * Init operation task by retrieving all content to be updated.
+   * Batch callback to create the dataset for processing.
    *
-   * @param array $args
-   * @param array $context
    */
   public static function createNodeData($args, &$context) {
     $bundle = $args['bundle'];
@@ -78,12 +82,11 @@ class EtgrmBatchService {
 
     $results = $result->fetchAll();
 
-
     // Setup results based on retrieved objects.
     $context['results'] = array_reduce($results,
       function ($carry, $object) {
         // Map object results extracted from previous query.
-        $carry[$object->nid] = array_map(fn($domain) => self::domainIDtoGroupId($domain[0]), explode('-', $object->domains));
+        $carry[$object->nid] = array_map(fn($domain) => self::domainIdtoGroupId($domain[0]), explode('-', $object->domains));
         return $carry;
       }, $context['results']
     );
@@ -107,6 +110,9 @@ class EtgrmBatchService {
     );
   }
 
+  /**
+   * Batch callback to create Node to Group relationships.
+   */
   public static function createNodeRelationships($args, &$context) {
 
     if (!isset($context['sandbox']['total'])) {
@@ -127,13 +133,12 @@ class EtgrmBatchService {
       }
 
       foreach ($groups as $group) {
-        if ($group === 0){
+        if ($group === 0) {
           continue;
         }
         $group = Group::load($group);
         $group->addContent($node, 'group_node:' . $bundle);
       }
-
 
       // Increment count at one.
       $count++;
@@ -162,6 +167,9 @@ class EtgrmBatchService {
     }
   }
 
+  /**
+   * Batch finish callback.
+   */
   public static function finishProcess($success, $results, $operations) {
     // Setup final message after process is done.
     $message = ($success) ?

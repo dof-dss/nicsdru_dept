@@ -40,13 +40,20 @@ class EtgrmCommands extends DrushCommands {
     }
 
     $batch_builder = (new BatchBuilder())
-      ->setTitle($this->t('Creating group relationships for @bundle nodes', ['@bundle' => $bundle]))
-      ->addOperation([EtgrmBatchService::class, 'createNodeData'], [['bundle' => $bundle, 'limit' => 100],])
-      ->addOperation([EtgrmBatchService::class, 'createNodeRelationships'], [['bundle' => $bundle, 'limit' => 100],])
+      ->setTitle($this->t('Creating group relationships for @bundle nodes', [
+        '@bundle' => $bundle
+      ]))
+      ->addOperation([EtgrmBatchService::class, 'createNodeData'], [
+        ['bundle' => $bundle, 'limit' => 100]
+      ])
+      ->addOperation([EtgrmBatchService::class, 'createNodeRelationships'], [
+        ['bundle' => $bundle, 'limit' => 100]
+      ])
       ->setFinishCallback([EtgrmBatchService::class, 'finishProcess']);
 
     batch_set($batch_builder->toArray());
     drush_backend_batch_process();
     $this->io()->success('Created relationships for ' . $bundle);
   }
+
 }
