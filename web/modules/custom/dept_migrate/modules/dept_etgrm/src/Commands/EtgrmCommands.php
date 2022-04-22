@@ -23,8 +23,8 @@ class EtgrmCommands extends DrushCommands {
    */
   public function removeAllCommand() {
     $dbConn = Database::getConnection('default', 'default');
-    $dbConn->truncate('group_content');
-    $dbConn->truncate('group_content_field_data');
+    $dbConn->truncate('group_content')->execute();
+    $dbConn->truncate('group_content_field_data')->execute();
     $this->io()->success('Removed all relationships');
   }
 
