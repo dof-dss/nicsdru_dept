@@ -132,7 +132,7 @@ class EtgrmBatchService {
 
       $node = Node::load($nid);
 
-      if ($node === null) {
+      if ($node === NULL) {
         continue;
       }
 
@@ -184,7 +184,7 @@ class EtgrmBatchService {
    */
   public static function finishProcess($success, $results, $operations) {
 
-    if($success) {
+    if ($success) {
       $message = t('Update process of @count articles was completed.', [
         '@count' => $results
       ]);
