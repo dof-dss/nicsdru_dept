@@ -149,6 +149,57 @@ class MigrateSupport {
     return $group_id;
   }
 
+  public function domainIdToGroupId(int $domain_id) {
+    $group_id = 0;
+
+    switch ($domain_id) {
+      case 1:
+      case 3:
+      case 10:
+      case 11:
+        $group_id = 1;
+        break;
+
+      case 7:
+        $group_id = 2;
+        break;
+
+      case 2:
+        $group_id = 3;
+        break;
+
+      case 13:
+        $group_id = 4;
+        break;
+
+      case 4:
+        $group_id = 5;
+        break;
+
+      case 6:
+        $group_id = 6;
+        break;
+
+      case 5:
+        $group_id = 7;
+        break;
+
+      case 8:
+        $group_id = 8;
+        break;
+
+      case 9:
+        $group_id = 9;
+        break;
+
+      case 12:
+        $group_id = 10;
+        break;
+    }
+
+    return $group_id;
+  }
+
   /**
    * @param \Drupal\node\NodeInterface $node
    *   The node object.

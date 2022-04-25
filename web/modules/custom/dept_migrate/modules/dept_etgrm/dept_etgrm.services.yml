@@ -1,3 +1,6 @@
 services:
   etgrm.manager:
     class: Drupal\dept_etgrm\EtgrmBatchService
+  etgrm.driver:
+    class: Drupal\dept_etgrm\EtgrmDriverService
+    arguments: ['@logger.factory', '@database']
