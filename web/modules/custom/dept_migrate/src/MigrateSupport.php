@@ -149,6 +149,12 @@ class MigrateSupport {
     return $group_id;
   }
 
+  /**
+   * @param int $domain_id
+   *   The D7 domain id (numerical).
+   * @return int
+   *   The D9 group id.
+   */
   public function domainIdToGroupId(int $domain_id) {
     $group_id = 0;
 

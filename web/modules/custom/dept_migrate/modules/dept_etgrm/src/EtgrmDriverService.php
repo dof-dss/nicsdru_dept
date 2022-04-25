@@ -42,14 +42,52 @@ class EtgrmDriverService {
     $this->dbconn = Database::getConnection('default', 'default');
   }
 
+  /**
+   * Service function to regenerate group relation entities
+   * for a specific type of node. Bypasses group and Drupal
+   * entity APIs as they're far too slow for the volume of
+   * data/operations going on here.
+   *
+   * @param string $type
+   *   Drupal node bundle machine key, eg: page, article.
+   */
   public function rebuildRelationsByType(string $type) {
     $type_map = [
+      'actions' => 'group_content_type_ef01e89809ca7',
+      'application' => 'group_content_type_9dbed154ced4f',
+      'article' => 'group_content_type_8f3c8c40c5ced',
+      'collection' => 'department_site-group_node-book',
+      'case_study' => 'group_content_type_729499773bd55',
+      'easychart' => 'group_content_type_85765319814ca',
+      'consultation' => 'group_content_type_fb2d5fb87aade',
+      'contact' => 'group_content_type_806d1de5fafe5',
+      'gallery' => 'group_content_type_671a55a120b42',
+      'global_page' => 'group_content_type_34099e0cf683b',
+      'heritage_site' => 'group_content_type_4206bea64afae',
+      'infogram' => 'group_content_type_6061d9dc53978',
+      'landing_page' => 'group_content_type_1b4b1ed9339c4',
+      'link' => 'department_site-group_node-link',
+      'news' => 'department_site-group_node-news',
+      'page' => 'department_site-group_node-page',
+      'profile' => 'group_content_type_d17c35c98baa3',
+      'project' => 'group_content_type_85d66e53e8361',
+      'protected_area' => 'group_content_type_ec8e415306531',
       'publication' => 'group_content_type_d91f8322473a4',
+      'subtopic' => 'group_content_type_9741084175ea2',
+      'topic' => 'department_site-group_node-topic',
+      'ual' => 'department_site-group_node-ual',
+      'webform' => 'group_content_type_0b612c56d0b26',
     ];
     $map_table = 'migrate_map_node_' . $type;
 
+    if (!$this->dbconn->schema()->tableExists($map_table)) {
+      return;
+    }
     // Delete any data we already have in use by joining on the map table.
-    // NB: Multi-table delete is a MySQL specific feature used for convenience.
+    // Multi-table delete is a MySQL specific feature used for convenience.
+    // NB: this won't remove content relation entities added outside of
+    // migrations; the join on the map table restricts the deletion
+    // to those records which satisfy the query condition.
     $delete_query = $this->dbconn->query("
       DELETE group_content, group_content_field_data
       FROM group_content
@@ -59,43 +97,9 @@ class EtgrmDriverService {
 
     // Array to represent content to add into the group_content table.
     $map_group_content = [];
-
     $results = $this->dbconn->query("SELECT
       :gc_type as type,
-      n.langcode
-      FROM
-      {node} n
-      JOIN $map_table mt ON mt.destid1 = n.nid
-      WHERE n.type = :type
-    ", [
-      ':gc_type' => $type_map['publication'],
-      ':type' => $type
-    ]);
-    foreach ($results as $row) {
-      $gc_row = [];
-      $gc_row['type'] = $type_map['publication'];
-      $gc_row['uuid'] = \Drupal::service('uuid')->generate();
-      $gc_row['langcode'] = $row->langcode;
-
-      $map_group_content[] = $gc_row;
-    }
-
-    // Insert to group_content table.
-    $gc_insert_query = $this->dbconn->insert('group_content')
-      ->fields(['type', 'uuid', 'langcode']);
-    foreach ($map_group_content as $record) {
-      $gc_insert_query->values($record);
-    }
-    $gc_insert_query->execute();
-
-    // build up array of nodes, source domain ids, and remapped group ids.
-    // Use a static query for efficiency.
-    $map_group_content_field_data = [];
-
-    $results = $this->dbconn->query("SELECT
-      gc.id,
-      :gc_type as `type`,
-      n.langcode,
+      :langcode as langcode,
       nfd.uid,
       mt.sourceid3,
       n.nid as entity_id,
@@ -104,80 +108,64 @@ class EtgrmDriverService {
       nfd.changed,
       :default_langcode as default_langcode
       FROM {node} n
-      JOIN {group_content} gc ON gc.uuid = n.uuid
       JOIN {node_field_data} nfd ON nfd.nid = n.nid
-      JOIN ${map_table} mt ON mt.destid1 = n.nid
+      JOIN $map_table mt ON mt.destid1 = n.nid
       WHERE n.type = :type
     ", [
-      ':gc_type' => $type_map['publication'],
+      ':gc_type' => $type_map[$type],
+      ':langcode' => 'en',
       ':type' => $type,
       ':default_langcode' => 1,
     ]);
+
     foreach ($results as $row) {
+      // Begin building a big array of data to start adding to group_content* tables.
+      // If there are multiple domains listed, we need to create extra rows
+      // in the array we use to populate the tables.
+      $domains = [];
       if (preg_match('/-/', $row->sourceid3)) {
-        // Duplicate the row for N domain variants.
-        foreach (explode('-', $row->sourceid3) as $domain_id) {
-          if (empty($domain_id)) {
-            continue;
-          }
-
-          $group_row = [];
-          // Append to map array.
-          $group_row['id'] = $row->id;
-          $group_row['type'] = $row->type;
-          $group_row['langcode'] = $row->langcode;
-          $group_row['uid'] = $row->uid;
-          $group_row['gid'] = \Drupal::service('dept_migrate.migrate_support')
-            ->domainIdToGroupId($domain_id);
-          $group_row['entity_id'] = $row->entity_id;
-          $group_row['label'] = $row->label;
-          $group_row['created'] = $row->created;
-          $group_row['changed'] = $row->changed;
-          $group_row['default_langcode'] = $row->default_langcode;
-          // Create an index column to help de-dupe the final array.
-          $group_row['idx'] = $this->createCollectionKey($group_row['id'], $group_row['gid']);
-
-          if ($this->groupContainsNode($group_row['entity_id'], $group_row['gid'], $map_group_content_field_data) === FALSE) {
-            $map_group_content_field_data[] = $group_row;
-          }
-        }
+        $domains = explode('-', $row->sourceid3);
       }
       else {
-        $map_item = [];
-        $map_item['id'] = $row->id;
-        $map_item['type'] = $row->type;
-        $map_item['langcode'] = $row->langcode;
-        $map_item['uid'] = $row->uid;
-        $map_item['gid'] = \Drupal::service('dept_migrate.migrate_support')
-          ->domainIdToGroupId($row->sourceid3);
-        $map_item['entity_id'] = $row->entity_id;
-        $map_item['label'] = $row->label;
-        $map_item['created'] = $row->created;
-        $map_item['changed'] = $row->changed;
-        $map_item['default_langcode'] = $row->default_langcode;
-        $map_item['idx'] = $this->createCollectionKey($map_item['id'], $map_item['gid']);
+        $domains[] = $row->sourceid3;
+      }
 
-        if ($this->groupContainsNode($map_item['entity_id'], $map_item['gid'], $map_group_content_field_data) === FALSE) {
-          $map_group_content_field_data[] = $map_item;
-        }
+      $group_item = [];
+      foreach ($domains as $domain_id) {
+        $group_item['type'] = $row->type;
+        $group_item['langcode'] = $row->langcode;
+        $group_item['uid'] = $row->uid;
+        $group_item['gid'] = \Drupal::service('dept_migrate.migrate_support')->domainIdToGroupId($domain_id);
+        $group_item['entity_id'] = $row->entity_id;
+        $group_item['label'] = $row->label;
+        $group_item['created'] = $row->created;
+        $group_item['changed'] = $row->changed;
+        $group_item['default_langcode'] = $row->default_langcode;
+        // Use last insert id to fill in this value, which links together
+        // group_content and group_content_field_data values.
+        $group_item['id'] = $this->dbconn->insert('group_content')
+          ->fields([
+            'type' => $group_item['type'],
+            'uuid' => \Drupal::service('uuid')->generate(),
+            'langcode' => $group_item['langcode']
+          ])->execute();
+
+        // Add record in group_content_field_data.
+        $this->dbconn->insert('group_content_field_data')
+          ->fields([
+            'id' => $group_item['id'],
+            'type' => $group_item['type'],
+            'langcode' => $group_item['langcode'],
+            'uid' => $group_item['uid'],
+            'gid' => $group_item['gid'],
+            'entity_id' => $group_item['entity_id'],
+            'label' => $group_item['label'],
+            'created' => $group_item['created'],
+            'changed' => $group_item['changed'],
+            'default_langcode' => $group_item['default_langcode']
+          ])->execute();
       }
     }
-
-    foreach ($map_group_content_field_data as $row) {
-      if ($row['entity_id'] == 28574) {
-        dump($row);
-      }
-    }
-
-    exit();
-
-    // Insert to group_content_field_data table.
-    $gcfd_insert_query = $this->dbconn->insert('group_content_field_data')
-      ->fields(['id', 'type', 'langcode', 'uid', 'gid', 'entity_id', 'label', 'created', 'changed', 'default_langcode']);
-    foreach ($map_group_content_field_data as $record) {
-      $gcfd_insert_query->values($record);
-    }
-    $gcfd_insert_query->execute();
   }
 
   /**
