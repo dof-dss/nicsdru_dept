@@ -125,16 +125,11 @@ class EtgrmBatchService {
 
     $bundle = $args['bundle'];
     $limit = $args['limit'];
+    $gc_storage = \Drupal::entityTypeManager()->getStorage('group_content');
 
     // Walk-through all results in order to update them.
     $count = 0;
     foreach ($context['results'] as $nid => $groups) {
-
-      $node = Node::load($nid);
-
-      if ($node === NULL) {
-        continue;
-      }
 
       foreach ($groups as $group) {
         // Retired or not found domain/group.
@@ -147,13 +142,23 @@ class EtgrmBatchService {
           // Hardcoded the groups to load, not ideal.
           $all_groups = Group::loadMultiple(range(1, 10));
           foreach ($all_groups as $gr) {
-            $gr->addContent($node);
+            // Fallback to addContent() for the time being.
+            $gr->addContent(Node::load($nid));
           }
           continue;
         }
 
-        $group = Group::load($group);
-        $group->addContent($node, 'group_node:' . $bundle);
+        $keys = [
+          'type' => 'group_content_type_8f3c8c40c5ced',
+          'gid' => $group,
+          'entity_id' => $nid,
+        ];
+
+        $gc_entity = $gc_storage->create($keys);
+        $gc_storage->save($gc_entity);
+
+//        $group = Group::load($group);
+//        $group->addContent($node, 'group_node:' . $bundle);
       }
 
       $count++;

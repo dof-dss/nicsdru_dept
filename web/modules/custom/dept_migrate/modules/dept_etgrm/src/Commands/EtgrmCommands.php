@@ -53,6 +53,7 @@ class EtgrmCommands extends DrushCommands {
 
     batch_set($batch_builder->toArray());
     drush_backend_batch_process();
+
     $this->io()->success('Created relationships for ' . $bundle);
   }
 

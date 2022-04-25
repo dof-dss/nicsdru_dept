@@ -4,4 +4,4 @@ dept_etgrm.admin.create:
     _title: 'Create all node to group relations'
     _form: '\Drupal\dept_etgrm\Form\CreateGroupRelationshipsForm'
   requirements:
-    _permission: 'access content'
+    _role: 'administrator'
