@@ -3,6 +3,7 @@
 namespace Drupal\dept_etgrm;
 
 use Drupal\group\Entity\Group;
+use Drupal\group\Entity\GroupContentType;
 use Drupal\node\Entity\Node;
 
 /**
@@ -77,6 +78,7 @@ class EtgrmBatchService {
     if (!isset($context['sandbox']['total'])) {
       $context['sandbox']['total'] = \Drupal::database()
         ->select($migration_table)
+        ->isNotNull('destid1')
         ->countQuery()
         ->execute()
         ->fetchField();
@@ -86,6 +88,7 @@ class EtgrmBatchService {
     $query = $dbConn->select($migration_table, 'mt');
     $query->addField('mt', 'sourceid3', 'domains');
     $query->addField('mt', 'destid1', 'nid');
+    $query->isNotNull('destid1');
     $query->range($offset, $limit);
     $result = $query->execute();
 
@@ -126,6 +129,7 @@ class EtgrmBatchService {
     $bundle = $args['bundle'];
     $limit = $args['limit'];
     $gc_storage = \Drupal::entityTypeManager()->getStorage('group_content');
+    $content_type = GroupContentType::loadByContentPluginId('group_node:' . $bundle);
 
     // Walk-through all results in order to update them.
     $count = 0;
@@ -148,17 +152,19 @@ class EtgrmBatchService {
           continue;
         }
 
+        // Bypassing the group::AddContent() method as that required both a
+        // node and group object to be loaded and performs a number of checks
+        // that we don't really need. By using the group_content storage
+        // directly we only need to pass in the node and group id's, thus
+        // reducing the number of db queries.
         $keys = [
-          'type' => 'group_content_type_8f3c8c40c5ced',
+          'type' => current($content_type)->id(),
           'gid' => $group,
           'entity_id' => $nid,
         ];
 
         $gc_entity = $gc_storage->create($keys);
         $gc_storage->save($gc_entity);
-
-//        $group = Group::load($group);
-//        $group->addContent($node, 'group_node:' . $bundle);
       }
 
       $count++;
