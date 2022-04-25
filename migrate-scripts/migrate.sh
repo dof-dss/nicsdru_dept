@@ -55,7 +55,7 @@ then
     $DRUSH migrate:import d7_file_media_document --force --limit=10000
   done
 
-  for type in topic subtopic actions application article consultation contact easychart gallery heritage_site infogram landing_page link page profile protected_area ual
+  for type in topic subtopic actions application article collection consultation contact easychart gallery heritage_site infogram landing_page link page profile protected_area ual
   do
     echo "Migrate D7 ${type} nodes"
     $DRUSH migrate:import node_$type --force
@@ -73,6 +73,9 @@ then
   do
     $DRUSH migrate:import node_news --force --limit=10000
   done
+
+  echo "Migrate book config"
+  $DRUSH migrate:import dept_book --force
 
   echo "Migrating URL aliases and redirects"
   $DRUSH migrate:import url_aliases_nodes --force

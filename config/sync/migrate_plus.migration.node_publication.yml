@@ -1,4 +1,4 @@
-uuid: f9e60217-c5d5-411e-bc94-8344ca352cc2
+uuid: f77c27de-11e7-4d68-a286-5bb2b44c3dad
 langcode: en
 status: true
 dependencies: {  }
@@ -42,6 +42,8 @@ process:
     -
       plugin: get
       source: body
+    -
+      plugin: media_wysiwyg_filter
     -
       plugin: str_replace
       regex: true

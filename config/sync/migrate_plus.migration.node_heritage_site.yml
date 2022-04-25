@@ -1,18 +1,18 @@
-uuid: dddadd3d-4d93-4429-9ea8-fc4fb0e6dc50
+uuid: 3db3ad61-08f7-4b7f-bd45-fb0b3a2443a8
 langcode: en
 status: true
 dependencies: {  }
-id: node_consultation
+id: node_heritage_site
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
 migration_group: migrate_group_nodes
-label: 'Consultation content type nodes'
+label: 'Heritage site nodes'
 source:
   plugin: d7_dept_node
-  node_type: consultation
+  node_type: heritage_site
   track_changes: true
 process:
   langcode:
@@ -60,75 +60,63 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  field_summary:
-    -
-      plugin: get
-      source: field_summary
-  field_consultation_dates:
-    plugin: sub_process
-    source: field_consultation_dates
-    process:
-      value:
-        plugin: format_date
-        source: value
-        from_format: 'Y-m-d H:i:s'
-        to_format: 'Y-m-d\TH:i:s'
-      end_value:
-        plugin: format_date
-        source: value2
-        from_format: 'Y-m-d H:i:s'
-        to_format: 'Y-m-d\TH:i:s'
-  field_global_topics:
+  field_address_line_1: field_address_line_1
+  field_address_line_2: field_address_line_2
+  field_town: field_town
+  field_county: field_county
+  field_postcode: field_postcode
+  field_sm_number: field_sm_number
+  field_website:
     -
       plugin: sub_process
-      source: field_global_topics
+      source: field_website
       process:
-        target_id: tid
-  field_site_subtopics:
+        uri: value
+        title: title
+        options: attributes
+  field_phone: field_phone
+  field_email:
     -
       plugin: sub_process
-      source: field_site_subtopics
-      process:
-        target_id: tid
-  field_postal: field_postal
-  field_published_date:
-    -
-      plugin: sub_process
-      source: field_published_date
-      process:
-        value:
-          plugin: format_date
-          from_format: 'Y-m-d H:i:s'
-          to_format: Y-m-d
-          source: value
-  field_respond_online:
-    -
-      plugin: service
-      service: dept_migrate.migrate_support
-      method: prefixForExternalMigrationUrls
-      source: field_respond_online
-  field_email_address:
-    -
-      plugin: sub_process
-      source: field_email_address
+      source: field_email
       process:
         value: email
-  field_original_domain: field_original_domain
-  field_attachment:
+  field_grid_reference: field_grid_reference
+  field_historic_map_viewer_link:
     -
       plugin: sub_process
-      source: field_attachment
+      source: field_historic_map_viewer_link
+      process:
+        uri: value
+        title: title
+        options: attributes
+  field_nismr_link:
+    -
+      plugin: sub_process
+      source: field_nismr_link
+      process:
+        uri: value
+        title: title
+        options: attributes
+  field_open_to_the_public: field_open_to_the_public
+  field_photo:
+    -
+      plugin: sub_process
+      source: field_photo
       process:
         target_id:
-          plugin: d7_file_lookup
-          source: fid
-          entity_type: media
+          -
+            plugin: d7_file_lookup
+            source: fid
+  field_site_subtopics: field_site_subtopics
+  field_site_topics: field_site_topics
+  field_map: field_map
 destination:
   plugin: 'entity:node'
-  default_bundle: consultation
+  default_bundle: heritage_site
 migration_dependencies:
   required:
     - users
+    - d7_file_media_image
     - node_subtopic
     - node_topic
-    - d7_taxonomy_term_global_topics
