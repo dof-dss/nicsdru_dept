@@ -2,6 +2,9 @@
 
 use Drupal\Core\Database\Database;
 
+/*
+ * Create all stored procedures and functions on install.
+ */
 function dept_etgrm_install() {
 
   extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
@@ -22,5 +25,27 @@ function dept_etgrm_install() {
     $pdo->exec('DROP FUNCTION IF EXISTS `' . strtoupper($proc) . '`');
     $pdo->exec('DROP PROCEDURE IF EXISTS `' . strtoupper($proc) . '`');
     $pdo->exec(file_get_contents($module_path . '/inc/sql_' . $proc . ".sql"));
+  }
+}
+/*
+ * Remove all stored procedures and functions on uninstall.
+ */
+function dept_etgrm_uninstall() {
+
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+
+  $sql_proc_list = [
+    'content_plugin_id',
+    'domain_id_to_group_id',
+    'process_group_relationships',
+    'process_group_zero_relationships',
+    'create_group_relationships',
+  ];
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+
+  foreach ($sql_proc_list as $proc) {
+    $pdo->exec('DROP FUNCTION IF EXISTS `' . strtoupper($proc) . '`');
+    $pdo->exec('DROP PROCEDURE IF EXISTS `' . strtoupper($proc) . '`');
   }
 }
