@@ -3,6 +3,7 @@
 namespace Drupal\dept_etgrm\Commands;
 
 use Drupal\Core\Batch\BatchBuilder;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Database;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_etgrm\EtgrmBatchService;
@@ -14,6 +15,21 @@ use Drush\Commands\DrushCommands;
 class EtgrmCommands extends DrushCommands {
 
   use StringTranslationTrait;
+
+  /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * MyModuleCommands constructor.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory) {
+    parent::__construct();
+    $this->configFactory = $config_factory;
+  }
 
   /**
    * Remove all relationships.
@@ -66,6 +82,9 @@ class EtgrmCommands extends DrushCommands {
   public function all() {
     $schema = Database::getConnectionInfo('default')['default']['database'];
     $dbConn = Database::getConnection('default', 'default');
+    $conf = $this->configFactory->getEditable('dept_etgrm.data');
+
+    $conf->set('ts_start', time());
 
     $this->io()->title("Creating group content for migrated nodes.");
 
@@ -80,6 +99,9 @@ class EtgrmCommands extends DrushCommands {
     $this->io()->write("Creating Group Content data (this may take a while)");
     $dbConn->query("call PROCESS_GROUP_RELATIONSHIPS()")->execute();
     $this->io()->writeln(" ✅");
+
+    $conf->set('ts_finish', time());
+    $conf->save();
 
     $this->io()->success("Finished.");
   }
