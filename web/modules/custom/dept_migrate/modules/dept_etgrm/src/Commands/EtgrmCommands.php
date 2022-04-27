@@ -57,4 +57,31 @@ class EtgrmCommands extends DrushCommands {
     $this->io()->success('Created relationships for ' . $bundle);
   }
 
+  /**
+   * Create all relationships.
+   *
+   * @command etgrm:createAll
+   * @aliases etgrm:ca
+   */
+  public function all() {
+    $schema = Database::getConnectionInfo('default')['default']['database'];
+    $dbConn = Database::getConnection('default', 'default');
+
+    $this->io()->title("Creating group content for migrated nodes.");
+
+    $this->io()->write("Building node to group relationships");
+    $dbConn->query("call CREATE_GROUP_RELATIONSHIPS('$schema')")->execute();
+    $this->io()->writeln(" ✅");
+
+    $this->io()->write("Expanding zero based domains to all groups");
+    $dbConn->query("call PROCESS_GROUP_ZERO_RELATIONSHIPS()")->execute();
+    $this->io()->writeln(" ✅");
+
+    $this->io()->write("Creating Group Content data (this may take a while)");
+    $dbConn->query("call PROCESS_GROUP_RELATIONSHIPS()")->execute();
+    $this->io()->writeln(" ✅");
+
+    $this->io()->success("Finished.");
+  }
+
 }
