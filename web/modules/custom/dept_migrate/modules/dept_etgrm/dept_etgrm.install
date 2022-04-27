@@ -19,6 +19,8 @@ function dept_etgrm_install() {
   $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
 
   foreach ($sql_proc_list as $proc) {
+    $pdo->exec('DROP FUNCTION IF EXISTS `' . strtoupper($proc) . '`');
+    $pdo->exec('DROP PROCEDURE IF EXISTS `' . strtoupper($proc) . '`');
     $pdo->exec(file_get_contents($module_path . '/inc/sql_' . $proc . ".sql"));
   }
 }
