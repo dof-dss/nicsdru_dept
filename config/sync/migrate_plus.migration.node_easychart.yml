@@ -1,4 +1,4 @@
-uuid: 465c26a8-f8a1-4ea3-8d68-36f31c09d542
+uuid: 9fc375be-626c-4a21-8b30-e393d55ad84a
 langcode: en
 status: true
 dependencies: {  }
@@ -11,7 +11,7 @@ migration_tags:
 migration_group: migrate_group_nodes
 label: 'Easychart content type nodes'
 source:
-  plugin: d7_node_uuid
+  plugin: d7_dept_node
   node_type: easychart
   track_changes: true
 process:
@@ -40,6 +40,8 @@ process:
     -
       plugin: get
       source: body
+    -
+      plugin: media_wysiwyg_filter
     -
       plugin: str_replace
       regex: true

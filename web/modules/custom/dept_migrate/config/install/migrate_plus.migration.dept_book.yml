@@ -1,0 +1,26 @@
+id: dept_book
+label: 'Departmental books'
+migration_group: migrate_group_book
+migration_tags:
+  - dept_sites
+source:
+  plugin: book
+process:
+  nid:
+    - plugin: d7_node_lookup
+      source: nid
+  book/bid:
+    - plugin: d7_node_lookup
+      source: bid
+  book/weight:
+    - plugin: get
+      source: weight
+  book/pid:
+    - plugin: migration_lookup
+      migration: dept_book
+destination:
+  plugin: book
+migration_dependencies:
+  required:
+    - user
+    - node_collection

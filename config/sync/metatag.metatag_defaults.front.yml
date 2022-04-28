@@ -7,5 +7,7 @@ _core:
 id: front
 label: 'Front page'
 tags:
-  canonical_url: '[site:url]'
   shortlink: '[site:url]'
+  canonical_url: '[site:url]'
+  title: 'Home | [site:slogan]'
+  description: 'Welcome to the home page of the [site:slogan] ([site:name]).  [site:name] is part of the Northern Ireland Executive.'

@@ -1,0 +1,197 @@
+uuid: c6d2b2f2-f292-4703-b997-9f285393f6d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - field.storage.node.field_global_topics
+    - field.storage.node.field_site_topics
+    - field.storage.node.field_summary
+    - field.storage.node.field_publication_type
+    - search_api.server.default
+  module:
+    - search_api_solr
+    - node
+    - user
+    - taxonomy
+    - scheduler
+    - scheduler_content_moderation_integration
+    - search_api
+third_party_settings:
+  search_api_solr:
+    finalize: false
+    commit_before_finalize: false
+    commit_after_finalize: false
+    debug_finalize: false
+    highlighter:
+      maxAnalyzedChars: 51200
+      fragmenter: gap
+      usePhraseHighlighter: true
+      highlightMultiTerm: true
+      preserveMulti: false
+      regex:
+        slop: 0.5
+        pattern: blank
+        maxAnalyzedChars: 10000
+      highlight:
+        mergeContiguous: false
+        requireFieldMatch: false
+        snippets: 3
+        fragsize: 0
+    mlt:
+      mintf: 1
+      mindf: 1
+      maxdf: 0
+      maxdfpct: 0
+      minwl: 0
+      maxwl: 0
+      maxqt: 100
+      maxntp: 2000
+      boost: false
+      interestingTerms: none
+    term_modifiers:
+      slop: 3
+      fuzzy: 1
+    advanced:
+      index_prefix: ''
+      collection: ''
+      timezone: ''
+    multilingual:
+      limit_to_content_language: false
+      include_language_independent: true
+id: publications_index
+name: 'Publications index'
+description: ''
+read_only: false
+field_settings:
+  body:
+    label: Body
+    datasource_id: 'entity:node'
+    property_path: body
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.body
+  field_publication_type:
+    label: Type
+    datasource_id: 'entity:node'
+    property_path: field_publication_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_publication_type
+  field_summary:
+    label: Summary
+    datasource_id: 'entity:node'
+    property_path: field_summary
+    type: text
+    boost: !!float 3
+    dependencies:
+      config:
+        - field.storage.node.field_summary
+  global_topics_id:
+    label: 'Global topics » Taxonomy term » Term ID'
+    datasource_id: 'entity:node'
+    property_path: 'field_global_topics:entity:tid'
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_global_topics
+      module:
+        - taxonomy
+  global_topics_name:
+    label: 'Global topics » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'field_global_topics:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_global_topics
+      module:
+        - taxonomy
+  name:
+    label: 'Authored by » User » Name'
+    datasource_id: 'entity:node'
+    property_path: 'uid:entity:name'
+    type: string
+    dependencies:
+      module:
+        - node
+        - user
+  publish_on:
+    label: 'Publish on'
+    datasource_id: 'entity:node'
+    property_path: publish_on
+    type: date
+    dependencies:
+      module:
+        - scheduler
+  publish_state:
+    label: 'Publish state'
+    datasource_id: 'entity:node'
+    property_path: publish_state
+    type: string
+    dependencies:
+      module:
+        - scheduler_content_moderation_integration
+  site_topics_id:
+    label: 'Site topics » Content » ID'
+    datasource_id: 'entity:node'
+    property_path: 'field_site_topics:entity:nid'
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_site_topics
+      module:
+        - node
+  site_topics_title:
+    label: 'Site topics » Content » Title'
+    datasource_id: 'entity:node'
+    property_path: 'field_site_topics:entity:title'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_site_topics
+      module:
+        - node
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: text
+    boost: !!float 21
+    dependencies:
+      module:
+        - node
+  uid:
+    label: 'Authored by'
+    datasource_id: 'entity:node'
+    property_path: uid
+    type: integer
+    dependencies:
+      module:
+        - node
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - publication
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  entity_type: {  }
+  language_with_fallback: {  }
+  rendered_item: {  }
+  solr_date_range: {  }
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  cron_limit: 50
+  index_directly: true
+  track_changes_in_references: true
+server: default
