@@ -2,7 +2,6 @@
 
 namespace Drupal\dept_etgrm\Commands;
 
-use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Database;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -38,7 +37,10 @@ class EtgrmCommands extends DrushCommands {
    * @aliases etgrm:ra
    */
   public function removeAllCommand() {
-
+    // Fetch the recorded timestamp from the import process. All
+    // created group content entities use this as their created date.
+    // This makes it easy for us to remove any imported rows while leaving
+    // other manually created entries in place.
     $ts = $this->configFactory->get('dept_etgrm.data')->get('processed_ts');
 
     if (!empty($ts) || $ts > 0) {
@@ -61,10 +63,7 @@ class EtgrmCommands extends DrushCommands {
       $this->io()->success('Finished');
     }
 
-
   }
-
-
 
   /**
    * Create all relationships.
@@ -76,7 +75,8 @@ class EtgrmCommands extends DrushCommands {
     $schema = Database::getConnectionInfo('default')['default']['database'];
     $dbConn = Database::getConnection('default', 'default');
     $conf = $this->configFactory->getEditable('dept_etgrm.data');
-    
+
+    // Timestamp for entity and import processed date.
     $ts = time();
 
     $this->io()->title("Creating group content for migrated nodes.");
