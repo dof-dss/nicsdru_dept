@@ -7,6 +7,7 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_etgrm\EtgrmBatchService;
 use Drush\Commands\DrushCommands;
+use Drush\Drush;
 
 /**
  * Drush commands for interacting with ETGRM.
@@ -75,6 +76,14 @@ class EtgrmCommands extends DrushCommands {
     $schema = Database::getConnectionInfo('default')['default']['database'];
     $dbConn = Database::getConnection('default', 'default');
     $conf = $this->configFactory->getEditable('dept_etgrm.data');
+
+    $results = $dbConn->select('group_relationships')->countQuery()->execute()->fetchField();
+
+    if (!empty($results) || $results > 0) {
+      $this->io()->note("Removing existing group content entities");
+      $process = Drush::drush(Drush::aliasManager()->getSelf(), 'etgrm:removeAll', [], []);
+      $process->start();
+    }
 
     // Timestamp for entity and import processed date.
     $ts = time();
