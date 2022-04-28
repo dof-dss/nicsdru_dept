@@ -38,40 +38,33 @@ class EtgrmCommands extends DrushCommands {
    * @aliases etgrm:ra
    */
   public function removeAllCommand() {
-    $dbConn = Database::getConnection('default', 'default');
-    $dbConn->truncate('group_content')->execute();
-    $dbConn->truncate('group_content_field_data')->execute();
-    $this->io()->success('Removed all relationships');
-  }
 
-  /**
-   * Create relationships by bundle id.
-   *
-   * @command etgrm:createByBundle
-   * @aliases etgrm:cb
-   */
-  public function createCommand($bundle = '') {
-    if (empty($bundle)) {
-      $this->io->error('Please provide a bundle id to process');
+    $ts = $this->configFactory->get('dept_etgrm.data')->get('processed_ts');
+
+    if (!empty($ts) || $ts > 0) {
+      $dbConn = Database::getConnection('default', 'default');
+
+      $this->io()->title("Removing imported Group Content entities");
+
+      $this->io()->write("Removing rows from group_content table");
+      $dbConn->query("DELETE gc FROM {group_content} AS gc INNER JOIN {group_content_field_data} AS gfd ON gc.id = gfd.id WHERE gfd.created = :ts", [
+        ':ts' => $ts,
+      ]);
+      $this->io()->writeln(" ✅");
+
+      $this->io()->write("Removing rows from group_content_field_data table");
+      $dbConn->query("DELETE gfd FROM {group_content_field_data} as gfd WHERE gfd.created = :ts", [
+        ':ts' => $ts,
+      ]);
+      $this->io()->writeln(" ✅");
+
+      $this->io()->success('Finished');
     }
 
-    $batch_builder = (new BatchBuilder())
-      ->setTitle($this->t('Creating group relationships for @bundle nodes', [
-        '@bundle' => $bundle
-      ]))
-      ->addOperation([EtgrmBatchService::class, 'createNodeData'], [
-        ['bundle' => $bundle, 'limit' => 100]
-      ])
-      ->addOperation([EtgrmBatchService::class, 'createNodeRelationships'], [
-        ['bundle' => $bundle, 'limit' => 100]
-      ])
-      ->setFinishCallback([EtgrmBatchService::class, 'finishProcess']);
 
-    batch_set($batch_builder->toArray());
-    drush_backend_batch_process();
-
-    $this->io()->success('Created relationships for ' . $bundle);
   }
+
+
 
   /**
    * Create all relationships.
@@ -83,8 +76,8 @@ class EtgrmCommands extends DrushCommands {
     $schema = Database::getConnectionInfo('default')['default']['database'];
     $dbConn = Database::getConnection('default', 'default');
     $conf = $this->configFactory->getEditable('dept_etgrm.data');
-
-    $conf->set('ts_start', time());
+    
+    $ts = time();
 
     $this->io()->title("Creating group content for migrated nodes.");
 
@@ -97,13 +90,13 @@ class EtgrmCommands extends DrushCommands {
     $this->io()->writeln(" ✅");
 
     $this->io()->write("Creating Group Content data (this may take a while)");
-    $dbConn->query("call PROCESS_GROUP_RELATIONSHIPS()")->execute();
+    $dbConn->query("call PROCESS_GROUP_RELATIONSHIPS($ts)")->execute();
     $this->io()->writeln(" ✅");
 
-    $conf->set('ts_finish', time());
+    $conf->set('processed_ts', $ts);
     $conf->save();
 
-    $this->io()->success("Finished.");
+    $this->io()->success("Finished");
   }
 
 }
