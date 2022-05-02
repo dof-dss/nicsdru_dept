@@ -39,6 +39,7 @@ class SettingsForm extends ConfigFormBase {
     $form['node_source_domains'] = [
       '#type' => 'details',
       '#title' => $this->t('Domain ID to URL mappings'),
+      '#description' => 'A list of Drupal 7 domain ID\'s and the corresponding website url.',
       '#open' => TRUE,
     ];
 
@@ -47,7 +48,7 @@ class SettingsForm extends ConfigFormBase {
     foreach ($domains as $key => $domain) {
       $form['node_source_domains']['node_source_domain_' . $key] = [
         '#type' => 'textfield',
-        '#title' => $this->t('ID: @id', ['@id' => $key] ),
+        '#title' => $this->t('ID: @id', ['@id' => $key]),
         '#default_value' => $domain,
       ];
     }
@@ -60,10 +61,12 @@ class SettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $form_vals = $form_state->getValues();
+    $domains = [];
 
+    // Fetch all the domain mapping id's and values.
     foreach ($form_vals as $key => $val) {
-      if (substr( $key, 0, 19) === "node_source_domain_") {
-        $domains[substr( $key, 19)] = $val;
+      if (substr($key, 0, 19) === "node_source_domain_") {
+        $domains[substr($key, 19)] = $val;
       }
     }
 
@@ -76,4 +79,3 @@ class SettingsForm extends ConfigFormBase {
   }
 
 }
-
