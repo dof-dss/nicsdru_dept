@@ -126,20 +126,32 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
 
           // Iterate all domains and generate links.
           $domains = explode('-', $node_migration_data->domains);
+          $domain_mappings = $this->configFactory->get('dept_dev.settings')->get('node_source_domains');
+
 
           foreach ($domains as $domain) {
-            // Skip 0 based domain id as this denotes 'all sites'.
+            // Iterate all domains if the source domain for the node is 0  as
+            // this denotes that it belongs to all sites.
             if ($domain == 0) {
-              continue;
-            }
-            $dept = $this->departmentManager->getDepartment('group_' . $domain);
-            $node_link = $dept->url() . 'node/' . $node_migration_data->d7nid;
+              foreach ($domain_mappings as $domain) {
+                $node_link = $domain . '/node/' . $node_migration_data->d7nid;
 
-            $links[] = [
-              '#title' => $dept->name() . ' : ' . $node->label(),
-              '#type' => 'link',
-              '#url' => Url::fromUri($node_link),
-            ];
+                $links[] = [
+                  '#title' => $domain . ' : ' . $node->label(),
+                  '#type' => 'link',
+                  '#url' => Url::fromUri($node_link),
+                ];
+              }
+              break;
+            }
+            else {
+              $node_link = $domain_mappings[$domain] . '/node/' . $node_migration_data->d7nid;
+              $links[] = [
+                '#title' => $domain_mappings[$domain] . ' : ' . $node->label(),
+                '#type' => 'link',
+                '#url' => Url::fromUri($node_link),
+              ];
+            }
           }
         }
       }
