@@ -133,11 +133,14 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
             // Iterate all domains if the source domain for the node is 0  as
             // this denotes that it belongs to all sites.
             if ($domain == 0) {
-              foreach ($domain_mappings as $domain) {
-                $node_link = $domain . '/node/' . $node_migration_data->d7nid;
+              foreach ($domain_mappings as $domain_map) {
+                if (substr( $domain_map, 0, 4) !== "http") {
+                  continue;
+                }
+                $node_link = $domain_map . '/node/' . $node_migration_data->d7nid;
 
                 $links[] = [
-                  '#title' => $domain . ' : ' . $node->label(),
+                  '#title' => $domain_map . ' : ' . $node->label(),
                   '#type' => 'link',
                   '#url' => Url::fromUri($node_link),
                 ];
