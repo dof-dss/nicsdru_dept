@@ -12,8 +12,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a migrated content summary block.
  *
  * @Block(
- *   id = "dept_mdash_mdashcontentsummary",
- *   admin_label = @Translation("MdashContentSummary"),
+ *   id = "dept_mdash_content_summary",
+ *   admin_label = @Translation("Mdash: Content Summary"),
  *   category = @Translation("mdash")
  * )
  */
