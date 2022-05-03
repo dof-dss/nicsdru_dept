@@ -1,0 +1,7 @@
+dept_mdash.dashboard:
+  path: '/admin/dept/mdash/dashboard'
+  defaults:
+    _title: 'Migration Dashboard'
+    _controller: '\Drupal\dept_mdash\Controller\DeptMdashController::build'
+  requirements:
+    _permission: 'administrator'
