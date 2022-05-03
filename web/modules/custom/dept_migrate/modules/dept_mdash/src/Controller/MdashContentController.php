@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Returns responses for Migration Dashboard routes.
  */
-class DeptMdashController extends ControllerBase {
+class MdashContentController extends ControllerBase {
 
   /**
    * The entity type manager.
@@ -24,7 +24,14 @@ class DeptMdashController extends ControllerBase {
    *
    * @var \Drupal\Core\Database\Connection
    */
-  protected $connection;
+  protected $dbConn;
+
+  /**
+   * The legacy database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $legacyConn;
 
   /**
    * The controller constructor.
@@ -33,10 +40,13 @@ class DeptMdashController extends ControllerBase {
    *   The entity type manager.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   The database connection.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, Connection $connection) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, Connection $connection, Connection $legacy_connection) {
     $this->entityTypeManager = $entity_type_manager;
-    $this->connection = $connection;
+    $this->dbConn = $connection;
+    $this->legacyConn = $legacy_connection;
   }
 
   /**
@@ -45,7 +55,8 @@ class DeptMdashController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('database')
+      $container->get('database'),
+      $container->get('dept_migrate.database_d7'),
     );
   }
 
