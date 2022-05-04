@@ -96,22 +96,33 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
       'ual',
     ];
 
+    $migration_timestamps = \Drupal::keyValue('migrate_last_imported');
+    $date_formatter = \Drupal::service('date.formatter');
+
     foreach ($bundles as $bundle) {
+
+//      ksm($imported->get('node_' . $bundle));
+
       $d9_rows = $this->dbConn->select('node')->condition('type', $bundle, '=')->countQuery()->execute()->fetchField();
       $d7_rows = $this->legacyConn->select('node')->condition('type', $bundle, '=')->countQuery()->execute()->fetchField();
       $diff = $d9_rows - $d7_rows;
       if ($diff > 0 ) {
         $diff_style = ['color: green'];
-        $row_style =  ['font-weight: bold'];
+        $row_style =  ['background-color: #cbd5e1'];
       }
       elseif ($diff < 0) {
         $diff_style = ['color: red'];
-        $row_style =  ['font-weight: bold'];
+        $row_style =  ['background-color: #cbd5e1'];
       }
       else {
         $diff_style = '';
         $row_style =  [''];
       }
+
+      // Retrieve and format the last imported date.
+      $imported = $migration_timestamps->get('node_' . $bundle);
+      $last_imported = $date_formatter->format((int) ($imported / 1000), 'custom', 'Y-m-d H:i:s');
+
       $rows[$bundle] = [
         'data' => [
         'bundle' => $bundle,
@@ -121,6 +132,7 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
           'data' => $d9_rows - $d7_rows,
           'style' => $diff_style,
         ],
+        'imported' => $last_imported,
         ],
         'style' => $row_style,
       ];
@@ -141,6 +153,10 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
       ],
       'diff' => [
         'data' => t('Difference'),
+        'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
+      ],
+      'imported' => [
+        'data' => t('Last imported'),
         'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
       ],
     ];
