@@ -1,0 +1,20 @@
+uuid: 1f838f2f-fcdc-4947-b0af-ce4d695abcb0
+langcode: en
+status: true
+dependencies:
+  module:
+    - dept_mdash
+  theme:
+    - bartik
+id: mdasherrorsummary
+theme: bartik
+region: content
+weight: -7
+provider: null
+plugin: dept_mdash_error_summary
+settings:
+  id: dept_mdash_error_summary
+  label: 'Mdash: Error Summary'
+  label_display: visible
+  provider: dept_mdash
+visibility: {  }
