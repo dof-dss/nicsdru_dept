@@ -101,7 +101,7 @@ class MdashErrorSummaryBlock extends BlockBase implements ContainerFactoryPlugin
 
       $rows[$table] = [
         [
-          'data'=> Markup::create(($has_messages) ? '&#9940; ' : '&#9989; ' . $table),
+          'data'=> Markup::create((($has_messages) ? '&#9940; ' : '&#9989; ') . $table),
           'colspan' => 2,
           'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
         ]
