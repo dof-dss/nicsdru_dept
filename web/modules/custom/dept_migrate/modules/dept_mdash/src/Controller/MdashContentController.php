@@ -65,12 +65,21 @@ class MdashContentController extends ControllerBase {
    */
   public function build() {
 
-    $build['content'] = [
-      '#type' => 'item',
-      '#markup' => $this->t('It works!'),
+    $block_manager = \Drupal::service('plugin.manager.block');
+    $config = [];
+
+    $plugin_block = $block_manager->createInstance('dept_mdash_content_summary', $config);
+    $content_status_block = $plugin_block->build();
+
+    $plugin_block = $block_manager->createInstance('dept_mdash_error_summary', $config);
+    $error_status_block = $plugin_block->build();
+
+    return [
+      '#theme' => 'mdash_dashboard',
+      '#content_status' => $content_status_block,
+      '#error_status' => $error_status_block,
     ];
 
-    return $build;
   }
 
 }
