@@ -78,6 +78,11 @@ class MdashContentController extends ControllerBase {
       '#theme' => 'mdash_dashboard',
       '#content_status' => $content_status_block,
       '#error_status' => $error_status_block,
+      '#attached' => array(
+        'library' => array(
+          'dept_mdash/dashboard',
+        ),
+      ),
     ];
 
   }
