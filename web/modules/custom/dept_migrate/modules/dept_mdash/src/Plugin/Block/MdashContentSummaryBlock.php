@@ -99,19 +99,50 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
     foreach ($bundles as $bundle) {
       $d9_rows = $this->dbConn->select('node')->condition('type', $bundle, '=')->countQuery()->execute()->fetchField();
       $d7_rows = $this->legacyConn->select('node')->condition('type', $bundle, '=')->countQuery()->execute()->fetchField();
+      $diff = $d9_rows - $d7_rows;
+      if ($diff > 0 ) {
+        $diff_style = ['color: green'];
+        $row_style =  ['font-weight: bold'];
+      }
+      elseif ($diff < 0) {
+        $diff_style = ['color: red'];
+        $row_style =  ['font-weight: bold'];
+      }
+      else {
+        $diff_style = '';
+        $row_style =  [''];
+      }
       $rows[$bundle] = [
+        'data' => [
         'bundle' => $bundle,
         'd9' => $d9_rows,
         'd7' => $d7_rows,
-        'diff' => $d9_rows - $d7_rows,
+        'diff' => [
+          'data' => $d9_rows - $d7_rows,
+          'style' => $diff_style,
+        ],
+        ],
+        'style' => $row_style,
       ];
     }
 
     $header = [
-      'bundle' => t('Bundle'),
-      'd9' => t('Drupal 9'),
-      'd7' => t('Drupal 7'),
-      'diff' => t('difference'),
+      'bundle' => [
+        'data' => t('Bundle'),
+        'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
+      ],
+      'd9' => [
+        'data' => t('Drupal 9'),
+        'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
+      ],
+      'd7' => [
+        'data' => t('Drupal 7'),
+        'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
+      ],
+      'diff' => [
+        'data' => t('Difference'),
+        'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
+      ],
     ];
 
     $build['content'] = [
