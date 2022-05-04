@@ -125,7 +125,7 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
 
       $rows[$bundle] = [
         'data' => [
-        'bundle' => $bundle,
+        'bundle' => ($bundle === 'publication') ? $bundle . "*" : $bundle,
         'd9' => $d9_rows,
         'd7' => $d7_rows,
         'diff' => [
@@ -165,6 +165,7 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
+      '#suffix' => "* publication contains both 'publication' and 'secure publication' nodes from the Drupal 7 site.",
     ];
     return $build;
   }
