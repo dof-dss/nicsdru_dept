@@ -337,12 +337,18 @@ class MigrateUuidLookupManager {
         'd7uuid' => $row->uuid,
         'd7type' => $row->type,
         'd7filename' => $row->filename,
+        'd7uri' => $row->uri,
       ];
     }
 
     // Match up to D9 files using uuid as key from migrate table.
     foreach ($map as $d7fid => $file) {
       $table = 'migrate_map_d7_file';
+
+      if (preg_match('/^private/', $file['d7uri'])) {
+        $table = 'migrate_map_d7_file_private';
+      }
+
       $d9_entity = 'file';
 
       if ($this->dbconn->schema()->tableExists($table) === FALSE) {
@@ -393,28 +399,27 @@ class MigrateUuidLookupManager {
         'd7uuid' => $row->uuid,
         'd7type' => $row->type,
         'd7filename' => $row->filename,
+        'd7uri' => $row->uri,
       ];
     }
 
     // Match up to D9 media entity using D7 file uuid as key from migrate table.
     foreach ($map as $d7fid => $file) {
-      $table = 'migrate_map_d7_file';
-
       // Switch table if there's a specified type for this file.
       switch ($file['d7type']) {
         case 'document':
-          $table .= '_media_document';
+        case 'undefined':
+          $table = 'migrate_map_d7_file_media_document';
           break;
 
         case 'image':
-          $table .= '_media_image';
+          $table = 'migrate_map_d7_file_media_image';
           break;
 
         case 'video':
         case 'remote_video':
-          $table .= '_media_video';
+          $table = 'migrate_map_d7_file_media_video';
           break;
-
       }
 
       if ($this->dbconn->schema()->tableExists($table) === FALSE) {
@@ -423,20 +428,42 @@ class MigrateUuidLookupManager {
         continue;
       }
 
-      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
+      $file_table = 'migrate_map_d7_file';
+      if (preg_match('/^private/', $file['d7uri'])) {
+        $file_table = 'migrate_map_d7_file_private';
+      }
+
+      $migrate_map = $this->dbconn->query("SELECT * from ${file_table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
 
       foreach ($migrate_map as $row) {
         if (empty($row->destid1)) {
+          $this->logger->error('destid1 property of media lookup was null and failed.');
           continue;
         }
 
-        $media = $this->entityTypeManager->getStorage('media')->load($row->destid1);
+        $media_entity = NULL;
+        $media_entities = \Drupal::entityTypeManager()->getStorage('media')->loadByProperties([
+          'field_media_file' => $row->destid1,
+        ]);
+        $media_entity = is_array($media_entities) ? array_pop($media_entities) : NULL;
 
-        if ($media instanceof MediaInterface) {
-          $map[$d7fid]['id'] = $media->id();
-          $map[$d7fid]['uuid'] = $media->uuid();
-          $map[$d7fid]['filename'] = $media->label();
-          $map[$d7fid]['type'] = $media->bundle();
+        // If null, try loading by secure media file property.
+        if (empty($media_entity)) {
+          $media_entities = \Drupal::entityTypeManager()->getStorage('media')->loadByProperties([
+            'field_media_file_1' => $row->destid1,
+          ]);
+
+          $media_entity = is_array($media_entities) ? array_pop($media_entities) : NULL;
+        }
+
+        if ($media_entity instanceof EntityInterface) {
+          $map[$d7fid]['id'] = $media_entity->id();
+          $map[$d7fid]['uuid'] = $media_entity->uuid();
+          $map[$d7fid]['filename'] = $media_entity->label();
+          $map[$d7fid]['type'] = $media_entity->bundle();
+        }
+        else {
+          $this->logger->error('No match found for media entity with file property value of ' . $row->destid1);
         }
       }
     }
