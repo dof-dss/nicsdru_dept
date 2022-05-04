@@ -40,7 +40,7 @@ class MdashContentController extends ControllerBase {
    *   The entity type manager.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection.
-   * @param \Drupal\Core\Database\Connection $connection
+   * @param \Drupal\Core\Database\Connection $legacy_connection
    *   The database connection.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, Connection $connection, Connection $legacy_connection) {
@@ -78,11 +78,11 @@ class MdashContentController extends ControllerBase {
       '#theme' => 'mdash_dashboard',
       '#content_status' => $content_status_block,
       '#error_status' => $error_status_block,
-      '#attached' => array(
-        'library' => array(
+      '#attached' => [
+        'library' => [
           'dept_mdash/dashboard',
-        ),
-      ),
+        ],
+      ],
     ];
 
   }

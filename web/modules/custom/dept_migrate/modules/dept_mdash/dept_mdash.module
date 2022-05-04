@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * mDash module hooks.
+ */
+
+/**
  * Implements hook_theme().
  */
 function dept_mdash_theme($existing, $type, $theme, $path) {

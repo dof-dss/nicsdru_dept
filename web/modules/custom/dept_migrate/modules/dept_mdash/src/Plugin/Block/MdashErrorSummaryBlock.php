@@ -94,26 +94,24 @@ class MdashErrorSummaryBlock extends BlockBase implements ContainerFactoryPlugin
     ];
 
     foreach ($msg_tables as $table) {
-
       $results = $this->dbConn->query("SELECT * FROM migrate_message_$table")->fetchAll();
-
       $has_messages = count($results) > 0;
 
       $rows[$table] = [
         [
-          'data'=> Markup::create((($has_messages) ? '&#9940; ' : '&#9989; ') . $table),
+          'data' => Markup::create((($has_messages) ? '&#9940; ' : '&#9989; ') . $table),
           'colspan' => 2,
           'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
         ]
       ];
 
-       if (count($results) > 0) {
-         $rows[$table . '_header'] = $header;
+      if (count($results) > 0) {
+        $rows[$table . '_header'] = $header;
 
-         foreach ($results as $result) {
-           $rows[$result->msgid] = [$result->msgid, $result->message];
-         }
-       }
+        foreach ($results as $result) {
+          $rows[$result->msgid] = [$result->msgid, $result->message];
+        }
+      }
     }
 
     $build['content'] = [
@@ -123,9 +121,11 @@ class MdashErrorSummaryBlock extends BlockBase implements ContainerFactoryPlugin
     return $build;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getCacheMaxAge() {
     return 0;
   }
-
 
 }

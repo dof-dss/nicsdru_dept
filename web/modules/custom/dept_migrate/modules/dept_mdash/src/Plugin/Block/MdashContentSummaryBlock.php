@@ -47,7 +47,7 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
    *   The plugin implementation definition.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection.
-   * @param \Drupal\Core\Database\Connection $connection
+   * @param \Drupal\Core\Database\Connection $legacy_connection
    *   The legacy database connection.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $connection, Connection $legacy_connection) {
@@ -103,17 +103,17 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
       $d9_rows = $this->dbConn->select('node')->condition('type', $bundle, '=')->countQuery()->execute()->fetchField();
       $d7_rows = $this->legacyConn->select('node')->condition('type', $bundle, '=')->countQuery()->execute()->fetchField();
       $diff = $d9_rows - $d7_rows;
-      if ($diff > 0 ) {
+      if ($diff > 0) {
         $diff_style = ['color: green'];
-        $row_style =  ['background-color: #cbd5e1'];
+        $row_style = ['background-color: #cbd5e1'];
       }
       elseif ($diff < 0) {
         $diff_style = ['color: red'];
-        $row_style =  ['background-color: #cbd5e1'];
+        $row_style = ['background-color: #cbd5e1'];
       }
       else {
         $diff_style = '';
-        $row_style =  [''];
+        $row_style = [''];
       }
 
       // Retrieve and format the last imported date.
@@ -122,14 +122,14 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
 
       $rows[$bundle] = [
         'data' => [
-        'bundle' => ($bundle === 'publication') ? $bundle . "*" : $bundle,
-        'd9' => $d9_rows,
-        'd7' => $d7_rows,
-        'diff' => [
-          'data' => $d9_rows - $d7_rows,
-          'style' => $diff_style,
-        ],
-        'imported' => $last_imported,
+          'bundle' => ($bundle === 'publication') ? $bundle . "*" : $bundle,
+          'd9' => $d9_rows,
+          'd7' => $d7_rows,
+          'diff' => [
+            'data' => $d9_rows - $d7_rows,
+            'style' => $diff_style,
+          ],
+          'imported' => $last_imported,
         ],
         'style' => $row_style,
       ];
@@ -162,14 +162,17 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
-      '#suffix' => "* publication contains both 'publication' and 'secure publication' nodes from the Drupal 7 site.",
+      '#suffix' => "* publication contains both 'publication' and 'secure publication' nodes from the Drupal 7 site.
+         <br>A positive or negative difference is not an unequivocal indication that data has not been migrated and should be verified by checking the 2 data sources.",
     ];
     return $build;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getCacheMaxAge() {
     return 0;
   }
-
 
 }
