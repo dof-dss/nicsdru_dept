@@ -5,7 +5,6 @@ namespace Drupal\dept_mdash\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\example\ExampleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -85,23 +84,39 @@ class MdashErrorSummaryBlock extends BlockBase implements ContainerFactoryPlugin
       'node_ual',
     ];
 
+    $header = [
+      'data' => [
+        'id' => t('ID'),
+        'message' => t('Message'),
+      ],
+      'style' => ['font-weight: bold; background-color: #cbd5e1']
+    ];
+
     foreach ($msg_tables as $table) {
 
-      $results = $this->dbConn->query("SELECT * FROM migrate_message_$table");
+      $results = $this->dbConn->query("SELECT * FROM migrate_message_$table")->fetchAll();
 
-      foreach ($results as $result) {
-        $rows[$result->msgid] = [$result->msgid, $result->message];
-      }
+      $has_messages = count($results) > 0;
+
+      $rows[$table] = [
+        [
+          'data'=> (($has_messages) ? ⛔ : ✅️) . ' ' . $table,
+          'colspan' => 2,
+          'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
+        ]
+      ];
+
+       if (count($results) > 0) {
+         $rows[$table . '_header'] = $header;
+
+         foreach ($results as $result) {
+           $rows[$result->msgid] = [$result->msgid, $result->message];
+         }
+       }
     }
-
-    $header = [
-      'id' => t('ID'),
-      'message' => t('Message'),
-    ];
 
     $build['content'] = [
       '#type' => 'table',
-      '#header' => $header,
       '#rows' => $rows,
     ];
     return $build;
