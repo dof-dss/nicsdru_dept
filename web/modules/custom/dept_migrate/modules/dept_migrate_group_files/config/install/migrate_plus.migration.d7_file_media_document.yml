@@ -16,7 +16,18 @@ source:
   batch_size: 1000
   constants:
     bundle: 'document'
+    ignore_uri_regex: '|^private://|'
 process:
+  skip_private_files:
+    plugin: skip_on_condition
+    source:
+      - 'constants/ignore_uri_regex'
+      - uri
+    condition:
+      plugin: callback
+      callable: preg_match
+      unpack_source: true
+    method: row
   bundle: 'constants/bundle'
   langcode:
     plugin: default_value
