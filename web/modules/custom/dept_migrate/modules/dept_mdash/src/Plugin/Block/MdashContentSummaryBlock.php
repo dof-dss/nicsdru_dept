@@ -100,9 +100,6 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
     $date_formatter = \Drupal::service('date.formatter');
 
     foreach ($bundles as $bundle) {
-
-//      ksm($imported->get('node_' . $bundle));
-
       $d9_rows = $this->dbConn->select('node')->condition('type', $bundle, '=')->countQuery()->execute()->fetchField();
       $d7_rows = $this->legacyConn->select('node')->condition('type', $bundle, '=')->countQuery()->execute()->fetchField();
       $diff = $d9_rows - $d7_rows;
@@ -144,11 +141,11 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
         'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
       ],
       'd9' => [
-        'data' => t('Drupal 9'),
+        'data' => t('Drupal 9 total'),
         'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
       ],
       'd7' => [
-        'data' => t('Drupal 7'),
+        'data' => t('Drupal 7 total'),
         'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
       ],
       'diff' => [
