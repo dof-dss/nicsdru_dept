@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -442,14 +441,14 @@ class MigrateUuidLookupManager {
         }
 
         $media_entity = NULL;
-        $media_entities = \Drupal::entityTypeManager()->getStorage('media')->loadByProperties([
+        $media_entities = $this->entityTypeManager->getStorage('media')->loadByProperties([
           'field_media_file' => $row->destid1,
         ]);
         $media_entity = is_array($media_entities) ? array_pop($media_entities) : NULL;
 
         // If null, try loading by secure media file property.
         if (empty($media_entity)) {
-          $media_entities = \Drupal::entityTypeManager()->getStorage('media')->loadByProperties([
+          $media_entities = $this->entityTypeManager->getStorage('media')->loadByProperties([
             'field_media_file_1' => $row->destid1,
           ]);
 
