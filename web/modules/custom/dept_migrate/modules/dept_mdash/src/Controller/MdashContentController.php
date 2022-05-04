@@ -2,9 +2,8 @@
 
 namespace Drupal\dept_mdash\Controller;
 
+use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -13,40 +12,21 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class MdashContentController extends ControllerBase {
 
   /**
-   * The entity type manager.
+   * The block manager service.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\Core\Block\BlockManagerInterface
    */
-  protected $entityTypeManager;
-
-  /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $dbConn;
-
-  /**
-   * The legacy database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $legacyConn;
+  protected $blockManager;
 
   /**
    * The controller constructor.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\Core\Database\Connection $connection
-   *   The database connection.
-   * @param \Drupal\Core\Database\Connection $legacy_connection
-   *   The database connection.
+   * @param \Drupal\Core\Block\BlockManagerInterface $block_manager
+   *   The block manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, Connection $connection, Connection $legacy_connection) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->dbConn = $connection;
-    $this->legacyConn = $legacy_connection;
+  public function __construct(BlockManagerInterface $block_manager) {
+    $this->blockManager = $block_manager;
+
   }
 
   /**
@@ -54,9 +34,7 @@ class MdashContentController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager'),
-      $container->get('database'),
-      $container->get('dept_migrate.database_d7'),
+      $container->get('plugin.manager.block'),
     );
   }
 
@@ -64,14 +42,10 @@ class MdashContentController extends ControllerBase {
    * Builds the response.
    */
   public function build() {
-
-    $block_manager = \Drupal::service('plugin.manager.block');
-    $config = [];
-
-    $plugin_block = $block_manager->createInstance('dept_mdash_content_summary', $config);
+    $plugin_block = $this->blockManager->createInstance('dept_mdash_content_summary', []);
     $content_status_block = $plugin_block->build();
 
-    $plugin_block = $block_manager->createInstance('dept_mdash_error_summary', $config);
+    $plugin_block = $this->blockManager->createInstance('dept_mdash_error_summary', []);
     $error_status_block = $plugin_block->build();
 
     return [
