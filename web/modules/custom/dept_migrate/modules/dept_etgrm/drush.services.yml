@@ -1,0 +1,6 @@
+services:
+  dept_etgrm.commands:
+    class: \Drupal\dept_etgrm\Commands\EtgrmCommands
+    arguments: ['@config.factory']
+    tags:
+      - { name: drush.command }
