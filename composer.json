@@ -147,8 +147,11 @@
         "drupal/migrate_devel": "2.x",
         "drupal/stage_file_proxy": "^1.1",
         "kint-php/kint": "^3.3",
-        "mglaman/drupal-check": "^1.1",
+        "mglaman/phpstan-drupal": "^1.1",
         "phpspec/prophecy-phpunit": "^2",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^1.6",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
         "previousnext/phpunit-finder": "^2.0"
     },
     "conflict": {
