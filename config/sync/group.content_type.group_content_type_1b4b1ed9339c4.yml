@@ -1,0 +1,19 @@
+uuid: 07c53a42-365b-4d1a-b9f2-147535dc31e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+    - node.type.landing_page
+  module:
+    - gnode
+    - node
+id: group_content_type_1b4b1ed9339c4
+label: 'Department site: Group node (Landing page)'
+description: 'Adds <em class="placeholder">Landing page</em> content to groups both publicly and privately.'
+group_type: department_site
+content_plugin: 'group_node:landing_page'
+plugin_config:
+  group_cardinality: 0
+  entity_cardinality: 1
+  use_creation_wizard: false
