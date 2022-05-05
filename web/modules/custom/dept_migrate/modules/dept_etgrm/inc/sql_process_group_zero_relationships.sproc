@@ -1,0 +1,18 @@
+/*
+ Create relationship rows for all department groups if the node is assigned a domain ID of 0.
+ */
+CREATE PROCEDURE PROCESS_GROUP_ZERO_RELATIONSHIPS()
+BEGIN
+  /* Create a row for every department (group) id if a relationship has a
+     domains id of 0 (belongs to all groups). */
+  INSERT INTO group_relationships (nid, gid, gc_type, label)
+  SELECT gr.nid, g.id, gr.gc_type, gr.label
+  FROM group_relationships as gr
+  CROSS JOIN groups as g
+  WHERE gr.gid = 0
+  AND g.type = 'department_site';
+
+  /* No longer need the 0 group relationship, so it's safe to remove all. */
+  DELETE FROM group_relationships
+  WHERE gid = 0;
+END

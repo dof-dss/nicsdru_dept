@@ -1,0 +1,16 @@
+/*
+ Return the group content plugin id for a given migration map table.
+ */
+CREATE FUNCTION CONTENT_PLUGIN_ID(tablename VARCHAR(64)) RETURNS VARCHAR(32)
+BEGIN
+  DECLARE output VARCHAR(32);
+
+  RETURN CASE SUBSTRING(tablename, 18)
+    WHEN 'article' THEN 'group_content_type_8f3c8c40c5ced'
+    WHEN 'consultation' THEN 'group_content_type_fb2d5fb87aade'
+    WHEN 'easychart' THEN 'group_content_type_85765319814ca'
+    WHEN 'news' THEN 'department_site-group_node-news'
+    WHEN 'publication' THEN 'group_content_type_d91f8322473a4'
+    ELSE 'unknown_plugin'
+  END;
+END

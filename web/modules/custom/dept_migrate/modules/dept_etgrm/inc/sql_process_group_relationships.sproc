@@ -1,0 +1,35 @@
+/*
+ Insert all of the relationship data into the group content tables.
+ */
+CREATE PROCEDURE PROCESS_GROUP_RELATIONSHIPS(ts INT)
+BEGIN
+	DECLARE current INT;
+  SET current = 0;
+
+  SELECT COUNT(`id`)
+  FROM `group_relationships`
+  INTO @total;
+
+  /* Process each relationship individually to get the last
+   inserted id to ensure data integrity between group_content
+   and group_content_field_data. */
+  loop_relationships: LOOP
+    IF current > @total THEN
+      LEAVE loop_relationships;
+    END IF;
+
+    SELECT `nid`, `gid`, `gc_type`, `label`
+    INTO @nid, @gid, @gc_type, @label
+    FROM `group_relationships`
+    LIMIT 1
+    OFFSET current;
+
+    INSERT INTO group_content (`type`, `uuid`, `langcode`)
+    VALUES (@gc_type, UUID(), 'en');
+
+    INSERT INTO group_content_field_data (`id`, `type`, `langcode`, `uid`, `gid`, `entity_id`, `label`, `created`, `changed`, `default_langcode`)
+    VALUES (LAST_INSERT_ID(), @gc_type, 'en', 1, @gid, @nid, @label, ts, ts, 1);
+
+    SET current = current + 1;
+  END LOOP loop_relationships;
+END
