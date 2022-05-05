@@ -90,7 +90,7 @@ class MdashErrorSummaryBlock extends BlockBase implements ContainerFactoryPlugin
         'id' => t('ID'),
         'message' => t('Message'),
       ],
-      'style' => ['font-weight: bold; background-color: #cbd5e1']
+      'class' => ['mdash-highlight']
     ];
 
     foreach ($msg_tables as $table) {
@@ -101,7 +101,7 @@ class MdashErrorSummaryBlock extends BlockBase implements ContainerFactoryPlugin
         [
           'data' => Markup::create((($has_messages) ? '&#9940; ' : '&#9989; ') . $table),
           'colspan' => 2,
-          'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
+          'class' => ['mdash-header']
         ]
       ];
 

@@ -105,15 +105,15 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
       $diff = $d9_rows - $d7_rows;
       if ($diff > 0) {
         $diff_style = ['color: green'];
-        $row_style = ['background-color: #cbd5e1'];
+        $row_class = ['mdash-highlight'];
       }
       elseif ($diff < 0) {
         $diff_style = ['color: red'];
-        $row_style = ['background-color: #cbd5e1'];
+        $row_class = ['mdash-highlight'];
       }
       else {
         $diff_style = '';
-        $row_style = [''];
+        $row_class = [''];
       }
 
       // Retrieve and format the last imported date.
@@ -131,30 +131,30 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
           ],
           'imported' => $last_imported,
         ],
-        'style' => $row_style,
+        'class' => $row_class,
       ];
     }
 
     $header = [
       'bundle' => [
         'data' => t('Bundle'),
-        'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
+        'class' => ['mdash-header'],
       ],
       'd9' => [
         'data' => t('Drupal 9 total'),
-        'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
+        'class' => ['mdash-header'],
       ],
       'd7' => [
         'data' => t('Drupal 7 total'),
-        'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
+        'class' => ['mdash-header'],
       ],
       'diff' => [
         'data' => t('Difference'),
-        'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
+        'class' => ['mdash-header'],
       ],
       'imported' => [
         'data' => t('Last imported'),
-        'style' => ['font-weight: bold; color: #1e293b; background-color: #94a3b8']
+        'class' => ['mdash-header'],
       ],
     ];
 
