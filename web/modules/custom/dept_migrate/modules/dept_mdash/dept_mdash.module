@@ -12,8 +12,9 @@ function dept_mdash_theme($existing, $type, $theme, $path) {
   return [
     'mdash_dashboard' => [
       'variables' => [
-        'content_status' => NULL,
-        'error_status' => NULL,
+        'content_summary' => NULL,
+        'error_summary' => NULL,
+        'relationship_summary' => NULL,
       ],
     ],
   ];

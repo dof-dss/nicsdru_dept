@@ -43,15 +43,19 @@ class MdashContentController extends ControllerBase {
    */
   public function build() {
     $plugin_block = $this->blockManager->createInstance('dept_mdash_content_summary', []);
-    $content_status_block = $plugin_block->build();
+    $content_summary_block = $plugin_block->build();
 
     $plugin_block = $this->blockManager->createInstance('dept_mdash_error_summary', []);
-    $error_status_block = $plugin_block->build();
+    $error_summary_block = $plugin_block->build();
+
+    $plugin_block = $this->blockManager->createInstance('dept_mdash_relationship_summary', []);
+    $relationship_summary_block = $plugin_block->build();
 
     return [
       '#theme' => 'mdash_dashboard',
-      '#content_status' => $content_status_block,
-      '#error_status' => $error_status_block,
+      '#content_summary' => $content_summary_block,
+      '#error_summary' => $error_summary_block,
+      '#relationship_summary' => $relationship_summary_block,
       '#attached' => [
         'library' => [
           'dept_mdash/dashboard',
