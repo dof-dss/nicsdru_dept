@@ -6,11 +6,29 @@ BEGIN
   DECLARE output VARCHAR(32);
 
   RETURN CASE SUBSTRING(tablename, 18)
+    WHEN 'actions' THEN 'group_content_type_ef01e89809ca7'
+    WHEN 'application' THEN 'group_content_type_9dbed154ced4f'
     WHEN 'article' THEN 'group_content_type_8f3c8c40c5ced'
+    WHEN 'book' THEN 'department_site-group_node-book'
+    WHEN 'case_study' THEN 'group_content_type_729499773bd55'
     WHEN 'consultation' THEN 'group_content_type_fb2d5fb87aade'
+    WHEN 'contact' THEN 'group_content_type_806d1de5fafe5'
     WHEN 'easychart' THEN 'group_content_type_85765319814ca'
+    WHEN 'gallery' THEN 'group_content_type_671a55a120b42'
+    WHEN 'global_page' THEN 'group_content_type_34099e0cf683b'
+    WHEN 'heritage_site' THEN 'group_content_type_4206bea64afae'
+    WHEN 'infogram' THEN 'group_content_type_6061d9dc53978'
+    WHEN 'landing_page' THEN 'group_content_type_1b4b1ed9339c4'
+    WHEN 'link' THEN 'department_site-group_node-link'
     WHEN 'news' THEN 'department_site-group_node-news'
+    WHEN 'page' THEN 'department_site-group_node-page'
+    WHEN 'profile' THEN 'group_content_type_d17c35c98baa3'
+    WHEN 'project' THEN 'group_content_type_85d66e53e8361'
+    WHEN 'protected_area' THEN 'group_content_type_ec8e415306531'
     WHEN 'publication' THEN 'group_content_type_d91f8322473a4'
+    WHEN 'subtopic' THEN 'group_content_type_9741084175ea2'
+    WHEN 'topic' THEN 'department_site-group_node-topic'
+    WHEN 'ual' THEN 'department_site-group_node-ual'
     ELSE 'unknown_plugin'
   END;
 END
