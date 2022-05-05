@@ -8,7 +8,6 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
-use Drupal\dept_core\DepartmentManager;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -25,13 +24,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginInterface {
-
-  /**
-   * The department.manager service.
-   *
-   * @var \Drupal\dept_core\DepartmentManager
-   */
-  protected $departmentManager;
 
   /**
    * The database connection.
@@ -66,8 +58,6 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\dept_core\DepartmentManager $department_manager
-   *   The department.manager service.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
@@ -75,9 +65,8 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The Config Factory Service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, DepartmentManager $department_manager, Connection $connection, RouteMatchInterface $route_match, ConfigFactoryInterface $configFactory) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $connection, RouteMatchInterface $route_match, ConfigFactoryInterface $configFactory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->departmentManager = $department_manager;
     $this->dbConn = $connection;
     $this->routeMatch = $route_match;
     $this->configFactory = $configFactory;
@@ -91,7 +80,6 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('department.manager'),
       $container->get('database'),
       $container->get('current_route_match'),
       $container->get('config.factory')
@@ -126,20 +114,35 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
 
           // Iterate all domains and generate links.
           $domains = explode('-', $node_migration_data->domains);
+          $domain_mappings = $this->configFactory->get('dept_dev.settings')->get('node_source_domains');
 
+          // Iterate each domain ID in the migration data.
           foreach ($domains as $domain) {
-            // Skip 0 based domain id as this denotes 'all sites'.
+            // Iterate all domain mappings if the source domain for the node
+            // is 0 as this denotes that it belongs to all sites.
             if ($domain == 0) {
-              continue;
-            }
-            $dept = $this->departmentManager->getDepartment('group_' . $domain);
-            $node_link = $dept->url() . 'node/' . $node_migration_data->d7nid;
+              foreach ($domain_mappings as $domain_map) {
+                if (substr($domain_map, 0, 4) !== "http") {
+                  continue;
+                }
+                $node_link = $domain_map . '/node/' . $node_migration_data->d7nid;
 
-            $links[] = [
-              '#title' => $dept->name() . ' : ' . $node->label(),
-              '#type' => 'link',
-              '#url' => Url::fromUri($node_link),
-            ];
+                $links[] = [
+                  '#title' => $domain_map . ' : ' . $node->label(),
+                  '#type' => 'link',
+                  '#url' => Url::fromUri($node_link),
+                ];
+              }
+              break;
+            }
+            else {
+              $node_link = $domain_mappings[$domain] . '/node/' . $node_migration_data->d7nid;
+              $links[] = [
+                '#title' => $domain_mappings[$domain] . ' : ' . $node->label(),
+                '#type' => 'link',
+                '#url' => Url::fromUri($node_link),
+              ];
+            }
           }
         }
       }
