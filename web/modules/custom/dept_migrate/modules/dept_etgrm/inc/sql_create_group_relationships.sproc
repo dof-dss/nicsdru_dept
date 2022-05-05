@@ -1,0 +1,77 @@
+/*
+ Create all node to group relationships for all the node migration tables present in the database.
+ */
+CREATE PROCEDURE CREATE_GROUP_RELATIONSHIPS(db_schema VARCHAR(32))
+BEGIN
+  DECLARE table_index INT;  SET table_index = 0;
+
+  DROP TABLE IF EXISTS `group_relationships`;
+
+  CREATE TABLE `group_relationships` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `nid` int(10) DEFAULT NULL,
+    `gid` int(10) DEFAULT NULL,
+    `gc_type` varchar(32) DEFAULT NULL,
+    `label` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+  ) ENGINE=InnoDB AUTO_INCREMENT=383 DEFAULT CHARSET=utf8;
+
+  /* Create a temporary table to store a list of all of the migrate_map_node
+     tables for processing. */
+  DROP TEMPORARY TABLE IF EXISTS migration_tables;
+  CREATE TEMPORARY TABLE `migration_tables` (   `id` INT PRIMARY KEY AUTO_INCREMENT,  	`table_name` VARCHAR(80) NOT NULL );
+
+  /* Insert all the migration_map_node tables from ehe db into
+     our temporary table. We use the db_schema variable to allow
+     for hosting environment changes. */
+  INSERT INTO `migration_tables` (`table_name`)
+  SELECT `table_name`
+  FROM information_schema.tables
+  WHERE `table_schema` = db_schema AND table_name LIKE 'migrate_map_node%'
+  ORDER BY table_name;
+
+  SELECT COUNT(`table_name`)
+  FROM `migration_tables`
+  INTO @table_total;
+
+  /* Loop through each migration table and process the migration rows. */
+  loop_migration_tables: LOOP
+  	IF table_index > @table_total THEN
+  		LEAVE loop_migration_tables;
+    END IF;
+
+    /* Assign the current loop tablename. */
+    SELECT `table_name`
+    FROM `migration_tables`
+    LIMIT 1
+    OFFSET table_index
+    INTO @tablename;
+
+    /* Fetch the Group content plugin id for this node type. */
+    SET @plugin = CONTENT_PLUGIN_ID(@tablename);
+
+    SET @i = 1;
+    REPEAT
+      /* Have to use a prepared statement here as MySQL won't let you
+         use a variable for a table name :(.
+         Take the current migration table, iterate each row, further
+         iterating the domain ids column (sourceid3) to create a row for
+         each node and domain/group. */
+      SET @sql = CONCAT("INSERT INTO `group_relationships` (`nid`, `gid`, `gc_type`, `label`)
+                  SELECT mm.destid1, DOMAIN_ID_TO_GROUP_ID(mm.sourceid3, '-', ",@i,"), '",@plugin,"', nf.title
+                  FROM `", @tablename, "` AS mm
+                  INNER JOIN `node_field_data` AS nf
+                  ON mm.destid1 = nf.nid
+        	        WHERE DOMAIN_ID_TO_GROUP_ID(mm.sourceid3, '-', ",@i,") IS NOT NULL AND mm.destid1 IS NOT NULL");
+
+      PREPARE stmt FROM @sql;
+      EXECUTE stmt;
+      DEALLOCATE PREPARE stmt;
+
+      SET @i = @i + 1;
+      UNTIL ROW_COUNT() = 0
+    END REPEAT;
+
+    SET table_index = table_index+1;
+  END LOOP loop_migration_tables;
+END
