@@ -5,9 +5,7 @@ namespace Drupal\dept_mdash\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
-use Drupal\Core\KeyValueStore\KeyValueStoreInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\example\ExampleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -47,7 +45,7 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
    *
    * @var array
    */
-  protected array $migration_ts;
+  protected array $migrationTimestamps;
 
   /**
    * Constructs a new MdashcontentsummaryBlock instance.
@@ -65,6 +63,8 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
    *   The database connection.
    * @param \Drupal\Core\Database\Connection $legacy_connection
    *   The legacy database connection.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   Date formatter service.
    * @param array $migration_import_timestamps
    *   Array of last import timestamps for each migration.
    */
@@ -73,7 +73,7 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
     $this->dbConn = $connection;
     $this->legacyConn = $legacy_connection;
     $this->dateFormatter = $date_formatter;
-    $this->migration_ts = $migration_import_timestamps;
+    $this->migrationTimestamps = $migration_import_timestamps;
   }
 
   /**
@@ -140,7 +140,7 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
       }
 
       // Retrieve and format the last imported date.
-      $imported = $this->migration_ts['node_' . $bundle];
+      $imported = $this->migrationTimestamps['node_' . $bundle];
       $last_imported = $this->dateFormatter->format((int) ($imported / 1000), 'custom', 'Y-m-d H:i:s');
 
       $rows[$bundle] = [

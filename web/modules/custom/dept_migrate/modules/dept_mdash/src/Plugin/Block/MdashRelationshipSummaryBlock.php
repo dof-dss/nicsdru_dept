@@ -5,7 +5,6 @@ namespace Drupal\dept_mdash\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\example\ExampleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
