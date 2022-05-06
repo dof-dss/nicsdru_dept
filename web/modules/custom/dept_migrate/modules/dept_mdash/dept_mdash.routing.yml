@@ -4,4 +4,4 @@ dept_mdash.dashboard:
     _title: 'Migration Dashboard'
     _controller: '\Drupal\dept_mdash\Controller\MdashContentController::build'
   requirements:
-    _permission: 'administrator'
+    _permission: 'access migration dashboard'
