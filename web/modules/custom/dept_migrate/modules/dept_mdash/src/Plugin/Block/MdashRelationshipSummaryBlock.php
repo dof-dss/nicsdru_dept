@@ -64,38 +64,45 @@ class MdashRelationshipSummaryBlock extends BlockBase implements ContainerFactor
    */
   public function build() {
 
-    $bundles = [
-      'actions',
-      'application',
-      'article',
-      'consultation',
-      'contact',
-      'easychart',
-      'gallery',
-      'heritage_site',
-      'infogram',
-      'landing_page',
-      'link',
-      'news',
-      'page',
-      'profile',
-      'protected_area',
-      'publication',
-      'subtopic',
-      'topic',
-      'ual',
+    $mapping = [
+      'group_content_type_ef01e89809ca7' => 'actions',
+      'group_content_type_9dbed154ced4f' => 'application',
+      'group_content_type_8f3c8c40c5ced' => 'article',
+      'group_content_type_729499773bd55' => 'case_study',
+      'group_content_type_fb2d5fb87aade' => 'consultation',
+      'group_content_type_806d1de5fafe5' => 'contact',
+      'group_content_type_85765319814ca' => 'easychart',
+      'group_content_type_671a55a120b42' => 'gallery',
+      'group_content_type_34099e0cf683b' => 'global_page',
+      'group_content_type_4206bea64afae' => 'heritage_site',
+      'group_content_type_6061d9dc53978' => 'infogram',
+      'group_content_type_1b4b1ed9339c4' => 'landing_page',
+      'department_site-group_node-news' => 'news',
+      'group_content_type_d17c35c98baa3' => 'profile',
+      'group_content_type_85d66e53e8361' => 'project',
+      'group_content_type_ec8e415306531' => 'protected_area',
+      'group_content_type_d91f8322473a4' => 'publication',
+      'group_content_type_9741084175ea2' => 'subtopic',
+      'department_site-group_node-ual' => 'ual',
+      'department_site-group_membership' => 'user',
     ];
 
     $header = [
-      'type' => $this->t('Type'),
-      'total' => $this->t('Total'),
+      'type' => [
+        'data' => $this->t('Type'),
+        'class' => ['mdash-header'],
+      ],
+      'total' => [
+        'data' => $this->t('total'),
+        'class' => ['mdash-header'],
+      ],
     ];
 
     $results = $this->dbConn->query('SELECT type, COUNT(type) AS total FROM group_content GROUP BY type')->fetchAll();
 
     foreach ($results as $result) {
       $rows[] = [
-        $result->type,
+        $mapping[$result->type],
         $result->total,
       ];
     }
@@ -104,6 +111,7 @@ class MdashRelationshipSummaryBlock extends BlockBase implements ContainerFactor
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
+      '#suffix' => $this->t('Shows the number of department associations for the type of content.')
     ];
     return $build;
   }
