@@ -4,6 +4,8 @@ namespace Drupal\dept_mdash\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\KeyValueStore\KeyValueStoreInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\example\ExampleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -34,6 +36,20 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
   protected $legacyConn;
 
   /**
+   * The date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
+   * Migration import timestamps.
+   *
+   * @var array
+   */
+  protected array $migration_ts;
+
+  /**
    * Constructs a new MdashcontentsummaryBlock instance.
    *
    * @param array $configuration
@@ -49,11 +65,15 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
    *   The database connection.
    * @param \Drupal\Core\Database\Connection $legacy_connection
    *   The legacy database connection.
+   * @param array $migration_import_timestamps
+   *   Array of last import timestamps for each migration.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $connection, Connection $legacy_connection) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $connection, Connection $legacy_connection, DateFormatterInterface $date_formatter, array $migration_import_timestamps) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->dbConn = $connection;
     $this->legacyConn = $legacy_connection;
+    $this->dateFormatter = $date_formatter;
+    $this->migration_ts = $migration_import_timestamps;
   }
 
   /**
@@ -65,7 +85,9 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
       $plugin_id,
       $plugin_definition,
       $container->get('database'),
-      $container->get('dept_migrate.database_d7')
+      $container->get('dept_migrate.database_d7'),
+      $container->get('date.formatter'),
+      $container->get('keyvalue')->get('migrate_last_imported')->getAll(),
     );
   }
 
@@ -97,7 +119,8 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
     ];
 
     $migration_timestamps = \Drupal::keyValue('migrate_last_imported');
-    $date_formatter = \Drupal::service('date.formatter');
+
+    ksm($migration_timestamps->getAll());
 
     foreach ($bundles as $bundle) {
       $d9_rows = $this->dbConn->select('node')->condition('type', $bundle, '=')->countQuery()->execute()->fetchField();
@@ -117,8 +140,8 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
       }
 
       // Retrieve and format the last imported date.
-      $imported = $migration_timestamps->get('node_' . $bundle);
-      $last_imported = $date_formatter->format((int) ($imported / 1000), 'custom', 'Y-m-d H:i:s');
+      $imported = $this->migration_ts['node_' . $bundle];
+      $last_imported = $this->dateFormatter->format((int) ($imported / 1000), 'custom', 'Y-m-d H:i:s');
 
       $rows[$bundle] = [
         'data' => [

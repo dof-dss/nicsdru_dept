@@ -55,7 +55,6 @@ class MdashRelationshipSummaryBlock extends BlockBase implements ContainerFactor
       $plugin_id,
       $plugin_definition,
       $container->get('database'),
-      $container->get('dept_migrate.database_d7')
     );
   }
 
@@ -64,6 +63,7 @@ class MdashRelationshipSummaryBlock extends BlockBase implements ContainerFactor
    */
   public function build() {
 
+    // Group Content plugin id to bundle id mapping.
     $mapping = [
       'group_content_type_ef01e89809ca7' => 'actions',
       'group_content_type_9dbed154ced4f' => 'application',
@@ -98,6 +98,7 @@ class MdashRelationshipSummaryBlock extends BlockBase implements ContainerFactor
       ],
     ];
 
+    // Count all the entries for each group plugin id.
     $results = $this->dbConn->query('SELECT type, COUNT(type) AS total FROM group_content GROUP BY type')->fetchAll();
 
     foreach ($results as $result) {
