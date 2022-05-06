@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * mDash module hooks.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function dept_mdash_theme($existing, $type, $theme, $path) {
+  return [
+    'mdash_dashboard' => [
+      'variables' => [
+        'content_summary' => NULL,
+        'error_summary' => NULL,
+        'relationship_summary' => NULL,
+      ],
+    ],
+  ];
+}
