@@ -87,8 +87,8 @@ class MdashErrorSummaryBlock extends BlockBase implements ContainerFactoryPlugin
 
     $header = [
       'data' => [
-        'id' => t('ID'),
-        'message' => t('Message'),
+        'id' => $this->t('ID'),
+        'message' => $this->t('Message'),
       ],
       'class' => ['mdash-highlight']
     ];

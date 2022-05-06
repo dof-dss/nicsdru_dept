@@ -137,23 +137,23 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
 
     $header = [
       'bundle' => [
-        'data' => t('Bundle'),
+        'data' => $this->t('Bundle'),
         'class' => ['mdash-header'],
       ],
       'd9' => [
-        'data' => t('Drupal 9 total'),
+        'data' => $this->t('Drupal 9 total'),
         'class' => ['mdash-header'],
       ],
       'd7' => [
-        'data' => t('Drupal 7 total'),
+        'data' => $this->t('Drupal 7 total'),
         'class' => ['mdash-header'],
       ],
       'diff' => [
-        'data' => t('Difference'),
+        'data' => $this->t('Difference'),
         'class' => ['mdash-header'],
       ],
       'imported' => [
-        'data' => t('Last imported'),
+        'data' => $this->t('Last imported'),
         'class' => ['mdash-header'],
       ],
     ];
