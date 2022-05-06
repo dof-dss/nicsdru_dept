@@ -39,14 +39,17 @@ elements: |-
     name:
       '#type': textfield
       '#title': Name
+      '#description': 'Please enter your name.'
       '#required': true
     email:
       '#type': email
       '#title': Email
+      '#description': 'Please enter your email address.'
       '#required': true
     telephone:
       '#type': tel
       '#title': Telephone
+      '#description': 'Please enter your telephone number (optional).'
     date_of_query:
       '#type': date
       '#title': 'Date of Query'
@@ -59,6 +62,7 @@ elements: |-
       '#type': select
       '#title': Country
       '#multiple': true
+      '#description': 'Select your countries.'
       '#options': country_names
       '#select2': true
   your_query:
@@ -67,6 +71,7 @@ elements: |-
     query:
       '#type': textarea
       '#title': Query
+      '#description': 'Please enter the text of your query.'
       '#required': true
 css: ''
 javascript: ''
