@@ -232,7 +232,7 @@ commands:
     steps:
       - run:
           name: Validate composer.json and composer.lock file for consistency
-          command: composer validate --no-check-all --strict
+          command: composer validate --no-check-all
       - restore_cache:
           keys:
             - composer-{{ checksum "composer.lock" }}
