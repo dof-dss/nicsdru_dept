@@ -17,6 +17,7 @@ third_party_settings:
     finalize: false
     commit_before_finalize: false
     commit_after_finalize: false
+    debug_finalize: false
     highlighter:
       maxAnalyzedChars: 51200
       fragmenter: gap
@@ -150,7 +151,7 @@ field_settings:
     label: 'Title fulltext'
     property_path: aggregated_field
     type: text
-    boost: !!float 5
+    boost: !!float 21
     configuration:
       type: concat
       fields:
@@ -184,6 +185,7 @@ datasource_settings:
     bundles:
       default: false
       selected:
+        - article
         - news
     languages:
       default: true
@@ -192,12 +194,14 @@ processor_settings:
   add_url: {  }
   aggregated_field: {  }
   entity_status: {  }
+  entity_type: {  }
   highlight:
     weights:
       postprocess_query: 0
     prefix: '<strong>'
     suffix: '</strong>'
     excerpt: true
+    excerpt_always: false
     excerpt_length: 256
     exclude_fields: {  }
     highlight: always

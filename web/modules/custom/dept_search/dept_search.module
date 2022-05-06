@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Search related overrides and preprocessing.
+ */
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dept_search_form_search_api_form_alter(&$form) {
+  $form['query']['#attributes']['placeholder'] = t('Search this site...');
+}
