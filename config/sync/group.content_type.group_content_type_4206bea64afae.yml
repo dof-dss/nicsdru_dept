@@ -1,0 +1,19 @@
+uuid: 4b1c35d4-9b2b-473b-ae46-4cf6c984eec2
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+    - node.type.heritage_site
+  module:
+    - gnode
+    - node
+id: group_content_type_4206bea64afae
+label: 'Department site: Group node (Heritage site)'
+description: 'Adds <em class="placeholder">Heritage site</em> content to groups both publicly and privately.'
+group_type: department_site
+content_plugin: 'group_node:heritage_site'
+plugin_config:
+  group_cardinality: 0
+  entity_cardinality: 1
+  use_creation_wizard: false
