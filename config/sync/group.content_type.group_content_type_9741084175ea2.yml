@@ -1,0 +1,19 @@
+uuid: 9ca06c8e-e03f-44a1-97d2-e507b6ce5ff1
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+    - node.type.subtopic
+  module:
+    - gnode
+    - node
+id: group_content_type_9741084175ea2
+label: 'Department site: Group node (Subtopic)'
+description: 'Adds <em class="placeholder">Subtopic</em> content to groups both publicly and privately.'
+group_type: department_site
+content_plugin: 'group_node:subtopic'
+plugin_config:
+  group_cardinality: 0
+  entity_cardinality: 1
+  use_creation_wizard: false

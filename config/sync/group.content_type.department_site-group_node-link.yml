@@ -1,0 +1,19 @@
+uuid: 7989ce70-0cfa-4ac1-9500-d1746059fe99
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+    - node.type.link
+  module:
+    - gnode
+    - node
+id: department_site-group_node-link
+label: 'Department site: Group node (Link)'
+description: 'Adds <em class="placeholder">Link</em> content to groups both publicly and privately.'
+group_type: department_site
+content_plugin: 'group_node:link'
+plugin_config:
+  group_cardinality: 0
+  entity_cardinality: 1
+  use_creation_wizard: false

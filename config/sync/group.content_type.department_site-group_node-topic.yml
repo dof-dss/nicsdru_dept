@@ -1,0 +1,19 @@
+uuid: 8ad89289-ea25-4470-ae92-4ec9dd53c24e
+langcode: en
+status: true
+dependencies:
+  config:
+    - group.type.department_site
+    - node.type.topic
+  module:
+    - gnode
+    - node
+id: department_site-group_node-topic
+label: 'Department site: Group node (Topic)'
+description: 'Adds <em class="placeholder">Topic</em> content to groups both publicly and privately.'
+group_type: department_site
+content_plugin: 'group_node:topic'
+plugin_config:
+  group_cardinality: 0
+  entity_cardinality: 1
+  use_creation_wizard: false
