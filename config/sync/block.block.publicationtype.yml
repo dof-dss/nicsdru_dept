@@ -1,0 +1,29 @@
+uuid: 496008cd-f1c4-47d9-9d0f-0f10b453a16b
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.publication_type
+  module:
+    - facets
+    - system
+  theme:
+    - bartik
+id: publicationtype
+theme: bartik
+region: sidebar_first
+weight: -6
+provider: null
+plugin: 'facet_block:publication_type'
+settings:
+  id: 'facet_block:publication_type'
+  label: 'Publication type'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: publicationtype
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/publications\r\n/publications/*"

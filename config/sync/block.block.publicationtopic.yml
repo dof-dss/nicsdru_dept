@@ -1,0 +1,29 @@
+uuid: 58beefcd-c7d3-4240-9956-ae6a7c3dd570
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.publication_topic
+  module:
+    - facets
+    - system
+  theme:
+    - bartik
+id: publicationtopic
+theme: bartik
+region: sidebar_first
+weight: -5
+provider: null
+plugin: 'facet_block:publication_topic'
+settings:
+  id: 'facet_block:publication_topic'
+  label: 'Publication topic'
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: publicationtopic
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/publications\r\n/publications/*"
