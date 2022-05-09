@@ -77,12 +77,14 @@ class EtgrmCommands extends DrushCommands {
     $dbConn = Database::getConnection('default', 'default');
     $conf = $this->configFactory->getEditable('dept_etgrm.data');
 
-    $results = $dbConn->select('group_relationships')->countQuery()->execute()->fetchField();
+    if ($dbConn->schema()->tableExists('group_relationships')) {
+      $results = $dbConn->select('group_relationships')->countQuery()->execute()->fetchField();
 
-    if (!empty($results) || $results > 0) {
-      $this->io()->note("Removing existing group content entities");
-      $process = Drush::drush(Drush::aliasManager()->getSelf(), 'etgrm:removeAll', [], []);
-      $process->start();
+      if (!empty($results) || $results > 0) {
+        $this->io()->note("Removing existing group content entities");
+        $process = Drush::drush(Drush::aliasManager()->getSelf(), 'etgrm:removeAll', [], []);
+        $process->start();
+      }
     }
 
     // Timestamp for entity and import processed date.
