@@ -59,7 +59,7 @@
         "composer/installers": "^1.9",
         "cweagans/composer-patches": "^1.7",
         "deaemth/easychart": "^3.1",
-        "dof-dss/nicsdru_origins_modules": "^1.0",
+        "dof-dss/nicsdru_origins_modules": "dev-development#8b5d724126d84095edb26b5652c60bdb82330236",
         "dof-dss/nicsdru_origins_theme": "^0.4.0",
         "drupal/admin_toolbar": "^3.0",
         "drupal/adminimal_theme": "^1.6",
@@ -147,8 +147,11 @@
         "drupal/migrate_devel": "2.x",
         "drupal/stage_file_proxy": "^1.1",
         "kint-php/kint": "^3.3",
-        "mglaman/drupal-check": "^1.1",
+        "mglaman/phpstan-drupal": "^1.1",
         "phpspec/prophecy-phpunit": "^2",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^1.6",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
         "previousnext/phpunit-finder": "^2.0"
     },
     "conflict": {
