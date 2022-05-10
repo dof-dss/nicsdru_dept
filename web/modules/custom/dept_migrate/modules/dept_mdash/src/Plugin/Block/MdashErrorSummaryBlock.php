@@ -117,7 +117,11 @@ class MdashErrorSummaryBlock extends BlockBase implements ContainerFactoryPlugin
         $rows[$table . '_header'] = $header;
 
         foreach ($results as $result) {
-          $rows[$result->msgid] = [$result->d7nid, $result->d9nid, $result->message];
+          $rows[$result->msgid] = [
+            $result->d7nid,
+            $result->d9nid,
+            $result->message
+          ];
         }
       }
     }
