@@ -1,0 +1,31 @@
+/*
+ Insert all of the relationship data into the group content tables.
+ */
+CREATE PROCEDURE PROCESS_GROUP_RELATIONSHIPS(ts INT)
+BEGIN
+  DECLARE completed INTEGER DEFAULT 0;
+  DECLARE cNID INTEGER;
+  DECLARE cGID INTEGER;
+  DECLARE cGc_type VARCHAR(32);
+  DECLARE cLabel VARCHAR(255);
+  DECLARE relationship_cursor CURSOR FOR SELECT nid, gid, gc_type, label FROM group_relationships;
+  DECLARE CONTINUE HANDLER
+  FOR NOT FOUND SET completed = 1;
+
+  OPEN relationship_cursor;
+    relationships: LOOP
+		  FETCH relationship_cursor INTO cNid, cGid, cGc_type, cLabel;
+
+		  IF completed = 1 THEN
+			  LEAVE relationships;
+		  END IF;
+
+		  INSERT INTO group_content (`type`, `uuid`, `langcode`)
+      VALUES (cGc_type, UUID(), 'en');
+
+      INSERT INTO group_content_field_data (`id`, `type`, `langcode`, `uid`, `gid`, `entity_id`, `label`, `created`, `changed`, `default_langcode`)
+      VALUES (LAST_INSERT_ID(), cGc_type, 'en', 1, cGid, cNid, cLabel, ts, ts, 1);
+
+	  END LOOP relationships;
+  CLOSE relationship_cursor;
+END

@@ -3,11 +3,11 @@ echo ">>> Started at: $(date -u +"%Y-%m-%d %H:%M:%S")"
 
 export DRUSH=/app/vendor/bin/drush
 export MIGRATIONS="d7_taxonomy_term_chart_type d7_taxonomy_term_global_topics d7_taxonomy_term_indicators \
-        d7_taxonomy_term_outcomes users d7_file d7_file_private d7_file_media_image d7_file_media_video \
-          node_actions node_subtopic node_topic node_application node_article node_consultation node_contact \
-          node_easychart node_gallery node_heritage_site node_infogram node_link node_news node_page \
-          node_profile node_protected_area node_publication node_ual url_aliases_nodes url_aliases_taxonomy_terms \
-          redirects "
+        d7_taxonomy_term_outcomes users d7_file d7_file_private d7_file_media_document d7_file_media_secure_file \
+        d7_file_media_image d7_file_media_video node_actions node_subtopic node_topic node_application node_article \
+        node_consultation node_contact node_easychart node_gallery node_heritage_site node_infogram node_link \
+        node_news node_page node_profile node_protected_area node_publication node_ual \
+        url_aliases_nodes url_aliases_taxonomy_terms redirects "
 
 if [ -z ${PLATFORM_BRANCH} ] && [ -z ${LANDO} ];
 then
@@ -43,7 +43,7 @@ then
   $DRUSH migrate:import d7_file_private --force
   $DRUSH migrate:import d7_file --force
 
-  for type in image video
+  for type in image video secure_file
   do
     echo "Migrating D7 ${type} to corresponding media entities"
     $DRUSH migrate:import d7_file_media_$type --force
