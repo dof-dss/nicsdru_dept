@@ -62,6 +62,11 @@ processor_configs:
     weights:
       build: 100
     settings: {  }
+  list_item:
+    processor_id: list_item
+    weights:
+      build: 5
+    settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:

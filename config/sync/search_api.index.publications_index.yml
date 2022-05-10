@@ -73,6 +73,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  field_global_topics:
+    label: 'Global topics'
+    datasource_id: 'entity:node'
+    property_path: field_global_topics
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_global_topics
   field_publication_type:
     label: Type
     datasource_id: 'entity:node'

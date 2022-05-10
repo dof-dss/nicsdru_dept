@@ -1,27 +1,27 @@
-uuid: 58beefcd-c7d3-4240-9956-ae6a7c3dd570
+uuid: 7c1b725f-e8d9-49e8-a1c0-cf724e496a71
 langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.publication_topic
+    - facets.facet.publication_topics
   module:
     - facets
     - system
   theme:
     - bartik
-id: publicationtopic
+id: publicationtopics
 theme: bartik
 region: sidebar_first
-weight: -5
+weight: -6
 provider: null
-plugin: 'facet_block:publication_topic'
+plugin: 'facet_block:publication_topics'
 settings:
-  id: 'facet_block:publication_topic'
+  id: 'facet_block:publication_topics'
   label: 'Publication topic'
   label_display: visible
   provider: facets
   context_mapping: {  }
-  block_id: publicationtopic
+  block_id: publicationtopics
 visibility:
   request_path:
     id: request_path

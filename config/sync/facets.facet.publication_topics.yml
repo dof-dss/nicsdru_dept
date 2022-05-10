@@ -1,4 +1,4 @@
-uuid: 4264a39f-28dc-4757-9ca7-64cb7070e48c
+uuid: fff717d6-e5f1-44cf-bcc0-e9d057b93b91
 langcode: en
 status: true
 dependencies:
@@ -11,13 +11,13 @@ dependencies:
 third_party_settings:
   facets_pretty_paths:
     coder: taxonomy_term_coder
-id: publication_topic
-name: 'Site topics » Content » ID'
+id: publication_topics
+name: 'Publication topics'
 weight: 0
 min_count: 1
 url_alias: topic
 facet_source_id: 'search_api:views_page__publications_search__publications_search'
-field_identifier: site_topics_id
+field_identifier: field_global_topics
 query_operator: and
 hard_limit: 0
 exclude: false
@@ -61,6 +61,11 @@ processor_configs:
     processor_id: hierarchy_processor
     weights:
       build: 100
+    settings: {  }
+  translate_entity:
+    processor_id: translate_entity
+    weights:
+      build: 5
     settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
