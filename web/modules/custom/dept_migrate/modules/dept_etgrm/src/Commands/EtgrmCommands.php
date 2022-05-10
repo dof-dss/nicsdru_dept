@@ -8,6 +8,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_etgrm\EtgrmBatchService;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
+use PDO;
 
 /**
  * Drush commands for interacting with ETGRM.
@@ -73,9 +74,13 @@ class EtgrmCommands extends DrushCommands {
    * @aliases etgrm:ca
    */
   public function all() {
+
+    extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+
     $schema = Database::getConnectionInfo('default')['default']['database'];
     $dbConn = Database::getConnection('default', 'default');
     $conf = $this->configFactory->getEditable('dept_etgrm.data');
+    $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
 
     if ($dbConn->schema()->tableExists('group_relationships')) {
       $results = $dbConn->select('group_relationships')->countQuery()->execute()->fetchField();
@@ -101,7 +106,9 @@ class EtgrmCommands extends DrushCommands {
     $this->io()->writeln(" ✅");
 
     $this->io()->write("Creating Group Content data (this may take a while)");
-    $dbConn->query("call PROCESS_GROUP_RELATIONSHIPS($ts)")->execute();
+    $query = $pdo->prepare('call PROCESS_GROUP_RELATIONSHIPS(?)');
+    $query->bindParam(1, $ts);
+    $query->execute();
     $this->io()->writeln(" ✅");
 
     $conf->set('processed_ts', $ts);
