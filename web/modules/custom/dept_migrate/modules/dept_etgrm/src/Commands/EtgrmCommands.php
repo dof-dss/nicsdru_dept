@@ -5,10 +5,8 @@ namespace Drupal\dept_etgrm\Commands;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Database;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\dept_etgrm\EtgrmBatchService;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
-use PDO;
 
 /**
  * Drush commands for interacting with ETGRM.
@@ -95,7 +93,7 @@ class EtgrmCommands extends DrushCommands {
 
     // Using PDO as Drupal's db driver doesn't provide an option to bind
     // parameters to prepared statements.
-    $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+    $pdo = new \PDO("mysql:host=$host;dbname=$database", $username, $password);
 
     $this->io()->title("Creating group content for migrated nodes.");
 
