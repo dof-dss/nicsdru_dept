@@ -3,6 +3,7 @@
 namespace Drupal\dept_mdash\Controller;
 
 use Drupal\Core\Block\BlockManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
@@ -35,6 +36,13 @@ class MdashContentController extends ControllerBase {
   protected $dateFormatter;
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * The controller constructor.
    *
    * @param \Drupal\Core\Block\BlockManagerInterface $block_manager
@@ -44,10 +52,11 @@ class MdashContentController extends ControllerBase {
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   Date formatter service.
    */
-  public function __construct(BlockManagerInterface $block_manager, Connection $connection, DateFormatterInterface $date_formatter) {
+  public function __construct(BlockManagerInterface $block_manager, Connection $connection, DateFormatterInterface $date_formatter, ConfigFactoryInterface $config_factory) {
     $this->blockManager = $block_manager;
     $this->dbConn = $connection;
     $this->dateFormatter = $date_formatter;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -58,6 +67,7 @@ class MdashContentController extends ControllerBase {
       $container->get('plugin.manager.block'),
       $container->get('database'),
       $container->get('date.formatter'),
+      $container->get('config.factory'),
     );
   }
 
@@ -81,6 +91,7 @@ class MdashContentController extends ControllerBase {
       '#relationship_summary' => $relationship_summary_block,
       '#last_migration' => $this->lastMigation(),
       '#group_relationships' => $this->groupRelationships(),
+      '#last_group_relationships_process' => $this->lastGroupRelationshipsProcess(),
       '#null_destination_nodes' => $this->nullDestinationNodes(),
       '#attached' => [
         'library' => [
@@ -104,6 +115,18 @@ class MdashContentController extends ControllerBase {
     $total = $this->dbConn->select('group_content')->countQuery()->execute()->fetchField();
 
     return $total;
+  }
+
+  public function lastGroupRelationshipsProcess() {
+    $last_processed_ts = $this->configFactory->get('dept_etgrm.data')->get('processed_ts');
+
+    if ($last_processed_ts != NULL) {
+      return $this->dateFormatter->format((int) $last_processed_ts, 'custom', 'd M Y');
+    }
+    else {
+      return '';
+    }
+
   }
 
   public function nullDestinationNodes() {
