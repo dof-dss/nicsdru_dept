@@ -51,6 +51,8 @@ class MdashContentController extends ControllerBase {
    *   The database connection.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   Date formatter service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Configuration factory service.
    */
   public function __construct(BlockManagerInterface $block_manager, Connection $connection, DateFormatterInterface $date_formatter, ConfigFactoryInterface $config_factory) {
     $this->blockManager = $block_manager;
@@ -101,34 +103,60 @@ class MdashContentController extends ControllerBase {
     ];
   }
 
-
+  /**
+   * Returns the date for when migration was last run.
+   *
+   * @return string
+   *   Date of last migration import or an empty string.
+   */
   public function lastMigation() {
     $migration_timestamps = \Drupal::keyValue('migrate_last_imported');
 
     $mig_ts = $migration_timestamps->getAll();
 
-    $last_import_ts =  max(array_values($mig_ts));
-    return $this->dateFormatter->format((int) ($last_import_ts / 1000), 'custom', 'd M Y');
+    $last_import_ts = max(array_values($mig_ts));
+
+    if ($last_import_ts !== NULL) {
+      return $this->dateFormatter->format((int) ($last_import_ts / 1000), 'custom', 'd M Y');
+    }
+
+    return '';
   }
 
+  /**
+   * Returns the total number of Group relationships.
+   *
+   * @return string
+   *   Number of group relationships.
+   */
   public function groupRelationships() {
     $total = $this->dbConn->select('group_content')->countQuery()->execute()->fetchField();
 
     return $total;
   }
 
+  /**
+   * Returns the date for when Group relationship were last processed.
+   *
+   * @return string
+   *   Date of last relationship process or an empty string.
+   */
   public function lastGroupRelationshipsProcess() {
     $last_processed_ts = $this->configFactory->get('dept_etgrm.data')->get('processed_ts');
 
-    if ($last_processed_ts != NULL) {
+    if ($last_processed_ts !== NULL) {
       return $this->dateFormatter->format((int) $last_processed_ts, 'custom', 'd M Y');
     }
-    else {
-      return '';
-    }
 
+    return '';
   }
 
+  /**
+   * Returns the total number of migrations with no node ID for the D9 site.
+   *
+   * @return string
+   *   Total number of null node ids.
+   */
   public function nullDestinationNodes() {
 
     $migration_table = [
