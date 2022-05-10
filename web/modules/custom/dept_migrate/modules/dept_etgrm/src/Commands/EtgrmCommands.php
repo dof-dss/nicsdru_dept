@@ -77,10 +77,8 @@ class EtgrmCommands extends DrushCommands {
 
     extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
 
-    $schema = Database::getConnectionInfo('default')['default']['database'];
     $dbConn = Database::getConnection('default', 'default');
     $conf = $this->configFactory->getEditable('dept_etgrm.data');
-    $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
 
     if ($dbConn->schema()->tableExists('group_relationships')) {
       $results = $dbConn->select('group_relationships')->countQuery()->execute()->fetchField();
@@ -95,14 +93,20 @@ class EtgrmCommands extends DrushCommands {
     // Timestamp for entity and import processed date.
     $ts = time();
 
+    // Using PDO as Drupal's db driver doesn't provide an option to bind
+    // parameters to prepared statements.
+    $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+
     $this->io()->title("Creating group content for migrated nodes.");
 
     $this->io()->write("Building node to group relationships");
-    $dbConn->query("call CREATE_GROUP_RELATIONSHIPS('$schema')")->execute();
+    $query = $pdo->prepare('call CREATE_GROUP_RELATIONSHIPS(?)');
+    $query->bindParam(1, $database);
+    $query->execute();
     $this->io()->writeln(" ✅");
 
     $this->io()->write("Expanding zero based domains to all groups");
-    $dbConn->query("call PROCESS_GROUP_ZERO_RELATIONSHIPS()")->execute();
+    $query = $pdo->query('call PROCESS_GROUP_ZERO_RELATIONSHIPS()');
     $this->io()->writeln(" ✅");
 
     $this->io()->write("Creating Group Content data (this may take a while)");
