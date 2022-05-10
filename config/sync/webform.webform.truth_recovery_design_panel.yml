@@ -78,10 +78,10 @@ elements: |-
 css: ''
 javascript: ''
 settings:
-  ajax: false
+  ajax: true
   ajax_scroll_top: form
-  ajax_progress_type: ''
-  ajax_effect: ''
+  ajax_progress_type: throbber
+  ajax_effect: fade
   ajax_speed: null
   page: true
   page_submit_path: ''
@@ -92,10 +92,10 @@ settings:
   form_open_message: ''
   form_close_message: ''
   form_exception_message: ''
-  form_previous_submissions: true
+  form_previous_submissions: false
   form_confidential: false
   form_confidential_message: ''
-  form_disable_remote_addr: false
+  form_disable_remote_addr: true
   form_convert_anonymous: false
   form_prepopulate: false
   form_prepopulate_source_entity: false
@@ -177,7 +177,7 @@ settings:
   draft_loaded_message: ''
   draft_pending_single_message: ''
   draft_pending_multiple_message: ''
-  confirmation_type: page
+  confirmation_type: inline
   confirmation_url: ''
   confirmation_title: ''
   confirmation_message: "<h2>Thank you for your contact request</h2>\r\n\r\n<p>The&nbsp;Truth Recovery Design Panel will be in touch with you shortly.</p>"
@@ -200,8 +200,8 @@ settings:
   entity_limit_total_interval: null
   entity_limit_user: null
   entity_limit_user_interval: null
-  purge: none
-  purge_days: null
+  purge: all
+  purge_days: 1
   results_disabled: false
   results_disabled_ignore: false
   results_customize: false
