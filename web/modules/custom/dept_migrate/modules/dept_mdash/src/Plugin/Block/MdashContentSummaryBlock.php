@@ -120,8 +120,6 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
 
     $migration_timestamps = \Drupal::keyValue('migrate_last_imported');
 
-    ksm($migration_timestamps->getAll());
-
     foreach ($bundles as $bundle) {
       $d9_rows = $this->dbConn->select('node')->condition('type', $bundle, '=')->countQuery()->execute()->fetchField();
       $d7_rows = $this->legacyConn->select('node')->condition('type', $bundle, '=')->countQuery()->execute()->fetchField();

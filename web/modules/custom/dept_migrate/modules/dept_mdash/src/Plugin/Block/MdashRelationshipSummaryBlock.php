@@ -54,6 +54,7 @@ class MdashRelationshipSummaryBlock extends BlockBase implements ContainerFactor
       $plugin_id,
       $plugin_definition,
       $container->get('database'),
+      $container->get('dept_migrate.database_d7')
     );
   }
 
@@ -62,7 +63,6 @@ class MdashRelationshipSummaryBlock extends BlockBase implements ContainerFactor
    */
   public function build() {
 
-    // Group Content plugin id to bundle id mapping.
     $mapping = [
       'group_content_type_ef01e89809ca7' => 'actions',
       'group_content_type_9dbed154ced4f' => 'application',
@@ -71,19 +71,25 @@ class MdashRelationshipSummaryBlock extends BlockBase implements ContainerFactor
       'group_content_type_fb2d5fb87aade' => 'consultation',
       'group_content_type_806d1de5fafe5' => 'contact',
       'group_content_type_85765319814ca' => 'easychart',
+      'group_content_type_674e4ffa7ff39' => 'entity queue',
       'group_content_type_671a55a120b42' => 'gallery',
       'group_content_type_34099e0cf683b' => 'global_page',
       'group_content_type_4206bea64afae' => 'heritage_site',
       'group_content_type_6061d9dc53978' => 'infogram',
       'group_content_type_1b4b1ed9339c4' => 'landing_page',
+      'department_site-group_node-link' => 'link',
+      'department_site-group_membership' => 'membership',
       'department_site-group_node-news' => 'news',
+      'department_site-group_node-page' => 'page',
       'group_content_type_d17c35c98baa3' => 'profile',
       'group_content_type_85d66e53e8361' => 'project',
       'group_content_type_ec8e415306531' => 'protected_area',
       'group_content_type_d91f8322473a4' => 'publication',
       'group_content_type_9741084175ea2' => 'subtopic',
+      'department_site-group_node-topic' => 'topic',
       'department_site-group_node-ual' => 'ual',
       'department_site-group_membership' => 'user',
+      'group_content_type_0b612c56d0b26' => 'webform',
     ];
 
     $header = [
@@ -97,12 +103,11 @@ class MdashRelationshipSummaryBlock extends BlockBase implements ContainerFactor
       ],
     ];
 
-    // Count all the entries for each group plugin id.
     $results = $this->dbConn->query('SELECT type, COUNT(type) AS total FROM group_content GROUP BY type')->fetchAll();
 
     foreach ($results as $result) {
       $rows[] = [
-        $mapping[$result->type],
+        $mapping[$result->type] ?? 'unknown',
         $result->total,
       ];
     }
