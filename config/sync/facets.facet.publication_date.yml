@@ -10,7 +10,7 @@ dependencies:
     - search_api
 third_party_settings:
   facets_pretty_paths:
-    coder: taxonomy_term_coder
+    coder: default_coder
 id: publication_date
 name: 'Publication date'
 weight: 0
@@ -51,6 +51,11 @@ processor_configs:
       sort: 20
     settings:
       sort: ASC
+  date_facet_drilldown:
+    processor_id: date_facet_drilldown
+    weights:
+      build: 1
+    settings: {  }
   date_item:
     processor_id: date_item
     weights:
@@ -60,17 +65,17 @@ processor_configs:
       granularity: 6
       date_format: ''
       hierarchy: false
-  display_value_widget_order:
-    processor_id: display_value_widget_order
-    weights:
-      sort: 40
-    settings:
-      sort: DESC
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
       build: 100
     settings: {  }
+  raw_value_widget_order:
+    processor_id: raw_value_widget_order
+    weights:
+      sort: 50
+    settings:
+      sort: DESC
   url_processor_handler:
     processor_id: url_processor_handler
     weights:

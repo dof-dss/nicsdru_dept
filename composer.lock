@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "93ac2745e65a34efe60154a4605ed7fd",
+    "content-hash": "45a9a77be8ab2b5d5f7a3c50e7010f83",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3213,6 +3213,55 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/ctools",
                 "issues": "https://www.drupal.org/project/issues/ctools"
+            }
+        },
+        {
+            "name": "drupal/date_facet_drilldown",
+            "version": "dev-2.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/date_facet_drilldown.git",
+                "reference": "c29b5a60734d88b88aa30b7fb3193a061b1cc4f0"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-2.x-dev",
+                    "datestamp": "1615471926",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "DuttonMa",
+                    "homepage": "https://www.drupal.org/user/2250396"
+                },
+                {
+                    "name": "oneillo",
+                    "homepage": "https://www.drupal.org/user/3624797"
+                },
+                {
+                    "name": "williamsona",
+                    "homepage": "https://www.drupal.org/user/3666663"
+                }
+            ],
+            "description": "Date facets - allow drilldown to month",
+            "homepage": "https://www.drupal.org/project/date_facet_drilldown",
+            "support": {
+                "source": "https://git.drupalcode.org/project/date_facet_drilldown"
             }
         },
         {
@@ -17589,6 +17638,7 @@
     "stability-flags": {
         "dof-dss/nicsdru_origins_modules": 20,
         "drupal/config_readonly": 10,
+        "drupal/date_facet_drilldown": 20,
         "drupal/domain_path": 10,
         "drupal/flag": 10,
         "drupal/group_entityqueue": 10,
