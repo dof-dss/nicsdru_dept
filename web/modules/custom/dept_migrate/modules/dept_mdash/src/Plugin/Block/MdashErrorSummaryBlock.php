@@ -63,6 +63,7 @@ class MdashErrorSummaryBlock extends BlockBase implements ContainerFactoryPlugin
    */
   public function build() {
 
+    // Migrate message tables.
     $msg_tables = [
       'node_actions',
       'node_application',
@@ -87,20 +88,27 @@ class MdashErrorSummaryBlock extends BlockBase implements ContainerFactoryPlugin
 
     $header = [
       'data' => [
-        'id' => $this->t('ID'),
+        'd7nid' => $this->t('D7 nid'),
+        'd9nid' => $this->t('D9 nid'),
         'message' => $this->t('Message'),
       ],
       'class' => ['mdash-highlight']
     ];
 
     foreach ($msg_tables as $table) {
-      $results = $this->dbConn->query("SELECT * FROM migrate_message_$table")->fetchAll();
+      $results = $this->dbConn->query("SELECT
+        msg.msgid, msg.message, map.sourceid2 as d7nid, map.destid1 as d9nid
+        FROM migrate_message_$table as msg
+        INNER JOIN migrate_map_$table as map
+        ON msg.source_ids_hash = map.source_ids_hash")
+        ->fetchAll();
+
       $has_messages = count($results) > 0;
 
       $rows[$table] = [
         [
           'data' => Markup::create((($has_messages) ? '&#9940; ' : '&#9989; ') . $table),
-          'colspan' => 2,
+          'colspan' => 3,
           'class' => ['mdash-header']
         ]
       ];
@@ -109,7 +117,11 @@ class MdashErrorSummaryBlock extends BlockBase implements ContainerFactoryPlugin
         $rows[$table . '_header'] = $header;
 
         foreach ($results as $result) {
-          $rows[$result->msgid] = [$result->msgid, $result->message];
+          $rows[$result->msgid] = [
+            $result->d7nid,
+            $result->d9nid,
+            $result->message
+          ];
         }
       }
     }
