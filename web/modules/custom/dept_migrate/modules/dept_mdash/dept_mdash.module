@@ -15,6 +15,10 @@ function dept_mdash_theme($existing, $type, $theme, $path) {
         'content_summary' => NULL,
         'error_summary' => NULL,
         'relationship_summary' => NULL,
+        'last_migration' => NULL,
+        'group_relationships' => NULL,
+        'last_group_relationships_process' => NULL,
+        'null_destination_nodes' => NULL,
       ],
     ],
   ];
