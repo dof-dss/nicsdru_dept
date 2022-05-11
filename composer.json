@@ -74,6 +74,7 @@
         "drupal/core-composer-scaffold": "^9.2",
         "drupal/core-recommended": "^9.2",
         "drupal/csp": "^1.15",
+        "drupal/date_facet_drilldown": "2.x-dev",
         "drupal/devel": "^4.1",
         "drupal/devel_entity_updates": "^3.0",
         "drupal/diff": "^1.0",
@@ -84,6 +85,8 @@
         "drupal/entity_embed": "^1.1",
         "drupal/entityqueue": "^1.2",
         "drupal/eu_cookie_compliance": "^1.14",
+        "drupal/facets": "^2.0",
+        "drupal/facets_pretty_paths": "^1.2",
         "drupal/fastly": "^3.14",
         "drupal/field_group": "^3.2",
         "drupal/flag": "^4.0@beta",
@@ -246,6 +249,9 @@
             },
             "drupal/devel": {
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://raw.githubusercontent.com/politsin/snipets/master/patch/kint.patch"
+            },
+            "drupal/facets_pretty_paths": {
+                "Cannot filter properly when using facet pretty paths": "https://www.drupal.org/files/issues/2022-04-19/url-duplication-25.patch"
             },
             "drupal/migrate_tools": {
                 "Provide a drush wrapper to destroy/delete migration tables": "https://www.drupal.org/files/issues/2021-08-23/migrate_tools-drush-command-to-remove-tables-5.x-2997576-16.patch"
