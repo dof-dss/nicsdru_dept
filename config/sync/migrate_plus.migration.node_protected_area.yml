@@ -1,4 +1,4 @@
-uuid: 5fb5851e-7438-49c8-83f4-f538f0b0b576
+uuid: 4314c5df-7f05-461a-8ce0-08c02cedc840
 langcode: en
 status: true
 dependencies: {  }
@@ -18,14 +18,25 @@ process:
   langcode:
     -
       plugin: default_value
-      source: language
+      source: langcode
       default_value: und
-  title: title
+  title:
+    -
+      plugin: get
+      source: title
+    -
+      plugin: callback
+      callable: trim
   uid:
     -
       plugin: d7_user_lookup
       source: node_uid
-  status: status
+  moderation_state:
+    plugin: static_map
+    source: status
+    map:
+      - draft
+      - published
   created: created
   changed: changed
   promote: promote
@@ -52,6 +63,7 @@ process:
       plugin: static_map
       bypass: true
       source: body/0/format
+      default_value: basic_html
       map:
         filtered_html: basic_html
         filtered_html_with_no_images: basic_html
@@ -74,3 +86,4 @@ migration_dependencies:
     - users
     - node_subtopic
     - node_topic
+    - d7_taxonomy_term_global_topics

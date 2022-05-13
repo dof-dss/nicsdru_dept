@@ -5,8 +5,6 @@ namespace Drupal\dept_migrate_group_files\Plugin\migrate\process;
 use Drupal\migrate\ProcessPluginBase;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\Row;
-use Drupal\migrate\MigrateSkipRowException;
-use GuzzleHttp\Exception\RequestException;
 
 /**
  * Provides a 'VideoUrl' migrate process plugin.
