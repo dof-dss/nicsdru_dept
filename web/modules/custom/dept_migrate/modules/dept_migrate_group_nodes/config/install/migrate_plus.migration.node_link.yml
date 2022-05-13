@@ -13,31 +13,36 @@ source:
   track_changes: true
 process:
   langcode:
-    -
-      plugin: default_value
-      source: language
+    - plugin: default_value
+      source: langcode
       default_value: en
-  title: title
+  title:
+    - plugin: get
+      source: title
+    - plugin: callback
+      callable: trim
   uid:
-    -
-      plugin: d7_user_lookup
+    - plugin: d7_user_lookup
       source: node_uid
-  status: status
+  moderation_state:
+    plugin: static_map
+    source: status
+    map:
+      0: draft
+      1: published
   created: created
   changed: changed
   promote: promote
   sticky: sticky
   revision_uid:
-    -
-      plugin: d7_user_lookup
+    - plugin: d7_user_lookup
       source: revision_uid
   revision_log: log
   revision_timestamp: timestamp
   field_file_language: field_file_language
   field_link_type: field_link_type
   field_link_url:
-    -
-      plugin: field_link
+    - plugin: field_link
       source: field_link_url
 destination:
   plugin: 'entity:node'

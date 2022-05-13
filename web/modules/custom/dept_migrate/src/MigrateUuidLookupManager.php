@@ -408,7 +408,12 @@ class MigrateUuidLookupManager {
       switch ($file['d7type']) {
         case 'document':
         case 'undefined':
-          $table = 'migrate_map_d7_file_media_document';
+          if (preg_match('/^private/', $file['d7uri'])) {
+            $table = 'migrate_map_d7_file_private';
+          }
+          else {
+            $table = 'migrate_map_d7_file';
+          }
           break;
 
         case 'image':
@@ -427,12 +432,7 @@ class MigrateUuidLookupManager {
         continue;
       }
 
-      $file_table = 'migrate_map_d7_file';
-      if (preg_match('/^private/', $file['d7uri'])) {
-        $file_table = 'migrate_map_d7_file_private';
-      }
-
-      $migrate_map = $this->dbconn->query("SELECT * from ${file_table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
+      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
 
       foreach ($migrate_map as $row) {
         if (empty($row->destid1)) {
