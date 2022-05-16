@@ -29,6 +29,10 @@ BEGIN
     (9,16605160),
     (10,8363580);
 
+  /* Remove any existing node_access entries for Group content. */
+  DELETE node_access FROM node_access JOIN group_content_field_data
+  ON group_content_field_data.`entity_id` = node_access.`nid`
+
   /* We update or create a node_access entry for the Domain module to
      perform its access control on the departmental sites. */
   REPLACE INTO node_access (nid, langcode, fallback, gid, realm, grant_view, grant_update, grant_delete)
