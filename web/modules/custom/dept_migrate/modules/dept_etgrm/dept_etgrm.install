@@ -27,6 +27,7 @@ function dept_etgrm_install() {
     $pdo->exec(file_get_contents($module_path . '/inc/sql_' . $proc . ".sproc"));
   }
 }
+
 /*
  * Remove all stored procedures and functions on uninstall.
  */
@@ -48,4 +49,18 @@ function dept_etgrm_uninstall() {
     $pdo->exec('DROP FUNCTION IF EXISTS `' . strtoupper($proc) . '`');
     $pdo->exec('DROP PROCEDURE IF EXISTS `' . strtoupper($proc) . '`');
   }
+}
+
+/**
+ * Update PROCESS_GROUP_RELATIONSHIPS Sproc.
+ */
+function dept_etgrm_update_8001() {
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+
+  $pdo->exec('DROP PROCEDURE IF EXISTS PROCESS_GROUP_RELATIONSHIPS');
+  $pdo->exec(file_get_contents($module_path . '/inc/sql_process_group_relationships.sproc'));
 }

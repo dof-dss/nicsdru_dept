@@ -13,23 +13,29 @@ source:
   track_changes: true
 process:
   langcode:
-    -
-      plugin: default_value
-      source: language
+    - plugin: default_value
+      source: langcode
       default_value: en
-  title: title
+  title:
+    - plugin: get
+      source: title
+    - plugin: callback
+      callable: trim
   uid:
-    -
-      plugin: d7_user_lookup
+    - plugin: d7_user_lookup
       source: node_uid
-  status: status
+  moderation_state:
+    plugin: static_map
+    source: status
+    map:
+      0: draft
+      1: published
   created: created
   changed: changed
   promote: promote
   sticky: sticky
   revision_uid:
-    -
-      plugin: d7_user_lookup
+    - plugin: d7_user_lookup
       source: revision_uid
   revision_log: log
   revision_timestamp: timestamp
@@ -42,10 +48,10 @@ process:
       search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
       replace: ''
   body/0/format:
-    -
-      plugin: static_map
+    - plugin: static_map
       bypass: true
       source: body/0/format
+      default_value: basic_html
       map:
         filtered_html: basic_html
         filtered_html_with_no_images: basic_html
@@ -61,8 +67,7 @@ process:
   field_postcode: field_postcode
   field_sm_number: field_sm_number
   field_website:
-    -
-      plugin: sub_process
+    - plugin: sub_process
       source: field_website
       process:
         uri: value
@@ -70,23 +75,20 @@ process:
         options: attributes
   field_phone: field_phone
   field_email:
-    -
-      plugin: sub_process
+    - plugin: sub_process
       source: field_email
       process:
         value: email
   field_grid_reference: field_grid_reference
   field_historic_map_viewer_link:
-    -
-      plugin: sub_process
+    - plugin: sub_process
       source: field_historic_map_viewer_link
       process:
         uri: value
         title: title
         options: attributes
   field_nismr_link:
-    -
-      plugin: sub_process
+    - plugin: sub_process
       source: field_nismr_link
       process:
         uri: value
@@ -94,8 +96,7 @@ process:
         options: attributes
   field_open_to_the_public: field_open_to_the_public
   field_photo:
-    -
-      plugin: sub_process
+    - plugin: sub_process
       source: field_photo
       process:
         target_id:

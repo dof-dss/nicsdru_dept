@@ -1,4 +1,4 @@
-uuid: e67c0c4e-28af-47eb-ac3d-cc9e67152e5a
+uuid: e3afbcc4-8a15-4784-b8c9-97e3c0516197
 langcode: en
 status: true
 dependencies: {  }
@@ -18,14 +18,25 @@ process:
   langcode:
     -
       plugin: default_value
-      source: language
+      source: langcode
       default_value: en
-  title: title
+  title:
+    -
+      plugin: get
+      source: title
+    -
+      plugin: callback
+      callable: trim
   uid:
     -
       plugin: d7_user_lookup
       source: node_uid
-  status: status
+  moderation_state:
+    plugin: static_map
+    source: status
+    map:
+      - draft
+      - published
   created: created
   changed: changed
   promote: promote

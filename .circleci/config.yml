@@ -188,6 +188,7 @@ jobs:
       - image: circleci/php:7.4.15-apache-browsers
     environment:
       EDGE_BUILD_BRANCH: "DEPT-edge"
+      PLATFORM_SOLR_HOST: "solr.internal:8080"
     steps:
       - hosts_keyscan
       - checkout_code

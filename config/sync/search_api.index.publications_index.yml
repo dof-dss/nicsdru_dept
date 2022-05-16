@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.body
     - field.storage.node.field_global_topics
+    - field.storage.node.field_published_date
     - field.storage.node.field_site_topics
     - field.storage.node.field_summary
     - field.storage.node.field_publication_type
@@ -72,6 +73,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  field_global_topics:
+    label: 'Global topics'
+    datasource_id: 'entity:node'
+    property_path: field_global_topics
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_global_topics
   field_publication_type:
     label: Type
     datasource_id: 'entity:node'
@@ -80,6 +89,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_publication_type
+  field_published_date:
+    label: 'Published date'
+    datasource_id: 'entity:node'
+    property_path: field_published_date
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_published_date
   field_summary:
     label: Summary
     datasource_id: 'entity:node'
@@ -103,7 +120,7 @@ field_settings:
     label: 'Global topics » Taxonomy term » Name'
     datasource_id: 'entity:node'
     property_path: 'field_global_topics:entity:name'
-    type: string
+    type: text
     dependencies:
       config:
         - field.storage.node.field_global_topics
@@ -148,7 +165,7 @@ field_settings:
     label: 'Site topics » Content » Title'
     datasource_id: 'entity:node'
     property_path: 'field_site_topics:entity:title'
-    type: string
+    type: text
     dependencies:
       config:
         - field.storage.node.field_site_topics
@@ -183,10 +200,35 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  entity_status: {  }
   entity_type: {  }
+  html_filter:
+    weights:
+      preprocess_index: -15
+      preprocess_query: -15
+    all_fields: true
+    fields:
+      - body
+      - field_publication_type
+      - field_summary
+      - global_topics_name
+      - name
+      - publish_state
+      - site_topics_title
+      - title
+    title: false
+    alt: true
+    tags:
+      b: 2
+      h1: 5
+      h2: 3
+      h3: 2
+      strong: 2
   language_with_fallback: {  }
   rendered_item: {  }
-  solr_date_range: {  }
+  solr_date_range:
+    weights:
+      preprocess_index: 0
 tracker_settings:
   default:
     indexing_order: fifo

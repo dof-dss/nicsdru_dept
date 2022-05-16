@@ -5,7 +5,6 @@ namespace Drupal\dept_etgrm\Commands;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Database;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\dept_etgrm\EtgrmBatchService;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 
@@ -73,33 +72,45 @@ class EtgrmCommands extends DrushCommands {
    * @aliases etgrm:ca
    */
   public function all() {
-    $schema = Database::getConnectionInfo('default')['default']['database'];
+
+    extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+
     $dbConn = Database::getConnection('default', 'default');
     $conf = $this->configFactory->getEditable('dept_etgrm.data');
 
-    $results = $dbConn->select('group_relationships')->countQuery()->execute()->fetchField();
+    if ($dbConn->schema()->tableExists('group_relationships')) {
+      $results = $dbConn->select('group_relationships')->countQuery()->execute()->fetchField();
 
-    if (!empty($results) || $results > 0) {
-      $this->io()->note("Removing existing group content entities");
-      $process = Drush::drush(Drush::aliasManager()->getSelf(), 'etgrm:removeAll', [], []);
-      $process->start();
+      if (!empty($results) || $results > 0) {
+        $this->io()->note("Removing existing group content entities");
+        $process = Drush::drush(Drush::aliasManager()->getSelf(), 'etgrm:removeAll', [], []);
+        $process->start();
+      }
     }
 
     // Timestamp for entity and import processed date.
     $ts = time();
 
+    // Using PDO as Drupal's db driver doesn't provide an option to bind
+    // parameters to prepared statements.
+    $pdo = new \PDO("mysql:host=$host;dbname=$database", $username, $password);
+
     $this->io()->title("Creating group content for migrated nodes.");
 
     $this->io()->write("Building node to group relationships");
-    $dbConn->query("call CREATE_GROUP_RELATIONSHIPS('$schema')")->execute();
+    $query = $pdo->prepare('call CREATE_GROUP_RELATIONSHIPS(?)');
+    $query->bindParam(1, $database);
+    $query->execute();
     $this->io()->writeln(" ✅");
 
     $this->io()->write("Expanding zero based domains to all groups");
-    $dbConn->query("call PROCESS_GROUP_ZERO_RELATIONSHIPS()")->execute();
+    $query = $pdo->query('call PROCESS_GROUP_ZERO_RELATIONSHIPS()');
     $this->io()->writeln(" ✅");
 
     $this->io()->write("Creating Group Content data (this may take a while)");
-    $dbConn->query("call PROCESS_GROUP_RELATIONSHIPS($ts)")->execute();
+    $query = $pdo->prepare('call PROCESS_GROUP_RELATIONSHIPS(?)');
+    $query->bindParam(1, $ts);
+    $query->execute();
     $this->io()->writeln(" ✅");
 
     $conf->set('processed_ts', $ts);

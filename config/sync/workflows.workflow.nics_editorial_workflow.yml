@@ -3,8 +3,29 @@ langcode: en
 status: true
 dependencies:
   config:
+    - node.type.actions
+    - node.type.application
     - node.type.article
+    - node.type.book
+    - node.type.case_study
+    - node.type.consultation
+    - node.type.contact
+    - node.type.easychart
+    - node.type.gallery
+    - node.type.global_page
+    - node.type.heritage_site
+    - node.type.infogram
+    - node.type.landing_page
+    - node.type.link
+    - node.type.news
     - node.type.page
+    - node.type.profile
+    - node.type.project
+    - node.type.protected_area
+    - node.type.publication
+    - node.type.subtopic
+    - node.type.topic
+    - node.type.ual
   module:
     - content_moderation
 _core:
@@ -97,6 +118,27 @@ type_settings:
       weight: 2
   entity_types:
     node:
+      - actions
+      - application
       - article
+      - book
+      - case_study
+      - consultation
+      - contact
+      - easychart
+      - gallery
+      - global_page
+      - heritage_site
+      - infogram
+      - landing_page
+      - link
+      - news
       - page
+      - profile
+      - project
+      - protected_area
+      - publication
+      - subtopic
+      - topic
+      - ual
   default_moderation_state: draft

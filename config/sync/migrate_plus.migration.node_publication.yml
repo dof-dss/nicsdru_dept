@@ -1,4 +1,4 @@
-uuid: 441feeaf-8e8e-4ed9-bfc2-4d6eb6dea26f
+uuid: 20d2178b-fea9-48a8-831f-32281a78ba9c
 langcode: en
 status: true
 dependencies: {  }
@@ -20,14 +20,25 @@ process:
   langcode:
     -
       plugin: default_value
-      source: language
+      source: langcode
       default_value: en
-  title: title
+  title:
+    -
+      plugin: get
+      source: title
+    -
+      plugin: callback
+      callable: trim
   uid:
     -
       plugin: d7_user_lookup
       source: node_uid
-  status: status
+  moderation_state:
+    plugin: static_map
+    source: status
+    map:
+      - draft
+      - published
   created: created
   changed: changed
   promote: promote
@@ -54,6 +65,7 @@ process:
       plugin: static_map
       bypass: true
       source: body/0/format
+      default_value: basic_html
       map:
         filtered_html: basic_html
         filtered_html_with_no_images: basic_html

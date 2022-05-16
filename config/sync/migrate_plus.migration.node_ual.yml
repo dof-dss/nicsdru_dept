@@ -1,4 +1,4 @@
-uuid: 94265be2-cd1f-4ba8-911e-21780cf7f7a0
+uuid: 008fa9ed-6e5b-4101-894c-1d421f09981e
 langcode: en
 status: true
 dependencies: {  }
@@ -18,14 +18,25 @@ process:
   langcode:
     -
       plugin: default_value
-      source: language
+      source: langcode
       default_value: und
-  title: title
+  title:
+    -
+      plugin: get
+      source: title
+    -
+      plugin: callback
+      callable: trim
   uid:
     -
       plugin: d7_user_lookup
       source: node_uid
-  status: status
+  moderation_state:
+    plugin: static_map
+    source: status
+    map:
+      - draft
+      - published
   created: created
   changed: changed
   promote: promote
@@ -71,4 +82,3 @@ migration_dependencies:
   required:
     - users
     - d7_file_media_image
-    - null
