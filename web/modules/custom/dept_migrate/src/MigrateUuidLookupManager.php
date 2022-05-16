@@ -424,6 +424,7 @@ class MigrateUuidLookupManager {
         case 'remote_video':
           $table = 'migrate_map_d7_file_media_video';
           break;
+
       }
 
       if ($this->dbconn->schema()->tableExists($table) === FALSE) {
