@@ -9,12 +9,12 @@ dependencies:
     - field.field.node.easychart.field_chart_type
     - field.field.node.easychart.field_indicators
     - node.type.easychart
+    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - easychart
     - path
     - scheduler
-    - scheduler_content_moderation_integration
     - text
 _core:
   default_config_hash: aZ6yRZREsMkZXZgIoTKGDVG6KupUxDZjChWCO18TVhY
@@ -82,8 +82,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   publish_state:
-    type: scheduler_moderation
-    weight: 30
+    type: options_select
+    weight: 121
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -125,8 +125,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   unpublish_state:
-    type: scheduler_moderation
-    weight: 30
+    type: options_select
+    weight: 122
     region: content
     settings: {  }
     third_party_settings: {  }

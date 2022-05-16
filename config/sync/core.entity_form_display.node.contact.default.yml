@@ -8,13 +8,13 @@ dependencies:
     - field.field.node.contact.field_site_subtopics
     - field.field.node.contact.field_site_topics
     - node.type.contact
+    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
     - google_map_field
     - path
     - scheduler
-    - scheduler_content_moderation_integration
     - text
 id: node.contact.default
 targetEntityType: node
@@ -93,8 +93,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   publish_state:
-    type: scheduler_moderation
-    weight: 14
+    type: options_select
+    weight: 27
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -137,8 +137,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   unpublish_state:
-    type: scheduler_moderation
-    weight: 15
+    type: options_select
+    weight: 28
     region: content
     settings: {  }
     third_party_settings: {  }

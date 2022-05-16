@@ -10,7 +10,6 @@ dependencies:
   module:
     - search_api_solr
     - node
-    - scheduler_content_moderation_integration
     - search_api
 third_party_settings:
   search_api_solr:
@@ -107,14 +106,6 @@ field_settings:
     dependencies:
       module:
         - node
-  publish_state:
-    label: 'Publish state'
-    datasource_id: 'entity:node'
-    property_path: publish_state
-    type: string
-    dependencies:
-      module:
-        - scheduler_content_moderation_integration
   revision_log:
     label: 'Revision log message'
     datasource_id: 'entity:node'
@@ -214,7 +205,6 @@ processor_settings:
     fields:
       - body
       - field_summary
-      - publish_state
       - revision_log
       - title
       - title_fulltext
@@ -235,7 +225,6 @@ processor_settings:
     fields:
       - body
       - field_summary
-      - publish_state
       - revision_log
       - title
       - title_fulltext
