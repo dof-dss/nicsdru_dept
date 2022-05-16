@@ -1,0 +1,39 @@
+/*
+ Update or create node_access rows for group content.
+ */
+CREATE PROCEDURE UPDATE_NODE_ACCESS()
+BEGIN
+
+  DROP TEMPORARY TABLE IF EXISTS domain_ids;
+
+  /* Group ID to Domain ID mapping. We use the Domain ID as the
+     Grant ID (gid) in node_access */
+  CREATE TEMPORARY TABLE domain_ids (
+    id INTEGER,
+    domain_id INTEGER
+  );
+
+  INSERT INTO domain_ids (
+    id,
+    domain_id
+  )
+  VALUES
+    (1,4567776),
+    (2,10261667),
+    (3,2853218),
+    (4,3070245),
+    (5,10077412),
+    (6,4252327),
+    (7,16252774),
+    (8,4866601),
+    (9,16605160),
+    (10,8363580);
+
+  /* We update or create a node_access entry for the Domain module to
+     perform its access control on the departmental sites. */
+  REPLACE INTO node_access (nid, langcode, fallback, gid, realm, grant_view, grant_update, grant_delete)
+  SELECT fd.entity_id, 'und', 1, d.domain_id, 'group_domain_id', 1, 0, 0
+  FROM group_content_field_data AS fd
+  INNER JOIN domain_ids AS d
+  ON fd.gid = d.id;
+END
