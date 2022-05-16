@@ -11,13 +11,13 @@ dependencies:
     - field.field.node.application.field_site_topics
     - field.field.node.application.field_summary
     - node.type.application
+    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
     - link
     - path
     - scheduler
-    - scheduler_content_moderation_integration
     - text
 id: node.application.default
 targetEntityType: node
@@ -120,8 +120,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   publish_state:
-    type: scheduler_moderation
-    weight: 14
+    type: options_select
+    weight: 26
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -164,8 +164,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   unpublish_state:
-    type: scheduler_moderation
-    weight: 15
+    type: options_select
+    weight: 27
     region: content
     settings: {  }
     third_party_settings: {  }

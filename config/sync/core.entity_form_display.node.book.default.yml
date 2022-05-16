@@ -9,12 +9,12 @@ dependencies:
     - field.field.node.book.field_site_topics
     - field.field.node.book.field_summary
     - node.type.book
+    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
     - path
     - scheduler
-    - scheduler_content_moderation_integration
     - text
 id: node.book.default
 targetEntityType: node
@@ -101,8 +101,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   publish_state:
-    type: scheduler_moderation
-    weight: 12
+    type: options_select
+    weight: 26
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -145,8 +145,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   unpublish_state:
-    type: scheduler_moderation
-    weight: 13
+    type: options_select
+    weight: 27
     region: content
     settings: {  }
     third_party_settings: {  }
