@@ -17,6 +17,7 @@ function dept_etgrm_install() {
     'process_group_relationships',
     'process_group_zero_relationships',
     'create_group_relationships',
+    'update_node_access',
   ];
 
   $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
@@ -41,6 +42,7 @@ function dept_etgrm_uninstall() {
     'process_group_relationships',
     'process_group_zero_relationships',
     'create_group_relationships',
+    'update_node_access',
   ];
 
   $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
@@ -63,4 +65,17 @@ function dept_etgrm_update_8001() {
 
   $pdo->exec('DROP PROCEDURE IF EXISTS PROCESS_GROUP_RELATIONSHIPS');
   $pdo->exec(file_get_contents($module_path . '/inc/sql_process_group_relationships.sproc'));
+}
+
+/**
+ * Add UPDATE_NODE_ACCESS Sproc.
+ */
+function dept_etgrm_update_8002() {
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+
+  $pdo->exec(file_get_contents($module_path . '/inc/sql_update_node_access.sproc'));
 }
