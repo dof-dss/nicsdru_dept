@@ -1,4 +1,4 @@
-uuid: a6272725-d0ed-4e7e-b1c3-30867b47c8f1
+uuid: 015de61a-c32d-4dea-9b26-b7fe9ac6e3fe
 langcode: en
 status: true
 dependencies: {  }
@@ -18,14 +18,25 @@ process:
   langcode:
     -
       plugin: default_value
-      source: language
+      source: langcode
       default_value: en
-  title: title
+  title:
+    -
+      plugin: get
+      source: title
+    -
+      plugin: callback
+      callable: trim
   uid:
     -
       plugin: d7_user_lookup
       source: node_uid
-  status: status
+  moderation_state:
+    plugin: static_map
+    source: status
+    map:
+      - draft
+      - published
   created: created
   changed: changed
   promote: promote
@@ -52,6 +63,7 @@ process:
       plugin: static_map
       bypass: true
       source: body/0/format
+      default_value: basic_html
       map:
         filtered_html: basic_html
         filtered_html_with_no_images: basic_html
@@ -71,14 +83,15 @@ process:
           -
             plugin: d7_file_lookup
             source: fid
+            entity_type: media
   field_global_topics:
     -
       plugin: sub_process
       source: field_global_topics
       process:
         target_id: tid
-  field_site_topics: field_site_topics
   field_site_subtopics: field_site_subtopics
+  field_site_topics: field_site_topics
 destination:
   plugin: 'entity:node'
   default_bundle: gallery
