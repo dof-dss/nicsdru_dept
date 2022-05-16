@@ -113,6 +113,10 @@ class EtgrmCommands extends DrushCommands {
     $query->execute();
     $this->io()->writeln(" ✅");
 
+    $this->io()->write("Updating Node Access data for Domain");
+    $query = $pdo->query('call UPDATE_NODE_ACCESS()');
+    $this->io()->writeln(" ✅");
+
     $conf->set('processed_ts', $ts);
     $conf->save();
 
