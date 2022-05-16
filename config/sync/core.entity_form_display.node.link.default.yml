@@ -7,12 +7,12 @@ dependencies:
     - field.field.node.link.field_link_type
     - field.field.node.link.field_link_url
     - node.type.link
+    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - link
     - path
     - scheduler
-    - scheduler_content_moderation_integration
 id: node.link.default
 targetEntityType: node
 bundle: link
@@ -82,8 +82,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   publish_state:
-    type: scheduler_moderation
-    weight: 13
+    type: options_select
+    weight: 26
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -126,8 +126,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   unpublish_state:
-    type: scheduler_moderation
-    weight: 14
+    type: options_select
+    weight: 27
     region: content
     settings: {  }
     third_party_settings: {  }

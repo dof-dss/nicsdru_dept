@@ -11,12 +11,12 @@ dependencies:
     - field.field.node.gallery.field_site_topics
     - field.field.node.gallery.field_summary
     - node.type.gallery
+    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - media_library
     - path
     - scheduler
-    - scheduler_content_moderation_integration
     - text
 id: node.gallery.default
 targetEntityType: node
@@ -110,8 +110,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   publish_state:
-    type: scheduler_moderation
-    weight: 13
+    type: options_select
+    weight: 26
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -154,8 +154,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   unpublish_state:
-    type: scheduler_moderation
-    weight: 14
+    type: options_select
+    weight: 27
     region: content
     settings: {  }
     third_party_settings: {  }
