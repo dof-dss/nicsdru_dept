@@ -63,15 +63,15 @@ then
 
   # Handle the larger quantity types independently, in batches, to avoid PHP timeouts.
   echo "Migrate D7 news nodes"
-  for i in {1..2}
+  for i in {1..6}
   do
-    $DRUSH migrate:import node_news --force --limit=10000
+    $DRUSH migrate:import node_news --force --limit=2500
   done
 
   echo "Migrate D7 publication nodes"
-  for i in {1..3}
+  for i in {1..12}
   do
-    $DRUSH migrate:import node_news --force --limit=10000
+    $DRUSH migrate:import node_publication --force --limit=2500
   done
 
   echo "Migrate book config"
