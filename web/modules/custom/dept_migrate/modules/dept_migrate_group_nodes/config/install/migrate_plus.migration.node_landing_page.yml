@@ -49,7 +49,6 @@ process:
       replace: ''
   body/0/format:
     - plugin: static_map
-      bypass: true
       source: body/0/format
       default_value: basic_html
       map:
