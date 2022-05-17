@@ -3,6 +3,7 @@
 namespace Drupal\dept_core\Plugin\views\field;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\group\Entity\Group;
 use Drupal\views\Plugin\views\field\EntityField;
 
 /**
@@ -48,6 +49,17 @@ class EntityFieldPlus extends EntityField {
 
     if ($alter['rel_2_abs_link'] === 1) {
       $entity = $alter['raw']->getEntity();
+      $groups = $entity->getGroups();
+      if (!empty($groups)) {
+        $group_id = array_key_first($groups);
+
+        /* @var $dept_man \Drupal\dept_core\DepartmentManager */
+        $dept_man = \Drupal::service('department.manager');
+
+        /* @var $dept \Drupal\dept_core\Department*/
+        $dept = $dept_man->getDepartment('group_' . $group_id);
+-       $hostname = $dept->hostname();
+      }
     }
     return $render;
   }
