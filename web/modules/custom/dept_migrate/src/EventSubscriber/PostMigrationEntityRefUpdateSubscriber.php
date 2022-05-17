@@ -97,11 +97,18 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
 
           // Iterate each target bundle and update the reference id.
           foreach ($target_bundles as $target_bundle) {
-            // Check the database has the correct schema and update table.
-            if ($this->dbconn->schema()->tableExists($migration_table = 'migrate_map_' . $target_entity . '_' . $target_bundle)) {
-              $this->updateEntityReferences($migration_table, $field);
+            $migration_table = 'migrate_map_' . $target_entity . '_' . $target_bundle;
+
+            if ($target_entity === 'media') {
+              $migration_table = 'migrate_map_d7_file_' . $target_entity . '_' . $target_bundle;
             }
-            elseif ($this->dbconn->schema()->tableExists($migration_table = 'migrate_map_d7_' . $target_entity . '_' . $target_bundle)) {
+
+            if ($target_entity === 'taxonomy_term') {
+              $migration_table = 'migrate_map_d7_' . $target_entity . '_' . $target_bundle;
+            }
+
+            // Check the database has the correct schema and update table.
+            if ($this->dbconn->schema()->tableExists($migration_table)) {
               $this->updateEntityReferences($migration_table, $field);
             }
             else {
