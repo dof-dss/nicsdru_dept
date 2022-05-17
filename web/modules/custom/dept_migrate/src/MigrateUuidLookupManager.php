@@ -406,18 +406,14 @@ class MigrateUuidLookupManager {
     foreach ($map as $d7fid => $file) {
       // Switch table if there's a specified type for this file.
       switch ($file['d7type']) {
+        case 'image':
         case 'document':
         case 'undefined':
+          $table = 'migrate_map_d7_file';
+
           if (preg_match('/^private/', $file['d7uri'])) {
             $table = 'migrate_map_d7_file_private';
           }
-          else {
-            $table = 'migrate_map_d7_file';
-          }
-          break;
-
-        case 'image':
-          $table = 'migrate_map_d7_file_media_image';
           break;
 
         case 'video':
@@ -451,6 +447,15 @@ class MigrateUuidLookupManager {
         if (empty($media_entity)) {
           $media_entities = $this->entityTypeManager->getStorage('media')->loadByProperties([
             'field_media_file_1' => $row->destid1,
+          ]);
+
+          $media_entity = is_array($media_entities) ? array_pop($media_entities) : NULL;
+        }
+
+        // Image media entities have their own image field to juggle, try that if all else is null.
+        if (empty($media_entity)) {
+          $media_entities = $this->entityTypeManager->getStorage('media')->loadByProperties([
+            'field_media_image' => $row->destid1,
           ]);
 
           $media_entity = is_array($media_entities) ? array_pop($media_entities) : NULL;
