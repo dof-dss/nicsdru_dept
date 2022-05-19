@@ -1,0 +1,22 @@
+uuid: 4ac4d60d-1cfc-413f-9b2b-87e64f3515d1
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: chart_types
+label: 'Chart types'
+type: 'canonical_entities:taxonomy_term'
+pattern: '[term:vocabulary]/[term:name]'
+selection_criteria:
+  e68120a0-0c5b-4714-b3d8-a8cee3d07ab7:
+    id: 'entity_bundle:taxonomy_term'
+    negate: false
+    uuid: e68120a0-0c5b-4714-b3d8-a8cee3d07ab7
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    bundles:
+      chart_type: chart_type
+selection_logic: and
+weight: -5
+relationships: {  }

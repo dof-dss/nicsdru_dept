@@ -1,0 +1,22 @@
+uuid: b5188684-a9b2-4791-9b17-40446d30a03e
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: charts
+label: Charts
+type: 'canonical_entities:node'
+pattern: 'indicators/[node:field_indicators]/charts/[node:field_chart_type]'
+selection_criteria:
+  68d078e7-a623-48de-bf58-010f29bacbe3:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 68d078e7-a623-48de-bf58-010f29bacbe3
+    context_mapping:
+      node: node
+    bundles:
+      easychart: easychart
+selection_logic: and
+weight: -5
+relationships: {  }

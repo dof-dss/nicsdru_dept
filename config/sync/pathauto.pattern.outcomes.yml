@@ -1,0 +1,22 @@
+uuid: a14e7602-cea7-41fa-9caa-2be9d9a80c23
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: outcomes
+label: Outcomes
+type: 'canonical_entities:taxonomy_term'
+pattern: 'outcomes/[term:name]'
+selection_criteria:
+  80f062fb-5b5e-4d86-bd5a-5c5bab884bc7:
+    id: 'entity_bundle:taxonomy_term'
+    negate: false
+    uuid: 80f062fb-5b5e-4d86-bd5a-5c5bab884bc7
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    bundles:
+      outcomes: outcomes
+selection_logic: and
+weight: -5
+relationships: {  }
