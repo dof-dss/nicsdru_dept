@@ -76,29 +76,41 @@ class relToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
   public function process($text, $langcode) {
     $result = new FilterProcessResult($text);
 
-    //TODO : Match against node uris "/node/13360" etc.
-    $updated_text = preg_replace_callback(
-      '/data-entity-uuid="(.+)" href="(\/\S+)"/m',
-      function ($matches) {
-        $node = $this->entityTypeManager->getStorage('node')->loadByProperties(['uuid' => $matches[1]]);
-        $node = reset($node);
-        // TODO: Check node object has getGroups method or is of a group content type plugin.
-        $groups = $node->getGroups();
+    // Check we are on a Departmental site.
+    if (!empty($dept = $this->departmentManager->getCurrentDepartment())) {
 
-        if (!empty($groups)) {
-          $group_id = array_key_first($groups);
+      // Fetch all the domains checked for processing from the filter settings.
+      $process_domains = $this->settings['process_domains'];
+      $domains_ids = array_keys(array_filter($process_domains));
 
-          $dept = $this->departmentManager->getDepartment('group_' . $group_id);
-          $hostname = $dept->hostname();
+     // Check if the current domain is selected for processing urls.
+     if (array_key_exists(substr($dept->id(), 6), $domains_ids)) {
 
-          return 'href="https://' . $hostname . $matches[2] . '"';
-        }
-      },
-      $result
-    );
+       //TODO : Match against node uris "/node/13360" etc.
+       $updated_text = preg_replace_callback(
+         '/data-entity-uuid="(.+)" href="(\/\S+)"/m',
+         function ($matches) {
+           $node = $this->entityTypeManager->getStorage('node')->loadByProperties(['uuid' => $matches[1]]);
+           $node = reset($node);
+           // TODO: Check node object has getGroups method or is of a group content type plugin.
+           $groups = $node->getGroups();
 
-    if ($updated_text) {
-      $result = new FilterProcessResult($updated_text);
+           if (!empty($groups)) {
+             $group_id = array_key_first($groups);
+
+             $dept = $this->departmentManager->getDepartment('group_' . $group_id);
+             $hostname = $dept->hostname();
+
+             return 'href="https://' . $hostname . $matches[2] . '"';
+           }
+         },
+         $result
+       );
+
+       if ($updated_text) {
+         $result = new FilterProcessResult($updated_text);
+       }
+     }
     }
 
     return $result;
