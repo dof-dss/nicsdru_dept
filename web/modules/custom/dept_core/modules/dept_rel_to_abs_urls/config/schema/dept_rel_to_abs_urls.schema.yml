@@ -1,0 +1,10 @@
+filter_settings.rel_to_abs_url:
+  type: filter
+  label: 'Relative to absolute URLs'
+  mapping:
+    process_domains:
+      type: sequence
+      label: 'Domains to process relative to absolute URLs'
+      sequence:
+        type: string
+        label: 'Domain'
