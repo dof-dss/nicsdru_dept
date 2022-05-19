@@ -86,27 +86,29 @@ class relToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
      // Check if the current domain is selected for processing urls.
      if (array_key_exists(substr($dept->id(), 6), $domains_ids)) {
 
-       //TODO : Match against node uris "/node/13360" etc.
+       // Convert links added by the LinkIt module.
        $updated_text = preg_replace_callback(
          '/data-entity-uuid="(.+)" href="(\/\S+)"/m',
          function ($matches) {
            $node = $this->entityTypeManager->getStorage('node')->loadByProperties(['uuid' => $matches[1]]);
            $node = reset($node);
-           // TODO: Check node object has getGroups method or is of a group content type plugin.
-           $groups = $node->getGroups();
 
-           if (!empty($groups)) {
-             $group_id = array_key_first($groups);
+           if (method_exists($node, 'getGroups')) {
+             $groups = $node->getGroups();
 
-             $dept = $this->departmentManager->getDepartment('group_' . $group_id);
-             $hostname = $dept->hostname();
+             if (!empty($groups)) {
+               $group_id = array_key_first($groups);
 
-             return 'href="https://' . $hostname . $matches[2] . '"';
+               $dept = $this->departmentManager->getDepartment('group_' . $group_id);
+               $hostname = $dept->hostname();
+
+               return 'href="https://' . $hostname . $matches[2] . '"';
+             }
            }
          },
          $result
        );
-
+       
        if ($updated_text) {
          $result = new FilterProcessResult($updated_text);
        }
