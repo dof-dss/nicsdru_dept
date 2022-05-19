@@ -3,6 +3,7 @@
 namespace Drupal\dept_rel_to_abs_urls\Plugin\Filter;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\filter\FilterProcessResult;
@@ -12,9 +13,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * @Filter(
  *   id = "rel_to_abs_url",
- *   title = @Translation("Relative to Absolute URL Filter"),
+ *   title = @Translation("Relative to Absolute URL"),
  *   description = @Translation("Transform relative URLs to absolute URLs"),
  *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE,
+ *   settings = {
+ *     "process_domains" = {},
+ *   },
+ *   weight = 100,
  * )
  */
 class relToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInterface  {
@@ -66,14 +71,12 @@ class relToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
     );
   }
 
-
-
   // TODO: Add an admin option to restrict this by domain.
 
   public function process($text, $langcode) {
     $result = new FilterProcessResult($text);
 
-
+    //TODO : Match against node uris "/node/13360" etc.
     $updated_text = preg_replace_callback(
       '/data-entity-uuid="(.+)" href="(\/\S+)"/m',
       function ($matches) {
@@ -99,6 +102,27 @@ class relToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
     }
 
     return $result;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsForm(array $form, FormStateInterface $form_state) {
+    $domains = [];
+    $depts = $this->departmentManager->getAllDepartments();
+
+    foreach ($depts as $dept) {
+      $domains[$dept->groupId()] = $dept->name();
+    }
+
+    $form['process_domains'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Domains to rewrite links'),
+      '#options' => $domains,
+      '#default_value' => $this->settings['process_domains']
+    ];
+
+    return $form;
   }
 
 }
