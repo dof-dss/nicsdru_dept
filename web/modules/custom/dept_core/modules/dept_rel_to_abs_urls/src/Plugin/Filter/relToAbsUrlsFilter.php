@@ -108,7 +108,29 @@ class relToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
          },
          $result
        );
-       
+
+       // Convert /node/XXXX links.
+       $updated_text = preg_replace_callback(
+         '/href="\/node\/(\d+)"/m',
+         function ($matches) {
+           $node = $this->entityTypeManager->getStorage('node')->load($matches[1]);
+
+           if (method_exists($node, 'getGroups')) {
+             $groups = $node->getGroups();
+
+             if (!empty($groups)) {
+               $group_id = array_key_first($groups);
+
+               $dept = $this->departmentManager->getDepartment('group_' . $group_id);
+               $hostname = $dept->hostname();
+
+               return 'href="https://' . $hostname . $matches[2] . '"';
+             }
+           }
+         },
+         $updated_text
+       );
+
        if ($updated_text) {
          $result = new FilterProcessResult($updated_text);
        }
