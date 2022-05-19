@@ -1,0 +1,22 @@
+uuid: 6a97439b-c4e0-426e-8dfe-4a7557159f70
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: heritage_sites
+label: 'Heritage sites'
+type: 'canonical_entities:node'
+pattern: 'heritage-sites/[node:title]'
+selection_criteria:
+  da4ce79e-598f-40ab-b018-119a3144722f:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: da4ce79e-598f-40ab-b018-119a3144722f
+    context_mapping:
+      node: node
+    bundles:
+      heritage_site: heritage_site
+selection_logic: and
+weight: -5
+relationships: {  }
