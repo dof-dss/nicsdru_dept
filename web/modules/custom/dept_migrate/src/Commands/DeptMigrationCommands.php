@@ -22,7 +22,7 @@ class DeptMigrationCommands extends DrushCommands {
    */
   public function updateInternalLinks() {
 
-    $tables = [
+    $fields = [
       'body',
       'field_additional_info',
       'field_summary',
@@ -33,29 +33,37 @@ class DeptMigrationCommands extends DrushCommands {
 
     $this->io()->title("Updating all internal links");
 
-    foreach ($tables as $table) {
-      $query = $dbConn->select('node__' . $table, 't');
+    foreach ($fields as $field) {
+      $table = 'node__' . $field;
+      $query = $dbConn->select($table, 't');
       $query->addField('t', 'entity_id', 'nid');
-      $query->addField('t', $table . '_value', 'value');
-      $query->condition($table . '_value', 'node\/[0-9]+', 'REGEXP');
+      $query->addField('t', $field . '_value', 'value');
+      $query->condition($field . '_value', 'node\/[0-9]+', 'REGEXP');
 
       $results = $query->execute()->fetchAll();
 
 
       foreach ($results as $result) {
-          $updated_value = preg_replace_callback(
-            '/node\/(\d+)/m',
-            function ($matches) use ($lookupMan) {
-              $d9_lookup = $lookupMan->lookupBySourceNodeId([$matches[1]]);
+        $updated_value = preg_replace_callback(
+          '/node\/(\d+)/m',
+          function ($matches) use ($lookupMan) {
+            $d9_lookup = $lookupMan->lookupBySourceNodeId([$matches[1]]);
 
-              if (!empty($d9_lookup['nid'])) {
-                return 'node/' . $d9_lookup['nid'];
-              }
-            },
-            $result->value
-          );
-        }
+            if (!empty($d9_lookup)) {
+              $node_data = current($d9_lookup);
+              return 'node/' . $node_data['nid'];
+            }
+          },
+          $result->value
+        );
+
+        $dbConn->update($table)
+          ->fields([$field . '_value' => $updated_value])
+          ->condition('entity_id', $result->nid, '=')
+          ->execute();
+
       }
+    }
 
     $this->io()->success("Finished");
   }
