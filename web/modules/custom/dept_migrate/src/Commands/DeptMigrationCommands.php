@@ -31,8 +31,6 @@ class DeptMigrationCommands extends DrushCommands {
     $dbConn = Database::getConnection('default', 'default');
     $lookupMan = \Drupal::service('dept_migrate.migrate_uuid_lookup_manager');
 
-    $this->io()->title("Updating all internal links");
-
     foreach ($fields as $field) {
       $table = 'node__' . $field;
       $query = $dbConn->select($table, 't');
@@ -45,13 +43,19 @@ class DeptMigrationCommands extends DrushCommands {
 
       foreach ($results as $result) {
         $updated_value = preg_replace_callback(
-          '/node\/(\d+)/m',
-          function ($matches) use ($lookupMan) {
-            $d9_lookup = $lookupMan->lookupBySourceNodeId([$matches[1]]);
+          '/(<a href="\/node\/)(\d+)/m',
+          function ($matches) use ($lookupMan, $dbConn) {
+            $d9_lookup = $lookupMan->lookupBySourceNodeId([$matches[2]]);
 
             if (!empty($d9_lookup)) {
               $node_data = current($d9_lookup);
-              return 'node/' . $node_data['nid'];
+
+              if (!empty($node_data['nid'])) {
+                $d9_nid = $node_data['nid'];
+                $d9_uuid = $dbConn->query('SELECT uuid FROM {node} WHERE nid = :nid', [':nid' => $d9_nid])->fetchField();
+
+                return '<a data-entity-substitution="canonical" data-entity-type="node" data-entity-uuid="' . $d9_uuid . '" href="/node/' . $node_data['nid'];
+              }
             }
           },
           $result->value
@@ -61,11 +65,9 @@ class DeptMigrationCommands extends DrushCommands {
           ->fields([$field . '_value' => $updated_value])
           ->condition('entity_id', $result->nid, '=')
           ->execute();
-
       }
-    }
 
+    }
     $this->io()->success("Finished");
   }
-
 }
