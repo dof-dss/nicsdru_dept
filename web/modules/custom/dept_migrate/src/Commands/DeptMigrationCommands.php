@@ -29,21 +29,33 @@ class DeptMigrationCommands extends DrushCommands {
     ];
 
     $dbConn = Database::getConnection('default', 'default');
+    $lookupMan = \Drupal::service('dept_migrate.migrate_uuid_lookup_manager');
 
     $this->io()->title("Updating all internal links");
 
     foreach ($tables as $table) {
-
       $query = $dbConn->select('node__' . $table, 't');
-      $query->addField('t', 'entity_id', 'id');
+      $query->addField('t', 'entity_id', 'nid');
       $query->addField('t', $table . '_value', 'value');
       $query->condition($table . '_value', 'node\/[0-9]+', 'REGEXP');
+
       $results = $query->execute()->fetchAll();
 
-      foreach ($results as $record) {
-        $this->io()->writeln($record->id);
+
+      foreach ($results as $result) {
+          $updated_value = preg_replace_callback(
+            '/node\/(\d+)/m',
+            function ($matches) use ($lookupMan) {
+              $d9_lookup = $lookupMan->lookupBySourceNodeId([$matches[1]]);
+
+              if (!empty($d9_lookup['nid'])) {
+                return 'node/' . $d9_lookup['nid'];
+              }
+            },
+            $result->value
+          );
+        }
       }
-    }
 
     $this->io()->success("Finished");
   }
