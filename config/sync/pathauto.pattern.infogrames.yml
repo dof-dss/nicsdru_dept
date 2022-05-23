@@ -1,0 +1,22 @@
+uuid: 93c927bb-cbca-41d9-b89e-aeddf4e56b8b
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: infogrames
+label: Infogrames
+type: 'canonical_entities:node'
+pattern: 'indicators/[node:field_indicators]/infograms/[node:field_chart_type]'
+selection_criteria:
+  8d2fb9e2-906d-4162-8bab-32c6a1940fd3:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 8d2fb9e2-906d-4162-8bab-32c6a1940fd3
+    context_mapping:
+      node: node
+    bundles:
+      infogram: infogram
+selection_logic: and
+weight: -5
+relationships: {  }

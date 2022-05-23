@@ -1,0 +1,22 @@
+uuid: ff8e6a82-e7ad-4f99-a9f4-d0ef87f5ced2
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: global_pages
+label: 'Global pages'
+type: 'canonical_entities:node'
+pattern: '[node:title]'
+selection_criteria:
+  974c5990-924c-486b-977a-1ad7f5446f63:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 974c5990-924c-486b-977a-1ad7f5446f63
+    context_mapping:
+      node: node
+    bundles:
+      global_page: global_page
+selection_logic: and
+weight: -5
+relationships: {  }

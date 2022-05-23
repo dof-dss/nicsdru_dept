@@ -1,0 +1,22 @@
+uuid: 52210d3f-6e0c-46e2-9ba1-73fc4742f641
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: galleries
+label: Galleries
+type: 'canonical_entities:node'
+pattern: 'galleries/[node:title]'
+selection_criteria:
+  616cccf2-3519-427a-96ee-24898ce793fe:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 616cccf2-3519-427a-96ee-24898ce793fe
+    context_mapping:
+      node: node
+    bundles:
+      gallery: gallery
+selection_logic: and
+weight: -5
+relationships: {  }
