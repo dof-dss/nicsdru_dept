@@ -2,9 +2,7 @@
 
 namespace Drupal\dept_migrate\Commands;
 
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Database\Database;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drush\Commands\DrushCommands;
@@ -31,9 +29,9 @@ class DeptMigrationCommands extends DrushCommands {
   protected $lookupManager;
 
   /**
-   * MyModuleCommands constructor.
+   * Command constructor.
    */
-  public function __construct(Connection $database, MigrateUuidLookupManager $lookup_manager ) {
+  public function __construct(Connection $database, MigrateUuidLookupManager $lookup_manager) {
     parent::__construct();
     $this->dbConn = $database;
     $this->lookupManager = $lookup_manager;
@@ -53,7 +51,11 @@ class DeptMigrationCommands extends DrushCommands {
       'field_summary',
     ];
 
+    $this->io()->title("Updating and converting content links");
+
     foreach ($fields as $field) {
+
+      $this->io()->write("Updating links within $field field");
       // Select all 'node/XXXX' links from the current field table.
       $table = 'node__' . $field;
       $query = $this->dbConn->select($table, 't');
@@ -69,7 +71,7 @@ class DeptMigrationCommands extends DrushCommands {
           '/(<a href="\/node\/)(\d+)/m',
           function ($matches) {
             // Fetch the new D9 nid for the D7 nid.
-            $d9_lookup =  $this->lookupManager->lookupBySourceNodeId([$matches[2]]);
+            $d9_lookup = $this->lookupManager->lookupBySourceNodeId([$matches[2]]);
 
             if (!empty($d9_lookup)) {
               $node_data = current($d9_lookup);
@@ -92,7 +94,9 @@ class DeptMigrationCommands extends DrushCommands {
           ->execute();
       }
 
+      $this->io()->writeln(" ✅");
     }
     $this->io()->success("Finished");
   }
+
 }
