@@ -1,9 +1,0 @@
-dept_migrate.default:
-  path: '/admin/content/migrate_index'
-  defaults:
-    _controller: '\Drupal\dept_migrate\Controller\IndexController::default'
-    _title: 'Migration index'
-  requirements:
-    _permission: 'administer nodes'
-  options:
-    _admin_route: TRUE
