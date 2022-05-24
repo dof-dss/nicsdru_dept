@@ -1,0 +1,7 @@
+name: 'Department sites: Content Processors'
+type: module
+description: 'Provides plugins and filters to manipulate and process site content.'
+package: 'NICS: Departmental'
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:text

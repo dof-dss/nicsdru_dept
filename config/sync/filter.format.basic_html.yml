@@ -2,8 +2,14 @@ uuid: e9a359c9-5d4a-4e9e-a1cc-61d09645136e
 langcode: en
 status: true
 dependencies:
+  config:
+    - core.entity_view_mode.media.article_float
+    - core.entity_view_mode.media.article_float_expandable
+    - core.entity_view_mode.media.article_full
+    - core.entity_view_mode.media.article_full_expandable
   module:
     - cookie_content_blocker
+    - dept_content_processors
     - editor
     - entity_embed
     - linkit
@@ -23,7 +29,7 @@ filters:
     status: true
     weight: -50
     settings:
-      allowed_html: '<a class href hreflang> <em> <strong> <cite> <blockquote cite> <code> <ul class type> <ol class start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <div class> <p class translate> <br> <img src alt height width data-* typeof> <sup> <table class> <caption> <tbody> <thead> <tfoot> <th scope> <td> <tr> <drupal-entity data-entity-type data-entity-uuid data-entity-embed-display data-entity-embed-display-settings data-align data-caption data-embed-button alt title class> <picture data-* alt title class> <source srcset media type> <address> <drupal-media data-entity-type data-entity-uuid data-entity-embed-display data-entity-embed-display-settings data-align data-caption data-embed-button data-view-mode alt title class>'
+      allowed_html: '<em> <strong> <cite> <blockquote cite> <code> <ul type class=""> <ol start type class=""> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <div class=""> <p translate class=""> <br> <img src alt height width data-* typeof> <sup> <table class=""> <caption> <tbody> <thead> <tfoot> <th scope> <td> <tr> <drupal-entity data-entity-type data-entity-uuid data-entity-embed-display data-entity-embed-display-settings data-align data-caption data-embed-button alt title class=""> <picture data-* alt title class=""> <source srcset media type> <address> <drupal-media data-entity-type data-entity-uuid data-entity-embed-display data-entity-embed-display-settings data-align data-caption data-embed-button data-view-mode alt title class=""> <a href hreflang data-entity-substitution data-entity-type data-entity-uuid title class="">'
       filter_html_help: false
       filter_html_nofollow: false
   filter_align:
@@ -121,7 +127,7 @@ filters:
   linkit:
     id: linkit
     provider: linkit
-    status: false
+    status: true
     weight: -34
     settings:
       title: true
@@ -132,3 +138,20 @@ filters:
     weight: -48
     settings:
       replacement_text: 'Click here to view the video content'
+  rel_to_abs_url:
+    id: rel_to_abs_url
+    provider: dept_content_processors
+    status: true
+    weight: 100
+    settings:
+      process_domains:
+        1: '1'
+        10: '0'
+        2: '0'
+        3: '0'
+        4: '0'
+        5: '0'
+        6: '0'
+        7: '0'
+        8: '0'
+        9: '0'
