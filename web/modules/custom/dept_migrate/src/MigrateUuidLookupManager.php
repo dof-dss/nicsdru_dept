@@ -102,7 +102,8 @@ class MigrateUuidLookupManager {
 
         if (empty($node)) {
           $this->logger->error('No node found with id ' . $row->destid1);
-        } else {
+        }
+        else {
           $map[$d7uuid]['nid'] = $node->id();
           $map[$d7uuid]['uuid'] = $node->uuid();
           $map[$d7uuid]['title'] = $node->label();

@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   weight = 100,
  * )
  */
-class relToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInterface  {
+class RelToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInterface {
 
   /**
    * The Entity Type Manager service.
@@ -71,50 +71,48 @@ class relToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
     );
   }
 
-  // TODO: Add an admin option to restrict this by domain.
-
+  /**
+   * {@inheritdoc}
+   */
   public function process($text, $langcode) {
     $result = new FilterProcessResult($text);
 
     // Check we are on a Departmental site.
     if (!empty($dept = $this->departmentManager->getCurrentDepartment())) {
-
       // Fetch all the domains checked for processing from the filter settings.
       $process_domains = $this->settings['process_domains'];
       $domains_ids = array_keys(array_filter($process_domains));
 
-     // Check if the current domain is selected for processing urls.
-     if (in_array(substr($dept->id(), 6), $domains_ids)) {
-
-       // Convert links added by the LinkIt module.
-       $updated_text = preg_replace_callback(
+      // Check if the current domain is selected for processing urls.
+      if (in_array(substr($dept->id(), 6), $domains_ids)) {
+        // Convert links added by the LinkIt module.
+        $updated_text = preg_replace_callback(
          '/data-entity-uuid="(.+)" href="(\/\S+)"/m',
-         function ($matches) {
-           $node = $this->entityTypeManager->getStorage('node')->loadByProperties(['uuid' => $matches[1]]);
-           $node = reset($node);
+          function ($matches) {
+            $node = $this->entityTypeManager->getStorage('node')->loadByProperties(['uuid' => $matches[1]]);
+            $node = reset($node);
 
-           if (method_exists($node, 'getGroups')) {
-             $groups = $node->getGroups();
+            if (method_exists($node, 'getGroups')) {
+              $groups = $node->getGroups();
 
-             if (!empty($groups)) {
-               $group_id = array_key_first($groups);
+              if (!empty($groups)) {
+                $group_id = array_key_first($groups);
 
-               $dept = $this->departmentManager->getDepartment('group_' . $group_id);
-               $hostname = $dept->hostname();
+                $dept = $this->departmentManager->getDepartment('group_' . $group_id);
+                $hostname = $dept->hostname();
+                return 'href="https://' . $hostname . $matches[2] . '"';
+              }
+            }
+            // Return the original link if we can't process it.
+            return 'href="https://' . $matches[2] . '"';
+          },
+          $result
+        );
 
-               return 'href="https://' . $hostname . $matches[2] . '"';
-             }
-           }
-           // Return the original link if we can't process it.
-           return 'href="https://' . $matches[2] . '"';
-         },
-         $result
-       );
-
-       if ($updated_text) {
-         $result = new FilterProcessResult($updated_text);
-       }
-     }
+        if ($updated_text) {
+          $result = new FilterProcessResult($updated_text);
+        }
+      }
     }
 
     return $result;
