@@ -99,10 +99,15 @@ class MigrateUuidLookupManager {
 
       foreach ($migrate_map as $row) {
         $node = $this->entityTypeManager->getStorage('node')->load($row->destid1);
-        $map[$d7uuid]['nid'] = $node->id();
-        $map[$d7uuid]['uuid'] = $node->uuid();
-        $map[$d7uuid]['title'] = $node->label();
-        $map[$d7uuid]['type'] = $node->bundle();
+
+        if (empty($node)) {
+          $this->logger->error('No node found with id ' . $row->destid1);
+        } else {
+          $map[$d7uuid]['nid'] = $node->id();
+          $map[$d7uuid]['uuid'] = $node->uuid();
+          $map[$d7uuid]['title'] = $node->label();
+          $map[$d7uuid]['type'] = $node->bundle();
+        }
       }
     }
 
