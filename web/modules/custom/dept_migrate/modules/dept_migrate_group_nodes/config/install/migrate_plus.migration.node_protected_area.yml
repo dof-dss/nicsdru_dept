@@ -49,7 +49,6 @@ process:
       replace: ''
   body/0/format:
     - plugin: static_map
-      bypass: true
       source: body/0/format
       default_value: basic_html
       map:
@@ -60,6 +59,7 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
+  field_protected_area_documents: field_protected_area_documents
   field_council: field_council
   field_county: field_county
   field_protected_area_feature: field_protected_area_feature

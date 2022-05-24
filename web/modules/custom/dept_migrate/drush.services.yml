@@ -1,0 +1,6 @@
+services:
+  dept_migrate.commands:
+    class: \Drupal\dept_migrate\Commands\DeptMigrationCommands
+    arguments: ['@database', '@dept_migrate.migrate_uuid_lookup_manager']
+    tags:
+      - { name: drush.command }

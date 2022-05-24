@@ -1,0 +1,22 @@
+uuid: 630a70b2-2332-4fcc-9134-7fdf7d13c46d
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: uals
+label: UALs
+type: 'canonical_entities:node'
+pattern: 'unlawfully-at-large/[node:title]'
+selection_criteria:
+  45004b93-3fc8-4e95-a2f7-8670f5377d15:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 45004b93-3fc8-4e95-a2f7-8670f5377d15
+    context_mapping:
+      node: node
+    bundles:
+      ual: ual
+selection_logic: and
+weight: -5
+relationships: {  }

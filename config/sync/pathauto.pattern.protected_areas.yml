@@ -1,0 +1,22 @@
+uuid: 6407f26e-bbc1-4168-a4e0-811bb1ead9d5
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: protected_areas
+label: 'Protected areas'
+type: 'canonical_entities:node'
+pattern: 'protected-areas/[node:title]'
+selection_criteria:
+  4ac5bc4c-b1c7-4afd-9c83-55ab7320dfc3:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 4ac5bc4c-b1c7-4afd-9c83-55ab7320dfc3
+    context_mapping:
+      node: node
+    bundles:
+      protected_area: protected_area
+selection_logic: and
+weight: -5
+relationships: {  }

@@ -1,7 +1,9 @@
-uuid: 4314c5df-7f05-461a-8ce0-08c02cedc840
+uuid: 9664ed9e-1828-49ac-bf3c-1e056a066154
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: 50m31mUo18_hMVaMjfGp97KxUAD9vLVlg45o8IpKnxA
 id: node_protected_area
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -61,7 +63,6 @@ process:
   body/0/format:
     -
       plugin: static_map
-      bypass: true
       source: body/0/format
       default_value: basic_html
       map:
@@ -78,6 +79,7 @@ process:
   field_site_subtopics: field_site_subtopics
   field_site_topics: field_site_topics
   field_protected_area_type: field_protected_area_type
+  field_protected_area_documents: field_protected_area_documents
 destination:
   plugin: 'entity:node'
   default_bundle: protected_area

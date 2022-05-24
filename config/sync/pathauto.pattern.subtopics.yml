@@ -1,0 +1,22 @@
+uuid: c81d1375-39f1-4f36-bcaf-42c42b5d1c04
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: subtopics
+label: Subtopics
+type: 'canonical_entities:node'
+pattern: 'topics/[node:field_parent_topic]/[node:title]'
+selection_criteria:
+  06fede01-a1e6-4f5b-b88b-5bd06a7d7ca8:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 06fede01-a1e6-4f5b-b88b-5bd06a7d7ca8
+    context_mapping:
+      node: node
+    bundles:
+      subtopic: subtopic
+selection_logic: and
+weight: -5
+relationships: {  }

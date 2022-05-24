@@ -49,7 +49,6 @@ process:
       replace: ''
   body/0/format:
     - plugin: static_map
-      bypass: true
       source: body/0/format
       default_value: basic_html
       map:
@@ -60,23 +59,26 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
+  field_news_type: field_news_type
   field_summary: field_summary
+  field_notes_to_editors: field_notes_to_editors
   field_teaser: field_teaser
   field_photo:
     - plugin: sub_process
       source: field_photo
       process:
         target_id:
-          -
-            plugin: d7_file_lookup
+          - plugin: d7_file_lookup
             source: fid
+            entity_type: media
   field_video:
     - plugin: sub_process
       source: field_video
       process:
         target_id:
-          plugin: d7_file_lookup
-          source: fid
+          - plugin: d7_file_lookup
+            source: fid
+            entity_type: media
   field_global_topics:
     - plugin: sub_process
       source: field_global_topics

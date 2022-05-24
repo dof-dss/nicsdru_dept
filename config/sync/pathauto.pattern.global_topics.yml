@@ -1,0 +1,22 @@
+uuid: 638ae3cd-f6e3-47e3-8da6-27adbc1cd7b5
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: global_topics
+label: 'Global topics'
+type: 'canonical_entities:taxonomy_term'
+pattern: '[term:name]'
+selection_criteria:
+  9ce127f4-3e06-451e-9805-372efd94bfdc:
+    id: 'entity_bundle:taxonomy_term'
+    negate: false
+    uuid: 9ce127f4-3e06-451e-9805-372efd94bfdc
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    bundles:
+      global_topics: global_topics
+selection_logic: and
+weight: -5
+relationships: {  }
