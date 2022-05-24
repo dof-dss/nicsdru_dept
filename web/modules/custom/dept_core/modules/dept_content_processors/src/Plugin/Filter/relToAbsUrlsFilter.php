@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\dept_rel_to_abs_urls\Plugin\Filter;
+namespace Drupal\dept_content_processors\Plugin\Filter;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
