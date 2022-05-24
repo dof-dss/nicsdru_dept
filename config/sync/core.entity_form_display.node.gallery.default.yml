@@ -6,7 +6,6 @@ dependencies:
     - field.field.node.gallery.body
     - field.field.node.gallery.field_gallery_images
     - field.field.node.gallery.field_global_topics
-    - field.field.node.gallery.field_original_domain
     - field.field.node.gallery.field_site_subtopics
     - field.field.node.gallery.field_site_topics
     - field.field.node.gallery.field_summary
@@ -164,5 +163,4 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden:
-  field_original_domain: true
+hidden: {  }
