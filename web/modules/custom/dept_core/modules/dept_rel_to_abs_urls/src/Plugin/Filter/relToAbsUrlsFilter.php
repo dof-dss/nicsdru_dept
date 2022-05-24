@@ -84,7 +84,7 @@ class relToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
       $domains_ids = array_keys(array_filter($process_domains));
 
      // Check if the current domain is selected for processing urls.
-     if (array_key_exists(substr($dept->id(), 6), $domains_ids)) {
+     if (in_array(substr($dept->id(), 6), $domains_ids)) {
 
        // Convert links added by the LinkIt module.
        $updated_text = preg_replace_callback(
@@ -105,30 +105,10 @@ class relToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
                return 'href="https://' . $hostname . $matches[2] . '"';
              }
            }
+           // Return the original link if we can't process it.
+           return 'href="https://' . $matches[2] . '"';
          },
          $result
-       );
-
-       // Convert /node/XXXX links.
-       $updated_text = preg_replace_callback(
-         '/href="\/node\/(\d+)"/m',
-         function ($matches) {
-           $node = $this->entityTypeManager->getStorage('node')->load($matches[1]);
-
-           if (method_exists($node, 'getGroups')) {
-             $groups = $node->getGroups();
-
-             if (!empty($groups)) {
-               $group_id = array_key_first($groups);
-
-               $dept = $this->departmentManager->getDepartment('group_' . $group_id);
-               $hostname = $dept->hostname();
-
-               return 'href="https://' . $hostname . $matches[2] . '"';
-             }
-           }
-         },
-         $updated_text
        );
 
        if ($updated_text) {
