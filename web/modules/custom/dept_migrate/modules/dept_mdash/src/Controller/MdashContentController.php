@@ -86,6 +86,9 @@ class MdashContentController extends ControllerBase {
     $plugin_block = $this->blockManager->createInstance('dept_mdash_relationship_summary', []);
     $relationship_summary_block = $plugin_block->build();
 
+    $plugin_block = $this->blockManager->createInstance('dept_mdash_log_viewer', []);
+    $log_viewer_block = $plugin_block->build();
+
     return [
       '#theme' => 'mdash_dashboard',
       '#content_summary' => $content_summary_block,
@@ -95,6 +98,7 @@ class MdashContentController extends ControllerBase {
       '#group_relationships' => $this->groupRelationships(),
       '#last_group_relationships_process' => $this->lastGroupRelationshipsProcess(),
       '#null_destination_nodes' => $this->nullDestinationNodes(),
+      '#log_output' => $log_viewer_block,
       '#attached' => [
         'library' => [
           'dept_mdash/dashboard',
