@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * Increase module weight.
+ */
+function dept_node_update_8001() {
+  module_set_weight('dept_node', 10);
+}
