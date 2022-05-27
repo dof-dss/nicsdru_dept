@@ -38,7 +38,6 @@ module:
   dept_migrate_group_nodes: 0
   dept_migrate_group_users: 0
   dept_migrate_taxo: 0
-  dept_node: 0
   dept_publications: 0
   dept_search: 0
   dept_user: 0
@@ -53,6 +52,7 @@ module:
   domain_group: 0
   domain_group_alias: 0
   domain_path: 0
+  domain_path_pathauto: 0
   domain_site_settings: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
@@ -165,6 +165,7 @@ module:
   workflows: 0
   pathauto: 1
   origins_workflow: 2
+  dept_node: 10
   views: 10
   minimal: 1000
   eu_cookie_compliance: 1001
