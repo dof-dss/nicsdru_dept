@@ -113,6 +113,10 @@ NB: migration order is important. The `migrate-scripts/migrate.sh` script outlin
 
 > Do NOT use the `--sync` flag on migrate import tasks. This causes a full migration rollback and re-import which can cause confusion for site users, irregularities with other content and can be tricky and time consuming to correct.
 
+There are a number of Drush commands to process migration data.
+* etgrm commands handle the translation of Domain to Group content relationships.
+* dept:updatelinks updates text fields with internal links and converts to LinkIt format links
+
 ### Points of interest
 
 * Revisions: these are deemed too complex to track/import on a rolling basis. Access to older content will be available on the D7 application, running on platform.sh on an internal hostname.
