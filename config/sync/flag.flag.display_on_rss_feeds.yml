@@ -1,0 +1,30 @@
+uuid: 1cbaee0d-aac3-48c6-839e-f28c7ba01452
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: display_on_rss_feeds
+label: 'Display on RSS feeds'
+bundles:
+  - publication
+entity_type: node
+global: true
+flag_short: 'Display on RSS feeds.'
+flag_long: 'Check this flag to indicate that this content should be displayed on RSS feeds.'
+flag_message: 'This content has been flagged to be displayed on RSS feeds.'
+unflag_short: 'Hide on RSS feeds.'
+unflag_long: 'Uncheck this flag to indicate that this content should be hidden on RSS feeds.'
+unflag_message: 'This content has been flagged to be hidden on RSS feeds.'
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:node'
+link_type: ajax_link
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: false
+  show_on_form: true
+  show_contextual_link: false
+  extra_permissions:
+    owner: owner
+linkTypeConfig: {  }

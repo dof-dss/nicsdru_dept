@@ -1,0 +1,15 @@
+uuid: bb736f9b-2f6b-4c9f-9d65-905281c4bdf1
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.hide_on_topic_subtopic_pages
+  module:
+    - flag
+id: flag_action.hide_on_topic_subtopic_pages_flag
+label: 'Hide on topic/subtopic pages.'
+type: node
+plugin: 'flag_action:hide_on_topic_subtopic_pages_flag'
+configuration:
+  flag_id: hide_on_topic_subtopic_pages
+  flag_action: flag

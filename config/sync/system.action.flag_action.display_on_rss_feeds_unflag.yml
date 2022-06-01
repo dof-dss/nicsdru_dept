@@ -1,0 +1,15 @@
+uuid: 57b9a961-ceb1-49dd-a4c9-f6249fe88abc
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.display_on_rss_feeds
+  module:
+    - flag
+id: flag_action.display_on_rss_feeds_unflag
+label: 'Hide on RSS feeds.'
+type: node
+plugin: 'flag_action:display_on_rss_feeds_unflag'
+configuration:
+  flag_id: display_on_rss_feeds
+  flag_action: unflag
