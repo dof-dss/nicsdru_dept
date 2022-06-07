@@ -134,6 +134,13 @@ field_settings:
       module:
         - node
         - user
+  node_grants:
+    label: 'Node access information'
+    property_path: search_api_node_grants
+    type: string
+    indexed_locked: true
+    type_locked: true
+    hidden: true
   publish_on:
     label: 'Publish on'
     datasource_id: 'entity:node'
@@ -162,6 +169,16 @@ field_settings:
         - field.storage.node.field_site_topics
       module:
         - node
+  status:
+    label: null
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    indexed_locked: true
+    type_locked: true
+    dependencies:
+      module:
+        - node
   title:
     label: Title
     datasource_id: 'entity:node'
@@ -176,6 +193,8 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: uid
     type: integer
+    indexed_locked: true
+    type_locked: true
     dependencies:
       module:
         - node
@@ -191,6 +210,9 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  content_access:
+    weights:
+      preprocess_query: -30
   entity_status: {  }
   entity_type: {  }
   html_filter:
