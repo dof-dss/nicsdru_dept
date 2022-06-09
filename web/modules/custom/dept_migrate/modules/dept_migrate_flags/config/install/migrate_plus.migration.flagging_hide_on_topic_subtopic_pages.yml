@@ -1,25 +1,25 @@
 langcode: en
 status: true
 dependencies: {  }
-id: flags_hide_on_topic_subtopic_pages
+id: flagging_hide_on_topic_subtopic_pages
 class: Drupal\migrate\Plugin\Migration
 migration_tags:
   - dept_sites
 label: 'Flags - Hide on Topic and Subtopic pages'
 migration_group: migrate_group_flags
 source:
-  plugin: flag_source
+  plugin: flagging_source
 process:
   flagging_id: flagging_id
   flag_id: flag_id
+  entity_id: entity_id
+  uid: uid
   entity_type:
     plugin: default_value
     default_value: node
-  entity_id: entity_id
   global:
     plugin: default_value
     default_value: 0
-  uid: uid
 destination:
   plugin: entity:flagging
   default_bundle: hide_on_topic_subtopic_pages
