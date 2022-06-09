@@ -65,11 +65,9 @@ class MigrationFlagCountsSubscriber implements EventSubscriberInterface {
    *   The pre migration import event.
    */
   public function onPreImport(MigrateImportEvent $event) {
-    $flag_migrations = [
-      'flagging_hide_on_topic_subtopic_pages'
-    ];
 
-//    if (in_array($event->getMigration()->getBaseId(), $flag_migrations)) {
+    // Limit the flag count data creation to migrations that use the flagging_source plugin.
+    if ($event->getMigration()->getSourcePlugin()->getPluginId() === 'flagging_source') {
     $results = $this->d7dbconn->query("SELECT CASE WHEN fid = 4 THEN 'hide_listing' WHEN fid = 5 THEN 'hide_on_topic_subtopic_pages' WHEN fid = 6 THEN 'display_on_rss_feeds' END AS flag_id, entity_id, last_updated FROM {flag_counts} WHERE fid IN (4,5,6)");
 
       foreach ($results as $result) {
@@ -79,6 +77,6 @@ class MigrationFlagCountsSubscriber implements EventSubscriberInterface {
         $this->dbconn->query("INSERT IGNORE INTO {flag_counts} (flag_id, entity_type, entity_id, count, last_updated) VALUES ('$result->flag_id', 'node', '$d9_nid', '0', '$result->last_updated')")->execute();
       }
     }
-//  }
+  }
 
 }
