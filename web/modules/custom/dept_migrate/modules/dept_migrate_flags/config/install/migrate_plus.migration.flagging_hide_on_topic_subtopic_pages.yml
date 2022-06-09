@@ -9,17 +9,20 @@ label: 'Flags - Hide on Topic and Subtopic pages'
 migration_group: migrate_group_flags
 source:
   plugin: flagging_source
+  flag_id: 5
 process:
   flagging_id: flagging_id
-  flag_id: flag_id
-  entity_id: entity_id
-  uid: uid
+  flag_id:
+    plugin: default_value
+    default_value: hide_on_topic_subtopic_pages
   entity_type:
     plugin: default_value
     default_value: node
+  entity_id: entity_id
   global:
     plugin: default_value
-    default_value: 0
+    default_value: 1
+  uid: uid
 destination:
   plugin: entity:flagging
   default_bundle: hide_on_topic_subtopic_pages
