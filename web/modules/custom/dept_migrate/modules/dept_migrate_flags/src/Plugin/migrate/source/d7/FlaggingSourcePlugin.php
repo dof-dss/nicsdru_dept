@@ -27,11 +27,19 @@ class FlaggingSourcePlugin extends SqlBase {
   protected $lookupManager;
 
   /**
+   * D7 flag ID to filter source data.
+   *
+   * @var integer
+   */
+  protected $flagId;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration, StateInterface $state, MigrateUuidLookupManager $lookup_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $migration, $state);
     $this->lookupManager = $lookup_manager;
+    $this->flagId = $configuration['flag_id'];
   }
 
   /**
@@ -59,7 +67,7 @@ class FlaggingSourcePlugin extends SqlBase {
         'fid',
         'entity_id',
         'uid',])
-      ->condition('fid', '5', '=');
+      ->condition('fid', $this->flagId, '=');
 
     return $query;
   }
@@ -92,13 +100,9 @@ class FlaggingSourcePlugin extends SqlBase {
    */
   public function prepareRow(Row $row) {
 
-    if (parent::prepareRow($row) === FALSE) {
-      return FALSE;
-    }
-
-    $flagging_id = $row->getSourceProperty('flagging_id');
-    $flag_id = $row->getSourceProperty('fid');
-    $uid = $row->getSourceProperty('uid');
+//    if (parent::prepareRow($row) === FALSE) {
+//      return FALSE;
+//    }
 
     $nids = $this->lookupManager->lookupBySourceNodeId([$row->getSourceProperty('entity_id')]);
 
