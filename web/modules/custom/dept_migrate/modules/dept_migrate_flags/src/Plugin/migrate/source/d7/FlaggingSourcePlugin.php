@@ -10,7 +10,7 @@ use Drupal\migrate\Row;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * D7 flagging source plugin for Flags module.
+ * D7 flagging source plugin for Flags module migrations.
  *
  * @MigrateSource(
  *   id = "flagging_source",
@@ -29,7 +29,7 @@ class FlaggingSourcePlugin extends SqlBase {
   /**
    * D7 flag ID to filter source data.
    *
-   * @var integer
+   * @var int
    */
   protected $flagId;
 
@@ -60,13 +60,13 @@ class FlaggingSourcePlugin extends SqlBase {
    * {@inheritdoc}
    */
   public function query() {
-
     $query = $this->select('flagging', 'flg')
       ->fields('flg', [
         'flagging_id',
         'fid',
         'entity_id',
-        'uid',])
+        'uid',
+      ])
       ->condition('fid', $this->flagId, '=');
 
     return $query;
@@ -100,16 +100,15 @@ class FlaggingSourcePlugin extends SqlBase {
    */
   public function prepareRow(Row $row) {
 
-//    if (parent::prepareRow($row) === FALSE) {
-//      return FALSE;
-//    }
+    if (!parent::prepareRow($row)) {
+      return FALSE;
+    }
 
+    // Replace the D7 entity ID with the D9 equivalent.
     $nids = $this->lookupManager->lookupBySourceNodeId([$row->getSourceProperty('entity_id')]);
-
     $row->setSourceProperty('entity_id', $nids[$row->getSourceProperty('entity_id')]['nid']);
 
     return parent::prepareRow($row);
   }
+
 }
-
-

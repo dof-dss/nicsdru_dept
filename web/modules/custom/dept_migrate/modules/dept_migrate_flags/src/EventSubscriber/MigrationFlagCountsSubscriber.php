@@ -44,7 +44,7 @@ class MigrationFlagCountsSubscriber implements EventSubscriberInterface {
    * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookup_manager
    *   The lookup manager.
    */
-  public function __construct( Connection $connection, Connection $d7_connection, MigrateUuidLookupManager $lookup_manager) {
+  public function __construct(Connection $connection, Connection $d7_connection, MigrateUuidLookupManager $lookup_manager) {
     $this->dbconn = $connection;
     $this->d7dbconn = $d7_connection;
     $this->lookupManager = $lookup_manager;
@@ -61,14 +61,15 @@ class MigrationFlagCountsSubscriber implements EventSubscriberInterface {
   /**
    * Callback for pre import.
    *
-   * @param \Drupal\migrate\EventMigrateImportEvent\ $event
+   * @param \Drupal\migrate\Event\MigrateImportEvent $event
    *   The pre migration import event.
    */
   public function onPreImport(MigrateImportEvent $event) {
 
-    // Limit the flag count data creation to migrations that use the flagging_source plugin.
+    // Limit the flag count data creation to migrations that use the
+    // flagging_source plugin.
     if ($event->getMigration()->getSourcePlugin()->getPluginId() === 'flagging_source') {
-    $results = $this->d7dbconn->query("SELECT CASE WHEN fid = 4 THEN 'hide_listing' WHEN fid = 5 THEN 'hide_on_topic_subtopic_pages' WHEN fid = 6 THEN 'display_on_rss_feeds' END AS flag_id, entity_id, last_updated FROM {flag_counts} WHERE fid IN (4,5,6)");
+      $results = $this->d7dbconn->query("SELECT CASE WHEN fid = 4 THEN 'hide_listing' WHEN fid = 5 THEN 'hide_on_topic_subtopic_pages' WHEN fid = 6 THEN 'display_on_rss_feeds' END AS flag_id, entity_id, last_updated FROM {flag_counts} WHERE fid IN (4,5,6)");
 
       foreach ($results as $result) {
         $nids = $this->lookupManager->lookupBySourceNodeId([$result->entity_id]);
