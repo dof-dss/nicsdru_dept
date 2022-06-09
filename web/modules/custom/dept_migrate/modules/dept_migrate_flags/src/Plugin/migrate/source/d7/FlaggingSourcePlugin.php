@@ -91,14 +91,19 @@ class FlaggingSourcePlugin extends SqlBase {
    * {@inheritdoc}
    */
   public function prepareRow(Row $row) {
+
+    if (parent::prepareRow($row) === FALSE) {
+      return FALSE;
+    }
+
     $flagging_id = $row->getSourceProperty('flagging_id');
     $flag_id = $row->getSourceProperty('fid');
     $uid = $row->getSourceProperty('uid');
-    $entity_id = $row->getSourceProperty('entity_id');
 
-//    $nids = $this->lookupManager->lookupBySourceNodeId([$row->getSourceProperty('entity_id')]);
+    $nids = $this->lookupManager->lookupBySourceNodeId([$row->getSourceProperty('entity_id')]);
 
-//    $entity_id = $nids[$row->getSourceProperty('entity_id')]['nid'];
+    $row->setSourceProperty('entity_id', $nids[$row->getSourceProperty('entity_id')]['nid']);
+
     return parent::prepareRow($row);
   }
 }
