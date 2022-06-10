@@ -38,6 +38,12 @@ services:
     scanner: false
     build_as_root:
       - /app/.lando/scripts/appserver_build.sh
+    overrides:
+      environment:
+        # Support debugging CLI with XDEBUG.
+        # Ensure PHPStorm->Preferences->PHP->Servers->Name is set to appserver.
+        PHP_IDE_CONFIG: "serverName=appserver"
+        XDEBUG_SESSION_START: lando
   redis:
     type: redis:5.0
     # Use persist: true to persist the cache's data between restarts and rebuilds.
