@@ -1,0 +1,31 @@
+uuid: 1c38f6f3-423f-4aa4-b088-9dc9d70c6604
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: hide_listing
+label: 'Hide listing'
+bundles:
+  - subtopic
+  - topic
+entity_type: node
+global: true
+flag_short: 'Hide listing'
+flag_long: 'Check this box to hide the listing of content and subtopics'
+flag_message: ''
+unflag_short: 'Show listing'
+unflag_long: 'Check this box to show the listing of content and subtopics'
+unflag_message: ''
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:node'
+link_type: ajax_link
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: false
+  show_on_form: true
+  show_contextual_link: false
+  extra_permissions:
+    owner: owner
+linkTypeConfig: {  }

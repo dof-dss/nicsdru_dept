@@ -1,0 +1,15 @@
+uuid: c51e3b2a-7688-406a-a897-f70e274dfa59
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.hide_listing
+  module:
+    - flag
+id: flag_action.hide_listing_unflag
+label: 'Show listing'
+type: node
+plugin: 'flag_action:hide_listing_unflag'
+configuration:
+  flag_id: hide_listing
+  flag_action: unflag

@@ -1,7 +1,9 @@
 uuid: c8f3d676-d2bc-4930-945b-19745a708154
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - flag
 id: rss_user
 label: 'rss user'
 weight: 6
@@ -13,5 +15,7 @@ permissions:
   - 'download own document files'
   - 'edit any document files'
   - 'edit own document files'
+  - 'flag display_on_rss_feeds'
   - 'flag rss_feed_display'
+  - 'unflag display_on_rss_feeds'
   - 'unflag rss_feed_display'

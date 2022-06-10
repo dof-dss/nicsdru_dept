@@ -1,7 +1,16 @@
 uuid: 7b356c56-75f9-435a-9ee7-85ac1b312bcd
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.filtered_html
+    - filter.format.filtered_html_with_no_images
+  module:
+    - book
+    - filter
+    - flag
+    - node
+    - redirect
 id: domain_admin_user
 label: 'domain admin user'
 weight: 11
@@ -85,6 +94,7 @@ permissions:
   - 'edit terms in 7'
   - 'flag content_audit'
   - 'flag featured_news'
+  - 'flag hide_on_topic_subtopic_pages'
   - 'flag home_page_display'
   - 'flag topic_page_display'
   - 'moderate content from draft to needs_review'
@@ -99,6 +109,7 @@ permissions:
   - 'show core Outline tab'
   - 'unflag content_audit'
   - 'unflag featured_news'
+  - 'unflag hide_on_topic_subtopic_pages'
   - 'unflag home_page_display'
   - 'unflag topic_page_display'
   - 'update application content on assigned domains'

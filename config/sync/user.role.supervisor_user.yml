@@ -1,7 +1,15 @@
 uuid: 2df286b1-ce01-47f3-9878-586a419088e4
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.filtered_html
+    - filter.format.filtered_html_with_no_images
+  module:
+    - book
+    - filter
+    - flag
+    - redirect
 _core:
   default_config_hash: CtfC5LDjVNnbLPFruCI4NqxrtR8ml1OZSXRF58iAYdo
 id: supervisor_user
@@ -76,6 +84,7 @@ permissions:
   - 'edit own video files'
   - 'flag content_audit'
   - 'flag featured_news'
+  - 'flag hide_on_topic_subtopic_pages'
   - 'flag home_page_display'
   - 'flag scheduled_delete'
   - 'flag topic_page_display'
@@ -91,6 +100,7 @@ permissions:
   - 'show core Outline tab'
   - 'unflag content_audit'
   - 'unflag featured_news'
+  - 'unflag hide_on_topic_subtopic_pages'
   - 'unflag home_page_display'
   - 'unflag scheduled_delete'
   - 'unflag topic_page_display'

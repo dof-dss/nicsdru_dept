@@ -1,0 +1,15 @@
+uuid: 5b7e19f6-e56d-49cd-a259-f7f42a906397
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.display_on_rss_feeds
+  module:
+    - flag
+id: flag_action.display_on_rss_feeds_flag
+label: 'Display on RSS feeds.'
+type: node
+plugin: 'flag_action:display_on_rss_feeds_flag'
+configuration:
+  flag_id: display_on_rss_feeds
+  flag_action: flag
