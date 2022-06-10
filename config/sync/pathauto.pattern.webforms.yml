@@ -1,0 +1,22 @@
+uuid: 8ae24fc1-3fa7-4f73-b840-4cb4440a66b9
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: webforms
+label: Webforms
+type: 'canonical_entities:node'
+pattern: 'forms/[node:title]'
+selection_criteria:
+  5651f671-1ce9-4851-a856-5e92168b6a50:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 5651f671-1ce9-4851-a856-5e92168b6a50
+    context_mapping:
+      node: node
+    bundles:
+      webform: webform
+selection_logic: and
+weight: -5
+relationships: {  }

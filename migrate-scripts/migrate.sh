@@ -7,7 +7,8 @@ export MIGRATIONS="d7_taxonomy_term_chart_type d7_taxonomy_term_global_topics d7
         d7_file_media_image d7_file_media_video node_actions node_subtopic node_topic node_application node_article \
         node_consultation node_contact node_easychart node_gallery node_heritage_site node_infogram node_link \
         node_news node_page node_profile node_protected_area node_publication node_ual \
-        url_aliases_nodes url_aliases_taxonomy_terms redirects "
+        url_aliases_nodes url_aliases_taxonomy_terms redirects flagging_display_on_rss_feeds flagging_hide_listing \
+        flagging_hide_on_topic_subtopic_pages "
 
 if [ -z ${PLATFORM_BRANCH} ] && [ -z ${LANDO} ];
 then
@@ -19,6 +20,10 @@ fi
 # Only execute on the main environment.
 if [[ "${PLATFORM_BRANCH}" == "main" || "${LANDO}" == "ON" ]];
 then
+
+  echo "Removing existing Group content relationships"
+  $DRUSH etgrm:removeAll
+
   echo "Resetting all migrations"
   for m in $MIGRATIONS
   do
@@ -80,6 +85,15 @@ then
   echo "Migrating URL aliases and redirects"
   $DRUSH migrate:import url_aliases_nodes --force
   $DRUSH migrate:import redirects --force
+
+  echo "Creating Group content relationships"
+  $DRUSH etgrm:createAll
+
+  echo "Creating Group content relationships"
+  $DRUSH etgrm:createAll
+
+  echo "Updating content links"
+  $DRUSH dept:updatelinks
 
   echo ".... DONE"
 fi

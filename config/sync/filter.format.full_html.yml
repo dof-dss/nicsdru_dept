@@ -2,8 +2,29 @@ uuid: d1446a83-099f-4509-9f18-e9bd7c7c20bf
 langcode: en
 status: true
 dependencies:
+  config:
+    - core.entity_view_mode.media.article_float
+    - core.entity_view_mode.media.article_float_expandable
+    - core.entity_view_mode.media.article_full
+    - core.entity_view_mode.media.article_full_expandable
+    - core.entity_view_mode.media.banner_deep
+    - core.entity_view_mode.media.banner_thin
+    - core.entity_view_mode.media.card_large
+    - core.entity_view_mode.media.card_small
+    - core.entity_view_mode.media.embed
+    - core.entity_view_mode.media.feature_card
+    - core.entity_view_mode.media.landing_full
+    - core.entity_view_mode.media.landscape_float
+    - core.entity_view_mode.media.landscape_float_xp
+    - core.entity_view_mode.media.landscape_full
+    - core.entity_view_mode.media.landscape_full_xp
+    - core.entity_view_mode.media.news_thumbnail
+    - core.entity_view_mode.media.portrait_float
+    - core.entity_view_mode.media.portrait_float_xp
+    - core.entity_view_mode.media.portrait_full
   module:
     - cookie_content_blocker
+    - dept_content_processors
     - editor
     - entity_embed
     - linkit
@@ -78,7 +99,7 @@ filters:
     status: false
     weight: -38
     settings:
-      allowed_html: '<em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <p> <h1> <pre> <drupal-entity data-entity-type data-entity-uuid data-entity-embed-display data-entity-embed-display-settings data-align data-caption data-embed-button> <sup> <a href hreflang !href accesskey id rel target title> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr>'
+      allowed_html: '<em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <p> <h1> <pre> <drupal-entity data-entity-type data-entity-uuid data-entity-embed-display data-entity-embed-display-settings data-align data-caption data-embed-button> <sup> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <a href hreflang !href accesskey id rel target title data-entity-substitution data-entity-type data-entity-uuid>'
       filter_html_help: true
       filter_html_nofollow: false
   noreferrer:
@@ -136,7 +157,7 @@ filters:
   linkit:
     id: linkit
     provider: linkit
-    status: false
+    status: true
     weight: -34
     settings:
       title: true
@@ -147,3 +168,20 @@ filters:
     weight: -47
     settings:
       replacement_text: 'Click here to view the video content'
+  rel_to_abs_url:
+    id: rel_to_abs_url
+    provider: dept_content_processors
+    status: true
+    weight: 100
+    settings:
+      process_domains:
+        1: '1'
+        10: '0'
+        2: '0'
+        3: '0'
+        4: '0'
+        5: '0'
+        6: '0'
+        7: '0'
+        8: '0'
+        9: '0'

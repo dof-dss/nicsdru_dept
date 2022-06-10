@@ -37,3 +37,12 @@
     {{ relationship_summary }}
   </div>
 </section>
+
+{% if log_output %}
+<section class="mdash-container">
+  <div class="card">
+    <h3>Migration log output</h3>
+    {{ log_output }}
+  </div>
+</section>
+{% endif %}

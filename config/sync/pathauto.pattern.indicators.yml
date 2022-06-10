@@ -1,0 +1,22 @@
+uuid: d8169a2c-2b05-41f9-9ada-6af42a4e8f8d
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: indicators
+label: Indicators
+type: 'canonical_entities:taxonomy_term'
+pattern: 'indicators/[term:name]'
+selection_criteria:
+  67e13b6b-39c6-407e-92f3-61be3a8b2333:
+    id: 'entity_bundle:taxonomy_term'
+    negate: false
+    uuid: 67e13b6b-39c6-407e-92f3-61be3a8b2333
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    bundles:
+      indicators: indicators
+selection_logic: and
+weight: -5
+relationships: {  }

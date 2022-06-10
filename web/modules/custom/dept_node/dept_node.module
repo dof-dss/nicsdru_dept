@@ -20,3 +20,26 @@ function dept_node_entity_type_alter(&$entity_types) {
     }
   }
 }
+
+/**
+ * Implements hook_form_ENTITY_form_alter().
+ */
+function dept_node_form_node_form_alter(&$form, $form_state) {
+
+  // Process Domain module pathauto alias options.
+  if (array_key_exists('domain_path', $form['path']['widget'][0])) {
+    $dept_manager = \Drupal::service('department.manager');
+    $dept = $dept_manager->getCurrentDepartment();
+
+    if (array_key_exists('group_publish', $form)) {
+      $form['group_publish']['#attached']['library'][] = 'dept_node/dept_node.domain_pathauto';
+    }
+    else {
+      if (array_key_exists($dept->id(), $form['path']['widget'][0]['domain_path'])) {
+        // Check the 'generate Domain URL' checkbox for the current domain.
+        $form['path']['widget'][0]['domain_path'][$dept->id()]['pathauto']['#default_value'] = 1;
+      }
+    }
+  }
+
+}

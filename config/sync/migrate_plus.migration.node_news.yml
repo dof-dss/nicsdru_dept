@@ -1,7 +1,9 @@
-uuid: 365d819a-f531-439a-ac12-9918a1b246cc
+uuid: b2622e5b-9dec-49a9-a09e-9fb5c42bec39
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: 3holNmzaEPw36bzPH1K8kj3KTgJWwWJb--6Biwa4aaE
 id: node_news
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -71,7 +73,9 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
+  field_news_type: field_news_type
   field_summary: field_summary
+  field_notes_to_editors: field_notes_to_editors
   field_teaser: field_teaser
   field_photo:
     -
