@@ -4,4 +4,4 @@ dept_migrate.detail:
     _title: 'Migration detail'
     _controller: '\Drupal\dept_migrate\Controller\NodeDetailController::default'
   requirements:
-    _permission: 'access migration dashboard'
+    _permission: 'administer migrations'
