@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class MigrateIndexFilterForm extends FormBase {
+class NodeDetailFilterForm extends FormBase {
 
   /**
    * @var \Symfony\Component\HttpFoundation\RequestStack
@@ -27,7 +27,7 @@ class MigrateIndexFilterForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'migrate_index_filter_form';
+    return 'node_detail_filter_form';
   }
 
   /**
@@ -35,25 +35,14 @@ class MigrateIndexFilterForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     // Form filter.
-    $form['filter_type'] = [
-      '#title' => $this->t('Filter type'),
-      '#type' => 'select',
-      '#options' => [
-        'type' => 'Content type',
-        'nid' => 'Node ID',
-        'uuid' => 'UUID',
-        'title' => 'Title',
-      ],
-      '#default_value' => $this->request->getCurrentRequest()->query->get('filter_type'),
-    ];
-    $form['filter_value'] = [
-      '#title' => $this->t('Filter value'),
+    $form['nid'] = [
+      '#title' => $this->t('Drupal 9 Node ID'),
       '#type' => 'textfield',
-      '#default_value' => $this->request->getCurrentRequest()->query->get('filter_value'),
+      '#default_value' => $this->request->getCurrentRequest()->query->get('nid'),
     ];
     $form['actions']['submit'] = [
       '#type' => 'submit',
-      '#value' => $this->t('Filter'),
+      '#value' => $this->t('Lookup'),
       '#attributes' => ['class' => ['button--primary']],
     ];
 
@@ -66,13 +55,11 @@ class MigrateIndexFilterForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $form_values = $form_state->getValues();
 
-    if (!empty($form_values['filter_type'])) {
-      $filter_value = $form_values['filter_value'] ?? '';
-
-      $form_state->setRedirect('dept_migrate.default', [], [
+    if (!empty($form_values['nid'])) {
+      $nid = $form_values['nid'] ?? '';
+      $form_state->setRedirect('dept_migrate.detail', [], [
         'query' => [
-          'filter_type' => $form_values['filter_type'],
-          'filter_value' => $filter_value,
+          'nid' => $nid,
         ],
       ]);
     }

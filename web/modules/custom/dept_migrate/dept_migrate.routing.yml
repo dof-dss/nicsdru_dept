@@ -1,0 +1,7 @@
+dept_migrate.detail:
+  path: '/admin/dept/mdash/detail'
+  defaults:
+    _title: 'Migration detail'
+    _controller: '\Drupal\dept_migrate\Controller\NodeDetailController::default'
+  requirements:
+    _permission: 'administer migrations'
