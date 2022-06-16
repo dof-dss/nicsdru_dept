@@ -220,7 +220,8 @@
         "patches": {
             "drupal/core": {
                 "Prevent leftover fields from causing errors like 'Call to a member function getLabel() after enabling layout_builder'": "https://www.drupal.org/files/issues/2020-01-20/2985882-53.patch",
-                "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch"
+                "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch",
+                "[regression] Drupal 9.4 breaks BC of \\Drupal\\Driver\\* overriding core drivers during installation and parsing connection URLs": "https://www.drupal.org/files/issues/2022-06-15/3144927-49.patch"
             },
             "drupal/easy_install": {
                 "Handle missing core version": "https://www.drupal.org/files/issues/2019-12-19/easy_install_core_version-3101883-0.patch"
