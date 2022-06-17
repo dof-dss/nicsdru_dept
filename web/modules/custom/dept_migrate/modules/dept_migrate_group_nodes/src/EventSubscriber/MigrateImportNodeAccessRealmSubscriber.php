@@ -3,8 +3,6 @@
 namespace Drupal\dept_migrate_group_nodes\EventSubscriber;
 
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Database\Database;
-use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigratePostRowSaveEvent;
