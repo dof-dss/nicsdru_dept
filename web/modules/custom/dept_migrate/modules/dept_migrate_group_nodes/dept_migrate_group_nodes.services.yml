@@ -1,6 +1,0 @@
-services:
-  dept_migrate_group_nodes.eventsubscriber.migrate.nodeaccessrealmsubscriber:
-    class: Drupal\dept_migrate_group_nodes\EventSubscriber\MigrateImportNodeAccessRealmSubscriber
-    arguments: ['@logger.factory', '@database']
-    tags:
-      - { name: event_subscriber }
