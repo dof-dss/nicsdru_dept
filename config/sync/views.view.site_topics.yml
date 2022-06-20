@@ -23,6 +23,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
+      title: 'Page: Site topics'
       fields:
         title:
           id: title
@@ -108,7 +109,7 @@ display:
             external: false
             replace_spaces: false
             path_case: none
-            trim_whitespace: false
+            trim_whitespace: true
             alt: ''
             rel: ''
             link_class: ''
@@ -122,7 +123,7 @@ display:
             more_link: false
             more_link_text: ''
             more_link_path: ''
-            strip_tags: false
+            strip_tags: true
             trim: false
             preserve_tags: ''
             html: false
@@ -201,7 +202,7 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          text: more
+          text: '… more'
           output_url_as_text: false
           absolute: false
       pager:
@@ -305,7 +306,6 @@ display:
         - user.permissions
       tags:
         - 'config:field.storage.node.field_summary'
-        - 'config_split_state:field.storage.node.field_summary'
   entity_reference_topics:
     id: entity_reference_topics
     display_title: 'Entity Reference'
@@ -415,4 +415,20 @@ display:
         - user.permissions
       tags:
         - 'config:field.storage.node.field_summary'
-        - 'config_split_state:field.storage.node.field_summary'
+  site_topics:
+    id: site_topics
+    display_title: Page
+    display_plugin: page
+    position: 3
+    display_options:
+      display_extenders: {  }
+      path: topics
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_summary'
