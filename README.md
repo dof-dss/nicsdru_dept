@@ -58,6 +58,9 @@ See `.lando.yml` and the `proxy` configuration section for local hostnames to re
 * For administrators, we recommend using `https://dept.lndo.site` for general site administration.
 * All other authenticated users should sign in to the site that they are managing content for, eg: `https://finance.lndo.site`
 
+When running locally it's important that the environment settings are set to local, this will ensure that the 'local' config split will import and this includes all of the recommended
+Lando site domains, see https://github.com/dof-dss/nicsdru_dept/tree/development/config/local
+
 ## Site/content negotiation and detection
 
 The project serves content for a number of websites. We can split the process of determining which site is being asked for (detection) and how we isolate and present the content (negotiation).
