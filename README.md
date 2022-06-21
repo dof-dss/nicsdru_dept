@@ -214,19 +214,21 @@ These classes do not currently support the creation or deletion of Departments.
 | name() | Department of Finance |
 | hostname() | finance-ni.lndo.site |
 
-Other methods are available including shortcuts to display field values.  
+Other methods are available including shortcuts to display field values.
 For a full list visit https://github.com/dof-dss/nicsdru_dept/blob/development/web/modules/custom/dept_core/src/Department.php
 
 ##### Loading department(s)
 
-The Department class should not be used to load a Department, this is the job of the DepartmentManager class.
+The Department class should not be used to directly load a Department, this is the job of the DepartmentManager class and
+can be injected using 'department.manager' or by calling `\Drupal::service('department.manager)`
 
-The manager can be injected using 'department.manager' or by calling `\Drupal::service('department.manager)`
-And has the following methods:
+The Manager has the following methods:
 
 * getCurrentDepartment()
 * getAllDepartments()
 * getDepartment(id) - id is the machine name e.g. 'group_2'
+
+Department objects will be cached and cleared from the cache when
 
 ##### Example
 ```
