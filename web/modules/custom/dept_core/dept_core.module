@@ -70,6 +70,8 @@ function dept_core_preprocess_menu(&$variables) {
  * Implements hook_ENTITY_update().
  */
 function dept_core_group_update(Drupal\group\Entity\GroupInterface $group) {
-  // Invalidate the department cache when updating a group.
-  Cache::invalidateTags(['department_' . $group->id()]);
+  if ($group->bundle() === 'department_site') {
+    // Invalidate the department cache when updating a group.
+    Cache::invalidateTags(['department_' . $group->id()]);
+  }
 }
