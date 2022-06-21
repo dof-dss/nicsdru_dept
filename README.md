@@ -190,3 +190,52 @@ id|domain_id|
 * Views and other things that rely on entity API are able to use entity access rules in conjunction with user permissions to determine whether a node can be seen on a given site. Pros: it happens without the need for explicit filters to be added to views config or entity queries. Cons: it can be confusing if viewing the site as a user with an administrative role as it will usually bypass usual access conditions.
 * Revisions: these are deemed too complex to track/import on a rolling basis. Access to older content will be available on the D7 application, running on platform.sh on an internal hostname.
 * Negative numbers of unprocessed source items: This sometimes occurs when source items (in D7) are removed. The removals are not replicated on the destination (D9) resulting in a natural imbalance to the way unprocessed items are calculated by Migrate API. This is acknowledged/documented here: https://www.drupal.org/project/migrate_tools/issues/2843383. It is possible to re-sync the counts with the `--sync` flag but this isn't recommended, as the process involes a full rollback (removal of prior migrated D9 content) followed by a full import. This can be very time consuming and result in a confusing experience for any site users. It could also lead to inconsistencies in data if executed in an incorrect sequence. **Where possible, irregularities should be investigated on a case-by-case basis and a bulk update or sync operation carried out where there is a clear trend or pattern of inconsistencies to correct.**
+
+### Department helper class
+
+The Department class provides a useful bridge between the Domain and Group aspects of managing a Department site.
+These classes do not currently support the creation or deletion of Departments.
+
+##### Useful methods
+
+| Method | Type | Description |
+| ------ | ---- | ----------- |
+| id() | String  | group_2    |
+| domainId() | Int | 10261667 |
+| name() | String | Department of Finance |
+| hostname() | String | finance-ni.lndo.site |
+
+##### Example for finance (group_2)
+
+| Method | Result |
+| -------- | ------- |
+| id() | group_2 |
+| domainId() | 10261667 |
+| name() | Department of Finance |
+| hostname() | finance-ni.lndo.site |
+
+Other methods are available including shortcuts to display field values.
+For a full list visit https://github.com/dof-dss/nicsdru_dept/blob/development/web/modules/custom/dept_core/src/Department.php
+
+##### Loading department(s)
+
+The Department class should not be used to directly load a Department, this is the job of the DepartmentManager class and
+can be injected using 'department.manager' or by calling `\Drupal::service('department.manager)`
+
+The Manager has the following methods:
+
+* getCurrentDepartment()
+* getAllDepartments()
+* getDepartment(id) - id is the machine name e.g. 'group_2'
+
+Department objects will be cached and cleared from the cache when
+
+##### Example
+```
+$dept_manager = \Drupal::service('department.manager);
+
+$finance_dept = $dept_manager->getDepartment('group_2');
+```
+
+By default the site will inject the current Department into the page preprocess variables.
+
