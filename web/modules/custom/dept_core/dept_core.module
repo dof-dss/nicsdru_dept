@@ -10,6 +10,7 @@ use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\group\Entity\Group;
 use Drupal\node\NodeInterface;
+use Drupal\group\Entity\GroupInterface;
 
 /**
  * Implements hook_preprocess_page().
@@ -63,5 +64,15 @@ function dept_core_preprocess_menu(&$variables) {
     }
 
     $variables['#cache']['tags'] = $cache_tags;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_update().
+ */
+function dept_core_group_update(GroupInterface $group) {
+  if ($group->bundle() === 'department_site') {
+    // Invalidate the department cache when updating a group.
+    Cache::invalidateTags(['department_' . $group->id()]);
   }
 }
