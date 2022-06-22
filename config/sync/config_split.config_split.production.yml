@@ -1,0 +1,15 @@
+uuid: 8b70aa18-4452-4b03-b386-598e5bfc7f64
+langcode: en
+status: false
+dependencies: {  }
+id: production
+label: production
+description: 'Split settings for non-live, but production values.'
+weight: 0
+stackable: false
+storage: folder
+folder: ../config/production
+module: {  }
+theme: {  }
+complete_list: {  }
+partial_list: {  }

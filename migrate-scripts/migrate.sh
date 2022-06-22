@@ -20,10 +20,6 @@ fi
 # Only execute on the main environment.
 if [[ "${PLATFORM_BRANCH}" == "main" || "${LANDO}" == "ON" ]];
 then
-
-  echo "Removing existing Group content relationships"
-  $DRUSH etgrm:removeAll
-
   echo "Resetting all migrations"
   for m in $MIGRATIONS
   do
@@ -86,10 +82,8 @@ then
   $DRUSH migrate:import url_aliases_nodes --force
   $DRUSH migrate:import redirects --force
 
-  echo "Creating Group content relationships"
-  $DRUSH etgrm:createAll
-
-  echo "Creating Group content relationships"
+  echo "Rebuilding Group content relationships"
+  $DRUSH etgrm:removeAll
   $DRUSH etgrm:createAll
 
   echo "Updating content links"
