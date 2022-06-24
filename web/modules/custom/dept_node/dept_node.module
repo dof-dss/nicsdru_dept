@@ -5,8 +5,10 @@
  * Departmental Node module for Departmental sites.
  */
 
+use Drupal\dept_core\Department;
 use Drupal\dept_node\Entity\Node;
 use Drupal\dept_node\Form\NodeForm;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -58,6 +60,31 @@ function dept_node_views_pre_render(ViewExecutable $view) {
     if (\Drupal::routeMatch()->getRouteName() === 'entity.view.preview_form') {
       \Drupal::messenger()
         ->addWarning('NB: Title alterered in dept_node_views_pre_render()');
+    }
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ *
+ * This adds the active department group id value to the WHERE clause
+ * where the group_content_field_data table has been both added as a
+ * relationship in the view config and has been added as a boilerplate
+ * filter condition to restrict o specific group.
+ */
+function dept_node_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  foreach ($query->where as $i => &$clause) {
+    foreach ($clause['conditions'] as $j => &$condition) {
+      if ($condition['field'] != 'group_content_field_data_node_field_data.gid') {
+        continue;
+      }
+
+      $dept_manager = \Drupal::service('department.manager');
+      $dept = $dept_manager->getCurrentDepartment();
+
+      if ($dept instanceof Department) {
+        $condition['value'] = $dept->groupId();
+      }
     }
   }
 }
