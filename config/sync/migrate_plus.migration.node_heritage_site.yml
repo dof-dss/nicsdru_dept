@@ -1,4 +1,4 @@
-uuid: 9f9f36a2-7b1c-424d-9e92-107086229bcd
+uuid: cd16a2b5-07b1-4841-a5a3-53e042a0daab
 langcode: en
 status: true
 dependencies: {  }
@@ -119,8 +119,24 @@ process:
           -
             plugin: d7_file_lookup
             source: fid
-  field_site_subtopics: field_site_subtopics
-  field_site_topics: field_site_topics
+  field_site_subtopics:
+    -
+      plugin: sub_process
+      source: field_site_subtopics
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
+  field_site_topics:
+    -
+      plugin: sub_process
+      source: field_site_topics
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
   field_map: field_map
 destination:
   plugin: 'entity:node'
