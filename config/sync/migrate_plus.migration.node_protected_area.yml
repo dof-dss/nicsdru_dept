@@ -1,9 +1,7 @@
-uuid: 9664ed9e-1828-49ac-bf3c-1e056a066154
+uuid: 3841afa2-2c56-4d35-8dfd-d7d402af143f
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: 50m31mUo18_hMVaMjfGp97KxUAD9vLVlg45o8IpKnxA
 id: node_protected_area
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -73,13 +71,29 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
+  field_protected_area_documents: field_protected_area_documents
   field_council: field_council
   field_county: field_county
   field_protected_area_feature: field_protected_area_feature
-  field_site_subtopics: field_site_subtopics
-  field_site_topics: field_site_topics
+  field_site_subtopics:
+    -
+      plugin: sub_process
+      source: field_site_subtopics
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
+  field_site_topics:
+    -
+      plugin: sub_process
+      source: field_site_topics
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
   field_protected_area_type: field_protected_area_type
-  field_protected_area_documents: field_protected_area_documents
 destination:
   plugin: 'entity:node'
   default_bundle: protected_area
