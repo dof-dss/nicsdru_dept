@@ -224,7 +224,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          parse_mode: sloppy_phrase
+          parse_mode: sloppy_terms
           min_length: 2
           fields:
             - body
