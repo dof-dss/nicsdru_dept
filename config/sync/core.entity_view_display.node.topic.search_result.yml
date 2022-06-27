@@ -1,15 +1,13 @@
-uuid: 44109910-dafe-4369-9c18-4fc674448cc6
+uuid: e10bd657-efa8-48a6-8aea-7544826be788
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_view_mode.node.search_result
-    - field.field.node.article.body
-    - field.field.node.article.field_global_topics
-    - field.field.node.article.field_site_subtopics
-    - field.field.node.article.field_site_topics
-    - field.field.node.article.field_summary
-    - node.type.article
+    - field.field.node.topic.body
+    - field.field.node.topic.field_photo
+    - field.field.node.topic.field_summary
+    - node.type.topic
   module:
     - layout_builder
     - text
@@ -18,11 +16,9 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-_core:
-  default_config_hash: ChmU3AVqDKU32A_fyChG0W9dTRKmVBR58B6OClCLvZI
-id: node.article.search_result
+id: node.topic.search_result
 targetEntityType: node
-bundle: article
+bundle: topic
 mode: search_result
 content:
   field_summary:
@@ -35,9 +31,7 @@ content:
 hidden:
   body: true
   content_moderation_control: true
-  field_global_topics: true
-  field_site_subtopics: true
-  field_site_topics: true
+  field_photo: true
   langcode: true
   links: true
   search_api_excerpt: true

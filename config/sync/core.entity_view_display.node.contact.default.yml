@@ -9,29 +9,16 @@ dependencies:
     - field.field.node.contact.field_site_topics
     - node.type.contact
   module:
-    - google_map_field
-    - text
     - user
 id: node.contact.default
 targetEntityType: node
 bundle: contact
 mode: default
-content:
-  body:
-    type: text_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  field_map:
-    type: google_map_field_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 1
-    region: content
+content: {  }
 hidden:
+  body: true
+  content_moderation_control: true
+  field_map: true
   field_site_subtopics: true
   field_site_topics: true
   langcode: true
