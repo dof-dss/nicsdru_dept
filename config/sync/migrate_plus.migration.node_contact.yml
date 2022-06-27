@@ -1,4 +1,4 @@
-uuid: b5bd52ee-02ca-42b0-9f6e-763e632cffa0
+uuid: 691af800-906b-429e-9895-f5f73e08371d
 langcode: en
 status: true
 dependencies: {  }
@@ -72,8 +72,24 @@ process:
         paste_format: plain_text
         plain_text: plain_text
   field_map: field_map
-  field_site_subtopics: field_site_subtopics
-  field_site_topics: field_site_topics
+  field_site_subtopics:
+    -
+      plugin: sub_process
+      source: field_site_subtopics
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
+  field_site_topics:
+    -
+      plugin: sub_process
+      source: field_site_topics
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
   field_original_domain: field_original_domain
 destination:
   plugin: 'entity:node'

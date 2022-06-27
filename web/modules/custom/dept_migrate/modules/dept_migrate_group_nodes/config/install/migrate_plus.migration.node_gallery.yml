@@ -74,8 +74,20 @@ process:
       source: field_global_topics
       process:
         target_id: tid
-  field_site_subtopics: field_site_subtopics
-  field_site_topics: field_site_topics
+  field_site_subtopics:
+    - plugin: sub_process
+      source: field_site_subtopics
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
+  field_site_topics:
+    - plugin: sub_process
+      source: field_site_topics
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
 destination:
   plugin: 'entity:node'
   default_bundle: gallery

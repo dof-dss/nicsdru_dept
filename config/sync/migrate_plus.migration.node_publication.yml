@@ -1,4 +1,4 @@
-uuid: 20d2178b-fea9-48a8-831f-32281a78ba9c
+uuid: 54e14166-1fdf-4e56-9b3b-8ea38b2aa187
 langcode: en
 status: true
 dependencies: {  }
@@ -91,12 +91,24 @@ process:
       source: field_global_topics
       process:
         target_id: tid
+  field_site_topics:
+    -
+      plugin: sub_process
+      source: field_site_topics
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
   field_site_subtopics:
     -
       plugin: sub_process
       source: field_site_subtopics
       process:
-        target_id: tid
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
   field_published_date:
     -
       plugin: sub_process

@@ -1,4 +1,4 @@
-uuid: 015de61a-c32d-4dea-9b26-b7fe9ac6e3fe
+uuid: 3ef47d7b-52d1-483f-b1e1-3af5bda5d3a0
 langcode: en
 status: true
 dependencies: {  }
@@ -89,8 +89,24 @@ process:
       source: field_global_topics
       process:
         target_id: tid
-  field_site_subtopics: field_site_subtopics
-  field_site_topics: field_site_topics
+  field_site_subtopics:
+    -
+      plugin: sub_process
+      source: field_site_subtopics
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
+  field_site_topics:
+    -
+      plugin: sub_process
+      source: field_site_topics
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
 destination:
   plugin: 'entity:node'
   default_bundle: gallery
