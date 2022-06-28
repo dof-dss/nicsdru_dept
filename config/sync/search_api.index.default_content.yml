@@ -106,6 +106,13 @@ field_settings:
     dependencies:
       module:
         - node
+  node_grants:
+    label: 'Node access information'
+    property_path: search_api_node_grants
+    type: string
+    indexed_locked: true
+    type_locked: true
+    hidden: true
   revision_log:
     label: 'Revision log message'
     datasource_id: 'entity:node'
@@ -127,6 +134,8 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: status
     type: boolean
+    indexed_locked: true
+    type_locked: true
     dependencies:
       module:
         - node
@@ -160,6 +169,8 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: uid
     type: integer
+    indexed_locked: true
+    type_locked: true
     dependencies:
       module:
         - node
@@ -176,27 +187,31 @@ datasource_settings:
     bundles:
       default: false
       selected:
+        - application
         - article
+        - consultation
+        - contact
+        - landing_page
         - news
+        - page
+        - profile
+        - project
+        - protected_area
+        - publication
+        - subtopic
+        - topic
+        - ual
     languages:
       default: true
       selected: {  }
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  content_access:
+    weights:
+      preprocess_query: -30
   entity_status: {  }
   entity_type: {  }
-  highlight:
-    weights:
-      postprocess_query: 0
-    prefix: '<strong>'
-    suffix: '</strong>'
-    excerpt: true
-    excerpt_always: false
-    excerpt_length: 256
-    exclude_fields: {  }
-    highlight: always
-    highlight_partial: false
   html_filter:
     weights:
       preprocess_index: -15

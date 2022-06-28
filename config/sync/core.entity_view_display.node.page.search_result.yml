@@ -19,14 +19,10 @@ id: node.page.search_result
 targetEntityType: node
 bundle: page
 mode: search_result
-content:
-  search_api_excerpt:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
-    region: content
+content: {  }
 hidden:
   body: true
   content_moderation_control: true
   langcode: true
   links: true
+  search_api_excerpt: true
