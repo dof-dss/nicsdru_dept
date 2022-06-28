@@ -6,10 +6,14 @@
  */
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\group\Entity\Group;
 use Drupal\node\NodeInterface;
+use Drupal\group\Entity\GroupInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_preprocess_page().
@@ -63,5 +67,28 @@ function dept_core_preprocess_menu(&$variables) {
     }
 
     $variables['#cache']['tags'] = $cache_tags;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_update().
+ */
+function dept_core_group_update(GroupInterface $group) {
+  if ($group->bundle() === 'department_site') {
+    // Invalidate the department cache when updating a group.
+    Cache::invalidateTags(['department_' . $group->id()]);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function dept_core_group_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  // Redirect anon users to homepage. We allow view group entity permission
+  // to ensure the press release RSS feeds can render the parent group id
+  // value for any news nodes in the feed.
+  if (\Drupal::currentUser()->isAnonymous()) {
+    $redirect_response = new RedirectResponse('/');
+    $redirect_response->send();
   }
 }

@@ -63,8 +63,20 @@ process:
   field_council: field_council
   field_county: field_county
   field_protected_area_feature: field_protected_area_feature
-  field_site_subtopics: field_site_subtopics
-  field_site_topics: field_site_topics
+  field_site_subtopics:
+    - plugin: sub_process
+      source: field_site_subtopics
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
+  field_site_topics:
+    - plugin: sub_process
+      source: field_site_topics
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
   field_protected_area_type: field_protected_area_type
 destination:
   plugin: 'entity:node'

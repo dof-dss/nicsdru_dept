@@ -25,27 +25,19 @@ targetEntityType: node
 bundle: article
 mode: search_result
 content:
-  body:
+  field_summary:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
-  content_moderation_control:
-    settings: {  }
-    third_party_settings: {  }
-    weight: -20
-    region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
-    region: content
 hidden:
+  body: true
+  content_moderation_control: true
   field_global_topics: true
   field_site_subtopics: true
   field_site_topics: true
-  field_summary: true
   langcode: true
+  links: true
   search_api_excerpt: true

@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - dept_dev
+    - system
   theme:
     - bartik
 id: drupal7nodelink
@@ -17,4 +18,8 @@ settings:
   label: 'Drupal 7 node link'
   label_display: visible
   provider: dept_dev
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/node/*'

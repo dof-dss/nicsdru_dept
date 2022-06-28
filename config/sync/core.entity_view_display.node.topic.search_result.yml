@@ -1,0 +1,37 @@
+uuid: e10bd657-efa8-48a6-8aea-7544826be788
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_result
+    - field.field.node.topic.body
+    - field.field.node.topic.field_photo
+    - field.field.node.topic.field_summary
+    - node.type.topic
+  module:
+    - layout_builder
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.topic.search_result
+targetEntityType: node
+bundle: topic
+mode: search_result
+content:
+  field_summary:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  content_moderation_control: true
+  field_photo: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

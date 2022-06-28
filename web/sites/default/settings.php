@@ -35,6 +35,7 @@ $settings['file_private_path'] = getenv('FILE_PRIVATE_PATH');
 // Set config split environment; environment specific values is set near the end of this file.
 $config['config_split.config_split.local']['status'] = FALSE;
 $config['config_split.config_split.development']['status'] = FALSE;
+$config['config_split.config_split.production']['status'] = FALSE;
 
 // Config readonly settings; should be set to 1 or 0 due to type juggling in PHP unable to correctly interpret strings
 // such as 'true' or 'false' from envvars.
@@ -76,6 +77,7 @@ if (!empty(getenv('PLATFORM_BRANCH'))) {
   // Environment specific settings and services.
   switch (getenv('PLATFORM_BRANCH')) {
     case 'main':
+      $config['config_split.config_split.production']['status'] = TRUE;
       break;
 
     default:

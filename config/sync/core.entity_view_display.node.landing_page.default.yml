@@ -23,66 +23,25 @@ targetEntityType: node
 bundle: landing_page
 mode: default
 content:
-  body:
+  field_summary:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 1
-    region: content
-  field_facebook_user:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 3
-    region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 6
-    region: content
-  field_site_topics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 5
-    region: content
-  field_summary:
-    type: text_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
     weight: 0
     region: content
-  field_tweet_count:
-    type: number_integer
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    weight: 4
-    region: content
-  field_twitter_user:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 2
-    region: content
 hidden:
+  body: true
+  content_moderation_control: true
   field_banner_image: true
   field_banner_image_overlay: true
   field_enable_title: true
+  field_facebook_user: true
+  field_site_subtopics: true
+  field_site_topics: true
   field_teaser: true
+  field_tweet_count: true
+  field_twitter_user: true
   langcode: true
   links: true
   search_api_excerpt: true

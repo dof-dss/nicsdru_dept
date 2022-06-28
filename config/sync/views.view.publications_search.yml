@@ -380,7 +380,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Enter keywords'
+            label: ''
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
@@ -412,7 +412,7 @@ display:
               admin_user: '0'
               user_manager: '0'
             expose_fields: false
-            placeholder: ''
+            placeholder: Keywords
             searched_fields_id: search_api_fulltext_searched_fields
           is_grouped: false
           group_info:
@@ -426,7 +426,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          parse_mode: edismax
+          parse_mode: sloppy_terms
           min_length: null
           fields: {  }
       style:
@@ -479,11 +479,13 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      title: Publications
       cache:
         type: search_api_tag
         options: {  }
       defaults:
         cache: false
+        title: false
       display_extenders: {  }
       path: publications
     cache_metadata:
