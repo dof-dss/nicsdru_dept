@@ -1,0 +1,26 @@
+uuid: 4a5c8325-1348-430b-8bb9-4ceda0a95811
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: executive_office_topics
+label: 'Executive office topics'
+handler: simple
+handler_configuration: {  }
+entity_settings:
+  target_type: node
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      topic: topic
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+queue_settings:
+  min_size: 0
+  max_size: 0
+  act_as_queue: false
+  reverse: false
