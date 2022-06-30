@@ -93,9 +93,12 @@ function dept_node_views_query_alter(ViewExecutable $view, QueryPluginBase $quer
   }
 
   if ($view->id() === 'topic_queue') {
-    $topic_queue_id = strtolower($dept->name()) . '_topics';
-    // Replace any spaces for underscores.
-    $topic_queue_id = str_replace(' ', '_', $topic_queue_id);
+    $dept_url_hostname_parts = explode('.', parse_url($dept->url(), PHP_URL_HOST));
+    if ($dept_url_hostname_parts[0] === 'www') {
+      $dept_url_hostname_parts = array_shift($dept_url_hostname_parts);
+    }
+
+    $topic_queue_id = 'topics_dept_' . str_replace('-ni', '', $dept_url_hostname_parts[0]);
 
     $table = $query->getTableInfo('entity_subqueue__items');
     $table['join']->extra[0]['value'][0] = $topic_queue_id;

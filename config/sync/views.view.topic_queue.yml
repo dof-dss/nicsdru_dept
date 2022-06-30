@@ -1,9 +1,9 @@
-uuid: ed872690-dff1-462f-929e-32e6231e1540
+uuid: 28591bcc-1abd-4cc6-a9cf-7748747b3d11
 langcode: en
 status: true
 dependencies:
   config:
-    - entityqueue.entity_queue.daera_topics
+    - entityqueue.entity_queue.dept_topics_daera
     - field.storage.node.field_summary
     - node.type.topic
   module:
@@ -234,7 +234,7 @@ display:
           entity_type: node
           plugin_id: entity_queue
           required: true
-          limit_queue: daera_topics
+          limit_queue: dept_topics_daera
       header: {  }
       footer: {  }
       display_extenders: {  }
@@ -246,7 +246,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:entityqueue.entity_queue.daera_topics'
+        - 'config:entityqueue.entity_queue.dept_topics_daera'
         - 'config:field.storage.node.field_summary'
         - entity_field_info
         - views_data
@@ -266,7 +266,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:entityqueue.entity_queue.daera_topics'
+        - 'config:entityqueue.entity_queue.dept_topics_daera'
         - 'config:field.storage.node.field_summary'
         - entity_field_info
         - views_data
