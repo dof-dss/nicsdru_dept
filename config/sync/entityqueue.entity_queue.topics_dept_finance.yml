@@ -1,0 +1,26 @@
+uuid: ebb10902-20c9-4ce5-98fa-b5d4ac38005a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: topics_dept_finance
+label: 'Department of Finance topics'
+handler: simple
+handler_configuration: {  }
+entity_settings:
+  target_type: node
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      topic: topic
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+queue_settings:
+  min_size: 0
+  max_size: 0
+  act_as_queue: false
+  reverse: false

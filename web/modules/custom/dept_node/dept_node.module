@@ -59,7 +59,7 @@ function dept_node_views_pre_render(ViewExecutable $view) {
 
     if (\Drupal::routeMatch()->getRouteName() === 'entity.view.preview_form') {
       \Drupal::messenger()
-        ->addWarning('NB: Title alterered in dept_node_views_pre_render()');
+        ->addWarning('NB: Title altered in dept_node_views_pre_render()');
     }
   }
 }
@@ -71,20 +71,36 @@ function dept_node_views_pre_render(ViewExecutable $view) {
  * where the group_content_field_data table has been both added as a
  * relationship in the view config and has been added as a boilerplate
  * filter condition to restrict o specific group.
+ *
+ * For topic entity queues, it alters the relationship condition to
+ * restrict the query to the correct entity queue id, based on repurposing
+ * the department name attribute as the numerical id would require a
+ * separate fixed lookup condition or function.
  */
 function dept_node_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  $dept_manager = \Drupal::service('department.manager');
+  /** @var Drupal\dept_core\Department $dept */
+  $dept = $dept_manager->getCurrentDepartment();
+
   foreach ($query->where as $i => &$clause) {
     foreach ($clause['conditions'] as $j => &$condition) {
       if ($condition['field'] != 'group_content_field_data_node_field_data.gid') {
         continue;
       }
 
-      $dept_manager = \Drupal::service('department.manager');
-      $dept = $dept_manager->getCurrentDepartment();
-
-      if ($dept instanceof Department) {
-        $condition['value'] = $dept->groupId();
-      }
+      $condition['value'] = $dept->groupId();
     }
+  }
+
+  if ($view->id() === 'topic_queue') {
+    $dept_url_hostname_parts = explode('.', parse_url($dept->url(), PHP_URL_HOST));
+    if ($dept_url_hostname_parts[0] === 'www') {
+      $dept_url_hostname_parts = array_shift($dept_url_hostname_parts);
+    }
+
+    $topic_queue_id = 'topics_dept_' . str_replace('-ni', '', $dept_url_hostname_parts[0]);
+
+    $table = $query->getTableInfo('entity_subqueue__items');
+    $table['join']->extra[0]['value'][0] = $topic_queue_id;
   }
 }
