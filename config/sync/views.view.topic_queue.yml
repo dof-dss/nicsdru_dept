@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - entityqueue.entity_queue.dept_topics_daera
+    - entityqueue.entity_queue.topics_dept_daera
     - field.storage.node.field_summary
     - node.type.topic
   module:
