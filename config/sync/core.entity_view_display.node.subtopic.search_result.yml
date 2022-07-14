@@ -1,0 +1,45 @@
+uuid: 5b43375d-b632-4afd-b0e8-300f7afb9bdf
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_result
+    - field.field.node.subtopic.body
+    - field.field.node.subtopic.field_banner_image
+    - field.field.node.subtopic.field_banner_link
+    - field.field.node.subtopic.field_link
+    - field.field.node.subtopic.field_parent_subtopic
+    - field.field.node.subtopic.field_parent_topic
+    - field.field.node.subtopic.field_summary
+    - node.type.subtopic
+  module:
+    - layout_builder
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.subtopic.search_result
+targetEntityType: node
+bundle: subtopic
+mode: search_result
+content:
+  field_summary:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  content_moderation_control: true
+  field_banner_image: true
+  field_banner_link: true
+  field_link: true
+  field_parent_subtopic: true
+  field_parent_topic: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

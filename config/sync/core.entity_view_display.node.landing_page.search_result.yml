@@ -1,0 +1,99 @@
+uuid: 3f69d81e-89bf-4bc4-8b8a-6c53c68ad7d8
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_result
+    - field.field.node.landing_page.body
+    - field.field.node.landing_page.field_banner_image
+    - field.field.node.landing_page.field_banner_image_overlay
+    - field.field.node.landing_page.field_enable_title
+    - field.field.node.landing_page.field_facebook_user
+    - field.field.node.landing_page.field_site_subtopics
+    - field.field.node.landing_page.field_site_topics
+    - field.field.node.landing_page.field_summary
+    - field.field.node.landing_page.field_teaser
+    - field.field.node.landing_page.field_tweet_count
+    - field.field.node.landing_page.field_twitter_user
+    - node.type.landing_page
+  module:
+    - layout_builder
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.landing_page.search_result
+targetEntityType: node
+bundle: landing_page
+mode: search_result
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+  field_facebook_user:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_site_subtopics:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_site_topics:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_summary:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_tweet_count:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_twitter_user:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  field_banner_image: true
+  field_banner_image_overlay: true
+  field_enable_title: true
+  field_teaser: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

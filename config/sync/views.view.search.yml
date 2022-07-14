@@ -99,7 +99,7 @@ display:
         type: full
         options:
           offset: 0
-          items_per_page: 25
+          items_per_page: 20
           total_pages: null
           id: 0
           tags:
@@ -157,7 +157,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: search_api
-          order: ASC
+          order: DESC
           expose:
             label: ''
             field_identifier: search_api_relevance
@@ -178,7 +178,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Fulltext search'
+            label: ''
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
@@ -210,7 +210,7 @@ display:
               admin_user: '0'
               user_manager: '0'
             expose_fields: false
-            placeholder: ''
+            placeholder: 'Search this site...'
             searched_fields_id: search_api_fulltext_searched_fields
           is_grouped: false
           group_info:
@@ -224,9 +224,12 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          parse_mode: terms
+          parse_mode: sloppy_terms
           min_length: 2
-          fields: {  }
+          fields:
+            - body
+            - field_summary
+            - title_fulltext
       style:
         type: html_list
       row:
@@ -242,7 +245,17 @@ display:
           skip_access: false
           preserve_facet_query_args: false
       relationships: {  }
-      header: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: '@total items'
       footer: {  }
       display_extenders: {  }
     cache_metadata:

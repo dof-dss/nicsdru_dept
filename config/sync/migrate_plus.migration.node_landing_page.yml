@@ -1,4 +1,4 @@
-uuid: cd75c5da-28a7-49f6-b99e-6e4d16a2a75b
+uuid: 52fdf71c-532f-4ae0-a4ac-d20a881ae558
 langcode: en
 status: true
 dependencies: {  }
@@ -92,8 +92,24 @@ process:
   field_enable_title: field_enable_title
   field_summary: field_summary
   field_teaser: field_teaser
-  field_site_subtopics: field_site_subtopics
-  field_site_topics: field_site_topics
+  field_site_subtopics:
+    -
+      plugin: sub_process
+      source: field_site_subtopics
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
+  field_site_topics:
+    -
+      plugin: sub_process
+      source: field_site_topics
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
   field_facebook_user: field_facebook_user
   field_tweet_count: field_tweet_count
   field_twitter_user: field_twitter_user
