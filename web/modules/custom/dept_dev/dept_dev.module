@@ -24,6 +24,7 @@ function dept_dev_toolbar() {
   $links = [];
 
   foreach ($domains as $domain) {
+    /** @var \Drupal\domain\Entity\Domain $domain */
     $url = $domain->getPath();
     if ($lando_hostnames) {
       $protocol = ($lando_protocol) ? 'http' : 'https';

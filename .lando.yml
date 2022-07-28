@@ -90,10 +90,6 @@ tooling:
     description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
     service: appserver
     cmd: /app/vendor/bin/drupal-check
-  phpstan:
-    description: PHPStan for deprecation checks, e.g. 'lando phpstan ./'
-    service: appserver
-    cmd: /app/vendor/bin/phpstan analyse -c /app/phpstan.neon
   drush:
     server: appserver
     cmd: /app/vendor/bin/drush -r /app/web

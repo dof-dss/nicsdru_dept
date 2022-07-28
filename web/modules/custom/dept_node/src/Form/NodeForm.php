@@ -112,8 +112,6 @@ class NodeForm extends ContentEntityForm {
     // rebuilding the form.
     $request_uuid = \Drupal::request()->query->get('uuid');
     if (!$form_state->isRebuilding() && $request_uuid && $preview = $store->get($request_uuid)) {
-      /** @var \Drupal\Core\Form\FormStateInterface $preview */
-
       $form_state->setStorage($preview->getStorage());
       $form_state->setUserInput($preview->getUserInput());
 
@@ -131,7 +129,7 @@ class NodeForm extends ContentEntityForm {
       $form_state->set('has_been_previewed', TRUE);
     }
 
-    /** @var \Drupal\node\NodeInterface $node */
+    /** @var \Drupal\dept_core\GroupContentEntityInterface|\Drupal\node\Entity\Node $node */
     $node = $this->entity;
 
     if ($this->operation == 'edit') {
@@ -242,13 +240,15 @@ class NodeForm extends ContentEntityForm {
     }
     $user_memberships = $this->groupMembership->loadByUser();
 
+    $group_options = [];
+    $group = NULL;
     foreach ($user_memberships as $membership) {
       $group = $membership->getGroup();
       $group_options[$group->id()] = $group->label();
     }
 
-    if (!$this->entity->isNew()) {
-      $content_groups = array_keys($this->entity->getGroups());
+    if (!$node->isNew()) {
+      $content_groups = array_keys($node->getGroups());
     }
 
     // If the user is a member of more than one Group/Department then we
@@ -303,8 +303,11 @@ class NodeForm extends ContentEntityForm {
    */
   protected function actions(array $form, FormStateInterface $form_state) {
     $element = parent::actions($form, $form_state);
+    /** @var \Drupal\node\Entity\Node $node */
     $node = $this->entity;
-    $preview_mode = $node->type->entity->getPreviewMode();
+    /** @var \Drupal\node\NodeTypeInterface $node_type */
+    $node_type = $this->entityTypeManager->getStorage('node_type')->load($node->bundle());
+    $preview_mode = $node_type->getPreviewMode();
 
     $element['submit']['#access'] = $preview_mode != DRUPAL_REQUIRED || $form_state->get('has_been_previewed');
 
@@ -332,12 +335,14 @@ class NodeForm extends ContentEntityForm {
    *   The current state of the form.
    */
   public function preview(array $form, FormStateInterface $form_state) {
+    /** @var \Drupal\dept_core\GroupContentEntityInterface|\Drupal\node\Entity\Node $node */
+    $node = $this->entity;
     $store = $this->tempStoreFactory->get('node_preview');
-    $this->entity->in_preview = TRUE;
-    $store->set($this->entity->uuid(), $form_state);
+    $node->in_preview = TRUE;
+    $store->set($node->uuid(), $form_state);
 
     $route_parameters = [
-      'node_preview' => $this->entity->uuid(),
+      'node_preview' => $node->uuid(),
       'view_mode_id' => 'full',
     ];
 
@@ -347,6 +352,7 @@ class NodeForm extends ContentEntityForm {
       $options['query']['destination'] = $query->get('destination');
       $query->remove('destination');
     }
+
     $form_state->setRedirect('entity.node.preview', $route_parameters, $options);
   }
 
@@ -354,9 +360,10 @@ class NodeForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
+    /** @var \Drupal\dept_core\GroupContentEntityInterface|\Drupal\node\NodeInterface $node */
     $node = $this->entity;
     $insert = $node->isNew();
-    $node->save();
+    $status = $node->save();
     $node_link = $node->toLink($this->t('View'))->toString();
     $context = [
       '@type' => $node->getType(),
@@ -379,14 +386,15 @@ class NodeForm extends ContentEntityForm {
     }
 
     $group_storage = $this->entityTypeManager->getStorage('group');
-    $plugin_id = $this->entity->groupBundle();
+    $plugin_id = $node->groupBundle();
 
     if ($insert) {
-      foreach ($groups as $group) {
-        $group = $group_storage->load($group);
+      foreach ($groups as $group_id) {
+        /** @var \Drupal\group\Entity\GroupInterface $group */
+        $group = $group_storage->load($group_id);
         // Check if the content plugin is enabled for the current group.
-        if (!empty($group) && $group->getGroupType()->hasContentPlugin($plugin_id)) {
-          $group->addContent($this->entity, $plugin_id);
+        if ($group->getGroupType()->hasContentPlugin($plugin_id)) {
+          $group->addContent($node, $plugin_id);
         }
       }
 
@@ -394,22 +402,25 @@ class NodeForm extends ContentEntityForm {
       $this->messenger()->addStatus($this->t('@type %title has been created.', $t_args));
     }
     else {
-      $entity_groups = $this->entity->getGroups();
+      $entity_groups = $node->getGroups();
 
       // Add entity to groups.
       foreach (array_diff_key($groups, $entity_groups) as $id => $label) {
+        /** @var \Drupal\group\Entity\GroupInterface $group */
         $group = $group_storage->load($id);
         // Check if the content plugin is enabled for the current group.
-        if (!empty($group) && $group->getGroupType()->hasContentPlugin($plugin_id)) {
+        if ($group->getGroupType()->hasContentPlugin($plugin_id)) {
           $group->addContent($this->entity, $plugin_id);
         }
       }
 
       // Remove entity from groups.
       foreach (array_diff_key($entity_groups, $groups) as $id => $label) {
+        /** @var \Drupal\group\Entity\GroupInterface $group */
         $group = $group_storage->load($id);
-        $group_entity_relations = $group->getContentByEntityId($plugin_id, $this->entity->id());
+        $group_entity_relations = $group->getContentByEntityId($plugin_id, $node->id());
         foreach ($group_entity_relations as $relation) {
+          /** @var \Drupal\group\Entity\GroupContentInterface $relation */
           $relation->delete();
         }
       }
@@ -441,6 +452,8 @@ class NodeForm extends ContentEntityForm {
       $this->messenger()->addError($this->t('The post could not be saved.'));
       $form_state->setRebuild();
     }
+
+    return $status;
   }
 
 }

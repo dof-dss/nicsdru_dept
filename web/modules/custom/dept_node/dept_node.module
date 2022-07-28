@@ -28,7 +28,6 @@ function dept_node_entity_type_alter(&$entity_types) {
  * Implements hook_form_ENTITY_form_alter().
  */
 function dept_node_form_node_form_alter(&$form, $form_state) {
-
   // Process Domain module pathauto alias options.
   if (array_key_exists('domain_path', $form['path']['widget'][0])) {
     $dept_manager = \Drupal::service('department.manager');
@@ -79,16 +78,29 @@ function dept_node_views_pre_render(ViewExecutable $view) {
  */
 function dept_node_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
   $dept_manager = \Drupal::service('department.manager');
-  /** @var Drupal\dept_core\Department $dept */
+  /** @var \Drupal\dept_core\Department $dept */
   $dept = $dept_manager->getCurrentDepartment();
 
-  foreach ($query->where as $i => &$clause) {
-    foreach ($clause['conditions'] as $j => &$condition) {
-      if ($condition['field'] != 'group_content_field_data_node_field_data.gid') {
-        continue;
-      }
+  if ($dept instanceof Department === FALSE) {
+    return;
+  }
 
-      $condition['value'] = $dept->groupId();
+  $base_table = $view->getBaseTables();
+
+  if (array_keys($base_table)[0] === 'node_field_data') {
+    /** @var \Drupal\views\Plugin\views\query\Sql $query */
+    // Ignore query reference below - depending on the base table
+    // and handling class, it's not guaranteed to be able to extract
+    // the where conditions with the same method, or even at all.
+    // @phpstan-ignore-next-line.
+    foreach ($query->where as $i => &$clause) {
+      foreach ($clause['conditions'] as $j => &$condition) {
+        if ($condition['field'] != 'group_content_field_data_node_field_data.gid') {
+          continue;
+        }
+
+        $condition['value'] = $dept->groupId();
+      }
     }
   }
 
@@ -100,6 +112,8 @@ function dept_node_views_query_alter(ViewExecutable $view, QueryPluginBase $quer
 
     $topic_queue_id = 'topics_dept_' . str_replace('-ni', '', $dept_url_hostname_parts[0]);
 
+    // Topic queue views is based on db query, so type hint the SQL query class.
+    /** @var \Drupal\views\Plugin\views\query\Sql $query */
     $table = $query->getTableInfo('entity_subqueue__items');
     $table['join']->extra[0]['value'][0] = $topic_queue_id;
   }
