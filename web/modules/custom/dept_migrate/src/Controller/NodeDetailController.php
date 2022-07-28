@@ -29,9 +29,9 @@ class NodeDetailController extends ControllerBase {
   protected $entityTypeManager;
 
   /**
-   * Symfony\Component\HttpFoundation\RequestStack definition.
+   * \Symfony\Component\HttpFoundation\RequestStack definition.
    *
-   * @var Symfony\Component\HttpFoundation\RequestStack
+   * @var \Symfony\Component\HttpFoundation\RequestStack
    */
   protected $request;
 
@@ -43,9 +43,9 @@ class NodeDetailController extends ControllerBase {
   protected $lookupManager;
 
   /**
-   * Drupal\Core\StringTranslation\Translator\TranslatorInterface definition.
+   * Translation manager service object.
    *
-   * @var \Drupal\Core\StringTranslation\Translator\TranslatorInterface
+   * @var \Drupal\Core\StringTranslation\TranslationManager
    */
   protected $t;
 

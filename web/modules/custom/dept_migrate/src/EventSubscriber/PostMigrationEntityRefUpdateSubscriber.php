@@ -25,9 +25,9 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
   protected $fieldManager;
 
   /**
-   * Drupal\Core\Logger\LoggerChannelFactory definition.
+   * Drupal\Core\Logger\LoggerChannel definition.
    *
-   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   * @var \Drupal\Core\Logger\LoggerChannel
    */
   protected $logger;
 
@@ -86,7 +86,8 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
           // Determine the reference types the field targets.
           if ($field_settings['handler'] === 'views') {
             $view = Views::getView($field_settings['handler_settings']['view']['view_name']);
-            $display = $view->getDisplay($field_settings['handler_settings']['view']['display_name']);
+            $view->setDisplay($field_settings['handler_settings']['view']['display_name']);
+            $display = $view->getDisplay();
             $target_bundles = array_keys($display->options['filters']['type']['value']);
           }
           else {
@@ -125,10 +126,10 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
    *
    * @param string $migration_table
    *   The migration mapping table to extract the destination node from.
-   * @param string $field
+   * @param \Drupal\field\Entity\FieldConfig $field
    *   The entity reference field.
    */
-  private function updateEntityReferences($migration_table, $field) {
+  private function updateEntityReferences(string $migration_table, FieldConfig $field) {
     // Check we have the D7 nid values in the migration mapping table.
     if ($this->dbconn->schema()->fieldExists($migration_table, 'sourceid2')) {
       $name = $field->getLabel();
@@ -138,8 +139,7 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
       // Update the entity reference target id with the migration map
       // destination id by matching the entity reference target id to the D7
       // id in the mapping table.
-      $count = $this->dbconn->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.$column = mt.destid1 WHERE ft.$column = mt.sourceid2", [], $options);
-
+      $this->dbconn->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.$column = mt.destid1 WHERE ft.$column = mt.sourceid2");
       $this->logger->info("Updated target ids for $name");
     }
     else {

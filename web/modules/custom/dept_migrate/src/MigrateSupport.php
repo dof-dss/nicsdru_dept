@@ -40,9 +40,9 @@ class MigrateSupport {
   protected $entityTypeManager;
 
   /**
-   * Drupal\Core\Logger\LoggerChannelFactory definition.
+   * Drupal\Core\Logger\LoggerChannel definition.
    *
-   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   * @var \Drupal\Core\Logger\LoggerChannel
    */
   protected $logger;
 

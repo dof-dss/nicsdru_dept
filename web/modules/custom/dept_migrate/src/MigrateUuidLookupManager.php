@@ -40,9 +40,9 @@ class MigrateUuidLookupManager {
   protected $entityTypeManager;
 
   /**
-   * Drupal\Core\Logger\LoggerChannelFactory definition.
+   * Drupal\Core\Logger\LoggerChannel definition.
    *
-   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   * @var \Drupal\Core\Logger\LoggerChannel
    */
   protected $logger;
 
@@ -147,7 +147,7 @@ class MigrateUuidLookupManager {
 
       // Add any domain ids, if they're present.
       if (!empty($row->domains)) {
-        $map[$row->nid]['domains'] = explode(',', $row->domains);
+        $map[$row->nid ?? 0]['domains'] = explode(',', $row->domains);
       }
     }
 
@@ -217,7 +217,7 @@ class MigrateUuidLookupManager {
 
       // Add any domain ids, if they're present.
       if (!empty($row->domains)) {
-        $map[$row->uid]['domains'] = explode(',', $row->domains);
+        $map[$row->uid ?? 0]['domains'] = explode(',', $row->domains);
       }
     }
 
@@ -409,6 +409,7 @@ class MigrateUuidLookupManager {
     }
 
     // Match up to D9 media entity using D7 file uuid as key from migrate table.
+    $table = '';
     foreach ($map as $d7fid => $file) {
       // Switch table if there's a specified type for this file.
       switch ($file['d7type']) {
@@ -601,8 +602,8 @@ class MigrateUuidLookupManager {
           $map[$node->id()]['d7type'] = $d7node->type;
 
           // Add any domain ids, if they're present.
-          if (!empty($d7row->domains)) {
-            $map[$node->id()]['domains'] = explode(',', $d7row->domains);
+          if (!empty($d7node->domains)) {
+            $map[$node->id()]['domains'] = explode(',', $d7node->domains);
           }
         }
       }
@@ -625,6 +626,7 @@ class MigrateUuidLookupManager {
    *   Array of content keyed by 'total' and 'rows'.
    */
   public function getMigrationContent(array $criteria, int $num_per_page, int $offset) {
+    $mig_map_tables = [];
     // If we don't have a 'type' fetch all the migrate_map_node tables.
     if (empty($criteria['type'])) {
       $mig_map_tables = $this->dbconn->schema()->findTables('migrate_map_node_%');
@@ -659,7 +661,7 @@ class MigrateUuidLookupManager {
       }
     }
 
-    $d9_data = [];
+    $d9_results = [];
 
     foreach ($mig_map_tables as $mig_map_table) {
       $query = $this->dbconn->select($mig_map_table, 'mm');

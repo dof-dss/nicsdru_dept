@@ -74,22 +74,25 @@ class DeptExampleGroupEntityForm extends ContentEntityForm {
     $form = parent::form($form, $form_state);
 
     $content_groups = [];
+    /** @var \Drupal\Core\Entity\ContentEntityInterface|\Drupal\dept_core\GroupContentEntityInterface $entity */
+    $entity = $this->entity;
 
     // Return if the bundle isn't present as a Group content plugin.
-    if (!method_exists($this->entity, 'groupBundle')) {
+    if (!method_exists($entity, 'groupBundle')) {
       return $form;
     }
 
-    $plugin_id = $this->entity->groupBundle();
+    $plugin_id = $entity->groupBundle();
     $user_memberships = $this->groupMembership->loadByUser();
 
+    $group = '';
     foreach ($user_memberships as $membership) {
       $group = $membership->getGroup();
       $group_options[$group->id()] = $group->label();
     }
 
-    if (!$this->entity->isNew()) {
-      $content_groups = array_keys($this->entity->getGroups());
+    if (!$entity->isNew()) {
+      $content_groups = array_keys($entity->getGroups());
     }
 
     $form['group_publish'] = [
@@ -134,37 +137,42 @@ class DeptExampleGroupEntityForm extends ContentEntityForm {
    */
   public function save(array $form, FormStateInterface $form_state) {
 
+    /** @var \Drupal\Core\Entity\EntityInterface|\Drupal\dept_core\Department|\Drupal\dept_core\GroupContentEntityInterface $entity */
     $entity = $this->getEntity();
     $result = $entity->save();
     $link = $entity->toLink($this->t('View'))->toRenderable();
 
     $groups = array_filter($form_state->getValue('groups'));
     $group_storage = $this->entityTypeManager->getStorage('group');
-    $plugin_id = $this->entity->groupBundle();
+    $plugin_id = $entity->groupBundle();
 
-    if ($this->entity->isNew()) {
+    if ($entity->isNew()) {
       foreach ($groups as $group) {
+        /** @var \Drupal\group\Entity\GroupInterface $group */
         $group = $group_storage->load($group);
         // Check if the content plugin is enabled for the current group.
-        if (!empty($group) && $group->getGroupType()->hasContentPlugin($plugin_id)) {
-          $group->addContent($this->entity, $plugin_id);
+        if ($group->getGroupType()->hasContentPlugin($plugin_id)) {
+          /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+          $group->addContent($entity, $plugin_id);
         }
       }
     }
     else {
-      $entity_groups = $this->entity->getGroups();
+      $entity_groups = $entity->getGroups();
 
       // Add entity to groups.
       foreach (array_diff_key($groups, $entity_groups) as $id => $label) {
+        /** @var \Drupal\group\Entity\GroupInterface $group */
         $group = $group_storage->load($id);
         // Check if the content plugin is enabled for the current group.
-        if (!empty($group) && $group->getGroupType()->hasContentPlugin($plugin_id)) {
+        if ($group->getGroupType()->hasContentPlugin($plugin_id)) {
           $group->addContent($this->entity, $plugin_id);
         }
       }
 
       // Remove entity from groups.
       foreach (array_diff_key($entity_groups, $groups) as $id => $label) {
+        /** @var \Drupal\group\Entity\GroupInterface $group */
         $group = $group_storage->load($id);
         $group_entity_relations = $group->getContentByEntityId($plugin_id, $this->entity->id());
         foreach ($group_entity_relations as $relation) {
@@ -174,7 +182,7 @@ class DeptExampleGroupEntityForm extends ContentEntityForm {
     }
 
     $message_arguments = ['%label' => $this->entity->label()];
-    $logger_arguments = $message_arguments + ['link' => $this->renderer($link)];
+    $logger_arguments = $message_arguments + ['link' => $this->renderer->render($link)];
 
     if ($result === SAVED_NEW) {
       $this->messenger()->addStatus($this->t('New departmental example group content entity %label has been created.', $message_arguments));
@@ -186,6 +194,8 @@ class DeptExampleGroupEntityForm extends ContentEntityForm {
     }
 
     $form_state->setRedirect('entity.dept_example_group_entity.canonical', ['dept_example_group_entity' => $entity->id()]);
+
+    return $result;
   }
 
 }
