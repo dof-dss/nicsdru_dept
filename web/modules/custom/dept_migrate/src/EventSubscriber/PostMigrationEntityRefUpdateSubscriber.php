@@ -138,7 +138,7 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
       // Update the entity reference target id with the migration map
       // destination id by matching the entity reference target id to the D7
       // id in the mapping table.
-      $count = $this->dbconn->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.$column = mt.destid1 WHERE ft.$column = mt.sourceid2", [], $options);
+      $count = $this->dbconn->query("UPDATE $migration_table AS mt, $field_table AS ft SET ft.$column = mt.destid1 WHERE ft.$column = mt.sourceid2");
 
       $this->logger->info("Updated target ids for $name");
     }
