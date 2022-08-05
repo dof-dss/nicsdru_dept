@@ -63,6 +63,7 @@ class DepartmentManager {
    */
   public function getAllDepartments() {
     $domains = $this->entityTypeManager->getStorage('domain')->loadMultiple();
+    $departments = [];
     foreach ($domains as $id => $domain) {
       if (strpos($id, 'group_') === 0) {
         $departments[] = $this->getDepartment($id);
@@ -83,9 +84,10 @@ class DepartmentManager {
     if (!preg_match('/group_\d+/', $id)) {
       return NULL;
     }
-    $department = $this->cache->get('department_' . $id)->data;
+    $cache_item = $this->cache->get('department_' . $id);
+    $department = $cache_item->data ?? '';
 
-    if (empty($department)) {
+    if (!$department instanceof Department) {
       $department = new Department($this->entityTypeManager, $id);
       // Add to cache and use tags that will invalidate when the Domain or
       // Group entities change.

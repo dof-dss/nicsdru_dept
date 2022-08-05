@@ -22,9 +22,7 @@ class PostMigrationFileImportTidy implements EventSubscriberInterface {
   protected $entityTypeManager;
 
   /**
-   * Drupal\Core\Logger\LoggerChannelFactory definition.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   * @var \Drupal\Core\Logger\LoggerChannel
    */
   protected $logger;
 

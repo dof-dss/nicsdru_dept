@@ -11,15 +11,19 @@ trait GroupableEntityTrait {
    * {@inheritdoc}
    */
   public function groupBundle() {
+    $bundle_id = '';
+
     /** @var \Drupal\group\Plugin\GroupContentEnablerManager $group_content_enabler */
     $group_content_enabler = \Drupal::service('plugin.manager.group_content_enabler');
     $plugins = $group_content_enabler->getInstalled();
 
     foreach ($plugins as $plugin) {
       if ($this->bundle() === $plugin->getDerivativeId()) {
-        return $plugin->getPluginId();
+        $bundle_id = $plugin->getPluginId();
       }
     }
+
+    return $bundle_id;
   }
 
   /**
@@ -30,6 +34,7 @@ trait GroupableEntityTrait {
     $entity_groups = [];
 
     foreach ($all_groups as $group) {
+      /** @var \Drupal\group\Entity\GroupInterface $group */
       if ($this->groupBundle() != NULL) {
         if ($group->getContentByEntityId($this->groupBundle(), $this->id())) {
           $entity_groups[$group->id()] = $group->label();
