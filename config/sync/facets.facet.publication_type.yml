@@ -10,7 +10,7 @@ dependencies:
     - search_api
 third_party_settings:
   facets_pretty_paths:
-    coder: taxonomy_term_coder
+    coder: default_coder
 id: publication_type
 name: 'Publication type'
 weight: 0
