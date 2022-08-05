@@ -31,7 +31,7 @@ class EditUserGroupMembershipForm extends FormBase {
   /**
    * The user account to edit group membership.
    *
-   * @var Drupal\Core\Session\AccountInterface
+   * @var \Drupal\Core\Session\AccountInterface
    */
   protected $userAccount;
 
@@ -89,10 +89,12 @@ class EditUserGroupMembershipForm extends FormBase {
 
     // Create an array of Group options, we can't use $this->allGroups directly
     // as it consists of the Group id index and Group entity as the value.
+    $groups_options = [];
     foreach ($this->allGroups as $group) {
       $groups_options[$group->id()] = $group->label();
     }
 
+    $users_groups = [];
     foreach ($this->userMemberships as $membership) {
       $users_groups[] = $membership->getGroup()->id();
     }
@@ -132,8 +134,10 @@ class EditUserGroupMembershipForm extends FormBase {
     // If the user doesn't have any current memberships, simply join the
     // selected Groups.
     if (count($this->userMemberships) == 0) {
-      foreach ($groups as $group) {
-        $all_groups[$group]->addMember($this->userAccount);
+      foreach ($groups as $group_id) {
+        /** @var \Drupal\group\Entity\GroupInterface $group */
+        $group = &$all_groups[$group_id];
+        $group->addMember($this->userAccount);
       }
     }
     else {
@@ -144,12 +148,16 @@ class EditUserGroupMembershipForm extends FormBase {
 
       // Add user to groups.
       foreach (array_diff_key($groups, $memberships) as $id) {
-        $all_groups[$id]->addMember($this->userAccount);
+        /** @var \Drupal\group\Entity\GroupInterface $membership */
+        $membership = &$all_groups[$id];
+        $membership->addMember($this->userAccount);
       }
 
       // Remove user from groups.
       foreach (array_diff_key($memberships, $groups) as $id => $group) {
-        $all_groups[$id]->removeMember($this->userAccount);
+        /** @var \Drupal\group\Entity\GroupInterface $group */
+        $group = &$all_groups[$id];
+        $group->removeMember($this->userAccount);
       }
     }
 

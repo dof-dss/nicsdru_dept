@@ -59,7 +59,7 @@
         "composer/installers": "^1.9",
         "cweagans/composer-patches": "^1.7",
         "deaemth/easychart": "^3.1",
-        "dof-dss/nicsdru_origins_modules": "dev-development#8b5d724126d84095edb26b5652c60bdb82330236",
+        "dof-dss/nicsdru_origins_modules": "dev-deprecated-code-update",
         "dof-dss/nicsdru_origins_theme": "^0.4.0",
         "drupal/admin_toolbar": "^3.0",
         "drupal/adminimal_theme": "^1.6",
@@ -128,7 +128,6 @@
         "drupal/twig_field_value": "^2.0",
         "drupal/twig_tweak": "^3.1",
         "drupal/ultimate_cron": "^2.0@alpha",
-        "drupal/upgrade_status": "^3.8",
         "drupal/views_conditional": "^1.4",
         "drupal/views_contextual_filters_or": "^1.2",
         "drupal/views_custom_cache_tag": "^1.2",
@@ -139,7 +138,8 @@
         "harvesthq/chosen": "^1.8",
         "highcharts/highcharts": "^10",
         "php-kit/ext-pdo": "^1.1",
-        "platformsh/config-reader": "^2.4"
+        "platformsh/config-reader": "^2.4",
+      "ext-pdo": "*"
     },
     "require-dev": {
         "drupal/coder": "^8.3",
@@ -151,11 +151,8 @@
         "drupal/migrate_devel": "2.x",
         "drupal/stage_file_proxy": "^1.1",
         "kint-php/kint": "^3.3",
-        "mglaman/phpstan-drupal": "^1.1",
+        "mglaman/drupal-check": "^1.4",
         "phpspec/prophecy-phpunit": "^2",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.6",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
         "previousnext/phpunit-finder": "^2.0"
     },
     "conflict": {

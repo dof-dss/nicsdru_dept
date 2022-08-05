@@ -78,7 +78,6 @@ class MdashRelationshipSummaryBlock extends BlockBase implements ContainerFactor
       'group_content_type_6061d9dc53978' => 'infogram',
       'group_content_type_1b4b1ed9339c4' => 'landing_page',
       'department_site-group_node-link' => 'link',
-      'department_site-group_membership' => 'membership',
       'department_site-group_node-news' => 'news',
       'department_site-group_node-page' => 'page',
       'group_content_type_d17c35c98baa3' => 'profile',
@@ -104,7 +103,7 @@ class MdashRelationshipSummaryBlock extends BlockBase implements ContainerFactor
     ];
 
     $results = $this->dbConn->query('SELECT type, COUNT(type) AS total FROM group_content GROUP BY type')->fetchAll();
-
+    $rows = [];
     foreach ($results as $result) {
       $rows[] = [
         $mapping[$result->type] ?? 'unknown',

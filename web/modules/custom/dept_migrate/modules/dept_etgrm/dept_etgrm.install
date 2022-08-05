@@ -6,7 +6,10 @@ use Drupal\Core\Database\Database;
  * Create all stored procedures and functions on install.
  */
 function dept_etgrm_install() {
-
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
   extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
   $module_handler = \Drupal::service('module_handler');
   $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());
@@ -33,7 +36,10 @@ function dept_etgrm_install() {
  * Remove all stored procedures and functions on uninstall.
  */
 function dept_etgrm_uninstall() {
-
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
   extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
 
   $sql_proc_list = [
@@ -57,6 +63,10 @@ function dept_etgrm_uninstall() {
  * Update PROCESS_GROUP_RELATIONSHIPS Sproc.
  */
 function dept_etgrm_update_8001() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
   extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
   $module_handler = \Drupal::service('module_handler');
   $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());
@@ -71,6 +81,10 @@ function dept_etgrm_update_8001() {
  * Add UPDATE_NODE_ACCESS Sproc.
  */
 function dept_etgrm_update_8002() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
   extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
   $module_handler = \Drupal::service('module_handler');
   $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());

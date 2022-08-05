@@ -72,6 +72,10 @@ class EtgrmCommands extends DrushCommands {
    * @aliases etgrm:ca
    */
   public function all() {
+    $database = '';
+    $host = '';
+    $password = '';
+    $username = '';
 
     extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
 
