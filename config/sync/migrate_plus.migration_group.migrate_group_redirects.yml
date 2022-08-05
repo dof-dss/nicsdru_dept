@@ -1,12 +1,10 @@
-uuid: 63cd7239-3931-44b2-8c14-66b7a229a083
+uuid: d7b94c61-696b-41c0-81d0-48ddf563c95d
 langcode: en
 status: true
 dependencies: {  }
 id: migrate_group_redirects
-label: 'Departmental sites - Redirects'
-description: 'Migrate redirects'
-source_type: 'Drupal 7'
+label: migrate_group_redirects
+description: ''
+source_type: null
 module: null
-shared_configuration:
-  source:
-    key: drupal7db
+shared_configuration: null
