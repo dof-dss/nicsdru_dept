@@ -155,6 +155,9 @@
         "phpspec/prophecy-phpunit": "^2",
         "previousnext/phpunit-finder": "^2.0"
     },
+    "replace": {
+        "drupal/ctools": "*"
+    },
     "conflict": {
         "drupal/drupal": "*"
     },
