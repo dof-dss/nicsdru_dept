@@ -1,5 +1,10 @@
 version: 2.1
 
+# Default docker image. (excludes functional_tests)
+default_docker_image: &docker_image
+  docker:
+    - image: circleci/php:8.0.9-apache-browsers
+
 workflows:
   version: 2
   build-test:
@@ -54,8 +59,7 @@ workflows:
 jobs:
   # Tests the integrity of the build, stores the results in a workspace for re-use in later jobs.
   build:
-    docker:
-      - image: circleci/php:7.4.15-apache-browsers
+    <<: *docker_image
     environment:
       PLATFORM_REGION: "uk-1.platform.sh"
     steps:
@@ -69,8 +73,7 @@ jobs:
             - ./
   # Test for coding standards - will inherit the workspace/filesystem changes from build step, above.
   coding_standards:
-    docker:
-      - image: circleci/php:7.4.15-apache-browsers
+    <<: *docker_image
     environment:
       PROJECT_ROOT: "/home/circleci/project"
       PLATFORM_REGION: "uk-1.platform.sh"
@@ -87,8 +90,7 @@ jobs:
             ~/project/phpcs.sh ${PROJECT_ROOT} $CHECK_DIRS
 
   deprecated_code:
-    docker:
-      - image: circleci/php:7.4.15-apache-browsers
+    <<: *docker_image
     environment:
       PROJECT_ROOT: "/home/circleci/project"
     steps:
@@ -150,8 +152,7 @@ jobs:
 
   # Task to build the edge site.
   build_edge:
-    docker:
-      - image: circleci/php:7.4.15-apache-browsers
+    <<: *docker_image
     environment:
       # git variables to avoid empty committer identity errors
       EMAIL: "circleci@localhost"
@@ -184,8 +185,7 @@ jobs:
             git push -f origin $EDGE_BUILD_BRANCH
   # Separate task to allow us to sync data on PSH environments, without pauses in other jobs.
   sync_data:
-    docker:
-      - image: circleci/php:7.4.15-apache-browsers
+    <<: *docker_image
     environment:
       EDGE_BUILD_BRANCH: "DEPT-edge"
       PLATFORM_SOLR_HOST: "solr.internal:8080"
