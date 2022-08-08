@@ -79,7 +79,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ./
-      - run: sudo cp /home/circleci/project/.circleci/docker-php-circleci.ini /usr/local/etc/php/conf.d/
       - run:
           name: PHPCS analysis
           command: |
@@ -95,7 +94,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ./
-      - run: sudo cp /home/circleci/project/.circleci/docker-php-circleci.ini /usr/local/etc/php/conf.d/
       - run:
           name: Deprecated code check
           command: |
