@@ -3,7 +3,7 @@ version: 2.1
 # Default docker image. (excludes functional_tests)
 default_docker_image: &docker_image
   docker:
-    - image: circleci/php:8.0.9-apache-browsers
+    - image: cimg/php:8.1.0-browsers
 
 workflows:
   version: 2
@@ -65,7 +65,6 @@ jobs:
     steps:
       - hosts_keyscan
       - checkout_code
-      - install_php_os_extensions
       - composer_tasks
       - persist_to_workspace:
           root: ./
@@ -80,7 +79,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ./
-      - run: sudo cp /home/circleci/project/.circleci/docker-php-circleci.ini /usr/local/etc/php/conf.d/
       - run:
           name: PHPCS analysis
           command: |
@@ -96,7 +94,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ./
-      - run: sudo cp /home/circleci/project/.circleci/docker-php-circleci.ini /usr/local/etc/php/conf.d/
       - run:
           name: Deprecated code check
           command: |
@@ -108,7 +105,7 @@ jobs:
   # Functional tests with headless browser; run against our edge environment.
   functional_tests:
     docker:
-      - image: circleci/php:7.4.15-apache-node-browsers
+      - image: cimg/php:8.1.0-browsers
         environment:
           TEST_TAGS: "dept_core"
           EDGE_BUILD_BRANCH: "DEPT-edge"
@@ -119,7 +116,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ./
-      - install_php_os_extensions
       - install_psh_cli
       - run:
           name: Get our environment URL and store as a local shell variable
@@ -163,7 +159,6 @@ jobs:
     steps:
       - hosts_keyscan
       - checkout_code
-      - install_php_os_extensions
       - install_psh_cli
       - run:
           name: Switch to edge branch
@@ -192,7 +187,6 @@ jobs:
     steps:
       - hosts_keyscan
       - checkout_code
-      - install_php_os_extensions
       - install_psh_cli
       - run:
           # This task triggers a drush cim from the .platform.app.yaml build/deploy steps.
@@ -264,16 +258,6 @@ commands:
             composer require dof-dss/nicsdru_origins_theme:dev-development \
                               dof-dss/nicsdru_origins_modules:dev-development \
                                 dof-dss/nicsdru_origins_theme:dev-development
-  install_php_os_extensions:
-    description: "Install a standard group of extensions and packages"
-    steps:
-      - run:
-          name: Add OS and PHP extensions
-          command: |
-            sudo cp /home/circleci/project/.circleci/docker-php-circleci.ini /usr/local/etc/php/conf.d/
-            sudo apt --allow-releaseinfo-change update
-            sudo apt install -y libpng-dev
-            sudo docker-php-ext-install gd pcntl posix
   hosts_keyscan:
     description: "Keyscan for hosts that require SSH access"
     steps:
