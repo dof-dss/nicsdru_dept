@@ -106,7 +106,7 @@ jobs:
   # Functional tests with headless browser; run against our edge environment.
   functional_tests:
     docker:
-      - image: cimg/php:8.1.5-ext-test
+      - image: cimg/php:8.1.0-browsers
         environment:
           TEST_TAGS: "dept_core"
           EDGE_BUILD_BRANCH: "DEPT-edge"
