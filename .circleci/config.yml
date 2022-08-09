@@ -65,6 +65,7 @@ jobs:
     steps:
       - hosts_keyscan
       - checkout_code
+      - install_php_os_extensions
       - composer_tasks
       - persist_to_workspace:
           root: ./
@@ -116,6 +117,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ./
+      - install_php_os_extensions
       - install_psh_cli
       - run:
           name: Get our environment URL and store as a local shell variable
@@ -159,6 +161,7 @@ jobs:
     steps:
       - hosts_keyscan
       - checkout_code
+      - install_php_os_extensions
       - install_psh_cli
       - run:
           name: Switch to edge branch
@@ -187,6 +190,7 @@ jobs:
     steps:
       - hosts_keyscan
       - checkout_code
+      - install_php_os_extensions
       - install_psh_cli
       - run:
           # This task triggers a drush cim from the .platform.app.yaml build/deploy steps.
@@ -258,6 +262,13 @@ commands:
             composer require dof-dss/nicsdru_origins_theme:dev-development \
                               dof-dss/nicsdru_origins_modules:dev-development \
                                 dof-dss/nicsdru_origins_theme:dev-development
+  install_php_os_extensions:
+    description: "Install a standard group of extensions and packages"
+    steps:
+      - run:
+          name: Add OS and PHP extensions
+          command: |
+            sudo docker-php-ext-install gd pcntl posix
   hosts_keyscan:
     description: "Keyscan for hosts that require SSH access"
     steps:
