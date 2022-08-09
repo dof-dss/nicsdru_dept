@@ -9,6 +9,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+/**
+ * Request subscriber to rewrite topic/subtopic ids on certain
+ * request paths. Topic and Subtopic node ids differ between the legacy
+ * system and the new system and this provides a more flexible approach
+ * than an large volume of ad hoc redirect entities in the database that
+ * will likely need updating over the course of the site(s) migration.
+ */
 class TopicsRedirectManager implements EventSubscriberInterface {
 
   /**
