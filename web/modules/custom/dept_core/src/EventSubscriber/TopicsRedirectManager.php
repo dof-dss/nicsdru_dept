@@ -54,7 +54,11 @@ class TopicsRedirectManager implements EventSubscriberInterface {
 
           // Create a new Url and redirect to it.
           $url = Url::fromUserInput($new_path)->toString();
-          $response = new RedirectResponse($url, 301);
+          $headers = [
+            'X-Redirect-Initiator' => 'TopicsRedirectManager',
+          ];
+
+          $response = new RedirectResponse($url, 301, $headers);
           $event->setResponse($response);
         }
       }
