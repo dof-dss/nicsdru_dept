@@ -1,5 +1,10 @@
 version: 2.1
 
+# Default docker image. (excludes functional_tests)
+default_docker_image: &docker_image
+  docker:
+    - image: cimg/php:8.1.0-browsers
+
 workflows:
   version: 2
   build-test:
@@ -54,14 +59,12 @@ workflows:
 jobs:
   # Tests the integrity of the build, stores the results in a workspace for re-use in later jobs.
   build:
-    docker:
-      - image: circleci/php:7.4.15-apache-browsers
+    <<: *docker_image
     environment:
       PLATFORM_REGION: "uk-1.platform.sh"
     steps:
       - hosts_keyscan
       - checkout_code
-      - install_php_os_extensions
       - composer_tasks
       - persist_to_workspace:
           root: ./
@@ -69,15 +72,13 @@ jobs:
             - ./
   # Test for coding standards - will inherit the workspace/filesystem changes from build step, above.
   coding_standards:
-    docker:
-      - image: circleci/php:7.4.15-apache-browsers
+    <<: *docker_image
     environment:
       PROJECT_ROOT: "/home/circleci/project"
       PLATFORM_REGION: "uk-1.platform.sh"
     steps:
       - attach_workspace:
           at: ./
-      - run: sudo cp /home/circleci/project/.circleci/docker-php-circleci.ini /usr/local/etc/php/conf.d/
       - run:
           name: PHPCS analysis
           command: |
@@ -87,14 +88,12 @@ jobs:
             ~/project/phpcs.sh ${PROJECT_ROOT} $CHECK_DIRS
 
   deprecated_code:
-    docker:
-      - image: circleci/php:7.4.15-apache-browsers
+    <<: *docker_image
     environment:
       PROJECT_ROOT: "/home/circleci/project"
     steps:
       - attach_workspace:
           at: ./
-      - run: sudo cp /home/circleci/project/.circleci/docker-php-circleci.ini /usr/local/etc/php/conf.d/
       - run:
           name: Deprecated code check
           command: |
@@ -106,7 +105,7 @@ jobs:
   # Functional tests with headless browser; run against our edge environment.
   functional_tests:
     docker:
-      - image: circleci/php:7.4.15-apache-node-browsers
+      - image: cimg/php:8.1.0-browsers
         environment:
           TEST_TAGS: "dept_core"
           EDGE_BUILD_BRANCH: "DEPT-edge"
@@ -117,7 +116,6 @@ jobs:
     steps:
       - attach_workspace:
           at: ./
-      - install_php_os_extensions
       - install_psh_cli
       - run:
           name: Get our environment URL and store as a local shell variable
@@ -150,8 +148,7 @@ jobs:
 
   # Task to build the edge site.
   build_edge:
-    docker:
-      - image: circleci/php:7.4.15-apache-browsers
+    <<: *docker_image
     environment:
       # git variables to avoid empty committer identity errors
       EMAIL: "circleci@localhost"
@@ -162,7 +159,6 @@ jobs:
     steps:
       - hosts_keyscan
       - checkout_code
-      - install_php_os_extensions
       - install_psh_cli
       - run:
           name: Switch to edge branch
@@ -184,15 +180,13 @@ jobs:
             git push -f origin $EDGE_BUILD_BRANCH
   # Separate task to allow us to sync data on PSH environments, without pauses in other jobs.
   sync_data:
-    docker:
-      - image: circleci/php:7.4.15-apache-browsers
+    <<: *docker_image
     environment:
       EDGE_BUILD_BRANCH: "DEPT-edge"
       PLATFORM_SOLR_HOST: "solr.internal:8080"
     steps:
       - hosts_keyscan
       - checkout_code
-      - install_php_os_extensions
       - install_psh_cli
       - run:
           # This task triggers a drush cim from the .platform.app.yaml build/deploy steps.
@@ -264,16 +258,6 @@ commands:
             composer require dof-dss/nicsdru_origins_theme:dev-development \
                               dof-dss/nicsdru_origins_modules:dev-development \
                                 dof-dss/nicsdru_origins_theme:dev-development
-  install_php_os_extensions:
-    description: "Install a standard group of extensions and packages"
-    steps:
-      - run:
-          name: Add OS and PHP extensions
-          command: |
-            sudo cp /home/circleci/project/.circleci/docker-php-circleci.ini /usr/local/etc/php/conf.d/
-            sudo apt --allow-releaseinfo-change update
-            sudo apt install -y libpng-dev
-            sudo docker-php-ext-install gd pcntl posix
   hosts_keyscan:
     description: "Keyscan for hosts that require SSH access"
     steps:
