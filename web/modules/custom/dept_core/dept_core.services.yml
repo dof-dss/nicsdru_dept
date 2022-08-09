@@ -2,3 +2,12 @@ services:
   department.manager:
     class: Drupal\dept_core\DepartmentManager
     arguments: ['@domain.negotiator', '@entity_type.manager', '@cache.default']
+  topics.redirect_manager:
+    class: Drupal\dept_core\EventSubscriber\TopicsRedirectManager
+    arguments: [ '@database', '%topic_route_patterns%']
+    tags:
+      - { name: event_subscriber }
+parameters:
+  topic_route_patterns:
+    - /publications/(topic)/(\d+)
+    - /publications/(subtopic)/(\d+)
