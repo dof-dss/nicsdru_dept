@@ -20,6 +20,7 @@ fi
 # Only execute on the main environment.
 if [[ "${PLATFORM_BRANCH}" == "main" || "${LANDO}" == "ON" ]];
 then
+
   echo "Resetting all migrations"
   for m in $MIGRATIONS
   do
