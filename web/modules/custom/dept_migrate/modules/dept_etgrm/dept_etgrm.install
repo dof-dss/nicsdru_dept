@@ -93,3 +93,22 @@ function dept_etgrm_update_8002() {
 
   $pdo->exec(file_get_contents($module_path . '/inc/sql_update_node_access.sproc'));
 }
+
+/**
+ * Update UPDATE_NODE_ACCESS Sproc.
+ */
+function dept_etgrm_update_8003() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+
+  $pdo->exec('DROP PROCEDURE IF EXISTS UPDATE_NODE_ACCESS');
+  $pdo->exec(file_get_contents($module_path . '/inc/sql_update_node_access.sproc'));
+}
+
