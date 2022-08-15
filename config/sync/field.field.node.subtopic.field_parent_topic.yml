@@ -16,17 +16,10 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:node'
+  handler: views
   handler_settings:
-    target_bundles: null
-    sort:
-      field: _none
-      direction: ASC
-    behaviors:
-      views-select-list:
-        status: 0
     view:
-      args: {  }
-      display_name: entityreference_1
-      view_name: topics
+      view_name: site_topics
+      display_name: entity_reference_topics
+      arguments: {  }
 field_type: entity_reference
