@@ -114,6 +114,7 @@ class MediaWysiwygFilter extends ProcessPluginBase implements ContainerFactoryPl
     $nid = $row->getSourceProperty('nid');
     // Convert from D7 to D9 node id.
     $lookup = $this->lookupManager->lookupBySourceNodeId([$nid]);
+    $lookup = reset($lookup);
     $nid = $lookup['nid'];
 
     $value['value'] = preg_replace_callback($pattern, function ($matches) use ($messenger, $nid) {
@@ -124,9 +125,11 @@ class MediaWysiwygFilter extends ProcessPluginBase implements ContainerFactoryPl
         $tag_info = $decoder->decode($matches['tag_info'], JsonEncoder::FORMAT);
         $fid = $tag_info['fid'];
         $file_lookup = $this->lookupManager->lookupBySourceFileId([$fid]);
-        $fidd9 = reset($file_lookup)['id'];
+        $file_lookup = reset($file_lookup);
+        $fidd9 = $file_lookup['id'] ?? 0;
         $media_lookup = $this->lookupManager->lookupMediaBySourceFileId([$fid]);
-        $midd9 = reset($media_lookup)['id'];
+        $media_lookup = reset($media_lookup);
+        $midd9 = $media_lookup['id'] ?? 0;
 
         // Lookup the Migration DB and check if we are referencing an embedded
         // or file asset.
@@ -138,7 +141,7 @@ class MediaWysiwygFilter extends ProcessPluginBase implements ContainerFactoryPl
 
         $replacement_template = '';
 
-        if ($media['filemime'] === 'video/oembed') {
+        if ($media['filemime'] === 'video/oembed' && !empty($midd9)) {
           // Search for oembed/remote media which doesn't have a
           // managed file entry.
           $query = $this->connDb->select('media', 'm');
@@ -149,7 +152,7 @@ class MediaWysiwygFilter extends ProcessPluginBase implements ContainerFactoryPl
           $query->range(0, 1);
           $oembed = $query->execute()->fetchAssoc();
 
-          if ($oembed['bundle'] === 'remote_video') {
+          if (is_array($oembed) && $oembed['bundle'] === 'remote_video') {
             $replacement_template = <<<'TEMPLATE'
 <drupal-media
 data-align="center"
@@ -157,8 +160,9 @@ data-entity-type="media"
 data-entity-uuid="%s">
 </drupal-media>
 TEMPLATE;
+
+            return sprintf($replacement_template, $oembed['uuid']);
           }
-          return sprintf($replacement_template, $oembed['uuid']);
         }
 
         // Ensure we have a managed file for the embedded asset.
