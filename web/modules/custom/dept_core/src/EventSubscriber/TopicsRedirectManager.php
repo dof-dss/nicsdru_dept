@@ -88,9 +88,7 @@ class TopicsRedirectManager implements EventSubscriberInterface {
 
     $table = "{migrate_map_node_$type}";
     $result = $this->dbconn->query("SELECT destid1 FROM $table WHERE sourceid2 = :id", [':id' => $d7_id]);
-    $new_id = $result->fetchCol('destid1')[0] ?? 0;
-
-    return $new_id;
+    return $result->fetchCol(0)[0] ?? 0;
   }
 
   /**
