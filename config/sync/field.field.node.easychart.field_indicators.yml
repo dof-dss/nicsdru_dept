@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.field_indicators
     - node.type.easychart
+    - taxonomy.vocabulary.indicators
 id: node.easychart.field_indicators
 field_name: field_indicators
 entity_type: node
@@ -18,6 +19,11 @@ default_value_callback: ''
 settings:
   handler: 'default:taxonomy_term'
   handler_settings:
+    target_bundles:
+      indicators: indicators
     sort:
       field: _none
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
 field_type: entity_reference

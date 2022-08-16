@@ -73,12 +73,22 @@ process:
         plain_text: plain_text
   field_parent_subtopic:
     -
-      plugin: get
+      plugin: sub_process
       source: field_parent_subtopic
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
   field_parent_topic:
     -
-      plugin: get
+      plugin: sub_process
       source: field_parent_topic
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
   field_summary:
     -
       plugin: get

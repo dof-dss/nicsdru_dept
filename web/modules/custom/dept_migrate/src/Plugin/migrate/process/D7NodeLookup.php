@@ -68,7 +68,8 @@ class D7NodeLookup extends ProcessPluginBase implements ContainerFactoryPluginIn
     $node_metadata = $this->lookupManager->lookupBySourceNodeId($value);
 
     if (!empty($node_metadata)) {
-      return reset($node_metadata)['nid'];
+      $node_metadata = reset($node_metadata);
+      return $node_metadata['nid'] ?? 0;
     }
   }
 
