@@ -88,10 +88,10 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
             $view = Views::getView($field_settings['handler_settings']['view']['view_name']);
             $view->setDisplay($field_settings['handler_settings']['view']['display_name']);
             $display = $view->getDisplay();
-            $target_bundles = array_keys($display->options['filters']['type']['value']);
+            $target_bundles = array_keys($display->options['filters']['type']['value'] ?? []);
           }
           else {
-            $target_bundles = array_keys($field_settings['handler_settings']['target_bundles']);
+            $target_bundles = array_keys($field_settings['handler_settings']['target_bundles'] ?? []);
           }
 
           $target_entity = $field_settings['target_type'];
