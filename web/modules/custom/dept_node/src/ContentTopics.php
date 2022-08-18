@@ -35,11 +35,13 @@ class ContentTopics {
    *   The node id for an item of content.
    * @param bool $include_subtopics
    *   Option to include or exclude subtopics in the final list.
+   * @param bool $links
+   *   Option to return the topic name as a link to the canonical page for that topic.
    *
    * @return array
    *   The list of topics in [topic_id => topic_label] format.
    */
-  public function getTopics(int $node_id, bool $include_subtopics = TRUE): array {
+  public function getTopics(int $node_id, bool $include_subtopics = TRUE, bool $links = FALSE): array {
     $topics = [];
 
     if (empty($node_id)) {
@@ -53,7 +55,15 @@ class ContentTopics {
         $node_topics = $node->get('field_site_topics')->referencedEntities();
 
         foreach ($node_topics as $topic) {
-          $topics[$topic->id()] = $topic->label();
+          $name = '';
+          if ($links) {
+            $name = Link::createFromRoute($topic->label(), 'entity.node.canonical', ['node' => $topic->id()])->toString();
+          }
+          else {
+            $name = $topic->label();
+          }
+
+          $topics[$topic->id()] = $name;
         }
       }
 
@@ -62,7 +72,15 @@ class ContentTopics {
           ->referencedEntities();
 
         foreach ($node_subtopics as $subtopic) {
-          $topics[$subtopic->id()] = $subtopic->label();
+          $name = '';
+          if ($links) {
+            $name = Link::createFromRoute($subtopic->label(), 'entity.node.canonical', ['node' => $subtopic->id()])->toString();
+          }
+          else {
+            $name = $subtopic->label();
+          }
+
+          $topics[$subtopic->id()] = $name;
         }
       }
 
@@ -83,21 +101,29 @@ class ContentTopics {
    * @return array
    *   A valid render array.
    */
-  public function render(array $topics, bool $link = FALSE): array {
+  public function renderList(array $topics, bool $link = TRUE): array {
     $items = [];
+    $cache_tags = [];
+
     foreach ($topics as $id => $name) {
       if ($link) {
-        $items[] = Link::createFromRoute($name, 'entity.node.canonical', ['node' => $id]);
+        $items[] = Link::createFromRoute($name, 'entity.node.canonical', ['node' => $id])->toRenderable();
       }
       else {
         $items[] = $name;
       }
+
+      $cache_tags[] = 'node:' . $id;
     }
 
     $render = [
-      '#type' => 'item_list',
+      '#theme' => 'item_list',
       '#list_type' => 'ul',
       '#items' => $items,
+      '#wrapper_attributes' => ['class' => 'container'],
+      '#cache' => [
+        '#tags' => $cache_tags,
+      ],
     ];
 
     return $render;
