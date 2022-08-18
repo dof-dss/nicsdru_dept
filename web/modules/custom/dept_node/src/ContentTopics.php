@@ -6,6 +6,11 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Link;
 use Drupal\node\NodeInterface;
 
+/**
+ * A utility class to provide easy access to a node's topics/subtopics.
+ * Intended to reduce code duplication between backend and frontend
+ * preprocessing.
+ */
 class ContentTopics {
 
   /**
