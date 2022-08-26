@@ -1,4 +1,4 @@
-uuid: 496008cd-f1c4-47d9-9d0f-0f10b453a16b
+uuid: cdc23a61-2417-417a-8c3a-e91200af4733
 langcode: en
 status: true
 dependencies:
@@ -8,11 +8,11 @@ dependencies:
     - facets
     - system
   theme:
-    - bartik
+    - nicsdru_dept_theme
 id: publicationtype
-theme: bartik
+theme: nicsdru_dept_theme
 region: sidebar_first
-weight: -7
+weight: -8
 provider: null
 plugin: 'facet_block:publication_type'
 settings:

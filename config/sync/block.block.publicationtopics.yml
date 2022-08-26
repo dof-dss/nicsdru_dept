@@ -1,4 +1,4 @@
-uuid: 7c1b725f-e8d9-49e8-a1c0-cf724e496a71
+uuid: 3e198432-dc3c-4e3e-bc4c-0b3ad40a69f1
 langcode: en
 status: true
 dependencies:
@@ -8,16 +8,16 @@ dependencies:
     - facets
     - system
   theme:
-    - bartik
+    - nicsdru_dept_theme
 id: publicationtopics
-theme: bartik
+theme: nicsdru_dept_theme
 region: sidebar_first
-weight: -6
+weight: -7
 provider: null
 plugin: 'facet_block:publication_topics'
 settings:
   id: 'facet_block:publication_topics'
-  label: 'Publication topic'
+  label: 'Publication topics'
   label_display: visible
   provider: facets
   context_mapping: {  }
