@@ -49,14 +49,14 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
       $form['publication_attachment_type']['#default_value'] = 1;
     }
 
-    $form['#validate'][] = 'validate_publication';
+    $form['#validate'][] = 'dept_publications_validate_publication';
   }
 }
 
 /**
  * Form validation callback.
  */
-function validate_publication(&$form, FormStateInterface $form_state) {
+function dept_publications_validate_publication(&$form, FormStateInterface $form_state) {
   $values = $form_state->getValues();
 
   // Validate public and secure file attachments.

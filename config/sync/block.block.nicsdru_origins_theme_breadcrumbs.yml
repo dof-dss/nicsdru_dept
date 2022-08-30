@@ -1,0 +1,22 @@
+uuid: fa24c6ff-17a7-437c-a317-3f1256b43613
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - nicsdru_origins_theme
+_core:
+  default_config_hash: zY4RED5nWFyYPVa_Oi0mc6MKdrIu_vI5e0YDvo-0DWE
+id: nicsdru_origins_theme_breadcrumbs
+theme: nicsdru_origins_theme
+region: breadcrumb
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility: {  }

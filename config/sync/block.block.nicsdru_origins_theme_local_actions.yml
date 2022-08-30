@@ -1,0 +1,20 @@
+uuid: d59604e9-0bea-490b-84af-eccce65521a1
+langcode: en
+status: true
+dependencies:
+  theme:
+    - nicsdru_origins_theme
+_core:
+  default_config_hash: ZNYSDFtmQFGqNo3iZZFUA-8tpgDISObcADC8fjs13E8
+id: nicsdru_origins_theme_local_actions
+theme: nicsdru_origins_theme
+region: content
+weight: -20
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

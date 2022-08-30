@@ -1,17 +1,17 @@
-uuid: 4b8e5467-ede8-432c-b8a8-3c739814f460
+uuid: eb470fbb-47c7-45a8-af5e-65d55082d6ad
 langcode: en
-status: false
+status: true
 dependencies:
   module:
     - system
   theme:
-    - bartik
+    - nicsdru_origins_theme
 _core:
-  default_config_hash: NDwadleLD3YVSbDUaakxyYZyINYtkFtOVGShfq4kWy8
-id: bartik_branding
-theme: bartik
+  default_config_hash: 4VRr6ePkOEyfHLsXgR3okgR9nnmsrf-G09rjG5mYPvw
+id: nicsdru_origins_theme_branding
+theme: nicsdru_origins_theme
 region: header
-weight: -7
+weight: 0
 provider: null
 plugin: system_branding_block
 settings:
