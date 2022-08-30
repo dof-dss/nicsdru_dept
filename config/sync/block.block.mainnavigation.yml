@@ -1,19 +1,17 @@
-uuid: ad1dbcaf-9d02-41e4-b786-f53c7ee8312a
+uuid: 74623376-448e-4d86-afee-a3adabec2734
 langcode: en
-status: false
+status: true
 dependencies:
   config:
     - system.menu.main
   module:
     - system
   theme:
-    - bartik
-_core:
-  default_config_hash: ChCx7DYNUrPTt5uiRdQAPDKJQMc-_SyAQTrZh8H0o-c
-id: bartik_main_menu
-theme: bartik
+    - nicsdru_dept_theme
+id: mainnavigation
+theme: nicsdru_dept_theme
 region: primary_menu
-weight: -7
+weight: 0
 provider: null
 plugin: 'system_menu_block:main'
 settings:
@@ -22,6 +20,6 @@ settings:
   label_display: '0'
   provider: system
   level: 1
-  depth: 1
+  depth: 0
   expand_all_items: false
 visibility: {  }
