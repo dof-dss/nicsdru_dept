@@ -36,7 +36,7 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
     if (array_key_exists('group_publish', $form)) {
       $form['group_publish']['#attached']['library'][] = 'dept_node/dept_node.domain_pathauto';
     }
-    else if ($dept !== NULL && array_key_exists($dept->id(), $form['path']['widget'][0]['domain_path'])) {
+    elseif ($dept !== NULL && array_key_exists($dept->id(), $form['path']['widget'][0]['domain_path'])) {
       // Check the 'generate Domain URL' checkbox for the current domain.
       $form['path']['widget'][0]['domain_path'][$dept->id()]['pathauto']['#default_value'] = 1;
     }
