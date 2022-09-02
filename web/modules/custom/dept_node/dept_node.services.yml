@@ -1,4 +1,4 @@
 services:
   dept_node.topics:
     class: Drupal\dept_node\ContentTopics
-    arguments: ['@entity_type.manager']
+    arguments: ['@entity_type.manager', '@current_route_match']

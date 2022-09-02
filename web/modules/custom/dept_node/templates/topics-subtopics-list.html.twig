@@ -1,11 +1,11 @@
-<div class="site-topics">
+<nav class="container site-topics">
   <span class="label-inline">{{ title }}:</span>
-  <ul>
+  <ul class="site-topics--list">
   {% for item in items %}
-    <li>
+    <li class="site-topics--item{% if not loop.last %} first {% else %} last {% endif %}">
       {{ item }}
       {% if not loop.last %}, {% endif %}
     </li>
   {% endfor %}
   </ul>
-</div>
+</nav>
