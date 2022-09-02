@@ -1,0 +1,11 @@
+<div class="site-topics">
+  <span class="label-inline">{{ title }}:</span>
+  <ul>
+  {% for item in items %}
+    <li>
+      {{ item }}
+      {% if not loop.last %}, {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
+</div>
