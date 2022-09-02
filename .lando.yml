@@ -65,6 +65,10 @@ services:
     hogfrom:
       - appserver
 tooling:
+  devmode:
+    service: appserver
+    description: Clone all required external dof-dss development repositories.
+    cmd: "sh /app/.lando/scripts/setup-for-dev.sh"
   drck:
     description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
     service: appserver
