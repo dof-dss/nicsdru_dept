@@ -1,14 +1,14 @@
 uuid: c35e7033-5ff1-4fe9-9962-6874b2d57091
 langcode: en
-status: false
+status: true
 dependencies:
   module:
     - search_api_block
     - system
   theme:
-    - bartik
+    - nicsdru_dept_theme
 id: searchapiform
-theme: bartik
+theme: nicsdru_dept_theme
 region: header
 weight: 0
 provider: null

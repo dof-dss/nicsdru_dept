@@ -4,12 +4,13 @@ status: true
 dependencies:
   module:
     - dept_dev
+    - system
   theme:
     - nicsdru_dept_theme
 id: drupal7nodelink_2
 theme: nicsdru_dept_theme
 region: content
-weight: 0
+weight: -5
 provider: null
 plugin: dept_dev_drupal_7_node_link
 settings:
@@ -17,4 +18,8 @@ settings:
   label: 'Drupal 7 node link'
   label_display: visible
   provider: dept_dev
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/node/*'
