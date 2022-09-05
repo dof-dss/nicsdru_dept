@@ -116,3 +116,19 @@ function dept_node_views_query_alter(ViewExecutable $view, QueryPluginBase $quer
     $table['join']->extra[0]['value'][0] = $topic_queue_id;
   }
 }
+
+/**
+ * Implements hook_theme().
+ */
+function dept_node_theme($existing, $type, $theme, $path) {
+  return [
+    'topics_subtopics_list' => [
+      'variables' => [
+        'title' => NULL,
+        'items' => NULL,
+        'render_links' => NULL,
+        'include_subtopics' => NULL,
+      ],
+    ],
+  ];
+}

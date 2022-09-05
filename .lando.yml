@@ -14,8 +14,6 @@ config:
   config:
     php: .lando/config/php.ini
     database: .lando/config/my.cnf
-compose:
-  - docker-compose.yml
 env_file:
   - .lando/config/.env
 proxy:
@@ -67,6 +65,29 @@ services:
     hogfrom:
       - appserver
 tooling:
+  devmode:
+    service: appserver
+    description: Clone all required external dof-dss development repositories.
+    cmd: "sh /app/.lando/scripts/setup-for-dev.sh"
+  drck:
+    description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
+    service: appserver
+    cmd: /app/vendor/bin/drupal-check
+  drush:
+    server: appserver
+    cmd: /app/vendor/bin/drush -r /app/web
+  npm:
+    service: appserver
+    cmd: npm
+  phpcs:
+    description: Run PHPCS checks against all custom Drupal code
+    service: appserver
+    # Add dirs to check below, as needed.
+    cmd: /app/phpcs.sh "/app" "/app/web/modules/origins /app/web/modules/custom /app/web/themes/custom"
+  phpunit:
+    description: "Run PHPUnit tests. You can pass options, e.g. --group=sitename"
+    service: appserver
+    cmd: cd /app/web/core && /app/vendor/bin/phpunit -c /app/web/core/phpunit.xml
   xdebug-on:
     service: appserver
     description: Enable xdebug
@@ -77,33 +98,3 @@ tooling:
     description: Disable xdebug
     cmd: "rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && /etc/init.d/apache2 reload"
     user: root
-  phpunit:
-    description: "Run PHPUnit tests. You can pass options, e.g. --group=sitename"
-    service: appserver
-    cmd: cd /app/web/core && /app/vendor/bin/phpunit -c /app/web/core/phpunit.xml
-  phpcs:
-    description: Run PHPCS checks against all custom Drupal code
-    service: appserver
-    # Add dirs to check below, as needed.
-    cmd: /app/phpcs.sh "/app" "/app/web/modules/origins /app/web/modules/custom /app/web/themes/custom"
-  drck:
-    description: Run drupal-check for Drupal 9 compatibility e.g. 'lando drck ./'
-    service: appserver
-    cmd: /app/vendor/bin/drupal-check
-  drush:
-    server: appserver
-    cmd: /app/vendor/bin/drush -r /app/web
-  yarn:
-    service: appserver
-    cmd: yarn
-  nightwatch:
-    service: appserver
-    description: "Run Nightwatch.js functional tests.\n\n
-                  Usage:\n
-                  > Run a specific test with tag\n
-                  lando nightwatch --tag your-tag\n
-                  > Run a single test suite file, relative to Drupal core location\n
-                  lando nightwatch ../modules/custom/modulename/tests/src/Nightwatch/Tests/yourTestSuite.js\n
-                  > Run all tests except Core\n
-                  lando nightwatch --skiptags core\n"
-    cmd: "yarn --cwd=/app/web/core test:nightwatch"
