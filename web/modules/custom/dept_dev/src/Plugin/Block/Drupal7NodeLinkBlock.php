@@ -137,11 +137,13 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
             }
             else {
               $node_link = $domain_mappings[$domain] . '/node/' . $node_migration_data->d7nid;
-              $links[] = [
-                '#title' => $domain_mappings[$domain] . ' : ' . $node->label(),
-                '#type' => 'link',
-                '#url' => Url::fromUri($node_link),
-              ];
+              if (preg_match('/^http/', $domain)) {
+                $links[] = [
+                  '#title' => $domain_mappings[$domain] . ' : ' . $node->label(),
+                  '#type' => 'link',
+                  '#url' => Url::fromUri($node_link),
+                ];
+              }
             }
           }
         }
