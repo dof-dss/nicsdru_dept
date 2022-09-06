@@ -6,7 +6,8 @@ dependencies:
     - node
 id: disable_toc
 label: 'Disable Table of Contents'
-bundles: {  }
+bundles:
+  - article
 entity_type: node
 global: true
 flag_short: 'Disable ToC'
