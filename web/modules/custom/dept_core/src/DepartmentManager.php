@@ -6,6 +6,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\domain\DomainNegotiatorInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 
 /**
  * Service class for managing Department objects.
@@ -34,6 +35,13 @@ class DepartmentManager {
   protected $cache;
 
   /**
+   * The messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * Constructs a DepartmentManager object.
    *
    * @param \Drupal\domain\DomainNegotiatorInterface $domain_negotiator
@@ -42,11 +50,14 @@ class DepartmentManager {
    *   The entity type manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The default cache service.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
    */
-  public function __construct(DomainNegotiatorInterface $domain_negotiator, EntityTypeManagerInterface $entity_type_manager, CacheBackendInterface $cache) {
+  public function __construct(DomainNegotiatorInterface $domain_negotiator, EntityTypeManagerInterface $entity_type_manager, CacheBackendInterface $cache, MessengerInterface $messenger) {
     $this->domainNegotiator = $domain_negotiator;
     $this->entityTypeManager = $entity_type_manager;
     $this->cache = $cache;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -55,7 +66,14 @@ class DepartmentManager {
   public function getCurrentDepartment() {
     $active_domain = $this->domainNegotiator->getActiveDomain();
 
-    return $this->getDepartment($active_domain->id());
+    $dept = $this->getDepartment($active_domain->id());
+
+    // Add a UI warning if we can't resolve the Department to the active domain.
+    if ($dept === NULL) {
+      $this->messenger->addWarning('Unable to resolve Department. Check Domain hostnames or Config Split settings.');
+    }
+
+    return $dept;
   }
 
   /**

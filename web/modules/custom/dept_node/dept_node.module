@@ -36,11 +36,9 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
     if (array_key_exists('group_publish', $form)) {
       $form['group_publish']['#attached']['library'][] = 'dept_node/dept_node.domain_pathauto';
     }
-    else {
-      if (array_key_exists($dept->id(), $form['path']['widget'][0]['domain_path'])) {
-        // Check the 'generate Domain URL' checkbox for the current domain.
-        $form['path']['widget'][0]['domain_path'][$dept->id()]['pathauto']['#default_value'] = 1;
-      }
+    elseif ($dept !== NULL && array_key_exists($dept->id(), $form['path']['widget'][0]['domain_path'])) {
+      // Check the 'generate Domain URL' checkbox for the current domain.
+      $form['path']['widget'][0]['domain_path'][$dept->id()]['pathauto']['#default_value'] = 1;
     }
   }
 
@@ -117,4 +115,20 @@ function dept_node_views_query_alter(ViewExecutable $view, QueryPluginBase $quer
     $table = $query->getTableInfo('entity_subqueue__items');
     $table['join']->extra[0]['value'][0] = $topic_queue_id;
   }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function dept_node_theme($existing, $type, $theme, $path) {
+  return [
+    'topics_subtopics_list' => [
+      'variables' => [
+        'title' => NULL,
+        'items' => NULL,
+        'render_links' => NULL,
+        'include_subtopics' => NULL,
+      ],
+    ],
+  ];
 }

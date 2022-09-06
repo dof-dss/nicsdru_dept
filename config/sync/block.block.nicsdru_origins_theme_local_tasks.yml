@@ -1,0 +1,22 @@
+uuid: 22055982-a5a7-4677-a3eb-44d33f7129d0
+langcode: en
+status: true
+dependencies:
+  theme:
+    - nicsdru_origins_theme
+_core:
+  default_config_hash: We9OYEMa8XYCAESJJTtrBGMtunp7op8u4YefcZAKGms
+id: nicsdru_origins_theme_local_tasks
+theme: nicsdru_origins_theme
+region: content
+weight: -40
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: true
+visibility: {  }

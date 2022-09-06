@@ -1,0 +1,18 @@
+uuid: 84ce94cb-24e8-4416-ad6a-ff59e5870143
+langcode: en
+status: true
+dependencies:
+  theme:
+    - nicsdru_dept_theme
+id: primaryadminactions
+theme: nicsdru_dept_theme
+region: top_banner
+weight: -8
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

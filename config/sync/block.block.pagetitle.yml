@@ -1,0 +1,24 @@
+uuid: 2fe57ad7-2bfb-4cde-8736-c7aef131d81c
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - nicsdru_dept_theme
+id: pagetitle
+theme: nicsdru_dept_theme
+region: content
+weight: -8
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: "<front>\r\n/node/*\r\n/taxonomy/term/*\r\n/publications*"

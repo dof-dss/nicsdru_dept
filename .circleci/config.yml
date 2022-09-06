@@ -3,7 +3,12 @@ version: 2.1
 # Default docker image. (excludes functional_tests)
 default_docker_image: &docker_image
   docker:
-    - image: cimg/php:8.1.0-browsers
+    - image: thecodingmachine/php:8.1-v4-apache-node14
+      environment:
+        PLATFORM_REGION: "uk-1.platform.sh"
+        PROJECT_ROOT: "/home/docker/project"
+        PHP_EXTENSION_GD: 1
+        PHP_INI_MEMORY_LIMIT: 1g
 
 workflows:
   version: 2
@@ -60,12 +65,9 @@ jobs:
   # Tests the integrity of the build, stores the results in a workspace for re-use in later jobs.
   build:
     <<: *docker_image
-    environment:
-      PLATFORM_REGION: "uk-1.platform.sh"
     steps:
-      - hosts_keyscan
       - checkout_code
-      - composer_tasks
+      - composer_tasks__no_cache
       - persist_to_workspace:
           root: ./
           paths:
@@ -73,9 +75,6 @@ jobs:
   # Test for coding standards - will inherit the workspace/filesystem changes from build step, above.
   coding_standards:
     <<: *docker_image
-    environment:
-      PROJECT_ROOT: "/home/circleci/project"
-      PLATFORM_REGION: "uk-1.platform.sh"
     steps:
       - attach_workspace:
           at: ./
@@ -89,8 +88,6 @@ jobs:
 
   deprecated_code:
     <<: *docker_image
-    environment:
-      PROJECT_ROOT: "/home/circleci/project"
     steps:
       - attach_workspace:
           at: ./
@@ -155,7 +152,6 @@ jobs:
       GIT_COMMITTER_NAME: "Circle CI"
       GIT_AUTHOR_NAME: "Circle CI"
       EDGE_BUILD_BRANCH: "DEPT-edge"
-      PLATFORM_REGION: "uk-1.platform.sh"
     steps:
       - hosts_keyscan
       - checkout_code
@@ -213,9 +209,6 @@ commands:
   checkout_code:
     description: "Handle composer access tokens, SSH key fingerprints and code checkout"
     steps:
-      - run:
-          name: Add GitHub access token for composer
-          command: echo 'composer config -g github-oauth.github.com $GITHUB_TOKEN' >> $BASH_ENV
       # Add SSH user key so we can access related repositories as part of our initial clone + composer install command.
       # 65:4e >> GitHub user key fingerprint.
       - add_ssh_keys:
@@ -227,14 +220,13 @@ commands:
     steps:
       - run:
           name: Validate composer.json and composer.lock file for consistency
-          command: composer validate --no-check-all
+          command: composer validate --no-check-all --strict
       - restore_cache:
           keys:
             - composer-{{ checksum "composer.lock" }}
       - run:
           name: Fetch dependencies with composer
-          command: |
-            composer install --no-interaction --optimize-autoloader
+          command: composer install --no-interaction --optimize-autoloader
       - save_cache:
           key: composer-{{ checksum "composer.lock" }}
           paths:
@@ -247,8 +239,7 @@ commands:
           command: composer validate --no-check-all --strict
       - run:
           name: Fetch dependencies with composer
-          command: |
-            composer install --no-interaction --optimize-autoloader
+          command: composer install --no-interaction --optimize-autoloader
   composer_tasks__edge_packages:
     description: "Switch dof-dss packages to HEAD on development branch"
     steps:
