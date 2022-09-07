@@ -169,7 +169,7 @@ display:
             operator: search_api_fulltext_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: search_api_fulltext
+            identifier: search
             required: false
             remember: false
             multiple: false
@@ -249,6 +249,10 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      title: Consultations
+      defaults:
+        title: false
+      exposed_block: true
       display_extenders: {  }
       path: consultations
     cache_metadata:
