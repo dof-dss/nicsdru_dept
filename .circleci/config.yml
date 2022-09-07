@@ -198,10 +198,10 @@ jobs:
       - run:
           name: Rebuild the Solr index
           command: |
-            platform environment:drush sapi-rt -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
-            platform environment:drush sapi-c -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
-            platform environment:drush sapi-r -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
-            platform environment:drush sapi-i -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
+            platform ssh -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-rt
+            platform ssh -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-c
+            platform ssh -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-r
+            platform ssh -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-i
           when: always
 
 # Re-usable commands.
