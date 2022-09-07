@@ -154,15 +154,11 @@ function dept_node_preprocess_node(array &$variables) {
     // Rewrite the published date label, a tiny bit.
     if (!empty($variables['content']['field_published_date'])) {
       $variables['content']['field_published_date']['#title'] = t('Published');
-//      dump($variables['content']);
-//      die();
     }
 
-    /**
-     * Preprocess variable to examine consultation end date relative to
-     * the current request timestamp and determine whether it is open
-     * or whether it has already closed.
-     */
+    // Preprocess variable to examine consultation end date relative to
+    // the current request timestamp and determine whether it is open
+    // or whether it has already closed.
     $variables['content']['consultation_status'] = [
       '#type' => 'html_tag',
       '#tag' => 'span',
