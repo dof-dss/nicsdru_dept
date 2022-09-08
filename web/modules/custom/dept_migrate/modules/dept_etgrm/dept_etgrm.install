@@ -112,3 +112,20 @@ function dept_etgrm_update_8003() {
   $pdo->exec(file_get_contents($module_path . '/inc/sql_update_node_access.sproc'));
 }
 
+/**
+ * Introduce DELETE_STALE_IMPORTS sproc.
+ */
+function dept_etgrm_update_8004() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+
+  $pdo->exec('DROP PROCEDURE IF EXISTS DELETE_STALE_IMPORTS');
+  $pdo->exec(file_get_contents($module_path . '/inc/sql_delete_stale_imports.sproc'));
+}
