@@ -17,7 +17,7 @@ dependencies:
     - field.field.node.consultation.field_summary
     - node.type.consultation
   module:
-    - datetime_range
+    - datetime
     - layout_builder
     - text
     - user
@@ -30,70 +30,33 @@ targetEntityType: node
 bundle: consultation
 mode: search_result
 content:
-  body:
+  field_published_date:
+    type: datetime_default
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: medium_date
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_summary:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 101
-    region: content
-  content_moderation_control:
-    settings: {  }
-    third_party_settings: {  }
-    weight: -20
-    region: content
-  field_attachment:
-    type: entity_reference_entity_view
-    label: above
-    settings:
-      view_mode: default
-      link: false
-    third_party_settings: {  }
-    weight: 106
-    region: content
-  field_consultation_dates:
-    type: daterange_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-      separator: '-'
-    third_party_settings: {  }
-    weight: 105
-    region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 104
-    region: content
-  field_site_topics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 103
-    region: content
-  field_summary:
-    type: text_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 102
-    region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
+    weight: 0
     region: content
 hidden:
+  body: true
+  content_moderation_control: true
+  field_attachment: true
+  field_consultation_dates: true
   field_email_address: true
   field_global_topics: true
   field_postal: true
-  field_published_date: true
   field_respond_online: true
+  field_site_subtopics: true
+  field_site_topics: true
   langcode: true
+  links: true
   search_api_excerpt: true

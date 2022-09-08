@@ -12,6 +12,12 @@ source:
   node_type: link
   track_changes: true
 process:
+  nid:
+    - plugin: skip_on_value
+      method: row
+      source: tnid
+      value:
+        - 45346
   langcode:
     - plugin: default_value
       source: langcode
