@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\group\Entity\GroupInterface;
 use Drupal\group\GroupMembershipLoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -392,6 +393,11 @@ class NodeForm extends ContentEntityForm {
       foreach ($groups as $group_id) {
         /** @var \Drupal\group\Entity\GroupInterface $group */
         $group = $group_storage->load($group_id);
+
+        if (!$group instanceof GroupInterface) {
+          continue;
+        }
+
         // Check if the content plugin is enabled for the current group.
         if ($group->getGroupType()->hasContentPlugin($plugin_id)) {
           $group->addContent($node, $plugin_id);
@@ -408,6 +414,10 @@ class NodeForm extends ContentEntityForm {
       foreach (array_diff_key($groups, $entity_groups) as $id => $label) {
         /** @var \Drupal\group\Entity\GroupInterface $group */
         $group = $group_storage->load($id);
+
+        if (!$group instanceof GroupInterface) {
+          continue;
+        }
         // Check if the content plugin is enabled for the current group.
         if ($group->getGroupType()->hasContentPlugin($plugin_id)) {
           $group->addContent($this->entity, $plugin_id);
@@ -418,6 +428,9 @@ class NodeForm extends ContentEntityForm {
       foreach (array_diff_key($entity_groups, $groups) as $id => $label) {
         /** @var \Drupal\group\Entity\GroupInterface $group */
         $group = $group_storage->load($id);
+        if (!$group instanceof GroupInterface) {
+          continue;
+        }
         $group_entity_relations = $group->getContentByEntityId($plugin_id, $node->id());
         foreach ($group_entity_relations as $relation) {
           /** @var \Drupal\group\Entity\GroupContentInterface $relation */
