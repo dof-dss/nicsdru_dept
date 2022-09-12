@@ -3,8 +3,9 @@ _core:
 entity_types:
   block_content: '0'
   domain_path: '0'
-  group_content: '0'
+  entity_subqueue: '0'
   group: '0'
+  group_content: '0'
   media: '0'
   menu_link_content: '0'
   node: '1'
@@ -12,5 +13,6 @@ entity_types:
   shortcut: '0'
   taxonomy_term: '0'
   user: '0'
-hide_path_alias_ui: true
+  webform_submission: '0'
+hide_path_alias_ui: false
 alias_title: name
