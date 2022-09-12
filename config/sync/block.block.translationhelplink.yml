@@ -1,0 +1,25 @@
+uuid: a9c7cef3-588f-4eba-891a-1c76986874d4
+langcode: en
+status: true
+dependencies:
+  module:
+    - origins_translations
+    - system
+  theme:
+    - nicsdru_dept_theme
+id: translationhelplink
+theme: nicsdru_dept_theme
+region: bottom_banner
+weight: 0
+provider: null
+plugin: origins_translations_block
+settings:
+  id: origins_translations_block
+  label: 'Translation help'
+  label_display: visible
+  provider: origins_translations
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: /articles/translation-help
