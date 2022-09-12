@@ -198,10 +198,10 @@ jobs:
       - run:
           name: Rebuild the Solr index
           command: |
-            platform environment:drush sapi-rt -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
-            platform environment:drush sapi-c -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
-            platform environment:drush sapi-r -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
-            platform environment:drush sapi-i -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH
+            platform ssh -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-rt
+            platform ssh -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-c
+            platform ssh -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-r
+            platform ssh -p $PLATFORM_PROJECT_ID -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-i
           when: always
 
 # Re-usable commands.
@@ -247,8 +247,9 @@ commands:
           name: Switch dof-dss packages to HEAD on develelopment branch
           command: |
             composer require dof-dss/nicsdru_origins_theme:dev-development \
-                              dof-dss/nicsdru_origins_modules:dev-development \
-                                dof-dss/nicsdru_origins_theme:dev-development
+              dof-dss/nicsdru_origins_modules:dev-development \
+                dof-dss/nicsdru_origins_theme:dev-development \
+                  dof-dss/nicsdru_dept_theme:dev-development
   hosts_keyscan:
     description: "Keyscan for hosts that require SSH access"
     steps:

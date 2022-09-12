@@ -19,15 +19,21 @@ targetEntityType: node
 bundle: article
 mode: default
 content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
   field_summary:
     type: text_default
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
 hidden:
-  body: true
   content_moderation_control: true
   field_global_topics: true
   field_site_subtopics: true
