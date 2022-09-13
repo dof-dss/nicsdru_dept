@@ -5,13 +5,14 @@ dependencies:
   config:
     - field.field.node.contact.body
     - field.field.node.contact.field_map
+    - field.field.node.contact.field_next_audit_due
     - field.field.node.contact.field_site_subtopics
     - field.field.node.contact.field_site_topics
     - node.type.contact
-    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
+    - datetime
     - google_map_field
     - path
     - scheduler
@@ -40,6 +41,12 @@ content:
   field_map:
     type: google_map_field_default
     weight: 26
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_next_audit_due:
+    type: datetime_default
+    weight: 1000
     region: content
     settings: {  }
     third_party_settings: {  }
