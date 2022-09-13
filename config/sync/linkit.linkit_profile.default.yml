@@ -18,7 +18,7 @@ matchers:
       group_by_bundle: true
       substitution_type: canonical
       limit: 100
-      include_unpublished: false
+      include_unpublished: true
       result_description: ''
     weight: 0
   494e7f56-8987-44de-9821-92a2e8ccd00b:
@@ -27,7 +27,7 @@ matchers:
     settings:
       metadata: ''
       bundles:
-        site_themes: site_themes
+        global_topics: global_topics
       group_by_bundle: true
       substitution_type: canonical
       limit: 100
