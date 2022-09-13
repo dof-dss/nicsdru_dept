@@ -121,6 +121,10 @@ class EtgrmCommands extends DrushCommands {
     $query = $pdo->query('call UPDATE_NODE_ACCESS()');
     $this->io()->writeln(" ✅");
 
+    $this->io()->write("Tidying up any stale previous timestamped imports");
+    $query = $pdo->query('call DELETE_STALE_IMPORTS(1000)');
+    $this->io()->writeln(" ✅");
+
     $conf->set('processed_ts', $ts);
     $conf->save();
 

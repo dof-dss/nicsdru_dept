@@ -11,3 +11,4 @@ parameters:
   topic_route_patterns:
     - /publications/(topic)/(\d+)
     - /publications/(subtopic)/(\d+)
+    - /consultations/(topic)/(\d+)
