@@ -1,7 +1,16 @@
 uuid: 5fd87ca1-42ca-4e23-9e96-283a2bdc30a4
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.filtered_html
+    - filter.format.filtered_html_with_no_images
+  module:
+    - filter
+    - node
+    - path
+    - pathauto
+    - system
 _core:
   default_config_hash: btW6TFHajhy7Eo6YUvdFiPh4TcPggo8GBXYctjV6zag
 id: authenticated
