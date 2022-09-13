@@ -84,6 +84,7 @@ type_settings:
       label: 'Quick Publish'
       from:
         - draft
+        - published
       to: published
       weight: -1
     reject:
@@ -110,12 +111,6 @@ type_settings:
         - draft
       to: needs_review
       weight: -2
-    unpublish:
-      label: Unpublish
-      from:
-        - published
-      to: needs_review
-      weight: 2
   entity_types:
     node:
       - actions
