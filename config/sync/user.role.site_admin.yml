@@ -1,7 +1,22 @@
 uuid: 72baa52b-fb14-4e38-bed1-127746dfe5a7
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.full_html
+    - media.type.audio
+    - media.type.document
+    - media.type.image
+    - media.type.remote_video
+    - media.type.video
+    - node.type.article
+    - node.type.page
+  module:
+    - filter
+    - media
+    - node
+    - system
+    - taxonomy
 id: site_admin
 label: 'Site admin'
 weight: 5

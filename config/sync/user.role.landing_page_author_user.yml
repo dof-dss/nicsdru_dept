@@ -1,7 +1,11 @@
 uuid: d9f9ce97-7662-4034-846f-1c7cce1d1933
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.filtered_html_with_templates
+  module:
+    - filter
 id: landing_page_author_user
 label: 'landing page author user'
 weight: 4

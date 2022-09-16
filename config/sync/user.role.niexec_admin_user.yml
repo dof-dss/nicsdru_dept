@@ -1,7 +1,9 @@
 uuid: ef04125e-e903-4b05-8cbe-fa2e7be604ca
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - entityqueue
 id: niexec_admin_user
 label: 'niexec admin user'
 weight: 12

@@ -1,7 +1,10 @@
 uuid: 9dce0c6a-a065-4691-af0d-8d1e2ad33c73
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - eu_cookie_compliance
+    - system
 _core:
   default_config_hash: pq_mEIu_B4widZN7Ap81iCJSjShFFdcL0jEiCi8VrDk
 id: anonymous
@@ -11,6 +14,7 @@ is_admin: false
 permissions:
   - 'access content'
   - 'diff view changes'
+  - 'display eu cookie compliance popup'
   - use_search_api_live_results
   - 'view field_external_publication'
   - 'view files'

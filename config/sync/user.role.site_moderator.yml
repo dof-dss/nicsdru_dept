@@ -1,7 +1,18 @@
 uuid: 02a1c708-d4b2-45e1-b831-70727aae2a91
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - media.type.audio
+    - media.type.document
+    - media.type.image
+    - media.type.remote_video
+    - media.type.video
+    - node.type.article
+    - node.type.page
+  module:
+    - media
+    - node
 id: site_moderator
 label: 'Site moderator'
 weight: 4

@@ -43,6 +43,15 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
     }
   }
 
+  $docs_field_ids = [
+    'field_attachment',
+    'field_publication_files',
+    'field_publication_secure_files',
+  ];
+
+  if (!empty(array_intersect(array_keys($form), $docs_field_ids))) {
+    $form['#attached']['library'][] = 'nicsdru_origins_theme/media_library_styles';
+  }
 }
 
 /**
