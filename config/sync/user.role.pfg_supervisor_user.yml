@@ -1,7 +1,15 @@
 uuid: 0ea7e20a-59e3-443c-9ae8-38014d578132
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - node.type.actions
+    - node.type.case_study
+    - node.type.easychart
+    - node.type.infogram
+  module:
+    - easychart
+    - node
 id: pfg_supervisor_user
 label: 'PfG supervisor user'
 weight: 7

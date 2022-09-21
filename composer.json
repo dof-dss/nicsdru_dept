@@ -65,6 +65,7 @@
         "dof-dss/nicsdru_origins_theme": "^0.4.0",
         "drupal/admin_toolbar": "^3.0",
         "drupal/adminimal_theme": "^1.6",
+        "drupal/antibot": "^2.0",
         "drupal/chosen": "^3.0",
         "drupal/config_delete": "^1.17",
         "drupal/config_filter": "^2.2",
@@ -221,7 +222,8 @@
         "patches": {
             "drupal/core": {
                 "Prevent leftover fields from causing errors like 'Call to a member function getLabel() after enabling layout_builder'": "https://www.drupal.org/files/issues/2020-01-20/2985882-53.patch",
-                "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch"
+                "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch",
+                "[IGNORE] Composer-friendly patches for filename sanitation while #2492171 awaits #3032390 (https://www.drupal.org/project/drupal/issues/2492171#comment-14173724)": "https://www.drupal.org/files/issues/2021-07-26/2492171-311.patch"
             },
             "drupal/easy_install": {
                 "Handle missing core version": "https://www.drupal.org/files/issues/2019-12-19/easy_install_core_version-3101883-0.patch"
