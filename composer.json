@@ -65,6 +65,7 @@
         "dof-dss/nicsdru_origins_theme": "^0.4.0",
         "drupal/admin_toolbar": "^3.0",
         "drupal/adminimal_theme": "^1.6",
+        "drupal/antibot": "^2.0",
         "drupal/chosen": "^3.0",
         "drupal/config_delete": "^1.17",
         "drupal/config_filter": "^2.2",
@@ -221,7 +222,8 @@
         "patches": {
             "drupal/core": {
                 "Prevent leftover fields from causing errors like 'Call to a member function getLabel() after enabling layout_builder'": "https://www.drupal.org/files/issues/2020-01-20/2985882-53.patch",
-                "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch"
+                "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch",
+                "[IGNORE] Composer-friendly patches for filename sanitation while #2492171 awaits #3032390 (https://www.drupal.org/project/drupal/issues/2492171#comment-14173724)": "https://www.drupal.org/files/issues/2021-07-26/2492171-311.patch"
             },
             "drupal/easy_install": {
                 "Handle missing core version": "https://www.drupal.org/files/issues/2019-12-19/easy_install_core_version-3101883-0.patch"
@@ -248,7 +250,8 @@
                 "Fatal error when un-checking the \"Provide a menu link\" checkbox on a node form": "https://git.drupalcode.org/project/group_content_menu/-/merge_requests/1.diff"
             },
             "drupal/group": {
-              "How to migrate content into group and group content": "https://www.drupal.org/files/issues/2020-02-17/groupcontent-disable-during-migration_0.patch"
+              "How to migrate content into group and group content": "https://www.drupal.org/files/issues/2020-02-17/groupcontent-disable-during-migration_0.patch",
+              "Access to Revisions of Group Content is Broken": "https://www.drupal.org/files/issues/2022-03-30/group-3256998-35.patch"
             },
             "drupal/devel": {
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://raw.githubusercontent.com/politsin/snipets/master/patch/kint.patch"

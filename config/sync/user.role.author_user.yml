@@ -1,7 +1,12 @@
 uuid: cd7d3cea-7461-478e-b04e-93339f535985
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.filtered_html
+    - filter.format.filtered_html_with_no_images
+  module:
+    - filter
 _core:
   default_config_hash: 3Ozx7iL-HRO465AnGS4QvafYPacfOKCsg_3eLgClUAg
 id: author_user
