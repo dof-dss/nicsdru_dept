@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - entityqueue.entity_queue.topics_dept_daera
+    - entityqueue.entity_queue.topics_dept_nigov
     - field.storage.node.field_summary
     - node.type.topic
   module:
@@ -234,7 +234,7 @@ display:
           entity_type: node
           plugin_id: entity_queue
           required: true
-          limit_queue: dept_topics_daera
+          limit_queue: topics_dept_nigov
       header: {  }
       footer: {  }
       display_extenders: {  }
@@ -246,7 +246,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:entityqueue.entity_queue.dept_topics_daera'
+        - 'config:entityqueue.entity_queue.topics_dept_nigov'
         - 'config:field.storage.node.field_summary'
         - entity_field_info
         - views_data
@@ -266,7 +266,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:entityqueue.entity_queue.dept_topics_daera'
+        - 'config:entityqueue.entity_queue.topics_dept_nigov'
         - 'config:field.storage.node.field_summary'
         - entity_field_info
         - views_data
