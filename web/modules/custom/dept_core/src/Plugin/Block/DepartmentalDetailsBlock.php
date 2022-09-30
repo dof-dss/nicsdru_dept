@@ -98,13 +98,20 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
    */
   public function build() {
     $dept = $this->departmentManager->getCurrentDepartment();
+    $build['content'] = [];
 
-    $build['content'] = [
-      '#markup' => call_user_func([
-        $dept,
-        $this->getConfiguration()['display_field'],
-      ]),
-    ];
+    $field_data = call_user_func([
+      $dept,
+      $this->getConfiguration()['display_field']]);
+
+    // Bit of a hack here to determine if field data was returned. This problem
+    // arose on edge and throws a WSOD with the error "TypeError: strlen():
+    // Argument #1 ($string) must be of type string, array given in strlen()"
+    // but unable to reproduce locally.
+    if (array_key_exists("field_name", $field_data)) {
+      $build['content'] = $field_data;
+    }
+
     return $build;
   }
 
