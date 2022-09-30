@@ -102,7 +102,8 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
 
     $field_data = call_user_func([
       $dept,
-      $this->getConfiguration()['display_field']]);
+      $this->getConfiguration()['display_field'],
+    ]);
 
     // Bit of a hack here to determine if field data was returned. This problem
     // arose on edge and throws a WSOD with the error "TypeError: strlen():
