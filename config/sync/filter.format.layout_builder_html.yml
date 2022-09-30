@@ -4,8 +4,8 @@ status: true
 dependencies:
   module:
     - cookie_content_blocker
+    - dept_content_processors
     - linkit
-    - media
     - noreferrer
     - origins_common
     - token_filter
@@ -62,3 +62,20 @@ filters:
     status: true
     weight: 10
     settings: {  }
+  rel_to_abs_url:
+    id: rel_to_abs_url
+    provider: dept_content_processors
+    status: true
+    weight: 100
+    settings:
+      process_domains:
+        1: '1'
+        10: '0'
+        2: '0'
+        3: '0'
+        4: '0'
+        5: '0'
+        6: '0'
+        7: '0'
+        8: '0'
+        9: '0'
