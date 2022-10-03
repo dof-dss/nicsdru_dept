@@ -5,16 +5,17 @@ dependencies:
   config:
     - field.storage.node.body
     - field.storage.node.field_global_topics
-    - field.storage.node.field_publication_type
     - field.storage.node.field_published_date
-    - field.storage.node.field_summary
     - field.storage.node.field_site_topics
+    - field.storage.node.field_summary
+    - field.storage.node.field_publication_type
     - search_api.server.default
   module:
     - search_api_solr
-    - taxonomy
     - node
     - user
+    - taxonomy
+    - group_extras
     - scheduler
     - search_api
 third_party_settings:
@@ -105,6 +106,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_summary
+  gids:
+    label: 'Groups Id'
+    datasource_id: 'entity:node'
+    property_path: gids
+    type: integer
+    dependencies:
+      module:
+        - group_extras
   global_topics_id:
     label: 'Global topics » Taxonomy term » Term ID'
     datasource_id: 'entity:node'
@@ -170,7 +179,7 @@ field_settings:
       module:
         - node
   status:
-    label: null
+    label: status
     datasource_id: 'entity:node'
     property_path: status
     type: boolean
@@ -210,6 +219,7 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  auto_aggregated_fulltext_field: {  }
   content_access:
     weights:
       preprocess_query: -30

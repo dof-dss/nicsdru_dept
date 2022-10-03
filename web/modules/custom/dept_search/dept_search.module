@@ -5,6 +5,8 @@
  * Search related overrides and preprocessing.
  */
 
+use Drupal\facets\FacetInterface;
+
 /**
  * Implements hook_form_FORM_ID_alter().
  */
@@ -33,5 +35,27 @@ function dept_search_preprocess_block(&$variables) {
       '#value' => t('Search news releases and choose filters to show only the results you want'),
       '#weight' => -1,
     ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_facets_item_list().
+ */
+function dept_search_preprocess_facets_item_list(array &$variables) {
+  /** @var \Drupal\facets\FacetInterface $facet */
+  $facet = $variables['facet'];
+
+  if ($facet->id() === 'groups' && !empty($variables['items'])) {
+    $depts = \Drupal::service('department.manager')->getAllDepartments();
+    foreach ($variables['items'] as &$link) {
+      $facet_group_id = $link['#title']['#raw_value'];
+      foreach ($depts as $dept) {
+        /** @var \Drupal\dept_core\Department $dept */
+        if ($dept->groupId() === $facet_group_id) {
+          // Replace the group id value with the dept name.
+          $link['#title']['#value'] = $dept->name();
+        }
+      }
+    }
   }
 }
