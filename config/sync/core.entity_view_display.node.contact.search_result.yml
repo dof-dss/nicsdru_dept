@@ -31,11 +31,6 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  content_moderation_control:
-    settings: {  }
-    third_party_settings: {  }
-    weight: -20
-    region: content
   field_map:
     type: google_map_field_default
     label: above
@@ -44,6 +39,7 @@ content:
     weight: 1
     region: content
 hidden:
+  content_moderation_control: true
   field_next_audit_due: true
   field_site_subtopics: true
   field_site_topics: true
