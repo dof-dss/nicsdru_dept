@@ -237,7 +237,20 @@ display:
         options:
           view_modes:
             'entity:node':
+              application: search_result
+              article: search_result
+              consultation: search_result
+              contact: search_result
+              landing_page: search_result
               news: search_result
+              page: search_result
+              profile: search_result
+              project: search_result
+              protected_area: search_result
+              publication: search_result
+              subtopic: search_result
+              topic: search_result
+              ual: search_result
       query:
         type: search_api_query
         options:
