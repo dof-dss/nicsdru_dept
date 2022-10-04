@@ -113,7 +113,7 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
           $node_migration_data = $result->fetch();
 
           // Iterate all domains and generate links.
-          /** @phpstan-ignore-next-line */
+          // @phpstan-ignore-next-line
           $domains = explode('-', $node_migration_data->domains);
           $domain_mappings = $this->configFactory->get('dept_dev.settings')->get('node_source_domains');
 
@@ -126,7 +126,7 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
                 if (substr($domain_map, 0, 4) !== "http") {
                   continue;
                 }
-                /** @phpstan-ignore-next-line */
+                // @phpstan-ignore-next-line
                 $node_link = $domain_map . '/node/' . $node_migration_data->d7nid;
 
                 $links[] = [
@@ -138,7 +138,7 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
               break;
             }
             else {
-              /** @phpstan-ignore-next-line */
+              // @phpstan-ignore-next-line
               $node_link = $domain_mappings[$domain] . '/node/' . $node_migration_data->d7nid;
               if (preg_match('/^http/', $domain)) {
                 $links[] = [
