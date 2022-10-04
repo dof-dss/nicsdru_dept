@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6ca3b0a8ea51848ea451551880dd4100",
+    "content-hash": "08b15043f426f8b2d900f484c8467522",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1964,6 +1964,45 @@
                 "source": "https://github.com/dof-dss/nicsdru_dept_theme/tree/0.0.1"
             },
             "time": "2022-08-25T15:23:13+00:00"
+        },
+        {
+            "name": "dof-dss/nicsdru_nidirect_theme",
+            "version": "2.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dof-dss/nicsdru_nidirect_theme.git",
+                "reference": "b09b688011d9f97cf39e8a436ac8cbe1e6948941"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_nidirect_theme/zipball/b09b688011d9f97cf39e8a436ac8cbe1e6948941",
+                "reference": "b09b688011d9f97cf39e8a436ac8cbe1e6948941",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "type": "drupal-custom-theme",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Corbett",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Drupal 8 theme for nidirect website",
+            "homepage": "https://github.com/dof-dss/nicsdru_nidirect_theme",
+            "keywords": [
+                "drupal",
+                "theme"
+            ],
+            "support": {
+                "source": "https://github.com/dof-dss/nicsdru_nidirect_theme/tree/2.1.5"
+            },
+            "time": "2022-09-01T12:50:06+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
