@@ -104,6 +104,7 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
       ],
     ];
 
+    // Call the display field method on the departmental class.
     $field_data = call_user_func([
       $dept,
       $this->getConfiguration()['display_field'],
