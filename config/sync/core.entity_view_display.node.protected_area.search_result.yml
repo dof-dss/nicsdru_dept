@@ -15,7 +15,6 @@ dependencies:
     - node.type.protected_area
   module:
     - layout_builder
-    - options
     - user
 third_party_settings:
   layout_builder:
@@ -26,9 +25,7 @@ targetEntityType: node
 bundle: protected_area
 mode: search_result
 content:
-  field_county:
-    type: list_default
-    label: inline
+  search_api_excerpt:
     settings: {  }
     third_party_settings: {  }
     weight: 0
@@ -37,6 +34,7 @@ hidden:
   body: true
   content_moderation_control: true
   field_council: true
+  field_county: true
   field_protected_area_documents: true
   field_protected_area_feature: true
   field_protected_area_type: true
@@ -44,4 +42,3 @@ hidden:
   field_site_topics: true
   langcode: true
   links: true
-  search_api_excerpt: true
