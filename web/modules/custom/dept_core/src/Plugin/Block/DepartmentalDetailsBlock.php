@@ -98,7 +98,11 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
    */
   public function build() {
     $dept = $this->departmentManager->getCurrentDepartment();
-    $build = [];
+    $build = [
+      '#cache' => [
+        'tags' => ['department_' . $dept->groupId()],
+      ],
+    ];
 
     $field_data = call_user_func([
       $dept,
