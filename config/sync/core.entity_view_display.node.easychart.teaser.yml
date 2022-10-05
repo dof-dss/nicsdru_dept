@@ -17,14 +17,10 @@ id: node.easychart.teaser
 targetEntityType: node
 bundle: easychart
 mode: teaser
-content:
-  content_moderation_control:
-    settings: {  }
-    third_party_settings: {  }
-    weight: -20
-    region: content
+content: {  }
 hidden:
   body: true
+  content_moderation_control: true
   easychart: true
   field_chart_taxonomy: true
   field_indicators: true
