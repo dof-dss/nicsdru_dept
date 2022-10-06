@@ -1,4 +1,4 @@
-uuid: 9eb3d61b-6b59-4464-b27d-ca0a2e26122d
+uuid: 889bec90-6327-4c11-a323-56e5c58d83e9
 langcode: en
 status: true
 dependencies:
@@ -11,16 +11,16 @@ dependencies:
 third_party_settings:
   facets_pretty_paths:
     coder: default_coder
-id: groups
-name: Groups
+id: group
+name: Group
 weight: 0
 min_count: 1
 missing: false
 missing_label: others
-url_alias: dept
+url_alias: group
 facet_source_id: 'search_api:views_page__press_release_search__pr_search_page'
-field_identifier: gids
-query_operator: and
+field_identifier: group_id
+query_operator: or
 hard_limit: 0
 exclude: false
 use_hierarchy: false
@@ -42,9 +42,7 @@ widget:
       show_less_label: 'Show fewer'
       show_more_label: 'Show more'
 empty_behavior:
-  behavior: text
-  text_format: plain_text
-  text: 'No group facet'
+  behavior: none
 only_visible_when_facet_source_is_visible: true
 show_only_one_result: false
 show_title: false
@@ -54,7 +52,7 @@ processor_configs:
     weights:
       sort: 20
     settings:
-      sort: DESC
+      sort: ASC
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:

@@ -51,24 +51,23 @@ class DepartmentPathSubscriber implements EventSubscriberInterface {
 
     if ($active_dept->name() === 'NIGov') {
       // NIGOV would use /press-releases instead.
-      if ($path === '/news') {
+      if (preg_match('|^/news|', $path)) {
         $response->setStatusCode(404);
+        $cache_options = new CacheableMetadata();
+        $cache_options->setCacheContexts(['url.site']);
+        $response->addCacheableDependency($cache_options);
+        $event->setResponse($response);
       }
     }
     else {
       // Non-NIGOV sites would use /news so return 404 for this path.
-      if ($path === '/press-releases') {
+      if (preg_match('|^/press-releases|', $path)) {
         $response->setStatusCode(404);
+        $cache_options = new CacheableMetadata();
+        $cache_options->setCacheContexts(['url.site']);
+        $response->addCacheableDependency($cache_options);
+        $event->setResponse($response);
       }
-    }
-
-    // Always add a url.site cache context for anything we've touched.
-    $touched_response = $response->getStatusCode() != 200;
-    if ($touched_response) {
-      $cache_options = new CacheableMetadata();
-      $cache_options->setCacheContexts(['url.site']);
-      $response->addCacheableDependency($cache_options);
-      $event->setResponse($response);
     }
   }
 
@@ -76,7 +75,7 @@ class DepartmentPathSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
-    $events[KernelEvents::RESPONSE][] = ['onKernelResponseCheckGroupPath'];
+    $events[KernelEvents::RESPONSE][] = ['onKernelResponseCheckGroupPath', 5];
     return $events;
   }
 

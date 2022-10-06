@@ -17,47 +17,39 @@ dependencies:
     - node.type.news
   module:
     - datetime
-    - text
     - user
 id: node.news.default
 targetEntityType: node
 bundle: news
 mode: default
 content:
-  body:
-    type: text_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 3
-    region: content
   field_photo:
     type: entity_reference_entity_view
-    label: hidden
+    label: above
     settings:
-      view_mode: embed
-      link: false
+      view_mode: default
+      link: true
     third_party_settings: {  }
-    weight: 2
+    weight: 1
     region: content
   field_published_date:
     type: datetime_default
-    label: inline
+    label: above
     settings:
       timezone_override: ''
-      format_type: medium_date
+      format_type: medium
     third_party_settings: {  }
     weight: 0
     region: content
   field_teaser:
     type: basic_string
-    label: hidden
+    label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
 hidden:
-  content_moderation_control: true
+  body: true
   field_global_topics: true
   field_news_type: true
   field_notes_to_editors: true

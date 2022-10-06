@@ -45,7 +45,7 @@ function dept_search_preprocess_facets_item_list(array &$variables) {
   /** @var \Drupal\facets\FacetInterface $facet */
   $facet = $variables['facet'];
 
-  if ($facet->id() === 'groups' && !empty($variables['items'])) {
+  if ($facet->id() === 'group' && !empty($variables['items'])) {
     $depts = \Drupal::service('department.manager')->getAllDepartments();
     foreach ($variables['items'] as &$link) {
       $facet_group_id = $link['#title']['#raw_value'];
