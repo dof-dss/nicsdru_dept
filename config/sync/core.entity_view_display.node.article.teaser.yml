@@ -28,15 +28,13 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  content_moderation_control:
+  links:
     settings: {  }
     third_party_settings: {  }
-    weight: -20
-    region: content
-  links:
-    weight: 100
+    weight: 1
     region: content
 hidden:
+  content_moderation_control: true
   field_global_topics: true
   field_site_subtopics: true
   field_site_topics: true

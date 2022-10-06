@@ -33,11 +33,6 @@ content:
     third_party_settings: {  }
     weight: 6
     region: content
-  content_moderation_control:
-    settings: {  }
-    third_party_settings: {  }
-    weight: -20
-    region: content
   field_external_publication:
     type: link
     label: above
@@ -130,6 +125,7 @@ content:
     weight: 11
     region: content
 hidden:
+  content_moderation_control: true
   field_attachment: true
   langcode: true
   search_api_excerpt: true
