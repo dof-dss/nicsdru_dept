@@ -31,6 +31,8 @@ class ContentTopics {
   }
 
   /**
+   * Return a list of topics for the given node.
+   *
    * @param int|NodeInterface $node
    *   The node id or node object for an item of content.
    * @param bool $include_subtopics
@@ -96,6 +98,8 @@ class ContentTopics {
   }
 
   /**
+   * Return a render array for the given topics.
+   *
    * @param array $topics
    *   A [topic_id => $topic_name] array of topics to convert a render array.
    * @param bool $link
