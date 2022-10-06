@@ -74,7 +74,7 @@ class TopicsListBlock extends BlockBase implements ContainerFactoryPluginInterfa
 
     $node = $this->routeMatch->getParameter('node');
     if ($node instanceof NodeInterface) {
-      $topics = $this->contentTopicsService->getTopics($node->id(), TRUE, TRUE);
+      $topics = $this->contentTopicsService->getTopics($node, TRUE, TRUE);
       $build['topics_subtopics_list'] = [
         '#theme' => 'topics_subtopics_list',
         '#title' => t('Topics'),
