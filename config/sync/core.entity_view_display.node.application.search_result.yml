@@ -1,9 +1,9 @@
-uuid: 4d262db2-b068-467c-bebe-639092c259d3
+uuid: 17831a79-6e92-479e-bc9d-0a6f2baea3fc
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.teaser
+    - core.entity_view_mode.node.search_result
     - field.field.node.application.body
     - field.field.node.application.field_additional_info
     - field.field.node.application.field_global_topics
@@ -13,33 +13,33 @@ dependencies:
     - field.field.node.application.field_summary
     - node.type.application
   module:
+    - layout_builder
     - text
     - user
-id: node.application.teaser
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.application.search_result
 targetEntityType: node
 bundle: application
-mode: teaser
+mode: search_result
 content:
-  body:
-    type: text_summary_or_trimmed
+  field_summary:
+    type: text_default
     label: hidden
-    settings:
-      trim_length: 600
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  links:
     settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
 hidden:
+  body: true
   content_moderation_control: true
   field_additional_info: true
   field_global_topics: true
   field_link: true
   field_site_subtopics: true
   field_site_topics: true
-  field_summary: true
   langcode: true
+  links: true
   search_api_excerpt: true

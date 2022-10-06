@@ -20,11 +20,15 @@ id: node.page.search_result
 targetEntityType: node
 bundle: page
 mode: search_result
-content: {  }
+content:
+  search_api_excerpt:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   body: true
   content_moderation_control: true
   field_next_audit_due: true
   langcode: true
   links: true
-  search_api_excerpt: true

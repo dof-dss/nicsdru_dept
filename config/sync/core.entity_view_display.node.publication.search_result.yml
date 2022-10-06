@@ -1,9 +1,9 @@
-uuid: b83233f7-1504-4cb2-8e6f-e4b36a25575b
+uuid: 981f3ee7-f71b-44f1-a37a-9273ff447eb2
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.teaser
+    - core.entity_view_mode.node.search_result
     - field.field.node.publication.body
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
@@ -17,27 +17,27 @@ dependencies:
     - field.field.node.publication.field_summary
     - node.type.publication
   module:
+    - layout_builder
     - text
     - user
-id: node.publication.teaser
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.publication.search_result
 targetEntityType: node
 bundle: publication
-mode: teaser
+mode: search_result
 content:
-  body:
-    type: text_summary_or_trimmed
+  field_summary:
+    type: text_default
     label: hidden
-    settings:
-      trim_length: 600
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  links:
     settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
 hidden:
+  body: true
   content_moderation_control: true
   field_attachment: true
   field_external_publication: true
@@ -49,6 +49,6 @@ hidden:
   field_published_date: true
   field_site_subtopics: true
   field_site_topics: true
-  field_summary: true
   langcode: true
+  links: true
   search_api_excerpt: true
