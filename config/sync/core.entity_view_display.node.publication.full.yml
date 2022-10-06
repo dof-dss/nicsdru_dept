@@ -48,7 +48,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 5
+    weight: 3
     region: content
   field_publication_files:
     type: entity_reference_entity_view
@@ -66,7 +66,7 @@ content:
       view_mode: embed
       link: false
     third_party_settings: {  }
-    weight: 3
+    weight: 5
     region: content
   field_published_date:
     type: datetime_default
