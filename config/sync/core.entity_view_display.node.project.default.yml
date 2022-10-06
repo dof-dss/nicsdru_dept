@@ -29,11 +29,6 @@ content:
     third_party_settings: {  }
     weight: 5
     region: content
-  content_moderation_control:
-    settings: {  }
-    third_party_settings: {  }
-    weight: -20
-    region: content
   field_departmental_project_code:
     type: string
     label: above
@@ -81,6 +76,7 @@ content:
     weight: 1
     region: content
 hidden:
+  content_moderation_control: true
   langcode: true
   links: true
   search_api_excerpt: true
