@@ -30,15 +30,14 @@ content:
     settings:
       trim_length: 600
     third_party_settings: {  }
-    weight: 1
+    weight: 101
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 100
     region: content
 hidden:
-  content_moderation_control: true
   field_global_topics: true
   field_news_type: true
   field_notes_to_editors: true
