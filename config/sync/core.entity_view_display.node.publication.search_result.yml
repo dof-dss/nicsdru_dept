@@ -1,0 +1,54 @@
+uuid: 981f3ee7-f71b-44f1-a37a-9273ff447eb2
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_result
+    - field.field.node.publication.body
+    - field.field.node.publication.field_external_publication
+    - field.field.node.publication.field_global_topics
+    - field.field.node.publication.field_last_updated
+    - field.field.node.publication.field_publication_files
+    - field.field.node.publication.field_publication_secure_files
+    - field.field.node.publication.field_publication_type
+    - field.field.node.publication.field_published_date
+    - field.field.node.publication.field_site_subtopics
+    - field.field.node.publication.field_site_topics
+    - field.field.node.publication.field_summary
+    - node.type.publication
+  module:
+    - layout_builder
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.publication.search_result
+targetEntityType: node
+bundle: publication
+mode: search_result
+content:
+  field_summary:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  content_moderation_control: true
+  field_attachment: true
+  field_external_publication: true
+  field_global_topics: true
+  field_last_updated: true
+  field_publication_files: true
+  field_publication_secure_files: true
+  field_publication_type: true
+  field_published_date: true
+  field_site_subtopics: true
+  field_site_topics: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

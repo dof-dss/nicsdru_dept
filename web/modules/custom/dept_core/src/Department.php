@@ -160,35 +160,35 @@ class Department {
    * Management and Structure details.
    */
   public function managementAndStructure() {
-    return $this->group->field_management_and_structure->view('full');
+    return $this->group->field_management_and_structure->view();
   }
 
   /**
    * Access to information details.
    */
   public function accessToInformation() {
-    return $this->group->field_access_to_information->view('full');
+    return $this->group->field_access_to_information->view();
   }
 
   /**
    * Contact Information details.
    */
   public function contactInformation() {
-    return $this->group->field_contact_information->view('full');
+    return $this->group->field_contact_information->view();
   }
 
   /**
    * Social media links.
    */
   public function socialMediaLinks() {
-    return $this->group->field_social_media_links->view('full');
+    return $this->group->field_social_media_links->view();
   }
 
   /**
    * Point of contact map location.
    */
   public function location() {
-    return $this->group->field_location->view('full');
+    return $this->group->field_location->view();
   }
 
   /**

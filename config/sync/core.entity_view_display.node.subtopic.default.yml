@@ -27,11 +27,6 @@ content:
     third_party_settings: {  }
     weight: 3
     region: content
-  content_moderation_control:
-    settings: {  }
-    third_party_settings: {  }
-    weight: -20
-    region: content
   field_banner_image:
     type: entity_reference_entity_view
     label: above
@@ -77,6 +72,7 @@ content:
     weight: 2
     region: content
 hidden:
+  content_moderation_control: true
   field_link: true
   langcode: true
   links: true

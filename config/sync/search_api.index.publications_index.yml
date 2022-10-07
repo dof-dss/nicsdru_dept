@@ -5,16 +5,18 @@ dependencies:
   config:
     - field.storage.node.body
     - field.storage.node.field_global_topics
-    - field.storage.node.field_publication_type
     - field.storage.node.field_published_date
-    - field.storage.node.field_summary
     - field.storage.node.field_site_topics
+    - field.storage.node.field_summary
+    - field.storage.node.field_publication_type
     - search_api.server.default
   module:
     - search_api_solr
-    - taxonomy
     - node
     - user
+    - taxonomy
+    - entitygroupfield
+    - group
     - scheduler
     - search_api
 third_party_settings:
@@ -72,6 +74,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  entitygroupfield:
+    label: Groups
+    datasource_id: 'entity:node'
+    property_path: entitygroupfield
+    type: integer
+    dependencies:
+      module:
+        - entitygroupfield
   field_global_topics:
     label: 'Global topics'
     datasource_id: 'entity:node'
@@ -125,6 +135,15 @@ field_settings:
         - field.storage.node.field_global_topics
       module:
         - taxonomy
+  group_id:
+    label: 'Groups » Group content » Parent group » Group » ID'
+    datasource_id: 'entity:node'
+    property_path: 'entitygroupfield:entity:gid:entity:id'
+    type: integer
+    dependencies:
+      module:
+        - entitygroupfield
+        - group
   name:
     label: 'Authored by » User » Name'
     datasource_id: 'entity:node'
@@ -170,7 +189,7 @@ field_settings:
       module:
         - node
   status:
-    label: null
+    label: status
     datasource_id: 'entity:node'
     property_path: status
     type: boolean
@@ -210,6 +229,7 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  auto_aggregated_fulltext_field: {  }
   content_access:
     weights:
       preprocess_query: -30
