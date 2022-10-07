@@ -1,0 +1,35 @@
+uuid: b1603ddf-fb09-4271-b263-9f14daec4443
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.embed
+    - field.field.media.secure_file.field_media_file_1
+    - media.type.secure_file
+  module:
+    - file
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: media.secure_file.embed
+targetEntityType: media
+bundle: secure_file
+mode: embed
+content:
+  field_media_file_1:
+    type: file_default
+    label: visually_hidden
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true
