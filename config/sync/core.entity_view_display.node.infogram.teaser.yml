@@ -32,8 +32,11 @@ content:
     region: content
 hidden:
   content_moderation_control: true
+  entitygroupfield: true
   field_chart_taxonomy: true
   field_indicators: true
   field_infogram: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
   search_api_excerpt: true

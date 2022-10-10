@@ -41,6 +41,7 @@ content:
 hidden:
   body: true
   content_moderation_control: true
+  entitygroupfield: true
   field_global_topics: true
   field_news_type: true
   field_notes_to_editors: true
@@ -50,6 +51,8 @@ hidden:
   field_summary: true
   field_teaser: true
   field_video: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
   links: true
   search_api_excerpt: true

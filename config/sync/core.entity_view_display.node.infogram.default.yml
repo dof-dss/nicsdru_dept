@@ -41,7 +41,10 @@ content:
     region: content
 hidden:
   content_moderation_control: true
+  entitygroupfield: true
   field_indicators: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
   links: true
   search_api_excerpt: true

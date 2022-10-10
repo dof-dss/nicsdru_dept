@@ -46,6 +46,7 @@ content:
     region: content
 hidden:
   content_moderation_control: true
+  entitygroupfield: true
   field_address_line_1: true
   field_address_line_2: true
   field_county: true
@@ -63,5 +64,7 @@ hidden:
   field_sm_number: true
   field_town: true
   field_website: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
   search_api_excerpt: true
