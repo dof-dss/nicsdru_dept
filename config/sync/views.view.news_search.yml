@@ -130,7 +130,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: none
+        type: search_api_tag
         options: {  }
       empty: {  }
       sorts:
@@ -276,13 +276,16 @@ display:
       display_extenders: {  }
       path: news
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
+        - url.site
         - 'user.node_grants:view'
       tags:
+        - 'config:facets.facet.news_publication_date'
+        - 'config:facets.facet.news_topic'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.news_index'
