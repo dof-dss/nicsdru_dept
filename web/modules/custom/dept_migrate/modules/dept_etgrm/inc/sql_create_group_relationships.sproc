@@ -69,7 +69,9 @@ BEGIN
       DEALLOCATE PREPARE stmt;
 
       SET @i = @i + 1;
-      UNTIL ROW_COUNT() = 0
+      /* @i is a fixed value of 10 to represent the active D7 domains. Kept fixed here
+         due to unexpected issues using ROW_COUNT() to terminate the loop. */
+    UNTIL @i > 10
     END REPEAT;
 
     SET table_index = table_index+1;
