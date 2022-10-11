@@ -32,6 +32,7 @@ third_party_settings:
     group_additional_content_details:
       children:
         - field_publication_type
+        - field_global_topics
         - field_site_topics
         - field_site_subtopics
       label: 'Additional content details'
@@ -79,6 +80,14 @@ content:
     third_party_settings: {  }
     weight: 4
     region: content
+  field_global_topics:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 12
+    region: content
   field_publication_files:
     type: entity_reference_entity_view
     label: above
@@ -119,7 +128,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 13
+    weight: 14
     region: content
   field_site_topics:
     type: entity_reference_label
@@ -127,7 +136,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 12
+    weight: 13
     region: content
   field_summary:
     type: text_default
@@ -139,7 +148,6 @@ content:
 hidden:
   entitygroupfield: true
   field_attachment: true
-  field_global_topics: true
   field_last_updated: true
   groups: true
   groups_type_department_site: true
