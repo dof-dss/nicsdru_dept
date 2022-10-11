@@ -36,6 +36,7 @@ content:
     region: content
 hidden:
   content_moderation_control: true
+  entitygroupfield: true
   field_council: true
   field_county: true
   field_protected_area_documents: true
@@ -43,5 +44,7 @@ hidden:
   field_protected_area_type: true
   field_site_subtopics: true
   field_site_topics: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
   search_api_excerpt: true

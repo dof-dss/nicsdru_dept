@@ -35,11 +35,14 @@ content:
     region: content
 hidden:
   content_moderation_control: true
+  entitygroupfield: true
   field_banner_image: true
   field_banner_link: true
   field_link: true
   field_parent_subtopic: true
   field_parent_topic: true
   field_summary: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
   search_api_excerpt: true

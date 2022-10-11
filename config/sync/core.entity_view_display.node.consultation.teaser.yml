@@ -39,6 +39,7 @@ content:
     region: content
 hidden:
   content_moderation_control: true
+  entitygroupfield: true
   field_attachment: true
   field_consultation_dates: true
   field_email_address: true
@@ -49,5 +50,7 @@ hidden:
   field_site_subtopics: true
   field_site_topics: true
   field_summary: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
   search_api_excerpt: true
