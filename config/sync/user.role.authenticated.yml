@@ -11,6 +11,7 @@ dependencies:
     - path
     - pathauto
     - system
+    - toolbar
 _core:
   default_config_hash: btW6TFHajhy7Eo6YUvdFiPh4TcPggo8GBXYctjV6zag
 id: authenticated
@@ -22,6 +23,7 @@ permissions:
   - 'access administration pages'
   - 'access content'
   - 'access media browser'
+  - 'access toolbar'
   - 'create url aliases'
   - 'diff view changes'
   - 'edit domain content'

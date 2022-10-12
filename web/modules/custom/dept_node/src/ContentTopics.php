@@ -31,8 +31,10 @@ class ContentTopics {
   }
 
   /**
-   * @param int $node_id
-   *   The node id for an item of content.
+   * Return a list of topics for the given node.
+   *
+   * @param int|NodeInterface $node
+   *   The node id or node object for an item of content.
    * @param bool $include_subtopics
    *   Option to include or exclude subtopics in the final list.
    * @param bool $links
@@ -41,14 +43,16 @@ class ContentTopics {
    * @return array
    *   The list of topics in [topic_id => topic_label] format.
    */
-  public function getTopics(int $node_id, bool $include_subtopics = TRUE, bool $links = FALSE): array {
+  public function getTopics(int|NodeInterface $node, bool $include_subtopics = TRUE, bool $links = FALSE): array {
     $topics = [];
 
-    if (empty($node_id)) {
+    if (empty($node)) {
       return $topics;
     }
 
-    $node = $this->entityTypeManager->getStorage('node')->load($node_id);
+    if (is_int($node)) {
+      $node = $this->entityTypeManager->getStorage('node')->load($node);
+    }
 
     if ($node instanceof NodeInterface) {
       if ($node->hasField('field_site_topics')) {
@@ -94,6 +98,8 @@ class ContentTopics {
   }
 
   /**
+   * Return a render array for the given topics.
+   *
    * @param array $topics
    *   A [topic_id => $topic_name] array of topics to convert a render array.
    * @param bool $link

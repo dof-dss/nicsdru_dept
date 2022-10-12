@@ -18,7 +18,6 @@ dependencies:
   module:
     - datetime
     - link
-    - options
     - text
     - user
 id: node.publication.default
@@ -31,11 +30,11 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 6
+    weight: 2
     region: content
   field_external_publication:
     type: link
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
@@ -43,88 +42,53 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 9
-    region: content
-  field_global_topics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  field_last_updated:
-    type: datetime_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
-    third_party_settings: {  }
-    weight: 10
+    weight: 3
     region: content
   field_publication_files:
     type: entity_reference_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: false
-    third_party_settings: {  }
-    weight: 8
-    region: content
-  field_publication_secure_files:
-    type: entity_reference_entity_view
-    label: above
-    settings:
-      view_mode: default
-      link: false
-    third_party_settings: {  }
-    weight: 7
-    region: content
-  field_publication_type:
-    type: list_default
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 3
-    region: content
-  field_published_date:
-    type: datetime_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
     third_party_settings: {  }
     weight: 4
     region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: above
+  field_publication_secure_files:
+    type: entity_reference_entity_view
+    label: hidden
     settings:
-      link: true
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  field_site_topics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  field_summary:
-    type: text_default
-    label: above
-    settings: {  }
+      view_mode: default
+      link: false
     third_party_settings: {  }
     weight: 5
     region: content
-  links:
+  field_published_date:
+    type: datetime_default
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: medium_date
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_summary:
+    type: text_default
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 11
+    weight: 1
     region: content
 hidden:
+  content_moderation_control: true
+  entitygroupfield: true
   field_attachment: true
+  field_global_topics: true
+  field_last_updated: true
+  field_publication_type: true
+  field_site_subtopics: true
+  field_site_topics: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
+  links: true
   search_api_excerpt: true

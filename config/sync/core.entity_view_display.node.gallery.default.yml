@@ -25,11 +25,6 @@ content:
     third_party_settings: {  }
     weight: 4
     region: content
-  content_moderation_control:
-    settings: {  }
-    third_party_settings: {  }
-    weight: -20
-    region: content
   field_gallery_images:
     type: entity_reference_entity_view
     label: above
@@ -71,6 +66,10 @@ content:
     weight: 3
     region: content
 hidden:
+  content_moderation_control: true
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
   links: true
   search_api_excerpt: true

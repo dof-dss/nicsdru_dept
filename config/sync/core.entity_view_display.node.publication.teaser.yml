@@ -30,14 +30,16 @@ content:
     settings:
       trim_length: 600
     third_party_settings: {  }
-    weight: 101
+    weight: 1
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 100
+    weight: 0
     region: content
 hidden:
+  content_moderation_control: true
+  entitygroupfield: true
   field_attachment: true
   field_external_publication: true
   field_global_topics: true
@@ -49,5 +51,7 @@ hidden:
   field_site_subtopics: true
   field_site_topics: true
   field_summary: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
   search_api_excerpt: true

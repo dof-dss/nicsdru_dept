@@ -61,6 +61,7 @@
         "cweagans/composer-patches": "^1.7",
         "deaemth/easychart": "^3.1",
         "dof-dss/nicsdru_dept_theme": "^0.0.1",
+        "dof-dss/nicsdru_nidirect_theme": "*",
         "dof-dss/nicsdru_origins_modules": "^1.4",
         "dof-dss/nicsdru_origins_theme": "^0.4.0",
         "drupal/admin_toolbar": "^3.0",
@@ -86,6 +87,7 @@
         "drupal/easychart": "^4",
         "drupal/entity_browser": "^2.6",
         "drupal/entity_embed": "^1.1",
+        "drupal/entitygroupfield": "^1.0@alpha",
         "drupal/entityqueue": "^1.2",
         "drupal/eu_cookie_compliance": "^1.14",
         "drupal/facets": "^2.0",
@@ -223,7 +225,8 @@
             "drupal/core": {
                 "Prevent leftover fields from causing errors like 'Call to a member function getLabel() after enabling layout_builder'": "https://www.drupal.org/files/issues/2020-01-20/2985882-53.patch",
                 "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch",
-                "[IGNORE] Composer-friendly patches for filename sanitation while #2492171 awaits #3032390 (https://www.drupal.org/project/drupal/issues/2492171#comment-14173724)": "https://www.drupal.org/files/issues/2021-07-26/2492171-311.patch"
+                "[IGNORE] Composer-friendly patches for filename sanitation while #2492171 awaits #3032390 (https://www.drupal.org/project/drupal/issues/2492171#comment-14173724)": "https://www.drupal.org/files/issues/2021-07-26/2492171-311.patch",
+                "Illegal mix of collations leads to error 500 #3188740": "https://www.drupal.org/files/issues/2020-12-21/3188740-3.patch"
             },
             "drupal/easy_install": {
                 "Handle missing core version": "https://www.drupal.org/files/issues/2019-12-19/easy_install_core_version-3101883-0.patch"
@@ -251,7 +254,8 @@
             },
             "drupal/group": {
               "How to migrate content into group and group content": "https://www.drupal.org/files/issues/2020-02-17/groupcontent-disable-during-migration_0.patch",
-              "Access to Revisions of Group Content is Broken": "https://www.drupal.org/files/issues/2022-03-30/group-3256998-35.patch"
+              "Access to Revisions of Group Content is Broken": "https://www.drupal.org/files/issues/2022-03-30/group-3256998-35.patch",
+              "Add a computed field for entity's group(s)": "https://www.drupal.org/files/issues/2022-07-07/group-computed-fields-2718195-65.patch"
             },
             "drupal/devel": {
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://raw.githubusercontent.com/politsin/snipets/master/patch/kint.patch"
@@ -264,6 +268,9 @@
             },
             "drupal/migrate_plus": {
                 "Source plugin to only pull in certain URL aliases": "https://www.drupal.org/files/issues/2022-02-18/migrate_plus-n3063778-15.patch"
+            },
+            "drupal/moderation_sidebar": {
+                "Can't preview a new node #3264639": "https://www.drupal.org/files/issues/2022-02-16/preview-new-node-3264639-2.patch"
             }
         }
     }

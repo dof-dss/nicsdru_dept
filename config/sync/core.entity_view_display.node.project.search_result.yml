@@ -1,0 +1,42 @@
+uuid: 49bc517e-e1a8-493a-8a59-4104ca9c7ba6
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_result
+    - field.field.node.project.body
+    - field.field.node.project.field_departmental_project_code
+    - field.field.node.project.field_project_category
+    - field.field.node.project.field_project_date
+    - field.field.node.project.field_project_duration
+    - field.field.node.project.field_project_status
+    - field.field.node.project.field_provider_project_code
+    - node.type.project
+  module:
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.project.search_result
+targetEntityType: node
+bundle: project
+mode: search_result
+content:
+  search_api_excerpt:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  content_moderation_control: true
+  field_departmental_project_code: true
+  field_project_category: true
+  field_project_date: true
+  field_project_duration: true
+  field_project_status: true
+  field_provider_project_code: true
+  langcode: true
+  links: true
