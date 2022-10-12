@@ -2,11 +2,6 @@ services:
   department.manager:
     class: Drupal\dept_core\DepartmentManager
     arguments: ['@domain.negotiator', '@entity_type.manager', '@cache.default', '@messenger']
-  department.path_subscriber:
-    class: Drupal\dept_core\EventSubscriber\DepartmentPathSubscriber
-    arguments: [ '@department.manager' ]
-    tags:
-      - { name: event_subscriber }
   topics.redirect_manager:
     class: Drupal\dept_core\EventSubscriber\TopicsRedirectManager
     arguments: [ '@database', '%topic_route_patterns%']

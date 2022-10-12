@@ -5,7 +5,9 @@
  * Search related overrides and preprocessing.
  */
 
+use Drupal\dept_core\Department;
 use Drupal\facets\FacetInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -56,6 +58,56 @@ function dept_search_preprocess_facets_item_list(array &$variables) {
           $link['#title']['#value'] = $dept->name();
         }
       }
+    }
+
+    // Slightly complex custom facet sort as the label is preprocessed above.
+    // NB: Facet config has display value sorting taken away to avoid double
+    // sorting the values as it comes through the render pipeline.
+    usort($variables['items'], 'dept_search_sort_group_facet_by_title');
+  }
+}
+
+/**
+ * Facet sorting callback, see dept_search_preprocess_facets_item_list().
+ */
+function dept_search_sort_group_facet_by_title($a, $b) {
+  $a_title = $a['#title']['#value'] ?? '';
+  $b_title = $b['#title']['#value'] ?? '';
+
+  // Case insensitive string comparison.
+  return strcasecmp($a_title, $b_title);
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'news_search' && $display_id === 'news_search') {
+    /** @var \Drupal\dept_core\Department $active_dept */
+    $active_dept = \Drupal::service('department.manager')->getCurrentDepartment();
+    if (!$active_dept instanceof Department) {
+      return;
+    }
+
+    // Don't pass in a value for NIGOV and let views show its 404 handler.
+    // That site should use /press-releases to show its content.
+    if ($active_dept->id() != 'group_1') {
+      $args[0] = str_replace('group_', '', $active_dept->id());
+    }
+  }
+
+  if ($view->id() === 'press_release_search' && $display_id === 'pr_search_page') {
+    /** @var \Drupal\dept_core\Department $active_dept */
+    $active_dept = \Drupal::service('department.manager')->getCurrentDepartment();
+    if (!$active_dept instanceof Department) {
+      return;
+    }
+
+    // Sites other than NIGOV should return a 404. We simply don't pass in
+    // an argument if it's not NIGOV and rely on views to return a 404 response
+    // as intercepting/adjusting this in an event subscriber is extremely awkward.
+    if ($active_dept->id() === 'group_1') {
+      $args[0] = '1';
     }
   }
 }
