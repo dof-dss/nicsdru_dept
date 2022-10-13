@@ -77,7 +77,7 @@ class DepartmentManager {
   }
 
   /**
-   * Returns the Department for the current domain.
+   * Returns all Departments as an array of objects.
    */
   public function getAllDepartments() {
     $domains = $this->entityTypeManager->getStorage('domain')->loadMultiple();

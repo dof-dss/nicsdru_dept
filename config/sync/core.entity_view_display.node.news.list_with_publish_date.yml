@@ -1,9 +1,9 @@
-uuid: 342a627b-6fd6-4665-af7c-dbf2f897a924
+uuid: 17e9bd3e-1ff6-42b4-b70c-8597e70a0710
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.teaser
+    - core.entity_view_mode.node.list_with_publish_date
     - field.field.node.news.body
     - field.field.node.news.field_global_topics
     - field.field.node.news.field_news_type
@@ -18,27 +18,25 @@ dependencies:
     - node.type.news
   module:
     - datetime
+    - layout_builder
     - user
-id: node.news.teaser
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.news.list_with_publish_date
 targetEntityType: node
 bundle: news
-mode: teaser
+mode: list_with_publish_date
 content:
   field_published_date:
     type: datetime_default
-    label: inline
+    label: hidden
     settings:
       timezone_override: ''
       format_type: medium_date
     third_party_settings: {  }
     weight: 0
-    region: content
-  field_teaser:
-    type: basic_string
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 1
     region: content
 hidden:
   body: true
@@ -51,6 +49,7 @@ hidden:
   field_site_subtopics: true
   field_site_topics: true
   field_summary: true
+  field_teaser: true
   field_video: true
   groups: true
   groups_type_department_site: true

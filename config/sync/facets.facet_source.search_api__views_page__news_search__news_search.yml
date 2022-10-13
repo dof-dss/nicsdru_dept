@@ -1,0 +1,12 @@
+uuid: 6de044c2-25d2-4b3d-a9bb-8e07c06991eb
+langcode: en
+status: true
+dependencies: {  }
+id: search_api__views_page__news_search__news_search
+name: 'search_api:views_page__news_search__news_search'
+filter_key: ''
+url_processor: facets_pretty_paths
+breadcrumb:
+  active: false
+  before: true
+  group: false
