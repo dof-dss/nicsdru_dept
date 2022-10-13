@@ -1,0 +1,10 @@
+uuid: 3d820e44-e09f-4422-83f9-5eed5bd7949a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.list_with_publish_date
+label: 'List with publish date'
+targetEntityType: node
+cache: true

@@ -1,20 +1,20 @@
-uuid: 53b7a0a5-4ab0-4d19-a21b-bc32a2d15084
+uuid: a1b263b0-5e6d-4670-945a-2907d84686f4
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.body
     - group.type.department_site
-    - search_api.index.press_releases
+    - search_api.index.news_index
   module:
     - search_api
     - text
-id: press_release_search
-label: 'Press release search'
+id: news_search
+label: 'News search'
 module: views
 description: ''
 tag: ''
-base_table: search_api_index_press_releases
+base_table: search_api_index_news_index
 base_field: search_api_id
 display:
   default:
@@ -23,11 +23,11 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Press releases'
+      title: 'News search'
       fields:
         body:
           id: body
-          table: search_api_index_press_releases
+          table: search_api_index_news_index
           field: body
           relationship: none
           group_type: group
@@ -133,24 +133,11 @@ display:
       cache:
         type: search_api_tag
         options: {  }
-      empty:
-        area:
-          id: area
-          table: views
-          field: area
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: text
-          empty: true
-          content:
-            value: 'No press releases found.'
-            format: basic_html
-          tokenize: false
+      empty: {  }
       sorts:
         search_api_relevance:
           id: search_api_relevance
-          table: search_api_index_press_releases
+          table: search_api_index_news_index
           field: search_api_relevance
           relationship: none
           group_type: group
@@ -163,7 +150,7 @@ display:
           exposed: false
         field_published_date:
           id: field_published_date
-          table: search_api_index_press_releases
+          table: search_api_index_news_index
           field: field_published_date
           relationship: none
           group_type: group
@@ -177,7 +164,7 @@ display:
       arguments:
         group_id:
           id: group_id
-          table: search_api_index_press_releases
+          table: search_api_index_news_index
           field: group_id
           relationship: none
           group_type: group
@@ -212,88 +199,9 @@ display:
           break_phrase: true
           not: false
       filters:
-        field_news_type:
-          id: field_news_type
-          table: search_api_index_press_releases
-          field: field_news_type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_options
-          operator: or
-          value:
-            pressrelease: pressrelease
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-        status:
-          id: status
-          table: search_api_index_press_releases
-          field: status
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_boolean
-          operator: '='
-          value: '1'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
         search_api_fulltext:
           id: search_api_fulltext
-          table: search_api_index_press_releases
+          table: search_api_index_news_index
           field: search_api_fulltext
           relationship: none
           group_type: group
@@ -355,14 +263,7 @@ display:
           min_length: null
           fields: {  }
       style:
-        type: html_list
-        options:
-          row_class: ''
-          default_row_class: false
-          uses_fields: false
-          type: ul
-          wrapper_class: ''
-          class: ''
+        type: default
       row:
         type: search_api
         options:
@@ -388,7 +289,7 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: '@total Results'
+          content: '@total results'
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -401,16 +302,16 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:field.storage.node.body'
-        - 'config:search_api.index.press_releases'
-  pr_search_page:
-    id: pr_search_page
+        - 'config:search_api.index.news_index'
+  news_search:
+    id: news_search
     display_title: Page
     display_plugin: page
     position: 1
     display_options:
       exposed_block: true
       display_extenders: {  }
-      path: press-releases
+      path: news
     cache_metadata:
       max-age: 0
       contexts:
@@ -421,8 +322,7 @@ display:
         - url.site
         - 'user.node_grants:view'
       tags:
-        - 'config:facets.facet.group'
-        - 'config:facets.facet.pr_publication_date'
-        - 'config:facets.facet.pr_topics'
+        - 'config:facets.facet.news_publication_date'
+        - 'config:facets.facet.news_topic'
         - 'config:field.storage.node.body'
-        - 'config:search_api.index.press_releases'
+        - 'config:search_api.index.news_index'
