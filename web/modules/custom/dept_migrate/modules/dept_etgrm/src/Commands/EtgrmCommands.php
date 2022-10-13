@@ -43,7 +43,7 @@ class EtgrmCommands extends DrushCommands {
     // other manually created entries in place.
     $ts = $this->configFactory->get('dept_etgrm.data')->get('processed_ts');
 
-    if (!empty($ts) || $ts > 0) {
+    if (!empty($ts) || (int) $ts > 0) {
       $dbConn = Database::getConnection('default', 'default');
 
       $this->io()->title("Removing imported Group Content entities");
@@ -85,7 +85,7 @@ class EtgrmCommands extends DrushCommands {
     if ($dbConn->schema()->tableExists('group_relationships')) {
       $results = $dbConn->select('group_relationships')->countQuery()->execute()->fetchField();
 
-      if (!empty($results) || $results > 0) {
+      if (!empty($results) || (int) $results > 0) {
         $this->io()->note("Removing existing group content entities");
         $process = Drush::drush(Drush::aliasManager()->getSelf(), 'etgrm:removeAll', [], []);
         $process->start();
