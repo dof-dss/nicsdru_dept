@@ -59,6 +59,8 @@ type_settings:
     archive:
       label: Archive
       from:
+        - draft
+        - needs_review
         - published
       to: archived
       weight: 3

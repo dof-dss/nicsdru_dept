@@ -1,26 +1,26 @@
-uuid: 889bec90-6327-4c11-a323-56e5c58d83e9
+uuid: c939463c-b4b7-45e5-8afe-3ff201d4cbbc
 langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.press_releases
-    - views.view.press_release_search
+    - search_api.index.news_index
+    - views.view.news_search
   module:
     - facets_pretty_paths
     - search_api
 third_party_settings:
   facets_pretty_paths:
     coder: default_coder
-id: group
-name: Group
+id: news_publication_date
+name: 'Publication date'
 weight: 0
 min_count: 1
 missing: false
 missing_label: others
-url_alias: group
-facet_source_id: 'search_api:views_page__press_release_search__pr_search_page'
-field_identifier: group_id
-query_operator: or
+url_alias: news-date
+facet_source_id: 'search_api:views_page__news_search__news_search'
+field_identifier: field_published_date
+query_operator: and
 hard_limit: 0
 exclude: false
 use_hierarchy: false
@@ -53,11 +53,31 @@ processor_configs:
       sort: 20
     settings:
       sort: ASC
+  date_facet_drilldown:
+    processor_id: date_facet_drilldown
+    weights:
+      build: 1
+    settings: {  }
+  date_item:
+    processor_id: date_item
+    weights:
+      build: 35
+    settings:
+      date_display: actual_date
+      granularity: 6
+      date_format: ''
+      hierarchy: false
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
       build: 100
     settings: {  }
+  raw_value_widget_order:
+    processor_id: raw_value_widget_order
+    weights:
+      sort: 50
+    settings:
+      sort: DESC
   url_processor_handler:
     processor_id: url_processor_handler
     weights:

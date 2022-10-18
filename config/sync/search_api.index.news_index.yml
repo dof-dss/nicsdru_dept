@@ -1,23 +1,19 @@
-uuid: c6d2b2f2-f292-4703-b997-9f285393f6d5
+uuid: 9e4fb63f-f519-4719-acc6-eb4244d263a6
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.body
     - field.storage.node.field_global_topics
+    - field.storage.node.field_news_type
     - field.storage.node.field_published_date
-    - field.storage.node.field_site_topics
     - field.storage.node.field_summary
-    - field.storage.node.field_publication_type
     - search_api.server.default
   module:
     - search_api_solr
-    - node
-    - user
-    - taxonomy
     - entitygroupfield
     - group
-    - scheduler
+    - node
     - search_api
 third_party_settings:
   search_api_solr:
@@ -63,8 +59,8 @@ third_party_settings:
       include_language_independent: true
       specific_languages:
         en: '0'
-id: publications_index
-name: 'Publications index'
+id: news_index
+name: 'News index'
 description: ''
 read_only: false
 field_settings:
@@ -92,16 +88,16 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_global_topics
-  field_publication_type:
-    label: Type
+  field_news_type:
+    label: 'News type'
     datasource_id: 'entity:node'
-    property_path: field_publication_type
+    property_path: field_news_type
     type: string
     dependencies:
       config:
-        - field.storage.node.field_publication_type
+        - field.storage.node.field_news_type
   field_published_date:
-    label: 'Published date'
+    label: 'Publication date'
     datasource_id: 'entity:node'
     property_path: field_published_date
     type: date
@@ -109,7 +105,7 @@ field_settings:
       config:
         - field.storage.node.field_published_date
   field_summary:
-    label: Summary
+    label: 'Introductory paragraph'
     datasource_id: 'entity:node'
     property_path: field_summary
     type: text
@@ -117,26 +113,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_summary
-  global_topics_id:
-    label: 'Global topics » Taxonomy term » Term ID'
-    datasource_id: 'entity:node'
-    property_path: 'field_global_topics:entity:tid'
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_global_topics
-      module:
-        - taxonomy
-  global_topics_name:
-    label: 'Global topics » Taxonomy term » Name'
-    datasource_id: 'entity:node'
-    property_path: 'field_global_topics:entity:name'
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.field_global_topics
-      module:
-        - taxonomy
   group_id:
     label: 'Groups » Group content » Parent group » Group » ID'
     datasource_id: 'entity:node'
@@ -146,48 +122,20 @@ field_settings:
       module:
         - entitygroupfield
         - group
-  name:
-    label: 'Authored by » User » Name'
-    datasource_id: 'entity:node'
-    property_path: 'uid:entity:name'
+  node_grants:
+    label: 'Node access information'
+    property_path: search_api_node_grants
     type: string
-    dependencies:
-      module:
-        - node
-        - user
-  publish_on:
-    label: 'Publish on'
-    datasource_id: 'entity:node'
-    property_path: publish_on
-    type: date
-    dependencies:
-      module:
-        - scheduler
-  site_topics_id:
-    label: 'Site topics » Content » ID'
-    datasource_id: 'entity:node'
-    property_path: 'field_site_topics:entity:nid'
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_site_topics
-      module:
-        - node
-  site_topics_title:
-    label: 'Site topics » Content » Title'
-    datasource_id: 'entity:node'
-    property_path: 'field_site_topics:entity:title'
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.field_site_topics
-      module:
-        - node
+    indexed_locked: true
+    type_locked: true
+    hidden: true
   status:
-    label: status
+    label: Published
     datasource_id: 'entity:node'
     property_path: status
     type: boolean
+    indexed_locked: true
+    type_locked: true
     dependencies:
       module:
         - node
@@ -200,11 +148,21 @@ field_settings:
     dependencies:
       module:
         - node
+  type:
+    label: 'Content type'
+    datasource_id: 'entity:node'
+    property_path: type
+    type: string
+    dependencies:
+      module:
+        - node
   uid:
-    label: 'Authored by'
+    label: uid
     datasource_id: 'entity:node'
     property_path: uid
     type: integer
+    indexed_locked: true
+    type_locked: true
     dependencies:
       module:
         - node
@@ -213,7 +171,7 @@ datasource_settings:
     bundles:
       default: false
       selected:
-        - publication
+        - news
     languages:
       default: true
       selected: {  }
@@ -221,29 +179,32 @@ processor_settings:
   add_url: {  }
   aggregated_field: {  }
   auto_aggregated_fulltext_field: {  }
+  content_access:
+    weights:
+      preprocess_query: -30
   entity_status: {  }
   entity_type: {  }
   html_filter:
     weights:
       preprocess_index: -15
       preprocess_query: -15
-    all_fields: true
+    all_fields: false
     fields:
       - body
-      - field_publication_type
+      - field_news_type
       - field_summary
-      - global_topics_name
-      - name
-      - site_topics_title
       - title
-    title: false
+      - type
+    title: true
     alt: true
     tags:
       b: 2
+      em: 1
       h1: 5
       h2: 3
       h3: 2
       strong: 2
+      u: 1
   language_with_fallback: {  }
   rendered_item: {  }
   solr_date_range:

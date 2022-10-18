@@ -99,7 +99,8 @@
         "drupal/google_map_field": "^1.14",
         "drupal/group_entityqueue": "^1.0@beta",
         "drupal/groupmedia": "^2.0@alpha",
-        "drupal/handy_cache_tags": "^1.1",
+        "drupal/handy_cache_tags": "^1.4",
+        "drupal/http_cache_control": "^2.0",
         "drupal/interval": "^1.9",
         "drupal/layout_builder_modal": "^1.1",
         "drupal/layout_builder_restrictions": "^2.9",
@@ -226,7 +227,8 @@
                 "Prevent leftover fields from causing errors like 'Call to a member function getLabel() after enabling layout_builder'": "https://www.drupal.org/files/issues/2020-01-20/2985882-53.patch",
                 "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch",
                 "[IGNORE] Composer-friendly patches for filename sanitation while #2492171 awaits #3032390 (https://www.drupal.org/project/drupal/issues/2492171#comment-14173724)": "https://www.drupal.org/files/issues/2021-07-26/2492171-311.patch",
-                "Illegal mix of collations leads to error 500 #3188740": "https://www.drupal.org/files/issues/2020-12-21/3188740-3.patch"
+                "Illegal mix of collations leads to error 500 #3188740": "https://www.drupal.org/files/issues/2020-12-21/3188740-3.patch",
+                "Provide link to latest revision of moderated entity": "https://www.drupal.org/files/issues/2021-11-29/2906455-34.patch"
             },
             "drupal/easy_install": {
                 "Handle missing core version": "https://www.drupal.org/files/issues/2019-12-19/easy_install_core_version-3101883-0.patch"
@@ -270,7 +272,11 @@
                 "Source plugin to only pull in certain URL aliases": "https://www.drupal.org/files/issues/2022-02-18/migrate_plus-n3063778-15.patch"
             },
             "drupal/moderation_sidebar": {
-                "Can't preview a new node #3264639": "https://www.drupal.org/files/issues/2022-02-16/preview-new-node-3264639-2.patch"
+                "Can't preview a new node #3264639": "https://www.drupal.org/files/issues/2022-02-16/preview-new-node-3264639-2.patch",
+                "'Draft available' text still appears after deleting a forward revision": "https://www.drupal.org/files/issues/2020-02-24/3115474-3.patch"
+            },
+            "drupal/scheduled_transitions": {
+                "No scheduled revisions appear for migrated nodes": "https://www.drupal.org/files/issues/2021-11-01/scheduled_transitions_base_language_3091006_2x.patch"
             }
         }
     }

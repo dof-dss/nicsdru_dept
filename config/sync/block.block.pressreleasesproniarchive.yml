@@ -1,8 +1,11 @@
-uuid: 8f8e1efd-ddfb-4ec1-8402-5b1075e6537e
+uuid: 14643541-5ca9-4001-84c4-f6ce391591a7
 langcode: en
 status: true
 dependencies:
+  content:
+    - 'block_content:basic:236532b2-dbc6-419e-8e10-a8f2fc9a64b9'
   module:
+    - block_content
     - system
   theme:
     - nicsdru_dept_theme
@@ -11,9 +14,9 @@ theme: nicsdru_dept_theme
 region: sidebar_first
 weight: 0
 provider: null
-plugin: 'block_content:1938168e-ceb3-46f3-9215-2ef6ee9a69c3'
+plugin: 'block_content:236532b2-dbc6-419e-8e10-a8f2fc9a64b9'
 settings:
-  id: 'block_content:1938168e-ceb3-46f3-9215-2ef6ee9a69c3'
+  id: 'block_content:236532b2-dbc6-419e-8e10-a8f2fc9a64b9'
   label: 'Press releases: PRONI archive'
   label_display: '0'
   provider: block_content
@@ -24,4 +27,4 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: "/press-releases\r\n/press-releases*"
+    pages: "/press-releases\r\n/press-releases*\r\n/news\r\n/news*"
