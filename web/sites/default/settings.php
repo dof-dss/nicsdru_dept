@@ -88,6 +88,10 @@ if (!empty(getenv('PLATFORM_BRANCH'))) {
 
 $settings['simple_environment_indicator'] = sprintf('%s %s', $env_colour, $env_name);
 
+// Set classic migrate mode to skip revisions on import.
+// https://www.drupal.org/node/3105503.
+$settings['migrate_node_migrate_type_classic'] = TRUE;
+
 // Domain hostname negotiation and overrides.
 if (file_exists($app_root . '/' . $site_path . '/settings.domain.php')) {
   include $app_root . '/' . $site_path . '/settings.domain.php';
