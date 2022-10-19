@@ -166,3 +166,21 @@ function dept_etgrm_update_8006() {
   $pdo->exec("DELETE FROM group_content WHERE type like '%unknown%'");
   $pdo->exec("DELETE FROM group_content_field_data WHERE type like '%unknown%'");
 }
+
+/**
+ * Pre-cursor update for group 2.x as it uses table names that
+ * clash with our nightly migration lookup table.
+ *
+ * That table is re-created and populated nightly, but stored procedures
+ * executed every night Mon-Fri.
+ */
+function dept_etgrm_update_8007() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+  $pdo->exec("DROP TABLE group_relationships");
+}
