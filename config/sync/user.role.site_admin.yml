@@ -13,6 +13,7 @@ dependencies:
     - node.type.page
   module:
     - filter
+    - group
     - media
     - node
     - system
@@ -22,6 +23,7 @@ label: 'Site admin'
 weight: 5
 is_admin: null
 permissions:
+  - 'access group overview'
   - 'administer menu'
   - 'administer taxonomy'
   - 'create terms in tags'

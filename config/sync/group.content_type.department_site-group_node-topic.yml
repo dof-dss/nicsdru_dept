@@ -9,8 +9,6 @@ dependencies:
     - gnode
     - node
 id: department_site-group_node-topic
-label: 'Department site: Group node (Topic)'
-description: 'Adds <em class="placeholder">Topic</em> content to groups both publicly and privately.'
 group_type: department_site
 content_plugin: 'group_node:topic'
 plugin_config:

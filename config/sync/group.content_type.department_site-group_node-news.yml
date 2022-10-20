@@ -9,8 +9,6 @@ dependencies:
     - gnode
     - node
 id: department_site-group_node-news
-label: 'Department site: Group node (News)'
-description: 'Adds <em class="placeholder">News</em> content to groups both publicly and privately.'
 group_type: department_site
 content_plugin: 'group_node:news'
 plugin_config:

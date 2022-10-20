@@ -7,8 +7,6 @@ dependencies:
   module:
     - user
 id: department_site-group_membership
-label: 'Department site: Group membership'
-description: 'Adds users to groups as members.'
 group_type: department_site
 content_plugin: group_membership
 plugin_config:

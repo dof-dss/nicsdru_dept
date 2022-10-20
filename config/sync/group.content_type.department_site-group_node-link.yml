@@ -9,8 +9,6 @@ dependencies:
     - gnode
     - node
 id: department_site-group_node-link
-label: 'Department site: Group node (Link)'
-description: 'Adds <em class="placeholder">Link</em> content to groups both publicly and privately.'
 group_type: department_site
 content_plugin: 'group_node:link'
 plugin_config:
