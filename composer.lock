@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "452f8bf68b3e1a189aeade46be0db525",
+    "content-hash": "5c8b7cfca39108627455d9aae78ce7b1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3504,6 +3504,44 @@
             }
         },
         {
+            "name": "drupal/domain_config",
+            "version": "1.0.0-beta6",
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "drupal/domain": "*"
+            },
+            "type": "metapackage",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-beta6",
+                    "datestamp": "1624563597",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "agentrickard",
+                    "homepage": "https://www.drupal.org/user/20975"
+                },
+                {
+                    "name": "nonsie",
+                    "homepage": "https://www.drupal.org/user/29899"
+                }
+            ],
+            "description": "Allows domain specific configuration.",
+            "homepage": "https://www.drupal.org/project/domain",
+            "support": {
+                "source": "https://git.drupalcode.org/project/domain"
+            }
+        },
+        {
             "name": "drupal/domain_path",
             "version": "1.0.0",
             "source": {
@@ -3577,6 +3615,64 @@
             "homepage": "https://www.drupal.org/project/domain_path",
             "support": {
                 "source": "https://git.drupalcode.org/project/domain_path"
+            }
+        },
+        {
+            "name": "drupal/domain_site_settings",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/domain_site_settings.git",
+                "reference": "8.x-1.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/domain_site_settings-8.x-1.4.zip",
+                "reference": "8.x-1.4",
+                "shasum": "15f40815f2b80323a9afa93de61a36a13fd82742"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9",
+                "drupal/domain": "^1.0",
+                "drupal/domain_config": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.4",
+                    "datestamp": "1626772892",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "JeroenT",
+                    "homepage": "https://www.drupal.org/user/2228934"
+                },
+                {
+                    "name": "aloknarwaria",
+                    "homepage": "https://www.drupal.org/user/906640"
+                },
+                {
+                    "name": "malaynayak",
+                    "homepage": "https://www.drupal.org/user/3529755"
+                }
+            ],
+            "description": "Basic Site Setting for Domains.",
+            "homepage": "https://www.drupal.org/project/domain_site_settings",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/domain_site_settings",
+                "issues": "https://www.drupal.org/project/issues/domain_site_settings"
             }
         },
         {
