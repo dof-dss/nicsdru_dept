@@ -342,7 +342,7 @@ display:
           absolute: false
         id:
           id: id
-          table: group_content_field_data
+          table: group_relationship_field_data
           field: id
           relationship: group_content
           group_type: group
@@ -538,7 +538,7 @@ display:
             group_items: {  }
         gid:
           id: gid
-          table: group_content_field_data
+          table: group_relationship_field_data
           field: gid
           relationship: group_content
           group_type: group
