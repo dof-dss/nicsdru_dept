@@ -125,6 +125,11 @@ class EtgrmCommands extends DrushCommands {
     $query = $pdo->query('call DELETE_STALE_IMPORTS(1000)');
     $this->io()->writeln(" ✅");
 
+    // Drop the group_relationships table, if it's still there.
+    if ($dbConn->schema()->tableExists('group_relationships')) {
+      $query = $pdo->query('DROP TABLE group_relationships');
+    }
+
     $conf->set('processed_ts', $ts);
     $conf->save();
 
