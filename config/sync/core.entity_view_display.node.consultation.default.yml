@@ -16,44 +16,107 @@ dependencies:
     - field.field.node.consultation.field_summary
     - node.type.consultation
   module:
-    - datetime
     - datetime_range
+    - field_group
+    - link
+    - text
     - user
+third_party_settings:
+  field_group:
+    group_ways_to_respond:
+      children:
+        - field_respond_online
+        - field_email_address
+        - field_postal
+      label: 'Ways to respond'
+      parent_name: ''
+      region: content
+      weight: 4
+      format_type: html_element
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: respond
+        element: div
+        show_label: true
+        label_element: h2
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
 id: node.consultation.default
 targetEntityType: node
 bundle: consultation
 mode: default
 content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_attachment:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: embed
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
   field_consultation_dates:
     type: daterange_default
     label: hidden
     settings:
       timezone_override: ''
       format_type: medium_date
-      separator: '-'
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  field_published_date:
-    type: datetime_default
-    label: inline
-    settings:
-      timezone_override: ''
-      format_type: medium_date
+      separator: ''
     third_party_settings: {  }
     weight: 0
     region: content
+  field_email_address:
+    type: email_mailto
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_postal:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_respond_online:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: '0'
+      target: '0'
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_summary:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
-  body: true
   content_moderation_control: true
-  field_attachment: true
-  field_email_address: true
+  entitygroupfield: true
   field_global_topics: true
-  field_postal: true
-  field_respond_online: true
+  field_published_date: true
   field_site_subtopics: true
   field_site_topics: true
-  field_summary: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
   links: true
   search_api_excerpt: true

@@ -148,3 +148,21 @@ function dept_etgrm_update_8005() {
   $pdo->exec('DROP PROCEDURE IF EXISTS CREATE_GROUP_RELATIONSHIPS');
   $pdo->exec(file_get_contents($module_path . '/inc/sql_create_group_relationships.sproc'));
 }
+
+/**
+ * Update hook intended to clear away any unknown group content type values
+ * before an upgrade to group 2.x.
+ *
+ * See DEPT-207.
+ */
+function dept_etgrm_update_8006() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+  $pdo->exec("DELETE FROM group_content WHERE type like '%unknown%'");
+  $pdo->exec("DELETE FROM group_content_field_data WHERE type like '%unknown%'");
+}
