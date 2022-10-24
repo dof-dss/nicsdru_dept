@@ -18,27 +18,36 @@ use Drupal\dept_dev\DeptDevLazyBuilders;
 function dept_dev_toolbar() {
   $items = [];
 
-  $domains = \Drupal::service('entity_type.manager')->getStorage('domain')->loadMultiple();
+  $domains = [
+    'Departmental' => ['dept.lndo.site', 'https://www.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site'],
+    'NI Gov' => ['nigov.lndo.site', 'https://northernireland.gov.uk'],
+    'Communities' => ['communities-ni.lndo.site', 'https://communities-ni.gov.uk'],
+    'DAERA' => ['daera-ni.lndo.site', 'https://daera-ni.gov.uk'],
+    'Economy' => ['economy-ni.lndo.site', 'https://economy-ni.gov.uk'],
+    'Education' => ['education-ni.lndo.site', 'https://education-ni.gov.uk'],
+    'Executive Office' => ['executiveoffice-ni.lndo.site', 'https://executiveoffice-ni.gov.uk'],
+    'Finance' => ['finance-ni.lndo.site', 'https://finance-ni.gov.uk'],
+    'Health' => ['health-ni.lndo.site', 'https://health-ni.gov.uk'],
+    'Infrastructure' => ['infrastructure-ni.lndo.site', 'https://infrastructure-ni.gov.uk'],
+    'Justice' => ['justice-ni.lndo.site', 'https://justice-ni.gov.uk'],
+  ];
+
   $lando_hostnames = \Drupal::config('dept_dev.settings.toolbar_sites')->get('lando_hostname');
   $lando_protocol = \Drupal::config('dept_dev.settings.toolbar_sites')->get('lando_protocol');
+  $protocol = ($lando_protocol) ? 'http://' : 'https://';
   $links = [];
 
-  foreach ($domains as $domain) {
-    /** @var \Drupal\domain\Entity\Domain $domain */
-    $url = $domain->getPath();
-    if ($lando_hostnames) {
-      $protocol = ($lando_protocol) ? 'http' : 'https';
+  foreach ($domains as $name => $urls) {
 
-      // Exception for Dept Admin domain, otherwise just replace gov.uk host.
-      if ($url === 'https://www.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site/') {
-        $url = "$protocol://dept.lndo.site/";
-      }
-      else {
-        $url = preg_replace('/https?:\/\/(www.)?(.*)(gov.uk)/', "$protocol://$2lndo.site", $url);
-      }
+    if ($lando_hostnames) {
+      $url = $protocol . $urls[0];
     }
-    $links[$domain->id()] = [
-      'title' => $domain->label(),
+    else {
+      $url = $urls[1];
+    }
+
+    $links[] = [
+      'title' => $name,
       'url' => Url::fromUri($url),
     ];
   }
