@@ -4,15 +4,33 @@ status: true
 dependencies:
   config:
     - filter.format.filtered_html_with_templates
+    - node.type.landing_page
   module:
+    - content_moderation
     - filter
+    - media
+    - node
+    - scheduled_transitions
 id: landing_page_supervisor_user
 label: 'landing page supervisor user'
 weight: 10
 is_admin: null
 permissions:
+  - 'access media overview'
+  - 'add scheduled transitions node landing_page'
+  - 'create landing_page content'
   - 'create landing_page content on assigned domains'
+  - 'create media'
+  - 'delete any landing_page content'
   - 'delete landing_page content on assigned domains'
+  - 'delete media'
+  - 'reschedule scheduled transitions node landing_page'
+  - 'revert landing_page revisions'
   - 'update landing_page content on assigned domains'
+  - 'update media'
   - 'use text format filtered_html_with_templates'
+  - 'view all revisions'
+  - 'view any unpublished content'
   - 'view any unpublished landing_page content'
+  - 'view landing_page revisions'
+  - 'view scheduled transitions node landing_page'

@@ -8,10 +8,11 @@ dependencies:
     - media.type.document
     - media.type.image
     - media.type.remote_video
+    - media.type.secure_file
     - media.type.video
-    - node.type.article
     - node.type.page
   module:
+    - content_moderation
     - filter
     - media
     - node
@@ -22,18 +23,29 @@ label: 'Site admin'
 weight: 5
 is_admin: null
 permissions:
+  - 'access media overview'
   - 'administer menu'
   - 'administer taxonomy'
+  - 'create media'
   - 'create terms in tags'
-  - 'delete any article content'
   - 'delete any audio media'
   - 'delete any document media'
   - 'delete any image media'
+  - 'delete any media'
   - 'delete any page content'
   - 'delete any remote_video media'
   - 'delete any video media'
+  - 'delete media'
   - 'delete terms in tags'
   - 'edit any audio media'
+  - 'edit any document media'
+  - 'edit any image media'
+  - 'edit any remote_video media'
+  - 'edit any secure_file media'
+  - 'edit any video media'
   - 'edit terms in tags'
   - 'update any media'
+  - 'update media'
   - 'use text format full_html'
+  - 'view all revisions'
+  - 'view any unpublished content'

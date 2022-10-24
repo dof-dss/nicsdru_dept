@@ -3,18 +3,27 @@ langcode: en
 status: true
 dependencies:
   module:
+    - content_moderation
     - entityqueue
+    - media
+    - node
 id: niexec_admin_user
 label: 'niexec admin user'
 weight: 12
 is_admin: null
 permissions:
+  - 'access media overview'
+  - 'create media'
+  - 'delete media'
   - 'manipulate entityqueues'
+  - 'update media'
   - 'update niexec_homepage_news entityqueue'
+  - 'view all revisions'
   - 'view any unpublished application content'
   - 'view any unpublished article content'
   - 'view any unpublished consultation content'
   - 'view any unpublished contact content'
+  - 'view any unpublished content'
   - 'view any unpublished gallery content'
   - 'view any unpublished heritage_site content'
   - 'view any unpublished irish_news content'
