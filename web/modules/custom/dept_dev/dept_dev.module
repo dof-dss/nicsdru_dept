@@ -19,17 +19,50 @@ function dept_dev_toolbar() {
   $items = [];
 
   $domains = [
-    'Departmental' => ['dept.lndo.site', 'https://www.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site'],
-    'NI Gov' => ['nigov.lndo.site', 'https://northernireland.gov.uk'],
-    'Communities' => ['communities-ni.lndo.site', 'https://communities-ni.gov.uk'],
-    'DAERA' => ['daera-ni.lndo.site', 'https://daera-ni.gov.uk'],
-    'Economy' => ['economy-ni.lndo.site', 'https://economy-ni.gov.uk'],
-    'Education' => ['education-ni.lndo.site', 'https://education-ni.gov.uk'],
-    'Executive Office' => ['executiveoffice-ni.lndo.site', 'https://executiveoffice-ni.gov.uk'],
-    'Finance' => ['finance-ni.lndo.site', 'https://finance-ni.gov.uk'],
-    'Health' => ['health-ni.lndo.site', 'https://health-ni.gov.uk'],
-    'Infrastructure' => ['infrastructure-ni.lndo.site', 'https://infrastructure-ni.gov.uk'],
-    'Justice' => ['justice-ni.lndo.site', 'https://justice-ni.gov.uk'],
+    'Departmental' => [
+      'dept.lndo.site',
+      'https://www.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site'
+    ],
+    'NI Gov' => [
+      'nigov.lndo.site',
+      'https://northernireland.gov.uk'
+    ],
+    'Communities' => [
+      'communities-ni.lndo.site',
+      'https://communities-ni.gov.uk'
+    ],
+    'DAERA' => [
+      'daera-ni.lndo.site',
+      'https://daera-ni.gov.uk'
+    ],
+    'Economy' => [
+      'economy-ni.lndo.site',
+      'https://economy-ni.gov.uk'
+    ],
+    'Education' => [
+      'education-ni.lndo.site',
+      'https://education-ni.gov.uk'
+    ],
+    'Executive Office' => [
+      'executiveoffice-ni.lndo.site',
+      'https://executiveoffice-ni.gov.uk'
+    ],
+    'Finance' => [
+      'finance-ni.lndo.site',
+      'https://finance-ni.gov.uk'
+    ],
+    'Health' => [
+      'health-ni.lndo.site',
+      'https://health-ni.gov.uk'
+    ],
+    'Infrastructure' => [
+      'infrastructure-ni.lndo.site',
+      'https://infrastructure-ni.gov.uk'
+    ],
+    'Justice' => [
+      'justice-ni.lndo.site',
+      'https://justice-ni.gov.uk'
+    ],
   ];
 
   $lando_hostnames = \Drupal::config('dept_dev.settings.toolbar_sites')->get('lando_hostname');
