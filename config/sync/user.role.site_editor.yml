@@ -4,11 +4,30 @@ status: true
 dependencies:
   config:
     - media.type.audio
+    - workflows.workflow.nics_editorial_workflow
   module:
+    - content_moderation
     - media
+    - node
 id: site_editor
 label: 'Site editor'
 weight: 3
 is_admin: null
 permissions:
+  - 'access media overview'
+  - 'create media'
+  - 'delete media'
   - 'edit any audio media'
+  - 'update media'
+  - 'use nics_editorial_workflow transition archive'
+  - 'use nics_editorial_workflow transition create_new_draft'
+  - 'use nics_editorial_workflow transition draft_of_published'
+  - 'use nics_editorial_workflow transition publish'
+  - 'use nics_editorial_workflow transition quick_publish'
+  - 'use nics_editorial_workflow transition reject'
+  - 'use nics_editorial_workflow transition restore'
+  - 'use nics_editorial_workflow transition restore_to_draft'
+  - 'use nics_editorial_workflow transition submit_for_review'
+  - 'view all revisions'
+  - 'view any unpublished content'
+  - 'view latest version'

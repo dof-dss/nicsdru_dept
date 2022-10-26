@@ -7,6 +7,7 @@ dependencies:
     - filter.format.filtered_html_with_no_images
   module:
     - filter
+    - media
     - node
     - path
     - pathauto
@@ -35,6 +36,7 @@ permissions:
   - use_search_api_live_results
   - 'view field_external_publication'
   - 'view files'
+  - 'view media'
   - 'view own field_external_publication'
   - 'view own unpublished content'
   - 'view revisions'

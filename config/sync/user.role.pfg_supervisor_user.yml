@@ -8,16 +8,21 @@ dependencies:
     - node.type.easychart
     - node.type.infogram
   module:
+    - content_moderation
     - easychart
+    - media
     - node
+    - scheduled_transitions
 id: pfg_supervisor_user
 label: 'PfG supervisor user'
 weight: 7
 is_admin: null
 permissions:
   - 'access full easychart configuration'
+  - 'access media overview'
   - 'access workbench'
   - 'add media from remote sources'
+  - 'add scheduled transitions node case_study'
   - 'add terms in indicators'
   - 'add terms in outcomes'
   - 'create actions content'
@@ -27,7 +32,9 @@ permissions:
   - 'create easychart content'
   - 'create easychart content on assigned domains'
   - 'create files'
+  - 'create infogram content'
   - 'create infogram content on assigned domains'
+  - 'create media'
   - 'delete actions content on assigned domains'
   - 'delete any actions content'
   - 'delete any case_study content'
@@ -36,6 +43,7 @@ permissions:
   - 'delete case_study content on assigned domains'
   - 'delete easychart content on assigned domains'
   - 'delete infogram content on assigned domains'
+  - 'delete media'
   - 'delete own actions content'
   - 'delete own case_study content'
   - 'delete own easychart content'
@@ -67,15 +75,39 @@ permissions:
   - 'moderate content from needs_review to draft'
   - 'moderate content from needs_review to published'
   - 'moderate content from published to needs_review'
+  - 'reschedule scheduled transitions node application'
+  - 'reschedule scheduled transitions node article'
+  - 'reschedule scheduled transitions node case_study'
+  - 'reschedule scheduled transitions node consultation'
+  - 'reschedule scheduled transitions node contact'
+  - 'reschedule scheduled transitions node easychart'
+  - 'reschedule scheduled transitions node heritage_site'
+  - 'reschedule scheduled transitions node page'
+  - 'revert actions revisions'
+  - 'revert case_study revisions'
   - 'revert taxonomy term revisions'
   - 'schedule revisions'
   - 'update actions content on assigned domains'
   - 'update case_study content on assigned domains'
   - 'update easychart content on assigned domains'
   - 'update infogram content on assigned domains'
+  - 'update media'
   - 'use workbench_moderation my drafts tab'
   - 'use workbench_moderation needs review tab'
+  - 'view actions revisions'
+  - 'view all revisions'
+  - 'view all scheduled transitions'
+  - 'view any unpublished content'
   - 'view any unpublished easychart content'
   - 'view any unpublished infogram content'
+  - 'view case_study revisions'
   - 'view own files'
+  - 'view scheduled transitions node application'
+  - 'view scheduled transitions node article'
+  - 'view scheduled transitions node case_study'
+  - 'view scheduled transitions node consultation'
+  - 'view scheduled transitions node contact'
+  - 'view scheduled transitions node easychart'
+  - 'view scheduled transitions node heritage_site'
+  - 'view scheduled transitions node page'
   - 'view taxonomy term revisions'
