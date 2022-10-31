@@ -64,7 +64,11 @@ class PreDomainAccessCleanUp implements EventSubscriberInterface {
     // Delete nigov da rows for publication and secure publications.
     $this->db7conn->query("DELETE domain_access FROM domain_access INNER JOIN node ON domain_access.nid = node.nid WHERE domain_access.gid = 1 AND node.type = 'publication' OR node.type = 'secure_publication' ");
 
+    // Delete nigov da rows for consultations.
+    $this->db7conn->query("DELETE domain_access FROM domain_access INNER JOIN node ON domain_access.nid = node.nid WHERE domain_access.gid = 1 AND node.type = 'consultation' ");
 
+    // Delete rows for old domains.
+    $this->db7conn->query("DELETE domain_access FROM domain_access WHERE domain_access.gid IN (3,10,11)");
 
   }
 
