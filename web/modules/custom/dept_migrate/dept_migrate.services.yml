@@ -26,6 +26,11 @@ services:
     arguments: [ '@entity_type.manager', '@dept_migrate.migrate_uuid_lookup_manager', '@logger.factory' ]
     tags:
       - { name: event_subscriber }
+  dept_migrate.eventsubscriber.migrate.domain_access:
+    class: Drupal\dept_migrate\EventSubscriber\PreDomainAccessCleanUp
+    arguments: [ '@logger.factory', '@dept_migrate.database_d7']
+    tags:
+      - { name: event_subscriber }
   dept_migrate.migrate_support:
     class: 'Drupal\dept_migrate\MigrateSupport'
     arguments: ['@entity_type.manager', '@logger.factory']
