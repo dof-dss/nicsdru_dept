@@ -57,6 +57,15 @@ class PreDomainAccessCleanUp implements EventSubscriberInterface {
    *   The import event object.
    */
   public function onMigratePreImport(MigrateImportEvent $event) {
+
+    // Delete nigov da rows for news items of type 'press release'.
+    $this->db7conn->query("DELETE domain_access FROM domain_access INNER JOIN field_data_field_news_type ON domain_access.nid = field_data_field_news_type.entity_id WHERE field_data_field_news_type.field_news_type_value = 'pressrelease' AND domain_access.gid = 1");
+
+    // Delete nigov da rows for publication and secure publications.
+    $this->db7conn->query("DELETE domain_access FROM domain_access INNER JOIN node ON domain_access.nid = node.nid WHERE domain_access.gid = 1 AND node.type = 'publication' OR node.type = 'secure_publication' ");
+
+
+
   }
 
 }
