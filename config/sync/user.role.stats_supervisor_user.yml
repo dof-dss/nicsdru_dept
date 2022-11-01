@@ -1,15 +1,42 @@
 uuid: b71a4ef2-58b2-463f-9109-8f7ae4c0421c
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - content_moderation
+    - media
+    - node
+    - scheduled_transitions
 id: stats_supervisor_user
 label: 'stats supervisor user'
 weight: 9
 is_admin: null
 permissions:
+  - 'access media overview'
+  - 'create media'
   - 'create secure_publication content on assigned domains'
+  - 'delete media'
   - 'delete secure_publication content on assigned domains'
+  - 'reschedule scheduled transitions node application'
+  - 'reschedule scheduled transitions node article'
+  - 'reschedule scheduled transitions node consultation'
+  - 'reschedule scheduled transitions node contact'
+  - 'reschedule scheduled transitions node easychart'
+  - 'reschedule scheduled transitions node heritage_site'
+  - 'reschedule scheduled transitions node page'
   - 'schedule revisions'
+  - 'update media'
   - 'update secure_publication content on assigned domains'
+  - 'view all revisions'
+  - 'view all scheduled transitions'
+  - 'view any unpublished content'
   - 'view any unpublished secure_publication content'
   - 'view own private files'
+  - 'view scheduled transitions node application'
+  - 'view scheduled transitions node article'
+  - 'view scheduled transitions node consultation'
+  - 'view scheduled transitions node contact'
+  - 'view scheduled transitions node easychart'
+  - 'view scheduled transitions node heritage_site'
+  - 'view scheduled transitions node page'
+  - 'view scheduled transitions node topic'

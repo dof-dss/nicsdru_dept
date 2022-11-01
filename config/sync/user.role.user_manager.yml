@@ -1,18 +1,27 @@
 uuid: c0f6e591-c622-4abe-8e73-d827fc609b62
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - content_moderation
+    - media
 id: user_manager
 label: 'user manager'
 weight: 15
 is_admin: null
 permissions:
+  - 'access media overview'
+  - 'access user profiles'
   - 'access users overview'
+  - 'administer users'
   - 'assign author user role'
   - 'assign domain editors'
   - 'assign supervisor user role'
+  - 'create media'
   - 'create users'
   - 'edit users with role 2'
   - 'edit users with role 3'
   - 'edit users with role 4'
   - 'force password change'
+  - 'view any unpublished content'
+  - 'view user email addresses'
