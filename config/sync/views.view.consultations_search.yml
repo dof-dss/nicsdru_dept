@@ -115,11 +115,11 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          quantity: 9
+          quantity: 5
       exposed_form:
         type: basic
         options:
-          submit_button: Go
+          submit_button: Search
           reset_button: false
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
@@ -130,10 +130,23 @@ display:
         type: none
         options: {  }
       cache:
-        type: none
+        type: search_api_tag
         options: {  }
       empty: {  }
       sorts:
+        field_published_date:
+          id: field_published_date
+          table: search_api_index_consultations_index
+          field: field_published_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
         search_api_relevance:
           id: search_api_relevance
           table: search_api_index_consultations_index
@@ -163,7 +176,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Enter keywords'
+            label: 'Search consultations and choose filters to show only the results you want'
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
@@ -195,7 +208,7 @@ display:
               admin_user: '0'
               user_manager: '0'
             expose_fields: false
-            placeholder: ''
+            placeholder: Keywords
             searched_fields_id: search_api_fulltext_searched_fields
           is_grouped: false
           group_info:
@@ -214,6 +227,10 @@ display:
           fields: {  }
       style:
         type: default
+        options:
+          row_class: card
+          default_row_class: false
+          uses_fields: false
       row:
         type: search_api
         options:
@@ -229,7 +246,17 @@ display:
           query_tags: {  }
           contextual_filters_or: false
       relationships: {  }
-      header: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: '@total consultations'
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -250,8 +277,13 @@ display:
     position: 1
     display_options:
       title: Consultations
+      cache:
+        type: none
       defaults:
+        cache: false
         title: false
+        css_class: false
+      css_class: 'card-deck card-deck--search-results'
       exposed_block: true
       display_extenders: {  }
       path: consultations
