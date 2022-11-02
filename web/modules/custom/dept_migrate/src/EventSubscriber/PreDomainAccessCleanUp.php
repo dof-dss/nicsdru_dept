@@ -60,8 +60,10 @@ class PreDomainAccessCleanUp implements EventSubscriberInterface {
     $event_id = $event->getMigration()->getBaseId();
 
     if (strpos($event_id, 'node_') === 0) {
-      // Delete rows for old domains.
-      $this->db7conn->query("DELETE domain_access FROM domain_access WHERE domain_access.gid IN (3,10,11)");
+      // Delete Access rows for NIGov and old domains.
+      // We remove all NIGov entries as these should only be applied to
+      // News (Press releases), Publications and Consultations.
+      $this->db7conn->query("DELETE domain_access FROM domain_access WHERE domain_access.gid IN (0, 3,10,11)");
     }
   }
 

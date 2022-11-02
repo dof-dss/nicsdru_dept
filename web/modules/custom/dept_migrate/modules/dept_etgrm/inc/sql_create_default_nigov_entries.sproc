@@ -4,14 +4,6 @@
 CREATE PROCEDURE CREATE_DEFAULT_NIGOV_ENTRIES()
 BEGIN
 
-  /** Delete all NIGov rows for news, publications and consultations. **/
-  DELETE group_relationships
-  FROM group_relationships
-  WHERE gid = 0
-  AND gc_type = 'department_site-group_node-news'
-  OR gc_type = 'group_content_type_fb2d5fb87aade'
-  OR gc_type = 'group_content_type_d91f8322473a4';
-
   /** Add NIGov entries for news press releases **/
   INSERT INTO group_relationships (nid, gid, gc_type, label)
   SELECT n.nid, '0', 'department_site-group_node-news', fd.title
