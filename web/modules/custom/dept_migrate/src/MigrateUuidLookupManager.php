@@ -98,6 +98,11 @@ class MigrateUuidLookupManager {
       $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $d7uuid]);
 
       foreach ($migrate_map as $row) {
+        if (empty($row->destid1)) {
+          $this->logger->error('No D9 node found for D7 node id ' . $row->sourceid2);
+          continue;
+        }
+
         $node = $this->entityTypeManager->getStorage('node')->load($row->destid1);
 
         if (empty($node)) {
