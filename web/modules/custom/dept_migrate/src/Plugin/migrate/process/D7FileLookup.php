@@ -86,7 +86,8 @@ class D7FileLookup extends ProcessPluginBase implements ContainerFactoryPluginIn
     }
 
     if (!empty($entity_metadata)) {
-      $value = reset($entity_metadata)['id'];
+      $entity_metadata = reset($entity_metadata);
+      $value = $entity_metadata['id'] ?? [];
     }
 
     return $value ?? [];
