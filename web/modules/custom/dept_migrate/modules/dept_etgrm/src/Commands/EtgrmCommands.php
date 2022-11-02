@@ -111,6 +111,10 @@ class EtgrmCommands extends DrushCommands {
     $query = $pdo->query('call PROCESS_GROUP_ZERO_RELATIONSHIPS()');
     $this->io()->writeln(" ✅");
 
+    $this->io()->write("Creating default NIGov entries");
+    $query = $pdo->query('call CREATE_DEFAULT_NIGOV_ENTRIES()');
+    $this->io()->writeln(" ✅");
+
     $this->io()->write("Creating Group Content data (this may take a while)");
     $query = $pdo->prepare('call PROCESS_GROUP_RELATIONSHIPS(?)');
     $query->bindParam(1, $ts);
