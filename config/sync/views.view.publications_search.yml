@@ -350,6 +350,19 @@ display:
         options: {  }
       empty: {  }
       sorts:
+        field_published_date:
+          id: field_published_date
+          table: search_api_index_publications_index
+          field: field_published_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
         search_api_relevance:
           id: search_api_relevance
           table: search_api_index_publications_index
@@ -495,7 +508,7 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: ''
+          content: '@total publications'
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -617,16 +630,16 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 0
+            max_length: 255
             word_boundary: true
             ellipsis: true
             more_link: false
             more_link_text: ''
             more_link_path: ''
-            strip_tags: false
-            trim: false
+            strip_tags: true
+            trim: true
             preserve_tags: ''
-            html: false
+            html: true
           element_type: p
           element_class: card__content
           element_label_type: ''
