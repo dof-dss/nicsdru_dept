@@ -3,7 +3,7 @@
 use Drupal\Core\Database\Database;
 
 /*
- * Create all stored procedures and functions on install.
+ * Create all stored procedures and functions on installation.
  */
 function dept_etgrm_install() {
   $database = '';
@@ -24,7 +24,7 @@ function dept_etgrm_install() {
 }
 
 /*
- * Remove all stored procedures and functions on uninstall.
+ * Remove all stored procedures and functions on uninstallation.
  */
 function dept_etgrm_uninstall() {
   $database = '';
@@ -41,7 +41,10 @@ function dept_etgrm_uninstall() {
   }
 }
 
-function dept_etgrm_sprocs() {
+/*
+ * Return array of stored procedure and function names from inc directory.
+ */
+function dept_etgrm_sprocs():array {
   $sprocs = [];
   $module_handler = \Drupal::service('module_handler');
   $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());

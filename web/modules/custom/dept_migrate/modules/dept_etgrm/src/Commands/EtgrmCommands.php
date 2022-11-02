@@ -33,6 +33,9 @@ class EtgrmCommands extends DrushCommands {
   /**
    * Remove all relationships.
    *
+   * Note this will only remove Group based relationships created using this
+   * module. See the first function comment for more info.
+   *
    * @command etgrm:removeAll
    * @aliases etgrm:ra
    */
@@ -67,6 +70,11 @@ class EtgrmCommands extends DrushCommands {
 
   /**
    * Create all relationships.
+   *
+   * This function will create a group_relationships mapping table taking source
+   * data from the migration tables, manipulating it before updating the
+   * relevant Group module tables. This method was chosen due to its raw speed
+   * versus using the much slower Group module or Entity API.
    *
    * @command etgrm:createAll
    * @option retain-relation-table Keep the group_relationships table.
@@ -115,7 +123,9 @@ class EtgrmCommands extends DrushCommands {
     $this->io()->writeln(" ✅");
 
     $this->io()->write("Remove redundant NIGov entries");
-    $query = $pdo->query("DELETE group_relationships FROM group_relationships WHERE gc_type NOT IN ('group_content_type_fb2d5fb87aade', 'department_site-group_node-news', 'group_content_type_d91f8322473a4') AND gid = 0");
+    $query = $pdo->query("DELETE group_relationships FROM group_relationships
+        WHERE gc_type NOT IN ('group_content_type_fb2d5fb87aade', 'department_site-group_node-news', 'group_content_type_d91f8322473a4')
+        AND gid = 0");
     $this->io()->writeln(" ✅");
 
     $this->io()->write("Creating Group Content data (this may take a while)");
