@@ -188,7 +188,7 @@ function dept_node_preprocess_node(array &$variables) {
           ],
         ],
         '#value' => $consultation_ended ? t('Closed') : t('Open'),
-        '#weight' => count($variables['content']) - 1,
+        '#weight' => count($variables['content']) + 1,
       ];
     }
   }
