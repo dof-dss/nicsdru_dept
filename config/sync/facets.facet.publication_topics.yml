@@ -1,4 +1,4 @@
-uuid: fff717d6-e5f1-44cf-bcc0-e9d057b93b91
+uuid: 712275a5-572b-40e5-a714-34de3a4d4a88
 langcode: en
 status: true
 dependencies:
@@ -19,7 +19,7 @@ missing: false
 missing_label: others
 url_alias: topic
 facet_source_id: 'search_api:views_page__publications_search__publications_search'
-field_identifier: field_global_topics
+field_identifier: field_site_topics
 query_operator: and
 hard_limit: 0
 exclude: false
@@ -59,6 +59,11 @@ processor_configs:
       sort: 40
     settings:
       sort: ASC
+  hide_1_result_facet:
+    processor_id: hide_1_result_facet
+    weights:
+      build: 50
+    settings: {  }
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:

@@ -495,7 +495,7 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: '@total publications'
+          content: ''
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -883,18 +883,14 @@ display:
       display_extenders: {  }
       path: publications
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
-        - url.site
         - 'user.node_grants:view'
       tags:
-        - 'config:facets.facet.publication_date'
-        - 'config:facets.facet.publication_topics'
-        - 'config:facets.facet.publication_type'
         - 'config:field.storage.node.field_publication_type'
         - 'config:field.storage.node.field_published_date'
         - 'config:field.storage.node.field_summary'
