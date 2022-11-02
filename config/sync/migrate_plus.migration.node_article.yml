@@ -99,12 +99,7 @@ process:
           -
             plugin: d7_node_lookup
             source: target_id
-  moderation_state:
-    plugin: static_map
-    source: status
-    map:
-      - draft
-      - published
+  status: status
   created: created
   changed: changed
   promote: promote
