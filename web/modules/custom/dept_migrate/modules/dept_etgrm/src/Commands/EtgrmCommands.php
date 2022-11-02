@@ -69,9 +69,12 @@ class EtgrmCommands extends DrushCommands {
    * Create all relationships.
    *
    * @command etgrm:createAll
+   * @option retain-relation-table Keep the group_relationships table.
    * @aliases etgrm:ca
    */
-  public function all() {
+  public function all(array $options = [
+    'retain-relation-table' => FALSE,
+    ]) {
     $database = '';
     $host = '';
     $password = '';
@@ -125,8 +128,8 @@ class EtgrmCommands extends DrushCommands {
     $query = $pdo->query('call DELETE_STALE_IMPORTS(1000)');
     $this->io()->writeln(" ✅");
 
-    // Drop the group_relationships table, if it's still there.
-    if ($dbConn->schema()->tableExists('group_relationships')) {
+    // Drop the group_relationships table if it's still there.
+    if ($options['retain-relation-table'] === FALSE && $dbConn->schema()->tableExists('group_relationships')) {
       $query = $pdo->query('DROP TABLE group_relationships');
     }
 
