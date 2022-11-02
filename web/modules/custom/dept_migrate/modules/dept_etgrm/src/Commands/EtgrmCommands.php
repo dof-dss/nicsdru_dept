@@ -107,10 +107,6 @@ class EtgrmCommands extends DrushCommands {
     $query->execute();
     $this->io()->writeln(" ✅");
 
-    $this->io()->write("Expanding zero based domains to all groups");
-    $query = $pdo->query('call PROCESS_GROUP_ZERO_RELATIONSHIPS()');
-    $this->io()->writeln(" ✅");
-
     $this->io()->write("Creating default NIGov entries");
     $query = $pdo->query('call CREATE_DEFAULT_NIGOV_ENTRIES()');
     $this->io()->writeln(" ✅");

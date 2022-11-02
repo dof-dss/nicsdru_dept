@@ -183,3 +183,21 @@ function dept_etgrm_update_8007() {
   $pdo->exec('DROP PROCEDURE IF EXISTS CREATE_DEFAULT_NIGOV_ENTRIES');
   $pdo->exec(file_get_contents($module_path . '/inc/sql_create_default_nigov_entries.sproc'));
 }
+
+/**
+ * Update hook remove zero-based domains to all groups relationships.
+ *
+ * See DEPT-230.
+ */
+function dept_etgrm_update_8008() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+  $pdo->exec('DROP PROCEDURE IF EXISTS PROCESS_GROUP_ZERO_RELATIONSHIPS');
+}
