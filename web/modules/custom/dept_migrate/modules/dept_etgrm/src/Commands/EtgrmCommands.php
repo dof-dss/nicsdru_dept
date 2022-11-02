@@ -114,6 +114,10 @@ class EtgrmCommands extends DrushCommands {
     $query = $pdo->query('call CREATE_DEFAULT_NIGOV_ENTRIES()');
     $this->io()->writeln(" ✅");
 
+    $this->io()->write("Remove redundant NIGov entries");
+    $query = $pdo->query("DELETE group_relationships FROM group_relationships WHERE gc_type NOT IN ('group_content_type_fb2d5fb87aade', 'department_site-group_node-news', 'group_content_type_d91f8322473a4') AND gid = 0");
+    $this->io()->writeln(" ✅");
+
     $this->io()->write("Creating Group Content data (this may take a while)");
     $query = $pdo->prepare('call PROCESS_GROUP_RELATIONSHIPS(?)');
     $query->bindParam(1, $ts);
