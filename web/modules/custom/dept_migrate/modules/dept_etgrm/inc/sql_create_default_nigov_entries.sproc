@@ -10,7 +10,7 @@ BEGIN
   WHERE gid = 0
   AND gc_type = 'department_site-group_node-news'
   OR gc_type = 'group_content_type_fb2d5fb87aade'
-  OR gc_type = 'group_content_type_d91f8322473a4'
+  OR gc_type = 'group_content_type_d91f8322473a4';
 
   /** Add NIGov entries for news press releases **/
   INSERT INTO group_relationships (nid, gid, gc_type, label)
@@ -20,7 +20,7 @@ BEGIN
   ON n.nid = fd.nid
   LEFT JOIN node__field_news_type AS nt
   ON n.nid = nt.entity_id
-  WHERE nt.field_news_type_value = 'pressrelease'
+  WHERE nt.field_news_type_value = 'pressrelease';
 
   /** Add NIGov entries for consultations **/
   INSERT INTO group_relationships (nid, gid, gc_type, label)
@@ -28,7 +28,7 @@ BEGIN
   FROM node AS n
   LEFT JOIN node_field_data AS fd
   ON n.nid = fd.nid
-  WHERE n.type = 'consultation'
+  WHERE n.type = 'consultation';
 
   /** Add NIGov entries for publications **/
   INSERT INTO group_relationships (nid, gid, gc_type, label)
@@ -36,6 +36,6 @@ BEGIN
   FROM node AS n
   LEFT JOIN node_field_data AS fd
   ON n.nid = fd.nid
-  WHERE n.type = 'publication'
+  WHERE n.type = 'publication';
 
 END
