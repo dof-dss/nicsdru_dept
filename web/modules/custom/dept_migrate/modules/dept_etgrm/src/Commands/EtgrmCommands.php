@@ -74,7 +74,7 @@ class EtgrmCommands extends DrushCommands {
    */
   public function all(array $options = [
     'retain-relation-table' => FALSE,
-    ]) {
+  ]) {
     $database = '';
     $host = '';
     $password = '';
