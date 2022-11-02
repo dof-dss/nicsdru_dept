@@ -182,10 +182,13 @@ function dept_node_preprocess_node(array &$variables) {
         '#type' => 'html_tag',
         '#tag' => 'span',
         '#attributes' => [
-          'class' => 'metaListItem',
+          'class' => [
+            'metaListItem',
+            'card__meta-type',
+          ],
         ],
         '#value' => $consultation_ended ? t('Closed') : t('Open'),
-        '#weight' => count($variables['content']) + 1,
+        '#weight' => count($variables['content']) - 1,
       ];
     }
   }
