@@ -115,7 +115,7 @@ class MediaWysiwygFilter extends ProcessPluginBase implements ContainerFactoryPl
     // Convert from D7 to D9 node id.
     $lookup = $this->lookupManager->lookupBySourceNodeId([$nid]);
     $lookup = reset($lookup);
-    $nid = $lookup['nid'];
+    $nid = $lookup['nid'] ?? 0;
 
     $value['value'] = preg_replace_callback($pattern, function ($matches) use ($messenger, $nid) {
       $decoder = new JsonDecode(TRUE);
