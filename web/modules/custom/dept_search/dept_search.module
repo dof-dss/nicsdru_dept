@@ -21,14 +21,6 @@ function dept_search_form_search_api_form_alter(&$form) {
  */
 function dept_search_preprocess_block(&$variables) {
   // Look for the 'social sharing' block.
-  if (preg_match('/consultations_search-consultations_search/', $variables['plugin_id'])) {
-    $variables['content']['preamble'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'div',
-      '#value' => t('Search consultations and choose filters to show only the results you want'),
-      '#weight' => -1,
-    ];
-  }
 
   if (preg_match('/press_release_search-pr_search_page/', $variables['plugin_id'])) {
     $variables['content']['preamble'] = [
