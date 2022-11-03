@@ -3,7 +3,7 @@
 use Drupal\Core\Database\Database;
 
 /*
- * Create all stored procedures and functions on install.
+ * Create all stored procedures and functions on installation.
  */
 function dept_etgrm_install() {
   $database = '';
@@ -14,26 +14,17 @@ function dept_etgrm_install() {
   $module_handler = \Drupal::service('module_handler');
   $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());
 
-  $sql_proc_list = [
-    'content_plugin_id',
-    'domain_id_to_group_id',
-    'process_group_relationships',
-    'process_group_zero_relationships',
-    'create_group_relationships',
-    'update_node_access',
-  ];
-
   $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
 
-  foreach ($sql_proc_list as $proc) {
-    $pdo->exec('DROP FUNCTION IF EXISTS `' . strtoupper($proc) . '`');
-    $pdo->exec('DROP PROCEDURE IF EXISTS `' . strtoupper($proc) . '`');
-    $pdo->exec(file_get_contents($module_path . '/inc/sql_' . $proc . ".sproc"));
+  foreach (dept_etgrm_sprocs() as $sproc) {
+    $pdo->exec('DROP FUNCTION IF EXISTS `' . strtoupper($sproc) . '`');
+    $pdo->exec('DROP PROCEDURE IF EXISTS `' . strtoupper($sproc) . '`');
+    $pdo->exec(file_get_contents($module_path . '/inc/sql_' . $sproc . ".sproc"));
   }
 }
 
 /*
- * Remove all stored procedures and functions on uninstall.
+ * Remove all stored procedures and functions on uninstallation.
  */
 function dept_etgrm_uninstall() {
   $database = '';
@@ -42,21 +33,30 @@ function dept_etgrm_uninstall() {
   $username = '';
   extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
 
-  $sql_proc_list = [
-    'content_plugin_id',
-    'domain_id_to_group_id',
-    'process_group_relationships',
-    'process_group_zero_relationships',
-    'create_group_relationships',
-    'update_node_access',
-  ];
-
   $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
 
-  foreach ($sql_proc_list as $proc) {
-    $pdo->exec('DROP FUNCTION IF EXISTS `' . strtoupper($proc) . '`');
-    $pdo->exec('DROP PROCEDURE IF EXISTS `' . strtoupper($proc) . '`');
+  foreach (dept_etgrm_sprocs() as $sproc) {
+    $pdo->exec('DROP FUNCTION IF EXISTS `' . strtoupper($sproc) . '`');
+    $pdo->exec('DROP PROCEDURE IF EXISTS `' . strtoupper($sproc) . '`');
   }
+}
+
+/*
+ * Return array of stored procedure and function names from inc directory.
+ */
+function dept_etgrm_sprocs():array {
+  $sprocs = [];
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());
+
+  $files = scandir($module_path . '/inc');
+
+  foreach ($files as $file) {
+    if (substr($file, 0, 4) === 'sql_') {
+      $sprocs[] = substr($file, 4, (strlen($file) - 10));
+    }
+  }
+  return $sprocs;
 }
 
 /**
@@ -165,4 +165,42 @@ function dept_etgrm_update_8006() {
   $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
   $pdo->exec("DELETE FROM group_content WHERE type like '%unknown%'");
   $pdo->exec("DELETE FROM group_content_field_data WHERE type like '%unknown%'");
+}
+
+/**
+ * Update hook to add NIGov entries for all press releases, publications and
+ * consultations.
+ *
+ * See DEPT-230.
+ */
+function dept_etgrm_update_8007() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+  $pdo->exec('DROP PROCEDURE IF EXISTS CREATE_DEFAULT_NIGOV_ENTRIES');
+  $pdo->exec(file_get_contents($module_path . '/inc/sql_create_default_nigov_entries.sproc'));
+}
+
+/**
+ * Update hook remove zero-based domains to all groups relationships.
+ *
+ * See DEPT-230.
+ */
+function dept_etgrm_update_8008() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+  $pdo->exec('DROP PROCEDURE IF EXISTS PROCESS_GROUP_ZERO_RELATIONSHIPS');
 }
