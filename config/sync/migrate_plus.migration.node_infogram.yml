@@ -32,6 +32,15 @@ process:
       plugin: d7_user_lookup
       source: node_uid
   status: status
+  moderation_state:
+    plugin: static_map
+    source: status
+    default_value: draft
+    map:
+      -
+        - draft
+      -
+        1: published
   created: created
   changed: changed
   promote: promote
