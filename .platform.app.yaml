@@ -85,6 +85,18 @@ hooks:
     ../vendor/bin/drush -y config-import
     # Final cache rebuild.
     ../vendor/bin/drush -y cache-rebuild
+  post_deploy: |
+    set -e
+
+    echo "***** Creating QA accounts ******"
+    IFS=',' read -ra usernames <<< "$QA_USERNAMES"
+
+    for username in "${usernames[@]}"
+    do
+      drush ucrt $username --password=$QA_PASSWORD
+      drush urol administrator $username
+    done
+
 # The configuration of app when it is exposed to the web.
 web:
   # Specific parameters for different URL prefixes.
