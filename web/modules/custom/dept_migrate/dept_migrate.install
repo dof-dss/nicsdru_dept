@@ -1,0 +1,20 @@
+<?php
+
+use Drupal\Core\Database\Database;
+
+/**
+* Ad-hoc removal of problematic data properties from source db
+*/
+function dept_migrate_update_8001() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+  $query = "UPDATE node__body
+      SET body_value = REGEXP_REPLACE(body_value, 'data-entity-type=\"node\" (data-entity-uuid=\".+)\" ', '')
+      WHERE body_value LIKE '%data-entity-type=\"node\" data-entity-uuid=%'";
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+  $pdo->exec($query);
+}

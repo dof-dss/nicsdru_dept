@@ -176,6 +176,14 @@
             "phpstan/extension-installer": true
         }
     },
+    "scripts": {
+        "post-install-cmd": [
+            "php -r \"copy('robots_custom.txt', 'web/robots.txt');\""
+        ],
+        "post-update-cmd": [
+            "php -r \"copy('robots_custom.txt', 'web/robots.txt');\""
+        ]
+    },
     "extra": {
         "drupal-scaffold": {
             "locations": {
