@@ -176,6 +176,14 @@
             "phpstan/extension-installer": true
         }
     },
+    "scripts": {
+        "post-install-cmd": [
+            "php -r \"copy('robots_custom.txt', 'web/robots.txt');\""
+        ],
+        "post-update-cmd": [
+            "php -r \"copy('robots_custom.txt', 'web/robots.txt');\""
+        ]
+    },
     "extra": {
         "drupal-scaffold": {
             "locations": {
@@ -252,9 +260,10 @@
                 "Fatal error when un-checking the \"Provide a menu link\" checkbox on a node form": "https://git.drupalcode.org/project/group_content_menu/-/merge_requests/1.diff"
             },
             "drupal/group": {
-              "How to migrate content into group and group content": "https://www.drupal.org/files/issues/2020-02-17/groupcontent-disable-during-migration_0.patch",
               "Access to Revisions of Group Content is Broken": "https://www.drupal.org/files/issues/2022-03-30/group-3256998-35.patch",
-              "Add a computed field for entity's group(s)": "https://www.drupal.org/files/issues/2022-07-07/group-computed-fields-2718195-65.patch"
+              "Add a computed field for entity's group(s)": "https://www.drupal.org/files/issues/2022-07-07/group-computed-fields-2718195-65.patch",
+              "Group Permission Callbacks Create White Screen Error on Group Type Permissions Page": "https://www.drupal.org/files/issues/2022-07-27/group-3294949-2.patch",
+              "Node update hook is triggered upon group content create": "https://www.drupal.org/files/issues/2022-01-04/2872697-45.patch"
             },
             "drupal/devel": {
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://raw.githubusercontent.com/politsin/snipets/master/patch/kint.patch"
