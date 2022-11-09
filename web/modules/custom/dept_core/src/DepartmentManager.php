@@ -122,7 +122,7 @@ class DepartmentManager {
     $department = $cache_item->data ?? '';
 
     if (!$department instanceof Department) {
-      $department = new Department($this->entityTypeManager, $id, $this->configStorageSync);
+      $department = new Department($this->entityTypeManager, $this->configStorageSync, $id);
       // Add to cache and use tags that will invalidate when the Domain or
       // Group entities change.
       $this->cache->set('department_' . $id, $department, CACHE::PERMANENT, [

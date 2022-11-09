@@ -69,10 +69,12 @@ class Department {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param Drupal\Core\Config\FileStorage $config_storage_sync
+   *   The default 'sync' config storage.
    * @param string|null $domain_id
    *   The Domain Identifier.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, string $domain_id = NULL, FileStorage $config_storage_sync) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, FileStorage $config_storage_sync, string $domain_id = NULL) {
     $this->id = $domain_id;
     $domain = $this->domain = $entity_type_manager->getStorage('domain')->load($this->id);
 
