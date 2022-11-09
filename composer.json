@@ -268,8 +268,11 @@
             "drupal/devel": {
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://raw.githubusercontent.com/politsin/snipets/master/patch/kint.patch"
             },
+            "drupal/facets": {
+                "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
+            },
             "drupal/facets_pretty_paths": {
-                "Cannot filter properly when using facet pretty paths": "https://www.drupal.org/files/issues/2022-04-19/url-duplication-25.patch"
+                "Cannot filter properly when using facet pretty paths": "https://www.drupal.org/files/issues/2022-01-11/url-duplication.patch"
             },
             "drupal/date_facet_drilldown": {
                 "Enable support for facet query string": "https://www.drupal.org/files/issues/2022-11-09/date_facet_drilldown-3320111-2.patch"
