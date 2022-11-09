@@ -4,7 +4,7 @@ namespace Drupal\dept_core;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\domain\DomainNegotiatorInterface;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -45,9 +45,16 @@ class DepartmentManager {
   /**
    * The default 'sync' config storage.
    *
-   * @var \Drupal\Core\Config\FileStorage
+   * @var \Drupal\Core\Config\StorageInterface
    */
   protected $configStorageSync;
+
+  /**
+   * The current (loaded) config storage.
+   *
+   * @var \Drupal\Core\Config\StorageInterface
+   */
+  protected $configStorage;
 
   /**
    * Constructs a DepartmentManager object.
@@ -60,20 +67,24 @@ class DepartmentManager {
    *   The default cache service.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
-   * @param \Drupal\Core\Config\FileStorage $config_storage_sync
+   * @param \Drupal\Core\Config\StorageInterface $config_storage_sync
    *   The default 'sync' config storage.
+   * @param \Drupal\Core\Config\StorageInterface $config_storage
+   *   The current (loaded) config storage.
    */
   public function __construct(
     DomainNegotiatorInterface $domain_negotiator,
     EntityTypeManagerInterface $entity_type_manager,
     CacheBackendInterface $cache,
     MessengerInterface $messenger,
-    FileStorage $config_storage_sync) {
+    StorageInterface $config_storage_sync,
+    StorageInterface $config_storage) {
     $this->domainNegotiator = $domain_negotiator;
     $this->entityTypeManager = $entity_type_manager;
     $this->cache = $cache;
     $this->messenger = $messenger;
     $this->configStorageSync = $config_storage_sync;
+    $this->configStorage = $config_storage;
   }
 
   /**
@@ -122,7 +133,7 @@ class DepartmentManager {
     $department = $cache_item->data ?? '';
 
     if (!$department instanceof Department) {
-      $department = new Department($this->entityTypeManager, $this->configStorageSync, $id);
+      $department = new Department($this->entityTypeManager, $this->configStorageSync, $this->configStorage, $id);
       // Add to cache and use tags that will invalidate when the Domain or
       // Group entities change.
       $this->cache->set('department_' . $id, $department, CACHE::PERMANENT, [
