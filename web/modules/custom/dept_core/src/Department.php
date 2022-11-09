@@ -141,10 +141,13 @@ class Department {
   }
 
   /**
-   * URL.
+   * Full URL (protocol and hostname).
+   *
+   * @param bool $live_url
+   *   Return live URL if true, else return the configuration Url.
    */
-  public function url(): string {
-    return $this->url;
+  public function url(bool $live_url = TRUE, bool $secure_protocol = TRUE): string {
+    return ($secure_protocol ? "https://" : "http://") . $this->hostname($live_url);
   }
 
   /**
