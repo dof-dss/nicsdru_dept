@@ -1,7 +1,7 @@
 services:
   department.manager:
     class: Drupal\dept_core\DepartmentManager
-    arguments: ['@domain.negotiator', '@entity_type.manager', '@cache.default', '@messenger']
+    arguments: ['@domain.negotiator', '@entity_type.manager', '@cache.default', '@messenger', '@config.storage.sync']
   topics.redirect_manager:
     class: Drupal\dept_core\EventSubscriber\TopicsRedirectManager
     arguments: [ '@database', '%topic_route_patterns%']

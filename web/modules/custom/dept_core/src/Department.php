@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_core;
 
+use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\domain\Entity\Domain;
@@ -71,7 +72,7 @@ class Department {
    * @param string|null $domain_id
    *   The Domain Identifier.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, string $domain_id = NULL) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, string $domain_id = NULL, FileStorage $config_storage_sync) {
     $this->id = $domain_id;
     $domain = $this->domain = $entity_type_manager->getStorage('domain')->load($this->id);
 
@@ -81,6 +82,9 @@ class Department {
       $this->domainId = $domain->get('domain_id');
       $this->setGroupId($domain->id());
       $this->group = $entity_type_manager->getStorage('group')->load($this->groupId);
+
+      $config = $config_storage_sync->read('domain.record.' . $this->id());
+      $this->url = $config['hostname'];
     }
   }
 
