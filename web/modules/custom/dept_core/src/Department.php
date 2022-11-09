@@ -145,6 +145,8 @@ class Department {
    *
    * @param bool $live_url
    *   Return live URL if true, else return the configuration Url.
+   * @param bool $secure_protocol
+   *   Return URL with HTTPS or HTTP protocol.
    */
   public function url(bool $live_url = TRUE, bool $secure_protocol = TRUE): string {
     return ($secure_protocol ? "https://" : "http://") . $this->hostname($live_url);
@@ -153,11 +155,11 @@ class Department {
   /**
    * Hostname.
    *
-   * @param boolean $live_hostname
+   * @param bool $live_hostname
    *   Return live hostname if true, else return the configuration hostname.
    */
-  public function hostname($live_hostname = TRUE): string {
-      return $live_hostname ? $this->hostnames[0] : $this->hostnames[1];
+  public function hostname(bool $live_hostname = TRUE): string {
+    return $live_hostname ? $this->hostnames[0] : $this->hostnames[1];
   }
 
   /**

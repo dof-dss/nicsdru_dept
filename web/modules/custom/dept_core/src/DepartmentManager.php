@@ -143,5 +143,7 @@ class DepartmentManager {
     }
 
     return $department;
+
   }
+
 }
