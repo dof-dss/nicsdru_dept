@@ -16,8 +16,14 @@ process:
     - plugin: get
       source: weight
   book/pid:
+    - plugin: skip_on_empty
+      method: process
+      source: plid
     - plugin: migration_lookup
       migration: dept_book
+  book/p2:
+    - plugin: d7_node_lookup
+      source: p2
 destination:
   plugin: book
 migration_dependencies:
