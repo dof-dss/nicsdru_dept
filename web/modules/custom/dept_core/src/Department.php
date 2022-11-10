@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_core;
 
+use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\domain\Entity\Domain;
@@ -57,30 +58,41 @@ class Department {
   protected string $name;
 
   /**
-   * URL for the department.
+   * Hostnames for the department.
    *
-   * @var string
+   * @var array
    */
-  protected $url;
+  protected array $hostnames;
 
   /**
    * Class constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Config\StorageInterface $config_storage_sync
+   *   The default 'sync' config storage.
+   * @param \Drupal\Core\Config\StorageInterface $config_storage
+   *   The current (loaded) config storage.
    * @param string|null $domain_id
    *   The Domain Identifier.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, string $domain_id = NULL) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, StorageInterface $config_storage_sync, StorageInterface $config_storage, string $domain_id = NULL) {
     $this->id = $domain_id;
     $domain = $this->domain = $entity_type_manager->getStorage('domain')->load($this->id);
 
     if ($domain instanceof Domain) {
       $this->name = $domain->label();
-      $this->url = $domain->getPath();
       $this->domainId = $domain->get('domain_id');
       $this->setGroupId($domain->id());
       $this->group = $entity_type_manager->getStorage('group')->load($this->groupId);
+
+      // Live Url for the department.
+      $config = $config_storage_sync->read('domain.record.' . $this->id());
+      $this->hostnames[] = $config['hostname'];
+
+      // Current configuration URL for the department.
+      $config = $config_storage->read('domain.record.' . $this->id());
+      $this->hostnames[] = $config['hostname'];
     }
   }
 
@@ -129,17 +141,25 @@ class Department {
   }
 
   /**
-   * URL.
+   * Full URL (protocol and hostname).
+   *
+   * @param bool $live_url
+   *   Return live URL if true, else return the configuration Url.
+   * @param bool $secure_protocol
+   *   Return URL with HTTPS or HTTP protocol.
    */
-  public function url(): string {
-    return $this->url;
+  public function url(bool $live_url = TRUE, bool $secure_protocol = TRUE): string {
+    return ($secure_protocol ? "https://" : "http://") . $this->hostname($live_url);
   }
 
   /**
-   * Domain.
+   * Hostname.
+   *
+   * @param bool $live_hostname
+   *   Return live hostname if true, else return the configuration hostname.
    */
-  public function hostname(): string {
-    return str_replace('www.', '', $this->domain->getHostname());
+  public function hostname(bool $live_hostname = TRUE): string {
+    return $live_hostname ? $this->hostnames[0] : $this->hostnames[1];
   }
 
   /**
