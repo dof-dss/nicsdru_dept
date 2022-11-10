@@ -35,24 +35,19 @@ class ToolbarSitesSettingsForm extends ConfigFormBase {
       '#title' => $this->t('URL settings'),
     ];
 
-    $form['toolbar_sites']['lando_hostname'] = [
+    $form['toolbar_sites']['config_hostnames'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Enable lando hostname'),
-      '#description' => $this->t('Rewrites the domain links to use the lndo.site hostname'),
-      '#default_value' => $this->config('dept_dev.settings.toolbar_sites')->get('lando_hostname'),
+      '#title' => $this->t('Enable configuration hostnames'),
+      '#description' => $this->t('Uses the hostnames in the loaded configuration (i.e. lando or edge domains)'),
+      '#default_value' => $this->config('dept_dev.settings.toolbar_sites')->get('config_hostnames'),
     ];
 
-    $form['toolbar_sites']['lando_protocol'] = [
+    $form['toolbar_sites']['url_protocol'] = [
       '#type' => 'radios',
-      '#title' => $this->t('Lando protocol'),
-      '#description' => $this->t('Rewrites the protocol for the lando hostname'),
-      '#options' => ['HTTPS', 'HTTP'],
-      '#default_value' => $this->config('dept_dev.settings.toolbar_sites')->get('lando_protocol') ?? '0',
-      '#states' => [
-        'invisible' => [
-          ':input[name="lando_hostname"]' => ['checked' => FALSE],
-        ],
-      ],
+      '#title' => $this->t('URL protocol'),
+      '#description' => $this->t('Protocol to use for site links'),
+      '#options' => ['1' => 'HTTPS', '0' => 'HTTP'],
+      '#default_value' => $this->config('dept_dev.settings.toolbar_sites')->get('url_protocol') ?? '0',
     ];
 
     return parent::buildForm($form, $form_state);
@@ -63,8 +58,8 @@ class ToolbarSitesSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('dept_dev.settings.toolbar_sites');
-    $config->set('lando_hostname', $form_state->getValue('lando_hostname'));
-    $config->set('lando_protocol', $form_state->getValue('lando_protocol'));
+    $config->set('config_hostnames', $form_state->getValue('config_hostnames'));
+    $config->set('url_protocol', $form_state->getValue('url_protocol'));
     $config->save();
     Cache::invalidateTags(['dept_dev_tools_sites']);
     parent::submitForm($form, $form_state);
