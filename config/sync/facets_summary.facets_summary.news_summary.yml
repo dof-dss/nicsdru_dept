@@ -1,0 +1,31 @@
+uuid: d49b48d0-f647-49b3-aa9a-741cdf9d6d9f
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.news_index
+    - views.view.news_search
+  module:
+    - search_api
+id: news_summary
+name: 'News summary'
+facet_source_id: 'search_api:views_page__news_search__news_search'
+processor_configs:
+  hide_when_not_rendered:
+    processor_id: hide_when_not_rendered
+    weights:
+      build: '45'
+    settings: {  }
+facets:
+  news_publication_date:
+    checked: true
+    label: 'Publication date'
+    separator: ', '
+    show_count: false
+    weight: 0
+  news_topic:
+    checked: true
+    label: 'Global topics'
+    separator: ', '
+    show_count: false
+    weight: 0
