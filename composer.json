@@ -272,7 +272,7 @@
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
             },
             "drupal/facets_pretty_paths": {
-                "Cannot filter properly when using facet pretty paths": "https://www.drupal.org/files/issues/2022-01-11/url-duplication.patch"
+                "Composite patch for issues 2952005 and 3254600": "https://gist.githubusercontent.com/johangant/00ba5b48ea73dc23c68fa31389e59b31/raw/867a56ab06bce67f9cbfae65d3dd3b974e09b92a/fpp-result-count-query-handler.patch"
             },
             "drupal/date_facet_drilldown": {
                 "Enable support for facet query string": "https://www.drupal.org/files/issues/2022-11-09/date_facet_drilldown-3320111-2.patch"

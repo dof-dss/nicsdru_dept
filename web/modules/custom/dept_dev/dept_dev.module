@@ -18,8 +18,8 @@ use Drupal\dept_dev\DeptDevLazyBuilders;
 function dept_dev_toolbar() {
   $items = [];
 
-  $config_hostnames = \Drupal::config('dept_dev.settings.toolbar_sites')->get('config_hostnames');
-  $url_protocol = \Drupal::config('dept_dev.settings.toolbar_sites')->get('url_protocol');
+  $config_hostnames = \Drupal::config('dept_dev.settings.toolbar_sites')->get('config_hostnames') ?? 1;
+  $url_protocol = \Drupal::config('dept_dev.settings.toolbar_sites')->get('url_protocol') ?? 0;
   $department_manager = \Drupal::service('department.manager');
 
   $departments = $department_manager->getAllDepartments();
