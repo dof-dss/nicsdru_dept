@@ -164,4 +164,3 @@ class PublicationsSortBy extends AreaPluginBase {
   }
 
 }
-
