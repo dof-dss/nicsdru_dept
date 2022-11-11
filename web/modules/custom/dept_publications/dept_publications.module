@@ -104,10 +104,13 @@ function dept_publications_form_alter(&$form, &$form_state, &$form_id) {
   }
 }
 
+/**
+ * Implements hook_views_data_alter().
+ */
 function dept_publications_views_data_alter(array &$data) {
   $data['views']['publications_sort_by'] = [
-    'title' => t('Sort by'),
-    'help' => t('Provides sort by option.'),
+    'title' => t('Publications search sort links'),
+    'help' => t('Provides links to sort publication results.'),
     'area' => [
       'id' => 'publications_sort_by',
     ],
