@@ -60,7 +60,6 @@ class PublicationsSortBy extends AreaPluginBase {
    * @return array
    *   In any case we need a valid Drupal render array to return.
    */
-
   public function render($empty = FALSE) {
 
     if ($empty) {
@@ -163,4 +162,6 @@ class PublicationsSortBy extends AreaPluginBase {
 
     return $sort_options;
   }
+
 }
+
