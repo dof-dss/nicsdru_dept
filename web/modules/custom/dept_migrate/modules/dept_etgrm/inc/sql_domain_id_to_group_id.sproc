@@ -11,7 +11,7 @@ BEGIN
   END IF;
 
   RETURN CASE output
-    WHEN 0 THEN 0
+    WHEN 0 THEN null
     WHEN 1 THEN 1
     WHEN 2 THEN 3
     WHEN 3 THEN null
