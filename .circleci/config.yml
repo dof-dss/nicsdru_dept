@@ -201,8 +201,9 @@ jobs:
             platform ssh -p $PLATFORM_PROJECT -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-rt
             platform ssh -p $PLATFORM_PROJECT -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-c
             platform ssh -p $PLATFORM_PROJECT -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-r
-            platform ssh -p $PLATFORM_PROJECT -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-i
+            platform ssh -p $PLATFORM_PROJECT -e $EDGE_BUILD_BRANCH /app/vendor/bin/drush sapi-i --batch-size=250
           when: always
+          no_output_timeout: 20m
 
 # Re-usable commands.
 commands:
