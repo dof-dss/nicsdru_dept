@@ -6,7 +6,7 @@ BEGIN
 
   /** Add NIGov entries for news press releases **/
   INSERT INTO group_relationships (nid, gid, gc_type, label)
-  SELECT n.nid, '0', 'department_site-group_node-news', fd.title
+  SELECT n.nid, '1', 'department_site-group_node-news', fd.title
   FROM node AS n
   LEFT JOIN node_field_data AS fd
   ON n.nid = fd.nid
@@ -16,7 +16,7 @@ BEGIN
 
   /** Add NIGov entries for consultations **/
   INSERT INTO group_relationships (nid, gid, gc_type, label)
-  SELECT n.nid, '0', 'group_content_type_fb2d5fb87aade', fd.title
+  SELECT n.nid, '1', 'group_content_type_fb2d5fb87aade', fd.title
   FROM node AS n
   LEFT JOIN node_field_data AS fd
   ON n.nid = fd.nid
@@ -24,7 +24,7 @@ BEGIN
 
   /** Add NIGov entries for publications **/
   INSERT INTO group_relationships (nid, gid, gc_type, label)
-  SELECT n.nid, '0', 'group_content_type_d91f8322473a4', fd.title
+  SELECT n.nid, '1', 'group_content_type_d91f8322473a4', fd.title
   FROM node AS n
   LEFT JOIN node_field_data AS fd
   ON n.nid = fd.nid
