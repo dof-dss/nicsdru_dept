@@ -10,7 +10,7 @@ dependencies:
     - search_api.index.publications_index
   module:
     - datetime
-    - dept_publications
+    - dept_search
     - options
     - search_api
     - text
@@ -496,7 +496,8 @@ display:
         options:
           bypass_access: false
           skip_access: true
-          preserve_facet_query_args: false
+          preserve_facet_query_args: true
+          query_tags: {  }
           contextual_filters_or: false
       relationships: {  }
       header:
@@ -510,14 +511,14 @@ display:
           plugin_id: result
           empty: false
           content: '<h2 class="view--count">@total publications</h2>'
-        publications_sort_by:
-          id: publications_sort_by
+        search_sort_by:
+          id: search_sort_by
           table: views
-          field: publications_sort_by
+          field: search_sort_by
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: publications_sort_by
+          plugin_id: search_sort_by
           empty: false
       footer: {  }
       display_extenders: {  }
