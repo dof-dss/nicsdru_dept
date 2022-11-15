@@ -1,0 +1,23 @@
+uuid: cc964b4f-d672-4831-a292-9d8efc2f2496
+langcode: en
+status: true
+dependencies: {  }
+id: node__publication
+label: 'Content: Publication'
+tags:
+  article_modified_time: '[node:created:custom:c]'
+  article_published_time: '[node:created:custom:c]'
+  article_tag: '[node:field_site_topics],[node:field_site_subtopics]'
+  canonical_url: '[current-page:url:absolute]'
+  description: '[node:field_summary]'
+  og_description: '[node:field_summary]'
+  og_title: '[node:title]'
+  og_type: Publication
+  og_updated_time: '[node:changed:custom:c]'
+  og_url: '[current-page:url:absolute]'
+  shortlink: '[current-page:url:unaliased]'
+  title: '[current-page:title] | [site:slogan]'
+  twitter_cards_description: '[node:field_summary]'
+  twitter_cards_page_url: '[current-page:url:absolute]'
+  twitter_cards_title: '[node:title]'
+  twitter_cards_type: summary
