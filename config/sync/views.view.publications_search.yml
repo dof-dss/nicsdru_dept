@@ -377,6 +377,19 @@ display:
             label: 'Published date'
             field_identifier: field_published_date
           exposed: true
+        field_published_date_1:
+          id: field_published_date_1
+          table: search_api_index_publications_index
+          field: field_published_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments:
         group_id:
           id: group_id

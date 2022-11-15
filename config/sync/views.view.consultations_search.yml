@@ -124,7 +124,7 @@ display:
           reset_button: false
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
-          expose_sort_order: false
+          expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
@@ -161,6 +161,19 @@ display:
             label: 'Published date'
             field_identifier: field_published_date
           exposed: true
+        field_published_date_1:
+          id: field_published_date_1
+          table: search_api_index_consultations_index
+          field: field_published_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments: {  }
       filters:
         search_api_fulltext:
@@ -277,6 +290,7 @@ display:
         - url
         - url.query_args
         - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
         - 'user.node_grants:view'
       tags:
         - 'config:field.storage.node.body'
@@ -306,6 +320,7 @@ display:
         - url
         - url.query_args
         - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
         - 'user.node_grants:view'
       tags:
         - 'config:field.storage.node.body'
