@@ -1,7 +1,8 @@
 <?php
 
-namespace Drupal\dept_publications\Plugin\views\area;
+namespace Drupal\dept_search\Plugin\views\area;
 
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\views\Plugin\views\area\AreaPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -11,9 +12,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @ingroup views_area_handlers
  *
- * @ViewsArea("publications_sort_by")
+ * @ViewsArea("search_sort_by")
  */
-class PublicationsSortBy extends AreaPluginBase {
+class SearchSortBy extends AreaPluginBase {
+
+  /**
+   * The route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
   // Query parameter of search form.
   const KEYWORD_PARAM = 'search';
 
@@ -23,11 +32,8 @@ class PublicationsSortBy extends AreaPluginBase {
   // Query parameter created by view for relevance field.
   const RELEVANCE_PARAM = 'search_api_relevance';
 
-  // Search view's route name.
-  const SEARCH_PAGE_ROUTE = 'view.publications_search.publications_search';
-
   /**
-   * Constructs a new PublicationsSortBy.
+   * Constructs a new SearchSortBy.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -35,9 +41,12 @@ class PublicationsSortBy extends AreaPluginBase {
    *   The plugin ID for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The current route match.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, RouteMatchInterface $route_match) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->routeMatch = $route_match;
   }
 
   /**
@@ -47,7 +56,8 @@ class PublicationsSortBy extends AreaPluginBase {
     return new static(
       $configuration,
       $plugin_id,
-      $plugin_definition
+      $plugin_definition,
+      $container->get('current_route_match')
     );
   }
 
@@ -67,6 +77,8 @@ class PublicationsSortBy extends AreaPluginBase {
     }
 
     $request_query = \Drupal::request()->query;
+    $routeName = $this->routeMatch->getRouteName();
+    $routeParams = $this->routeMatch->getRawParameters()->all();
 
     // Default query options for published date sort criteria.
     $date_options_query = $request_query->all();
@@ -133,7 +145,7 @@ class PublicationsSortBy extends AreaPluginBase {
         $sort_options['sort_link'] = [
           '#type' => 'link',
           '#title' => 'sort by date published',
-          '#url' => Url::fromRoute(self::SEARCH_PAGE_ROUTE, [], $date_options),
+          '#url' => Url::fromRoute($routeName, $routeParams, $date_options),
           '#attributes' => [
             'data-self-ref' => ['false'],
           ],
@@ -152,7 +164,7 @@ class PublicationsSortBy extends AreaPluginBase {
         $sort_options['sort_link'] = [
           '#type' => 'link',
           '#title' => 'sort by relevance',
-          '#url' => Url::fromRoute(self::SEARCH_PAGE_ROUTE, [], $relevance_options),
+          '#url' => Url::fromRoute($routeName, $routeParams, $relevance_options),
           '#attributes' => [
             'data-self-ref' => ['false'],
           ],

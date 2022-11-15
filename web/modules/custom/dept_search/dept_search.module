@@ -127,3 +127,33 @@ function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$a
     }
   }
 }
+
+/**
+ * Implements hook_form_alter().
+ */
+function dept_search_form_alter(&$form, &$form_state, &$form_id) {
+  // Don't display the sort/order by options on view exposed
+  // search forms.
+  switch ($form['#id']) {
+    case 'views-exposed-form-consultations-search-consultations-search':
+    case 'views-exposed-form-news-search-news-search':
+    case 'views-exposed-form-publications-search-publications-search':
+      $form['sort_by']['#type'] = 'hidden';
+      $form['sort_order']['#type'] = 'hidden';
+      break;
+  }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function dept_search_views_data_alter(array &$data) {
+  $data['views']['search_sort_by'] = [
+    'title' => t('Search sort links'),
+    'help' => t('Provides links to sort search results by publication date and by relevance.'),
+    'area' => [
+      'id' => 'search_sort_by',
+    ],
+  ];
+  return $data;
+}
