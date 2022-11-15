@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * Update toolbar config
+ */
+function dept_dev_update_8001() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('dept_dev.settings.toolbar_sites');
+  $config->set('config_hostnames', 1);
+  $config->set('url_protocol', 0);
+  $config->save(TRUE);
+}
+

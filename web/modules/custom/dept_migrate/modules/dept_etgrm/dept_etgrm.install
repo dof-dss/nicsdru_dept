@@ -204,3 +204,29 @@ function dept_etgrm_update_8008() {
   $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
   $pdo->exec('DROP PROCEDURE IF EXISTS PROCESS_GROUP_ZERO_RELATIONSHIPS');
 }
+
+/**
+ * Update hook to fix zero based group relationships.
+ *
+ * See DEPT-248.
+ */
+function dept_etgrm_update_8009() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_etgrm')->getPath());
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+  $pdo->exec('DROP PROCEDURE IF EXISTS CREATE_DEFAULT_NIGOV_ENTRIES');
+  $pdo->exec(file_get_contents($module_path . '/inc/sql_create_default_nigov_entries.sproc'));
+
+  $pdo->exec('DROP FUNCTION IF EXISTS DOMAIN_ID_TO_GROUP_ID');
+  $pdo->exec(file_get_contents($module_path . '/inc/sql_domain_id_to_group_id.sproc'));
+
+  $query = $pdo->query("UPDATE group_content_field_data SET gid = 1
+        WHERE type IN ('group_content_type_fb2d5fb87aade', 'department_site-group_node-news', 'group_content_type_d91f8322473a4')
+        AND gid = 0");
+}

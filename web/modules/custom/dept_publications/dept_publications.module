@@ -82,10 +82,38 @@ function dept_publications_validate_publication(&$form, FormStateInterface $form
     $allowed_domains[] = $department->hostname();
   }
 
-  $regex = '/https?:\/\/(?:www.)?(' . rtrim(implode('|', $allowed_domains), '|') . ')\/publications\/.+/m';
+  if (!empty($values['field_external_publication'][0]["uri"])) {
+    $regex = '/https?:\/\/(?:www.)?(' . rtrim(implode('|', $allowed_domains), '|') . ')\/publications\/.+/m';
 
-  if (preg_match($regex, $values['field_external_publication'][0]['uri']) !== 1) {
-    $form_state->setErrorByName('field_external_publication', t('External publications links can only be to departmental websites e.g http://www.health-ni.gov.uk/publications/alternative-languages-and-accessible-formats'));
+    if (preg_match($regex, $values['field_external_publication'][0]['uri']) !== 1) {
+      $form_state->setErrorByName('field_external_publication', t('External publications links can only be to departmental websites e.g http://www.health-ni.gov.uk/publications/alternative-languages-and-accessible-formats'));
+    }
   }
 
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function dept_publications_form_alter(&$form, &$form_state, &$form_id) {
+  // Don't display the sort/order by options on the
+  // publications exposed search form.
+  if ($form['#id'] == 'views-exposed-form-publications-search-publications-search') {
+    $form['sort_by']['#type'] = 'hidden';
+    $form['sort_order']['#type'] = 'hidden';
+  }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function dept_publications_views_data_alter(array &$data) {
+  $data['views']['publications_sort_by'] = [
+    'title' => t('Publications search sort links'),
+    'help' => t('Provides links to sort publication results.'),
+    'area' => [
+      'id' => 'publications_sort_by',
+    ],
+  ];
+  return $data;
 }

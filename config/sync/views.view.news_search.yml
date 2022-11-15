@@ -23,7 +23,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'News search'
+      title: News
       fields:
         body:
           id: body
@@ -116,11 +116,11 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          quantity: 9
+          quantity: 5
       exposed_form:
         type: basic
         options:
-          submit_button: Go
+          submit_button: Search
           reset_button: false
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
@@ -135,10 +135,10 @@ display:
         options: {  }
       empty: {  }
       sorts:
-        search_api_relevance:
-          id: search_api_relevance
+        field_published_date:
+          id: field_published_date
           table: search_api_index_news_index
-          field: search_api_relevance
+          field: field_published_date
           relationship: none
           group_type: group
           admin_label: ''
@@ -148,10 +148,10 @@ display:
             label: ''
             field_identifier: ''
           exposed: false
-        field_published_date:
-          id: field_published_date
+        search_api_relevance:
+          id: search_api_relevance
           table: search_api_index_news_index
-          field: field_published_date
+          field: search_api_relevance
           relationship: none
           group_type: group
           admin_label: ''
@@ -264,6 +264,10 @@ display:
           fields: {  }
       style:
         type: default
+        options:
+          row_class: card
+          default_row_class: false
+          uses_fields: false
       row:
         type: search_api
         options:
@@ -309,20 +313,93 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      cache:
+        type: none
+      filters:
+        search_api_fulltext:
+          id: search_api_fulltext
+          table: search_api_index_news_index
+          field: search_api_fulltext
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_fulltext
+          operator: or
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: search_api_fulltext_op
+            label: 'Search news and choose filters to show only the results you want'
+            description: ''
+            use_operator: false
+            operator: search_api_fulltext_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: search
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              author_user: '0'
+              site_editor: '0'
+              stats_author_user: '0'
+              landing_page_author_user: '0'
+              site_moderator: '0'
+              site_admin: '0'
+              supervisor_user: '0'
+              rss_user: '0'
+              pfg_supervisor_user: '0'
+              brexit_supervisor_user: '0'
+              stats_supervisor_user: '0'
+              landing_page_supervisor_user: '0'
+              domain_admin_user: '0'
+              niexec_admin_user: '0'
+              editor_user: '0'
+              admin_user: '0'
+              user_manager: '0'
+            expose_fields: false
+            placeholder: Keywords
+            searched_fields_id: search_api_fulltext_searched_fields
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          parse_mode: sloppy_terms
+          min_length: null
+          fields: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      defaults:
+        cache: false
+        css_class: false
+        filters: false
+        filter_groups: false
+      css_class: 'card-deck card-deck--search-results'
       exposed_block: true
       display_extenders: {  }
       path: news
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
-        - url.site
         - 'user.node_grants:view'
       tags:
-        - 'config:facets.facet.news_publication_date'
-        - 'config:facets.facet.news_topic'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.news_index'
