@@ -88,30 +88,6 @@ function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$a
     }
   }
 
-  if ($view->id() === 'consultations_search' && $display_id === 'consultations_search') {
-    /** @var \Drupal\dept_core\Department $active_dept */
-    $active_dept = \Drupal::service('department.manager')->getCurrentDepartment();
-    if (!$active_dept instanceof Department) {
-      return;
-    }
-
-    // Sites other than NIGOV should return a 404. We simply don't pass in
-    // an argument if it's not NIGOV and rely on views to return a 404 response
-    // as intercepting/adjusting this in an event subscriber is extremely awkward.
-    if ($active_dept->id() === 'group_1') {
-      // Add all group ids as + separated entries to the view's contextual arg.
-      $dept_ids = [];
-      $depts = \Drupal::service('department.manager')->getAllDepartments();
-      foreach ($depts as $dept) {
-        $dept_ids[] = $dept->groupId();
-      }
-      $args[0] = implode('+', $dept_ids);
-    }
-    else {
-      $args[0] = str_replace('group_', '', $active_dept->id());
-    }
-  }
-
   if ($view->id() === 'press_release_search' && $display_id === 'pr_search_page') {
     /** @var \Drupal\dept_core\Department $active_dept */
     $active_dept = \Drupal::service('department.manager')->getCurrentDepartment();
