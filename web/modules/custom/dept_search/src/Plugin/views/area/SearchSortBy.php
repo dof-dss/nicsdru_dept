@@ -16,6 +16,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class SearchSortBy extends AreaPluginBase {
 
+  /**
+   * The route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
   // Query parameter of search form.
   const KEYWORD_PARAM = 'search';
 
