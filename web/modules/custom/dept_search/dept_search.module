@@ -88,6 +88,30 @@ function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$a
     }
   }
 
+  if ($view->id() === 'consultations_search' && $display_id === 'consultations_search') {
+    /** @var \Drupal\dept_core\Department $active_dept */
+    $active_dept = \Drupal::service('department.manager')->getCurrentDepartment();
+    if (!$active_dept instanceof Department) {
+      return;
+    }
+
+    // Sites other than NIGOV should return a 404. We simply don't pass in
+    // an argument if it's not NIGOV and rely on views to return a 404 response
+    // as intercepting/adjusting this in an event subscriber is extremely awkward.
+    if ($active_dept->id() === 'group_1') {
+      // Add all group ids as + separated entries to the view's contextual arg.
+      $dept_ids = [];
+      $depts = \Drupal::service('department.manager')->getAllDepartments();
+      foreach ($depts as $dept) {
+        $dept_ids[] = $dept->groupId();
+      }
+      $args[0] = implode('+', $dept_ids);
+    }
+    else {
+      $args[0] = str_replace('group_', '', $active_dept->id());
+    }
+  }
+
   if ($view->id() === 'press_release_search' && $display_id === 'pr_search_page') {
     /** @var \Drupal\dept_core\Department $active_dept */
     $active_dept = \Drupal::service('department.manager')->getCurrentDepartment();
@@ -126,4 +150,34 @@ function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$a
       $args[0] = str_replace('group_', '', $active_dept->id());
     }
   }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function dept_search_form_alter(&$form, &$form_state, &$form_id) {
+  // Don't display the sort/order by options on view exposed
+  // search forms.
+  switch ($form['#id']) {
+    case 'views-exposed-form-consultations-search-consultations-search':
+    case 'views-exposed-form-news-search-news-search':
+    case 'views-exposed-form-publications-search-publications-search':
+      $form['sort_by']['#type'] = 'hidden';
+      $form['sort_order']['#type'] = 'hidden';
+      break;
+  }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function dept_search_views_data_alter(array &$data) {
+  $data['views']['search_sort_by'] = [
+    'title' => t('Search sort links'),
+    'help' => t('Provides links to sort search results by publication date and by relevance.'),
+    'area' => [
+      'id' => 'search_sort_by',
+    ],
+  ];
+  return $data;
 }
