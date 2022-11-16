@@ -10,8 +10,8 @@ eu_only_js: false
 popup_position: false
 fixed_top_position: false
 popup_info:
-  value: "<h2>We use cookies on this site to enhance your user experience</h2>\r\n\r\n<p>By clicking the Accept button, you agree to us doing so.</p>\r\n"
-  format: basic_html
+  value: "<h2>Cookies on [site:url-brief]</h2>\r\n\r\n<p>We use some essential cookies to make this service work. We’d like to set additional cookies so we can remember your settings, understand how people use the service and make improvements. Some of our pages allow selected third parties to set cookies – for example, pages that contain YouTube videos or Google Maps.&nbsp;</p>\r\n"
+  format: filtered_html_with_tokens
 mobile_popup_info:
   value: ''
   format: basic_html
@@ -24,7 +24,7 @@ popup_hide_agreed: false
 disagree_button_label: 'Reject cookies'
 popup_agreed:
   value: "<h2>Thank you for accepting cookies</h2>\r\n\r\n<p>You can now hide this message or find out more about cookies.</p>\r\n"
-  format: basic_html
+  format: filtered_html_with_tokens
 popup_find_more_button_message: 'More info'
 popup_hide_button_message: Hide
 popup_link: '<front>'
@@ -59,8 +59,8 @@ automatic_cookies_removal: true
 allowed_cookies: ''
 consent_storage_method: do_not_store
 withdraw_message:
-  value: "<h2>We use cookies on this site to enhance your user experience</h2>\r\n\r\n<p>You have given your consent for us to set cookies.</p>\r\n"
-  format: basic_html
+  value: "<h2>Cookies on [site:url-brief]</h2>\r\n\r\n<p>You have given your consent for us to set additional cookies&nbsp;so we can remember your settings, understand how people use the service and make improvements.&nbsp; If you have changed your mind, you can withdraw consent.<br />\r\n<a href=\"/articles/how-we-use-cookies\">Find out more about how we use cookies</a></p>\r\n"
+  format: filtered_html_with_tokens
 withdraw_tab_button_label: 'Cookie settings'
 withdraw_action_button_label: 'Withdraw consent'
 withdraw_enabled: true
@@ -83,3 +83,4 @@ close_button_enabled: false
 dependencies:
   config:
     - filter.format.basic_html
+    - filter.format.filtered_html_with_tokens
