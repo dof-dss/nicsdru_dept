@@ -498,12 +498,11 @@ display:
           row_class: card
           default_row_class: false
       row:
-        type: fields
+        type: search_api
         options:
-          default_field_elements: false
-          inline: {  }
-          separator: ''
-          hide_empty: false
+          view_modes:
+            'entity:node':
+              publication: search_metadata
       query:
         type: search_api_query
         options:

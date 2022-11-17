@@ -17,6 +17,7 @@ dependencies:
     - node.type.ual
   module:
     - layout_builder
+    - smart_trim
     - user
 third_party_settings:
   layout_builder:
@@ -28,14 +29,29 @@ bundle: ual
 mode: search_result
 content:
   field_description:
-    type: basic_string
+    type: smart_trim
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 20
+      trim_type: words
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more_link: false
+      more_class: more-link
+      more_text: More
+      more_aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
     third_party_settings: {  }
     weight: 0
     region: content
 hidden:
   content_moderation_control: true
+  entitygroupfield: true
   field_age: true
   field_distinguishing_marks: true
   field_eye_colour: true
@@ -45,6 +61,8 @@ hidden:
   field_prison: true
   field_release_type: true
   field_ual_from: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
   links: true
   search_api_excerpt: true

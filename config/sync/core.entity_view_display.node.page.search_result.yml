@@ -9,6 +9,7 @@ dependencies:
     - node.type.page
   module:
     - layout_builder
+    - smart_trim
     - user
 third_party_settings:
   layout_builder:
@@ -21,14 +22,33 @@ targetEntityType: node
 bundle: page
 mode: search_result
 content:
-  search_api_excerpt:
-    settings: {  }
+  body:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 20
+      trim_type: words
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more_link: false
+      more_class: more-link
+      more_text: More
+      more_aria_label: 'Read more about [node:title]'
+      summary_handler: ignore
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
     third_party_settings: {  }
     weight: 0
     region: content
 hidden:
-  body: true
   content_moderation_control: true
+  entitygroupfield: true
   field_next_audit_due: true
+  groups: true
+  groups_type_department_site: true
   langcode: true
   links: true
+  search_api_excerpt: true
