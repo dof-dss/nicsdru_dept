@@ -9,8 +9,8 @@
  * @see https://www.drupal.org/node/2217931
  */
 
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
-use Drupal\dept_dev\DeptDevLazyBuilders;
 
 /**
  * Implements hook_toolbar().
@@ -71,4 +71,14 @@ function dept_dev_toolbar() {
   ];
 
   return $items;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function dept_dev_preprocess_page(&$variables) {
+  // Display warning when Redis isn't configured to run on lando.
+  if (!is_null(Settings::get('redis_enabled')) && !Settings::get('redis_enabled')) {
+    \Drupal::messenger()->addError("Local Redis is not enable. Change the 'redis_enabled' variable to true under settings.local.php");
+  }
 }
