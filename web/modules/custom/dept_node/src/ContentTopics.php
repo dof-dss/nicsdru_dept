@@ -70,14 +70,15 @@ class ContentTopics {
           $topics[$topic->id()] = $name;
         }
       }
-      else if ($node->hasField('field_parent_topic')) {
+      elseif ($node->hasField('field_parent_topic')) {
         $node_topics = $node->get('field_parent_topic')->referencedEntities();
 
         foreach ($node_topics as $topic) {
           $name = '';
           if ($links) {
             $name = Link::createFromRoute($topic->label(), 'entity.node.canonical', ['node' => $topic->id()])->toString();
-          } else {
+          }
+          else {
             $name = $topic->label();
           }
 
@@ -101,7 +102,7 @@ class ContentTopics {
           $topics[$subtopic->id()] = $name;
         }
       }
-      else if ($include_subtopics && $node->hasField('field_parent_subtopic')) {
+      elseif ($include_subtopics && $node->hasField('field_parent_subtopic')) {
         $node_subtopics = $node->get('field_parent_subtopic')
           ->referencedEntities();
 
