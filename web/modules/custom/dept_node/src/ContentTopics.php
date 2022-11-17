@@ -70,9 +70,39 @@ class ContentTopics {
           $topics[$topic->id()] = $name;
         }
       }
+      else if ($node->hasField('field_parent_topic')) {
+        $node_topics = $node->get('field_parent_topic')->referencedEntities();
+
+        foreach ($node_topics as $topic) {
+          $name = '';
+          if ($links) {
+            $name = Link::createFromRoute($topic->label(), 'entity.node.canonical', ['node' => $topic->id()])->toString();
+          } else {
+            $name = $topic->label();
+          }
+
+          $topics[$topic->id()] = $name;
+        }
+      }
 
       if ($include_subtopics && $node->hasField('field_site_subtopics')) {
         $node_subtopics = $node->get('field_site_subtopics')
+          ->referencedEntities();
+
+        foreach ($node_subtopics as $subtopic) {
+          $name = '';
+          if ($links) {
+            $name = Link::createFromRoute($subtopic->label(), 'entity.node.canonical', ['node' => $subtopic->id()])->toString();
+          }
+          else {
+            $name = $subtopic->label();
+          }
+
+          $topics[$subtopic->id()] = $name;
+        }
+      }
+      else if ($include_subtopics && $node->hasField('field_parent_subtopic')) {
+        $node_subtopics = $node->get('field_parent_subtopic')
           ->referencedEntities();
 
         foreach ($node_subtopics as $subtopic) {
