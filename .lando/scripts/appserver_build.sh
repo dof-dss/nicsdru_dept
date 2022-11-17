@@ -20,7 +20,7 @@ fi
 # If we don't have a Drupal install, download it.
 if [ ! -d "/app/web/core" ]; then
   echo "Installing Drupal"
-  composer -d /app install
+  composer install
 fi
 
 # Create Drupal public files directory and set IO permissions.
@@ -34,6 +34,11 @@ fi
 if [ ! -d "/app/.lando/private" ]; then
   echo "Creating private Drupal files directory"
   mkdir -p /app/.lando/private
+fi
+
+if [ ! -d $DRUPAL_ROOT/sites/default/settings.local.php ]; then
+  echo "Creating local Drupal settings file"
+  cp -v /app/.lando/config/drupal.settings.php $DRUPAL_ROOT/sites/default/settings.local.php
 fi
 
 #echo "Copying Redis service overrides"
