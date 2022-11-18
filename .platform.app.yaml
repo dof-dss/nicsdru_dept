@@ -89,11 +89,10 @@ hooks:
     set -e
     echo "***** Creating QA accounts ******"
 
-    cd web
-    IFS=',' read -ra usernames <<< "$QA_USERNAMES"
+    cd /app/web
 
-    for username in "${usernames[@]}"
-    do
+    echo "$QA_USERNAMES" | tr ',' '\n' | while read username; do
+      echo $item
       ../vendor/bin/drush ucrt $username --password=$QA_PASSWORD
       ../vendor/bin/drush urol administrator $username
     done
