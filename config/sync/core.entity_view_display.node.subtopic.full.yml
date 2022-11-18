@@ -1,8 +1,9 @@
-uuid: 8fee9929-10c4-4516-90cb-495cddb59088
+uuid: 66d27d1a-52b4-4204-abcd-8e713b0a7e15
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.full
     - field.field.node.subtopic.body
     - field.field.node.subtopic.field_banner_image
     - field.field.node.subtopic.field_banner_link
@@ -12,69 +13,40 @@ dependencies:
     - field.field.node.subtopic.field_summary
     - node.type.subtopic
   module:
-    - link
+    - layout_builder
     - text
     - user
-id: node.subtopic.default
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.subtopic.full
 targetEntityType: node
 bundle: subtopic
-mode: default
+mode: full
 content:
   body:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 3
-    region: content
-  field_banner_image:
-    type: entity_reference_entity_view
-    label: hidden
-    settings:
-      view_mode: banner_thin
-      link: false
-    third_party_settings: {  }
-    weight: 4
-    region: content
-  field_banner_link:
-    type: link
-    label: hidden
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    weight: 5
-    region: content
-  field_parent_subtopic:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
     weight: 1
-    region: content
-  field_parent_topic:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 0
     region: content
   field_summary:
     type: text_default
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 0
     region: content
 hidden:
   content_moderation_control: true
   entitygroupfield: true
+  field_banner_image: true
+  field_banner_link: true
   field_link: true
+  field_parent_subtopic: true
+  field_parent_topic: true
   groups: true
   groups_type_department_site: true
   langcode: true
