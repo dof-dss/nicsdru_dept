@@ -7,6 +7,7 @@ dependencies:
     - group.type.department_site
     - search_api.index.press_releases
   module:
+    - dept_search
     - search_api
     - text
 id: press_release_search
@@ -124,7 +125,7 @@ display:
           reset_button: false
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
-          expose_sort_order: false
+          expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
@@ -158,11 +159,24 @@ display:
           plugin_id: search_api
           order: DESC
           expose:
-            label: ''
-            field_identifier: ''
-          exposed: false
+            label: Relevance
+            field_identifier: search_api_relevance
+          exposed: true
         field_published_date:
           id: field_published_date
+          table: search_api_index_press_releases
+          field: field_published_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: 'Publication date'
+            field_identifier: field_published_date
+          exposed: true
+        field_published_date_1:
+          id: field_published_date_1
           table: search_api_index_press_releases
           field: field_published_date
           relationship: none
@@ -305,7 +319,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Enter keywords'
+            label: 'Search press releases and choose filters to show only the results you want'
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
@@ -355,14 +369,11 @@ display:
           min_length: null
           fields: {  }
       style:
-        type: html_list
+        type: default
         options:
-          row_class: ''
+          row_class: card
           default_row_class: false
           uses_fields: false
-          type: ul
-          wrapper_class: ''
-          class: ''
       row:
         type: search_api
         options:
@@ -374,7 +385,7 @@ display:
         options:
           bypass_access: false
           skip_access: false
-          preserve_facet_query_args: false
+          preserve_facet_query_args: true
           query_tags: {  }
           contextual_filters_or: false
       relationships: {  }
@@ -388,7 +399,16 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: '@total Results'
+          content: '<h2>@total press releases</h2>'
+        search_sort_by:
+          id: search_sort_by
+          table: views
+          field: search_sort_by
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_sort_by
+          empty: false
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -398,6 +418,8 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
         - 'user.node_grants:view'
       tags:
         - 'config:field.storage.node.body'
@@ -408,21 +430,25 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      cache:
+        type: none
+      defaults:
+        cache: false
+        css_class: false
+      css_class: 'card-deck card-deck--search-results'
       exposed_block: true
       display_extenders: {  }
       path: press-releases
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
-        - url.site
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
         - 'user.node_grants:view'
       tags:
-        - 'config:facets.facet.group'
-        - 'config:facets.facet.pr_publication_date'
-        - 'config:facets.facet.pr_topics'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.press_releases'
