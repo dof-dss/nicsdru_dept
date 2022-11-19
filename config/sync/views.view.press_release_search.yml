@@ -430,17 +430,15 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      cache:
-        type: none
       defaults:
-        cache: false
+        cache: true
         css_class: false
       css_class: 'card-deck card-deck--search-results'
       exposed_block: true
       display_extenders: {  }
       path: press-releases
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -448,7 +446,11 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'url.query_args:sort_order'
+        - url.site
         - 'user.node_grants:view'
       tags:
+        - 'config:facets.facet.group'
+        - 'config:facets.facet.pr_publication_date'
+        - 'config:facets.facet.pr_topics'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.press_releases'
