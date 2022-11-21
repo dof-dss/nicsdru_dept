@@ -1,8 +1,9 @@
-uuid: c86685f5-53af-489f-b63c-eba9a3c5fd7f
+uuid: ce2246a5-7086-43f4-bc43-6954c1ccc32e
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.search_metadata
     - field.field.node.consultation.body
     - field.field.node.consultation.field_attachment
     - field.field.node.consultation.field_consultation_dates
@@ -16,9 +17,9 @@ dependencies:
     - field.field.node.consultation.field_summary
     - node.type.consultation
   module:
-    - datetime_range
+    - datetime
     - field_group
-    - text
+    - layout_builder
     - user
 third_party_settings:
   field_group:
@@ -43,40 +44,36 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
-id: node.consultation.default
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.consultation.search_metadata
 targetEntityType: node
 bundle: consultation
-mode: default
+mode: search_metadata
 content:
-  field_consultation_dates:
-    type: daterange_default
-    label: hidden
+  field_published_date:
+    type: datetime_default
+    label: inline
     settings:
       timezone_override: ''
       format_type: medium_date
-      separator: ''
     third_party_settings: {  }
     weight: 0
-    region: content
-  field_summary:
-    type: text_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 1
     region: content
 hidden:
   body: true
   content_moderation_control: true
   entitygroupfield: true
   field_attachment: true
+  field_consultation_dates: true
   field_email_address: true
   field_global_topics: true
   field_postal: true
-  field_published_date: true
   field_respond_online: true
   field_site_subtopics: true
   field_site_topics: true
+  field_summary: true
   groups: true
   groups_type_department_site: true
   langcode: true
