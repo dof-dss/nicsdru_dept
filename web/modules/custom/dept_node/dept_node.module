@@ -150,12 +150,18 @@ function dept_node_theme($existing, $type, $theme, $path) {
 function dept_node_preprocess_node(array &$variables) {
   $node = &$variables['node'];
   $view_mode = $variables['view_mode'];
+  $routename = \Drupal::routeMatch()->getRouteName();
 
   if (!$node instanceof NodeInterface) {
     return;
   }
 
   if ($view_mode === 'search_metadata' && $node->bundle() === 'news') {
+    // Add the department metadata on the press-releases listing.
+    if ($routename != 'view.press_release_search.pr_search_page') {
+      return;
+    }
+
     // Inject the department for a press-release/news items for search.
     $group_contents = GroupContent::loadByEntity($variables['node']);
     foreach ($group_contents as $group_content_id => $group_content_entity) {
