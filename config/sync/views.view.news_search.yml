@@ -338,8 +338,6 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      cache:
-        type: none
       filters:
         search_api_fulltext:
           id: search_api_fulltext
@@ -409,7 +407,7 @@ display:
         groups:
           1: AND
       defaults:
-        cache: false
+        cache: true
         css_class: false
         filters: false
         filter_groups: false
@@ -418,7 +416,7 @@ display:
       display_extenders: {  }
       path: news
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -426,7 +424,10 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'url.query_args:sort_order'
+        - url.site
         - 'user.node_grants:view'
       tags:
+        - 'config:facets.facet.news_publication_date'
+        - 'config:facets.facet.news_topic'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.news_index'

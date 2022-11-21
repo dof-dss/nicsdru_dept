@@ -839,8 +839,6 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-      cache:
-        type: none
       filters:
         search_api_fulltext:
           id: search_api_fulltext
@@ -910,7 +908,7 @@ display:
         groups:
           1: AND
       defaults:
-        cache: false
+        cache: true
         title: false
         css_class: false
         fields: false
@@ -921,7 +919,7 @@ display:
       display_extenders: {  }
       path: publications
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -929,8 +927,12 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'url.query_args:sort_order'
+        - url.site
         - 'user.node_grants:view'
       tags:
+        - 'config:facets.facet.publication_date'
+        - 'config:facets.facet.publication_topics'
+        - 'config:facets.facet.publication_type'
         - 'config:field.storage.node.field_publication_type'
         - 'config:field.storage.node.field_published_date'
         - 'config:field.storage.node.field_summary'

@@ -302,10 +302,8 @@ display:
     position: 1
     display_options:
       title: Consultations
-      cache:
-        type: none
       defaults:
-        cache: false
+        cache: true
         title: false
         css_class: false
       css_class: 'card-deck card-deck--search-results'
@@ -313,7 +311,7 @@ display:
       display_extenders: {  }
       path: consultations
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -321,7 +319,10 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'url.query_args:sort_order'
+        - url.site
         - 'user.node_grants:view'
       tags:
+        - 'config:facets.facet.consultation_publication_date'
+        - 'config:facets.facet.consultation_topic'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.consultations_index'
