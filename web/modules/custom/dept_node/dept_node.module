@@ -8,6 +8,7 @@
 use Drupal\dept_core\Department;
 use Drupal\dept_node\Entity\Node;
 use Drupal\dept_node\Form\NodeForm;
+use Drupal\group\Entity\GroupContent;
 use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
@@ -149,9 +150,38 @@ function dept_node_theme($existing, $type, $theme, $path) {
 function dept_node_preprocess_node(array &$variables) {
   $node = &$variables['node'];
   $view_mode = $variables['view_mode'];
+  $routename = \Drupal::routeMatch()->getRouteName();
 
   if (!$node instanceof NodeInterface) {
     return;
+  }
+
+  if ($view_mode === 'search_metadata' && $node->bundle() === 'news') {
+    // Add the department metadata on the press-releases listing.
+    if ($routename != 'view.press_release_search.pr_search_page') {
+      return;
+    }
+
+    // Inject the department for a press-release/news items for search.
+    $group_contents = GroupContent::loadByEntity($variables['node']);
+    foreach ($group_contents as $group_content_id => $group_content_entity) {
+      $group = $group_content_entity->getGroup();
+
+      // Exclude NIGov items from list; seems to be added exclusively for
+      // access control purposes.
+      if ($group->id() > 1) {
+        // Department long-description stored as field value (with text format).
+        // We only want the plain text value sitting in there to print out
+        // as the group/department label per row in the metadata area.
+        // If there is no field value, use the group entity label as a fallback.
+        $dept_description = $group->get('field_description')->getValue();
+        if (!empty($dept_description)) {
+          foreach ($dept_description as $item) {
+            $variables['content']['departments'][] = strip_tags($item['value']) ?? $group->label();
+          }
+        }
+      }
+    }
   }
 
   if ($view_mode === 'search_result') {
