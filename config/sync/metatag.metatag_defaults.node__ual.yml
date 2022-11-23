@@ -1,24 +1,23 @@
-uuid: cc964b4f-d672-4831-a292-9d8efc2f2496
+uuid: dbf41268-f838-4b06-8b82-26e0761fe839
 langcode: en
 status: true
 dependencies: {  }
-id: node__publication
-label: 'Content: Publication'
+id: node__ual
+label: 'Content: Unlawfully at large'
 tags:
-  article_modified_time: '[node:created:custom:c]'
+  article_modified_time: '[node:changed:custom:c]'
   article_published_time: '[node:created:custom:c]'
   article_tag: '[node:field_site_topics],[node:field_site_subtopics]'
   canonical_url: '[current-page:url:absolute]'
-  description: '[node:field_summary]'
-  og_description: '[node:field_summary]'
+  description: '[current-page:title] at large from [node:field_ual_from]'
+  og_description: '[current-page:title] at large from [node:field_ual_from]'
   og_site_name: '[site:name]'
   og_title: '[node:title]'
-  og_type: Publication
+  og_type: Article
   og_updated_time: '[node:changed:custom:c]'
   og_url: '[current-page:url:absolute]'
   shortlink: '[current-page:url:unaliased]'
   title: '[current-page:title] | [site:slogan]'
-  twitter_cards_description: '[node:field_summary]'
+  twitter_cards_description: '[current-page:title] at large from [node:field_ual_from]'
   twitter_cards_page_url: '[current-page:url:absolute]'
   twitter_cards_title: '[node:title]'
-  twitter_cards_type: summary
