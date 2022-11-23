@@ -1,0 +1,37 @@
+uuid: 63cb35b3-78bd-46c0-8837-823f71ea6680
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.press_releases
+    - views.view.press_release_search
+  module:
+    - search_api
+id: press_releases_summary
+name: 'Press Releases summary'
+facet_source_id: 'search_api:views_page__press_release_search__pr_search_page'
+processor_configs:
+  hide_when_not_rendered:
+    processor_id: hide_when_not_rendered
+    weights:
+      build: '45'
+    settings: {  }
+facets:
+  group:
+    checked: true
+    label: Department
+    separator: ', '
+    show_count: false
+    weight: 0
+  pr_publication_date:
+    checked: true
+    label: 'Publication date'
+    separator: ', '
+    show_count: false
+    weight: 0
+  pr_topics:
+    checked: true
+    label: Topics
+    separator: ', '
+    show_count: false
+    weight: 0

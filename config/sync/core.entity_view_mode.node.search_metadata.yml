@@ -1,0 +1,10 @@
+uuid: 8f89c000-4cdf-45c2-8c68-255678691379
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.search_metadata
+label: 'Search with metadata'
+targetEntityType: node
+cache: true
