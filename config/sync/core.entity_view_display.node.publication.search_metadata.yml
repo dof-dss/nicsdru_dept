@@ -20,7 +20,7 @@ dependencies:
     - datetime
     - layout_builder
     - options
-    - text
+    - smart_trim
     - user
 third_party_settings:
   layout_builder:
@@ -48,9 +48,23 @@ content:
     weight: 1
     region: content
   field_summary:
-    type: text_default
+    type: smart_trim
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 45
+      trim_type: words
+      trim_suffix: ...
+      wrap_output: false
+      wrap_class: trimmed
+      more_link: false
+      more_class: more-link
+      more_text: ''
+      more_aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
     third_party_settings: {  }
     weight: 0
     region: content
