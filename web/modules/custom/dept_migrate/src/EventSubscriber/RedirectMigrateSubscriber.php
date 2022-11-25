@@ -63,10 +63,9 @@ class RedirectMigrateSubscriber implements EventSubscriberInterface {
       // Source: if it's an internal node path update the node id to the D9 equivalent.
       $source_matches = [];
       preg_match('|node/(\d+)|', $source, $source_matches);
-      $old_nid = $source_matches[1];
 
-      if (!empty($old_nid)) {
-        $d9_info = $this->lookupManager->lookupBySourceNodeId([$old_nid]);
+      if (!empty($source_matches[1])) {
+        $d9_info = $this->lookupManager->lookupBySourceNodeId([$source_matches[1]]);
         $d9_nid = reset($d9_info)['nid'] ?? 0;
 
         if (!empty($d9_nid)) {
@@ -78,10 +77,9 @@ class RedirectMigrateSubscriber implements EventSubscriberInterface {
       // Destination: if it's an internal node path update the node id to the D9 equivalent.
       $dest_matches = [];
       preg_match('|node/(\d+)|', $destination, $dest_matches);
-      $old_nid = $dest_matches[1];
 
-      if (!empty($old_nid)) {
-        $d9_info = $this->lookupManager->lookupBySourceNodeId([$old_nid]);
+      if (!empty($dest_matches[1])) {
+        $d9_info = $this->lookupManager->lookupBySourceNodeId([$dest_matches[1]]);
         $d9_nid = reset($d9_info)['nid'] ?? 0;
 
         if (!empty($d9_nid)) {
