@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5da111feeaed7eacfa3003d8dfa14304",
+    "content-hash": "c5a79e6238a8f7f253b968fc4ef5b9ef",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1929,16 +1929,16 @@
         },
         {
             "name": "dof-dss/nicsdru_dept_theme",
-            "version": "0.0.5",
+            "version": "0.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dof-dss/nicsdru_dept_theme.git",
-                "reference": "043cd7d1c719eaddc60ebdafc6c4c018d5ab9812"
+                "reference": "5d24c93d5fc34429bdff719a54702a4afa41f7f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_dept_theme/zipball/043cd7d1c719eaddc60ebdafc6c4c018d5ab9812",
-                "reference": "043cd7d1c719eaddc60ebdafc6c4c018d5ab9812",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_dept_theme/zipball/5d24c93d5fc34429bdff719a54702a4afa41f7f5",
+                "reference": "5d24c93d5fc34429bdff719a54702a4afa41f7f5",
                 "shasum": ""
             },
             "require": {
@@ -1963,9 +1963,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dof-dss/nicsdru_dept_theme/issues",
-                "source": "https://github.com/dof-dss/nicsdru_dept_theme/tree/0.0.5"
+                "source": "https://github.com/dof-dss/nicsdru_dept_theme/tree/0.0.6"
             },
-            "time": "2022-11-15T11:49:25+00:00"
+            "time": "2022-11-28T14:28:26+00:00"
         },
         {
             "name": "dof-dss/nicsdru_nidirect_theme",
@@ -17646,5 +17646,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
