@@ -100,11 +100,13 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
           foreach ($target_bundles as $target_bundle) {
             $migration_table = 'migrate_map_' . $target_entity . '_' . $target_bundle;
 
+            /* Commenting this out as we currently don't need to update media or
+            term references.
             if ($target_entity === 'media') {
-              $migration_table = 'migrate_map_d7_file_' . $target_entity . '_' . $target_bundle;
+            $migration_table = 'migrate_map_d7_file_' . $target_entity . '_' . $target_bundle;
             }
 
-            /* Commenting this out as we currently don't need to update term references.
+
             if ($target_entity === 'taxonomy_term') {
             $migration_table = 'migrate_map_d7_' . $target_entity . '_' . $target_bundle;
             }
