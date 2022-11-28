@@ -148,6 +148,7 @@ function dept_node_theme($existing, $type, $theme, $path) {
  * Implements hook_preprocess_node().
  */
 function dept_node_preprocess_node(array &$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
   $node = &$variables['node'];
   $view_mode = $variables['view_mode'];
   $routename = \Drupal::routeMatch()->getRouteName();
@@ -160,6 +161,30 @@ function dept_node_preprocess_node(array &$variables) {
     // Add the department metadata on the press-releases listing.
     if ($routename != 'view.press_release_search.pr_search_page') {
       return;
+    }
+
+    // Rewrite any existing relative URLs to content to their absolute
+    // departmental URL paths, using active config split profile values.
+    if (!preg_match('|^http|', $variables['url'])) {
+      if (method_exists($node, 'getGroups')) {
+        $groups = $node->getGroups();
+
+        if (!empty($groups)) {
+          foreach ($groups as $id => $label) {
+            if ($id === 1) {
+              // Skip NIGov.
+              continue;
+            }
+
+            /** @var \Drupal\dept_core\Department $dept */
+            $dept = \Drupal::service('department.manager')->getDepartment('group_' . $id);
+            $dept_url = $dept->url(FALSE);
+            $variables['url'] = $dept_url . $variables['url'];
+            // Stop after first group this content might be assigned to.
+            break;
+          }
+        }
+      }
     }
 
     // Inject the department for a press-release/news items for search.
