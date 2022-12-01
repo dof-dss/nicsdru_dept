@@ -1,7 +1,11 @@
 <?php
 
 // @codingStandardsIgnoreFile
-$settings['container_yamls'][] = $app_root . '/' . $site_path . '/services.development.yml';
+$local_services_config = $app_root . '/sites/local.development.services.yml';
+if (file_exists($local_services_config)) {
+  $settings['container_yamls'][] = $local_services_config;
+}
+
 $settings['file_private_path'] = getenv('FILE_PRIVATE_PATH');
 
 $databases['default']['default'] = [
