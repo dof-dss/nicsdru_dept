@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
+    - field.field.node.publication.field_metatags
     - field.field.node.publication.field_publication_files
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
@@ -157,6 +158,7 @@ content:
 hidden:
   entitygroupfield: true
   field_attachment: true
+  field_metatags: true
   groups: true
   groups_type_department_site: true
   langcode: true

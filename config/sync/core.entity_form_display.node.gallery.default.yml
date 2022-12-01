@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.gallery.body
     - field.field.node.gallery.field_gallery_images
     - field.field.node.gallery.field_global_topics
+    - field.field.node.gallery.field_metatags
     - field.field.node.gallery.field_site_subtopics
     - field.field.node.gallery.field_site_topics
     - field.field.node.gallery.field_summary
@@ -14,6 +15,7 @@ dependencies:
   module:
     - content_moderation
     - media_library
+    - metatag
     - path
     - scheduler
     - text
@@ -50,6 +52,14 @@ content:
     weight: 1
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 28
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_site_subtopics:
     type: options_select
@@ -163,4 +173,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true

@@ -5,15 +5,18 @@ dependencies:
   config:
     - field.field.node.contact.body
     - field.field.node.contact.field_map
+    - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
     - field.field.node.contact.field_site_subtopics
     - field.field.node.contact.field_site_topics
     - node.type.contact
+    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
     - datetime
     - google_map_field
+    - metatag
     - path
     - scheduler
     - text
@@ -43,6 +46,14 @@ content:
     weight: 26
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 1001
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_next_audit_due:
     type: datetime_default
@@ -154,4 +165,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true

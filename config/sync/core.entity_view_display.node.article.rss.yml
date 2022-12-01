@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.rss
     - field.field.node.article.body
     - field.field.node.article.field_global_topics
+    - field.field.node.article.field_metatags
     - field.field.node.article.field_site_subtopics
     - field.field.node.article.field_site_topics
     - field.field.node.article.field_summary
@@ -29,6 +30,7 @@ hidden:
   content_moderation_control: true
   entitygroupfield: true
   field_global_topics: true
+  field_metatags: true
   field_site_subtopics: true
   field_site_topics: true
   field_summary: true

@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.landing_page.field_banner_image_overlay
     - field.field.node.landing_page.field_enable_title
     - field.field.node.landing_page.field_facebook_user
+    - field.field.node.landing_page.field_metatags
     - field.field.node.landing_page.field_site_subtopics
     - field.field.node.landing_page.field_site_topics
     - field.field.node.landing_page.field_summary
@@ -22,6 +23,7 @@ dependencies:
     - content_moderation
     - field_group
     - image
+    - metatag
     - path
     - scheduler
     - text
@@ -140,6 +142,14 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 31
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_site_subtopics:
     type: chosen_select
@@ -276,4 +286,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true

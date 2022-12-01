@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.protected_area.body
     - field.field.node.protected_area.field_council
     - field.field.node.protected_area.field_county
+    - field.field.node.protected_area.field_metatags
     - field.field.node.protected_area.field_protected_area_documents
     - field.field.node.protected_area.field_protected_area_feature
     - field.field.node.protected_area.field_protected_area_type
@@ -17,6 +18,7 @@ dependencies:
     - chosen_field
     - content_moderation
     - field_group
+    - metatag
     - path
     - scheduler
     - text
@@ -72,6 +74,14 @@ content:
     weight: 6
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 28
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_protected_area_documents:
     type: entity_reference_autocomplete
@@ -199,4 +209,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true

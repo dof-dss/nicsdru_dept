@@ -1,0 +1,21 @@
+uuid: a4050353-41e6-42a2-90a9-265b32b9ed48
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_metatags
+    - node.type.subtopic
+  module:
+    - metatag
+id: node.subtopic.field_metatags
+field_name: field_metatags
+entity_type: node
+bundle: subtopic
+label: Metatags
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

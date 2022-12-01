@@ -4,8 +4,10 @@ status: true
 dependencies:
   config:
     - field.field.node.global_page.body
+    - field.field.node.global_page.field_metatags
     - node.type.global_page
   module:
+    - metatag
     - text
     - user
 id: node.global_page.default
@@ -19,6 +21,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
     region: content
   links:
     settings: {  }
