@@ -555,7 +555,7 @@ display:
       display_extenders: {  }
       path: press-releases
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -567,5 +567,7 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:facets.facet.pr_department'
+        - 'config:facets.facet.pr_publication_date'
+        - 'config:facets.facet.pr_topics'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.news_index'
