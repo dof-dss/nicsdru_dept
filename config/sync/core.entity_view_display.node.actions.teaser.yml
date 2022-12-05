@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.actions.body
+    - field.field.node.actions.field_metatags
     - field.field.node.actions.field_outcomes
     - node.type.actions
   module:
@@ -31,6 +32,7 @@ content:
 hidden:
   content_moderation_control: true
   entitygroupfield: true
+  field_metatags: true
   field_outcomes: true
   groups: true
   groups_type_department_site: true

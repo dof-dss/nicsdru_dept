@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.protected_area.body
     - field.field.node.protected_area.field_council
     - field.field.node.protected_area.field_county
+    - field.field.node.protected_area.field_metatags
     - field.field.node.protected_area.field_protected_area_documents
     - field.field.node.protected_area.field_protected_area_feature
     - field.field.node.protected_area.field_protected_area_type
@@ -13,6 +14,7 @@ dependencies:
     - field.field.node.protected_area.field_site_topics
     - node.type.protected_area
   module:
+    - metatag
     - options
     - text
     - user
@@ -41,6 +43,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 2
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 8
     region: content
   field_protected_area_documents:
     type: entity_reference_label

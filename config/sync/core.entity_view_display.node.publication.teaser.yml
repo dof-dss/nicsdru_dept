@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
+    - field.field.node.publication.field_metatags
     - field.field.node.publication.field_publication_files
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
@@ -44,6 +45,7 @@ hidden:
   field_external_publication: true
   field_global_topics: true
   field_last_updated: true
+  field_metatags: true
   field_publication_files: true
   field_publication_secure_files: true
   field_publication_type: true

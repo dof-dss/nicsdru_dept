@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.consultation.field_consultation_dates
     - field.field.node.consultation.field_email_address
     - field.field.node.consultation.field_global_topics
+    - field.field.node.consultation.field_metatags
     - field.field.node.consultation.field_postal
     - field.field.node.consultation.field_published_date
     - field.field.node.consultation.field_respond_online
@@ -23,6 +24,7 @@ dependencies:
     - datetime_range
     - link
     - media_library
+    - metatag
     - path
     - scheduler
     - text
@@ -73,6 +75,14 @@ content:
     weight: 1
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 29
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_postal:
     type: string_textarea
@@ -208,4 +218,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true
