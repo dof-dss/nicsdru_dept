@@ -3,19 +3,17 @@ langcode: en
 status: true
 dependencies:
   config:
-    - domain.record.group_1
     - field.storage.node.body
     - group.type.department_site
     - search_api.index.news_index
   module:
     - dept_search
-    - domain
     - search_api
     - text
 id: news_search
 label: 'News search'
 module: views
-description: ''
+description: 'News and Press releases (NIGov) search'
 tag: ''
 base_table: search_api_index_news_index
 base_field: search_api_id
@@ -433,18 +431,12 @@ display:
         - 'config:facets.facet.news_topic'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.news_index'
-  press_releases_search:
-    id: press_releases_search
+  page_1:
+    id: page_1
     display_title: 'Press releases'
     display_plugin: page
     position: 2
     display_options:
-      title: 'Press releases'
-      access:
-        type: domain
-        options:
-          domain:
-            group_1: group_1
       arguments: {  }
       filters:
         search_api_fulltext:
@@ -510,19 +502,17 @@ display:
           parse_mode: sloppy_terms
           min_length: null
           fields: {  }
-        group_id:
-          id: group_id
+        field_news_type:
+          id: field_news_type
           table: search_api_index_news_index
-          field: group_id
+          field: field_news_type
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: search_api_numeric
-          operator: '='
+          plugin_id: search_api_options
+          operator: or
           value:
-            min: ''
-            max: ''
-            value: '1'
+            pressrelease: pressrelease
           group: 1
           exposed: false
           expose:
@@ -539,9 +529,7 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -554,17 +542,16 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: false
       filter_groups:
         operator: AND
         groups:
           1: AND
       defaults:
-        access: false
-        title: false
         arguments: false
         filters: false
         filter_groups: false
-      display_description: 'For display on NI Gov'
+      display_description: ''
       display_extenders: {  }
       path: press-releases
     cache_metadata:
@@ -579,5 +566,6 @@ display:
         - url.site
         - 'user.node_grants:view'
       tags:
+        - 'config:facets.facet.pr_department'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.news_index'
