@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.profile.body
     - field.field.node.profile.field_department
+    - field.field.node.profile.field_metatags
     - field.field.node.profile.field_photo
     - field.field.node.profile.field_summary
     - node.type.profile
@@ -12,6 +13,7 @@ dependencies:
   module:
     - content_moderation
     - media_library
+    - metatag
     - path
     - scheduler
     - text
@@ -43,6 +45,14 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 28
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_photo:
     type: media_library_widget
@@ -151,4 +161,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true

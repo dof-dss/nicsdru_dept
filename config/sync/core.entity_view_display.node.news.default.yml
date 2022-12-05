@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.news.body
     - field.field.node.news.field_global_topics
+    - field.field.node.news.field_metatags
     - field.field.node.news.field_news_type
     - field.field.node.news.field_notes_to_editors
     - field.field.node.news.field_photo
@@ -17,6 +18,7 @@ dependencies:
     - node.type.news
   module:
     - datetime
+    - metatag
     - text
     - user
 id: node.news.default
@@ -30,6 +32,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 4
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
     region: content
   field_notes_to_editors:
     type: text_default

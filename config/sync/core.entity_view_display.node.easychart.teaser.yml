@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.easychart.easychart
     - field.field.node.easychart.field_chart_taxonomy
     - field.field.node.easychart.field_indicators
+    - field.field.node.easychart.field_metatags
     - node.type.easychart
   module:
     - user
@@ -25,6 +26,7 @@ hidden:
   entitygroupfield: true
   field_chart_taxonomy: true
   field_indicators: true
+  field_metatags: true
   groups: true
   groups_type_department_site: true
   langcode: true

@@ -7,12 +7,14 @@ dependencies:
     - field.field.node.subtopic.field_banner_image
     - field.field.node.subtopic.field_banner_link
     - field.field.node.subtopic.field_link
+    - field.field.node.subtopic.field_metatags
     - field.field.node.subtopic.field_parent_subtopic
     - field.field.node.subtopic.field_parent_topic
     - field.field.node.subtopic.field_summary
     - node.type.subtopic
   module:
     - link
+    - metatag
     - text
     - user
 id: node.subtopic.default
@@ -47,6 +49,13 @@ content:
       target: ''
     third_party_settings: {  }
     weight: 5
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
     region: content
   field_parent_subtopic:
     type: entity_reference_label

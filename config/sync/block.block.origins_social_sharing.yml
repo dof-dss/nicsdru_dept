@@ -1,0 +1,25 @@
+uuid: 6ec79c5c-4541-47aa-a1b4-7e852161182a
+langcode: en
+status: true
+dependencies:
+  module:
+    - origins_social_sharing
+    - system
+  theme:
+    - nicsdru_dept_theme
+id: origins_social_sharing
+theme: nicsdru_dept_theme
+region: bottom_banner
+weight: 0
+provider: null
+plugin: origins_social_sharing
+settings:
+  id: origins_social_sharing
+  label: 'Social sharing'
+  label_display: '0'
+  provider: origins_social_sharing
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/node/*'

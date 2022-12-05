@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.news.body
     - field.field.node.news.field_global_topics
+    - field.field.node.news.field_metatags
     - field.field.node.news.field_news_type
     - field.field.node.news.field_notes_to_editors
     - field.field.node.news.field_photo
@@ -22,6 +23,7 @@ dependencies:
     - datetime
     - entitygroupfield
     - media_library
+    - metatag
     - path
     - scheduler
     - text
@@ -61,6 +63,14 @@ content:
     weight: 2
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 28
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_news_type:
     type: options_select

@@ -328,6 +328,26 @@ class NodeForm extends ContentEntityForm {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+
+    $groups = $form_state->getValue('groups');
+
+    // Remove unchecked Group entries as this can throw a WSOD for some users
+    // when postSave() is executed in GroupGroupReferenceItemList().
+    foreach ($groups as $id => $value) {
+      if ($value == 0) {
+        unset($groups[$id]);
+      }
+    }
+
+    $form_state->setValue('groups', $groups);
+
+    parent::submitForm($form, $form_state);
+  }
+
+  /**
    * Form submission handler for the 'preview' action.
    *
    * @param array $form

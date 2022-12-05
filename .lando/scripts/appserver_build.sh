@@ -37,8 +37,9 @@ if [ ! -d "/app/.lando/private" ]; then
 fi
 
 if [ ! -d $DRUPAL_ROOT/sites/default/settings.local.php ]; then
-  echo "Creating local Drupal settings file"
+  echo "Creating local Drupal settings and developent services files"
   cp -v /app/.lando/config/drupal.settings.php $DRUPAL_ROOT/sites/default/settings.local.php
+  cp -v /app/.lando/config/drupal.services.yml $DRUPAL_ROOT/sites/local.development.services.yml
 fi
 
 #echo "Copying Redis service overrides"

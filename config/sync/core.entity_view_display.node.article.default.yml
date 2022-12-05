@@ -5,11 +5,13 @@ dependencies:
   config:
     - field.field.node.article.body
     - field.field.node.article.field_global_topics
+    - field.field.node.article.field_metatags
     - field.field.node.article.field_site_subtopics
     - field.field.node.article.field_site_topics
     - field.field.node.article.field_summary
     - node.type.article
   module:
+    - metatag
     - text
     - user
 _core:
@@ -25,6 +27,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
     region: content
   field_summary:
     type: text_default

@@ -1,0 +1,21 @@
+uuid: 1b2f12ef-be7f-44ca-a5bd-6a3bddd2aa79
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_metatags
+    - node.type.consultation
+  module:
+    - metatag
+id: node.consultation.field_metatags
+field_name: field_metatags
+entity_type: node
+bundle: consultation
+label: Metatags
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

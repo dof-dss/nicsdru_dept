@@ -5,11 +5,13 @@ dependencies:
   config:
     - field.field.node.book.body
     - field.field.node.book.field_global_topics
+    - field.field.node.book.field_metatags
     - field.field.node.book.field_site_subtopics
     - field.field.node.book.field_site_topics
     - field.field.node.book.field_summary
     - node.type.book
   module:
+    - metatag
     - text
     - user
 id: node.book.default
@@ -31,6 +33,13 @@ content:
       link: true
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
     region: content
   field_site_subtopics:
     type: entity_reference_label

@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.subtopic.field_banner_image
     - field.field.node.subtopic.field_banner_link
     - field.field.node.subtopic.field_link
+    - field.field.node.subtopic.field_metatags
     - field.field.node.subtopic.field_parent_subtopic
     - field.field.node.subtopic.field_parent_topic
     - field.field.node.subtopic.field_summary
@@ -16,6 +17,7 @@ dependencies:
     - content_moderation
     - link
     - media_library
+    - metatag
     - path
     - scheduler
     - text
@@ -54,6 +56,14 @@ content:
     settings:
       placeholder_url: ''
       placeholder_title: ''
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 28
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_parent_subtopic:
     type: options_select
@@ -168,4 +178,7 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  entitygroupfield: true
   field_link: true
+  groups: true
+  groups_type_department_site: true

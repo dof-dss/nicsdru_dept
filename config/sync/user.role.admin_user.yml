@@ -50,6 +50,7 @@ dependencies:
     - media
     - metatag
     - node
+    - origins_metatag
     - path
     - pathauto
     - redirect
@@ -352,6 +353,7 @@ permissions:
   - 'edit any video files'
   - 'edit any video media'
   - 'edit any webform content'
+  - 'edit basic meta tags'
   - 'edit domain content'
   - 'edit meta tags'
   - 'edit own application content'

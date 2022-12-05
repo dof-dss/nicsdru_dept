@@ -82,6 +82,13 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
       foreach ($fields as $field) {
         if ($field instanceof FieldConfig && $field->getType() === 'entity_reference') {
           $field_settings = $field->getSettings();
+          $target_entity = $field_settings['target_type'];
+
+          /* Ignore migration tables for Media and Taxonomy as we
+          don't need to update those types of reference field. */
+          if ($target_entity === 'media' || $target_entity === 'taxonomy_term') {
+            continue;
+          }
 
           // Determine the reference types the field targets.
           if ($field_settings['handler'] === 'views') {
@@ -94,23 +101,10 @@ class PostMigrationEntityRefUpdateSubscriber implements EventSubscriberInterface
             $target_bundles = array_keys($field_settings['handler_settings']['target_bundles'] ?? []);
           }
 
-          $target_entity = $field_settings['target_type'];
-
           // Iterate each target bundle and update the reference id.
           foreach ($target_bundles as $target_bundle) {
+
             $migration_table = 'migrate_map_' . $target_entity . '_' . $target_bundle;
-
-            /* Commenting this out as we currently don't need to update media or
-            term references.
-            if ($target_entity === 'media') {
-            $migration_table = 'migrate_map_d7_file_' . $target_entity . '_' . $target_bundle;
-            }
-
-
-            if ($target_entity === 'taxonomy_term') {
-            $migration_table = 'migrate_map_d7_' . $target_entity . '_' . $target_bundle;
-            }
-             */
 
             // Check the database has the correct schema and update table.
             if ($this->dbconn->schema()->tableExists($migration_table)) {

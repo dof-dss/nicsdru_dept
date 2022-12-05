@@ -7,10 +7,12 @@ dependencies:
     - field.field.node.infogram.field_chart_taxonomy
     - field.field.node.infogram.field_indicators
     - field.field.node.infogram.field_infogram
+    - field.field.node.infogram.field_metatags
     - node.type.infogram
     - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
+    - metatag
     - path
     - scheduler
     - text
@@ -54,6 +56,14 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 28
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   flag:
     weight: 9
@@ -147,4 +157,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true
