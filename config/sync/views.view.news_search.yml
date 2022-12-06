@@ -437,6 +437,9 @@ display:
     display_plugin: page
     position: 2
     display_options:
+      title: 'Press releases'
+      cache:
+        type: none
       arguments: {  }
       filters:
         search_api_fulltext:
@@ -548,14 +551,17 @@ display:
         groups:
           1: AND
       defaults:
+        cache: false
+        title: false
         arguments: false
         filters: false
         filter_groups: false
       display_description: ''
+      exposed_block: true
       display_extenders: {  }
       path: press-releases
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -563,11 +569,7 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'url.query_args:sort_order'
-        - url.site
         - 'user.node_grants:view'
       tags:
-        - 'config:facets.facet.pr_department'
-        - 'config:facets.facet.pr_publication_date'
-        - 'config:facets.facet.pr_topics'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.news_index'
