@@ -411,7 +411,28 @@ display:
         css_class: false
         filters: false
         filter_groups: false
+        header: false
       css_class: 'card-deck card-deck--search-results'
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: '<h2>@total results</h2>'
+        search_sort_by:
+          id: search_sort_by
+          table: views
+          field: search_sort_by
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_sort_by
+          empty: false
       exposed_block: true
       display_extenders: {  }
       path: news
@@ -454,8 +475,8 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Enter keywords'
-            description: 'Search press releases and choose filters to show only the results you want'
+            label: 'Search press releases and choose filters to show only the results you want'
+            description: ''
             use_operator: false
             operator: search_api_fulltext_op
             operator_limit_selection: false
@@ -555,8 +576,29 @@ display:
         arguments: false
         filters: false
         filter_groups: false
+        header: false
       css_class: 'card-deck card-deck--search-results'
       display_description: ''
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: '<h2>@total press releases</h2>'
+        search_sort_by:
+          id: search_sort_by
+          table: views
+          field: search_sort_by
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_sort_by
+          empty: false
       exposed_block: true
       display_extenders: {  }
       path: press-releases
