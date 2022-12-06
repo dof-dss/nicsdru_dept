@@ -1,29 +1,37 @@
-uuid: e2837a3c-3365-433f-a94c-197795390fa6
+uuid: 7830adf2-4ecf-40c3-bdac-9bfafde8c3f0
 langcode: en
 status: true
 dependencies:
   config:
     - facets.facet.pr_topics
   module:
+    - domain
     - facets
     - system
   theme:
     - nicsdru_dept_theme
-id: topics
+id: prtopics
 theme: nicsdru_dept_theme
 region: sidebar_first
-weight: -5
+weight: -6
 provider: null
 plugin: 'facet_block:pr_topics'
 settings:
   id: 'facet_block:pr_topics'
-  label: Topics
+  label: Topic
   label_display: visible
   provider: facets
   context_mapping: {  }
-  block_id: topics
+  block_id: prtopics
 visibility:
+  domain:
+    id: domain
+    negate: false
+    context_mapping:
+      domain: '@domain.current_domain_context:domain'
+    domains:
+      group_1: group_1
   request_path:
     id: request_path
     negate: false
-    pages: "/press-releases\r\n/press-releases*"
+    pages: /press-releases

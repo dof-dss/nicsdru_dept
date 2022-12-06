@@ -13,7 +13,7 @@ dependencies:
 id: news_search
 label: 'News search'
 module: views
-description: ''
+description: 'News and Press releases (NIGov) search'
 tag: ''
 base_table: search_api_index_news_index
 base_field: search_api_id
@@ -411,7 +411,28 @@ display:
         css_class: false
         filters: false
         filter_groups: false
+        header: false
       css_class: 'card-deck card-deck--search-results'
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: '<h2>@total results</h2>'
+        search_sort_by:
+          id: search_sort_by
+          table: views
+          field: search_sort_by
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_sort_by
+          empty: false
       exposed_block: true
       display_extenders: {  }
       path: news
@@ -429,5 +450,172 @@ display:
       tags:
         - 'config:facets.facet.news_publication_date'
         - 'config:facets.facet.news_topic'
+        - 'config:field.storage.node.body'
+        - 'config:search_api.index.news_index'
+  press_release_search:
+    id: press_release_search
+    display_title: 'Press releases'
+    display_plugin: page
+    position: 2
+    display_options:
+      title: 'Press releases'
+      arguments: {  }
+      filters:
+        search_api_fulltext:
+          id: search_api_fulltext
+          table: search_api_index_news_index
+          field: search_api_fulltext
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_fulltext
+          operator: or
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: search_api_fulltext_op
+            label: 'Search press releases and choose filters to show only the results you want'
+            description: ''
+            use_operator: false
+            operator: search_api_fulltext_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: search
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              author_user: '0'
+              site_editor: '0'
+              stats_author_user: '0'
+              landing_page_author_user: '0'
+              site_moderator: '0'
+              site_admin: '0'
+              supervisor_user: '0'
+              rss_user: '0'
+              pfg_supervisor_user: '0'
+              brexit_supervisor_user: '0'
+              stats_supervisor_user: '0'
+              landing_page_supervisor_user: '0'
+              domain_admin_user: '0'
+              niexec_admin_user: '0'
+              editor_user: '0'
+              admin_user: '0'
+              user_manager: '0'
+            expose_fields: false
+            placeholder: ''
+            searched_fields_id: search_api_fulltext_searched_fields
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          parse_mode: sloppy_terms
+          min_length: null
+          fields: {  }
+        field_news_type:
+          id: field_news_type
+          table: search_api_index_news_index
+          field: field_news_type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_options
+          operator: or
+          value:
+            pressrelease: pressrelease
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      defaults:
+        cache: true
+        title: false
+        css_class: false
+        arguments: false
+        filters: false
+        filter_groups: false
+        header: false
+      css_class: 'card-deck card-deck--search-results'
+      display_description: ''
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: '<h2>@total press releases</h2>'
+        search_sort_by:
+          id: search_sort_by
+          table: views
+          field: search_sort_by
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_sort_by
+          empty: false
+      exposed_block: true
+      display_extenders: {  }
+      path: press-releases
+    cache_metadata:
+      max-age: 0
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
+        - url.site
+        - 'user.node_grants:view'
+      tags:
+        - 'config:facets.facet.pr_department'
+        - 'config:facets.facet.pr_publication_date'
+        - 'config:facets.facet.pr_topics'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.news_index'

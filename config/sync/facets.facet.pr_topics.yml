@@ -1,24 +1,20 @@
-uuid: 06de0c43-5a22-475e-b404-e0898bdaea14
+uuid: 25e3ad41-918f-4d0e-8b45-966275fd53bd
 langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.press_releases
-    - views.view.press_release_search
+    - search_api.index.news_index
+    - views.view.news_search
   module:
-    - facets_pretty_paths
     - search_api
-third_party_settings:
-  facets_pretty_paths:
-    coder: default_coder
 id: pr_topics
-name: Topics
+name: 'pr: topics'
 weight: 0
 min_count: 1
 missing: false
 missing_label: others
 url_alias: topic
-facet_source_id: 'search_api:views_page__press_release_search__pr_search_page'
+facet_source_id: 'search_api:views_page__news_search__press_release_search'
 field_identifier: field_global_topics
 query_operator: and
 hard_limit: 0
@@ -52,7 +48,7 @@ processor_configs:
     weights:
       sort: 20
     settings:
-      sort: ASC
+      sort: DESC
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:

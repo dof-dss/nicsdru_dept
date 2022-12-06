@@ -1,15 +1,15 @@
-uuid: 63cb35b3-78bd-46c0-8837-823f71ea6680
+uuid: 563fd4e2-e357-49fd-9b73-a37b5041343c
 langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.press_releases
-    - views.view.press_release_search
+    - search_api.index.news_index
+    - views.view.news_search
   module:
     - search_api
 id: press_releases_summary
-name: 'Press Releases summary'
-facet_source_id: 'search_api:views_page__press_release_search__pr_search_page'
+name: 'Press releases summary'
+facet_source_id: 'search_api:views_page__news_search__press_release_search'
 processor_configs:
   hide_when_not_rendered:
     processor_id: hide_when_not_rendered
@@ -17,7 +17,7 @@ processor_configs:
       build: '45'
     settings: {  }
 facets:
-  group:
+  pr_department:
     checked: true
     label: Department
     separator: ', '
@@ -31,7 +31,7 @@ facets:
     weight: 0
   pr_topics:
     checked: true
-    label: Topics
+    label: Topic
     separator: ', '
     show_count: false
     weight: 0
