@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
+    - field.field.node.publication.field_metatags
     - field.field.node.publication.field_publication_files
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
@@ -20,7 +21,7 @@ dependencies:
     - datetime
     - layout_builder
     - options
-    - text
+    - smart_trim
     - user
 third_party_settings:
   layout_builder:
@@ -48,9 +49,23 @@ content:
     weight: 1
     region: content
   field_summary:
-    type: text_default
+    type: smart_trim
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 45
+      trim_type: words
+      trim_suffix: ...
+      wrap_output: false
+      wrap_class: trimmed
+      more_link: false
+      more_class: more-link
+      more_text: ''
+      more_aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
     third_party_settings: {  }
     weight: 0
     region: content
@@ -62,6 +77,7 @@ hidden:
   field_external_publication: true
   field_global_topics: true
   field_last_updated: true
+  field_metatags: true
   field_publication_files: true
   field_publication_secure_files: true
   field_site_subtopics: true

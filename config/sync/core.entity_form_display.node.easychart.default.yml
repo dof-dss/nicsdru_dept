@@ -7,11 +7,13 @@ dependencies:
     - field.field.node.easychart.easychart
     - field.field.node.easychart.field_chart_taxonomy
     - field.field.node.easychart.field_indicators
+    - field.field.node.easychart.field_metatags
     - node.type.easychart
     - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - easychart
+    - metatag
     - path
     - scheduler
     - text
@@ -42,6 +44,14 @@ content:
     weight: 31
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 123
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   flag:
     weight: 10
@@ -135,5 +145,8 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  entitygroupfield: true
   field_chart_taxonomy: true
   field_indicators: true
+  groups: true
+  groups_type_department_site: true

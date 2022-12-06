@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.search_result
     - field.field.node.page.body
+    - field.field.node.page.field_metatags
     - field.field.node.page.field_next_audit_due
     - node.type.page
   module:
@@ -46,6 +47,7 @@ content:
 hidden:
   content_moderation_control: true
   entitygroupfield: true
+  field_metatags: true
   field_next_audit_due: true
   groups: true
   groups_type_department_site: true

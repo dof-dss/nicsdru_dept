@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.heritage_site.field_grid_reference
     - field.field.node.heritage_site.field_historic_map_viewer_link
     - field.field.node.heritage_site.field_map
+    - field.field.node.heritage_site.field_metatags
     - field.field.node.heritage_site.field_nismr_link
     - field.field.node.heritage_site.field_open_to_the_public
     - field.field.node.heritage_site.field_phone
@@ -26,6 +27,7 @@ dependencies:
     - field_group
     - google_map_field
     - link
+    - metatag
     - options
     - text
     - user
@@ -134,6 +136,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 10
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 12
     region: content
   field_nismr_link:
     type: link

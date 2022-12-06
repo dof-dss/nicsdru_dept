@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
+    - field.field.node.publication.field_metatags
     - field.field.node.publication.field_publication_files
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
@@ -38,7 +39,7 @@ third_party_settings:
       label: 'Additional content details'
       parent_name: ''
       region: content
-      weight: 7
+      weight: 8
       format_type: html_element
       format_settings:
         classes: field-collection
@@ -61,7 +62,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
   content_moderation_control:
     settings: {  }
@@ -78,7 +79,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 4
+    weight: 5
     region: content
   field_global_topics:
     type: entity_reference_label
@@ -88,6 +89,15 @@ content:
     third_party_settings: {  }
     weight: 12
     region: content
+  field_last_updated:
+    type: datetime_default
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: medium_date
+    third_party_settings: {  }
+    weight: 2
+    region: content
   field_publication_files:
     type: entity_reference_entity_view
     label: above
@@ -95,7 +105,7 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 5
+    weight: 6
     region: content
   field_publication_secure_files:
     type: entity_reference_entity_view
@@ -104,7 +114,7 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 6
+    weight: 7
     region: content
   field_publication_type:
     type: list_default
@@ -143,12 +153,12 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
 hidden:
   entitygroupfield: true
   field_attachment: true
-  field_last_updated: true
+  field_metatags: true
   groups: true
   groups_type_department_site: true
   langcode: true

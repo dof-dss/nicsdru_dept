@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.heritage_site.field_grid_reference
     - field.field.node.heritage_site.field_historic_map_viewer_link
     - field.field.node.heritage_site.field_map
+    - field.field.node.heritage_site.field_metatags
     - field.field.node.heritage_site.field_nismr_link
     - field.field.node.heritage_site.field_open_to_the_public
     - field.field.node.heritage_site.field_phone
@@ -30,6 +31,7 @@ dependencies:
     - google_map_field
     - link
     - media_library
+    - metatag
     - path
     - scheduler
     - text
@@ -161,6 +163,14 @@ content:
     weight: 23
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 28
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_nismr_link:
     type: link_default
@@ -327,4 +337,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true

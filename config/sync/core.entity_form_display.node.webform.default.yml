@@ -4,10 +4,12 @@ status: true
 dependencies:
   config:
     - field.field.node.webform.body
+    - field.field.node.webform.field_metatags
     - field.field.node.webform.webform
     - node.type.webform
   module:
     - content_moderation
+    - metatag
     - path
     - scheduler
     - text
@@ -33,6 +35,14 @@ content:
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 123
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   flag:
     weight: 10
@@ -131,4 +141,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true
