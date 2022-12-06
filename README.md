@@ -1,5 +1,9 @@
 [![CircleCI](https://circleci.com/gh/dof-dss/nicsdru_dept/tree/development.svg?style=svg)](https://circleci.com/gh/dof-dss/nicsdru_dept/tree/development)
 
+**NOTE: NIGov (northernireland.gov.uk)**
+Group access control for the NIGov domain is altered by some custom modules to provide
+access to certain content types without assigning it to the NIGov group.
+
 # Departmental sites codebase
 
 This source code is for the Departmental sites. It is built with Drupal 9 in a single codebase, single database manner using these key contrib modules to control content and access across the sites:
