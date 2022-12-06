@@ -139,7 +139,7 @@ function dept_search_form_alter(&$form, &$form_state, &$form_id) {
   switch ($form['#id']) {
     case 'views-exposed-form-consultations-search-consultations-search':
     case 'views-exposed-form-news-search-news-search':
-    case 'views-exposed-form-press-release-search-pr-search-page':
+    case 'views-exposed-form-news-search-press-release-search':
     case 'views-exposed-form-publications-search-publications-search':
       $form['sort_by']['#type'] = 'hidden';
       $form['sort_order']['#type'] = 'hidden';
