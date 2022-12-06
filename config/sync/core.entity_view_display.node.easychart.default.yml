@@ -7,9 +7,11 @@ dependencies:
     - field.field.node.easychart.easychart
     - field.field.node.easychart.field_chart_taxonomy
     - field.field.node.easychart.field_indicators
+    - field.field.node.easychart.field_metatags
     - node.type.easychart
   module:
     - easychart
+    - metatag
     - user
 _core:
   default_config_hash: fxc9VzsJHVXJGsT-X1GYXMAGlmlaRbRJkIwIa4udAvU
@@ -24,6 +26,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
   body: true

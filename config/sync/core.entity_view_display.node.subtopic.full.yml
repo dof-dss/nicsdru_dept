@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.subtopic.field_banner_image
     - field.field.node.subtopic.field_banner_link
     - field.field.node.subtopic.field_link
+    - field.field.node.subtopic.field_metatags
     - field.field.node.subtopic.field_parent_subtopic
     - field.field.node.subtopic.field_parent_topic
     - field.field.node.subtopic.field_summary
@@ -45,6 +46,7 @@ hidden:
   field_banner_image: true
   field_banner_link: true
   field_link: true
+  field_metatags: true
   field_parent_subtopic: true
   field_parent_topic: true
   groups: true

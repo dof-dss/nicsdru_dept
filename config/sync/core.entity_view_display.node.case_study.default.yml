@@ -4,9 +4,11 @@ status: true
 dependencies:
   config:
     - field.field.node.case_study.body
+    - field.field.node.case_study.field_metatags
     - field.field.node.case_study.field_outcomes
     - node.type.case_study
   module:
+    - metatag
     - text
     - user
 id: node.case_study.default
@@ -20,6 +22,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
   content_moderation_control: true

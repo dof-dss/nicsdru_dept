@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.infogram.field_chart_taxonomy
     - field.field.node.infogram.field_indicators
     - field.field.node.infogram.field_infogram
+    - field.field.node.infogram.field_metatags
     - node.type.infogram
   module:
     - text
@@ -36,6 +37,7 @@ hidden:
   field_chart_taxonomy: true
   field_indicators: true
   field_infogram: true
+  field_metatags: true
   groups: true
   groups_type_department_site: true
   langcode: true

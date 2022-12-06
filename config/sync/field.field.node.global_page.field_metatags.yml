@@ -1,0 +1,21 @@
+uuid: d4e1b294-45c4-4adb-ade4-882de919988f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_metatags
+    - node.type.global_page
+  module:
+    - metatag
+id: node.global_page.field_metatags
+field_name: field_metatags
+entity_type: node
+bundle: global_page
+label: Metatags
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

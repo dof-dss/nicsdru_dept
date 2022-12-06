@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.project.body
     - field.field.node.project.field_departmental_project_code
+    - field.field.node.project.field_metatags
     - field.field.node.project.field_project_category
     - field.field.node.project.field_project_date
     - field.field.node.project.field_project_duration
@@ -16,6 +17,7 @@ dependencies:
     - content_moderation
     - datetime
     - interval
+    - metatag
     - path
     - scheduler
     - text
@@ -47,6 +49,14 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 28
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_project_category:
     type: options_select
@@ -182,4 +192,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true

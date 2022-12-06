@@ -7,6 +7,9 @@ services:
     arguments: [ '@database', '%topic_route_patterns%']
     tags:
       - { name: event_subscriber }
+  rel2abs_url:
+    class: Drupal\dept_core\Rel2AbsUrl
+    arguments: ['@entity_type.manager', '@department.manager', '@path_alias.manager']
 parameters:
   topic_route_patterns:
     - /publications/(topic)/(\d+)

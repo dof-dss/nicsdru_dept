@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.case_study.body
+    - field.field.node.case_study.field_metatags
     - field.field.node.case_study.field_outcomes
     - node.type.case_study
   module:
@@ -31,6 +32,7 @@ content:
 hidden:
   content_moderation_control: true
   entitygroupfield: true
+  field_metatags: true
   field_outcomes: true
   groups: true
   groups_type_department_site: true

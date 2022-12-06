@@ -5,6 +5,7 @@ dependencies:
   config:
     - views.view.news
   module:
+    - domain
     - node
     - views
   theme:
@@ -30,3 +31,10 @@ visibility:
       node: '@node.node_route_context:node'
     bundles:
       news: news
+  domain:
+    id: domain
+    negate: true
+    context_mapping:
+      domain: '@domain.current_domain_context:domain'
+    domains:
+      group_1: group_1

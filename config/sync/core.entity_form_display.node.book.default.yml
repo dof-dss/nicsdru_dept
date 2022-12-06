@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.book.body
     - field.field.node.book.field_global_topics
+    - field.field.node.book.field_metatags
     - field.field.node.book.field_site_subtopics
     - field.field.node.book.field_site_topics
     - field.field.node.book.field_summary
@@ -13,6 +14,7 @@ dependencies:
   module:
     - chosen_field
     - content_moderation
+    - metatag
     - path
     - scheduler
     - text
@@ -42,6 +44,14 @@ content:
     weight: 1
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 28
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_site_subtopics:
     type: chosen_select
@@ -155,4 +165,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true

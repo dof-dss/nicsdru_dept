@@ -7,8 +7,10 @@ dependencies:
     - field.field.node.infogram.field_chart_taxonomy
     - field.field.node.infogram.field_indicators
     - field.field.node.infogram.field_infogram
+    - field.field.node.infogram.field_metatags
     - node.type.infogram
   module:
+    - metatag
     - text
     - user
 id: node.infogram.default
@@ -38,6 +40,13 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
     region: content
 hidden:
   content_moderation_control: true

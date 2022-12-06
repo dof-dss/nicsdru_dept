@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dept_core\DepartmentManager;
+use Drupal\dept_core\Rel2AbsUrl;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -39,6 +40,13 @@ class RelToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
   protected $departmentManager;
 
   /**
+   * Rel2AbsUrl service object.
+   *
+   * @var \Drupal\dept_core\Rel2AbsUrl
+   */
+  protected $rel2AbsUrl;
+
+  /**
    * Filter constructor.
    *
    * @param array $configuration
@@ -51,11 +59,14 @@ class RelToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
    *   The Entity Type Manager service.
    * @param \Drupal\dept_core\DepartmentManager $department_manager
    *   The department manager.
+   * @param \Drupal\dept_core\Rel2AbsUrl $rel2abs_url
+   *   The rel2abs url service object.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, DepartmentManager $department_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, DepartmentManager $department_manager, Rel2AbsUrl $rel2abs_url) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
     $this->departmentManager = $department_manager;
+    $this->rel2AbsUrl = $rel2abs_url;
   }
 
   /**
@@ -67,7 +78,8 @@ class RelToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('department.manager')
+      $container->get('department.manager'),
+      $container->get('rel2abs_url')
     );
   }
 
@@ -91,20 +103,8 @@ class RelToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
           function ($matches) {
             $node = $this->entityTypeManager->getStorage('node')->loadByProperties(['uuid' => $matches[1]]);
             $node = reset($node);
-
-            if (method_exists($node, 'getGroups')) {
-              $groups = $node->getGroups();
-
-              if (!empty($groups)) {
-                $group_id = array_key_first($groups);
-
-                $dept = $this->departmentManager->getDepartment('group_' . $group_id);
-                $hostname = $dept->hostname();
-                return 'href="https://' . $hostname . $matches[2] . '"';
-              }
-            }
-            // Return the original link if we can't process it.
-            return 'href="https://' . $matches[2] . '"';
+            $url = $this->rel2AbsUrl->handleUrl($matches[2], $node);
+            return 'href="' . $url . '"';
           },
           $result
         );

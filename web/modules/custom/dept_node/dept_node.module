@@ -166,25 +166,8 @@ function dept_node_preprocess_node(array &$variables) {
     // Rewrite any existing relative URLs to content to their absolute
     // departmental URL paths, using active config split profile values.
     if (!preg_match('|^http|', $variables['url'])) {
-      if (method_exists($node, 'getGroups')) {
-        $groups = $node->getGroups();
-
-        if (!empty($groups)) {
-          foreach ($groups as $id => $label) {
-            if ($id === 1) {
-              // Skip NIGov.
-              continue;
-            }
-
-            /** @var \Drupal\dept_core\Department $dept */
-            $dept = \Drupal::service('department.manager')->getDepartment('group_' . $id);
-            $dept_url = $dept->url(FALSE);
-            $variables['url'] = $dept_url . $variables['url'];
-            // Stop after first group this content might be assigned to.
-            break;
-          }
-        }
-      }
+      $variables['url'] = \Drupal::service('rel2abs_url')
+        ->handleUrl($variables['url'], $node);
     }
 
     // Inject the department for a press-release/news items for search.
