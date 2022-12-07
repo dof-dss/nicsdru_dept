@@ -1,0 +1,12 @@
+uuid: c0efb1a5-f760-491a-bda8-3b7fa801987b
+langcode: en
+status: true
+dependencies: {  }
+id: migrate_group_flags
+label: 'Departmental sites - Flags'
+description: 'Migrate Flags'
+source_type: 'Drupal 7'
+module: null
+shared_configuration:
+  source:
+    key: drupal7db
