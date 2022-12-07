@@ -1,24 +1,20 @@
-uuid: 8c427633-8d68-4c65-8e94-159bb4f952c5
+uuid: 2254136f-7dd8-488b-a72a-8a9f4c4f6aa6
 langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.press_releases
-    - views.view.press_release_search
+    - search_api.index.news_index
+    - views.view.news_search
   module:
-    - facets_pretty_paths
     - search_api
-third_party_settings:
-  facets_pretty_paths:
-    coder: default_coder
 id: pr_publication_date
-name: 'Publication date'
+name: 'PR: Publication date'
 weight: 0
 min_count: 1
 missing: false
 missing_label: others
 url_alias: date
-facet_source_id: 'search_api:views_page__press_release_search__pr_search_page'
+facet_source_id: 'search_api:views_page__news_search__press_release_search'
 field_identifier: field_published_date
 query_operator: and
 hard_limit: 0
@@ -52,7 +48,7 @@ processor_configs:
     weights:
       sort: 20
     settings:
-      sort: ASC
+      sort: DESC
   date_facet_drilldown:
     processor_id: date_facet_drilldown
     weights:

@@ -114,7 +114,8 @@ function dept_node_views_query_alter(ViewExecutable $view, QueryPluginBase $quer
   }
 
   if ($view->id() === 'topic_queue') {
-    $dept_url_hostname_parts = explode('.', parse_url($dept->url(), PHP_URL_HOST));
+    $is_prod_env = getenv('PLATFORM_BRANCH') === 'main';
+    $dept_url_hostname_parts = explode('.', parse_url($dept->url($is_prod_env), PHP_URL_HOST));
     if ($dept_url_hostname_parts[0] === 'www') {
       $dept_url_hostname_parts = array_shift($dept_url_hostname_parts);
     }
@@ -159,7 +160,7 @@ function dept_node_preprocess_node(array &$variables) {
 
   if ($view_mode === 'search_metadata' && $node->bundle() === 'news') {
     // Add the department metadata on the press-releases listing.
-    if ($routename != 'view.press_release_search.pr_search_page') {
+    if ($routename != 'view.news_search.press_release_search') {
       return;
     }
 
