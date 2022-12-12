@@ -1,25 +1,21 @@
-uuid: 889bec90-6327-4c11-a323-56e5c58d83e9
+uuid: 502f6d33-d791-4602-81dc-e293379d2bb8
 langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.press_releases
-    - views.view.press_release_search
+    - search_api.index.news_index
+    - views.view.news_search
   module:
-    - facets_pretty_paths
     - search_api
-third_party_settings:
-  facets_pretty_paths:
-    coder: default_coder
-id: group
+id: pr_department
 name: Department
 weight: 0
 min_count: 1
 missing: false
 missing_label: others
-url_alias: dept
-facet_source_id: 'search_api:views_page__press_release_search__pr_search_page'
-field_identifier: group_id
+url_alias: pr_department
+facet_source_id: 'search_api:views_page__news_search__press_release_search'
+field_identifier: label
 query_operator: or
 hard_limit: 0
 exclude: false
@@ -39,7 +35,7 @@ widget:
     reset_text: 'Show all'
     hide_reset_when_no_selection: false
     soft_limit_settings:
-      show_less_label: 'Show fewer'
+      show_less_label: 'Show less'
       show_more_label: 'Show more'
 empty_behavior:
   behavior: none

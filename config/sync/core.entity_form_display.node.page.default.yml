@@ -4,12 +4,14 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
+    - field.field.node.page.field_metatags
     - field.field.node.page.field_next_audit_due
     - node.type.page
     - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - datetime
+    - metatag
     - path
     - scheduler
     - text
@@ -35,6 +37,14 @@ content:
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_metatags:
+    type: metatag_firehose
+    weight: 1001
+    region: content
+    settings:
+      sidebar: true
+      use_details: true
     third_party_settings: {  }
   field_next_audit_due:
     type: datetime_default
@@ -134,4 +144,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true

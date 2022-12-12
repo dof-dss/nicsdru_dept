@@ -1,0 +1,21 @@
+uuid: c38a0f15-ff78-4298-9b4e-a25c742416dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_metatags
+    - node.type.easychart
+  module:
+    - metatag
+id: node.easychart.field_metatags
+field_name: field_metatags
+entity_type: node
+bundle: easychart
+label: Metatags
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

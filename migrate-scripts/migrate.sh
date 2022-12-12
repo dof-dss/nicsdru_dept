@@ -57,6 +57,7 @@ then
   done
 
   echo "Make sure active config matches that from migrate modules"
+  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_flags/config/install -y
   $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_taxo/config/install -y
 
   for type in users files nodes

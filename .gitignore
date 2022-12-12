@@ -15,8 +15,9 @@
 /web/libraries/
 console/
 
-# Ignore sensitive information
+# Ignore sensitive information or local config.
 /web/sites/*/settings.local.php
+/web/sites/local.development.services.yml
 
 # Ignore Drupal's files directory
 /web/sites/*/files/

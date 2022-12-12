@@ -114,7 +114,8 @@ function dept_node_views_query_alter(ViewExecutable $view, QueryPluginBase $quer
   }
 
   if ($view->id() === 'topic_queue') {
-    $dept_url_hostname_parts = explode('.', parse_url($dept->url(), PHP_URL_HOST));
+    $is_prod_env = getenv('PLATFORM_BRANCH') === 'main';
+    $dept_url_hostname_parts = explode('.', parse_url($dept->url($is_prod_env), PHP_URL_HOST));
     if ($dept_url_hostname_parts[0] === 'www') {
       $dept_url_hostname_parts = array_shift($dept_url_hostname_parts);
     }
@@ -159,32 +160,15 @@ function dept_node_preprocess_node(array &$variables) {
 
   if ($view_mode === 'search_metadata' && $node->bundle() === 'news') {
     // Add the department metadata on the press-releases listing.
-    if ($routename != 'view.press_release_search.pr_search_page') {
+    if ($routename != 'view.news_search.press_release_search') {
       return;
     }
 
     // Rewrite any existing relative URLs to content to their absolute
     // departmental URL paths, using active config split profile values.
     if (!preg_match('|^http|', $variables['url'])) {
-      if (method_exists($node, 'getGroups')) {
-        $groups = $node->getGroups();
-
-        if (!empty($groups)) {
-          foreach ($groups as $id => $label) {
-            if ($id === 1) {
-              // Skip NIGov.
-              continue;
-            }
-
-            /** @var \Drupal\dept_core\Department $dept */
-            $dept = \Drupal::service('department.manager')->getDepartment('group_' . $id);
-            $dept_url = $dept->url(FALSE);
-            $variables['url'] = $dept_url . $variables['url'];
-            // Stop after first group this content might be assigned to.
-            break;
-          }
-        }
-      }
+      $variables['url'] = \Drupal::service('rel2abs_url')
+        ->handleUrl($variables['url'], $node);
     }
 
     // Inject the department for a press-release/news items for search.

@@ -1,0 +1,21 @@
+uuid: f5bfa55b-d75d-4786-9d35-6a5d57a95a09
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_metatags
+    - node.type.application
+  module:
+    - metatag
+id: node.application.field_metatags
+field_name: field_metatags
+entity_type: node
+bundle: application
+label: Metatags
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: metatag

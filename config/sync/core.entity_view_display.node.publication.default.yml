@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
+    - field.field.node.publication.field_metatags
     - field.field.node.publication.field_publication_files
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
@@ -18,6 +19,7 @@ dependencies:
   module:
     - datetime
     - link
+    - metatag
     - text
     - user
 id: node.publication.default
@@ -52,6 +54,13 @@ content:
       format_type: medium_date
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
     region: content
   field_publication_files:
     type: entity_reference_entity_view
