@@ -54,6 +54,9 @@ function dept_topics_preprocess_node(array &$variables) {
 
         $cache_tags[] = 'node:' . $subtopic_id;
 
+        // Add cache keys for each rendered subtopic block, as otherwise
+        // the contents are repeated for each instance of the block in the
+        // content render array.
         $cache_keys = &$content['subtopic_' . $subtopic_id]['block']['#cache']['keys'];
         $cache_keys[] = 'subtopic_' . $subtopic_id;
       }
