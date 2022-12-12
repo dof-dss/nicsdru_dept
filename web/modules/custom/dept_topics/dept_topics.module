@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * @file
+ * Departmental topics/subtopics module for controlling display
+ * of topics, subtopics and related content.
+ */
+
+use Drupal\node\NodeInterface;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Views;
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function dept_topics_preprocess_node(array &$variables) {
+  $node = &$variables['node'];
+  $content = &$variables['content'];
+  $view_mode = $variables['view_mode'];
+
+  if (!$node instanceof NodeInterface) {
+    return;
+  }
+
+  if ($node->bundle() === 'topic' && $view_mode === 'full') {
+    // For each topic, define a map of what subtopics appear.
+    // Each subtopic block is then rendered in turn with the subtopic id and number of items
+    // to show passed in as block/views display parameters.
+    $subtopics_to_display = dept_topics_subtopics_queue_for_topic($node);
+
+    if (!empty($subtopics_to_display)) {
+      foreach ($subtopics_to_display as $subtopic_id => $label) {
+        $args = [$node->id(), $subtopic_id];
+
+        /** @var \Drupal\views\ViewExecutable $view */
+        $view = Views::getView('subtopic_content');
+        $view->setDisplay('subtopic_content');
+        $view->setItemsPerPage(3);
+        $view->setArguments($args);
+        $view->execute();
+
+        // Block title renders, curiously, independently to the body.
+        $content['subtopic_' . $subtopic_id]['block_title'] = [
+          '#type' => 'html_tag',
+          '#tag' => 'h2',
+          '#value' => $label,
+        ];
+        $content['subtopic_' . $subtopic_id]['block'] = $view->buildRenderable('subtopic_content');
+        // Set some appropriate cache contexts and tags.
+        $cache_tags = &$content['subtopic_' . $subtopic_id]['block']['#cache']['tags'];
+        if (array_key_exists('node_list', $cache_tags)) {
+          unset($cache_tags['node_list']);
+        }
+
+        $cache_tags[] = 'node:' . $subtopic_id;
+
+        $cache_keys = &$content['subtopic_' . $subtopic_id]['block']['#cache']['keys'];
+        $cache_keys[] = 'subtopic_' . $subtopic_id;
+      }
+    }
+  }
+}
+
+/**
+ * Function to return a list of keyed subtopic node ids/labels
+ * that reference a specified topic node.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ *   The topic node.
+ *
+ * @return array
+ *   Array of subtopic id/label values, e.g.: [1 => 'Angling'].
+ */
+function dept_topics_subtopics_queue_for_topic(NodeInterface $node) {
+  $queue = [];
+
+  if ($node->bundle() === 'topic') {
+    // Find all subtopics that reference this topic.
+    $ids = \Drupal::entityQuery('node')
+      ->condition('type', 'subtopic')
+      ->condition('status', 1)
+      ->condition('field_parent_topic', $node->id())
+      ->execute();
+
+    $subtopic_nodes = \Drupal::entityTypeManager()
+      ->getStorage('node')->loadMultiple($ids);
+
+    foreach ($subtopic_nodes as $node) {
+      $queue[$node->id()] = $node->label();
+    }
+  }
+
+  return $queue;
+}
