@@ -45,6 +45,8 @@ function dept_search_preprocess_facets_summary_item_list(&$variables) {
 
   $summary_facet = \Drupal::entityTypeManager()->getStorage('facets_summary')->load($variables['facet_summary_id']);
 
+  // Add the facet summary label as a facet description to allow us to
+  // display that instead of the default facet (machine) name.
   if (!empty($summary_facet)) {
     $facets = $summary_facet->getFacets();
     foreach ($variables['items'] as $index => $item) {
