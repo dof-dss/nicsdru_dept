@@ -44,12 +44,19 @@ function dept_topics_preprocess_node(array &$variables) {
 
         $content_links = [];
         foreach ($subtopic_nodes as $content_node) {
+          /** @var \Drupal\node\NodeInterface $content_node */
           $content_links[] = $content_node->toLink()->toRenderable();
         }
 
+        // Add render array elements we can call from the node-topic--full template.
         $variables['subtopics_content']['subtopic_' . $subtopic_id] = [
           '#theme' => 'subtopic_content_list',
           '#title' => $subtopics_to_display[$subtopic_id],
+          '#title_link' => Link::createFromRoute(
+            $node->label(),
+            'entity.node.canonical',
+            ['node' => $node->id()],
+          ),
           '#content_links' => $content_links,
           '#read_more_link' => Link::createFromRoute(
             t('Read more'),
@@ -62,11 +69,15 @@ function dept_topics_preprocess_node(array &$variables) {
   }
 }
 
+/**
+ * Implements hook_theme().
+ */
 function dept_topics_theme($existing, $type, $theme, $path) {
   return [
     'subtopic_content_list' => [
       'variables' => [
         'title' => NULL,
+        'title_link' => NULL,
         'content_links' => NULL,
         'read_more_link' => NULL,
       ],
@@ -104,20 +115,4 @@ function dept_topics_subtopics_queue_for_topic(NodeInterface $node) {
   }
 
   return $queue;
-}
-
-function dept_topics_subtopic_sequence_by_topic_id(int $topic_id) {
-  $subtopic_map = [
-    73 => [
-      'Inland Fisheries',
-      'Angling',
-      'Stakeholder Engagement',
-      'Conservation and Protection',
-      'Publications and Statistics',
-      'Inland Fisheries Commercial Fishing Policy',
-      'Inland Fisheries Statutory Approvals',
-    ]
-  ];
-
-  return $sequence;
 }
