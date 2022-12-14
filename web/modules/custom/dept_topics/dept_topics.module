@@ -29,7 +29,7 @@ function dept_topics_preprocess_node(array &$variables) {
     $subtopics_to_display = dept_topics_subtopics_queue_for_topic($node);
 
     if (!empty($subtopics_to_display)) {
-      foreach ($subtopics_to_display as $subtopic_id => $label) {
+      foreach ($subtopics_to_display as $subtopic_id => $subtopic_title) {
         // Get subtopic content.
         $ids = \Drupal::entityQuery('node')
           ->condition('type', 'article')
@@ -53,7 +53,7 @@ function dept_topics_preprocess_node(array &$variables) {
           '#theme' => 'subtopic_content_list',
           '#title' => $subtopics_to_display[$subtopic_id],
           '#title_link' => Link::createFromRoute(
-            $node->label(),
+            $subtopic_title,
             'entity.node.canonical',
             ['node' => $node->id()],
           ),
