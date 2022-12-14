@@ -6,6 +6,7 @@
  * of topics, subtopics and related content.
  */
 
+use Drupal\Core\Link;
 use Drupal\node\NodeInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
@@ -15,7 +16,6 @@ use Drupal\views\Views;
  */
 function dept_topics_preprocess_node(array &$variables) {
   $node = &$variables['node'];
-  $content = &$variables['content'];
   $view_mode = $variables['view_mode'];
 
   if (!$node instanceof NodeInterface) {
@@ -30,38 +30,48 @@ function dept_topics_preprocess_node(array &$variables) {
 
     if (!empty($subtopics_to_display)) {
       foreach ($subtopics_to_display as $subtopic_id => $label) {
-        $args = [$node->id(), $subtopic_id];
+        // Get subtopic content.
+        $ids = \Drupal::entityQuery('node')
+          ->condition('type', 'article')
+          ->condition('status', 1)
+          ->condition('field_site_topics', $node->id())
+          ->condition('field_site_subtopics', $subtopic_id)
+          ->sort('title', 'ASC')
+          ->execute();
 
-        /** @var \Drupal\views\ViewExecutable $view */
-        $view = Views::getView('subtopic_content');
-        $view->setDisplay('subtopic_content');
-        $view->setItemsPerPage(3);
-        $view->setArguments($args);
-        $view->execute();
+        $subtopic_nodes = \Drupal::entityTypeManager()
+          ->getStorage('node')->loadMultiple($ids);
 
-        // Block title renders, curiously, independently to the body.
-        $content['subtopic_' . $subtopic_id]['block_title'] = [
-          '#type' => 'html_tag',
-          '#tag' => 'h2',
-          '#value' => $label,
-        ];
-        $content['subtopic_' . $subtopic_id]['block'] = $view->buildRenderable('subtopic_content');
-        // Set some appropriate cache contexts and tags.
-        $cache_tags = &$content['subtopic_' . $subtopic_id]['block']['#cache']['tags'];
-        if (array_key_exists('node_list', $cache_tags)) {
-          unset($cache_tags['node_list']);
+        $content_links = [];
+        foreach ($subtopic_nodes as $content_node) {
+          $content_links[] = $content_node->toLink()->toRenderable();
         }
 
-        $cache_tags[] = 'node:' . $subtopic_id;
-
-        // Add cache keys for each rendered subtopic block, as otherwise
-        // the contents are repeated for each instance of the block in the
-        // content render array.
-        $cache_keys = &$content['subtopic_' . $subtopic_id]['block']['#cache']['keys'];
-        $cache_keys[] = 'subtopic_' . $subtopic_id;
+        $variables['subtopics_content']['subtopic_' . $subtopic_id] = [
+          '#theme' => 'subtopic_content_list',
+          '#title' => $subtopics_to_display[$subtopic_id],
+          '#content_links' => $content_links,
+          '#read_more_link' => Link::createFromRoute(
+            t('Read more'),
+            'entity.node.canonical',
+            ['node' => $node->id()],
+          ),
+        ];
       }
     }
   }
+}
+
+function dept_topics_theme($existing, $type, $theme, $path) {
+  return [
+    'subtopic_content_list' => [
+      'variables' => [
+        'title' => NULL,
+        'content_links' => NULL,
+        'read_more_link' => NULL,
+      ],
+    ],
+  ];
 }
 
 /**
@@ -94,4 +104,20 @@ function dept_topics_subtopics_queue_for_topic(NodeInterface $node) {
   }
 
   return $queue;
+}
+
+function dept_topics_subtopic_sequence_by_topic_id(int $topic_id) {
+  $subtopic_map = [
+    73 => [
+      'Inland Fisheries',
+      'Angling',
+      'Stakeholder Engagement',
+      'Conservation and Protection',
+      'Publications and Statistics',
+      'Inland Fisheries Commercial Fishing Policy',
+      'Inland Fisheries Statutory Approvals',
+    ]
+  ];
+
+  return $sequence;
 }
