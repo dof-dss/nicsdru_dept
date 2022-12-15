@@ -30,6 +30,13 @@ function dept_topics_preprocess_node(array &$variables) {
 
     if (!empty($subtopics_to_display)) {
       foreach ($subtopics_to_display as $subtopic_id => $subtopic_title) {
+        $subtopic_weight = dept_topics_fetch_subtopic_weight_from_eq($node, $subtopic_id);
+
+        if ($subtopic_weight === FALSE) {
+          // Not in the entityqueue so don't try to fetch anything else for this subtopic.
+          continue;
+        }
+
         // Get subtopic content.
         $ids = \Drupal::entityQuery('node')
           ->condition('type', 'article')
@@ -49,7 +56,7 @@ function dept_topics_preprocess_node(array &$variables) {
         }
 
         // Add render array elements we can call from the node-topic--full template.
-        $variables['subtopics_content']['subtopic_' . $subtopic_id] = [
+        $variables['content']['subtopics_list'][] = [
           '#theme' => 'subtopic_content_list',
           '#title' => $subtopics_to_display[$subtopic_id],
           '#title_link' => Link::createFromRoute(
@@ -63,10 +70,32 @@ function dept_topics_preprocess_node(array &$variables) {
             'entity.node.canonical',
             ['node' => $node->id()],
           ),
+          '#weight' => $subtopic_weight,
+          '#cache' => [
+            'keys' => ['subtopic_' . $subtopic_id],
+          ]
         ];
       }
     }
   }
+}
+
+function dept_topics_fetch_subtopic_weight_from_eq(NodeInterface $topic_node, int $subtopic_id) {
+  // Load the entityqueue for the topic to see the order of subtopics.
+  $queue_id = 'topic_' . $topic_node->label();
+  // Machinename-ify the queue id.
+  $queue_id = str_replace('-', '_', $queue_id);
+  $queue_id = str_replace(' ', '_', $queue_id);
+  $queue_id = strtolower($queue_id);
+
+  $eq = \Drupal::entityTypeManager()->getStorage('entity_subqueue')->load($queue_id);
+  $items = $eq->get('items')->getValue();
+  $queue_item_ids = [];
+  foreach ($items as $queue_item) {
+    $queue_item_ids[] = $queue_item['target_id'];
+  }
+
+  return array_search($subtopic_id, $queue_item_ids);
 }
 
 /**
@@ -96,7 +125,7 @@ function dept_topics_theme($existing, $type, $theme, $path) {
  *   Array of subtopic id/label values, e.g.: [1 => 'Angling'].
  */
 function dept_topics_subtopics_queue_for_topic(NodeInterface $node) {
-  $queue = [];
+  $subtopic_queue = [];
 
   if ($node->bundle() === 'topic') {
     // Find all subtopics that reference this topic.
@@ -104,15 +133,16 @@ function dept_topics_subtopics_queue_for_topic(NodeInterface $node) {
       ->condition('type', 'subtopic')
       ->condition('status', 1)
       ->condition('field_parent_topic', $node->id())
+      ->accessCheck(TRUE)
       ->execute();
 
     $subtopic_nodes = \Drupal::entityTypeManager()
       ->getStorage('node')->loadMultiple($ids);
 
     foreach ($subtopic_nodes as $node) {
-      $queue[$node->id()] = $node->label();
+      $subtopic_queue[$node->id()] = $node->label();
     }
   }
 
-  return $queue;
+  return $subtopic_queue;
 }

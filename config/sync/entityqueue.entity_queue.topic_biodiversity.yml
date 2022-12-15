@@ -1,0 +1,26 @@
+uuid: 6ec68d45-b21d-4514-82dd-4f7857d43dad
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: topic_biodiversity
+label: 'Topic: biodiversity'
+handler: simple
+handler_configuration: {  }
+entity_settings:
+  target_type: node
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      subtopic: subtopic
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+queue_settings:
+  min_size: 0
+  max_size: 0
+  act_as_queue: false
+  reverse: false
