@@ -17,21 +17,21 @@ processor_configs:
       build: '45'
     settings: {  }
 facets:
-  pr_department:
-    checked: true
-    label: Department
-    separator: ', '
-    show_count: false
-    weight: 0
-  pr_publication_date:
-    checked: true
-    label: 'Publication date'
-    separator: ', '
-    show_count: false
-    weight: 0
   pr_topics:
     checked: true
-    label: Topic
+    label: 'in the topic'
     separator: ', '
     show_count: false
-    weight: 0
+    weight: -10
+  pr_publication_date:
+    checked: true
+    label: 'published in'
+    separator: ', '
+    show_count: false
+    weight: -9
+  pr_department:
+    checked: true
+    label: 'by dept'
+    separator: ', '
+    show_count: false
+    weight: -8

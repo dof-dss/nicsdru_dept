@@ -8,6 +8,7 @@
 use Drupal\dept_core\Department;
 use Drupal\facets\FacetInterface;
 use Drupal\views\ViewExecutable;
+use Drupal\facets_summary\Entity\FacetsSummary;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -34,6 +35,24 @@ function dept_search_preprocess_facets_result_item__summary(&$variables) {
         $variables['value'] = $dept->name();
         return;
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_facets_summary_item_list().
+ */
+function dept_search_preprocess_facets_summary_item_list(&$variables) {
+  /* @var \Drupal\facets_summary\Entity\FacetsSummary $summary_facet */
+  $summary_facet = \Drupal::entityTypeManager()->getStorage('facets_summary')->load($variables['facet_summary_id']);
+
+  // Add the facet summary label as a facet description to allow us to
+  // display that instead of the default facet (machine) name.
+  if ($summary_facet instanceof FacetsSummary) {
+    $facets = $summary_facet->getFacets();
+    foreach ($variables['items'] as $index => $item) {
+      $label = $facets[$item['#title']['#facet']->id()]['label'];
+      $variables['items'][$index]['#title']['#facet']->set('description', $label);
     }
   }
 }
