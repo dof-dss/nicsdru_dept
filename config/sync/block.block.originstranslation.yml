@@ -1,4 +1,4 @@
-uuid: a9c7cef3-588f-4eba-891a-1c76986874d4
+uuid: 16768a67-ee40-43c8-89fa-d42b29bb9203
 langcode: en
 status: true
 dependencies:
@@ -7,10 +7,10 @@ dependencies:
     - system
   theme:
     - nicsdru_dept_theme
-id: translationhelplink
+id: originstranslation
 theme: nicsdru_dept_theme
-region: bottom_banner
-weight: 0
+region: primary_menu
+weight: -19
 provider: null
 plugin: origins_translations_block
 settings:
@@ -22,4 +22,4 @@ visibility:
   request_path:
     id: request_path
     negate: true
-    pages: /articles/translation-help
+    pages: /translations

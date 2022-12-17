@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0464ebd23c6f39a3e035cba63f97a06",
+    "content-hash": "da10953daf0191d264b93ac82746cd0a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2008,16 +2008,16 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "1.4.7",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "ec4e427e7edca7755786a1f91009f60535141c30"
+                "reference": "f67f4cf8a701094ba5b0c59f09b3d4aa74b9a58d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/ec4e427e7edca7755786a1f91009f60535141c30",
-                "reference": "ec4e427e7edca7755786a1f91009f60535141c30",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/f67f4cf8a701094ba5b0c59f09b3d4aa74b9a58d",
+                "reference": "f67f4cf8a701094ba5b0c59f09b3d4aa74b9a58d",
                 "shasum": ""
             },
             "require": {
@@ -2028,7 +2028,7 @@
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2022-10-27T11:08:55+00:00"
+            "time": "2022-12-16T10:08:33+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
@@ -17646,5 +17646,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
