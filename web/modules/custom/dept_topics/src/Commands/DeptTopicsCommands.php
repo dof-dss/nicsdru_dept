@@ -11,6 +11,7 @@ use Drupal\entityqueue\Entity\EntitySubqueue;
 use Drupal\entityqueue\EntityQueueInterface;
 use Drupal\entityqueue\EntityQueueRepositoryInterface;
 use Drupal\entityqueue\EntitySubqueueInterface;
+use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -79,7 +80,19 @@ class DeptTopicsCommands extends DrushCommands {
 
     if (!empty($d7Subtopics)) {
       foreach ($d7Subtopics as $topic_id => $subtopic_queue) {
-        //
+        // $topic_ID: 5165
+        // $subtopic_queue: array:2 [
+        //  0 => array:3 [
+        //    "nid" => "5191"
+        //    "title" => "Walking"
+        //    "weight" => "0"
+        //  ]
+        //  1 => array:3 [
+        //          "nid" => "5190"
+        //    "title" => "Cycling"
+        //    "weight" => "1"
+        //  ]
+        //]
         $d9_topic_nid = reset($this->lookupManager->lookupBySourceNodeId([$topic_id]))['nid'];
         $topic_queue_id = 'topic_' . $d9_topic_nid;
 
@@ -112,10 +125,65 @@ class DeptTopicsCommands extends DrushCommands {
 
           $this->io()->writeln("Created queue " . $topic_queue_id . ", for Topic: " . $topic_node->label());
         }
+
+        foreach ($subtopic_queue as $subqueue_item) {
+          $subtopic_queue_id = 'subtopic_' . $subqueue_item['nid'];
+          $subqueue = $this->etManager->getStorage('entity_subqueue')->load($subtopic_queue_id);
+
+          // Is there a subqueue for the subtopic? If not, create one.
+          if (!$subqueue instanceof EntitySubqueueInterface) {
+            $subqueue = EntitySubqueue::create([
+              'queue' => $topic_queue_id,
+              'name' => $subtopic_queue_id,
+              'title' => $subqueue_item['title'],
+            ])->save();
+            $this->io()->writeln("Created subtopic queue " . $subtopic_queue_id . " for " . $subqueue_item['title']);
+          }
+
+          $this->emptyEntityQueue($subtopic_queue_id);
+          $this->fillSubtopicQueue($subqueue);
+        }
       }
+
+      $this->io()->success("Finished");
     }
     else {
       $this->io()->warning("No D7 subtopic queues found");
+    }
+  }
+
+  protected function fillSubtopicQueue(EntitySubqueueInterface $subqueue) {
+    $subtopic_d9_nid = str_replace('subtopic_', '', $subqueue->id());
+
+    $articles = [];
+    // Find the content this subtopic includes.
+    $d7DbConn = Database::getConnection('default', 'drupal7db');
+    $sql = "SELECT
+      ds.view_name, ds.view_display, ds.entity_id, ds.weight, ds.parent, n.nid, n.type, n.title
+      FROM {draggableviews_structure} ds
+      JOIN {node} n on n.nid = ds.entity_id
+      WHERE args LIKE '%" . $subtopic_d9_nid . '\",\"' . $subtopic_d9_nid . "%' AND
+      n.type = 'article'
+      ORDER by view_name, view_display, weight";
+
+    $result = $d7DbConn->query($sql)->fetchAll();
+
+    // Tidy up and reformat the results array.
+    $article_nids = [];
+    foreach ($result as $row_object) {
+      $d7nid = $row_object->nid;
+      $d9nid = reset($this->lookupManager->lookupBySourceNodeId([$d7nid]))['nid'];
+      $article_nids[] = ['target_id' => $d9nid];
+    }
+
+    if (!empty($article_nids)) {
+      $subqueue->set('items', $article_nids);
+      $subqueue->save();
+
+      $this->io()->writeln("Added " . count($article_nids) . " articles to subqueue " . $subqueue->id());
+    }
+    else {
+      $this->io()->warning("No content found to add to subqueue " . $subqueue->id());
     }
   }
 
