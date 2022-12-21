@@ -1,0 +1,32 @@
+uuid: 62ef2c82-9e89-4783-8c14-7a991ea76278
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: topic_36
+label: 'Topic: Ordnance Survey of Northern Ireland'
+handler: multiple
+handler_configuration: {  }
+entity_settings:
+  target_type: node
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      - article
+      - subtopic
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: article
+  queue_settings:
+    min_size: 0
+    max_size: 0
+    act_as_queue: false
+    reverse: false
+queue_settings:
+  min_size: 0
+  max_size: 0
+  act_as_queue: false
+  reverse: false

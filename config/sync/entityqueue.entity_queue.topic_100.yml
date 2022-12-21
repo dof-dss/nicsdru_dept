@@ -1,0 +1,32 @@
+uuid: d3780a64-7b2b-45b2-91c3-0992c6dcf57f
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: topic_100
+label: 'Topic: Justice and the law'
+handler: multiple
+handler_configuration: {  }
+entity_settings:
+  target_type: node
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      - article
+      - subtopic
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: article
+  queue_settings:
+    min_size: 0
+    max_size: 0
+    act_as_queue: false
+    reverse: false
+queue_settings:
+  min_size: 0
+  max_size: 0
+  act_as_queue: false
+  reverse: false

@@ -1,0 +1,32 @@
+uuid: 97b19105-fee5-4238-841b-5767e44c05e9
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: topic_121
+label: 'Topic: Environmental Advice for Planning'
+handler: multiple
+handler_configuration: {  }
+entity_settings:
+  target_type: node
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      - article
+      - subtopic
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: article
+  queue_settings:
+    min_size: 0
+    max_size: 0
+    act_as_queue: false
+    reverse: false
+queue_settings:
+  min_size: 0
+  max_size: 0
+  act_as_queue: false
+  reverse: false

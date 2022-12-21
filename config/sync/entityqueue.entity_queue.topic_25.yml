@@ -1,0 +1,32 @@
+uuid: 8abbb2be-b1f3-46c5-a099-99b378c692c3
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: topic_25
+label: 'Topic: Making Government Work'
+handler: multiple
+handler_configuration: {  }
+entity_settings:
+  target_type: node
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      - article
+      - subtopic
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: article
+  queue_settings:
+    min_size: 0
+    max_size: 0
+    act_as_queue: false
+    reverse: false
+queue_settings:
+  min_size: 0
+  max_size: 0
+  act_as_queue: false
+  reverse: false
