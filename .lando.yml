@@ -15,7 +15,7 @@ config:
     php: .lando/config/php.ini
     database: .lando/config/my.cnf
 env_file:
-  - .lando/config/.env
+  - .env
 proxy:
   # Proxy patterns here are matched on naming structure found under
   # config/sync/domain.record.group_*.yml + overridden in web/sites/default/settings.domain.php
