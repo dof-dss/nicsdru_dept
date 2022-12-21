@@ -183,7 +183,7 @@ class DeptTopicsCommands extends DrushCommands {
       $this->io()->writeln("Added " . count($article_nids) . " articles to subqueue " . $subqueue->id());
     }
     else {
-      $this->io()->warning("No content found to add to subqueue " . $subqueue->id());
+      $this->io()->writeln("No content found to add to subqueue " . $subqueue->id());
     }
   }
 
