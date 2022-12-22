@@ -141,7 +141,16 @@ class DeptTopicsCommands extends DrushCommands {
         }
 
         foreach ($subtopic_queue as $subqueue_item) {
-          $subtopic_queue_id = 'subtopic_' . $subqueue_item['nid'];
+          $d9subtopic_lookup = reset($this->lookupManager->lookupBySourceNodeId([$subqueue_item['nid']]));
+          $d9subtopic_nid = $d9subtopic_lookup['nid'] ?? 0;
+
+          if (empty($d9subtopic_nid)) {
+            $this->io()->warning("Could not create subtopic subqueue for " . $subqueue_item['title'] . " as no D9 equivalent node could be loaded");
+            continue;
+          }
+
+          $subtopic_queue_id = 'subtopic_' . $d9subtopic_nid;
+
           /** @var \Drupal\entityqueue\EntitySubqueueInterface $subqueue */
           $subqueue = $this->etManager->getStorage('entity_subqueue')->load($subtopic_queue_id);
 
