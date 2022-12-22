@@ -142,6 +142,7 @@ class DeptTopicsCommands extends DrushCommands {
 
         foreach ($subtopic_queue as $subqueue_item) {
           $subtopic_queue_id = 'subtopic_' . $subqueue_item['nid'];
+          /** @var \Drupal\entityqueue\EntitySubqueueInterface $subqueue */
           $subqueue = $this->etManager->getStorage('entity_subqueue')->load($subtopic_queue_id);
 
           // Is there a subqueue for the subtopic? If not, create one.
@@ -152,6 +153,11 @@ class DeptTopicsCommands extends DrushCommands {
               'title' => $subqueue_item['title'],
             ])->save();
             $this->io()->writeln("Created subtopic queue " . $subtopic_queue_id . " for " . $subqueue_item['title']);
+          }
+
+          if (!$subqueue instanceof EntitySubqueueInterface) {
+            $this->io()->warning("Unable to empty+fill subtopic queue " . $subtopic_queue_id . " as subqueue id reference did not implement EntitySubqueueInterface");
+            continue;
           }
 
           $this->emptyEntityQueue($subtopic_queue_id);
@@ -189,8 +195,12 @@ class DeptTopicsCommands extends DrushCommands {
     $article_nids = [];
     foreach ($result as $row_object) {
       $d7nid = $row_object->nid;
-      $d9nid = reset($this->lookupManager->lookupBySourceNodeId([$d7nid]))['nid'];
-      $article_nids[] = ['target_id' => $d9nid];
+      $lookup = reset($this->lookupManager->lookupBySourceNodeId([$d7nid]));
+      $d9nid = $lookup['nid'] ?? 0;
+
+      if (!empty($d9nid)) {
+        $article_nids[] = ['target_id' => $d9nid];
+      }
     }
 
     if (!empty($article_nids)) {
