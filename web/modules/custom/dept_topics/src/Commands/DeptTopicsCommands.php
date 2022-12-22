@@ -68,31 +68,45 @@ class DeptTopicsCommands extends DrushCommands {
    */
   public function generateTopicAndSubtopicQueues() {
     // Verifies and rebuilds the list at /topics, per dept.
-    //$this->regenerateTopicsQueue();
-
+    $this->regenerateTopicsQueue();
     // Sets up the queues for each subtopic.
     $this->regenerateSubtopicQueues();
   }
 
+  /**
+   * Builds the top-level queue of items listed under /topics.
+   */
+  public function regenerateTopicsQueue() {
+    $d7topicsByDept = $this->getD7TopicsByDept();
+
+    if (!empty($d7topicsByDept)) {
+      foreach ($d7topicsByDept as $d7_domain_id => $queue_item) {
+        $dept_topics_queue_id = $this->d7DomainIdToEntityQueueId($d7_domain_id);
+        // Check if we have the entityqueue for dept topics, create one if not.
+        // Clear out + fill the entity queue for each dept.
+        $this->emptyEntityQueue($dept_topics_queue_id);
+        // Re-fill the queue with contents.
+        $this->insertIntoEntityQueue($dept_topics_queue_id, $queue_item);
+      }
+
+      $this->io()->success("Finished");
+    }
+    else {
+      $this->io()->warning("No D7 topic queue could be loaded");
+    }
+  }
+
+  /**
+   * Re-builds the subtopic entity queues and fills them
+   * with content references in the weight they had in the
+   * D7 table(s).
+   */
   public function regenerateSubtopicQueues() {
     // Load all our D7 subtopic queues (stored in draggableviews table).
     $d7Subtopics = $this->getD7Subtopics();
 
     if (!empty($d7Subtopics)) {
       foreach ($d7Subtopics as $topic_id => $subtopic_queue) {
-        // $topic_ID: 5165
-        // $subtopic_queue: array:2 [
-        //  0 => array:3 [
-        //    "nid" => "5191"
-        //    "title" => "Walking"
-        //    "weight" => "0"
-        //  ]
-        //  1 => array:3 [
-        //          "nid" => "5190"
-        //    "title" => "Cycling"
-        //    "weight" => "1"
-        //  ]
-        //]
         $d9_topic_nid = reset($this->lookupManager->lookupBySourceNodeId([$topic_id]))['nid'];
         $topic_queue_id = 'topic_' . $d9_topic_nid;
 
@@ -152,6 +166,9 @@ class DeptTopicsCommands extends DrushCommands {
     }
   }
 
+  /**
+   * Fills up a subtopic queue with D7 content references.
+   */
   protected function fillSubtopicQueue(EntitySubqueueInterface $subqueue) {
     $subtopic_d9_nid = str_replace('subtopic_', '', $subqueue->id());
 
@@ -188,43 +205,24 @@ class DeptTopicsCommands extends DrushCommands {
   }
 
   /**
-   * Builds the top-level queue of items listed under /topics.
-   *
-   * @return void
+   * Empties out existing items in an entity queue.
    */
-  public function regenerateTopicsQueue() {
-    $d7topicsByDept = $this->getD7TopicsByDept();
-
-    if (!empty($d7topicsByDept)) {
-      foreach ($d7topicsByDept as $d7_domain_id => $queue_item) {
-        $dept_topics_queue_id = $this->d7DomainIdToEntityQueueId($d7_domain_id);
-        // Check if we have the entityqueue for dept topics, create one if not.
-        // Clear out + fill the entity queue for each dept.
-        $this->emptyEntityQueue($dept_topics_queue_id);
-        // Re-fill the queue with contents.
-        $this->insertIntoEntityQueue($dept_topics_queue_id, $queue_item);
-      }
-
-      $this->io()->success("Finished");
-    }
-    else {
-      $this->io()->warning("No D7 topic queue could be loaded");
-    }
-  }
-
   protected function emptyEntityQueue($entity_queue_id) {
     /** @var \Drupal\entityqueue\EntitySubqueueInterface $eq */
     $eq = $this->etManager->getStorage('entity_subqueue')->load($entity_queue_id);
-    $items = $eq->get('items');
-    if (empty($items)) {
-      return;
-    }
-
     $eq->set('items', []);
     $eq->save();
   }
 
-  protected function insertIntoEntityQueue($entity_queue_id, $queue_data) {
+  /**
+   * Adds known queue data into an entity queue.
+   *
+   * @param string $entity_queue_id
+   *   The mechine name of the entity queue.
+   * @param array $queue_data
+   *   The data to add.
+   */
+  protected function insertIntoEntityQueue(string $entity_queue_id, array $queue_data) {
     $eq = $this->etManager->getStorage('entity_subqueue')->load($entity_queue_id);
 
     if ($eq instanceof EntitySubqueueInterface) {
@@ -243,6 +241,12 @@ class DeptTopicsCommands extends DrushCommands {
     }
   }
 
+  /**
+   * Drupal 7 topics by department id.
+   *
+   * @return array
+   *   The topics grouped by department id.
+   */
   protected function getD7TopicsByDept() {
     $d7DbConn = Database::getConnection('default', 'drupal7db');
 
@@ -278,7 +282,17 @@ class DeptTopicsCommands extends DrushCommands {
     return $queue;
   }
 
-  protected function d7DomainIdToEntityQueueId($d7_domain_id) {
+  /**
+   * Function to map Drupal 7 domain id to a defined
+   * D9 entity queue id.
+   *
+   * @param int $d7_domain_id
+   *   The Drupal 7 domain id.
+   *
+   * @return string
+   *   The Drupal 9 entity queue id.
+   */
+  protected function d7DomainIdToEntityQueueId(int $d7_domain_id) {
     $entity_queue_id_prefix = 'topics_dept_';
     $suffix = '';
 
@@ -327,6 +341,12 @@ class DeptTopicsCommands extends DrushCommands {
     return $entity_queue_id_prefix . $suffix;
   }
 
+  /**
+   * Fetch an array of Drupal 7 subtopics.
+   *
+   * @return array
+   *   The D7 subtopics keyed by the parent topic id.
+   */
   protected function getD7Subtopics() {
     $d7DbConn = Database::getConnection('default', 'drupal7db');
 
@@ -359,4 +379,5 @@ class DeptTopicsCommands extends DrushCommands {
 
     return $subtopics;
   }
+
 }

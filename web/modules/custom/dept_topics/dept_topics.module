@@ -80,6 +80,17 @@ function dept_topics_preprocess_node(array &$variables) {
   }
 }
 
+/**
+ * Find the subtopic weight from a given topic entityqueue.
+ *
+ * @param \Drupal\node\NodeInterface $topic_node
+ *   The topic node.
+ * @param int $subtopic_id
+ *   The subtopic id we want to find the weight for.
+ *
+ * @return int|false
+ *   The weight value if found, otherwise FALSE.
+ */
 function dept_topics_fetch_subtopic_weight_from_eq(NodeInterface $topic_node, int $subtopic_id) {
   // Load the entityqueue for the topic to see the order of subtopics.
   $queue_id = 'topic_' . $topic_node->label();
@@ -88,6 +99,7 @@ function dept_topics_fetch_subtopic_weight_from_eq(NodeInterface $topic_node, in
   $queue_id = str_replace(' ', '_', $queue_id);
   $queue_id = strtolower($queue_id);
 
+  /** @var \Drupal\entityqueue\EntitySubqueueInterface $eq */
   $eq = \Drupal::entityTypeManager()->getStorage('entity_subqueue')->load($queue_id);
   $items = $eq->get('items')->getValue();
   $queue_item_ids = [];
