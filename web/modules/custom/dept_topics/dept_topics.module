@@ -67,7 +67,6 @@ function dept_topics_preprocess_node(array &$variables) {
             'entity.node.canonical',
             ['node' => $subtopic_id],
           ),
-          '#weight' => $subtopic_weight,
           '#cache' => [
             'keys' => ['subtopic_' . $subtopic_id],
           ]
