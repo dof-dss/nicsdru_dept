@@ -39,8 +39,13 @@ function dept_topics_preprocess_node(array &$variables) {
 
         $ids = $query->execute()->fetchAllAssoc('entity_id');
         if (empty($ids)) {
-          // Replace with naturally sorted list??
-          continue;
+          // Replace with naturally sorted list.
+          $query = \Drupal::entityQuery('node')
+            ->condition('type', 'article')
+            ->condition('status', 1)
+            ->condition('field_site_subtopics', $subtopic_id)
+            ->sort('changed', 'DESC');
+          $ids = $query->execute();
         }
 
         $article_nodes = \Drupal::entityTypeManager()
