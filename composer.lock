@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cf02f2f8cc25724ff51a37494838fedf",
+    "content-hash": "01e1a73f10a99dc6c224353836f60971",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4242,62 +4242,6 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/entitygroupfield",
                 "issues": "https://drupal.org/project/issues/entitygroupfield"
-            }
-        },
-        {
-            "name": "drupal/entityqueue",
-            "version": "1.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/entityqueue.git",
-                "reference": "8.x-1.4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entityqueue-8.x-1.4.zip",
-                "reference": "8.x-1.4",
-                "shasum": "eb5fd020ae1ebc50381962e3ede51ed8adb5a6b7"
-            },
-            "require": {
-                "drupal/core": "^8.7.7 || ^9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.4",
-                    "datestamp": "1670930861",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Andrei Mateescu",
-                    "homepage": "https://www.drupal.org/u/amateescu",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Jonathan Jordan",
-                    "homepage": "https://www.drupal.org/u/jojonaloha",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "quicksketch",
-                    "homepage": "https://www.drupal.org/user/35821"
-                }
-            ],
-            "description": "The Entityqueue module allows users to create queues of any entity type.",
-            "homepage": "https://www.drupal.org/project/entityqueue",
-            "support": {
-                "source": "http://cgit.drupalcode.org/entityqueue",
-                "issues": "https://www.drupal.org/project/issues/entityqueue",
-                "irc": "irc://irc.freenode.org/drupal-contribute"
             }
         },
         {
@@ -17863,5 +17807,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.2.0"
 }
