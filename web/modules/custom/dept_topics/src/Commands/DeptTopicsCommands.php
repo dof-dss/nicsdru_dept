@@ -2,16 +2,11 @@
 
 namespace Drupal\dept_topics\Commands;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
-use Drupal\entityqueue\Entity\EntityQueue;
-use Drupal\entityqueue\Entity\EntitySubqueue;
-use Drupal\entityqueue\EntityQueueInterface;
-use Drupal\entityqueue\EntityQueueRepositoryInterface;
-use Drupal\entityqueue\EntitySubqueueInterface;
-use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -22,39 +17,31 @@ class DeptTopicsCommands extends DrushCommands {
   use StringTranslationTrait;
 
   /**
-   * The entity queue repo service object.
-   *
-   * @var \Drupal\entityqueue\EntityQueueRepositoryInterface
-   */
-  protected $eqRepo;
-
-  /**
    * The entity type manager service object.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $etManager;
+  protected EntityTypeManagerInterface $etManager;
 
   /**
    * The migration lookup manager service object.
    *
    * @var \Drupal\dept_migrate\MigrateUuidLookupManager
    */
-  protected $lookupManager;
+  protected MigrateUuidLookupManager $lookupManager;
 
   /**
    * D7 database connection.
    *
    * @var \Drupal\Core\Database\Connection
    */
-  protected $d7DbConn;
+  protected Connection $d7DbConn;
 
   /**
    * Class constructor.
    */
-  public function __construct(EntityQueueRepositoryInterface $eq_repo, EntityTypeManagerInterface $et_manager, MigrateUuidLookupManager $lookup_manager) {
+  public function __construct(EntityTypeManagerInterface $et_manager, MigrateUuidLookupManager $lookup_manager) {
     parent::__construct();
-    $this->eqRepo = $eq_repo;
     $this->etManager = $et_manager;
     $this->lookupManager = $lookup_manager;
   }
@@ -63,8 +50,8 @@ class DeptTopicsCommands extends DrushCommands {
    * Bulk generate any required topic and subtopic entity queues
    * based on known stored values in the D7 database.
    *
-   * @command dept_topics:generateEntityQueues
-   * @aliases dept_topics:geq
+   * @command dept_topics:syncTopicSubtopicOrder
+   * @aliases dept_topics:ststo
    */
   public function generateTopicAndSubtopicQueues() {
     // Verifies and rebuilds the list at /topics, per dept.
@@ -81,12 +68,7 @@ class DeptTopicsCommands extends DrushCommands {
 
     if (!empty($d7topicsByDept)) {
       foreach ($d7topicsByDept as $d7_domain_id => $queue_item) {
-        $dept_topics_queue_id = $this->d7DomainIdToEntityQueueId($d7_domain_id);
-        // Check if we have the entityqueue for dept topics, create one if not.
-        // Clear out + fill the entity queue for each dept.
-        $this->emptyEntityQueue($dept_topics_queue_id);
-        // Re-fill the queue with contents.
-        $this->insertIntoEntityQueue($dept_topics_queue_id, $queue_item);
+
       }
 
       $this->io()->success("Finished");
@@ -105,158 +87,99 @@ class DeptTopicsCommands extends DrushCommands {
     // Load all our D7 subtopic queues (stored in draggableviews table).
     $d7Subtopics = $this->getD7Subtopics();
 
-    if (!empty($d7Subtopics)) {
-      foreach ($d7Subtopics as $topic_id => $subtopic_queue) {
-        $d9_topic_nid = reset($this->lookupManager->lookupBySourceNodeId([$topic_id]))['nid'];
-        $topic_queue_id = 'topic_' . $d9_topic_nid;
-
-        // Attempt to load the entity queue, if it's empty - create it.
-        $eq = $this->etManager->getStorage('entity_queue')->load($topic_queue_id);
-
-        if (!$eq instanceof EntityQueueInterface) {
-          $topic_node = $this->etManager->getStorage('node')->load($d9_topic_nid);
-          EntityQueue::create([
-            'id' => $topic_queue_id,
-            'label' => 'Topic: ' . $topic_node->label(),
-            'handler' => 'multiple',
-            'entity_settings' => [
-              'target_type' => 'node',
-              'handler' => 'default:node',
-              'handler_settings' => [
-                'target_bundles' => ['article', 'subtopic'],
-                'sort' => ['field' => '_none', 'direction' => 'ASC'],
-                'auto_create' => FALSE,
-                'auto_create_bundle' => 'article',
-              ],
-              'queue_settings' => [
-                'min_size' => 0,
-                'max_size' => 0,
-                'act_as_queue' => FALSE,
-                'reverse' => FALSE,
-              ],
-            ],
-          ])->save();
-
-          $this->io()->writeln("Created queue " . $topic_queue_id . ", for Topic: " . $topic_node->label());
-        }
-
-        foreach ($subtopic_queue as $subqueue_item) {
-          $d9subtopic_lookup = reset($this->lookupManager->lookupBySourceNodeId([$subqueue_item['nid']]));
-          $d9subtopic_nid = $d9subtopic_lookup['nid'] ?? 0;
-
-          if (empty($d9subtopic_nid)) {
-            $this->io()->warning("Could not create subtopic subqueue for " . $subqueue_item['title'] . " as no D9 equivalent node could be loaded");
-            continue;
-          }
-
-          $subtopic_queue_id = 'subtopic_' . $d9subtopic_nid;
-
-          /** @var \Drupal\entityqueue\EntitySubqueueInterface $subqueue */
-          $subqueue = $this->etManager->getStorage('entity_subqueue')->load($subtopic_queue_id);
-
-          // Is there a subqueue for the subtopic? If not, create one.
-          if (!$subqueue instanceof EntitySubqueueInterface) {
-            $subqueue = EntitySubqueue::create([
-              'queue' => $topic_queue_id,
-              'name' => $subtopic_queue_id,
-              'title' => $subqueue_item['title'],
-            ])->save();
-            $this->io()->writeln("Created subtopic queue " . $subtopic_queue_id . " for " . $subqueue_item['title']);
-          }
-
-          if (!$subqueue instanceof EntitySubqueueInterface) {
-            $this->io()->warning("Unable to empty+fill subtopic queue " . $subtopic_queue_id . " as subqueue id reference did not implement EntitySubqueueInterface");
-            continue;
-          }
-
-          $this->emptyEntityQueue($subtopic_queue_id);
-          $this->fillSubtopicQueue($subqueue);
-        }
-      }
-
-      $this->io()->success("Finished");
-    }
-    else {
+    if (empty($d7Subtopics)) {
       $this->io()->warning("No D7 subtopic queues found");
-    }
-  }
-
-  /**
-   * Fills up a subtopic queue with D7 content references.
-   */
-  protected function fillSubtopicQueue(EntitySubqueueInterface $subqueue) {
-    $subtopic_d9_nid = str_replace('subtopic_', '', $subqueue->id());
-
-    $articles = [];
-    // Find the content this subtopic includes.
-    $d7DbConn = Database::getConnection('default', 'drupal7db');
-    $sql = "SELECT
-      ds.view_name, ds.view_display, ds.entity_id, ds.weight, ds.parent, n.nid, n.type, n.title
-      FROM {draggableviews_structure} ds
-      JOIN {node} n on n.nid = ds.entity_id
-      WHERE args LIKE '%" . $subtopic_d9_nid . '\",\"' . $subtopic_d9_nid . "%' AND
-      n.type = 'article'
-      ORDER by view_name, view_display, weight";
-
-    $result = $d7DbConn->query($sql)->fetchAll();
-
-    // Tidy up and reformat the results array.
-    $article_nids = [];
-    foreach ($result as $row_object) {
-      $d7nid = $row_object->nid;
-      $lookup = reset($this->lookupManager->lookupBySourceNodeId([$d7nid]));
-      $d9nid = $lookup['nid'] ?? 0;
-
-      if (!empty($d9nid)) {
-        $article_nids[] = ['target_id' => $d9nid];
-      }
+      return;
     }
 
-    if (!empty($article_nids)) {
-      $subqueue->set('items', $article_nids);
-      $subqueue->save();
+    foreach ($d7Subtopics as $d7_topic_id => $d7_subtopic_data) {
+      $topic_lookup = reset($this->lookupManager->lookupBySourceNodeId([$d7_topic_id]));
+      $d9_topic_id = $topic_lookup['nid'];
+      $d9_topic_title = $topic_lookup['title'];
 
-      $this->io()->writeln("Added " . count($article_nids) . " articles to subqueue " . $subqueue->id());
-    }
-    else {
-      $this->io()->writeln("No content found to add to subqueue " . $subqueue->id());
-    }
-  }
+      foreach ($d7_subtopic_data as $d7_subtopic_info) {
+        $d7_subtopic_id = $d7_subtopic_info['nid'];
+        $d7_subtopic_weight = $d7_subtopic_info['weight'];
 
-  /**
-   * Empties out existing items in an entity queue.
-   */
-  protected function emptyEntityQueue($entity_queue_id) {
-    /** @var \Drupal\entityqueue\EntitySubqueueInterface $eq */
-    $eq = $this->etManager->getStorage('entity_subqueue')->load($entity_queue_id);
-    $eq->set('items', []);
-    $eq->save();
-  }
+        $this->io()->writeln($d9_topic_title . " - processing subtopic d7 id " . $d7_subtopic_id);
 
-  /**
-   * Adds known queue data into an entity queue.
-   *
-   * @param string $entity_queue_id
-   *   The mechine name of the entity queue.
-   * @param array $queue_data
-   *   The data to add.
-   */
-  protected function insertIntoEntityQueue(string $entity_queue_id, array $queue_data) {
-    $eq = $this->etManager->getStorage('entity_subqueue')->load($entity_queue_id);
+        if (empty($d7_subtopic_id)) {
+          $this->io()->writeln("Couldn't find the D7 subtopic id for " . $d7_subtopic_id);
+          continue;
+        }
 
-    if ($eq instanceof EntitySubqueueInterface) {
-      foreach ($queue_data as $item) {
-        $lookup_data = reset($this->lookupManager->lookupBySourceNodeId([$item['nid']]));
-        $d9nid = $lookup_data['nid'] ?? 0;
+        // Lookup the D9 subtopic node id.
+        $lookup_data = reset($this->lookupManager->lookupBySourceNodeId([$d7_subtopic_id]));
+        $d9_subtopic_id = $lookup_data['nid'] ?? 0;
 
-        if (!empty($d9nid)) {
-          $node = $this->etManager->getStorage('node')->load($d9nid);
-          $eq->addItem($node);
+        if (empty($d9_subtopic_id)) {
+          $this->io()
+            ->writeln("No D9 subtopic node found for D7 id " . $d7_subtopic_id);
+          continue;
+        }
+
+        // Is there a draggable views entry?
+        $existing_dv_data = \Drupal::database()
+          ->query("SELECT * FROM {draggableviews_structure} WHERE view_name = :display AND args = :args", [
+            ':display' => 'stack_topics',
+            ':args' => '["' . $d9_topic_id . '"]'
+          ])->fetchAll();
+
+        if (empty($existing_dv_data)) {
+          // Pull in D7 draggableviews data and insert the required rows.
+          $this->io()->writeln("Adding record for " . $d9_subtopic_id);
+
+          $row = [
+            'view_name' => 'content_stacks',
+            'view_display' => 'stack_topics',
+            'args' => '["' . $d9_topic_id . '"]',
+            'entity_id' => $d9_subtopic_id,
+            'weight' => $d7_subtopic_weight,
+          ];
+          \Drupal::database()->insert('draggableviews_structure')
+            ->fields($row)->execute();
+
+          // Per-subtopic, insert values for any articles referenced by them.
+          $this->syncSubtopicArticles($d7_subtopic_id, $d9_subtopic_id);
+        }
+        else {
+          $this->io()
+            ->writeln("Existing data in draggableviews_structure table for subtopic id " . $d9_subtopic_id);
         }
       }
+    }
 
-      $eq->save();
-      $this->io()->writeln("Updated entity queue " . $entity_queue_id);
+    $this->io()->success("Finished");
+  }
+
+  /**
+   * Function to map D7 draggableviews data for a subtopic
+   * against the D9 equivalent content.
+   *
+   * @param int $d7_subtopic_id
+   *   The Drupal 7 subtopic id value.
+   * @param int $d9_subtopic_id
+   *   The Drupal 9 subtopic id value.
+   */
+  protected function syncSubtopicArticles(int $d7_subtopic_id, int $d9_subtopic_id) {
+    $subtopic_articles = $this->getD7SubtopicArticles($d7_subtopic_id);
+    if (!empty($subtopic_articles)) {
+      $subtopic_articles = reset($subtopic_articles);
+      foreach ($subtopic_articles as $row) {
+        $article_lookup = $this->lookupManager->lookupBySourceNodeId([$row['nid']]);
+        $article_d9_nid = reset($article_lookup)['nid'];
+
+        $row = [
+          'view_name' => 'content_stacks',
+          'view_display' => 'stack_subtopics',
+          'args' => '["' . $d9_subtopic_id . '"]',
+          'entity_id' => $article_d9_nid,
+          'weight' => $row['weight'],
+        ];
+
+        \Drupal::database()->insert('draggableviews_structure')
+          ->fields($row)->execute();
+      }
     }
   }
 
@@ -302,65 +225,6 @@ class DeptTopicsCommands extends DrushCommands {
   }
 
   /**
-   * Function to map Drupal 7 domain id to a defined
-   * D9 entity queue id.
-   *
-   * @param int $d7_domain_id
-   *   The Drupal 7 domain id.
-   *
-   * @return string
-   *   The Drupal 9 entity queue id.
-   */
-  protected function d7DomainIdToEntityQueueId(int $d7_domain_id) {
-    $entity_queue_id_prefix = 'topics_dept_';
-    $suffix = '';
-
-    switch ($d7_domain_id) {
-      case 1:
-        $suffix = 'executive_office';
-        break;
-
-      case 2:
-        $suffix = 'daera';
-        break;
-
-      case 4:
-        $suffix = 'economy';
-        break;
-
-      case 5:
-        $suffix = 'nigov';
-        break;
-
-      case 6:
-        $suffix = 'education';
-        break;
-
-      case 7:
-        $suffix = 'finance';
-        break;
-
-      case 8:
-        $suffix = 'health';
-        break;
-
-      case 9:
-        $suffix = 'infrastructure';
-        break;
-
-      case 12:
-        $suffix = 'justice';
-        break;
-
-      case 13:
-        $suffix = 'communities';
-        break;
-    }
-
-    return $entity_queue_id_prefix . $suffix;
-  }
-
-  /**
    * Fetch an array of Drupal 7 subtopics.
    *
    * @return array
@@ -397,6 +261,41 @@ class DeptTopicsCommands extends DrushCommands {
     }
 
     return $subtopics;
+  }
+
+  /**
+   * Class to fetch weighted, article content for a given D7 subtopic.
+   *
+   * @param int $d7_subtopic_id
+   *   The D7 subtopic id.
+   * @return array
+   *   D7 articles for the subtopic specified.
+   */
+  protected function getD7SubtopicArticles(int $d7_subtopic_id) {
+    $d7DbConn = Database::getConnection('default', 'drupal7db');
+
+    $articles = [];
+
+    $sql = "SELECT
+    ds.view_name, ds.view_display, ds.entity_id, ds.weight, ds.parent, n.nid, n.type, n.title
+    FROM {draggableviews_structure} ds
+    JOIN {node} n on n.nid = ds.entity_id
+    WHERE args LIKE '%" . $d7_subtopic_id . '\",\"' . $d7_subtopic_id . "%' AND
+    n.type = 'article'
+    ORDER by view_name, view_display, weight";
+
+    $result = $d7DbConn->query($sql)->fetchAll();
+
+    // Tidy up and reformat the results array.
+    foreach ($result as $row_object) {
+      $articles[$d7_subtopic_id][] = [
+        'nid' => $row_object->nid,
+        'title' => $row_object->title,
+        'weight' => $row_object->weight,
+      ];
+    }
+
+    return $articles;
   }
 
 }
