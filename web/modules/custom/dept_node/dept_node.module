@@ -112,21 +112,6 @@ function dept_node_views_query_alter(ViewExecutable $view, QueryPluginBase $quer
       }
     }
   }
-
-  if ($view->id() === 'topic_queue') {
-    $is_prod_env = getenv('PLATFORM_BRANCH') === 'main';
-    $dept_url_hostname_parts = explode('.', parse_url($dept->url($is_prod_env), PHP_URL_HOST));
-    if ($dept_url_hostname_parts[0] === 'www') {
-      $dept_url_hostname_parts = array_shift($dept_url_hostname_parts);
-    }
-
-    $topic_queue_id = 'topics_dept_' . str_replace('-ni', '', $dept_url_hostname_parts[0]);
-
-    // Topic queue views is based on db query, so type hint the SQL query class.
-    /** @var \Drupal\views\Plugin\views\query\Sql $query */
-    $table = $query->getTableInfo('entity_subqueue__items');
-    $table['join']->extra[0]['value'][0] = $topic_queue_id;
-  }
 }
 
 /**
