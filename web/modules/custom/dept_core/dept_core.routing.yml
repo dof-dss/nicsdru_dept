@@ -1,0 +1,7 @@
+entity.department.settings:
+  path: 'admin/structure/department'
+  defaults:
+    _form: '\Drupal\dept_core\Form\DepartmentSettingsForm'
+    _title: 'Department'
+  requirements:
+    _permission: 'administer department'

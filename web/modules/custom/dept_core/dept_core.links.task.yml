@@ -1,0 +1,22 @@
+entity.department.settings:
+  title: 'Settings'
+  route_name: entity.department.settings
+  base_route: entity.department.settings
+entity.department.view:
+  title: 'View'
+  route_name: entity.department.canonical
+  base_route: entity.department.canonical
+entity.department.edit_form:
+  title: 'Edit'
+  route_name: entity.department.edit_form
+  base_route: entity.department.canonical
+entity.department.delete_form:
+  title: 'Delete'
+  route_name: entity.department.delete_form
+  base_route: entity.department.canonical
+  weight: 10
+entity.department.collection:
+  title: 'Departments'
+  route_name: entity.department.collection
+  base_route: system.admin_content
+  weight: 10
