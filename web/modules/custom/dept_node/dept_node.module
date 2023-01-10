@@ -79,11 +79,6 @@ function dept_node_views_pre_render(ViewExecutable $view) {
  * where the group_content_field_data table has been both added as a
  * relationship in the view config and has been added as a boilerplate
  * filter condition to restrict o specific group.
- *
- * For topic entity queues, it alters the relationship condition to
- * restrict the query to the correct entity queue id, based on repurposing
- * the department name attribute as the numerical id would require a
- * separate fixed lookup condition or function.
  */
 function dept_node_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
   $dept_manager = \Drupal::service('department.manager');

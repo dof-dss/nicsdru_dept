@@ -6,6 +6,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\dept_migrate\MigrateSupport;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drush\Commands\DrushCommands;
 
@@ -31,6 +32,13 @@ class DeptTopicsCommands extends DrushCommands {
   protected MigrateUuidLookupManager $lookupManager;
 
   /**
+   * The migration support service object.
+   *
+   * @var \Drupal\dept_migrate\MigrateSupport
+   */
+  protected MigrateSupport $migrateSupport;
+
+  /**
    * D7 database connection.
    *
    * @var \Drupal\Core\Database\Connection
@@ -40,10 +48,11 @@ class DeptTopicsCommands extends DrushCommands {
   /**
    * Class constructor.
    */
-  public function __construct(EntityTypeManagerInterface $et_manager, MigrateUuidLookupManager $lookup_manager) {
+  public function __construct(EntityTypeManagerInterface $et_manager, MigrateUuidLookupManager $lookup_manager, MigrateSupport $migrate_support) {
     parent::__construct();
     $this->etManager = $et_manager;
     $this->lookupManager = $lookup_manager;
+    $this->migrateSupport = $migrate_support;
   }
 
   /**
@@ -67,8 +76,24 @@ class DeptTopicsCommands extends DrushCommands {
     $d7topicsByDept = $this->getD7TopicsByDept();
 
     if (!empty($d7topicsByDept)) {
-      foreach ($d7topicsByDept as $d7_domain_id => $queue_item) {
+      foreach ($d7topicsByDept as $d7_domain_id => $topics) {
+        foreach ($topics as $topic_data) {
+          $d9_dept_id = $this->migrateSupport->domainToGroupId($topic_data['d7_domain_name']);
+          $d9_topic_lookup = reset($this->lookupManager->lookupBySourceNodeId([$topic_data['nid']]));
+          $d9_topic_id = $d9_topic_lookup['nid'];
 
+          $row = [
+            'view_name' => 'content_stacks',
+            'view_display' => 'dept_topics',
+            'args' => '["' . $d9_dept_id . '"]',
+            'entity_id' => $d9_topic_lookup['nid'],
+            'weight' => $topic_data['weight'],
+          ];
+          \Drupal::database()->insert('draggableviews_structure')
+            ->fields($row)->execute();
+
+          $this->io()->writeln("Inserted row for Topic ". $topic_data['title']);
+        }
       }
 
       $this->io()->success("Finished");
@@ -121,7 +146,7 @@ class DeptTopicsCommands extends DrushCommands {
         // Is there a draggable views entry?
         $existing_dv_data = \Drupal::database()
           ->query("SELECT * FROM {draggableviews_structure} WHERE view_name = :display AND args = :args", [
-            ':display' => 'stack_topics',
+            ':display' => 'topic_subtopics',
             ':args' => '["' . $d9_topic_id . '"]'
           ])->fetchAll();
 
@@ -131,7 +156,7 @@ class DeptTopicsCommands extends DrushCommands {
 
           $row = [
             'view_name' => 'content_stacks',
-            'view_display' => 'stack_topics',
+            'view_display' => 'topic_subtopics',
             'args' => '["' . $d9_topic_id . '"]',
             'entity_id' => $d9_subtopic_id,
             'weight' => $d7_subtopic_weight,
@@ -171,7 +196,7 @@ class DeptTopicsCommands extends DrushCommands {
 
         $row = [
           'view_name' => 'content_stacks',
-          'view_display' => 'stack_subtopics',
+          'view_display' => 'subtopic_articles',
           'args' => '["' . $d9_subtopic_id . '"]',
           'entity_id' => $article_d9_nid,
           'weight' => $row['weight'],
@@ -218,6 +243,7 @@ class DeptTopicsCommands extends DrushCommands {
         'nid' => $row_object->nid,
         'title' => $row_object->title,
         'weight' => $row_object->weight,
+        'd7_domain_name' => $row_object->machine_name,
       ];
     }
 
