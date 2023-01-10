@@ -92,7 +92,7 @@ class DeptTopicsCommands extends DrushCommands {
           \Drupal::database()->insert('draggableviews_structure')
             ->fields($row)->execute();
 
-          $this->io()->writeln("Inserted row for Topic ". $topic_data['title']);
+          $this->io()->writeln("Inserted row for Topic " . $topic_data['title']);
         }
       }
 
