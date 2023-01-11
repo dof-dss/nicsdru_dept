@@ -20,6 +20,7 @@ fi
 # If we don't have a Drupal install, download it.
 if [ ! -d "/app/web/core" ]; then
   echo "Installing Drupal"
+  export COMPOSER_PROCESS_TIMEOUT=600
   composer install
 fi
 

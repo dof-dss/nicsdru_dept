@@ -1,0 +1,125 @@
+uuid: c65bb8ba-521f-4619-b718-27afbed5392a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.diff
+    - field.field.node.subtopic.body
+    - field.field.node.subtopic.field_banner_image
+    - field.field.node.subtopic.field_banner_link
+    - field.field.node.subtopic.field_link
+    - field.field.node.subtopic.field_metatags
+    - field.field.node.subtopic.field_parent_subtopic
+    - field.field.node.subtopic.field_parent_topic
+    - field.field.node.subtopic.field_summary
+    - node.type.subtopic
+  module:
+    - entitygroupfield
+    - field_group
+    - layout_builder
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  field_group:
+    group_additional_content_details:
+      children:
+        - field_parent_topic
+        - field_parent_subtopic
+        - entitygroupfield
+        - groups
+        - groups_type_department_site
+        - field_banner_image
+      label: 'Additional content details'
+      parent_name: ''
+      region: content
+      weight: 2
+      format_type: html_element
+      format_settings:
+        classes: field-collection
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+id: node.subtopic.diff
+targetEntityType: node
+bundle: subtopic
+mode: diff
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  entitygroupfield:
+    type: parent_group_label_formatter
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_banner_image:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_parent_subtopic:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_parent_topic:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_summary:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  groups:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  groups_type_department_site:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  content_moderation_control: true
+  field_banner_link: true
+  field_link: true
+  field_metatags: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

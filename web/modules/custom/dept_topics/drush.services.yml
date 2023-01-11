@@ -1,0 +1,6 @@
+services:
+  dept_topics.commands:
+    class: \Drupal\dept_topics\Commands\DeptTopicsCommands
+    arguments: ['@entity_type.manager', '@dept_migrate.migrate_uuid_lookup_manager', '@dept_migrate.migrate_support']
+    tags:
+      - { name: drush.command }
