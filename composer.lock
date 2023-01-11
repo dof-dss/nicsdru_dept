@@ -2032,16 +2032,16 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
-            "version": "0.4.4",
+            "version": "0.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dof-dss/nicsdru_origins_theme.git",
-                "reference": "59be47c14e4df68be4f78bc10895c4e3fe57185e"
+                "reference": "33fbca10b0e656daf1f0881da1e35fb08f28ea48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_theme/zipball/59be47c14e4df68be4f78bc10895c4e3fe57185e",
-                "reference": "59be47c14e4df68be4f78bc10895c4e3fe57185e",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_theme/zipball/33fbca10b0e656daf1f0881da1e35fb08f28ea48",
+                "reference": "33fbca10b0e656daf1f0881da1e35fb08f28ea48",
                 "shasum": ""
             },
             "require": {
@@ -2065,9 +2065,9 @@
                 "theme"
             ],
             "support": {
-                "source": "https://github.com/dof-dss/nicsdru_origins_theme/tree/0.4.4"
+                "source": "https://github.com/dof-dss/nicsdru_origins_theme/tree/0.4.5"
             },
-            "time": "2022-10-14T13:44:21+00:00"
+            "time": "2023-01-11T11:00:48+00:00"
         },
         {
             "name": "drupal/admin_toolbar",
@@ -17858,5 +17858,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
