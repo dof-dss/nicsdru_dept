@@ -1,0 +1,53 @@
+uuid: 216d1cd2-d546-43ee-88eb-c8a1cb542cd8
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.full
+    - field.field.node.contact.body
+    - field.field.node.contact.field_map
+    - field.field.node.contact.field_metatags
+    - field.field.node.contact.field_next_audit_due
+    - field.field.node.contact.field_site_subtopics
+    - field.field.node.contact.field_site_topics
+    - node.type.contact
+  module:
+    - google_map_field
+    - layout_builder
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.contact.full
+targetEntityType: node
+bundle: contact
+mode: full
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_map:
+    type: google_map_field_embed
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  content_moderation_control: true
+  entitygroupfield: true
+  field_metatags: true
+  field_next_audit_due: true
+  field_site_subtopics: true
+  field_site_topics: true
+  groups: true
+  groups_type_department_site: true
+  langcode: true
+  links: true
+  search_api_excerpt: true
