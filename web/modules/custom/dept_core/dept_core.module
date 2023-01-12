@@ -283,8 +283,12 @@ function dept_core_node_get_domains(NodeInterface $node) {
  */
 function dept_core_domain_load(array $domains) {
   $dept_ent_manager = \Drupal::entityTypeManager()->getStorage('department');
+
+  // Add the associated Department as a property of the Domain.
   foreach ($domains as $domain) {
-    $department = $dept_ent_manager->loadByProperties(['domain' => $domain]);
-    $domain->addProperty('department', $department);
+    if ($domain->id() !== 'dept_admin') {
+        $department = $dept_ent_manager->loadByProperties(['domain' => $domain->id()]);
+        $domain->addProperty('department', $department);
+    }
   }
 }
