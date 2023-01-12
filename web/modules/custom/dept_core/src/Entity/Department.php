@@ -69,6 +69,14 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   use EntityOwnerTrait;
 
   /**
+   * Hostnames for the department.
+   *
+   * @var array
+   */
+  protected array $hostnames;
+
+
+  /**
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {
@@ -206,7 +214,53 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
     return $fields;
   }
 
+  /**
+   * Department name.
+   */
   public function name() {
     return $this->label();
+  }
+
+
+  /**
+   * Domain.
+   */
+  public function domain() {
+    return $this->get('domain')->entity;
+  }
+
+  /**
+   * Full URL (protocol and hostname).
+   *
+   * @param bool $live_url
+   *   Return live URL if true, else return the configuration Url.
+   * @param bool $secure_protocol
+   *   Return URL with HTTPS or HTTP protocol.
+   */
+  public function url(bool $live_url = TRUE, bool $secure_protocol = TRUE): string {
+    return ($secure_protocol ? "https://" : "http://") . $this->hostname($live_url);
+  }
+
+  /**
+   * Hostname.
+   *
+   * @param bool $live_hostname
+   *   Return live hostname if true, else return the configuration hostname.
+   */
+  public function hostname(bool $live_hostname = TRUE): string {
+
+    // Cannot inject services into custom entities (https://www.drupal.org/project/drupal/issues/2142515)
+    // So instead we lazy load the hostnames via the static Drupal calls.
+    if (empty($this->hostnames)) {
+      // Live Url for the department.
+      $config = \Drupal::service('config.storage.sync')->read('domain.record.' . $this->domain()->id());
+      $this->hostnames[] = $config['hostname'];
+
+      // Current configuration URL for the department.
+      $config = \Drupal::service('config.storage')->read('domain.record.' . $this->domain()->id());
+      $this->hostnames[] = $config['hostname'];
+    }
+
+    return $live_hostname ? $this->hostnames[0] : $this->hostnames[1];
   }
 }
