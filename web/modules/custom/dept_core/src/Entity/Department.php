@@ -244,23 +244,21 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   /**
    * Hostname.
    *
-   * @param bool $live_hostname
-   *   Return live hostname if true, else return the configuration hostname.
+   * @param bool $production_hostname
+   *   Return production hostname if true, else return the configuration hostname.
    */
-  public function hostname(bool $live_hostname = TRUE): string {
+  public function hostname(bool $production_hostname = TRUE): string {
 
     // Cannot inject services into custom entities (https://www.drupal.org/project/drupal/issues/2142515)
     // So instead we lazy load the hostnames via the static Drupal calls.
     if (empty($this->hostnames)) {
-      // Live Url for the department.
-      $config = \Drupal::service('config.storage.sync')->read('domain.record.' . $this->domain()->id());
-      $this->hostnames[] = $config['hostname'];
-
-      // Current configuration URL for the department.
-      $config = \Drupal::service('config.storage')->read('domain.record.' . $this->domain()->id());
-      $this->hostnames[] = $config['hostname'];
+      // Get Production and config domain hostnames.
+      foreach (['config.storage.sync', 'config.storage'] as $config_store) {
+        $config = \Drupal::service($config_store)->read('domain.record.' . $this->domain()->id());
+        $this->hostnames[] = $config['hostname'];
+      }
     }
 
-    return $live_hostname ? $this->hostnames[0] : $this->hostnames[1];
+    return $production_hostname ? $this->hostnames[0] : $this->hostnames[1];
   }
 }
