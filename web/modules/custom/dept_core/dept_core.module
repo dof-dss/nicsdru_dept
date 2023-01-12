@@ -25,8 +25,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * Implements hook_preprocess_page().
  */
 function dept_core_preprocess_page(&$variables) {
-  $dept_manager = \Drupal::service('department.manager');
-  $variables['department'] = $dept_manager->getCurrentDepartment();
+//  $dept_manager = \Drupal::service('department.manager');
+//  $variables['department'] = $dept_manager->getCurrentDepartment();
 }
 
 /**
@@ -276,4 +276,15 @@ function dept_core_node_get_domains(NodeInterface $node) {
     }
   }
   return $domains;
+}
+
+/**
+ * Implements hook_domain_load().
+ */
+function dept_core_domain_load(array $domains) {
+  $dept_ent_manager = \Drupal::entityTypeManager()->getStorage('department');
+  foreach ($domains as $domain) {
+    $department = $dept_ent_manager->loadByProperties(['domain' => $domain]);
+    $domain->addProperty('department', $department);
+  }
 }
