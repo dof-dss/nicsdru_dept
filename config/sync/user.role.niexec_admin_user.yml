@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - content_moderation
-    - entityqueue
     - media
     - node
 id: niexec_admin_user
@@ -15,7 +14,6 @@ permissions:
   - 'access media overview'
   - 'create media'
   - 'delete media'
-  - 'manipulate entityqueues'
   - 'update media'
   - 'update niexec_homepage_news entityqueue'
   - 'view all revisions'
