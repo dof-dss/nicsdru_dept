@@ -36,6 +36,7 @@ use Drupal\user\EntityOwnerTrait;
  *     }
  *   },
  *   base_table = "department",
+ *   fieldable = TRUE,
  *   revision_table = "department_revision",
  *   show_revision_ui = TRUE,
  *   admin_permission = "administer department",
@@ -45,6 +46,7 @@ use Drupal\user\EntityOwnerTrait;
  *     "label" = "label",
  *     "uuid" = "uuid",
  *     "owner" = "uid",
+ *     "domain" = "domain"
  *   },
  *   revision_metadata_keys = {
  *     "revision_user" = "revision_uid",
@@ -180,7 +182,31 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the department was last edited.'));
 
+    $fields['domain'] = BaseFieldDefinition::create('entity_reference')
+      ->setRevisionable(TRUE)
+      ->setLabel(t('Domain'))
+      ->setSetting('target_type', 'domain')
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => 60,
+          'placeholder' => '',
+        ],
+        'weight' => 15,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'domain',
+        'weight' => 15,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+
     return $fields;
   }
 
+  public function name() {
+    return $this->label();
+  }
 }
