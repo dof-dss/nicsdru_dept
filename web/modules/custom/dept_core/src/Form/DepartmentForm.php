@@ -27,6 +27,10 @@ class DepartmentForm extends ContentEntityForm {
 
     $id_options = array_diff_assoc($domain_options, $departments);
 
+    if (count($id_options) < 1) {
+      \Drupal::messenger()->addWarning('All Domains have a Department assigned.');
+    }
+
     $form['id'] = [
       '#type' => 'select',
       '#title' => 'Department',
