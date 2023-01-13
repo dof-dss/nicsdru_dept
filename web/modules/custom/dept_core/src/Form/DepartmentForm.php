@@ -10,10 +10,36 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class DepartmentForm extends ContentEntityForm {
 
+
+  public function form(array $form, FormStateInterface $form_state) {
+    $form = parent::form($form, $form_state);
+
+    $domains = \Drupal::entityTypeManager()->getStorage('domain')->loadMultiple();
+    $domain_options = [];
+
+    foreach ($domains as $domain) {
+      if ($domain->id() !== 'dept_admin') {
+        $domain_options[$domain->id()] = $domain->label();
+      }
+    }
+
+    $form['id'] = [
+      '#type' => 'select',
+      '#title' => 'Department',
+      '#options' => $domain_options,
+      '#required' => TRUE,
+      '#weight' => -50,
+    ];
+
+    return $form;
+  }
+
   /**
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
+    $form_state->setValue('id', 'justice');
+
     $result = parent::save($form, $form_state);
 
     $entity = $this->getEntity();
