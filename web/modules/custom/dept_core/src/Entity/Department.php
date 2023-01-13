@@ -93,6 +93,13 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
     $fields = parent::baseFieldDefinitions($entity_type);
 
+    $fields['id'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('ID'))
+      ->setDescription(t('The ID of the test entity.'))
+      ->setReadOnly(TRUE)
+      // Set to InnoDB 191 character limit.
+      ->setSetting('max_length', 191);
+
     $fields['label'] = BaseFieldDefinition::create('string')
       ->setRevisionable(TRUE)
       ->setLabel(t('Label'))
@@ -225,14 +232,14 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    * @param bool $production_hostname
    *   Return production hostname if true, else return the configuration hostname.
    */
-  public function hostname(bool $production_hostname = TRUE): string {
+  public function hostname(bool $production_hostname = TRUE): string|null {
 
-    // Cannot inject services into custom entities (https://www.drupal.org/project/drupal/issues/2142515)
+    // Cannot inject services into entities (https://www.drupal.org/project/drupal/issues/2142515)
     // So instead we lazy load the hostnames via the static Drupal calls.
     if (empty($this->hostnames)) {
       // Get Production and config domain hostnames.
       foreach (['config.storage.sync', 'config.storage'] as $config_store) {
-        $config = \Drupal::service($config_store)->read('domain.record.' . $this->domain()->id());
+        $config = \Drupal::service($config_store)->read('domain.record.' . $this->id());
         $this->hostnames[] = $config['hostname'];
       }
     }
