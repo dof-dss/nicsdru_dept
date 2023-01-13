@@ -233,7 +233,6 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    *   Return production hostname if true, else return the configuration hostname.
    */
   public function hostname(bool $production_hostname = TRUE): string|null {
-
     // Cannot inject services into entities (https://www.drupal.org/project/drupal/issues/2142515)
     // So instead we lazy load the hostnames via the static Drupal calls.
     if (empty($this->hostnames)) {

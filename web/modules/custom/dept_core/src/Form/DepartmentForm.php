@@ -16,6 +16,7 @@ class DepartmentForm extends ContentEntityForm {
     $form = parent::form($form, $form_state);
 
     $domains = \Drupal::entityTypeManager()->getStorage('domain')->loadMultiple();
+    $departments = \Drupal::database()->query("SELECT id, label FROM {department}")->fetchAllKeyed();
     $domain_options = [];
 
     foreach ($domains as $domain) {
@@ -24,10 +25,12 @@ class DepartmentForm extends ContentEntityForm {
       }
     }
 
+    $id_options = array_diff_assoc($domain_options, $departments);
+
     $form['id'] = [
       '#type' => 'select',
       '#title' => 'Department',
-      '#options' => $domain_options,
+      '#options' => $id_options,
       '#required' => TRUE,
       '#weight' => -50,
     ];
@@ -35,7 +38,7 @@ class DepartmentForm extends ContentEntityForm {
     $form['label']['widget'][0]['#required'] = FALSE;
     $form['label']['#access'] = FALSE;
     $form['label']['widget'][0]['value']['#required'] = FALSE;
-    
+
     return $form;
   }
 
