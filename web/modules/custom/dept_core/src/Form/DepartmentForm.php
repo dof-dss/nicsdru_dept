@@ -3,6 +3,7 @@
 namespace Drupal\dept_core\Form;
 
 use Drupal\Core\Entity\ContentEntityForm;
+use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -31,15 +32,27 @@ class DepartmentForm extends ContentEntityForm {
       '#weight' => -50,
     ];
 
+    $form['label']['widget'][0]['#required'] = FALSE;
+    $form['label']['#access'] = FALSE;
+    $form['label']['widget'][0]['value']['#required'] = FALSE;
+    
     return $form;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function save(array $form, FormStateInterface $form_state) {
-    $form_state->setValue('id', 'justice');
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $domain = \Drupal::entityTypeManager()->getStorage('domain')->load($form_state->getValue('id'));
+    $form_state->setValue('label', ['0' => ['value' => $domain->label()]]);
 
+    parent::validateForm($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function save(array $form, FormStateInterface $form_state) {
     $result = parent::save($form, $form_state);
 
     $entity = $this->getEntity();
