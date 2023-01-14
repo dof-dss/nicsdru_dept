@@ -1,0 +1,21 @@
+uuid: f9e3fad0-a5e8-4ecf-9031-81b2f2ae510f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_map_location
+    - node.type.contact
+  module:
+    - geolocation
+id: node.contact.field_map_location
+field_name: field_map_location
+entity_type: node
+bundle: contact
+label: 'Map location'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: geolocation
