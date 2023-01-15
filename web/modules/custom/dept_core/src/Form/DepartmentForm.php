@@ -43,6 +43,16 @@ class DepartmentForm extends ContentEntityForm {
     $form['label']['#access'] = FALSE;
     $form['label']['widget'][0]['value']['#required'] = FALSE;
 
+    $form['author'] = [
+      '#type' => 'details',
+      '#group' => 'advanced',
+      '#title' => 'Authoring Information'
+    ];
+
+    $form['status']['#group'] = 'footer';
+    $form['uid']['#group'] = 'author';
+    $form['created']['#group'] = 'author';
+
     return $form;
   }
 
