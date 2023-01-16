@@ -33,47 +33,39 @@ function dept_core_preprocess_page(&$variables) {
  * Implements hook_preprocess_menu().
  */
 function dept_core_preprocess_menu(&$variables) {
-//  if ($variables['menu_name'] === 'footer' && !empty($variables['items'])) {
-//    // Add a menu link to the end of the menu with a link to the
-//    // accessibility statement defined in the group field value.
-//    $dept = \Drupal::service('department.manager')->getCurrentDepartment();
-//    if (empty($dept)) {
-//      return;
-//    }
-//
-//    $group = Group::load($dept->groupId());
-//
-//    if (empty($group)) {
-//      return;
-//    }
-//
-//    // Footer menu doesn't vary much at all so use a very broad context.
-//    // See https://www.drupal.org/docs/drupal-apis/cache-api/cache-contexts#core-contexts
-//    $variables['#cache']['contexts'] = ['theme'];
-//    $cache_tags = ['group:' . $group->id()];
-//
-//    if (($accessibility_statement = $dept->accessibilityStatement()) !== NULL && $accessibility_statement instanceof NodeInterface) {
-//      // See MenuLinkTree->buildItems() which this imitates.
-//      $menu_link = [
-//        'title' => $accessibility_statement->getTitle(),
-//        'url' => Url::fromRoute('entity.node.canonical', ['node' => $accessibility_statement->id()]),
-//        'is_collapsed' => FALSE,
-//        'is_expanded' => FALSE,
-//        'in_active_trail' => FALSE,
-//        'attributes' => new Attribute(),
-//      ];
-//
-//      $cache_tags[] = 'node:' . $accessibility_statement->id();
-//
-//      if (!empty($variables['#cache']['tags'])) {
-//        $variables['#cache']['tags'] = Cache::mergeTags($cache_tags, $variables['#cache']['keys']);
-//      }
-//
-//      $variables['items'][] = $menu_link;
-//    }
-//
-//    $variables['#cache']['tags'] = $cache_tags;
-//  }
+  if ($variables['menu_name'] === 'footer' && !empty($variables['items'])) {
+    // Add a menu link to the end of the menu with a link to the
+    // accessibility statement defined in the group field value.
+    $dept = \Drupal::service('department.manager')->getCurrentDepartment();
+    if (empty($dept)) {
+      return;
+    }
+
+    // Footer menu doesn't vary much at all so use a very broad context.
+    // See https://www.drupal.org/docs/drupal-apis/cache-api/cache-contexts#core-contexts
+
+    if (($accessibility_statement = $dept->accessibilityStatement()) !== NULL && $accessibility_statement instanceof NodeInterface) {
+      // See MenuLinkTree->buildItems() which this imitates.
+      $menu_link = [
+        'title' => $accessibility_statement->getTitle(),
+        'url' => Url::fromRoute('entity.node.canonical', ['node' => $accessibility_statement->id()]),
+        'is_collapsed' => FALSE,
+        'is_expanded' => FALSE,
+        'in_active_trail' => FALSE,
+        'attributes' => new Attribute(),
+      ];
+
+      $cache_tags[] = 'node:' . $accessibility_statement->id();
+
+      if (!empty($variables['#cache']['tags'])) {
+        $variables['#cache']['tags'] = Cache::mergeTags($cache_tags, $variables['#cache']['keys']);
+      }
+
+      $variables['items'][] = $menu_link;
+    }
+
+    $variables['#cache']['tags'] = $cache_tags;
+  }
 }
 
 
@@ -81,55 +73,55 @@ function dept_core_preprocess_menu(&$variables) {
  * Implements hook_node_grants().
  */
 function dept_core_node_grants(AccountInterface $account, $op) {
-  $grants = [];
-
-  /** @var \Drupal\domain\Entity\Domain $active */
-  $active = \Drupal::service('domain.negotiator')->getActiveDomain();
-
-  if (!$active instanceof DomainInterface) {
-    /** @var \Drupal\domain\DomainStorageInterface $domain_storage */
-    $domain_storage = \Drupal::entityTypeManager()->getStorage('domain');
-    $active = $domain_storage->loadDefaultDomain();
-  }
-
-  // No domains means no permissions.
-  if (!$active instanceof Domain) {
-    return $grants;
-  }
-
-  if ($op == 'view') {
-    $grants['group_domain_id'][] = $active->getDomainId();
-  }
-
-  return $grants;
+//  $grants = [];
+//
+//  /** @var \Drupal\domain\Entity\Domain $active */
+//  $active = \Drupal::service('domain.negotiator')->getActiveDomain();
+//
+//  if (!$active instanceof DomainInterface) {
+//    /** @var \Drupal\domain\DomainStorageInterface $domain_storage */
+//    $domain_storage = \Drupal::entityTypeManager()->getStorage('domain');
+//    $active = $domain_storage->loadDefaultDomain();
+//  }
+//
+//  // No domains means no permissions.
+//  if (!$active instanceof Domain) {
+//    return $grants;
+//  }
+//
+//  if ($op == 'view') {
+//    $grants['group_domain_id'][] = $active->getDomainId();
+//  }
+//
+//  return $grants;
 }
 
 /**
  * Implements hook_node_access_records().
  */
 function dept_core_node_access_records(NodeInterface $node) {
-  $grants = [];
-  // Create grants for each translation of the node. See the report at
-  // https://www.drupal.org/node/2825419 for the logic here. Note that right
-  // now, grants may not be the same for all languages.
-  $translations = $node->getTranslationLanguages();
-  foreach ($translations as $langcode => $language) {
-    $translation = $node->getTranslation($langcode);
-    $domains = dept_core_node_get_domains($translation);
-    if (!empty($domains)) {
-      foreach ($domains as $domain_id) {
-        $grants[] = [
-          'realm' => 'group_domain_id',
-          'gid' => $domain_id,
-          'grant_view' => 1,
-          'grant_update' => 0,
-          'grant_delete' => 0,
-          'langcode' => $langcode,
-        ];
-      }
-    }
-  }
-  return $grants;
+//  $grants = [];
+//  // Create grants for each translation of the node. See the report at
+//  // https://www.drupal.org/node/2825419 for the logic here. Note that right
+//  // now, grants may not be the same for all languages.
+//  $translations = $node->getTranslationLanguages();
+//  foreach ($translations as $langcode => $language) {
+//    $translation = $node->getTranslation($langcode);
+//    $domains = dept_core_node_get_domains($translation);
+//    if (!empty($domains)) {
+//      foreach ($domains as $domain_id) {
+//        $grants[] = [
+//          'realm' => 'group_domain_id',
+//          'gid' => $domain_id,
+//          'grant_view' => 1,
+//          'grant_update' => 0,
+//          'grant_delete' => 0,
+//          'langcode' => $langcode,
+//        ];
+//      }
+//    }
+//  }
+//  return $grants;
 }
 
 /**
@@ -186,4 +178,30 @@ function dept_core_node_access(NodeInterface $node, $op, AccountInterface $accou
 //  return AccessResult::neutral();
 }
 
+
+/**
+ * Get domains for the given node.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ *   The node.
+ *
+ * @return array
+ *   The list of domains.
+ */
+//function dept_core_node_get_domains(NodeInterface $node) {
+//  $domains = [];
+//  $group_content = GroupContent::loadByEntity($node);
+//  if (!empty($group_content)) {
+//    foreach ($group_content as $gc_node) {
+//      $group = $gc_node->getGroup();
+//      if ($group) {
+//        $domain = \Drupal::entityTypeManager()->getStorage('domain')->load('group_' . $gc_node->getGroup()->id());
+//        if ($domain instanceof DomainInterface) {
+//          $domains[$domain->id()] = $domain->getDomainId();
+//        }
+//      }
+//    }
+//  }
+//  return $domains;
+//}
 
