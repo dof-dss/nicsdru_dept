@@ -95,6 +95,17 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   /**
    * {@inheritdoc}
    */
+  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+    parent::postSave($storage, $update);
+
+    if ($update) {
+      \Drupal::service('cache_tags.invalidator')->invalidateTags(['rendered', 'url.site']);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
 
     $fields = parent::baseFieldDefinitions($entity_type);
