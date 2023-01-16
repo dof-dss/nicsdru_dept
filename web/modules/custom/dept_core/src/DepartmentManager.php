@@ -34,8 +34,7 @@ class DepartmentManager {
    */
   public function __construct(
     DomainNegotiatorInterface $domain_negotiator,
-    EntityTypeManagerInterface $entity_type_manager,
-    MessengerInterface $messenger) {
+    EntityTypeManagerInterface $entity_type_manager) {
     $this->domainNegotiator = $domain_negotiator;
     $this->entityTypeManager = $entity_type_manager;
   }
