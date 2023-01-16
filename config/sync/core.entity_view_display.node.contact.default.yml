@@ -5,12 +5,14 @@ dependencies:
   config:
     - field.field.node.contact.body
     - field.field.node.contact.field_map
+    - field.field.node.contact.field_map_location
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
     - field.field.node.contact.field_site_subtopics
     - field.field.node.contact.field_site_topics
     - node.type.contact
   module:
+    - geolocation
     - metatag
     - user
 id: node.contact.default
@@ -18,6 +20,13 @@ targetEntityType: node
 bundle: contact
 mode: default
 content:
+  field_map_location:
+    type: geolocation_latlng
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
   field_metatags:
     type: metatag_empty_formatter
     label: above
