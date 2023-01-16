@@ -25,89 +25,57 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * Implements hook_preprocess_page().
  */
 function dept_core_preprocess_page(&$variables) {
-//  $dept_manager = \Drupal::service('department.manager');
-//  $variables['department'] = $dept_manager->getCurrentDepartment();
+  $dept_manager = \Drupal::service('department.manager');
+  $variables['department'] = $dept_manager->getCurrentDepartment();
 }
 
 /**
  * Implements hook_preprocess_menu().
  */
 function dept_core_preprocess_menu(&$variables) {
-  if ($variables['menu_name'] === 'footer' && !empty($variables['items'])) {
-    // Add a menu link to the end of the menu with a link to the
-    // accessibility statement defined in the group field value.
-    $dept = \Drupal::service('department.manager')->getCurrentDepartment();
-    if (empty($dept)) {
-      return;
-    }
-
-    $group = Group::load($dept->groupId());
-
-    if (empty($group)) {
-      return;
-    }
-
-    // Footer menu doesn't vary much at all so use a very broad context.
-    // See https://www.drupal.org/docs/drupal-apis/cache-api/cache-contexts#core-contexts
-    $variables['#cache']['contexts'] = ['theme'];
-    $cache_tags = ['group:' . $group->id()];
-
-    if (($accessibility_statement = $dept->accessibilityStatement()) !== NULL && $accessibility_statement instanceof NodeInterface) {
-      // See MenuLinkTree->buildItems() which this imitates.
-      $menu_link = [
-        'title' => $accessibility_statement->getTitle(),
-        'url' => Url::fromRoute('entity.node.canonical', ['node' => $accessibility_statement->id()]),
-        'is_collapsed' => FALSE,
-        'is_expanded' => FALSE,
-        'in_active_trail' => FALSE,
-        'attributes' => new Attribute(),
-      ];
-
-      $cache_tags[] = 'node:' . $accessibility_statement->id();
-
-      if (!empty($variables['#cache']['tags'])) {
-        $variables['#cache']['tags'] = Cache::mergeTags($cache_tags, $variables['#cache']['keys']);
-      }
-
-      $variables['items'][] = $menu_link;
-    }
-
-    $variables['#cache']['tags'] = $cache_tags;
-  }
+//  if ($variables['menu_name'] === 'footer' && !empty($variables['items'])) {
+//    // Add a menu link to the end of the menu with a link to the
+//    // accessibility statement defined in the group field value.
+//    $dept = \Drupal::service('department.manager')->getCurrentDepartment();
+//    if (empty($dept)) {
+//      return;
+//    }
+//
+//    $group = Group::load($dept->groupId());
+//
+//    if (empty($group)) {
+//      return;
+//    }
+//
+//    // Footer menu doesn't vary much at all so use a very broad context.
+//    // See https://www.drupal.org/docs/drupal-apis/cache-api/cache-contexts#core-contexts
+//    $variables['#cache']['contexts'] = ['theme'];
+//    $cache_tags = ['group:' . $group->id()];
+//
+//    if (($accessibility_statement = $dept->accessibilityStatement()) !== NULL && $accessibility_statement instanceof NodeInterface) {
+//      // See MenuLinkTree->buildItems() which this imitates.
+//      $menu_link = [
+//        'title' => $accessibility_statement->getTitle(),
+//        'url' => Url::fromRoute('entity.node.canonical', ['node' => $accessibility_statement->id()]),
+//        'is_collapsed' => FALSE,
+//        'is_expanded' => FALSE,
+//        'in_active_trail' => FALSE,
+//        'attributes' => new Attribute(),
+//      ];
+//
+//      $cache_tags[] = 'node:' . $accessibility_statement->id();
+//
+//      if (!empty($variables['#cache']['tags'])) {
+//        $variables['#cache']['tags'] = Cache::mergeTags($cache_tags, $variables['#cache']['keys']);
+//      }
+//
+//      $variables['items'][] = $menu_link;
+//    }
+//
+//    $variables['#cache']['tags'] = $cache_tags;
+//  }
 }
 
-/**
- * Implements hook_ENTITY_update().
- */
-function dept_core_group_update(GroupInterface $group) {
-  if ($group->bundle() === 'department_site') {
-    // Invalidate the department cache when updating a group.
-    Cache::invalidateTags(['department_' . $group->id()]);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_view().
- */
-function dept_core_group_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  // Redirect anon users to homepage. We allow view group entity permission
-  // to ensure the press release RSS feeds can render the parent group id
-  // value for any news nodes in the feed.
-  if (\Drupal::currentUser()->isAnonymous()) {
-    $redirect_response = new RedirectResponse('/');
-    $redirect_response->send();
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_delete().
- */
-function dept_core_group_delete(EntityInterface $entity) {
-  // Deleting domain created by the group.
-  if ($domain = Domain::load('group_' . $entity->id())) {
-    $domain->delete();
-  }
-}
 
 /**
  * Implements hook_node_grants().
@@ -168,127 +136,54 @@ function dept_core_node_access_records(NodeInterface $node) {
  * Implements hook_node_access().
  */
 function dept_core_node_access(NodeInterface $node, $op, AccountInterface $account) {
-  // We do not care about create access as we have our own wizard for that. Any
-  // operation aside from 'view', 'update' and 'delete' is also unsupported.
-  if (!in_array($op, ['view', 'update', 'delete'])) {
-    return AccessResult::neutral();
-  }
-
-  // Some modules, including the code in \Drupal\node\NodeForm::access() may
-  // check for 'view', 'update' or 'delete' access on new nodes, even though
-  // that makes little sense. We need to account for it to avoid crashes because
-  // we would otherwise query the DB with a non-existent node ID.
-  if ($node->isNew()) {
-    return AccessResult::neutral();
-  }
-
-  $plugin_id = 'group_node:' . $node->bundle();
-
-  // Only act if there are group content types for this node type.
-  $group_content_types = GroupContentType::loadByContentPluginId($plugin_id);
-  if (empty($group_content_types)) {
-    return AccessResult::neutral();
-  }
-
-  $domains = dept_core_node_get_domains($node);
-
-  /** @var \Drupal\domain\Entity\Domain $active */
-  $active = \Drupal::service('domain.negotiator')->getActiveDomain();
-
-  if (!$active instanceof DomainInterface) {
-    /** @var \Drupal\domain\DomainStorageInterface $domain_storage */
-    $domain_storage = \Drupal::entityTypeManager()->getStorage('domain');
-    $active = $domain_storage->loadDefaultDomain();
-  }
-
-  // If active domain is the is default domain (eg: NIGOV) then
-  // don't forbid access but remain neutral.
-  if ($active && $active->isDefault()) {
-    return AccessResult::neutral();
-  }
-
-  if ($domains && !array_key_exists($active->id(), $domains)) {
-    return AccessResult::forbidden();
-  }
-
-  // Instead of outright forbidding access when no group granted it, we return
-  // a neutral access result to play nice with other modules. If the end result
-  // is still neutral, Drupal will deny access anyway unless the node grants
-  // system allows the operation in a last ditch effort to determine access.
-  return AccessResult::neutral();
+//  // We do not care about create access as we have our own wizard for that. Any
+//  // operation aside from 'view', 'update' and 'delete' is also unsupported.
+//  if (!in_array($op, ['view', 'update', 'delete'])) {
+//    return AccessResult::neutral();
+//  }
+//
+//  // Some modules, including the code in \Drupal\node\NodeForm::access() may
+//  // check for 'view', 'update' or 'delete' access on new nodes, even though
+//  // that makes little sense. We need to account for it to avoid crashes because
+//  // we would otherwise query the DB with a non-existent node ID.
+//  if ($node->isNew()) {
+//    return AccessResult::neutral();
+//  }
+//
+//  $plugin_id = 'group_node:' . $node->bundle();
+//
+//  // Only act if there are group content types for this node type.
+//  $group_content_types = GroupContentType::loadByContentPluginId($plugin_id);
+//  if (empty($group_content_types)) {
+//    return AccessResult::neutral();
+//  }
+//
+//  $domains = dept_core_node_get_domains($node);
+//
+//  /** @var \Drupal\domain\Entity\Domain $active */
+//  $active = \Drupal::service('domain.negotiator')->getActiveDomain();
+//
+//  if (!$active instanceof DomainInterface) {
+//    /** @var \Drupal\domain\DomainStorageInterface $domain_storage */
+//    $domain_storage = \Drupal::entityTypeManager()->getStorage('domain');
+//    $active = $domain_storage->loadDefaultDomain();
+//  }
+//
+//  // If active domain is the is default domain (eg: NIGOV) then
+//  // don't forbid access but remain neutral.
+//  if ($active && $active->isDefault()) {
+//    return AccessResult::neutral();
+//  }
+//
+//  if ($domains && !array_key_exists($active->id(), $domains)) {
+//    return AccessResult::forbidden();
+//  }
+//
+//  // Instead of outright forbidding access when no group granted it, we return
+//  // a neutral access result to play nice with other modules. If the end result
+//  // is still neutral, Drupal will deny access anyway unless the node grants
+//  // system allows the operation in a last ditch effort to determine access.
+//  return AccessResult::neutral();
 }
 
-/**
- * Implements hook_ENTITY_TYPE_access().
- */
-function dept_core_group_access(EntityInterface $entity, $op, AccountInterface $account) {
-  if (!in_array($op, ['view', 'update', 'delete'])) {
-    return AccessResult::neutral();
-  }
 
-  if ($entity->isNew()) {
-    return AccessResult::neutral();
-  }
-
-  /** @var \Drupal\domain\Entity\Domain $active */
-  $active = \Drupal::service('domain.negotiator')->getActiveDomain();
-
-  if (!$active instanceof DomainInterface) {
-    /** @var \Drupal\domain\DomainStorageInterface $domain_storage */
-    $domain_storage = \Drupal::entityTypeManager()->getStorage('domain');
-    $active = $domain_storage->loadDefaultDomain();
-  }
-
-  // If active is default then avoid alter access.
-  if ($active && $active->isDefault()) {
-    return AccessResult::neutral();
-  }
-
-  $group_domain = \Drupal::entityTypeManager()->getStorage('domain')->load('group_' . $entity->id());
-  if ($group_domain && $active->id() != $group_domain->id()) {
-    return AccessResult::forbidden();
-  }
-
-  return AccessResult::neutral();
-}
-
-/**
- * Get domains for the given node.
- *
- * @param \Drupal\node\NodeInterface $node
- *   The node.
- *
- * @return array
- *   The list of domains.
- */
-function dept_core_node_get_domains(NodeInterface $node) {
-  $domains = [];
-  $group_content = GroupContent::loadByEntity($node);
-  if (!empty($group_content)) {
-    foreach ($group_content as $gc_node) {
-      $group = $gc_node->getGroup();
-      if ($group) {
-        $domain = \Drupal::entityTypeManager()->getStorage('domain')->load('group_' . $gc_node->getGroup()->id());
-        if ($domain instanceof DomainInterface) {
-          $domains[$domain->id()] = $domain->getDomainId();
-        }
-      }
-    }
-  }
-  return $domains;
-}
-
-/**
- * Implements hook_domain_load().
- */
-function dept_core_domain_load(array $domains) {
-  $dept_ent_manager = \Drupal::entityTypeManager()->getStorage('department');
-
-  // Add the associated Department as a property of the Domain.
-  foreach ($domains as $domain) {
-    if ($domain->id() !== 'dept_admin') {
-        $department = $dept_ent_manager->loadByProperties(['domain' => $domain->id()]);
-        $domain->addProperty('department', $department);
-    }
-  }
-}
