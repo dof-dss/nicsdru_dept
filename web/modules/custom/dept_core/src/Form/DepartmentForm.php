@@ -27,17 +27,25 @@ class DepartmentForm extends ContentEntityForm {
 
     $id_options = array_diff_assoc($domain_options, $departments);
 
-    if (count($id_options) < 1) {
+    if (count($id_options) < 1 && $this->entity->isNew()) {
       \Drupal::messenger()->addWarning('All Domains have a Department assigned.');
     }
 
-    $form['id'] = [
-      '#type' => 'select',
-      '#title' => 'Department',
-      '#options' => $id_options,
-      '#required' => TRUE,
-      '#weight' => -50,
-    ];
+    if ($this->entity->isNew()) {
+      $form['id'] = [
+        '#type' => 'select',
+        '#title' => 'Department',
+        '#options' => $id_options,
+        '#required' => TRUE,
+        '#access' => $this->entity->isNew(),
+        '#weight' => -50,
+      ];
+    } else {
+      $form['id'] = [
+        '#type' => 'hidden',
+        '#value' => $this->entity->id()
+      ];
+    }
 
     $form['label']['widget'][0]['#required'] = FALSE;
     $form['label']['#access'] = FALSE;
