@@ -26,20 +26,11 @@ class DepartmentManager {
   protected $entityTypeManager;
 
   /**
-   * The messenger service.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
-
-  /**
    * Constructs a DepartmentManager object.
    *
    * @param \Drupal\domain\DomainNegotiatorInterface $domain_negotiator
    *   The Domain negotiator service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    */
   public function __construct(
     DomainNegotiatorInterface $domain_negotiator,
@@ -47,7 +38,6 @@ class DepartmentManager {
     MessengerInterface $messenger) {
     $this->domainNegotiator = $domain_negotiator;
     $this->entityTypeManager = $entity_type_manager;
-    $this->messenger = $messenger;
   }
 
   /**
@@ -56,16 +46,14 @@ class DepartmentManager {
   public function getCurrentDepartment() {
     $active_domain = $this->domainNegotiator->getActiveDomain();
 
-    return $active_domain->get('department');
+    return $this->getDepartment($active_domain->id());
   }
 
   /**
    * Returns all Departments as an array of objects.
    */
   public function getAllDepartments() {
-    $departments = $this->entityTypeManager->getStorage('department')->loadMultiple();
-
-    return $departments;
+    return $this->entityTypeManager->getStorage('department')->loadMultiple();
   }
 
   /**
@@ -75,10 +63,12 @@ class DepartmentManager {
    *   The department ID to load.
    */
   public function getDepartment(string $id) {
-    $department = $this->entityTypeManager->getStorage('department')->load($id);
+    // Ignore the site administration domain.
+    if ($id === 'dept_admin') {
+      return NULL;
+    }
 
-    return $department;
-
+    return $this->entityTypeManager->getStorage('department')->load($id);
   }
 
 }
