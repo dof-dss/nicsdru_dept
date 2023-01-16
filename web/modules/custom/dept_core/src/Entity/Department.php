@@ -98,6 +98,9 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   public function postSave(EntityStorageInterface $storage, $update = TRUE) {
     parent::postSave($storage, $update);
 
+    // Maybe a bit heavy-handed, but I can't see Departments getting updated
+    // much and this reduces the need for adding lots of 'dept:xyz' type cache
+    // tags to render arrays.
     if ($update) {
       \Drupal::service('cache_tags.invalidator')->invalidateTags(['rendered', 'url.site']);
     }
@@ -267,5 +270,47 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
     }
 
     return $production_hostname ? $this->hostnames[0] : $this->hostnames[1];
+  }
+
+  /**
+   * Management and Structure details.
+   */
+  public function managementAndStructure() {
+    return $this->get('field_dept_management_structure')->view();
+  }
+
+  /**
+   * Access to information details.
+   */
+  public function accessToInformation() {
+    return $this->get('field_dept_access_to_info')->view();
+  }
+
+  /**
+   * Contact Information details.
+   */
+  public function contactInformation() {
+    return $this->get('field_dept_contact_info')->view();
+  }
+
+  /**
+   * Social media links.
+   */
+  public function socialMediaLinks() {
+    return $this->get('field_dept_social_media_links')->view();
+  }
+
+  /**
+   * Point of contact map location.
+   */
+  public function location() {
+    return $this->get('field_dept_location')->view();
+  }
+
+  /**
+   * Accessibility statement.
+   */
+  public function accessibilityStatement() {
+    return (empty($this->get('field_dept_accessibility')->referencedEntities())) ? NULL : $this->get('field_dept_accessibility')->referencedEntities()[0];
   }
 }
