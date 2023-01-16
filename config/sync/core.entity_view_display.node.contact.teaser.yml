@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.contact.body
-    - field.field.node.contact.field_map
     - field.field.node.contact.field_map_location
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
@@ -36,7 +35,6 @@ content:
 hidden:
   content_moderation_control: true
   entitygroupfield: true
-  field_map: true
   field_map_location: true
   field_metatags: true
   field_next_audit_due: true

@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.contact.body
-    - field.field.node.contact.field_map
     - field.field.node.contact.field_map_location
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
@@ -17,7 +16,6 @@ dependencies:
     - content_moderation
     - datetime
     - geolocation_google_maps
-    - google_map_field
     - metatag
     - path
     - scheduler
@@ -40,12 +38,6 @@ content:
   created:
     type: datetime_timestamp
     weight: 6
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  field_map:
-    type: google_map_field_default
-    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }
