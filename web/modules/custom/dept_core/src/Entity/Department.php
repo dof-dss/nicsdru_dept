@@ -68,12 +68,18 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   use EntityOwnerTrait;
 
   /**
+   * Domain for the department.
+   *
+   * @var array
+   */
+  protected array $domain;
+
+  /**
    * Hostnames for the department.
    *
    * @var array
    */
   protected array $hostnames;
-
 
   /**
    * {@inheritdoc}
@@ -211,7 +217,13 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    * Domain.
    */
   public function domain() {
+    // Cannot inject services into entities (https://www.drupal.org/project/drupal/issues/2142515)
+    // So instead we lazy load the hostnames via the static Drupal calls.
+    if (empty($this->domain)) {
+      $domain = \Drupal::entityTypeManager()->getStorage('domain')->load($this->id());
+    }
 
+    return $domain;
   }
 
   /**
