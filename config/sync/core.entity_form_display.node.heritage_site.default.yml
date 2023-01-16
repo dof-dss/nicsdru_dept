@@ -10,7 +10,7 @@ dependencies:
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
     - field.field.node.heritage_site.field_historic_map_viewer_link
-    - field.field.node.heritage_site.field_map
+    - field.field.node.heritage_site.field_map_location
     - field.field.node.heritage_site.field_metatags
     - field.field.node.heritage_site.field_nismr_link
     - field.field.node.heritage_site.field_open_to_the_public
@@ -28,7 +28,7 @@ dependencies:
     - chosen_field
     - content_moderation
     - field_group
-    - google_map_field
+    - geolocation
     - link
     - media_library
     - metatag
@@ -158,9 +158,9 @@ content:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-  field_map:
-    type: google_map_field_default
-    weight: 23
+  field_map_location:
+    type: geolocation_latlng
+    weight: 29
     region: content
     settings: {  }
     third_party_settings: {  }
