@@ -6,6 +6,8 @@ dependencies:
     - field.field.node.ual.field_age
     - field.field.node.ual.field_description
     - field.field.node.ual.field_distinguishing_marks
+    - field.field.node.ual.field_domain_access
+    - field.field.node.ual.field_domain_all_affiliates
     - field.field.node.ual.field_eye_colour
     - field.field.node.ual.field_hair_colour
     - field.field.node.ual.field_offence
@@ -54,6 +56,19 @@ content:
     settings:
       rows: 5
       placeholder: ''
+    third_party_settings: {  }
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_eye_colour:
     type: string_textfield
@@ -198,4 +213,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true

@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.node.case_study.body
+    - field.field.node.case_study.field_domain_access
+    - field.field.node.case_study.field_domain_all_affiliates
     - field.field.node.case_study.field_metatags
     - field.field.node.case_study.field_outcomes
     - node.type.case_study
@@ -33,6 +35,8 @@ content:
 hidden:
   content_moderation_control: true
   entitygroupfield: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
   field_outcomes: true
   groups: true
   groups_type_department_site: true

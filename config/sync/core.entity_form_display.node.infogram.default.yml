@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.field.node.infogram.body
     - field.field.node.infogram.field_chart_taxonomy
+    - field.field.node.infogram.field_domain_access
+    - field.field.node.infogram.field_domain_all_affiliates
     - field.field.node.infogram.field_indicators
     - field.field.node.infogram.field_infogram
     - field.field.node.infogram.field_metatags
@@ -42,6 +44,19 @@ content:
     weight: 2
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_indicators:
     type: options_select

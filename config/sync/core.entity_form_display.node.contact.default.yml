@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.node.contact.body
+    - field.field.node.contact.field_domain_access
+    - field.field.node.contact.field_domain_all_affiliates
     - field.field.node.contact.field_map
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
@@ -40,6 +42,19 @@ content:
     weight: 7
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_map:
     type: google_map_field_default

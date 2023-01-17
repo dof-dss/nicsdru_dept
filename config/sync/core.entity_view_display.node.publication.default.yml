@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.node.publication.body
+    - field.field.node.publication.field_domain_access
+    - field.field.node.publication.field_domain_all_affiliates
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
@@ -100,6 +102,8 @@ hidden:
   content_moderation_control: true
   entitygroupfield: true
   field_attachment: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
   field_global_topics: true
   field_publication_type: true
   field_site_subtopics: true

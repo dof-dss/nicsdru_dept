@@ -6,6 +6,8 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.node.application.body
     - field.field.node.application.field_additional_info
+    - field.field.node.application.field_domain_access
+    - field.field.node.application.field_domain_all_affiliates
     - field.field.node.application.field_global_topics
     - field.field.node.application.field_link
     - field.field.node.application.field_metatags
@@ -38,6 +40,8 @@ hidden:
   content_moderation_control: true
   entitygroupfield: true
   field_additional_info: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
   field_global_topics: true
   field_link: true
   field_metatags: true

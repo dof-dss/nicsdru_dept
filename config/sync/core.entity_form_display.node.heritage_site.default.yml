@@ -7,6 +7,8 @@ dependencies:
     - field.field.node.heritage_site.field_address_line_1
     - field.field.node.heritage_site.field_address_line_2
     - field.field.node.heritage_site.field_county
+    - field.field.node.heritage_site.field_domain_access
+    - field.field.node.heritage_site.field_domain_all_affiliates
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
     - field.field.node.heritage_site.field_historic_map_viewer_link
@@ -133,6 +135,19 @@ content:
     weight: 4
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_email:
     type: email_default

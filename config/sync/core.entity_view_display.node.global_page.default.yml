@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.node.global_page.body
+    - field.field.node.global_page.field_domain_access
+    - field.field.node.global_page.field_domain_all_affiliates
     - field.field.node.global_page.field_metatags
     - node.type.global_page
   module:
@@ -37,6 +39,8 @@ content:
 hidden:
   content_moderation_control: true
   entitygroupfield: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
   groups: true
   groups_type_department_site: true
   langcode: true

@@ -6,6 +6,8 @@ dependencies:
     - field.field.node.consultation.body
     - field.field.node.consultation.field_attachment
     - field.field.node.consultation.field_consultation_dates
+    - field.field.node.consultation.field_domain_access
+    - field.field.node.consultation.field_domain_all_affiliates
     - field.field.node.consultation.field_email_address
     - field.field.node.consultation.field_global_topics
     - field.field.node.consultation.field_metatags
@@ -61,6 +63,19 @@ content:
     weight: 5
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_email_address:
     type: email_default

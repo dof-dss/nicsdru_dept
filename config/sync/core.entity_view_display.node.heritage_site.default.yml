@@ -7,6 +7,8 @@ dependencies:
     - field.field.node.heritage_site.field_address_line_1
     - field.field.node.heritage_site.field_address_line_2
     - field.field.node.heritage_site.field_county
+    - field.field.node.heritage_site.field_domain_access
+    - field.field.node.heritage_site.field_domain_all_affiliates
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
     - field.field.node.heritage_site.field_historic_map_viewer_link
@@ -219,6 +221,8 @@ content:
 hidden:
   content_moderation_control: true
   entitygroupfield: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
   field_site_subtopics: true
   field_site_topics: true
   groups: true

@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.node.article.body
+    - field.field.node.article.field_domain_access
+    - field.field.node.article.field_domain_all_affiliates
     - field.field.node.article.field_global_topics
     - field.field.node.article.field_metatags
     - field.field.node.article.field_site_subtopics
@@ -45,6 +47,8 @@ content:
 hidden:
   content_moderation_control: true
   entitygroupfield: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
   field_global_topics: true
   field_site_subtopics: true
   field_site_topics: true

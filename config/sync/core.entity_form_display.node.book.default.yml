@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.node.book.body
+    - field.field.node.book.field_domain_access
+    - field.field.node.book.field_domain_all_affiliates
     - field.field.node.book.field_global_topics
     - field.field.node.book.field_metatags
     - field.field.node.book.field_site_subtopics
@@ -38,6 +40,19 @@ content:
     weight: 8
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_global_topics:
     type: chosen_select

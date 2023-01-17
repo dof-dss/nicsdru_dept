@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.field.node.application.body
     - field.field.node.application.field_additional_info
+    - field.field.node.application.field_domain_access
+    - field.field.node.application.field_domain_all_affiliates
     - field.field.node.application.field_global_topics
     - field.field.node.application.field_link
     - field.field.node.application.field_metatags
@@ -49,6 +51,19 @@ content:
     settings:
       rows: 5
       placeholder: ''
+    third_party_settings: {  }
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_global_topics:
     type: chosen_select

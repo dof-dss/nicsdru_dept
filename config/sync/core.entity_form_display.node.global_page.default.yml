@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.node.global_page.body
+    - field.field.node.global_page.field_domain_access
+    - field.field.node.global_page.field_domain_all_affiliates
     - field.field.node.global_page.field_metatags
     - node.type.global_page
     - workflows.workflow.nics_editorial_workflow
@@ -33,6 +35,19 @@ content:
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   field_metatags:
     type: metatag_firehose
