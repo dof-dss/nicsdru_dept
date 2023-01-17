@@ -1,0 +1,114 @@
+uuid: 28263a2d-1d00-413f-9109-c6a2864bba34
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.department.department.field_dept_access_to_info
+    - field.field.department.department.field_dept_accessibility
+    - field.field.department.department.field_dept_contact_info
+    - field.field.department.department.field_dept_location
+    - field.field.department.department.field_dept_management_structure
+    - field.field.department.department.field_dept_social_media_links
+  module:
+    - dept_core
+    - geolocation
+    - link
+    - text
+    - user
+id: department.department.default
+targetEntityType: department
+bundle: department
+mode: default
+content:
+  created:
+    type: timestamp
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+    third_party_settings: {  }
+    weight: 20
+    region: content
+  description:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  field_dept_access_to_info:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 22
+    region: content
+  field_dept_accessibility:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 21
+    region: content
+  field_dept_contact_info:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 23
+    region: content
+  field_dept_location:
+    type: geolocation_latlng
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 24
+    region: content
+  field_dept_management_structure:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 25
+    region: content
+  field_dept_social_media_links:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 26
+    region: content
+  label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: -5
+    region: content
+  status:
+    type: boolean
+    label: above
+    settings:
+      format: enabled-disabled
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  uid:
+    type: author
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 15
+    region: content
+hidden:
+  search_api_excerpt: true

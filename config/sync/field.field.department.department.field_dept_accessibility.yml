@@ -1,0 +1,30 @@
+uuid: 361c9a3c-8171-4537-ab39-aad7cac485f3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.department.field_dept_accessibility
+    - node.type.page
+  module:
+    - dept_core
+id: department.department.field_dept_accessibility
+field_name: field_dept_accessibility
+entity_type: department
+bundle: department
+label: 'Accessibility statement'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      page: page
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
