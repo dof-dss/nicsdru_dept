@@ -31,6 +31,7 @@ class DepartmentManager {
    * @param \Drupal\domain\DomainNegotiatorInterface $domain_negotiator
    *   The Domain negotiator service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The Entity Type Manager service.
    */
   public function __construct(
     DomainNegotiatorInterface $domain_negotiator,
@@ -41,6 +42,9 @@ class DepartmentManager {
 
   /**
    * Returns the Department for the current domain.
+   *
+   * @return \Drupal\dept_core\Entity\Department
+   *   The Department entity.
    */
   public function getCurrentDepartment() {
     $active_domain = $this->domainNegotiator->getActiveDomain();
@@ -50,6 +54,9 @@ class DepartmentManager {
 
   /**
    * Returns all Departments as an array of objects.
+   *
+   * @return array
+   *   An array of Department entities.
    */
   public function getAllDepartments() {
     return $this->entityTypeManager->getStorage('department')->loadMultiple();
@@ -60,6 +67,9 @@ class DepartmentManager {
    *
    * @param string $id
    *   The department ID to load.
+   *
+   * @return \Drupal\dept_core\Entity\Department
+   *   The Department entity.
    */
   public function getDepartment(string $id) {
     // Ignore the site administration domain.

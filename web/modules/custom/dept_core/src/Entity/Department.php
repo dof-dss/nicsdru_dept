@@ -102,7 +102,10 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
     // much and this reduces the need for adding lots of 'dept:xyz' type cache
     // tags to render arrays.
     if ($update) {
-      \Drupal::service('cache_tags.invalidator')->invalidateTags(['rendered', 'url.site']);
+      \Drupal::service('cache_tags.invalidator')->invalidateTags([
+        'rendered',
+        'url.site'
+      ]);
     }
   }
 
@@ -226,7 +229,6 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
     return $this->label();
   }
 
-
   /**
    * Domain.
    */
@@ -312,5 +314,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    */
   public function accessibilityStatement() {
     return (empty($this->get('field_dept_accessibility')->referencedEntities())) ? NULL : $this->get('field_dept_accessibility')->referencedEntities()[0];
+
   }
+
 }

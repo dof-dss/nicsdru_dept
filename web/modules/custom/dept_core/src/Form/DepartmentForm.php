@@ -11,7 +11,9 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class DepartmentForm extends ContentEntityForm {
 
-
+  /**
+   * {@inheritdoc}
+   */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
@@ -40,7 +42,8 @@ class DepartmentForm extends ContentEntityForm {
         '#access' => $this->entity->isNew(),
         '#weight' => -50,
       ];
-    } else {
+    }
+    else {
       $form['id'] = [
         '#type' => 'hidden',
         '#value' => $this->entity->id()
