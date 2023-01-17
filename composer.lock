@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "43c856fcad8518e5fa1d7e711a692873",
+    "content-hash": "3a6e15dc25dd52a8fcf56245f3453114",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1929,16 +1929,16 @@
         },
         {
             "name": "dof-dss/nicsdru_dept_theme",
-            "version": "0.0.8",
+            "version": "0.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dof-dss/nicsdru_dept_theme.git",
-                "reference": "dc2653cea0c72d56b4691455a26169a9b3bca6eb"
+                "reference": "e2cc676adb2a86e51ffcb106350fc1e3007121be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_dept_theme/zipball/dc2653cea0c72d56b4691455a26169a9b3bca6eb",
-                "reference": "dc2653cea0c72d56b4691455a26169a9b3bca6eb",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_dept_theme/zipball/e2cc676adb2a86e51ffcb106350fc1e3007121be",
+                "reference": "e2cc676adb2a86e51ffcb106350fc1e3007121be",
                 "shasum": ""
             },
             "require": {
@@ -1963,9 +1963,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dof-dss/nicsdru_dept_theme/issues",
-                "source": "https://github.com/dof-dss/nicsdru_dept_theme/tree/0.0.8"
+                "source": "https://github.com/dof-dss/nicsdru_dept_theme/tree/0.0.9"
             },
-            "time": "2023-01-11T14:57:11+00:00"
+            "time": "2023-01-17T14:47:06+00:00"
         },
         {
             "name": "dof-dss/nicsdru_nidirect_theme",
@@ -4242,58 +4242,6 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/entitygroupfield",
                 "issues": "https://drupal.org/project/issues/entitygroupfield"
-            }
-        },
-        {
-            "name": "drupal/entityqueue",
-            "version": "1.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/entityqueue.git",
-                "reference": "8.x-1.5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entityqueue-8.x-1.5.zip",
-                "reference": "8.x-1.5",
-                "shasum": "7306f80ab03e82a908ccd421fe12d33804a891e0"
-            },
-            "require": {
-                "drupal/core": "^8.7.7 || ^9 || ^10"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.5",
-                    "datestamp": "1672826319",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "amateescu",
-                    "homepage": "https://www.drupal.org/user/729614"
-                },
-                {
-                    "name": "jojonaloha",
-                    "homepage": "https://www.drupal.org/user/1579186"
-                },
-                {
-                    "name": "quicksketch",
-                    "homepage": "https://www.drupal.org/user/35821"
-                }
-            ],
-            "description": "Allows users to collect entities in arbitrarily ordered lists.",
-            "homepage": "https://www.drupal.org/project/entityqueue",
-            "support": {
-                "source": "https://git.drupalcode.org/project/entityqueue"
             }
         },
         {
@@ -17858,5 +17806,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.1.0"
 }

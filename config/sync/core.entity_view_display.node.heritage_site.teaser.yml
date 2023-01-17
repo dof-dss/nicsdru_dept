@@ -11,7 +11,7 @@ dependencies:
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
     - field.field.node.heritage_site.field_historic_map_viewer_link
-    - field.field.node.heritage_site.field_map
+    - field.field.node.heritage_site.field_map_location
     - field.field.node.heritage_site.field_metatags
     - field.field.node.heritage_site.field_nismr_link
     - field.field.node.heritage_site.field_open_to_the_public
@@ -54,7 +54,7 @@ hidden:
   field_email: true
   field_grid_reference: true
   field_historic_map_viewer_link: true
-  field_map: true
+  field_map_location: true
   field_metatags: true
   field_nismr_link: true
   field_open_to_the_public: true

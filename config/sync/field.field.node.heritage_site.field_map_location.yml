@@ -1,21 +1,21 @@
-uuid: 4790435b-ce90-4a21-ba6a-11f966f1ded3
+uuid: a43c6df0-ab71-409f-89d6-55b0242b918a
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_map
+    - field.storage.node.field_map_location
     - node.type.heritage_site
   module:
-    - google_map_field
-id: node.heritage_site.field_map
-field_name: field_map
+    - geolocation
+id: node.heritage_site.field_map_location
+field_name: field_map_location
 entity_type: node
 bundle: heritage_site
 label: 'Map location'
-description: 'Add a google map location for the heritage site.'
+description: ''
 required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: google_map_field
+field_type: geolocation
