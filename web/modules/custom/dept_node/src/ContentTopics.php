@@ -194,6 +194,7 @@ class ContentTopics {
         FROM {node_field_data} st_nfd
         JOIN {node__field_parent_subtopic} nfps ON st_nfd.nid = nfps.entity_id
         WHERE st_nfd.type = 'subtopic' AND nfps.field_parent_subtopic_target_id = :subtopic_id
+        AND st_nfd.status = 1
       UNION
         SELECT
         ar_nfd.nid,
@@ -201,7 +202,8 @@ class ContentTopics {
         ar_nfd.title
         FROM {node_field_data} ar_nfd
         JOIN {node__field_site_subtopics} nfss ON ar_nfd.nid = nfss.entity_id
-        WHERE ar_nfd.type = 'article' AND nfss.field_site_subtopics_target_id = :subtopic_id";
+        WHERE ar_nfd.type = 'article' AND nfss.field_site_subtopics_target_id = :subtopic_id
+        AND ar_nfd.status = 1";
 
       $subtopic_content = \Drupal::database()
         ->query($subtopic_content_sql, [':subtopic_id' => $node->id()])

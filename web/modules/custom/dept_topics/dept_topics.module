@@ -95,6 +95,17 @@ function dept_topics_preprocess_node(array &$variables) {
       }
     }
   }
+
+  if ($node->bundle() === 'subtopic' && $view_mode === 'full') {
+    $subtopics_content = \Drupal::service('dept_node.topics')
+      ->getSubtopicContent($node->id());
+
+    $variables['content'][] = [
+      '#theme' => 'item_list',
+      '#list_type' => 'ul',
+      '#items' => $subtopics_content,
+    ];
+  }
 }
 
 /**
