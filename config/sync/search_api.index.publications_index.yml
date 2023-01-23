@@ -15,8 +15,6 @@ dependencies:
     - node
     - user
     - taxonomy
-    - entitygroupfield
-    - group
     - scheduler
     - search_api
 third_party_settings:
@@ -76,14 +74,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
-  entitygroupfield:
-    label: Groups
-    datasource_id: 'entity:node'
-    property_path: entitygroupfield
-    type: integer
-    dependencies:
-      module:
-        - entitygroupfield
   field_global_topics:
     label: 'Global topics'
     datasource_id: 'entity:node'
@@ -145,15 +135,6 @@ field_settings:
         - field.storage.node.field_global_topics
       module:
         - taxonomy
-  group_id:
-    label: 'Groups » Group content » Parent group » Group » ID'
-    datasource_id: 'entity:node'
-    property_path: 'entitygroupfield:entity:gid:entity:id'
-    type: integer
-    dependencies:
-      module:
-        - entitygroupfield
-        - group
   name:
     label: 'Authored by » User » Name'
     datasource_id: 'entity:node'

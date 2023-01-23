@@ -12,8 +12,6 @@ dependencies:
   module:
     - search_api_solr
     - node
-    - entitygroupfield
-    - group
     - search_api
 third_party_settings:
   search_api_solr:
@@ -72,14 +70,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
-  entitygroupfield:
-    label: Groups
-    datasource_id: 'entity:node'
-    property_path: entitygroupfield
-    type: integer
-    dependencies:
-      module:
-        - entitygroupfield
   field_global_topics:
     label: 'Global topics'
     datasource_id: 'entity:node'
@@ -113,24 +103,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_summary
-  group_id:
-    label: 'Groups » Group content » Parent group » Group » ID'
-    datasource_id: 'entity:node'
-    property_path: 'entitygroupfield:entity:gid:entity:id'
-    type: integer
-    dependencies:
-      module:
-        - entitygroupfield
-        - group
-  label:
-    label: 'Groups » Group content » Parent group » Group » Title'
-    datasource_id: 'entity:node'
-    property_path: 'entitygroupfield:entity:gid:entity:label'
-    type: string
-    dependencies:
-      module:
-        - entitygroupfield
-        - group
   node_grants:
     label: 'Node access information'
     property_path: search_api_node_grants
