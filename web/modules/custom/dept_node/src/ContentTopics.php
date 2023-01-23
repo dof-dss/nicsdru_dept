@@ -203,7 +203,8 @@ class ContentTopics {
         FROM {node_field_data} ar_nfd
         JOIN {node__field_site_subtopics} nfss ON ar_nfd.nid = nfss.entity_id
         WHERE ar_nfd.type = 'article' AND nfss.field_site_subtopics_target_id = :subtopic_id
-        AND ar_nfd.status = 1";
+        AND ar_nfd.status = 1
+      ORDER BY title ASC";
 
       $subtopic_content = \Drupal::database()
         ->query($subtopic_content_sql, [':subtopic_id' => $node->id()])
