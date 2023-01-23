@@ -105,7 +105,7 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
 
     $build = [
       '#cache' => [
-        'tags' => ['department_' . $dept->groupId()],
+        'tags' => ['department:' . $dept->id()],
       ],
     ];
 
