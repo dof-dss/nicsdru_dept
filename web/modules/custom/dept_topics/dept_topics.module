@@ -8,7 +8,6 @@
 
 use Drupal\Core\Link;
 use Drupal\dept_core\Department;
-use Drupal\entityqueue\EntityQueueInterface;
 use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
@@ -40,23 +39,21 @@ function dept_topics_preprocess_node(array &$variables) {
           ->orderBy('weight', 'ASC');
 
         $ids = $query->execute()->fetchAllAssoc('entity_id');
+
         if (empty($ids)) {
-          // Replace with naturally sorted list.
-          $query = \Drupal::entityQuery('node')
-            ->condition('type', 'article')
-            ->condition('status', 1)
-            ->condition('field_site_subtopics', $subtopic_id)
-            ->sort('changed', 'DESC');
-          $ids = $query->execute();
+          // If not sorted by draggableviews, then fall back to using the
+          // service to fetch content for a subtopic.
+          $content_links = \Drupal::service('dept_node.topics')->getSubtopicContent($subtopic_id);
         }
+        else {
+          $subtopic_ref_nodes = \Drupal::entityTypeManager()
+            ->getStorage('node')->loadMultiple(array_keys($ids));
 
-        $article_nodes = \Drupal::entityTypeManager()
-          ->getStorage('node')->loadMultiple(array_keys($ids));
-
-        $content_links = [];
-        foreach ($article_nodes as $content_node) {
-          /** @var \Drupal\node\NodeInterface $content_node */
-          $content_links[] = $content_node->toLink()->toRenderable();
+          $content_links = [];
+          foreach ($subtopic_ref_nodes as $content_node) {
+            /** @var \Drupal\node\NodeInterface $content_node */
+            $content_links[] = $content_node->toLink()->toRenderable();
+          }
         }
 
         // Add render array elements we can call from the node-topic--full template.
@@ -80,6 +77,17 @@ function dept_topics_preprocess_node(array &$variables) {
         ];
       }
     }
+  }
+
+  if ($node->bundle() === 'subtopic' && $view_mode === 'full') {
+    $subtopics_content = \Drupal::service('dept_node.topics')
+      ->getSubtopicContent($node->id());
+
+    $variables['content'][] = [
+      '#theme' => 'item_list',
+      '#list_type' => 'ul',
+      '#items' => $subtopics_content,
+    ];
   }
 }
 
