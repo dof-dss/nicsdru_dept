@@ -3,7 +3,7 @@ status: true
 id: d7_file_private
 migration_tags:
   - dept_sites
-migration_group: migrate_group_files
+migration_group: migrate_files
 label: Private files
 source:
   plugin: d7_file_uuid

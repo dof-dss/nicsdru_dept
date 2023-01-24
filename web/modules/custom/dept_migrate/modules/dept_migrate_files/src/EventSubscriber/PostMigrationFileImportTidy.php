@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\dept_migrate_group_files\EventSubscriber;
+namespace Drupal\dept_migrate_files\EventSubscriber;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;

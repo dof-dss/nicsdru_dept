@@ -7,7 +7,7 @@ field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_files
+migration_group: migrate_files
 label: 'Migrate D7 files to media images'
 source:
   plugin: file_entity

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\dept_migrate_group_files\Plugin\migrate\source;
+namespace Drupal\dept_migrate_files\Plugin\migrate\source;
 
 use Drupal\Core\Database\Query\Condition;
 use Drupal\migrate\Row;
