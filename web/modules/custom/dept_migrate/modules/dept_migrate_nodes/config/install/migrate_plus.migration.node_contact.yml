@@ -1,21 +1,21 @@
-id: node_protected_area
-label: 'Protected area nodes'
+id: node_contact
+label: 'Contact content type nodes'
 status: true
-dependencies: { }
-migration_group: migrate_group_nodes
+dependencies: {  }
+migration_group: migrate_nodes
 migration_tags:
   - dept_sites
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 source:
   plugin: d7_dept_node
-  node_type: protected_area
+  node_type: contact
   track_changes: true
 process:
   langcode:
     - plugin: default_value
       source: langcode
-      default_value: und
+      default_value: en
   title:
     - plugin: get
       source: title
@@ -33,11 +33,12 @@ process:
       - 0: draft
       - 1: published
   created: created
-  changed: changed
+  changed: timestamp
   promote: promote
   sticky: sticky
   revision_uid:
-    - plugin: d7_user_lookup
+    -
+      plugin: d7_user_lookup
       source: revision_uid
   revision_log: log
   revision_timestamp: timestamp
@@ -61,10 +62,7 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  field_protected_area_documents: field_protected_area_documents
-  field_council: field_council
-  field_county: field_county
-  field_protected_area_feature: field_protected_area_feature
+  field_map: field_map
   field_site_subtopics:
     - plugin: sub_process
       source: field_site_subtopics
@@ -79,13 +77,12 @@ process:
         target_id:
           - plugin: d7_node_lookup
             source: target_id
-  field_protected_area_type: field_protected_area_type
+  field_original_domain: field_original_domain
 destination:
   plugin: 'entity:node'
-  default_bundle: protected_area
+  default_bundle: contact
 migration_dependencies:
   required:
-     - users
-     - node_subtopic
-     - node_topic
-     - d7_taxonomy_term_global_topics
+    - users
+    - node_subtopic
+    - node_topic

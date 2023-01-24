@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\dept_migrate_group_nodes\Plugin\migrate\source\d7;
+namespace Drupal\dept_migrate_nodes\Plugin\migrate\source\d7;
 
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\migrate\Row;

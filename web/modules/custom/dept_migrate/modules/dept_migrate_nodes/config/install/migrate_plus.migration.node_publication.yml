@@ -1,15 +1,17 @@
-id: node_news
-label: 'News content type nodes'
+id: node_publication
+label: 'Publication content type nodes'
 status: true
 dependencies: {  }
-migration_group: migrate_group_nodes
+migration_group: migrate_nodes
 migration_tags:
   - dept_sites
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 source:
   plugin: d7_dept_node
-  node_type: news
+  node_type:
+    - publication
+    - secure_publication
   track_changes: true
 process:
   langcode:
@@ -61,7 +63,6 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  field_news_type: field_news_type
   field_summary: field_summary
   field_summary/0/format:
     - plugin: static_map
@@ -75,36 +76,21 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  field_notes_to_editors: field_notes_to_editors
-  field_teaser: field_teaser
-  field_photo:
+  field_publication_type: field_publication_type
+  field_last_updated:
     - plugin: sub_process
-      source: field_photo
+      source: field_last_updated
       process:
-        target_id:
-          - plugin: d7_file_lookup
-            source: fid
-            entity_type: media
-  field_video:
-    - plugin: sub_process
-      source: field_video
-      process:
-        target_id:
-          - plugin: d7_file_lookup
-            source: fid
-            entity_type: media
+        value:
+          plugin: format_date
+          source: value
+          from_format: 'Y-m-d H:i:s'
+          to_format: 'Y-m-d\TH:i:s'
   field_global_topics:
     - plugin: sub_process
       source: field_global_topics
       process:
         target_id: tid
-  field_site_subtopics:
-    - plugin: sub_process
-      source: field_site_subtopics
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
   field_site_topics:
     - plugin: sub_process
       source: field_site_topics
@@ -112,7 +98,13 @@ process:
         target_id:
           - plugin: d7_node_lookup
             source: target_id
-  field_original_domain: field_original_domain
+  field_site_subtopics:
+    - plugin: sub_process
+      source: field_site_subtopics
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
   field_published_date:
     - plugin: sub_process
       source: field_published_date
@@ -122,12 +114,37 @@ process:
           from_format: 'Y-m-d H:i:s'
           to_format: 'Y-m-d'
           source: value
+  field_publication_files:
+    plugin: sub_process
+    source: field_attachment
+    process:
+      target_id:
+        - plugin: d7_file_lookup
+          source: fid
+          entity_type: media
+        - plugin: default_value
+          default_value: 97431
+  field_publication_secure_files:
+    plugin: sub_process
+    source: field_secure_attachment
+    process:
+      target_id:
+        - plugin: d7_file_lookup
+          source: fid
+          entity_type: media
+        - plugin: default_value
+          default_value: 97431
+  field_external_publication:
+    plugin: sub_process
+    source: field_external_publication
+    process:
+      uri: url
+      title: title
+      attributes: attributes
 destination:
   plugin: 'entity:node'
-  default_bundle: news
+  default_bundle: publication
 migration_dependencies:
   required:
     - users
-    - d7_file_media_image
-    - d7_file_media_video
-    - d7_taxonomy_term_global_topics
+    - d7_file_media_document

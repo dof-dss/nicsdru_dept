@@ -1,15 +1,15 @@
-id: node_article
-label: 'Article nodes'
+id: node_application
+label: 'Application content type nodes'
 status: true
-dependencies: { }
-migration_group: migrate_group_nodes
+dependencies: {  }
+migration_group: migrate_nodes
 migration_tags:
   - dept_sites
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 source:
   plugin: d7_dept_node
-  node_type: article
+  node_type: application
   track_changes: true
 process:
   langcode:
@@ -24,6 +24,18 @@ process:
   uid:
     - plugin: d7_user_lookup
       source: node_uid
+  status: status
+  moderation_state:
+    plugin: static_map
+    source: status
+    default_value: draft
+    map:
+      - 0: draft
+      - 1: published
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
   revision_uid:
     - plugin: d7_user_lookup
       source: revision_uid
@@ -67,13 +79,7 @@ process:
       source: field_global_topics
       process:
         target_id: tid
-  field_site_subtopics:
-    - plugin: sub_process
-      source: field_site_subtopics
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
+  field_additional_info: field_additional_info
   field_site_topics:
     - plugin: sub_process
       source: field_site_topics
@@ -81,21 +87,23 @@ process:
         target_id:
           - plugin: d7_node_lookup
             source: target_id
-  status: status
-  moderation_state:
-    plugin: static_map
-    source: status
-    default_value: draft
-    map:
-      - 0: draft
-      - 1: published
-  created: created
-  changed: changed
-  promote: promote
-  sticky: sticky
+  field_site_subtopics:
+    - plugin: sub_process
+      source: field_site_subtopics
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
+  field_link:
+    - plugin: sub_process
+      source: field_link
+      process:
+        uri: value
+        title: title
+        options: attributes
 destination:
   plugin: 'entity:node'
-  default_bundle: article
+  default_bundle: application
 migration_dependencies:
   required:
     - users

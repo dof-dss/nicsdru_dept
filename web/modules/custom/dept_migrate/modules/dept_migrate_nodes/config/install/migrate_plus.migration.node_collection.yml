@@ -1,15 +1,15 @@
-id: node_subtopic
-label: 'Subtopic content type nodes'
+id: node_collection
+label: 'Collection content type nodes'
 status: true
 dependencies: {  }
-migration_group: migrate_group_nodes
+migration_group: migrate_nodes
 migration_tags:
   - dept_sites
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 source:
   plugin: d7_dept_node
-  node_type: subtopic
+  node_type: book
   track_changes: true
 process:
   langcode:
@@ -61,38 +61,9 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  field_parent_subtopic:
-    - plugin: sub_process
-      source: field_parent_subtopic
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
-  field_parent_topic:
-    - plugin: sub_process
-      source: field_parent_topic
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
-  field_summary:
-    - plugin: get
-      source: field_summary
-  field_banner_image:
-    - plugin: sub_process
-      source: field_banner_image
-      process:
-        target_id:
-          -
-            plugin: d7_file_lookup
-            source: fid
-  field_link:
-    - plugin: field_link
-      source: field_link
 destination:
   plugin: 'entity:node'
-  default_bundle: subtopic
+  default_bundle: book
 migration_dependencies:
   required:
     - users
-    - d7_file_media_image
