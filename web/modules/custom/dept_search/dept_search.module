@@ -70,10 +70,12 @@ function dept_search_sort_group_facet_by_title($a, $b) {
  */
 function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
 
-  $dept_manager = match ($view->id()) {
-    'news_search', 'news_search', 'publications_search' => \Drupal::service('department.manager'),
-    'default' => NULL,
-  };
+  $dept_manager = in_array($view->id(), [
+    'news_search',
+    'news_search',
+    'publications_search'
+  ]) ? \Drupal::service('department.manager') : null;
+
 
   if ($view->id() === 'news_search' && $display_id === 'news_search') {
     /** @var \Drupal\dept_core\Department $active_dept */
