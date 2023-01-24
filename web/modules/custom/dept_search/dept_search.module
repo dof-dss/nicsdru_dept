@@ -18,28 +18,6 @@ function dept_search_form_search_api_form_alter(&$form) {
 }
 
 /**
- * Implements hook_preprocess_facets_result_item__summary().
- */
-function dept_search_preprocess_facets_result_item__summary(&$variables) {
-  /** @var \Drupal\facets\FacetInterface $facet */
-  $facet = $variables['facet'];
-
-  if ($facet->id() === 'group') {
-    /* @var \Drupal\dept_core\DepartmentManager $dept_manager */
-    $dept_manager = \Drupal::service('department.manager');
-    $facet_value = $variables['raw_value'];
-
-    foreach ($dept_manager->getAllDepartments() as $dept) {
-      /* @var \Drupal\dept_core\Department $dept */
-      if ($dept->groupId() === $facet_value) {
-        $variables['value'] = $dept->name();
-        return;
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_facets_summary_item_list().
  */
 function dept_search_preprocess_facets_summary_item_list(&$variables) {
@@ -64,25 +42,6 @@ function dept_search_preprocess_facets_item_list(array &$variables) {
 
   /** @var \Drupal\facets\FacetInterface $facet */
   $facet = $variables['facet'];
-
-  if ($facet->id() === 'group' && !empty($variables['items'])) {
-    $depts = \Drupal::service('department.manager')->getAllDepartments();
-    foreach ($variables['items'] as &$link) {
-      $facet_group_id = $link['#title']['#raw_value'];
-      foreach ($depts as $dept) {
-        /** @var \Drupal\dept_core\Department $dept */
-        if ($dept->groupId() === $facet_group_id) {
-          // Replace the group id value with the dept name.
-          $link['#title']['#value'] = $dept->name();
-        }
-      }
-    }
-
-    // Slightly complex custom facet sort as the label is preprocessed above.
-    // NB: Facet config has display value sorting taken away to avoid double
-    // sorting the values as it comes through the render pipeline.
-    usort($variables['items'], 'dept_search_sort_group_facet_by_title');
-  }
 
   // Remove NIGov from press releases department facet.
   if ($facet->id() === 'pr_department' && !empty($variables['items'])) {
@@ -110,23 +69,29 @@ function dept_search_sort_group_facet_by_title($a, $b) {
  * Implements hook_views_pre_view().
  */
 function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+
+  $dept_manager = match ($view->id()) {
+    'news_search', 'news_search', 'publications_search' => \Drupal::service('department.manager'),
+    'default' => NULL,
+  };
+
   if ($view->id() === 'news_search' && $display_id === 'news_search') {
     /** @var \Drupal\dept_core\Department $active_dept */
-    $active_dept = \Drupal::service('department.manager')->getCurrentDepartment();
+    $active_dept = $dept_manager->getCurrentDepartment();
     if (!$active_dept instanceof Department) {
       return;
     }
 
     // Don't pass in a value for NIGOV and let views show its 404 handler.
     // That site should use /press-releases to show its content.
-    if ($active_dept->id() != 'group_1') {
-      $args[0] = str_replace('group_', '', $active_dept->id());
+    if ($active_dept->id() !== 'nigov') {
+      $args[0] = $active_dept->id();
     }
   }
 
   if ($view->id() === 'publications_search' && $display_id === 'publications_search') {
     /** @var \Drupal\dept_core\Department $active_dept */
-    $active_dept = \Drupal::service('department.manager')->getCurrentDepartment();
+    $active_dept = $dept_manager->getCurrentDepartment();
     if (!$active_dept instanceof Department) {
       return;
     }
@@ -134,17 +99,16 @@ function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$a
     // Sites other than NIGOV should return a 404. We simply don't pass in
     // an argument if it's not NIGOV and rely on views to return a 404 response
     // as intercepting/adjusting this in an event subscriber is extremely awkward.
-    if ($active_dept->id() === 'group_1') {
+    if ($active_dept->id() === 'nigov') {
       // Add all group ids as + separated entries to the view's contextual arg.
       $dept_ids = [];
-      $depts = \Drupal::service('department.manager')->getAllDepartments();
-      foreach ($depts as $dept) {
-        $dept_ids[] = $dept->groupId();
+      foreach ($dept_manager->getAllDepartments() as $dept) {
+        $dept_ids[] = $dept->id();
       }
       $args[0] = implode('+', $dept_ids);
     }
     else {
-      $args[0] = str_replace('group_', '', $active_dept->id());
+      $args[0] = $active_dept->id();
     }
   }
 }

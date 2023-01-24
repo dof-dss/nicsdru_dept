@@ -93,65 +93,66 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
 
     $links = [];
 
-    $node_source_link = $this->configFactory->get('dept_dev.settings')->get('node_source_link');
-
-    if ($node_source_link) {
-      /** @var \Drupal\node\NodeInterface $node */
-      $node = $this->routeMatch->getParameter('node');
-      if ($node instanceof NodeInterface) {
-        $mapping_table = 'migrate_map_node_' . $node->bundle();
-        // Check mapping table exists for the current bundle.
-        if ($this->dbConn->schema()->tableExists($mapping_table)) {
-          // Lookup Destination node using current nid and extract D7
-          // nid and group.
-          $query = $this->dbConn->select($mapping_table, 'mt')
-            ->condition('destid1', $node->id(), '=');
-          $query->addField('mt', 'sourceid2', 'd7nid');
-          $query->addField('mt', 'sourceid3', 'domains');
-
-          $result = $query->execute();
-          $node_migration_data = $result->fetch();
-
-          // Iterate all domains and generate links.
-          // @phpstan-ignore-next-line
-          $domains = explode('-', $node_migration_data->domains);
-          $domain_mappings = $this->configFactory->get('dept_dev.settings')->get('node_source_domains');
-
-          // Iterate each domain ID in the migration data.
-          foreach ($domains as $domain) {
-            // Iterate all domain mappings if the source domain for the node
-            // is 0 as this denotes that it belongs to all sites.
-            if ($domain == 0) {
-              foreach ($domain_mappings as $domain_map) {
-                if (substr($domain_map, 0, 4) !== "http") {
-                  continue;
-                }
-                // @phpstan-ignore-next-line
-                $node_link = $domain_map . '/node/' . $node_migration_data->d7nid;
-
-                $links[] = [
-                  '#title' => $domain_map . ' : ' . $node->label(),
-                  '#type' => 'link',
-                  '#url' => Url::fromUri($node_link),
-                ];
-              }
-              break;
-            }
-            else {
-              // @phpstan-ignore-next-line
-              $node_link = $domain_mappings[$domain] . '/node/' . $node_migration_data->d7nid;
-              if (preg_match('/^http/', $domain)) {
-                $links[] = [
-                  '#title' => $domain_mappings[$domain] . ' : ' . $node->label(),
-                  '#type' => 'link',
-                  '#url' => Url::fromUri($node_link),
-                ];
-              }
-            }
-          }
-        }
-      }
-    }
+    // TODO: Commenting out until Groups is removed and migration updated.
+//    $node_source_link = $this->configFactory->get('dept_dev.settings')->get('node_source_link');
+//
+//    if ($node_source_link) {
+//      /** @var \Drupal\node\NodeInterface $node */
+//      $node = $this->routeMatch->getParameter('node');
+//      if ($node instanceof NodeInterface) {
+//        $mapping_table = 'migrate_map_node_' . $node->bundle();
+//        // Check mapping table exists for the current bundle.
+//        if ($this->dbConn->schema()->tableExists($mapping_table)) {
+//          // Lookup Destination node using current nid and extract D7
+//          // nid and group.
+//          $query = $this->dbConn->select($mapping_table, 'mt')
+//            ->condition('destid1', $node->id(), '=');
+//          $query->addField('mt', 'sourceid2', 'd7nid');
+//          $query->addField('mt', 'sourceid3', 'domains');
+//
+//          $result = $query->execute();
+//          $node_migration_data = $result->fetch();
+//
+//          // Iterate all domains and generate links.
+//          // @phpstan-ignore-next-line
+//          $domains = explode('-', $node_migration_data->domains);
+//          $domain_mappings = $this->configFactory->get('dept_dev.settings')->get('node_source_domains');
+//
+//          // Iterate each domain ID in the migration data.
+//          foreach ($domains as $domain) {
+//            // Iterate all domain mappings if the source domain for the node
+//            // is 0 as this denotes that it belongs to all sites.
+//            if ($domain == 0) {
+//              foreach ($domain_mappings as $domain_map) {
+//                if (substr($domain_map, 0, 4) !== "http") {
+//                  continue;
+//                }
+//                // @phpstan-ignore-next-line
+//                $node_link = $domain_map . '/node/' . $node_migration_data->d7nid;
+//
+//                $links[] = [
+//                  '#title' => $domain_map . ' : ' . $node->label(),
+//                  '#type' => 'link',
+//                  '#url' => Url::fromUri($node_link),
+//                ];
+//              }
+//              break;
+//            }
+//            else {
+//              // @phpstan-ignore-next-line
+//              $node_link = $domain_mappings[$domain] . '/node/' . $node_migration_data->d7nid;
+//              if (preg_match('/^http/', $domain)) {
+//                $links[] = [
+//                  '#title' => $domain_mappings[$domain] . ' : ' . $node->label(),
+//                  '#type' => 'link',
+//                  '#url' => Url::fromUri($node_link),
+//                ];
+//              }
+//            }
+//          }
+//        }
+//      }
+//    }
 
     $build['d7_links'] = [
       '#theme' => 'item_list',

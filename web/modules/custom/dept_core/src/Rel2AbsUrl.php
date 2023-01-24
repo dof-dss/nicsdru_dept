@@ -57,47 +57,49 @@ class Rel2AbsUrl {
    *   and node parameters are both missing.
    */
   public function handleUrl(string $url = '', mixed $node = NULL) {
-    if (empty($url) && empty($node)) {
-      throw new \Exception("Url and node parameters are missing. Cannot perform a lookup without at least one.");
-    }
-
-    if (empty($node)) {
-      // Attempt to load the node from the URL alias.
-      $path = $this->aliasManager->getPathByAlias($url);
-      if (preg_match('/node\/(\d+)/', $path, $matches)) {
-        $node = $matches[1];
-      }
-    }
-
-    /* is_numeric() tests for string numbers as well as true integers */
-    if (is_numeric($node)) {
-      $node = $this->entityTypeManager->getStorage('node')->load($node);
-    }
-
-    if ($node instanceof NodeInterface) {
-      if (method_exists($node, 'getGroups')) {
-        $groups = $node->getGroups();
-
-        if (!empty($groups)) {
-          foreach ($groups as $gid => $group_label) {
-            // If there's more than one group skip the NIGov group.
-            if (count($groups) > 1 && $gid === 1) {
-              continue;
-            }
-
-            $dept = $this->deptManager->getDepartment('group_' . $gid);
-            $hostname = $dept->hostname();
-
-            // Early return means exit on first match, but this could
-            // be adjusted to append to an array in future if more
-            // group links were needed at a later date.
-            return 'https://' . $hostname . $url;
-          }
-        }
-      }
+// TODO: Commenting out until Groups is removed and migration updated.
+//
+//    if (empty($url) && empty($node)) {
+//      throw new \Exception("Url and node parameters are missing. Cannot perform a lookup without at least one.");
+//    }
+//
+//    if (empty($node)) {
+//      // Attempt to load the node from the URL alias.
+//      $path = $this->aliasManager->getPathByAlias($url);
+//      if (preg_match('/node\/(\d+)/', $path, $matches)) {
+//        $node = $matches[1];
+//      }
+//    }
+//
+//    /* is_numeric() tests for string numbers as well as true integers */
+//    if (is_numeric($node)) {
+//      $node = $this->entityTypeManager->getStorage('node')->load($node);
+//    }
+//
+//    if ($node instanceof NodeInterface) {
+//      if (method_exists($node, 'getGroups')) {
+//        $groups = $node->getGroups();
+//
+//        if (!empty($groups)) {
+//          foreach ($groups as $gid => $group_label) {
+//            // If there's more than one group skip the NIGov group.
+//            if (count($groups) > 1 && $gid === 1) {
+//              continue;
+//            }
+//
+//            $dept = $this->deptManager->getDepartment('group_' . $gid);
+//            $hostname = $dept->hostname();
+//
+//            // Early return means exit on first match, but this could
+//            // be adjusted to append to an array in future if more
+//            // group links were needed at a later date.
+//            return 'https://' . $hostname . $url;
+//          }
+//        }
+//      }
       // Return the original link if we can't process it.
       return 'https://' . $url;
-    }
+//    }
   }
 
 }
