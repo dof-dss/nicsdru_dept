@@ -23,7 +23,6 @@ dependencies:
     - chosen_field
     - content_moderation
     - datetime
-    - entitygroupfield
     - media_library
     - metatag
     - path
@@ -49,16 +48,6 @@ content:
     weight: 14
     region: content
     settings: {  }
-    third_party_settings: {  }
-  entitygroupfield:
-    type: entitygroupfield_select_widget
-    weight: 23
-    region: content
-    settings:
-      help_text: ''
-      label: 'Group name'
-      multiple: true
-      required: false
     third_party_settings: {  }
   field_domain_access:
     type: options_buttons

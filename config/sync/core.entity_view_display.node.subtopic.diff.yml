@@ -16,7 +16,6 @@ dependencies:
     - field.field.node.subtopic.field_summary
     - node.type.subtopic
   module:
-    - entitygroupfield
     - field_group
     - layout_builder
     - text
@@ -61,14 +60,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 1
-    region: content
-  entitygroupfield:
-    type: parent_group_label_formatter
-    label: inline
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 2
     region: content
   field_banner_image:
     type: entity_reference_label
