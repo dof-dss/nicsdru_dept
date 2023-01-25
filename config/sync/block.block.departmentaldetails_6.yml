@@ -1,4 +1,4 @@
-uuid: 0eae46a1-bec8-48a9-ae7d-4fa9fd88cb52
+uuid: 2c1cff6c-5bdc-4de4-8e83-8bf089eb2a0c
 langcode: en
 status: true
 dependencies:
@@ -7,20 +7,20 @@ dependencies:
     - system
   theme:
     - nicsdru_dept_theme
-id: departmentaldetails_3
+id: departmentaldetails_6
 theme: nicsdru_dept_theme
 region: content
-weight: -14
+weight: -20
 provider: null
 plugin: dept_core_departmental_details
 settings:
   id: dept_core_departmental_details
-  label: 'Departmental details - Management & structure'
-  label_display: visible
+  label: 'Contacts - Contact Information'
+  label_display: '0'
   provider: dept_core
-  display_field: managementAndStructure
+  display_field: contactInformation
 visibility:
   request_path:
     id: request_path
     negate: false
-    pages: '<front>'
+    pages: /contact
