@@ -180,6 +180,12 @@ class Node extends FieldableEntity {
       }
     }
 
+    if ($this->getDomainSites($nid) != NULL) {
+      $row->setSourceProperty('domain_all_affiliates', 1);
+    }
+    $row->setSourceProperty('domain_access_node', $this->getDomainTargetIds($nid));
+    $row->setSourceProperty('domain_source', $this->getDomainSourceTargetId($nid));
+
     return parent::prepareRow($row);
   }
 
@@ -203,7 +209,7 @@ class Node extends FieldableEntity {
       'tnid' => $this->t('The translation set id for this node'),
       'timestamp' => $this->t('The timestamp the latest revision of this node was created.'),
       'uuid' => $this->t('The unique identifier for this item of content.'),
-      'domains' => $this->t('CSV list of domains for the node'),
+      'domain_access_node' => $this->t("Node Domain Access"),
     ];
     return $fields;
   }
@@ -234,6 +240,83 @@ class Node extends FieldableEntity {
       // Translations: Yield only non-default translations.
       $query->where('[n].[tnid] <> 0 AND [n].[tnid] <> [n].[nid]');
     }
+  }
+
+  /**
+   * Helper method to get the domain site entries.
+   *
+   * @param int $nid
+   *   Nid of the current row.
+   *
+   * @return mixed
+   *   The domain_access entries with realm=domain_site
+   */
+  private function getDomainSites(int $nid) {
+    return $this->select('domain_access', 'da')
+      ->fields('da', ['realm'])
+      ->condition('da.realm', 'domain_site')
+      ->condition('da.nid', $nid)
+      ->execute()
+      ->fetchCol();
+  }
+
+  /**
+   * Helper method to get the gids as target ids from d7 domain_access.
+   *
+   * @param int $nid
+   *   Nid of the current row.
+   *
+   * @return array
+   *   returns target ids of domains
+   */
+  private function getDomainTargetIds(int $nid) {
+    $row_source_properties = [];
+
+    $domains = $this->select('domain_access', 'da')
+      ->fields('da', ['gid'])
+      ->condition('da.realm', 'domain_id')
+      ->condition('da.nid', $nid)
+      ->execute()
+      ->fetchCol();
+
+    foreach ($domains as $domain) {
+      $domain_target_ids = $this->select('domain', 'da')
+        ->fields('da', ['machine_name'])
+        ->condition('da.domain_id', $domain)
+        ->execute()
+        ->fetchCol();
+      $row_source_properties[] = ['target_id' => $domain_target_ids[0]];
+    }
+    return $row_source_properties;
+  }
+
+  /**
+   * Helper method to get the gids as target ids from d7 domain_source.
+   *
+   * @param int $nid
+   *   Nid of the current row.
+   *
+   * @return array
+   *   returns target ids of domains
+   */
+  private function getDomainSourceTargetId(int $nid) {
+    $row_source_properties = [];
+
+    $domains = $this->select('domain_source', 'ds')
+      ->fields('ds', ['domain_id'])
+      ->condition('ds.nid', $nid)
+      ->execute()
+      ->fetchCol();
+
+    foreach ($domains as $domain) {
+      $domain_target_ids = $this->select('domain', 'da')
+        ->fields('da', ['machine_name'])
+        ->condition('da.domain_id', $domain)
+        ->execute()
+        ->fetchCol();
+      $row_source_properties = $domain_target_ids[0];
+    }
+    return $row_source_properties;
   }
 
 }

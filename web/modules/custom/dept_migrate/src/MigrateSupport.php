@@ -101,16 +101,16 @@ class MigrateSupport {
    *   The media entity.
    */
   public function addMediaToDefaultGroup(MediaInterface $media) {
-    $relation = GroupContent::loadByEntity($media);
-
-    if (!empty($relation)) {
-      return;
-    }
-
-    // Default group (NIGOV) has group id 1.
-    $group = Group::load(1);
-    // Add entity to group.
-    $group->addContent($media, 'group_media:' . $media->bundle());
+//    $relation = GroupContent::loadByEntity($media);
+//
+//    if (!empty($relation)) {
+//      return;
+//    }
+//
+//    // Default group (NIGOV) has group id 1.
+//    $group = Group::load(1);
+//    // Add entity to group.
+//    $group->addContent($media, 'group_media:' . $media->bundle());
   }
 
   /**

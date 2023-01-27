@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\dept_migrate_group_users\EventSubscriber;
+namespace Drupal\dept_migrate_users\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
