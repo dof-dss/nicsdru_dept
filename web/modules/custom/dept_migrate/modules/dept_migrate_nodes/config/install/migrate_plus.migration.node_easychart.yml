@@ -64,6 +64,14 @@ process:
   easychart:
     - plugin: get
       source: easychart
+  field_domain_access:
+    - plugin: sub_process
+      source: domain_access_node
+      process:
+        target_id: target_id
+  field_domain_all_affiliates:
+    - plugin: get
+      source: domain_all_affiliates
 destination:
   plugin: 'entity:node'
   default_bundle: easychart

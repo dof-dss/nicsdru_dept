@@ -114,8 +114,6 @@ class Node extends FieldableEntity {
     $query->addField('da', 'gid', 'domains');
     $query->innerJoin('node', 'n', static::JOIN);
     $query->innerJoin('domain_access', 'da', 'n.nid = da.nid');
-    // Group the domains the node belongs to into a csv column.
-    $query->addExpression("GROUP_CONCAT(gid SEPARATOR '-')", 'domains');
 
     // If the content_translation module is enabled, get the source langcode
     // to fill the content_translation_source field.
@@ -184,7 +182,6 @@ class Node extends FieldableEntity {
       $row->setSourceProperty('domain_all_affiliates', 1);
     }
     $row->setSourceProperty('domain_access_node', $this->getDomainTargetIds($nid));
-    $row->setSourceProperty('domain_source', $this->getDomainSourceTargetId($nid));
 
     return parent::prepareRow($row);
   }
@@ -220,7 +217,6 @@ class Node extends FieldableEntity {
   public function getIds() {
     $ids['uuid']['type'] = 'string';
     $ids['nid']['type'] = 'integer';
-    $ids['domains']['type'] = 'string';
     return $ids;
   }
 

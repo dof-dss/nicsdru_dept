@@ -112,7 +112,6 @@ process:
         target_id:
           - plugin: d7_node_lookup
             source: target_id
-  field_original_domain: field_original_domain
   field_published_date:
     - plugin: sub_process
       source: field_published_date
@@ -122,6 +121,14 @@ process:
           from_format: 'Y-m-d H:i:s'
           to_format: 'Y-m-d'
           source: value
+  field_domain_access:
+    - plugin: sub_process
+      source: domain_access_node
+      process:
+        target_id: target_id
+  field_domain_all_affiliates:
+    - plugin: get
+      source: domain_all_affiliates
 destination:
   plugin: 'entity:node'
   default_bundle: news
