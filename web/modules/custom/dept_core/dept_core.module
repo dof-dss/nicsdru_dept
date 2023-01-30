@@ -56,4 +56,3 @@ function dept_core_preprocess_menu(&$variables) {
     $variables['#cache']['tags'] = $cache_tags;
   }
 }
-

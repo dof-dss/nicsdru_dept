@@ -89,8 +89,6 @@ class MdashContentController extends ControllerBase {
     $plugin_block = $this->blockManager->createInstance('dept_mdash_log_viewer', []);
     $log_viewer_block = $plugin_block->build();
 
-    ksm($content_summary_block, $domain_access_block);
-
     return [
       '#theme' => 'mdash_dashboard',
       '#content_summary' => $content_summary_block,

@@ -64,7 +64,7 @@ class MdashDomainAccessBlock extends BlockBase implements ContainerFactoryPlugin
    * @param \Drupal\Core\Database\Connection $legacy_connection
    *   The legacy database connection.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $connection, Connection $legacy_connection,  ) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $connection, Connection $legacy_connection) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->dbConn = $connection;
     $this->legacyConn = $legacy_connection;
@@ -117,12 +117,12 @@ INNER JOIN node_access AS na
 ON n.nid = na.nid
 INNER JOIN migrate_map_node_" . $bundle . " AS mm
 ON n.nid = mm.destid1
-WHERE n.type = '" . $bundle ."'")->fetchAll();
+WHERE n.type = '" . $bundle . "'")->fetchAll();
 
       $d7_data = $this->legacyConn->query("SELECT n.nid, da.gid FROM node AS n
 INNER JOIN domain_access AS da
 ON n.nid = da.nid
-WHERE n.type = '" . $bundle ."'")->fetchAll();
+WHERE n.type = '" . $bundle . "'")->fetchAll();
 
       $diff = count($d9_data) - count($d7_data);
       $diff_style = '';
@@ -136,7 +136,6 @@ WHERE n.type = '" . $bundle ."'")->fetchAll();
         $diff_style = ['color: red'];
         $row_class = ['mdash-highlight'];
       }
-
 
       $rows[$bundle] = [
         'data' => [

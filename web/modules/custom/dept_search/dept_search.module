@@ -74,8 +74,7 @@ function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$a
     'news_search',
     'news_search',
     'publications_search'
-  ]) ? \Drupal::service('department.manager') : null;
-
+  ]) ? \Drupal::service('department.manager') : NULL;
 
   if ($view->id() === 'news_search' && $display_id === 'news_search') {
     /** @var \Drupal\dept_core\Department $active_dept */
