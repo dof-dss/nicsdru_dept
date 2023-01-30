@@ -83,13 +83,19 @@ class MdashContentController extends ControllerBase {
     $plugin_block = $this->blockManager->createInstance('dept_mdash_error_summary', []);
     $error_summary_block = $plugin_block->build();
 
+    $plugin_block = $this->blockManager->createInstance('dept_mdash_domain_access', []);
+    $domain_access_block = $plugin_block->build();
+
     $plugin_block = $this->blockManager->createInstance('dept_mdash_log_viewer', []);
     $log_viewer_block = $plugin_block->build();
+
+    ksm($content_summary_block, $domain_access_block);
 
     return [
       '#theme' => 'mdash_dashboard',
       '#content_summary' => $content_summary_block,
       '#error_summary' => $error_summary_block,
+      '#domain_access' => $domain_access_block,
       '#last_migration' => $this->lastMigation(),
       '#null_destination_nodes' => $this->nullDestinationNodes(),
       '#log_output' => $log_viewer_block,
