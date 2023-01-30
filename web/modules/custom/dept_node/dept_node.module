@@ -138,6 +138,9 @@ function dept_node_preprocess_node(array &$variables) {
     return;
   }
 
+  // Add the topic banner to the output, if relevant.
+  dept_node_topic_banner($variables);
+
   if ($view_mode === 'search_metadata' && $node->bundle() === 'news') {
     // Add the department metadata on the press-releases listing.
     if ($routename != 'view.news_search.press_release_search') {
@@ -196,4 +199,70 @@ function dept_node_preprocess_node(array &$variables) {
       '#weight' => count($variables['content']) + 1,
     ];
   }
+}
+
+/**
+ * Adds the required preprocess variables to the page
+ * if there is a parent topic with a landing page that has
+ * a banner image associated with it. If these values are
+ * detected at the template, it should render the image
+ * media with the overlay file on top to create a blended
+ * banner image that can appear above the title.
+ */
+function dept_node_topic_banner(array &$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = &$variables['node'];
+  $view_mode = $variables['view_mode'];
+
+  // Only show the banner on full view mode.
+  if ($view_mode != 'full') {
+    return;
+  }
+
+  // Assume topic nodes present this banner as part of $content.
+  if ($node->bundle() === 'topic') {
+    return;
+  }
+
+  // Look up referenced topics.
+  $site_topics = NULL;
+  foreach (['field_site_topics', 'field_parent_topic'] as $topic_field_name) {
+    if ($node->hasField($topic_field_name)) {
+      $site_topics = $node->get($topic_field_name)->referencedEntities();
+    }
+  }
+
+  if (empty($site_topics)) {
+    return;
+  }
+
+  /** @var \Drupal\node\NodeInterface $topic_node */
+  $topic_node = $site_topics[0];
+
+  // Is there a landing page with the same topic reference with a banner?
+  $lp_query_ids = \Drupal::entityQuery('node')
+    ->condition('type', 'landing_page')
+    ->condition('status', 1)
+    ->condition('field_site_topics', $topic_node->id())
+    ->range(0, 1)
+    ->execute();
+
+  $landing_page_node = \Drupal::entityTypeManager()
+    ->getStorage('node')
+    ->loadMultiple($lp_query_ids);
+  $landing_page_node = reset($landing_page_node);
+
+  $banner_media = reset($landing_page_node
+    ->get('field_banner_image')
+    ->referencedEntities()
+  );
+
+  $banner_render = \Drupal::entityTypeManager()
+    ->getViewBuilder('media')
+    ->view($banner_media, 'banner_thin');
+
+  // Put the media render array into the preprocess vars to blend
+  // with the overlay image at the template layer.
+  $variables['banner_image'] = $banner_render;
+  $variables['banner_image']['#weight'] = -100;
 }
