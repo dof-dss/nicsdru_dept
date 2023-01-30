@@ -23,13 +23,15 @@ dependencies:
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
     - field.field.node.heritage_site.field_website
+    - filter.format.plain_text
     - node.type.heritage_site
   module:
     - field_group
+    - geolocation
     - layout_builder
     - link
+    - metatag
     - options
-    - origins_common
     - text
     - user
 third_party_settings:
@@ -43,49 +45,32 @@ third_party_settings:
       parent_name: ''
       region: content
       weight: 6
-      format_type: details_sidebar
+      format_type: details
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
-        open: true
+        open: false
         description: ''
         required_fields: false
-        weight: 0
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
     group_additional_info:
       children:
         - field_open_to_the_public
         - field_grid_reference
         - field_sm_number
         - field_nismr_link
-        - field_historic_map_viewer_link
       label: 'Additional Information'
       parent_name: ''
       region: content
       weight: 7
-      format_type: details_sidebar
+      format_type: details
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
-        open: true
+        open: false
         description: ''
         required_fields: false
-        weight: 0
-        element: div
-        show_label: false
-        label_element: h3
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
   layout_builder:
     enabled: false
     allow_custom: false
@@ -125,7 +110,7 @@ content:
     weight: 5
     region: content
   field_email:
-    type: email_mailto
+    type: basic_string
     label: inline
     settings: {  }
     third_party_settings: {  }
@@ -149,20 +134,95 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 12
+    weight: 9
     region: content
   field_map_location:
-    type: gmaps_lazy_load_formatter
-    label: hidden
+    type: geolocation_map
+    label: above
     settings:
-      map_type: roadmap
-      zoom: '15'
-      placeholder: empty
-      link_text: ''
-      map_width: '600'
-      map_height: '400'
+      set_marker: true
+      show_label: false
+      common_map: true
+      show_delta_label: false
+      use_overridden_map_settings: false
+      title: ''
+      info_text:
+        value: ''
+        format: plain_text
+      centre:
+        fit_bounds:
+          enable: true
+          weight: -101
+          settings:
+            reset_zoom: true
+            min_zoom: null
+          map_center_id: fit_bounds
+        fixed_boundaries:
+          enable: false
+          weight: 0
+          settings:
+            south: ''
+            west: ''
+            north: ''
+            east: ''
+          map_center_id: fixed_boundaries
+        client_location:
+          enable: false
+          weight: 0
+          map_center_id: client_location
+        fixed_value:
+          enable: false
+          weight: 0
+          settings:
+            location_option_id: fixed_value
+            latitude: null
+            longitude: null
+          map_center_id: location_plugins
+        ipstack:
+          enable: false
+          weight: 0
+          settings:
+            location_option_id: ipstack
+            access_key: ''
+          map_center_id: location_plugins
+      map_provider_id: google_static_maps
+      map_provider_settings:
+        map_features:
+          geolocation_shapes:
+            weight: 0
+            settings:
+              remove_markers: false
+              polyline: true
+              polyline_title: ''
+              strokeColor: '#FF0000'
+              strokeOpacity: 0.8
+              strokeWidth: '2'
+              polygon: false
+              polygon_title: ''
+              fillColor: '#FF0000'
+              fillOpacity: 0.35
+            enabled: false
+          geolocation_marker_scroll_to_id:
+            weight: 0
+            settings:
+              scroll_target_id: ''
+            enabled: false
+        type: ROADMAP
+        zoom: 10
+        height: null
+        width: null
+        format: png
+        scale: 1
+      data_provider_settings: {  }
     third_party_settings: {  }
-    weight: 9
+    weight: 13
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 12
     region: content
   field_nismr_link:
     type: link
@@ -239,7 +299,6 @@ content:
 hidden:
   content_moderation_control: true
   entitygroupfield: true
-  field_metatags: true
   field_site_subtopics: true
   field_site_topics: true
   groups: true
