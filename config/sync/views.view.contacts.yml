@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - node.type.contact
-    - system.menu.main
   module:
     - node
     - user
@@ -261,7 +260,7 @@ display:
       display_extenders: {  }
       path: contact
       menu:
-        type: normal
+        type: none
         title: Contact
         description: ''
         weight: 0
