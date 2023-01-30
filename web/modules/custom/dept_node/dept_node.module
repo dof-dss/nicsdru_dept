@@ -252,10 +252,18 @@ function dept_node_topic_banner(array &$variables) {
     ->loadMultiple($lp_query_ids);
   $landing_page_node = reset($landing_page_node);
 
+  if (empty($landing_page_node)) {
+    return;
+  }
+
   $banner_media = reset($landing_page_node
     ->get('field_banner_image')
     ->referencedEntities()
   );
+
+  if (empty($banner_media)) {
+    return;
+  }
 
   $banner_render = \Drupal::entityTypeManager()
     ->getViewBuilder('media')
