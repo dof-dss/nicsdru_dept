@@ -1,0 +1,7 @@
+services:
+  dept_topics.topics:
+    class: Drupal\dept_topics\ContentTopics
+    arguments: ['@entity_type.manager', '@current_route_match']
+  dept_topics.subtopics:
+    class: Drupal\dept_topics\ContentTopics
+    arguments: [ '@entity_type.manager', '@current_route_match' ]

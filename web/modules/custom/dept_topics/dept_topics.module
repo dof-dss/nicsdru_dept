@@ -43,7 +43,7 @@ function dept_topics_preprocess_node(array &$variables) {
         if (empty($ids)) {
           // If not sorted by draggableviews, then fall back to using the
           // service to fetch content for a subtopic.
-          $content_links = \Drupal::service('dept_node.topics')->getSubtopicContent($subtopic_id);
+          $content_links = \Drupal::service('dept_node.subtopics')->getSubtopicContent($subtopic_id);
         }
         else {
           $subtopic_ref_nodes = \Drupal::entityTypeManager()
@@ -80,7 +80,7 @@ function dept_topics_preprocess_node(array &$variables) {
   }
 
   if ($node->bundle() === 'subtopic' && $view_mode === 'full') {
-    $subtopics_content = \Drupal::service('dept_node.topics')
+    $subtopics_content = \Drupal::service('dept_topics.subtopics')
       ->getSubtopicContent($node->id());
 
     $variables['content'][] = [

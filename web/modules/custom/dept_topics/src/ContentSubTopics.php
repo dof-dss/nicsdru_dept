@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\dept_node;
+namespace Drupal\dept_topics;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Link;
@@ -11,7 +11,7 @@ use Drupal\node\NodeInterface;
  * Intended to reduce code duplication between backend and frontend
  * preprocessing.
  */
-class ContentTopics {
+class ContentSubTopics {
 
   /**
    * The entity type manager.
