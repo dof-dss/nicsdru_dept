@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.ual.field_distinguishing_marks
     - field.field.node.ual.field_domain_access
     - field.field.node.ual.field_domain_all_affiliates
+    - field.field.node.ual.field_domain_source
     - field.field.node.ual.field_eye_colour
     - field.field.node.ual.field_hair_colour
     - field.field.node.ual.field_offence
@@ -69,6 +70,12 @@ content:
     region: content
     settings:
       display_label: true
+    third_party_settings: {  }
+  field_domain_source:
+    type: options_select
+    weight: 42
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_eye_colour:
     type: string_textfield

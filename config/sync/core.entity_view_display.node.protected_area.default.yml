@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.protected_area.field_county
     - field.field.node.protected_area.field_domain_access
     - field.field.node.protected_area.field_domain_all_affiliates
+    - field.field.node.protected_area.field_domain_source
     - field.field.node.protected_area.field_metatags
     - field.field.node.protected_area.field_protected_area_documents
     - field.field.node.protected_area.field_protected_area_feature
@@ -96,6 +97,7 @@ hidden:
   entitygroupfield: true
   field_domain_access: true
   field_domain_all_affiliates: true
+  field_domain_source: true
   groups: true
   groups_type_department_site: true
   langcode: true

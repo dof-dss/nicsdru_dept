@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.ual.field_distinguishing_marks
     - field.field.node.ual.field_domain_access
     - field.field.node.ual.field_domain_all_affiliates
+    - field.field.node.ual.field_domain_source
     - field.field.node.ual.field_eye_colour
     - field.field.node.ual.field_hair_colour
     - field.field.node.ual.field_offence
@@ -58,6 +59,7 @@ hidden:
   field_distinguishing_marks: true
   field_domain_access: true
   field_domain_all_affiliates: true
+  field_domain_source: true
   field_eye_colour: true
   field_hair_colour: true
   field_offence: true

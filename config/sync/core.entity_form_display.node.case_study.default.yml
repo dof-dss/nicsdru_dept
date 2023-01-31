@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.case_study.body
     - field.field.node.case_study.field_domain_access
     - field.field.node.case_study.field_domain_all_affiliates
+    - field.field.node.case_study.field_domain_source
     - field.field.node.case_study.field_metatags
     - field.field.node.case_study.field_outcomes
     - node.type.case_study
@@ -49,6 +50,12 @@ content:
     region: content
     settings:
       display_label: true
+    third_party_settings: {  }
+  field_domain_source:
+    type: options_select
+    weight: 42
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_metatags:
     type: metatag_firehose

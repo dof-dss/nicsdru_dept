@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.infogram.field_chart_taxonomy
     - field.field.node.infogram.field_domain_access
     - field.field.node.infogram.field_domain_all_affiliates
+    - field.field.node.infogram.field_domain_source
     - field.field.node.infogram.field_indicators
     - field.field.node.infogram.field_infogram
     - field.field.node.infogram.field_metatags
@@ -57,6 +58,12 @@ content:
     region: content
     settings:
       display_label: true
+    third_party_settings: {  }
+  field_domain_source:
+    type: options_select
+    weight: 42
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_indicators:
     type: options_select

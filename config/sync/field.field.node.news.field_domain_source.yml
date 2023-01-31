@@ -1,0 +1,25 @@
+uuid: 99c4dbc0-ba31-4ff8-83b0-d5dde0a9d0f7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_domain_source
+    - node.type.news
+id: node.news.field_domain_source
+field_name: field_domain_source
+entity_type: node
+bundle: news
+label: 'Domain Source'
+description: 'Select the canonical domain for this content.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:domain'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: weight
+      direction: ASC
+field_type: entity_reference

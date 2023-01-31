@@ -1,0 +1,25 @@
+uuid: d3e7ae36-4c42-4fef-8c9e-b6d6c79b5ef8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_domain_source
+    - node.type.application
+id: node.application.field_domain_source
+field_name: field_domain_source
+entity_type: node
+bundle: application
+label: 'Domain Source'
+description: 'Select the canonical domain for this content.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:domain'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: weight
+      direction: ASC
+field_type: entity_reference
