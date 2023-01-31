@@ -1,0 +1,29 @@
+uuid: edbc35d9-f554-4eb7-a353-a904af5af1a0
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.topic_queue
+  module:
+    - system
+    - views
+  theme:
+    - nicsdru_dept_theme
+id: views_block__block_topics_queue
+theme: nicsdru_dept_theme
+region: content
+weight: -20
+provider: null
+plugin: 'views_block:topic_queue-block_topics_queue'
+settings:
+  id: 'views_block:topic_queue-block_topics_queue'
+  label: 'Our responsibilities'
+  label_display: visible
+  provider: views
+  views_label: 'Our responsibilities'
+  items_per_page: '20'
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'
