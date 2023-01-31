@@ -60,6 +60,7 @@ class FeaturedContentBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function build() {
     $build = [];
+    $cache_tags = [];
     $config = $this->getConfiguration();
 
     $featured_items = $config['featured_items'];
@@ -73,9 +74,10 @@ class FeaturedContentBlock extends BlockBase implements ContainerFactoryPluginIn
         // Add some metadata so we can hide the teaser field when preprocessing feature nodes.
         $node_render['#hide_feature_fields'] = ['field_teaser'];
         $build['featured_content'][] = $node_render;
+        $cache_tags[] = 'node:' . $nid->id();
       }
     }
-
+    $build['#cache'] = ['tags' => $cache_tags];
     $build['#attributes']['class'] = ['section--featured-highlights'];
     return $build;
   }
@@ -88,7 +90,7 @@ class FeaturedContentBlock extends BlockBase implements ContainerFactoryPluginIn
     $config = $this->getConfiguration();
 
     $fcl_query = $this->entityTypeManager->getStorage('node')->loadByProperties(
-      ['type' => 'featured_content_list'],
+      ['type' => 'featured_content'],
     );
 
     $fcl_nodes = [];
