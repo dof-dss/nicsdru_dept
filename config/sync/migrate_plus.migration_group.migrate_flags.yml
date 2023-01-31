@@ -1,8 +1,10 @@
-uuid: c0efb1a5-f760-491a-bda8-3b7fa801987b
+uuid: e80b420b-be2a-4370-8df9-a567c636cce3
 langcode: en
 status: true
 dependencies: {  }
-id: migrate_group_flags
+_core:
+  default_config_hash: JhY8d2_vw5XhjoOwnQaImeFqeHEwhoVTkJdbFxQAXqk
+id: migrate_flags
 label: 'Departmental sites - Flags'
 description: 'Migrate Flags'
 source_type: 'Drupal 7'
