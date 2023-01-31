@@ -95,54 +95,39 @@ class ContentTopics {
 
   /**
    * @param int|\Drupal\node\NodeInterface $node
-   *   The subtopic node (nid or full object)
+   *   The topic node (nid or full object)
    *
    * @return array
-   *   A render array of links elements.
+   *   Array of subtopics as [$subtopic_id => $subtopic_label].
    */
-  public function getSubtopicContent(int|NodeInterface $node): array {
-    $content = [];
-
-    if (empty($node)) {
-      return $content;
-    }
+  public function getSubtopicsForTopic(int|NodeInterface $node): array {
+    $subtopics = [];
 
     if (is_int($node)) {
       $node = $this->entityTypeManager->getStorage('node')->load($node);
     }
 
-    if ($node instanceof NodeInterface && $node->bundle() === 'subtopic') {
-      // Fetch articles tagged with this subtopic, as well as subtopics
-      // referencing it from the parent subtopic field.
-      $subtopic_content_sql = "SELECT
-        st_nfd.nid,
-        st_nfd.type,
-        st_nfd.title
-        FROM {node_field_data} st_nfd
-        JOIN {node__field_parent_subtopic} nfps ON st_nfd.nid = nfps.entity_id
-        WHERE st_nfd.type = 'subtopic' AND nfps.field_parent_subtopic_target_id = :subtopic_id
-        AND st_nfd.status = 1
-      UNION
-        SELECT
-        ar_nfd.nid,
-        ar_nfd.type,
-        ar_nfd.title
-        FROM {node_field_data} ar_nfd
-        JOIN {node__field_site_subtopics} nfss ON ar_nfd.nid = nfss.entity_id
-        WHERE ar_nfd.type = 'article' AND nfss.field_site_subtopics_target_id = :subtopic_id
-        AND ar_nfd.status = 1
-      ORDER BY title ASC";
-
-      $subtopic_content = \Drupal::database()
-        ->query($subtopic_content_sql, [':subtopic_id' => $node->id()])
-        ->fetchAll();
-
-      foreach ($subtopic_content as $row) {
-        $content[] = Link::createFromRoute($row->title, 'entity.node.canonical', ['node' => $row->nid])->toString();
-      }
+    if ($node->bundle() != 'topic') {
+      return $subtopics;
     }
 
-    return $content;
+    // Find the entity ids and weights of the draggable view display.
+    $query = \Drupal::database()->select('draggableviews_structure', 'ds')
+      ->fields('ds', ['entity_id'])
+      ->condition('view_name', 'content_stacks')
+      ->condition('view_display', 'topic_subtopics')
+      ->condition('args', '["' . $node->id() . '"]')
+      ->orderBy('weight', 'ASC');
+
+    $ids = $query->execute()->fetchAllAssoc('entity_id');
+    $subtopic_nodes = \Drupal::entityTypeManager()
+      ->getStorage('node')->loadMultiple(array_keys($ids));
+
+    foreach ($subtopic_nodes as $node) {
+      $subtopics[$node->id()] = $node->label();
+    }
+
+    return $subtopics;
   }
 
 }
