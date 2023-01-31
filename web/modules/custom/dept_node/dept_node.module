@@ -5,6 +5,7 @@
  * Departmental Node module for Departmental sites.
  */
 
+use Drupal\Core\Link;
 use Drupal\dept_core\Department;
 use Drupal\dept_node\Entity\Node;
 use Drupal\dept_node\Form\NodeForm;
@@ -118,11 +119,26 @@ function dept_node_theme($existing, $type, $theme, $path) {
       'variables' => [
         'title' => NULL,
         'items' => NULL,
-        'render_links' => NULL,
-        'include_subtopics' => NULL,
+        'links' => NULL,
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_preprocess_topics_subtopics_list().
+ */
+function dept_node_preprocess_topics_subtopics_list(array &$variables) {
+  if ($variables['links']) {
+    $link_items = [];
+
+    foreach ($variables['items'] as $id => $title) {
+      $link_items[] = Link::createFromRoute($title, 'entity.node.canonical', ['node' => $id])->toString();
+    }
+
+    // Replace the text list with link equivalents.
+    $variables['items'] = $link_items;
+  }
 }
 
 /**
