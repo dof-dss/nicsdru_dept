@@ -80,7 +80,7 @@ class Rel2AbsUrl {
       $domain_id = DomainAccessManager::getAccessValues($node, 'field_domain_access');
 
       if (!empty($domain_id)) {
-        /** @var $domain Domain */
+        /** @var $domain \Drupal\domain\Entity\Domain */
         $domain = $this->entityTypeManager->getStorage('domain')->load($domain_id);
         return $domain->getPath() . $url;
       }

@@ -77,7 +77,7 @@ function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$a
   ]) ? \Drupal::service('department.manager') : NULL;
 
   if ($view->id() === 'news_search' && $display_id === 'news_search') {
-    /** @var Department $active_dept */
+    /** @var Drupal\dept_core\Entity\Department $active_dept */
     $active_dept = $dept_manager->getCurrentDepartment();
     if (!$active_dept instanceof Department) {
       return;
@@ -91,7 +91,7 @@ function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$a
   }
 
   if ($view->id() === 'publications_search' && $display_id === 'publications_search') {
-    /** @var Department $active_dept */
+    /** @var Drupal\dept_core\Entity\Department $active_dept */
     $active_dept = $dept_manager->getCurrentDepartment();
     if (!$active_dept instanceof Department) {
       return;
