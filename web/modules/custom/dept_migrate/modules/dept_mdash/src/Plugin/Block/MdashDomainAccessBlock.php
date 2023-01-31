@@ -34,20 +34,6 @@ class MdashDomainAccessBlock extends BlockBase implements ContainerFactoryPlugin
   protected $legacyConn;
 
   /**
-   * The date formatter service.
-   *
-   * @var \Drupal\Core\Datetime\DateFormatterInterface
-   */
-  protected $dateFormatter;
-
-  /**
-   * Migration import timestamps.
-   *
-   * @var array
-   */
-  protected array $migrationTimestamps;
-
-  /**
    * Constructs a new MdashcontentsummaryBlock instance.
    *
    * @param array $configuration
@@ -68,7 +54,6 @@ class MdashDomainAccessBlock extends BlockBase implements ContainerFactoryPlugin
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->dbConn = $connection;
     $this->legacyConn = $legacy_connection;
-    $this->dateFormatter = $date_formatter;
   }
 
   /**

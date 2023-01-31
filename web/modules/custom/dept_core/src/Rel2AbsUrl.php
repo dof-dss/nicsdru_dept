@@ -3,6 +3,7 @@
 namespace Drupal\dept_core;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\domain\Entity\Domain;
 use Drupal\node\NodeInterface;
 use Drupal\path_alias\AliasManagerInterface;
 use Drupal\domain_access\DomainAccessManager;
@@ -79,6 +80,7 @@ class Rel2AbsUrl {
       $domain_id = DomainAccessManager::getAccessValues($node, 'field_domain_access');
 
       if (!empty($domain_id)) {
+        /** @var $domain Domain */
         $domain = $this->entityTypeManager->getStorage('domain')->load($domain_id);
         return $domain->getPath() . $url;
       }

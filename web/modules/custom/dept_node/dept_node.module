@@ -54,7 +54,7 @@ function dept_node_views_pre_render(ViewExecutable $view) {
  */
 function dept_node_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
   $dept_manager = \Drupal::service('department.manager');
-  /** @var \Drupal\dept_core\Department $dept */
+  /** @var \Drupal\dept_core\Entity\Department $dept */
   $dept = $dept_manager->getCurrentDepartment();
 
   if ($dept instanceof Department === FALSE) {

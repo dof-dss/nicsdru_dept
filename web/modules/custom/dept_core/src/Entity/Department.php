@@ -236,10 +236,10 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
     // Cannot inject services into entities (https://www.drupal.org/project/drupal/issues/2142515)
     // So instead we lazy load the hostnames via the static Drupal calls.
     if (empty($this->domain)) {
-      $domain = \Drupal::entityTypeManager()->getStorage('domain')->load($this->id());
+      $this->domain = \Drupal::entityTypeManager()->getStorage('domain')->load($this->id());
     }
 
-    return $domain;
+    return $this->domain;
   }
 
   /**

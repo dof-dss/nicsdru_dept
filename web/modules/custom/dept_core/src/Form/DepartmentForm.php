@@ -75,6 +75,7 @@ class DepartmentForm extends ContentEntityForm {
     $form_state->setValue('label', ['0' => ['value' => $domain->label()]]);
 
     parent::validateForm($form, $form_state);
+    return $this->entity;
   }
 
   /**
