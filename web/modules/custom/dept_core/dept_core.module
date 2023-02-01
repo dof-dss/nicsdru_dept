@@ -27,6 +27,11 @@ function dept_core_preprocess_menu(&$variables) {
     // accessibility statement defined in the group field value.
     $dept = \Drupal::service('department.manager')->getCurrentDepartment();
 
+    // @phpstan-ignore-next-line
+    if (empty($dept)) {
+      return;
+    }
+
     // Footer menu doesn't vary much at all so use a very broad context.
     // See https://www.drupal.org/docs/drupal-apis/cache-api/cache-contexts#core-contexts
 

@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
+    - field.storage.node.field_domain_access
+    - field.storage.node.field_domain_source
     - field.storage.node.field_global_topics
     - field.storage.node.field_summary
     - field.storage.node.field_news_type
@@ -70,6 +72,22 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  field_domain_access:
+    label: 'Domain Access'
+    datasource_id: 'entity:node'
+    property_path: field_domain_access
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_domain_access
+  field_domain_source:
+    label: 'Domain Source'
+    datasource_id: 'entity:node'
+    property_path: field_domain_source
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_domain_source
   field_global_topics:
     label: 'Global topics'
     datasource_id: 'entity:node'
