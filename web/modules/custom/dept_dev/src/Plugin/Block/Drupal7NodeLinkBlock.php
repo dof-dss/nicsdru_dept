@@ -115,7 +115,7 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
           $dept_manager = \Drupal::service('department.manager');
           $department = $dept_manager->getCurrentDepartment();
 
-          /** @phpstan-ignore-next-line */
+          // @phpstan-ignore-next-line
           $node_link = 'https://' . $department->hostname(TRUE) . '/node/' . $node_migration_data->d7nid;
 
           $links[] = [
