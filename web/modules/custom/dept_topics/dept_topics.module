@@ -29,7 +29,7 @@ function dept_topics_preprocess_node(array &$variables) {
     $subtopics_to_display = dept_topics_subtopics_queue_for_topic($node);
 
     if (!empty($subtopics_to_display)) {
-      foreach ($subtopics_to_display as $subtopic_id => $subtopic_title) {
+      foreach ($subtopics_to_display as $subtopic_id => $subtopic) {
         // Get subtopic content - try the draggableviews table first.
         $query = \Drupal::database()->select('draggableviews_structure', 'ds')
           ->fields('ds', ['entity_id'])
@@ -59,17 +59,20 @@ function dept_topics_preprocess_node(array &$variables) {
         // Add render array elements we can call from the node-topic--full template.
         $variables['content']['subtopics_list'][] = [
           '#theme' => 'subtopic_content_list',
-          '#title' => $subtopic_title,
+          '#title' => $subtopic['title'],
           '#title_link' => Link::createFromRoute(
-            $subtopic_title,
+            $subtopic['title'],
             'entity.node.canonical',
             ['node' => $subtopic_id],
           ),
+          '#content_summary' => [
+            '#markup' => $subtopic['summary'],
+          ],
           '#content_links' => $content_links,
           '#read_more_link' => Link::createFromRoute(
             t('Read more'),
             'entity.node.canonical',
-            ['node' => $subtopic_id],
+            ['node' => $subtopic_id], ['attributes' => ['class' => 'more']],
           ),
           '#cache' => [
             'keys' => ['subtopic_' . $subtopic_id],
@@ -100,6 +103,7 @@ function dept_topics_theme($existing, $type, $theme, $path) {
       'variables' => [
         'title' => NULL,
         'title_link' => NULL,
+        'content_summary' => NULL,
         'content_links' => NULL,
         'read_more_link' => NULL,
       ],
@@ -136,7 +140,10 @@ function dept_topics_subtopics_queue_for_topic(NodeInterface $node) {
       ->getStorage('node')->loadMultiple(array_keys($ids));
 
     foreach ($subtopic_nodes as $node) {
-      $subtopic_queue[$node->id()] = $node->label();
+      $subtopic_queue[$node->id()] = [
+        'title' => $node->label(),
+        'summary' => $node->get('field_summary')->getValue()[0]['value'],
+      ];
     }
   }
 
