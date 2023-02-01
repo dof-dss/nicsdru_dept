@@ -81,7 +81,7 @@ class Rel2AbsUrl {
 
       if (!empty($domain_id)) {
         /** @var $domain \Drupal\domain\Entity\Domain */
-        $domain = $this->entityTypeManager->getStorage('domain')->load($domain_id);
+        $domain = $this->entityTypeManager->getStorage('domain')->load(array_key_first($domain_id));
         return $domain->getPath() . $url;
       }
 
