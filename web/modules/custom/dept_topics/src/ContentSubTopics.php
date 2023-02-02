@@ -21,7 +21,7 @@ class ContentSubTopics {
   protected $entityTypeManager;
 
   /**
-   * Constructor for ContentTopic class.
+   * Constructor for ContentSubTopic class.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
