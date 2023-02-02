@@ -8,23 +8,38 @@
  * - content_links: an array of link render elements.
  * - show_more_link: a link back to the subtopic page.
 #}
-<article class="card">
-  {% if title_link %}
-  <h2 class="card__title">{{ title_link }}</h2>
-  {% endif %}
-  <div class="card__content">
-    {% if content_summary %}
-      {{ content_summary }}
+{% if content_links %}
+  <article class="card">
+    {% if title_link %}
+      <h2 class="card__title">{{ title_link }}</h2>
     {% endif %}
-    {% if content_links %}
+    <div class="card__content">
+      {% if content_summary %}
+        {{ content_summary }}
+      {% endif %}
       <ul class="list--link-list">
         {% for link in content_links|slice(0, 3) %}
           <li>{{ link }}</li>
         {% endfor %}
       </ul>
-    {% endif %}
-    {% if read_more_link and content_links|length > 3 %}
-      {{ read_more_link }}
-    {% endif %}
-  </div>
-</article>
+      {% if read_more_link and content_links|length > 3 %}
+        <p>
+          <a class="more" href="{{ read_more_link.url }}">
+            More in this topic <svg aria-hidden="true" class="ico ico-arrow-right"><use xlink:href="#arrow"></use></svg><span class="visually-hidden">{{ title }}</span>
+          </a>
+        </p>
+      {% endif %}
+    </div>
+  </article>
+{% else %}
+  <article>
+    <a class="card" href="{{ title_link.url }}">
+      <h2 class="card__title">{{ title }}</h2>
+      <div class="card__content">
+        {% if content_summary %}
+          {{ content_summary }}
+        {% endif %}
+      </div>
+    </a>
+  </article>
+{% endif %}
