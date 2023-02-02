@@ -8,7 +8,6 @@
 
 use Drupal\Core\Link;
 use Drupal\dept_core\Department;
-use Drupal\entityqueue\EntityQueueInterface;
 use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
@@ -27,37 +26,14 @@ function dept_topics_preprocess_node(array &$variables) {
 
   if ($node->bundle() === 'topic' && $view_mode === 'full') {
 
-    $subtopics_to_display = dept_topics_subtopics_queue_for_topic($node);
+    $subtopics_to_display = \Drupal::service('dept_topics.topics')
+      ->getSubtopicsForTopic($node);
 
     if (!empty($subtopics_to_display)) {
       foreach ($subtopics_to_display as $subtopic_id => $subtopic_title) {
-        // Get subtopic content - try the draggableviews table first.
-        $query = \Drupal::database()->select('draggableviews_structure', 'ds')
-          ->fields('ds', ['entity_id'])
-          ->condition('view_name', 'content_stacks')
-          ->condition('view_display', 'subtopic_articles')
-          ->condition('args', '["' . $subtopic_id . '"]')
-          ->orderBy('weight', 'ASC');
-
-        $ids = $query->execute()->fetchAllAssoc('entity_id');
-        if (empty($ids)) {
-          // Replace with naturally sorted list.
-          $query = \Drupal::entityQuery('node')
-            ->condition('type', 'article')
-            ->condition('status', 1)
-            ->condition('field_site_subtopics', $subtopic_id)
-            ->sort('changed', 'DESC');
-          $ids = $query->execute();
-        }
-
-        $article_nodes = \Drupal::entityTypeManager()
-          ->getStorage('node')->loadMultiple(array_keys($ids));
-
-        $content_links = [];
-        foreach ($article_nodes as $content_node) {
-          /** @var \Drupal\node\NodeInterface $content_node */
-          $content_links[] = $content_node->toLink()->toRenderable();
-        }
+        // Service to pull in subtopic content instead of the fixed code here.
+        $content_links = \Drupal::service('dept_topics.subtopics')
+          ->getSubtopicContent($subtopic_id);
 
         // Add render array elements we can call from the node-topic--full template.
         $variables['content']['subtopics_list'][] = [
@@ -81,6 +57,17 @@ function dept_topics_preprocess_node(array &$variables) {
       }
     }
   }
+
+  if ($node->bundle() === 'subtopic' && $view_mode === 'full') {
+    $subtopics_content = \Drupal::service('dept_topics.subtopics')
+      ->getSubtopicContent($node->id());
+
+    $variables['content'][] = [
+      '#theme' => 'item_list',
+      '#list_type' => 'ul',
+      '#items' => $subtopics_content,
+    ];
+  }
 }
 
 /**
@@ -97,40 +84,4 @@ function dept_topics_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
-}
-
-/**
- * Function to return a list of keyed subtopic node ids/labels
- * that reference a specified topic node.
- *
- * @param \Drupal\node\NodeInterface $node
- *   The topic node.
- *
- * @return array
- *   Array of subtopic id/label values, e.g.: [1 => 'Angling'].
- */
-function dept_topics_subtopics_queue_for_topic(NodeInterface $node) {
-  $subtopic_queue = [];
-
-  if ($node->bundle() === 'topic') {
-    $topic_id = $node->id();
-
-    // Find the entity ids and weights of the draggable view display.
-    $query = \Drupal::database()->select('draggableviews_structure', 'ds')
-      ->fields('ds', ['entity_id'])
-      ->condition('view_name', 'content_stacks')
-      ->condition('view_display', 'topic_subtopics')
-      ->condition('args', '["' . $topic_id . '"]')
-      ->orderBy('weight', 'ASC');
-
-    $ids = $query->execute()->fetchAllAssoc('entity_id');
-    $subtopic_nodes = \Drupal::entityTypeManager()
-      ->getStorage('node')->loadMultiple(array_keys($ids));
-
-    foreach ($subtopic_nodes as $node) {
-      $subtopic_queue[$node->id()] = $node->label();
-    }
-  }
-
-  return $subtopic_queue;
 }
