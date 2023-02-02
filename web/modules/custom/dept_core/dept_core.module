@@ -55,7 +55,7 @@ function dept_core_preprocess_menu(&$variables) {
     if (($accessibility_statement = $dept->accessibilityStatement()) !== NULL && $accessibility_statement instanceof NodeInterface) {
       // See MenuLinkTree->buildItems() which this imitates.
       $menu_link = [
-        'title' => $accessibility_statement->getTitle(),
+        'title' => 'Accessibility statement',
         'url' => Url::fromRoute('entity.node.canonical', ['node' => $accessibility_statement->id()]),
         'is_collapsed' => FALSE,
         'is_expanded' => FALSE,
