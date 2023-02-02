@@ -37,7 +37,7 @@
       <h2 class="card__title">{{ title }}</h2>
       <div class="card__content">
         {% if content_summary %}
-          {{ content_summary }}
+          {{ content_summary|render|striptags|raw }}
         {% endif %}
       </div>
     </a>
