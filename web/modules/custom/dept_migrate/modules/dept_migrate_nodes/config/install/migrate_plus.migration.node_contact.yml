@@ -62,8 +62,7 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  field_map_location/lng: field_map/0/lon
-  field_map_location/lat: field_map/0/lat
+  field_map: field_map
   field_site_subtopics:
     - plugin: sub_process
       source: field_site_subtopics

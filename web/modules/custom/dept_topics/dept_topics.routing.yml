@@ -1,9 +1,0 @@
-dept_topics.dept_list:
-  path: '/admin/content/stacks/depts'
-  defaults:
-    _controller: '\Drupal\dept_topics\Controller\ContentStacksController::default'
-    _title: 'Department topics/subtopics: manage stacks'
-  options:
-    _admin_route: TRUE
-  requirements:
-    _permission: 'administer content'

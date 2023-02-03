@@ -7,9 +7,7 @@
  */
 
 use Drupal\Core\Link;
-use Drupal\dept_core\Department;
 use Drupal\node\NodeInterface;
-use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
 
@@ -25,48 +23,49 @@ function dept_topics_preprocess_node(array &$variables) {
   }
 
   if ($node->bundle() === 'topic' && $view_mode === 'full') {
-
-    $subtopics_to_display = \Drupal::service('dept_topics.topics')
-      ->getSubtopicsForTopic($node);
+    // For each topic, define a map of what subtopics appear.
+    // Each subtopic block is then rendered in turn with the subtopic id and number of items
+    // to show passed in as block/views display parameters.
+    $subtopics_to_display = dept_topics_subtopics_queue_for_topic($node);
 
     if (!empty($subtopics_to_display)) {
       foreach ($subtopics_to_display as $subtopic_id => $subtopic_title) {
-        // Service to pull in subtopic content instead of the fixed code here.
-        $content_links = \Drupal::service('dept_topics.subtopics')
-          ->getSubtopicContent($subtopic_id);
+        // Get subtopic content.
+        $ids = \Drupal::entityQuery('node')
+          ->condition('type', 'article')
+          ->condition('status', 1)
+          ->condition('field_site_topics', $node->id())
+          ->condition('field_site_subtopics', $subtopic_id)
+          ->sort('title', 'ASC')
+          ->execute();
+
+        $subtopic_nodes = \Drupal::entityTypeManager()
+          ->getStorage('node')->loadMultiple($ids);
+
+        $content_links = [];
+        foreach ($subtopic_nodes as $content_node) {
+          /** @var \Drupal\node\NodeInterface $content_node */
+          $content_links[] = $content_node->toLink()->toRenderable();
+        }
 
         // Add render array elements we can call from the node-topic--full template.
-        $variables['content']['subtopics_list'][] = [
+        $variables['subtopics_content']['subtopic_' . $subtopic_id] = [
           '#theme' => 'subtopic_content_list',
-          '#title' => $subtopic_title,
+          '#title' => $subtopics_to_display[$subtopic_id],
           '#title_link' => Link::createFromRoute(
             $subtopic_title,
             'entity.node.canonical',
-            ['node' => $subtopic_id],
+            ['node' => $node->id()],
           ),
           '#content_links' => $content_links,
           '#read_more_link' => Link::createFromRoute(
             t('Read more'),
             'entity.node.canonical',
-            ['node' => $subtopic_id],
+            ['node' => $node->id()],
           ),
-          '#cache' => [
-            'keys' => ['subtopic_' . $subtopic_id],
-          ]
         ];
       }
     }
-  }
-
-  if ($node->bundle() === 'subtopic' && $view_mode === 'full') {
-    $subtopics_content = \Drupal::service('dept_topics.subtopics')
-      ->getSubtopicContent($node->id());
-
-    $variables['content'][] = [
-      '#theme' => 'item_list',
-      '#list_type' => 'ul',
-      '#items' => $subtopics_content,
-    ];
   }
 }
 
@@ -84,4 +83,36 @@ function dept_topics_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
+}
+
+/**
+ * Function to return a list of keyed subtopic node ids/labels
+ * that reference a specified topic node.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ *   The topic node.
+ *
+ * @return array
+ *   Array of subtopic id/label values, e.g.: [1 => 'Angling'].
+ */
+function dept_topics_subtopics_queue_for_topic(NodeInterface $node) {
+  $queue = [];
+
+  if ($node->bundle() === 'topic') {
+    // Find all subtopics that reference this topic.
+    $ids = \Drupal::entityQuery('node')
+      ->condition('type', 'subtopic')
+      ->condition('status', 1)
+      ->condition('field_parent_topic', $node->id())
+      ->execute();
+
+    $subtopic_nodes = \Drupal::entityTypeManager()
+      ->getStorage('node')->loadMultiple($ids);
+
+    foreach ($subtopic_nodes as $node) {
+      $queue[$node->id()] = $node->label();
+    }
+  }
+
+  return $queue;
 }

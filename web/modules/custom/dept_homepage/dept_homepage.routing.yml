@@ -1,7 +1,0 @@
-dept_homepage.homepage_controller_default:
-  path: '/homepage'
-  defaults:
-    _controller: '\Drupal\dept_homepage\Controller\HomepageController::default'
-    _title: 'Home'
-  requirements:
-    _permission: 'access content'
