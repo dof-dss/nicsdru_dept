@@ -40,8 +40,8 @@ backend_config:
   connector: standard
   connector_config:
     scheme: http
-    host: solr.internal
-    port: 8080
+    host: solr
+    port: 8983
     path: /
     core: default
     timeout: 5

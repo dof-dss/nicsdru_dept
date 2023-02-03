@@ -1,14 +1,16 @@
-uuid: d53528e8-de54-4922-8673-5425e33c06fd
+uuid: 8174aaaf-10ec-4db4-85d2-785551cbdbc8
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: KkSQqqXKqRjUS7HdFxgvbOKPleaMDg954_5w5TzbwS4
 id: d7_file
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_files
+migration_group: migrate_files
 label: 'Public files'
 source:
   plugin: d7_file_uuid

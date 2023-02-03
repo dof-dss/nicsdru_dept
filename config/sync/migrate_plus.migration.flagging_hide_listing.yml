@@ -1,14 +1,16 @@
-uuid: 111c03c6-a2cc-4d56-8775-e051ebc0a92f
+uuid: eb899b88-2e41-4d95-9e55-1a87045cd69f
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: gYC4cw5ZnyaZgAtJ0L30sHUyJR50IATrLO23IB1EP8I
 id: flagging_hide_listing
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_flags
+migration_group: migrate_flags
 label: 'Flags - Hide listing'
 source:
   plugin: flagging_source

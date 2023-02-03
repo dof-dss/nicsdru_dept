@@ -4,6 +4,9 @@ status: true
 dependencies:
   config:
     - field.field.node.news.body
+    - field.field.node.news.field_domain_access
+    - field.field.node.news.field_domain_all_affiliates
+    - field.field.node.news.field_domain_source
     - field.field.node.news.field_global_topics
     - field.field.node.news.field_metatags
     - field.field.node.news.field_news_type
@@ -21,7 +24,6 @@ dependencies:
     - chosen_field
     - content_moderation
     - datetime
-    - entitygroupfield
     - media_library
     - metatag
     - path
@@ -48,15 +50,24 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  entitygroupfield:
-    type: entitygroupfield_select_widget
-    weight: 23
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
     region: content
     settings:
-      help_text: ''
-      label: 'Group name'
-      multiple: true
-      required: false
+      display_label: true
+    third_party_settings: {  }
+  field_domain_source:
+    type: options_select
+    weight: 42
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_global_topics:
     type: chosen_select

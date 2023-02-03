@@ -8,6 +8,9 @@ dependencies:
     - field.field.node.heritage_site.field_address_line_1
     - field.field.node.heritage_site.field_address_line_2
     - field.field.node.heritage_site.field_county
+    - field.field.node.heritage_site.field_domain_access
+    - field.field.node.heritage_site.field_domain_all_affiliates
+    - field.field.node.heritage_site.field_domain_source
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
     - field.field.node.heritage_site.field_historic_map_viewer_link
@@ -51,6 +54,9 @@ hidden:
   field_address_line_1: true
   field_address_line_2: true
   field_county: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
   field_email: true
   field_grid_reference: true
   field_historic_map_viewer_link: true

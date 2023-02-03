@@ -1,14 +1,16 @@
-uuid: 2429dcb7-fb60-4ca5-9f0d-620571439d1f
+uuid: e351c712-e918-44ad-998a-d39ab290bfaf
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: gO1zAsyq3rfqyFR2Im4rn45CU0UlxwsF8oSB9jleSJs
 id: node_news
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_nodes
+migration_group: migrate_nodes
 label: 'News content type nodes'
 source:
   plugin: d7_dept_node
@@ -136,7 +138,6 @@ process:
           -
             plugin: d7_node_lookup
             source: target_id
-  field_original_domain: field_original_domain
   field_published_date:
     -
       plugin: sub_process
@@ -147,6 +148,16 @@ process:
           from_format: 'Y-m-d H:i:s'
           to_format: Y-m-d
           source: value
+  field_domain_access:
+    -
+      plugin: sub_process
+      source: domain_access_node
+      process:
+        target_id: target_id
+  field_domain_all_affiliates:
+    -
+      plugin: get
+      source: domain_all_affiliates
 destination:
   plugin: 'entity:node'
   default_bundle: news

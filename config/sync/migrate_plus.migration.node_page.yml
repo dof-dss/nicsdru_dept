@@ -1,14 +1,16 @@
-uuid: d2e2e5b4-4c51-453e-833e-9605a887bc51
+uuid: c68e7740-a8a3-4f66-88e8-a5193b6191cd
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: CJvprPbecPdyTdT5LxZVR4ObT3HrQpD3zE47qf5Viqs
 id: node_page
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_nodes
+migration_group: migrate_nodes
 label: 'Page nodes'
 source:
   plugin: d7_dept_node
@@ -75,7 +77,16 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  field_original_domain: field_original_domain
+  field_domain_access:
+    -
+      plugin: sub_process
+      source: domain_access_node
+      process:
+        target_id: target_id
+  field_domain_all_affiliates:
+    -
+      plugin: get
+      source: domain_all_affiliates
 destination:
   plugin: 'entity:node'
   default_bundle: page

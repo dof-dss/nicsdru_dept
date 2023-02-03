@@ -6,6 +6,9 @@ dependencies:
     - field.field.node.protected_area.body
     - field.field.node.protected_area.field_council
     - field.field.node.protected_area.field_county
+    - field.field.node.protected_area.field_domain_access
+    - field.field.node.protected_area.field_domain_all_affiliates
+    - field.field.node.protected_area.field_domain_source
     - field.field.node.protected_area.field_metatags
     - field.field.node.protected_area.field_protected_area_documents
     - field.field.node.protected_area.field_protected_area_feature
@@ -72,6 +75,25 @@ content:
   field_county:
     type: options_select
     weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_domain_source:
+    type: options_select
+    weight: 42
     region: content
     settings: {  }
     third_party_settings: {  }

@@ -2,7 +2,7 @@
 
 namespace Drupal\dept_migrate\Plugin\migrate\source\d7;
 
-use Drupal\dept_migrate_group_nodes\Plugin\migrate\source\d7\Node;
+use Drupal\dept_migrate_nodes\Plugin\migrate\source\d7\Node;
 use Drupal\migrate\Row;
 
 /**

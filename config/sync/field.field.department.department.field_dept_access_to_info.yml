@@ -1,0 +1,21 @@
+uuid: 90f460c1-ae34-43e3-bf29-108b12d7748f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.department.field_dept_access_to_info
+  module:
+    - dept_core
+    - text
+id: department.department.field_dept_access_to_info
+field_name: field_dept_access_to_info
+entity_type: department
+bundle: department
+label: 'Access to information'
+description: 'Enter information on how customers make FOI and other types of information access requests.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

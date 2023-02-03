@@ -3,7 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.user.user.field_domain_access
     - field.field.user.user.field_domain_admin
+    - field.field.user.user.field_domain_all_affiliates
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
@@ -23,11 +25,24 @@ content:
   contact:
     weight: 5
     region: content
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_domain_admin:
     type: options_buttons
     weight: 50
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   language:
     weight: 0
@@ -50,4 +65,7 @@ content:
       preview_image_style: thumbnail
     third_party_settings: {  }
 hidden:
+  entitygroupfield: true
+  groups: true
+  groups_type_department_site: true
   langcode: true

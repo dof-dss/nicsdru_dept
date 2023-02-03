@@ -1,14 +1,16 @@
-uuid: 93a86b30-d616-463f-a9d5-b5e8f42e4121
+uuid: 22665fc4-527f-4c71-8592-198b857b2bee
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: fQkly2q8Q2caCWLwo2m0pV1INasEb0qmgiVVmiEkTTI
 id: node_collection
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_nodes
+migration_group: migrate_nodes
 label: 'Collection content type nodes'
 source:
   plugin: d7_dept_node
@@ -75,6 +77,16 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
+  field_domain_access:
+    -
+      plugin: sub_process
+      source: domain_access_node
+      process:
+        target_id: target_id
+  field_domain_all_affiliates:
+    -
+      plugin: get
+      source: domain_all_affiliates
 destination:
   plugin: 'entity:node'
   default_bundle: book

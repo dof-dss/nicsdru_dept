@@ -1,0 +1,14 @@
+uuid: 2106bf23-7f03-45d7-aa53-87055e329dc6
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: tyiT2xPRd4grFEpqjzQbj2Db4hIRzRKbhTc0teINfU4
+id: migrate_files
+label: 'Departmental sites - Files'
+description: 'Migrate files'
+source_type: 'Drupal 7'
+module: null
+shared_configuration:
+  source:
+    key: drupal7db

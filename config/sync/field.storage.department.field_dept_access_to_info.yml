@@ -1,0 +1,19 @@
+uuid: 1ef406cc-f1ec-46b3-bb6c-e4af11a9f130
+langcode: en
+status: true
+dependencies:
+  module:
+    - dept_core
+    - text
+id: department.field_dept_access_to_info
+field_name: field_dept_access_to_info
+entity_type: department
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

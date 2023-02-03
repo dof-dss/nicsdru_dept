@@ -1,14 +1,16 @@
-uuid: 52fdf71c-532f-4ae0-a4ac-d20a881ae558
+uuid: a53ef568-a17b-4a22-bf9f-8c8740c7c7d4
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: xTfaU1hpWmNpKehsPgZY-TNTDGQz2wZNrVH7Cr2MaxA
 id: node_landing_page
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_nodes
+migration_group: migrate_nodes
 label: 'Landing page nodes'
 source:
   plugin: d7_dept_node
@@ -131,6 +133,16 @@ process:
   field_facebook_user: field_facebook_user
   field_tweet_count: field_tweet_count
   field_twitter_user: field_twitter_user
+  field_domain_access:
+    -
+      plugin: sub_process
+      source: domain_access_node
+      process:
+        target_id: target_id
+  field_domain_all_affiliates:
+    -
+      plugin: get
+      source: domain_all_affiliates
 destination:
   plugin: 'entity:node'
   default_bundle: landing_page

@@ -126,7 +126,7 @@ class RelToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
     $depts = $this->departmentManager->getAllDepartments();
 
     foreach ($depts as $dept) {
-      $domains[$dept->groupId()] = $dept->name();
+      $domains[$dept->id()] = $dept->name();
     }
 
     $form['process_domains'] = [

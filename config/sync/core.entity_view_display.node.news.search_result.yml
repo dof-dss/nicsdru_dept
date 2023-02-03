@@ -5,6 +5,9 @@ dependencies:
   config:
     - core.entity_view_mode.node.search_result
     - field.field.node.news.body
+    - field.field.node.news.field_domain_access
+    - field.field.node.news.field_domain_all_affiliates
+    - field.field.node.news.field_domain_source
     - field.field.node.news.field_global_topics
     - field.field.node.news.field_metatags
     - field.field.node.news.field_news_type
@@ -55,6 +58,9 @@ hidden:
   body: true
   content_moderation_control: true
   entitygroupfield: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
   field_global_topics: true
   field_metatags: true
   field_news_type: true

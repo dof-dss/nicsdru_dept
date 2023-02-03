@@ -1,0 +1,21 @@
+uuid: 2f4395a3-bf75-4e07-bd1b-4a6a5d79bc5d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.department.field_dept_location
+  module:
+    - dept_core
+    - geolocation
+id: department.department.field_dept_location
+field_name: field_dept_location
+entity_type: department
+bundle: department
+label: Location
+description: 'Set the location for this point of contact using Google Maps.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: geolocation

@@ -1,14 +1,16 @@
-uuid: 3f878124-9d11-4457-97d6-56bc0f22b1ee
+uuid: 99569c06-7159-4ceb-b42e-81550403d43b
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: qtRhHuzG5cwppM6f6rdkXPdfyiaoFWlllWaN3fmAh78
 id: d7_file_media_secure_file
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_files
+migration_group: migrate_files
 label: 'Migrate D7 files to "secure file" media entities'
 source:
   plugin: file_entity

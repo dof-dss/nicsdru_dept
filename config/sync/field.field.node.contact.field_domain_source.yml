@@ -1,0 +1,25 @@
+uuid: d461f449-1db7-4a63-a343-628f83e1d078
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_domain_source
+    - node.type.contact
+id: node.contact.field_domain_source
+field_name: field_domain_source
+entity_type: node
+bundle: contact
+label: 'Domain Source'
+description: 'Select the canonical domain for this content.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:domain'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: weight
+      direction: ASC
+field_type: entity_reference

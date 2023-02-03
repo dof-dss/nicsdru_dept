@@ -1,0 +1,19 @@
+uuid: 0eeaf137-26f4-40be-b96b-3eadcf0d1ed8
+langcode: en
+status: true
+dependencies:
+  module:
+    - dept_core
+    - geolocation
+id: department.field_dept_location
+field_name: field_dept_location
+entity_type: department
+type: geolocation
+settings: {  }
+module: geolocation
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

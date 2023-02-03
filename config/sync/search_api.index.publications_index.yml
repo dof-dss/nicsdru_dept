@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
+    - field.storage.node.field_domain_access
     - field.storage.node.field_global_topics
     - field.storage.node.field_published_date
     - field.storage.node.field_site_topics
@@ -15,8 +16,6 @@ dependencies:
     - node
     - user
     - taxonomy
-    - entitygroupfield
-    - group
     - scheduler
     - search_api
 third_party_settings:
@@ -76,14 +75,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
-  entitygroupfield:
-    label: Groups
+  field_domain_access:
+    label: 'Domain Access'
     datasource_id: 'entity:node'
-    property_path: entitygroupfield
-    type: integer
+    property_path: field_domain_access
+    type: string
     dependencies:
-      module:
-        - entitygroupfield
+      config:
+        - field.storage.node.field_domain_access
   field_global_topics:
     label: 'Global topics'
     datasource_id: 'entity:node'
@@ -145,15 +144,6 @@ field_settings:
         - field.storage.node.field_global_topics
       module:
         - taxonomy
-  group_id:
-    label: 'Groups » Group content » Parent group » Group » ID'
-    datasource_id: 'entity:node'
-    property_path: 'entitygroupfield:entity:gid:entity:id'
-    type: integer
-    dependencies:
-      module:
-        - entitygroupfield
-        - group
   name:
     label: 'Authored by » User » Name'
     datasource_id: 'entity:node'
@@ -228,6 +218,7 @@ processor_settings:
     all_fields: true
     fields:
       - body
+      - field_domain_access
       - field_publication_type
       - field_summary
       - global_topics_name

@@ -4,6 +4,9 @@ status: true
 dependencies:
   config:
     - field.field.node.webform.body
+    - field.field.node.webform.field_domain_access
+    - field.field.node.webform.field_domain_all_affiliates
+    - field.field.node.webform.field_domain_source
     - field.field.node.webform.field_metatags
     - field.field.node.webform.webform
     - node.type.webform
@@ -47,6 +50,9 @@ content:
     region: content
 hidden:
   entitygroupfield: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
   groups: true
   groups_type_department_site: true
   langcode: true

@@ -83,8 +83,8 @@ class MdashContentController extends ControllerBase {
     $plugin_block = $this->blockManager->createInstance('dept_mdash_error_summary', []);
     $error_summary_block = $plugin_block->build();
 
-    $plugin_block = $this->blockManager->createInstance('dept_mdash_relationship_summary', []);
-    $relationship_summary_block = $plugin_block->build();
+    $plugin_block = $this->blockManager->createInstance('dept_mdash_domain_access', []);
+    $domain_access_block = $plugin_block->build();
 
     $plugin_block = $this->blockManager->createInstance('dept_mdash_log_viewer', []);
     $log_viewer_block = $plugin_block->build();
@@ -93,10 +93,8 @@ class MdashContentController extends ControllerBase {
       '#theme' => 'mdash_dashboard',
       '#content_summary' => $content_summary_block,
       '#error_summary' => $error_summary_block,
-      '#relationship_summary' => $relationship_summary_block,
+      '#domain_access' => $domain_access_block,
       '#last_migration' => $this->lastMigation(),
-      '#group_relationships' => $this->groupRelationships(),
-      '#last_group_relationships_process' => $this->lastGroupRelationshipsProcess(),
       '#null_destination_nodes' => $this->nullDestinationNodes(),
       '#log_output' => $log_viewer_block,
       '#attached' => [
@@ -122,34 +120,6 @@ class MdashContentController extends ControllerBase {
 
     if ($last_import_ts !== NULL) {
       return $this->dateFormatter->format((int) ($last_import_ts / 1000), 'custom', 'd M Y');
-    }
-
-    return '';
-  }
-
-  /**
-   * Returns the total number of Group relationships.
-   *
-   * @return string
-   *   Number of group relationships.
-   */
-  public function groupRelationships() {
-    $total = $this->dbConn->select('group_content')->countQuery()->execute()->fetchField();
-
-    return $total;
-  }
-
-  /**
-   * Returns the date for when Group relationship were last processed.
-   *
-   * @return string
-   *   Date of last relationship process or an empty string.
-   */
-  public function lastGroupRelationshipsProcess() {
-    $last_processed_ts = $this->configFactory->get('dept_etgrm.data')->get('processed_ts');
-
-    if ($last_processed_ts !== NULL) {
-      return $this->dateFormatter->format((int) $last_processed_ts, 'custom', 'd M Y');
     }
 
     return '';
