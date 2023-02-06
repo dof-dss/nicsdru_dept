@@ -12,6 +12,7 @@ type: 'php:8.1'
 variables:
   php:
     memory_limit: "256M"
+    xdebug.mode: "debug"
 
 dependencies:
   php:
@@ -22,6 +23,8 @@ runtime:
   extensions:
     - apcu
     - redis
+  xdebug:
+    idekey: PHPSTORM
 
 # The relationships of the application with services or other applications.
 #
