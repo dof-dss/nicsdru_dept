@@ -7,9 +7,6 @@
 
 use Drupal\dept_core\Entity\Department;
 use Drupal\Core\Link;
-use Drupal\dept_core\Department;
-use Drupal\dept_node\Entity\Node;
-use Drupal\dept_node\Form\NodeForm;
 use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
