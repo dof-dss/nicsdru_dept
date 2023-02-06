@@ -155,7 +155,6 @@ process:
     -
       plugin: get
       source: domain_all_affiliates
->>>>>>> development
 destination:
   plugin: 'entity:node'
   default_bundle: heritage_site
