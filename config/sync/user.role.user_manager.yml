@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - content_moderation
+    - domain_access
     - media
 id: user_manager
 label: 'user manager'

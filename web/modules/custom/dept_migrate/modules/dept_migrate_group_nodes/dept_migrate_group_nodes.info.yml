@@ -1,9 +1,0 @@
-name: 'Department sites: migration -- Group :: Nodes'
-type: module
-description: 'Group nodes migration module for departmental sites'
-core_version_requirement: ^8.8 || ^9
-package: 'NICS: Departmental'
-dependencies:
-  - dept_migrate
-  - dept_migrate_group_users
-  - group

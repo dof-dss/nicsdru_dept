@@ -3,8 +3,10 @@
 namespace Drupal\dept_core;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\domain\Entity\Domain;
 use Drupal\node\NodeInterface;
 use Drupal\path_alias\AliasManagerInterface;
+use Drupal\domain_access\DomainAccessManager;
 
 /**
  * Class to inspect url and return the absolute path
@@ -75,26 +77,16 @@ class Rel2AbsUrl {
     }
 
     if ($node instanceof NodeInterface) {
-      if (method_exists($node, 'getGroups')) {
-        $groups = $node->getGroups();
+      $domain_id = DomainAccessManager::getAccessValues($node, 'field_domain_access');
 
-        if (!empty($groups)) {
-          foreach ($groups as $gid => $group_label) {
-            // If there's more than one group skip the NIGov group.
-            if (count($groups) > 1 && $gid === 1) {
-              continue;
-            }
-
-            $dept = $this->deptManager->getDepartment('group_' . $gid);
-            $hostname = $dept->hostname();
-
-            // Early return means exit on first match, but this could
-            // be adjusted to append to an array in future if more
-            // group links were needed at a later date.
-            return 'https://' . $hostname . $url;
-          }
-        }
+      if (!empty($domain_id)) {
+        /** @var $domain \Drupal\domain\Entity\Domain */
+        // @phpstan-ignore-next-line
+        $domain = $this->entityTypeManager->getStorage('domain')->load(array_key_first($domain_id));
+        // @phpstan-ignore-next-line
+        return $domain->getPath() . $url;
       }
+
       // Return the original link if we can't process it.
       return 'https://' . $url;
     }

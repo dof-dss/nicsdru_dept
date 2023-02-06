@@ -4,7 +4,10 @@ status: true
 dependencies:
   config:
     - field.field.node.contact.body
-    - field.field.node.contact.field_map_location
+    - field.field.node.contact.field_domain_access
+    - field.field.node.contact.field_domain_all_affiliates
+    - field.field.node.contact.field_domain_source
+    - field.field.node.contact.field_map
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
     - field.field.node.contact.field_site_subtopics
@@ -41,9 +44,28 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_map_location:
-    type: geolocation_googlegeocoder
-    weight: 15
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_domain_source:
+    type: options_select
+    weight: 42
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_map:
+    type: google_map_field_default
+    weight: 26
     region: content
     settings:
       auto_client_location: ''

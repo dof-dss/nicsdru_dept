@@ -1,14 +1,16 @@
-uuid: 5971807d-5ee1-4bdf-abc2-b88630496487
+uuid: e21bda49-fd61-4414-8199-52b0971ea100
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: tPALo80Sb_L07wq7SmJ2XhgFHEfb1EbnlWXeo8LDdiI
 id: users
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_users
+migration_group: migrate_users
 label: Users
 source:
   plugin: d7_user_uuid

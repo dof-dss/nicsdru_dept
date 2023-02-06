@@ -1,14 +1,16 @@
-uuid: 81cd7632-25fc-46c7-8a56-8fd22e796a42
+uuid: dfa21610-c8ba-4567-918b-54afc21e681f
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: S1_QowXCoK2rqlYMzMQwi__yPxrnAB2a_6fBmutTH6A
 id: flagging_display_on_rss_feeds
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_flags
+migration_group: migrate_flags
 label: 'Flags - Display on RSS feeds'
 source:
   plugin: flagging_source

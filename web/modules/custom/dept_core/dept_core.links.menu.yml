@@ -1,0 +1,10 @@
+entity.department.settings:
+  title: 'Department'
+  description: 'Configure a Department entity type.'
+  route_name:  entity.department.settings
+  parent: system.admin_structure
+entity.department.collection:
+  title: 'Departments'
+  description: 'List of departments.'
+  route_name: entity.department.collection
+  parent: system.admin_content

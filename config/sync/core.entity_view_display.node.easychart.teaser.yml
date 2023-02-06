@@ -7,6 +7,9 @@ dependencies:
     - field.field.node.easychart.body
     - field.field.node.easychart.easychart
     - field.field.node.easychart.field_chart_taxonomy
+    - field.field.node.easychart.field_domain_access
+    - field.field.node.easychart.field_domain_all_affiliates
+    - field.field.node.easychart.field_domain_source
     - field.field.node.easychart.field_indicators
     - field.field.node.easychart.field_metatags
     - node.type.easychart
@@ -25,6 +28,9 @@ hidden:
   easychart: true
   entitygroupfield: true
   field_chart_taxonomy: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
   field_indicators: true
   field_metatags: true
   groups: true

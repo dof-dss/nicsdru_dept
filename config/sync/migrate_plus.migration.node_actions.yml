@@ -1,14 +1,16 @@
-uuid: 674687cd-15c7-4bd6-b86f-ff14f9c645dd
+uuid: a7ac702c-a020-4bdd-be7e-01dfc600c8da
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: Lo9J31mIuYBWmtyNgSm5IKuc0-EJLi0VrNJ0ABfxElM
 id: node_actions
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_nodes
+migration_group: migrate_nodes
 label: 'Actions content type nodes'
 source:
   plugin: d7_dept_node
@@ -81,6 +83,16 @@ process:
       source: field_outcomes
       process:
         target_id: tid
+  field_domain_access:
+    -
+      plugin: sub_process
+      source: domain_access_node
+      process:
+        target_id: target_id
+  field_domain_all_affiliates:
+    -
+      plugin: get
+      source: domain_all_affiliates
 destination:
   plugin: 'entity:node'
   default_bundle: actions

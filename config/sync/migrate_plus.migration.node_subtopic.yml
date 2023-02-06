@@ -1,14 +1,16 @@
-uuid: 3ac380e8-331c-49d3-8d4c-c505fca9effe
+uuid: 9806dae6-097c-4fa5-ae67-360618ba1d26
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: _kQX4rzLhbJ90gbD_coJSt3KwLpi5vl63EvHL8YrACM
 id: node_subtopic
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_nodes
+migration_group: migrate_nodes
 label: 'Subtopic content type nodes'
 source:
   plugin: d7_dept_node
@@ -110,6 +112,16 @@ process:
     -
       plugin: field_link
       source: field_link
+  field_domain_access:
+    -
+      plugin: sub_process
+      source: domain_access_node
+      process:
+        target_id: target_id
+  field_domain_all_affiliates:
+    -
+      plugin: get
+      source: domain_all_affiliates
 destination:
   plugin: 'entity:node'
   default_bundle: subtopic

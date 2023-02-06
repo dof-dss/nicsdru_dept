@@ -5,6 +5,9 @@ dependencies:
   config:
     - core.entity_view_mode.node.search_result
     - field.field.node.topic.body
+    - field.field.node.topic.field_domain_access
+    - field.field.node.topic.field_domain_all_affiliates
+    - field.field.node.topic.field_domain_source
     - field.field.node.topic.field_metatags
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
@@ -47,6 +50,9 @@ hidden:
   body: true
   content_moderation_control: true
   entitygroupfield: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
   field_metatags: true
   field_photo: true
   groups: true

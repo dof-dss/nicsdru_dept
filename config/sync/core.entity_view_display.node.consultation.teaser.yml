@@ -7,6 +7,9 @@ dependencies:
     - field.field.node.consultation.body
     - field.field.node.consultation.field_attachment
     - field.field.node.consultation.field_consultation_dates
+    - field.field.node.consultation.field_domain_access
+    - field.field.node.consultation.field_domain_all_affiliates
+    - field.field.node.consultation.field_domain_source
     - field.field.node.consultation.field_email_address
     - field.field.node.consultation.field_global_topics
     - field.field.node.consultation.field_metatags
@@ -43,6 +46,9 @@ hidden:
   entitygroupfield: true
   field_attachment: true
   field_consultation_dates: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
   field_email_address: true
   field_global_topics: true
   field_metatags: true

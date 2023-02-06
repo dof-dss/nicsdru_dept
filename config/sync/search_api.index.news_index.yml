@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
+    - field.storage.node.field_domain_access
+    - field.storage.node.field_domain_source
     - field.storage.node.field_global_topics
     - field.storage.node.field_summary
     - field.storage.node.field_news_type
@@ -12,8 +14,6 @@ dependencies:
   module:
     - search_api_solr
     - node
-    - entitygroupfield
-    - group
     - search_api
 third_party_settings:
   search_api_solr:
@@ -72,14 +72,22 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
-  entitygroupfield:
-    label: Groups
+  field_domain_access:
+    label: 'Domain Access'
     datasource_id: 'entity:node'
-    property_path: entitygroupfield
-    type: integer
+    property_path: field_domain_access
+    type: string
     dependencies:
-      module:
-        - entitygroupfield
+      config:
+        - field.storage.node.field_domain_access
+  field_domain_source:
+    label: 'Domain Source'
+    datasource_id: 'entity:node'
+    property_path: field_domain_source
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_domain_source
   field_global_topics:
     label: 'Global topics'
     datasource_id: 'entity:node'
@@ -113,24 +121,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_summary
-  group_id:
-    label: 'Groups » Group content » Parent group » Group » ID'
-    datasource_id: 'entity:node'
-    property_path: 'entitygroupfield:entity:gid:entity:id'
-    type: integer
-    dependencies:
-      module:
-        - entitygroupfield
-        - group
-  label:
-    label: 'Groups » Group content » Parent group » Group » Title'
-    datasource_id: 'entity:node'
-    property_path: 'entitygroupfield:entity:gid:entity:label'
-    type: string
-    dependencies:
-      module:
-        - entitygroupfield
-        - group
   node_grants:
     label: 'Node access information'
     property_path: search_api_node_grants

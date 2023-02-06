@@ -6,7 +6,7 @@ class: Drupal\migrate\Plugin\Migration
 migration_tags:
   - dept_sites
 label: 'Flags - Display on RSS feeds'
-migration_group: migrate_group_flags
+migration_group: migrate_flags
 source:
   plugin: flagging_source
   flag_id: 6

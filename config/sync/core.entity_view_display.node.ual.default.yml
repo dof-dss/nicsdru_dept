@@ -6,6 +6,9 @@ dependencies:
     - field.field.node.ual.field_age
     - field.field.node.ual.field_description
     - field.field.node.ual.field_distinguishing_marks
+    - field.field.node.ual.field_domain_access
+    - field.field.node.ual.field_domain_all_affiliates
+    - field.field.node.ual.field_domain_source
     - field.field.node.ual.field_eye_colour
     - field.field.node.ual.field_hair_colour
     - field.field.node.ual.field_offence
@@ -105,6 +108,9 @@ content:
 hidden:
   content_moderation_control: true
   entitygroupfield: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
   groups: true
   groups_type_department_site: true
   langcode: true

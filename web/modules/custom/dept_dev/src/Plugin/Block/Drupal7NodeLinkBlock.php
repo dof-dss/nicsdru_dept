@@ -8,6 +8,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\domain_access\DomainAccessManager;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -107,48 +108,21 @@ class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginIn
           $query = $this->dbConn->select($mapping_table, 'mt')
             ->condition('destid1', $node->id(), '=');
           $query->addField('mt', 'sourceid2', 'd7nid');
-          $query->addField('mt', 'sourceid3', 'domains');
 
           $result = $query->execute();
           $node_migration_data = $result->fetch();
 
-          // Iterate all domains and generate links.
+          $dept_manager = \Drupal::service('department.manager');
+          $department = $dept_manager->getCurrentDepartment();
+
           // @phpstan-ignore-next-line
-          $domains = explode('-', $node_migration_data->domains);
-          $domain_mappings = $this->configFactory->get('dept_dev.settings')->get('node_source_domains');
+          $node_link = 'https://' . $department->hostname(TRUE) . '/node/' . $node_migration_data->d7nid;
 
-          // Iterate each domain ID in the migration data.
-          foreach ($domains as $domain) {
-            // Iterate all domain mappings if the source domain for the node
-            // is 0 as this denotes that it belongs to all sites.
-            if ($domain == 0) {
-              foreach ($domain_mappings as $domain_map) {
-                if (substr($domain_map, 0, 4) !== "http") {
-                  continue;
-                }
-                // @phpstan-ignore-next-line
-                $node_link = $domain_map . '/node/' . $node_migration_data->d7nid;
-
-                $links[] = [
-                  '#title' => $domain_map . ' : ' . $node->label(),
-                  '#type' => 'link',
-                  '#url' => Url::fromUri($node_link),
-                ];
-              }
-              break;
-            }
-            else {
-              // @phpstan-ignore-next-line
-              $node_link = $domain_mappings[$domain] . '/node/' . $node_migration_data->d7nid;
-              if (preg_match('/^http/', $domain)) {
-                $links[] = [
-                  '#title' => $domain_mappings[$domain] . ' : ' . $node->label(),
-                  '#type' => 'link',
-                  '#url' => Url::fromUri($node_link),
-                ];
-              }
-            }
-          }
+          $links[] = [
+            '#title' => $node->label(),
+            '#type' => 'link',
+            '#url' => Url::fromUri($node_link),
+          ];
         }
       }
     }

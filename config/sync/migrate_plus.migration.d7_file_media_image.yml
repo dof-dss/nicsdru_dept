@@ -1,14 +1,16 @@
-uuid: 5c0891ad-ca38-4de8-b3af-e612284b93dd
+uuid: 3c90d673-15ac-4efd-9313-93def8dcaad4
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: Dw4hgXcKrGvV01i1k2dZIgfwkH-7DIPHDwwIPW5Hinw
 id: d7_file_media_image
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
 cck_plugin_method: null
 migration_tags:
   - dept_sites
-migration_group: migrate_group_files
+migration_group: migrate_files
 label: 'Migrate D7 files to media images'
 source:
   plugin: file_entity

@@ -1,0 +1,14 @@
+uuid: 3a3694f7-36e8-4670-90b4-dc135310a3f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.dept_admin
+  module:
+    - domain_access
+id: domain_access_add_action.dept_admin
+label: 'Add selected content to the Dept admin domain'
+type: node
+plugin: domain_access_add_action
+configuration:
+  domain_id: dept_admin

@@ -31,15 +31,13 @@ module:
   dept_content_processors: 0
   dept_core: 0
   dept_dev: 0
-  dept_etgrm: 0
-  dept_homepage: 0
   dept_mdash: 0
   dept_migrate: 0
+  dept_migrate_files: 0
   dept_migrate_flags: 0
-  dept_migrate_group_files: 0
-  dept_migrate_group_nodes: 0
-  dept_migrate_group_users: 0
+  dept_migrate_nodes: 0
   dept_migrate_taxo: 0
+  dept_migrate_users: 0
   dept_node: 0
   dept_publications: 0
   dept_search: 0
@@ -50,13 +48,14 @@ module:
   devel_generate: 0
   diff: 0
   domain: 0
+  domain_access: 0
   domain_alias: 0
   domain_config: 0
   domain_config_ui: 0
   domain_path: 0
   domain_path_pathauto: 0
   domain_site_settings: 0
-  draggableviews: 0
+  domain_source: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
   easychart: 0
@@ -65,7 +64,7 @@ module:
   entity: 0
   entity_browser: 0
   entity_embed: 0
-  entitygroupfield: 0
+  entityqueue: 0
   facets: 0
   facets_pretty_paths: 0
   facets_summary: 0
@@ -78,8 +77,6 @@ module:
   flag: 0
   geolocation: 0
   geolocation_google_maps: 0
-  geolocation_google_static_maps: 0
-  gnode: 0
   google_map_field: 0
   group: 0
   handy_cache_tags: 0
@@ -164,7 +161,6 @@ module:
   views_custom_cache_tag: 0
   views_tree: 0
   webform: 0
-  webform_group: 0
   webform_node: 0
   webform_options_limit: 0
   webform_ui: 0

@@ -1,0 +1,19 @@
+uuid: 479c7e49-2f3d-4397-b4ab-6b6a706cfa22
+langcode: en
+status: true
+dependencies:
+  module:
+    - dept_core
+    - text
+id: department.field_dept_contact_info
+field_name: field_dept_contact_info
+entity_type: department
+type: text_long
+settings: {  }
+module: text
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
