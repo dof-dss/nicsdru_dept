@@ -91,8 +91,8 @@ class ContentStacksController extends ControllerBase {
 
     if (!empty($depts)) {
       foreach ($depts as $dept) {
-        /** @var \Drupal\dept_core\Department $dept */
-        $dept_id = $dept->groupId();
+        /** @var \Drupal\dept_core\Entity\Department $dept */
+        $dept_id = $dept->id();
         $dept_name = $dept->name();
         $dept_url = Url::fromUri($dept->url());
 
