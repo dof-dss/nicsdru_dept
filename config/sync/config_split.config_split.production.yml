@@ -12,4 +12,5 @@ folder: ../config/production
 module: {  }
 theme: {  }
 complete_list: {  }
-partial_list: {  }
+partial_list:
+  - 'domain.record.*'

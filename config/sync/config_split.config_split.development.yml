@@ -6,10 +6,12 @@ id: development
 label: development
 description: 'Development environment split'
 weight: 0
-storage: null
+stackable: false
+storage: folder
 folder: ../config/development
 module:
   permissions_filter: 0
 theme: {  }
 complete_list: {  }
-partial_list: {  }
+partial_list:
+  - 'domain.record.*'
