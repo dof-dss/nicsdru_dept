@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_migrate_nodes\Plugin\migrate\source\d7;
 
+use Drupal\dept_migrate\MigrateUtils;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\migrate\Row;
 use Drupal\migrate_drupal\Plugin\migrate\source\d7\FieldableEntity;
@@ -281,7 +282,7 @@ class Node extends FieldableEntity {
         ->condition('da.domain_id', $domain)
         ->execute()
         ->fetchCol();
-      $row_source_properties[] = ['target_id' => $domain_target_ids[0]];
+      $row_source_properties[] = ['target_id' => MigrateUtils::d7DomianToD9Domain($domain_target_ids[0])];
     }
     return $row_source_properties;
   }
@@ -310,7 +311,7 @@ class Node extends FieldableEntity {
         ->condition('da.domain_id', $domain)
         ->execute()
         ->fetchCol();
-      $row_source_properties = $domain_target_ids[0];
+      $row_source_properties = MigrateUtils::d7DomianToD9Domain($domain_target_ids[0]);
     }
     return $row_source_properties;
   }
