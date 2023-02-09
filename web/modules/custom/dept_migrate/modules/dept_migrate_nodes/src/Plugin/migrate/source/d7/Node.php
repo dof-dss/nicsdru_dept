@@ -299,20 +299,21 @@ class Node extends FieldableEntity {
   private function getDomainSourceTargetId(int $nid) {
     $row_source_properties = [];
 
-    $domains = $this->select('domain_source', 'ds')
-      ->fields('ds', ['domain_id'])
-      ->condition('ds.nid', $nid)
+    $domain_id = $this->select('domain_access', 'da')
+      ->fields('da', ['gid'])
+      ->condition('da.realm', 'domain_id')
+      ->condition('da.nid', $nid)
+      ->condition('da.gid', '1', '<>')
       ->execute()
       ->fetchCol();
 
-    foreach ($domains as $domain) {
-      $domain_target_ids = $this->select('domain', 'da')
+    $domain_source_id = $this->select('domain', 'da')
         ->fields('da', ['machine_name'])
-        ->condition('da.domain_id', $domain)
+        ->condition('da.domain_id', $domain_id)
         ->execute()
         ->fetchCol();
-      $row_source_properties = MigrateUtils::d7DomianToD9Domain($domain_target_ids[0]);
-    }
+    $row_source_properties[] = ['target_id' => MigrateUtils::d7DomianToD9Domain($domain_source_id[0])];
+
     return $row_source_properties;
   }
 
