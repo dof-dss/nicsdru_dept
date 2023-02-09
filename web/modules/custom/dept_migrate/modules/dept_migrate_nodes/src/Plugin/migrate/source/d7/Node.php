@@ -182,7 +182,22 @@ class Node extends FieldableEntity {
     if ($this->getDomainSites($nid) != NULL) {
       $row->setSourceProperty('domain_all_affiliates', 1);
     }
-    $row->setSourceProperty('domain_access_node', $this->getDomainTargetIds($nid));
+
+    $domain_access_ids = $this->getDomainTargetIds($nid);
+
+    if (in_array($type, ['consultation', 'publication'])) {
+
+      $hasNiGovEntry = (bool) array_filter($domain_access_ids, function ($val, $key) {
+        return $val['target_id'] === 'nigov';
+      }, ARRAY_FILTER_USE_BOTH);
+
+      if (!$hasNiGovEntry) {
+        $domain_access_ids[] = ['target_id' => 'nigov'];
+      }
+    }
+
+    $row->setSourceProperty('domain_access_node', $domain_access_ids);
+    $row->setSourceProperty('domain_source_node', $this->getDomainTargetIds($nid));
 
     return parent::prepareRow($row);
   }
