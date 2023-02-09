@@ -186,7 +186,7 @@ class Node extends FieldableEntity {
     $domain_access_ids = $this->getDomainTargetIds($nid);
 
     if (in_array($type, ['consultation', 'publication'])) {
-
+      // If we do not have a domain_access entry for nigov, create one.
       $hasNiGovEntry = (bool) array_filter($domain_access_ids, function ($val, $key) {
         return $val['target_id'] === 'nigov';
       }, ARRAY_FILTER_USE_BOTH);
@@ -323,10 +323,10 @@ class Node extends FieldableEntity {
       ->fetchCol();
 
     $domain_source_id = $this->select('domain', 'da')
-        ->fields('da', ['machine_name'])
-        ->condition('da.domain_id', $domain_id)
-        ->execute()
-        ->fetchCol();
+      ->fields('da', ['machine_name'])
+      ->condition('da.domain_id', $domain_id)
+      ->execute()
+      ->fetchCol();
     $row_source_properties[] = ['target_id' => MigrateUtils::d7DomianToD9Domain($domain_source_id[0])];
 
     return $row_source_properties;
