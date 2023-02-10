@@ -141,6 +141,8 @@ class Node extends FieldableEntity {
     $vid = $row->getSourceProperty('vid');
     $type = $row->getSourceProperty('type');
     $row->setSourceProperty('uuid', $row->getSourceProperty('uuid'));
+    $node_fields = $this->getFields('node', $type);
+    $is_press_release = FALSE;
 
     // If this entity was translated using Entity Translation, we need to get
     // its source language to get the field values in the right language.
@@ -158,7 +160,7 @@ class Node extends FieldableEntity {
     }
 
     // Get Field API field values.
-    foreach ($this->getFields('node', $type) as $field_name => $field) {
+    foreach ($node_fields as $field_name => $field) {
       // Ensure we're using the right language if the entity and the field are
       // translatable.
       $field_language = $entity_translatable && $field['translatable'] ? $language : NULL;
@@ -185,13 +187,21 @@ class Node extends FieldableEntity {
 
     $domain_access_ids = $this->getDomainTargetIds($nid);
 
-    if (in_array($type, ['consultation', 'publication'])) {
+    // Determine if the News node is a 'Press release'.
+    if ($type === 'news' && $row->getSourceProperty('field_news_type')[0]['value'] !== 'pressrelease') {
+      $is_press_release = TRUE;
+    }
+
+    // If the node bundle is 'consultation', 'publication' or a 'news' node set
+    // as a 'press release' ensure we have a domain access entry for the
+    // nigov domain.
+    if (in_array($type, ['consultation', 'publication']) || $is_press_release === TRUE) {
       // If we do not have a domain_access entry for nigov, create one.
-      $hasNiGovEntry = (bool) array_filter($domain_access_ids, function ($val, $key) {
+      $has_nigov_entry = (bool) array_filter($domain_access_ids, function ($val, $key) {
         return $val['target_id'] === 'nigov';
       }, ARRAY_FILTER_USE_BOTH);
 
-      if (!$hasNiGovEntry) {
+      if (!$has_nigov_entry) {
         $domain_access_ids[] = ['target_id' => 'nigov'];
       }
     }
