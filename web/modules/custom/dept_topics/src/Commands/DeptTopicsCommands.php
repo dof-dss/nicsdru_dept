@@ -75,7 +75,7 @@ class DeptTopicsCommands extends DrushCommands {
     $this->io()->writeln("Syncing topics");
     $this->syncTopics();
 
-    $this->io()->writeln("Syncing topics");
+    $this->io()->writeln("Syncing subtopics");
     $this->syncSubtopics();
 
     $this->io()->success("Done!");
