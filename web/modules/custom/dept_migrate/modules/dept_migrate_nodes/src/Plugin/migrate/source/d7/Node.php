@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_migrate_nodes\Plugin\migrate\source\d7;
 
+use Drupal\dept_migrate\MigrateUtils;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\migrate\Row;
 use Drupal\migrate_drupal\Plugin\migrate\source\d7\FieldableEntity;
@@ -140,6 +141,8 @@ class Node extends FieldableEntity {
     $vid = $row->getSourceProperty('vid');
     $type = $row->getSourceProperty('type');
     $row->setSourceProperty('uuid', $row->getSourceProperty('uuid'));
+    $node_fields = $this->getFields('node', $type);
+    $is_press_release = FALSE;
 
     // If this entity was translated using Entity Translation, we need to get
     // its source language to get the field values in the right language.
@@ -157,7 +160,7 @@ class Node extends FieldableEntity {
     }
 
     // Get Field API field values.
-    foreach ($this->getFields('node', $type) as $field_name => $field) {
+    foreach ($node_fields as $field_name => $field) {
       // Ensure we're using the right language if the entity and the field are
       // translatable.
       $field_language = $entity_translatable && $field['translatable'] ? $language : NULL;
@@ -181,7 +184,30 @@ class Node extends FieldableEntity {
     if ($this->getDomainSites($nid) != NULL) {
       $row->setSourceProperty('domain_all_affiliates', 1);
     }
-    $row->setSourceProperty('domain_access_node', $this->getDomainTargetIds($nid));
+
+    $domain_access_ids = $this->getDomainTargetIds($nid);
+
+    // Determine if the News node is a 'Press release'.
+    if ($type === 'news' && $row->getSourceProperty('field_news_type')[0]['value'] !== 'pressrelease') {
+      $is_press_release = TRUE;
+    }
+
+    // If the node bundle is 'consultation', 'publication' or a 'news' node set
+    // as a 'press release' ensure we have a domain access entry for the
+    // nigov domain.
+    if (in_array($type, ['consultation', 'publication']) || $is_press_release === TRUE) {
+      // If we do not have a domain_access entry for nigov, create one.
+      $has_nigov_entry = (bool) array_filter($domain_access_ids, function ($val, $key) {
+        return $val['target_id'] === 'nigov';
+      }, ARRAY_FILTER_USE_BOTH);
+
+      if (!$has_nigov_entry) {
+        $domain_access_ids[] = ['target_id' => 'nigov'];
+      }
+    }
+
+    $row->setSourceProperty('domain_access_node', $domain_access_ids);
+    $row->setSourceProperty('domain_source_node', $this->getDomainTargetIds($nid));
 
     return parent::prepareRow($row);
   }
@@ -281,7 +307,7 @@ class Node extends FieldableEntity {
         ->condition('da.domain_id', $domain)
         ->execute()
         ->fetchCol();
-      $row_source_properties[] = ['target_id' => $domain_target_ids[0]];
+      $row_source_properties[] = ['target_id' => MigrateUtils::d7DomianToD9Domain($domain_target_ids[0])];
     }
     return $row_source_properties;
   }
@@ -298,20 +324,21 @@ class Node extends FieldableEntity {
   private function getDomainSourceTargetId(int $nid) {
     $row_source_properties = [];
 
-    $domains = $this->select('domain_source', 'ds')
-      ->fields('ds', ['domain_id'])
-      ->condition('ds.nid', $nid)
+    $domain_id = $this->select('domain_access', 'da')
+      ->fields('da', ['gid'])
+      ->condition('da.realm', 'domain_id')
+      ->condition('da.nid', $nid)
+      ->condition('da.gid', '1', '<>')
       ->execute()
       ->fetchCol();
 
-    foreach ($domains as $domain) {
-      $domain_target_ids = $this->select('domain', 'da')
-        ->fields('da', ['machine_name'])
-        ->condition('da.domain_id', $domain)
-        ->execute()
-        ->fetchCol();
-      $row_source_properties = $domain_target_ids[0];
-    }
+    $domain_source_id = $this->select('domain', 'da')
+      ->fields('da', ['machine_name'])
+      ->condition('da.domain_id', $domain_id)
+      ->execute()
+      ->fetchCol();
+    $row_source_properties[] = ['target_id' => MigrateUtils::d7DomianToD9Domain($domain_source_id[0])];
+
     return $row_source_properties;
   }
 
