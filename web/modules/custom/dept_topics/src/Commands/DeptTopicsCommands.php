@@ -46,13 +46,22 @@ class DeptTopicsCommands extends DrushCommands {
   protected Connection $d7DbConn;
 
   /**
+   * DB object.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected Connection $dbconn;
+
+  /**
    * Class constructor.
    */
-  public function __construct(EntityTypeManagerInterface $et_manager, MigrateUuidLookupManager $lookup_manager, MigrateSupport $migrate_support) {
+  public function __construct(EntityTypeManagerInterface $et_manager, MigrateUuidLookupManager $lookup_manager, MigrateSupport $migrate_support, Connection $dbconn) {
     parent::__construct();
     $this->etManager = $et_manager;
     $this->lookupManager = $lookup_manager;
     $this->migrateSupport = $migrate_support;
+    $this->dbconn = $dbconn;
+    $this->d7DbConn = Database::getConnection('default', 'drupal7db');
   }
 
   /**
@@ -110,7 +119,6 @@ class DeptTopicsCommands extends DrushCommands {
       foreach ($topics as $topic_data) {
         $d9_dept_id = $this->domainD7ToD9($d7_domain_id);
         $d9_topic_lookup = reset($this->lookupManager->lookupBySourceNodeId([$topic_data['nid']]));
-        $d9_topic_id = $d9_topic_lookup['nid'];
 
         $row = [
           'view_name' => 'content_stacks',
@@ -119,7 +127,7 @@ class DeptTopicsCommands extends DrushCommands {
           'entity_id' => $d9_topic_lookup['nid'],
           'weight' => $topic_data['weight'],
         ];
-        \Drupal::database()->insert('draggableviews_structure')
+        $this->dbconn->insert('draggableviews_structure')
           ->fields($row)->execute();
 
         $this->io()->writeln("Inserted row for Topic " . $topic_data['title']);
@@ -185,7 +193,7 @@ class DeptTopicsCommands extends DrushCommands {
             'entity_id' => $d9_subtopic_id,
             'weight' => $d7_subtopic_weight,
           ];
-          \Drupal::database()->insert('draggableviews_structure')
+          $this->dbconn->insert('draggableviews_structure')
             ->fields($row)->execute();
 
           // Per-subtopic, insert values for any articles referenced by them.
@@ -226,7 +234,7 @@ class DeptTopicsCommands extends DrushCommands {
           'weight' => $row['weight'],
         ];
 
-        \Drupal::database()->insert('draggableviews_structure')
+        $this->dbconn->insert('draggableviews_structure')
           ->fields($row)->execute();
       }
     }
@@ -239,8 +247,6 @@ class DeptTopicsCommands extends DrushCommands {
    *   The topics grouped by department id.
    */
   protected function getD7TopicsByDept() {
-    $d7DbConn = Database::getConnection('default', 'drupal7db');
-
     $sql = "SELECT
       da.gid,
       d.machine_name,
@@ -258,7 +264,7 @@ class DeptTopicsCommands extends DrushCommands {
       WHERE ds.view_name = 'topics'
       ORDER BY da.gid, ds.weight";
 
-    $result = $d7DbConn->query($sql)->fetchAll();
+    $result = $this->d7DbConn->query($sql)->fetchAll();
 
     // Tidy up and reformat the results array.
     $queue = [];
@@ -281,11 +287,9 @@ class DeptTopicsCommands extends DrushCommands {
    *   The D7 subtopics keyed by the parent topic id.
    */
   protected function getD7Subtopics() {
-    $d7DbConn = Database::getConnection('default', 'drupal7db');
-
     $subtopics = [];
 
-    $topics_to_query = $d7DbConn->query("SELECT nid,trim(title) as trim_title from {node} where type='topic' order by trim(title)")->fetchAll();
+    $topics_to_query = $this->d7DbConn->query("SELECT nid,trim(title) as trim_title from {node} where type='topic' order by trim(title)")->fetchAll();
     foreach ($topics_to_query as $topic) {
       $topic_id = $topic->nid;
       $topic_title = $topic->trim_title;
@@ -298,7 +302,7 @@ class DeptTopicsCommands extends DrushCommands {
       n.type = 'subtopic'
       ORDER by view_name, view_display, weight";
 
-      $result = $d7DbConn->query($sql)->fetchAll();
+      $result = $this->d7DbConn->query($sql)->fetchAll();
 
       // Tidy up and reformat the results array.
       foreach ($result as $row_object) {
@@ -322,8 +326,6 @@ class DeptTopicsCommands extends DrushCommands {
    *   D7 articles for the subtopic specified.
    */
   protected function getD7SubtopicArticles(int $d7_subtopic_id) {
-    $d7DbConn = Database::getConnection('default', 'drupal7db');
-
     $articles = [];
 
     $sql = "SELECT
@@ -334,7 +336,7 @@ class DeptTopicsCommands extends DrushCommands {
     n.type = 'article'
     ORDER by view_name, view_display, weight";
 
-    $result = $d7DbConn->query($sql)->fetchAll();
+    $result = $this->d7DbConn->query($sql)->fetchAll();
 
     // Tidy up and reformat the results array.
     foreach ($result as $row_object) {
