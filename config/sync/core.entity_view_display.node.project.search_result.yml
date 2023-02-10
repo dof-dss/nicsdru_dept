@@ -52,7 +52,6 @@ content:
     region: content
 hidden:
   content_moderation_control: true
-  entitygroupfield: true
   field_departmental_project_code: true
   field_domain_access: true
   field_domain_all_affiliates: true
@@ -63,8 +62,6 @@ hidden:
   field_project_duration: true
   field_project_status: true
   field_provider_project_code: true
-  groups: true
-  groups_type_department_site: true
   langcode: true
   links: true
   search_api_excerpt: true
