@@ -1,8 +1,9 @@
-uuid: e2fb6cd8-2e99-4176-9be2-d71334e2e68a
+uuid: 7bc91a40-4b1c-4731-9422-5301b762099c
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.full
     - field.field.node.heritage_site.body
     - field.field.node.heritage_site.field_address_line_1
     - field.field.node.heritage_site.field_address_line_2
@@ -29,6 +30,7 @@ dependencies:
     - node.type.heritage_site
   module:
     - field_group
+    - layout_builder
     - link
     - metatag
     - options
@@ -72,10 +74,13 @@ third_party_settings:
         open: false
         description: ''
         required_fields: false
-id: node.heritage_site.default
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.heritage_site.full
 targetEntityType: node
 bundle: heritage_site
-mode: default
+mode: full
 content:
   body:
     type: text_default

@@ -1,0 +1,21 @@
+uuid: a43c6df0-ab71-409f-89d6-55b0242b918a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_map_location
+    - node.type.heritage_site
+  module:
+    - geolocation
+id: node.heritage_site.field_map_location
+field_name: field_map_location
+entity_type: node
+bundle: heritage_site
+label: 'Map location'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: geolocation

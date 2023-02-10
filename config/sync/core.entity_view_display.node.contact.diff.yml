@@ -1,67 +1,85 @@
-uuid: 3f773b74-80fd-4d00-ab00-ddb2b5122779
+uuid: 73c71f62-8207-47c7-a37b-bb9108a9d90e
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.diff
     - field.field.node.contact.body
     - field.field.node.contact.field_map_location
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
     - field.field.node.contact.field_site_subtopics
     - field.field.node.contact.field_site_topics
+    - filter.format.plain_text
     - node.type.contact
-    - workflows.workflow.nics_editorial_workflow
   module:
-    - chosen_field
-    - content_moderation
-    - datetime
-    - geolocation_google_maps
-    - metatag
-    - path
-    - scheduler
+    - field_group
+    - geolocation
+    - layout_builder
     - text
-id: node.contact.default
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  field_group:
+    group_additional_content_details:
+      children:
+        - field_site_topics
+        - field_site_subtopics
+      label: 'Additional content details'
+      parent_name: ''
+      region: content
+      weight: 2
+      format_type: html_element
+      format_settings:
+        classes: field-collection
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+id: node.contact.diff
 targetEntityType: node
 bundle: contact
-mode: default
+mode: diff
 content:
   body:
-    type: text_textarea_with_summary
-    weight: 3
-    region: content
-    settings:
-      rows: 9
-      summary_rows: 3
-      placeholder: ''
-      show_summary: false
-    third_party_settings: {  }
-  created:
-    type: datetime_timestamp
-    weight: 6
-    region: content
+    type: text_default
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-  field_map_location:
-    type: geolocation_googlegeocoder
-    weight: 15
+    weight: 0
     region: content
+  field_map_location:
+    type: geolocation_map
+    label: above
     settings:
-      auto_client_location: ''
-      auto_client_location_marker: '0'
-      allow_override_map_settings: 0
-      hide_textfield_form: false
+      set_marker: true
+      show_label: false
+      common_map: true
+      show_delta_label: false
+      use_overridden_map_settings: false
+      title: ''
+      info_text:
+        value: ''
+        format: plain_text
       centre:
+        fit_bounds:
+          enable: true
+          weight: -101
+          settings:
+            reset_zoom: true
+            min_zoom: null
+          map_center_id: fit_bounds
         client_location:
           enable: false
           weight: 0
           map_center_id: client_location
-        fit_bounds:
-          enable: true
-          weight: 0
-          settings:
-            reset_zoom: false
-            min_zoom: null
-          map_center_id: fit_bounds
         fixed_boundaries:
           enable: false
           weight: 0
@@ -86,30 +104,9 @@ content:
             location_option_id: ipstack
             access_key: ''
           map_center_id: location_plugins
-      google_map_settings:
+      map_provider_id: google_maps
+      map_provider_settings:
         map_features:
-          control_geocoder:
-            weight: -100
-            settings:
-              position: TOP_LEFT
-              geocoder: google_geocoding_api
-              settings:
-                label: Address
-                description: 'Enter an address to be localized.'
-                autocomplete_min_length: 1
-                component_restrictions:
-                  route: ''
-                  country: ''
-                  administrative_area: ''
-                  locality: ''
-                  postal_code: ''
-                boundary_restriction:
-                  south: ''
-                  west: ''
-                  north: ''
-                  east: ''
-                region: uk
-            enabled: true
           google_maps_layer_bicycling:
             weight: 0
             enabled: false
@@ -177,6 +174,28 @@ content:
               position: TOP_RIGHT
               behavior: default
             enabled: true
+          control_geocoder:
+            weight: 0
+            settings:
+              position: TOP_LEFT
+              geocoder: google_geocoding_api
+              settings:
+                label: Address
+                description: 'Enter an address to be localized.'
+                autocomplete_min_length: 1
+                component_restrictions:
+                  route: ''
+                  country: ''
+                  administrative_area: ''
+                  locality: ''
+                  postal_code: ''
+                boundary_restriction:
+                  south: ''
+                  west: ''
+                  north: ''
+                  east: ''
+                region: ''
+            enabled: false
           control_loading_indicator:
             weight: 0
             settings:
@@ -191,7 +210,7 @@ content:
           control_maptype:
             weight: 0
             settings:
-              position: BOTTOM_LEFT
+              position: TOP_LEFT
               behavior: default
               style: DEFAULT
             enabled: true
@@ -215,7 +234,7 @@ content:
           control_zoom:
             weight: 0
             settings:
-              position: RIGHT_BOTTOM
+              position: BOTTOM_RIGHT
               behavior: default
               style: LARGE
             enabled: true
@@ -338,136 +357,43 @@ content:
             weight: 0
             enabled: false
         type: ROADMAP
-        zoom: 10
+        zoom: 14
         minZoom: 0
-        maxZoom: 18
+        maxZoom: 20
         height: 400px
         width: 100%
         gestureHandling: auto
+      data_provider_settings: {  }
     third_party_settings: {  }
-  field_metatags:
-    type: metatag_firehose
-    weight: 18
-    region: content
-    settings:
-      sidebar: true
-      use_details: true
-    third_party_settings: {  }
-  field_next_audit_due:
-    type: datetime_default
-    weight: 17
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  field_site_subtopics:
-    type: chosen_select
-    weight: 2
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  field_site_topics:
-    type: chosen_select
     weight: 1
     region: content
-    settings: {  }
-    third_party_settings: {  }
-  flag:
-    weight: 8
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  langcode:
-    type: language_select
-    weight: 4
-    region: content
+  field_site_subtopics:
+    type: entity_reference_label
+    label: inline
     settings:
-      include_locked: true
+      link: true
     third_party_settings: {  }
-  moderation_state:
-    type: moderation_state_default
-    weight: 13
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  path:
-    type: path
-    weight: 9
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  promote:
-    type: boolean_checkbox
-    weight: 7
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
-  publish_on:
-    type: datetime_timestamp_no_default
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  publish_state:
-    type: options_select
-    weight: 27
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  status:
-    type: boolean_checkbox
-    weight: 14
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
-  sticky:
-    type: boolean_checkbox
-    weight: 8
-    region: content
-    settings:
-      display_label: true
-    third_party_settings: {  }
-  title:
-    type: string_textfield
-    weight: 0
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  uid:
-    type: entity_reference_autocomplete
-    weight: 5
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  unpublish_on:
-    type: datetime_timestamp_no_default
     weight: 11
     region: content
-    settings: {  }
+  field_site_topics:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
     third_party_settings: {  }
-  unpublish_state:
-    type: options_select
-    weight: 28
+    weight: 10
     region: content
-    settings: {  }
-    third_party_settings: {  }
-  url_redirects:
-    weight: 12
-    region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden:
+  content_moderation_control: true
   entitygroupfield: true
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
   field_map: true
+  field_metatags: true
+  field_next_audit_due: true
   groups: true
   groups_type_department_site: true
+  langcode: true
+  links: true
+  search_api_excerpt: true
