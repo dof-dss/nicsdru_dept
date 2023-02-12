@@ -31,7 +31,7 @@ dependencies:
     - chosen_field
     - content_moderation
     - field_group
-    - geolocation
+    - geolocation_google_maps
     - link
     - media_library
     - metatag
@@ -184,6 +184,7 @@ content:
     type: geolocation_latlng
     weight: 29
     third_party_settings: {  }
+    settings: {  }
   field_metatags:
     type: metatag_firehose
     weight: 28
