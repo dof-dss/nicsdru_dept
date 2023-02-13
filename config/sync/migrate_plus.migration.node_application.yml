@@ -1,7 +1,9 @@
-uuid: e60741e5-8c5e-4514-a28a-4a8155bb62c0
+uuid: f8f44b6d-2c5a-4095-89b6-3422127677ff
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: xYT-Rq3VFO5G62WegZfecCkdjw8DQop9I8NxsdOpak8
 id: node_application
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -126,6 +128,12 @@ process:
     -
       plugin: sub_process
       source: domain_access_node
+      process:
+        target_id: target_id
+  field_domain_source:
+    -
+      plugin: sub_process
+      source: domain_source_node
       process:
         target_id: target_id
   field_domain_all_affiliates:

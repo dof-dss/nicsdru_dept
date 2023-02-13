@@ -7,6 +7,9 @@ dependencies:
     - field.field.node.heritage_site.field_address_line_1
     - field.field.node.heritage_site.field_address_line_2
     - field.field.node.heritage_site.field_county
+    - field.field.node.heritage_site.field_domain_access
+    - field.field.node.heritage_site.field_domain_all_affiliates
+    - field.field.node.heritage_site.field_domain_source
     - field.field.node.heritage_site.field_email
     - field.field.node.heritage_site.field_grid_reference
     - field.field.node.heritage_site.field_historic_map_viewer_link
@@ -28,7 +31,7 @@ dependencies:
     - chosen_field
     - content_moderation
     - field_group
-    - geolocation
+    - geolocation_google_maps
     - link
     - media_library
     - metatag
@@ -134,6 +137,25 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_domain_access:
+    type: options_buttons
+    weight: 40
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_all_affiliates:
+    type: boolean_checkbox
+    weight: 41
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_domain_source:
+    type: options_select
+    weight: 42
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_email:
     type: email_default
     weight: 7
@@ -161,9 +183,8 @@ content:
   field_map_location:
     type: geolocation_latlng
     weight: 29
-    region: content
-    settings: {  }
     third_party_settings: {  }
+    settings: {  }
   field_metatags:
     type: metatag_firehose
     weight: 28
@@ -343,5 +364,3 @@ hidden:
   field_domain_all_affiliates: true
   field_domain_source: true
   field_map: true
-  groups: true
-  groups_type_department_site: true

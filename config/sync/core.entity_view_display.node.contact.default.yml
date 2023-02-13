@@ -12,7 +12,7 @@ dependencies:
     - filter.format.plain_text
     - node.type.contact
   module:
-    - geolocation
+    - geolocation_google_maps
     - metatag
     - user
 id: node.contact.default
