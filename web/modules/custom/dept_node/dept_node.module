@@ -215,6 +215,12 @@ function dept_node_topic_banner(array &$variables) {
 
 function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_state) {
 
+  if ($form_state->getFormObject()->getEntity()->bundle() === 'news') {
+    if ($form_state->getValue('field_news_type')[0]['value'] !== 'pressrelease') {
+      return;
+    }
+  }
+
   $domain_access = $form_state->getValue('field_domain_access');
   $domain_access[] = ['target_id' => 'nigov'];
 
