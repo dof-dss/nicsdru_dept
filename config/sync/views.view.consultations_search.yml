@@ -174,7 +174,37 @@ display:
             label: ''
             field_identifier: ''
           exposed: false
-      arguments: {  }
+      arguments:
+        field_domain_access:
+          id: field_domain_access
+          table: search_api_index_consultations_index
+          field: field_domain_access
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          default_action: default
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: active_domain
+          default_argument_options: {  }
+          default_argument_skip_url: false
+          summary_options: {  }
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          break_phrase: false
+          not: false
       filters:
         search_api_fulltext:
           id: search_api_fulltext
@@ -291,6 +321,7 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'url.query_args:sort_order'
+        - url.site
         - 'user.node_grants:view'
       tags:
         - 'config:field.storage.node.body'

@@ -31,7 +31,7 @@ dependencies:
     - chosen_field
     - content_moderation
     - field_group
-    - geolocation
+    - geolocation_google_maps
     - link
     - media_library
     - metatag
@@ -183,9 +183,8 @@ content:
   field_map_location:
     type: geolocation_latlng
     weight: 29
-    region: content
-    settings: {  }
     third_party_settings: {  }
+    settings: {  }
   field_metatags:
     type: metatag_firehose
     weight: 28
@@ -361,5 +360,7 @@ content:
     third_party_settings: {  }
 hidden:
   entitygroupfield: true
-  groups: true
-  groups_type_department_site: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
+  field_map: true

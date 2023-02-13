@@ -1,9 +1,9 @@
-uuid: e351c712-e918-44ad-998a-d39ab290bfaf
+uuid: 54ad0499-3ea4-49b9-ba7f-7fe74ca84c8d
 langcode: en
 status: true
 dependencies: {  }
 _core:
-  default_config_hash: gO1zAsyq3rfqyFR2Im4rn45CU0UlxwsF8oSB9jleSJs
+  default_config_hash: bKv49VR3aWAJD8SQ16lR69e9R49J9ELVqtWI_5HMkjU
 id: node_news
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -152,6 +152,12 @@ process:
     -
       plugin: sub_process
       source: domain_access_node
+      process:
+        target_id: target_id
+  field_domain_source:
+    -
+      plugin: sub_process
+      source: domain_source_node
       process:
         target_id: target_id
   field_domain_all_affiliates:

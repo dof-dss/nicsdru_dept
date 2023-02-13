@@ -1,9 +1,9 @@
-uuid: b7a1fa14-f6a2-407d-995b-a8a5edeecc75
+uuid: 739c9b66-ce70-4821-8e75-6b24a2a0c177
 langcode: en
 status: true
 dependencies: {  }
 _core:
-  default_config_hash: S8x53ZNtrwhVDJIx3mw0Ufsbi2PoHE1Y31PPcdkDfg8
+  default_config_hash: ejvB6F2UBahyI6MeGkI7jxg41Y1ImbFnE-qfWU6o-W8
 id: node_easychart
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -85,6 +85,12 @@ process:
     -
       plugin: sub_process
       source: domain_access_node
+      process:
+        target_id: target_id
+  field_domain_source:
+    -
+      plugin: sub_process
+      source: domain_source_node
       process:
         target_id: target_id
   field_domain_all_affiliates:

@@ -4,10 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.contact.body
-    - field.field.node.contact.field_domain_access
-    - field.field.node.contact.field_domain_all_affiliates
-    - field.field.node.contact.field_domain_source
-    - field.field.node.contact.field_map
+    - field.field.node.contact.field_map_location
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
     - field.field.node.contact.field_site_subtopics
@@ -15,7 +12,7 @@ dependencies:
     - filter.format.plain_text
     - node.type.contact
   module:
-    - geolocation
+    - geolocation_google_maps
     - metatag
     - user
 id: node.contact.default
