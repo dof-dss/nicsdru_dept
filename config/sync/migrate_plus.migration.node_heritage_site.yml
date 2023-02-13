@@ -143,7 +143,8 @@ process:
           -
             plugin: d7_node_lookup
             source: target_id
-  field_map: field_map
+  field_map_location/lng: field_map/0/lon
+  field_map_location/lat: field_map/0/lat
   field_domain_access:
     -
       plugin: sub_process
