@@ -17,10 +17,15 @@ use Drupal\views\ViewExecutable;
  */
 function dept_node_form_node_form_alter(&$form, $form_state) {
 
-  if (in_array($form_state->getFormObject()->getEntity()->bundle(), ['consultation', 'publication', 'news'])) {
+  // Add handler to process nodes that should have 'nigov' entries.
+  if (in_array($form_state->getFormObject()->getEntity()->bundle(), [
+    'consultation',
+    'publication',
+    'news'
+  ])) {
     foreach (array_keys($form['actions']) as $action) {
       if ($action != 'preview' && isset($form['actions'][$action]['#type']) && $form['actions'][$action]['#type'] === 'submit') {
-        array_unshift($form['actions'][$action]['#submit'] , 'dept_node_assign_domain_defaults');
+        array_unshift($form['actions'][$action]['#submit'], 'dept_node_assign_domain_defaults');
       }
     }
   }
@@ -213,14 +218,18 @@ function dept_node_topic_banner(array &$variables) {
   $variables['banner_image']['#weight'] = -100;
 }
 
+/**
+ * Updates the domain_access value to include the nigov domain if certain
+ * conditions are met.
+ */
 function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_state) {
 
   $domain_access = $form_state->getValue('field_domain_access');
 
   if ($form_state->getFormObject()->getEntity()->bundle() === 'news') {
+    // If News is not a press release, remove any existing 'nigov' entry.
     if ($form_state->getValue('field_news_type')[0]['value'] !== 'pressrelease') {
-      
-      $form_state->setValue('field_domain_access', array_filter($domain_access, function($domain) {
+      $form_state->setValue('field_domain_access', array_filter($domain_access, function ($domain) {
         return $domain['target_id'] !== 'nigov';
       }));
       return;
@@ -228,6 +237,5 @@ function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_
   }
 
   $domain_access[] = ['target_id' => 'nigov'];
-
   $form_state->setValue('field_domain_access', $domain_access);
 }
