@@ -41,7 +41,7 @@ dependencies:
     - content_moderation
     - domain
     - domain_access
-    - entityqueue
+    - draggableviews
     - field_ui
     - file
     - filter
@@ -101,7 +101,6 @@ permissions:
   - 'administer book outlines'
   - 'administer content types'
   - 'administer domains'
-  - 'administer entity_subqueue fields'
   - 'administer features'
   - 'administer field permissions'
   - 'administer fields'
