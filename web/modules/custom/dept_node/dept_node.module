@@ -215,13 +215,18 @@ function dept_node_topic_banner(array &$variables) {
 
 function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_state) {
 
+  $domain_access = $form_state->getValue('field_domain_access');
+
   if ($form_state->getFormObject()->getEntity()->bundle() === 'news') {
     if ($form_state->getValue('field_news_type')[0]['value'] !== 'pressrelease') {
+      
+      $form_state->setValue('field_domain_access', array_filter($domain_access, function($domain) {
+        return $domain['target_id'] !== 'nigov';
+      }));
       return;
     }
   }
 
-  $domain_access = $form_state->getValue('field_domain_access');
   $domain_access[] = ['target_id' => 'nigov'];
 
   $form_state->setValue('field_domain_access', $domain_access);
