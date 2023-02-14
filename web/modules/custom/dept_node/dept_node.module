@@ -226,6 +226,7 @@ function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_
 
   $domain_access = $form_state->getValue('field_domain_access');
 
+  // @phpstan-ignore-next-line
   if ($form_state->getFormObject()->getEntity()->bundle() === 'news') {
     // If News is not a press release, remove any existing 'nigov' entry.
     if ($form_state->getValue('field_news_type')[0]['value'] !== 'pressrelease') {
