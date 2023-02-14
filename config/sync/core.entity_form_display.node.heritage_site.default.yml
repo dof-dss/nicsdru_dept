@@ -183,8 +183,9 @@ content:
   field_map_location:
     type: geolocation_latlng
     weight: 29
-    third_party_settings: {  }
+    region: content
     settings: {  }
+    third_party_settings: {  }
   field_metatags:
     type: metatag_firehose
     weight: 28
@@ -364,3 +365,4 @@ hidden:
   field_domain_all_affiliates: true
   field_domain_source: true
   field_map: true
+  groups: true

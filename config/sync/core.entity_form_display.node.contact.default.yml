@@ -367,7 +367,7 @@ content:
         height: 400px
         width: 100%
         gestureHandling: auto
-    third_party_settings: { }
+    third_party_settings: {  }
   field_metatags:
     type: metatag_firehose
     weight: 1001
@@ -488,5 +488,6 @@ content:
     third_party_settings: {  }
 hidden:
   entitygroupfield: true
+  field_map: true
   groups: true
   groups_type_department_site: true
