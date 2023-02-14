@@ -368,6 +368,7 @@ display:
     display_plugin: block
     position: 2
     display_options:
+      title: 'Our responsibilities'
       style:
         type: default
         options:
@@ -380,6 +381,7 @@ display:
           relationship: none
           view_mode: teaser
       defaults:
+        title: false
         style: false
         row: false
       display_description: ''
