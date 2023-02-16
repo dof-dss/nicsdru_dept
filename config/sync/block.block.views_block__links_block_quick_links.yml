@@ -1,0 +1,39 @@
+uuid: f4a35654-0006-41ad-8a4b-f7dc75d5486a
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.links
+  module:
+    - domain
+    - system
+    - views
+  theme:
+    - nicsdru_dept_theme
+id: views_block__links_block_quick_links
+theme: nicsdru_dept_theme
+region: content
+weight: -18
+provider: null
+plugin: 'views_block:links-block_quick_links'
+settings:
+  id: 'views_block:links-block_quick_links'
+  label: ''
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  domain:
+    id: domain
+    negate: true
+    context_mapping:
+      domain: '@domain.current_domain_context:domain'
+    domains:
+      dept_admin: dept_admin
+      nigov: nigov
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'
