@@ -180,6 +180,7 @@ class Node extends FieldableEntity {
 
     $domain_access_ids = $this->getDomainTargetIds($nid);
 
+<<<<<<< HEAD
     // Determine if the node has an access entry for the NIGov domain.
     $has_nigov_entry = (bool) array_filter($domain_access_ids, function ($val, $key) {
       return $val['target_id'] === 'nigov';
@@ -198,6 +199,13 @@ class Node extends FieldableEntity {
           }
         }, $domain_access_ids)));
       }
+=======
+
+
+    // Determine if the News node is a 'Press release'.
+    if ($type === 'news' && $row->getSourceProperty('field_news_type')[0]['value'] == 'pressrelease') {
+      $is_press_release = TRUE;
+>>>>>>> c088421 (Fix News migrations)
     }
 
     // If the node bundle is 'consultation', 'publication' or a 'news' node set
@@ -205,6 +213,7 @@ class Node extends FieldableEntity {
     // nigov domain.
     if (in_array($type, ['consultation', 'publication']) || $is_press_release === TRUE) {
       if (!$has_nigov_entry) {
+        var_dump($row->getSourceProperty('field_news_type'));
         $domain_access_ids[] = ['target_id' => 'nigov'];
       }
     }
