@@ -1,4 +1,4 @@
-uuid: f4a35654-0006-41ad-8a4b-f7dc75d5486a
+uuid: 1a7b1ac5-1ffc-4f09-831e-7c5bc60c3ff9
 langcode: en
 status: true
 dependencies:
@@ -10,14 +10,14 @@ dependencies:
     - views
   theme:
     - nicsdru_dept_theme
-id: views_block__links_block_quick_links
+id: views_block__links_block_agency_links
 theme: nicsdru_dept_theme
 region: content
-weight: -19
+weight: -16
 provider: null
-plugin: 'views_block:links-block_quick_links'
+plugin: 'views_block:links-block_agency_links'
 settings:
-  id: 'views_block:links-block_quick_links'
+  id: 'views_block:links-block_agency_links'
   label: ''
   label_display: visible
   provider: views

@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.field_link_type
     - field.storage.node.field_link_url
     - node.type.link
+    - system.menu.admin
   module:
     - domain_access
     - draggableviews
@@ -805,6 +806,15 @@ display:
       display_description: ''
       display_extenders: {  }
       path: admin/content/links
+      menu:
+        type: normal
+        title: Links
+        description: ''
+        weight: 0
+        expanded: false
+        menu_name: admin
+        parent: system.admin_content
+        context: '0'
     cache_metadata:
       max-age: -1
       contexts:
@@ -824,6 +834,54 @@ display:
     position: 2
     display_options:
       title: 'We work with these bodies'
+      fields:
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            make_link: false
+            absolute: false
+            word_boundary: false
+            ellipsis: false
+            strip_tags: false
+            trim: false
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
       pager:
         type: some
         options:
@@ -847,7 +905,7 @@ display:
             label: ''
             field_identifier: ''
           exposed: false
-          draggable_views_reference: this
+          draggable_views_reference: 'links:draggable_agency_links'
           draggable_views_null_order: after
           draggable_views_pass_arguments: false
         title:
@@ -936,10 +994,29 @@ display:
         operator: AND
         groups:
           1: AND
+      style:
+        type: html_list
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: false
+          type: ul
+          wrapper_class: ''
+          class: list--hyphen-bullet
+      row:
+        type: fields
+        options:
+          default_field_elements: true
+          inline: {  }
+          separator: ''
+          hide_empty: false
       defaults:
         access: false
         title: false
         pager: false
+        style: false
+        row: false
+        fields: false
         sorts: false
         filters: false
         filter_groups: false
@@ -954,8 +1031,7 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags:
-        - 'config:field.storage.node.field_link_type'
+      tags: {  }
   block_corporate_links:
     id: block_corporate_links
     display_title: 'Block: Corporate links'
@@ -963,6 +1039,54 @@ display:
     position: 3
     display_options:
       title: 'Corporate information'
+      fields:
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            make_link: false
+            absolute: false
+            word_boundary: false
+            ellipsis: false
+            strip_tags: false
+            trim: false
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
       access:
         type: perm
         options:
@@ -981,7 +1105,7 @@ display:
             label: ''
             field_identifier: ''
           exposed: false
-          draggable_views_reference: this
+          draggable_views_reference: 'links:draggable_corporate_links'
           draggable_views_null_order: after
           draggable_views_pass_arguments: false
         title:
@@ -1070,9 +1194,32 @@ display:
         operator: AND
         groups:
           1: AND
+      style:
+        type: html_list
+        options:
+          grouping:
+            -
+              field: field_link_type
+              rendered: true
+              rendered_strip: false
+          row_class: ''
+          default_row_class: true
+          type: ul
+          wrapper_class: ''
+          class: list--hyphen-bullet
+      row:
+        type: fields
+        options:
+          default_field_elements: true
+          inline: {  }
+          separator: ''
+          hide_empty: false
       defaults:
         access: false
         title: false
+        style: false
+        row: false
+        fields: false
         sorts: false
         filters: false
         filter_groups: false
@@ -1087,8 +1234,7 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags:
-        - 'config:field.storage.node.field_link_type'
+      tags: {  }
   block_quick_links:
     id: block_quick_links
     display_title: 'Block: Quick links'
@@ -1096,6 +1242,54 @@ display:
     position: 4
     display_options:
       title: 'Quick links'
+      fields:
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            make_link: false
+            absolute: false
+            word_boundary: false
+            ellipsis: false
+            strip_tags: false
+            trim: false
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
       pager:
         type: some
         options:
@@ -1119,7 +1313,7 @@ display:
             label: ''
             field_identifier: ''
           exposed: false
-          draggable_views_reference: 'links:page_1'
+          draggable_views_reference: 'links:draggable_quick_links'
           draggable_views_null_order: after
           draggable_views_pass_arguments: false
         title:
@@ -1215,8 +1409,8 @@ display:
           row_class: ''
           default_row_class: false
           type: ul
-          wrapper_class: item-list
-          class: ''
+          wrapper_class: ''
+          class: list--hyphen-bullet
       row:
         type: fields
         options:
@@ -1230,6 +1424,7 @@ display:
         pager: false
         style: false
         row: false
+        fields: false
         sorts: false
         filters: false
         filter_groups: false
@@ -1244,8 +1439,7 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags:
-        - 'config:field.storage.node.field_link_type'
+      tags: {  }
   draggable_agency_links:
     id: draggable_agency_links
     display_title: 'Draggable: Agency links'
@@ -1655,13 +1849,13 @@ display:
       display_extenders: {  }
       path: admin/content/agencylinks
       menu:
-        type: none
+        type: normal
         title: 'Links - agency'
         description: 'Edit links shown under "We work with these bodies" on the home page'
         weight: 0
         expanded: false
         menu_name: admin
-        parent: system.admin_content
+        parent: 'views_view:views.links.all_links'
         context: '0'
     cache_metadata:
       max-age: 0
@@ -2076,19 +2270,19 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: "<p>\r\nEdit links to corporate information shown on the home page.  Drag and drop to change the display order.\r\n</p>"
+            value: "<p>\r\nEdit links to corporate information shown on the home page.  Drag and drop to change the display order. \r\n</p>"
             format: basic_html
           tokenize: false
       display_extenders: {  }
       path: admin/content/corporatelinks
       menu:
-        type: none
-        title: 'Link - corporate'
+        type: normal
+        title: 'Links - corporate'
         description: 'Edit links shown under "Corporate information" on the home page'
         weight: 0
         expanded: false
         menu_name: admin
-        parent: system.admin_content
+        parent: 'views_view:views.links.all_links'
         context: '0'
     cache_metadata:
       max-age: 0
@@ -2503,19 +2697,19 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: "<p>\r\nEdit quick links shown on the home page.  Drag and drop to change the display order.\r\n</p>"
+            value: "<p>\r\nEdit quick links shown on the home page.  Drag and drop to change the display order. <strong>Only the first 9 items are displayed.</strong>\r\n</p>"
             format: basic_html
           tokenize: false
       display_extenders: {  }
       path: admin/content/quicklinks
       menu:
-        type: none
+        type: normal
         title: 'Links - quick links'
         description: 'Edit home page "Quick links"'
         weight: 0
         expanded: false
         menu_name: admin
-        parent: system.admin_content
+        parent: 'views_view:views.links.all_links'
         context: '0'
     cache_metadata:
       max-age: 0
