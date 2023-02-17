@@ -186,7 +186,7 @@ class Node extends FieldableEntity {
     }
 
     $domain_access_ids = $this->getDomainTargetIds($nid);
-    
+
     // Determine if the News node is a 'Press release'.
     if ($type === 'news' && $row->getSourceProperty('field_news_type')[0]['value'] == 'pressrelease') {
       $is_press_release = TRUE;
