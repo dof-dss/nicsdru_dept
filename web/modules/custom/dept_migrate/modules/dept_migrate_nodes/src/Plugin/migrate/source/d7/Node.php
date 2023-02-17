@@ -180,6 +180,7 @@ class Node extends FieldableEntity {
 
     $domain_access_ids = $this->getDomainTargetIds($nid);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
     // Determine if the node has an access entry for the NIGov domain.
@@ -206,6 +207,9 @@ class Node extends FieldableEntity {
 =======
     
 >>>>>>> dc1e869 (Code standards)
+=======
+
+>>>>>>> 24d85e8 (Code standards)
     // Determine if the News node is a 'Press release'.
     if ($type === 'news' && $row->getSourceProperty('field_news_type')[0]['value'] == 'pressrelease') {
       $is_press_release = TRUE;
