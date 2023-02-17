@@ -113,12 +113,8 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
         $this->getConfiguration()['display_field'],
       ]);
 
-      // Bit of a hack here to determine if field data was returned. This problem
-      // arose on edge and throws a WSOD with the error "TypeError: strlen():
-      // Argument #1 ($string) must be of type string, array given in strlen()"
-      // but unable to reproduce locally.
       if (array_key_exists("#field_name", $field_data)) {
-        $build['content'] = $field_data;
+        $build['content'] = $dept->get($field_data['#field_name'])->view('default');
       }
     }
 
