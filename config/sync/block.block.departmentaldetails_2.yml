@@ -1,34 +1,26 @@
-uuid: e2c1e57e-7a1e-4155-b346-0def4648579e
+uuid: ab811a12-b4a8-40f9-af0a-f115ec58a832
 langcode: en
 status: true
 dependencies:
   module:
     - dept_core
-    - domain
     - system
   theme:
     - nicsdru_dept_theme
-id: department_details_contact_us
+id: departmentaldetails_2
 theme: nicsdru_dept_theme
 region: content
-weight: -14
+weight: -21
 provider: null
 plugin: dept_core_departmental_details
 settings:
   id: dept_core_departmental_details
-  label: 'Department details - contact us'
+  label: 'Departmental details - Contact'
   label_display: '0'
   provider: dept_core
   display_field: contactInformation
 visibility:
-  domain:
-    id: domain
-    negate: true
-    context_mapping:
-      domain: '@domain.current_domain_context:domain'
-    domains:
-      dept_admin: dept_admin
   request_path:
     id: request_path
     negate: false
-    pages: '<front>'
+    pages: /contact

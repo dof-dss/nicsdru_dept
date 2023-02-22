@@ -11,8 +11,8 @@ dependencies:
     - field.field.department.department.field_dept_social_media_links
   module:
     - dept_core
-    - geolocation_google_maps
     - link
+    - origins_common
     - text
     - user
 id: department.department.default
@@ -60,9 +60,15 @@ content:
     weight: 23
     region: content
   field_dept_location:
-    type: geolocation_latlng
+    type: gmaps_lazy_load_formatter
     label: above
-    settings: {  }
+    settings:
+      map_type: roadmap
+      zoom: '15'
+      placeholder: empty
+      link_text: ''
+      map_width: '300'
+      map_height: '300'
     third_party_settings: {  }
     weight: 24
     region: content
