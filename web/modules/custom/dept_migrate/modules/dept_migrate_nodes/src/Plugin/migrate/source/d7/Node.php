@@ -49,19 +49,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class Node extends FieldableEntity {
-  /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
 
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration, StateInterface $state, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration, StateInterface $state, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $migration, $state, $entity_type_manager);
-    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -187,20 +180,30 @@ class Node extends FieldableEntity {
 
     $domain_access_ids = $this->getDomainTargetIds($nid);
 
+    // Determine if the node has an access entry for the NIGov domain.
+    $has_nigov_entry = (bool) array_filter($domain_access_ids, function ($val, $key) {
+      return $val['target_id'] === 'nigov';
+    }, ARRAY_FILTER_USE_BOTH);
+
     // Determine if the News node is a 'Press release'.
-    if ($type === 'news' && $row->getSourceProperty('field_news_type')[0]['value'] == 'pressrelease') {
-      $is_press_release = TRUE;
+    if ($type === 'news') {
+      if ($row->getSourceProperty('field_news_type')[0]['value'] === 'pressrelease') {
+        $is_press_release = TRUE;
+      }
+      elseif ($has_nigov_entry) {
+        // Remove any NIGov entries for non 'press release' news nodes.
+        $domain_access_ids = array_values(array_filter(array_map(function ($key) {
+          if ($key['target_id'] !== 'nigov') {
+            return $key;
+          }
+        }, $domain_access_ids)));
+      }
     }
 
     // If the node bundle is 'consultation', 'publication' or a 'news' node set
     // as a 'press release' ensure we have a domain access entry for the
     // nigov domain.
     if (in_array($type, ['consultation', 'publication']) || $is_press_release === TRUE) {
-      // If we do not have a domain_access entry for nigov, create one.
-      $has_nigov_entry = (bool) array_filter($domain_access_ids, function ($val, $key) {
-        return $val['target_id'] === 'nigov';
-      }, ARRAY_FILTER_USE_BOTH);
-
       if (!$has_nigov_entry) {
         $domain_access_ids[] = ['target_id' => 'nigov'];
       }

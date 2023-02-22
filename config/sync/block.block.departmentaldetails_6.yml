@@ -1,4 +1,4 @@
-uuid: 99a8a1c7-1b95-4367-9cd5-372d6e6924da
+uuid: f80d9434-a13c-473c-b83c-11fea1bc82a7
 langcode: en
 status: true
 dependencies:
@@ -7,20 +7,20 @@ dependencies:
     - system
   theme:
     - nicsdru_dept_theme
-id: departmentaldetails_4
+id: departmentaldetails_6
 theme: nicsdru_dept_theme
 region: content
-weight: -11
+weight: -20
 provider: null
 plugin: dept_core_departmental_details
 settings:
   id: dept_core_departmental_details
-  label: 'Departmental details - Social links'
+  label: 'Map location'
   label_display: visible
   provider: dept_core
-  display_field: socialMediaLinks
+  display_field: location
 visibility:
   request_path:
     id: request_path
     negate: false
-    pages: '<front>'
+    pages: /contact
