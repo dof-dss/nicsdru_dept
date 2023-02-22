@@ -41,7 +41,6 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
     $form['#attached']['library'][] = 'nicsdru_origins_theme/media_library_styles';
   }
 
-
   // Set the Domain source entry if not already provided.
   if (empty($form['field_domain_source']['widget']['#default_value'])) {
     $domain_access_ids = $form['field_domain_access']['widget']['#default_value'];
@@ -56,7 +55,7 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
       }, $domain_access_ids)));
     }
 
-    $form['field_domain_source']['widget']['#default_value'][] =  $domain_access_ids[0];
+    $form['field_domain_source']['widget']['#default_value'][] = $domain_access_ids[0];
   }
 }
 
