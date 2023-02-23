@@ -269,6 +269,44 @@ display:
           parse_mode: sloppy_terms
           min_length: null
           fields: {  }
+        status:
+          id: status
+          table: search_api_index_news_index
+          field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_boolean
+          operator: '='
+          value: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       style:
         type: default
         options:
@@ -396,6 +434,44 @@ display:
           parse_mode: sloppy_terms
           min_length: null
           fields: {  }
+        status:
+          id: status
+          table: search_api_index_news_index
+          field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_boolean
+          operator: '='
+          value: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -453,123 +529,44 @@ display:
     position: 2
     display_options:
       title: 'Press releases'
-      arguments: {  }
-      filters:
-        search_api_fulltext:
-          id: search_api_fulltext
+      arguments:
+        field_domain_access:
+          id: field_domain_access
           table: search_api_index_news_index
-          field: search_api_fulltext
+          field: field_domain_access
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: search_api_fulltext
-          operator: or
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: search_api_fulltext_op
-            label: 'Search press releases and choose filters to show only the results you want'
-            description: ''
-            use_operator: false
-            operator: search_api_fulltext_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: search
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              author_user: '0'
-              site_editor: '0'
-              stats_author_user: '0'
-              landing_page_author_user: '0'
-              site_moderator: '0'
-              site_admin: '0'
-              supervisor_user: '0'
-              rss_user: '0'
-              pfg_supervisor_user: '0'
-              brexit_supervisor_user: '0'
-              stats_supervisor_user: '0'
-              landing_page_supervisor_user: '0'
-              domain_admin_user: '0'
-              niexec_admin_user: '0'
-              editor_user: '0'
-              admin_user: '0'
-              user_manager: '0'
-            expose_fields: false
-            placeholder: ''
-            searched_fields_id: search_api_fulltext_searched_fields
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          parse_mode: sloppy_terms
-          min_length: null
-          fields: {  }
-        field_news_type:
-          id: field_news_type
-          table: search_api_index_news_index
-          field: field_news_type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_options
-          operator: or
-          value:
-            pressrelease: pressrelease
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-      filter_groups:
-        operator: AND
-        groups:
-          1: AND
+          plugin_id: search_api
+          default_action: default
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: active_domain
+          default_argument_options: {  }
+          default_argument_skip_url: false
+          summary_options: {  }
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          break_phrase: false
+          not: false
       defaults:
         cache: true
         title: false
         css_class: false
         arguments: false
-        filters: false
-        filter_groups: false
+        filters: true
+        filter_groups: true
         header: false
       css_class: 'card-deck card-deck--search-results'
       display_description: ''
