@@ -102,6 +102,11 @@ We use Lando for this, see `.lando.yml` for the structure and configuration of t
 Once we have determined the site that a request is being made for, we need to assess how to present content for this. Internally, Drupal uses the Domain module and the node_access table to determine
 if the current Domain has been granted view access to that node.
 
+Each entity has 2 entity reference fields, field_domain_access and field_domain_source.
+
+field_domain_access : Multiple references to domains the content can be viewed on.
+field_domain_source : Single reference to the domain the content belongs to.
+
 ## Migrations
 
 You will need to install modules that start with `Department sites: migration` in order to run migrations to import Drupal 7
