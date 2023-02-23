@@ -1,0 +1,11 @@
+uuid: 51114538-114c-47dc-92bb-9d0c794f872d
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.featured_content_list
+id: node.featured_content_list
+target_entity_type_id: node
+target_bundle: featured_content_list
+default_langcode: site_default
+language_alterable: false
