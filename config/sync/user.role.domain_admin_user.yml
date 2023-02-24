@@ -16,6 +16,7 @@ dependencies:
     - node.type.book
     - node.type.consultation
     - node.type.contact
+    - node.type.featured_content_list
     - node.type.gallery
     - node.type.heritage_site
     - node.type.landing_page
@@ -33,6 +34,7 @@ dependencies:
     - book
     - content_moderation
     - domain_access
+    - draggableviews
     - filter
     - flag
     - media
@@ -176,6 +178,7 @@ permissions:
   - 'edit any contact content'
   - 'edit any document files'
   - 'edit any document media'
+  - 'edit any featured_content_list content'
   - 'edit any gallery content'
   - 'edit any heritage_site content'
   - 'edit any image files'
@@ -198,6 +201,7 @@ permissions:
   - 'edit own audio files'
   - 'edit own audio media'
   - 'edit own document files'
+  - 'edit own featured_content_list content'
   - 'edit own image files'
   - 'edit own video files'
   - 'edit terms in 7'
@@ -233,6 +237,7 @@ permissions:
   - 'revert book revisions'
   - 'revert consultation revisions'
   - 'revert contact revisions'
+  - 'revert featured_content_list revisions'
   - 'revert gallery revisions'
   - 'revert heritage_site revisions'
   - 'revert landing_page revisions'
@@ -304,6 +309,7 @@ permissions:
   - 'view book revisions'
   - 'view consultation revisions'
   - 'view contact revisions'
+  - 'view featured_content_list revisions'
   - 'view gallery revisions'
   - 'view heritage_site revisions'
   - 'view landing_page revisions'
