@@ -358,10 +358,13 @@ $settings['update_free_access'] = FALSE;
 # $settings['reverse_proxy'] = TRUE;
 
 /**
- * Specify every reverse proxy IP address in your environment.
- * This setting is required if $settings['reverse_proxy'] is TRUE.
+ * Reverse proxy addresses.
+ *
+ * Specify every reverse proxy IP address in your environment, as an array of
+ * IPv4/IPv6 addresses or subnets in CIDR notation. This setting is required if
+ * $settings['reverse_proxy'] is TRUE.
  */
-# $settings['reverse_proxy_addresses'] = ['a.b.c.d', ...];
+# $settings['reverse_proxy_addresses'] = ['a.b.c.d', 'e.f.g.h/24', ...];
 
 /**
  * Reverse proxy trusted headers.
@@ -617,21 +620,6 @@ $settings['update_free_access'] = FALSE;
 # ini_set('pcre.recursion_limit', 200000);
 
 /**
- * Add Permissions-Policy header to disable Google FLoC.
- *
- * By default, Drupal sends the 'Permissions-Policy: interest-cohort=()' header
- * to disable Google's Federated Learning of Cohorts feature, introduced in
- * Chrome 89.
- *
- * See https://en.wikipedia.org/wiki/Federated_Learning_of_Cohorts for more
- * information about FLoC.
- *
- * If you don't wish to disable FLoC in Chrome, you can set this value
- * to FALSE.
- */
-# $settings['block_interest_cohort'] = TRUE;
-
-/**
  * Configuration overrides.
  *
  * To globally override specific configuration values for this site,
@@ -764,6 +752,49 @@ $settings['entity_update_backup'] = TRUE;
  * node migrations.
  */
 $settings['migrate_node_migrate_type_classic'] = FALSE;
+
+/**
+ * The default settings for migration sources.
+ *
+ * These settings are used as the default settings on the Credential form at
+ * /upgrade/credentials.
+ *
+ * - migrate_source_version - The version of the source database. This can be
+ *   '6' or '7'. Defaults to '7'.
+ * - migrate_source_connection - The key in the $databases array for the source
+ *   site.
+ * - migrate_file_public_path - The location of the source Drupal 6 or Drupal 7
+ *   public files. This can be a local file directory containing the source
+ *   Drupal 6 or Drupal 7 site (e.g /var/www/docroot), or the site address
+ *   (e.g http://example.com).
+ * - migrate_file_private_path - The location of the source Drupal 7 private
+ *   files. This can be a local file directory containing the source Drupal 7
+ *   site (e.g /var/www/docroot), or empty to use the same value as Public
+ *   files directory.
+ *
+ * Sample configuration for a drupal 6 source site with the source files in a
+ * local directory.
+ *
+ * @code
+ * $settings['migrate_source_version'] = '6';
+ * $settings['migrate_source_connection'] = 'migrate';
+ * $settings['migrate_file_public_path'] = '/var/www/drupal6';
+ * @endcode
+ *
+ * Sample configuration for a drupal 7 source site with public source files on
+ * the source site and the private files in a local directory.
+ *
+ * @code
+ * $settings['migrate_source_version'] = '7';
+ * $settings['migrate_source_connection'] = 'migrate';
+ * $settings['migrate_file_public_path'] = 'https://drupal7.com';
+ * $settings['migrate_file_private_path'] = '/var/www/drupal7';
+ * @endcode
+ */
+# $settings['migrate_source_connection'] = '';
+# $settings['migrate_source_version'] = '';
+# $settings['migrate_file_public_path'] = '';
+# $settings['migrate_file_private_path'] = '';
 
 /**
  * Load local development override configuration, if available.

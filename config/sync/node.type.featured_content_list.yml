@@ -1,25 +1,14 @@
-uuid: ef7f8492-1c78-4c84-ae51-4c086f3e8be5
+uuid: 4654c75e-e23b-4513-a899-dfaeff9c719f
 langcode: en
 status: true
 dependencies:
   module:
     - menu_ui
-    - origins_toc
     - scheduler
 third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
-  origins_toc:
-    toc_enable: 0
-    toc_title: 'Table of contents'
-    toc_location: ''
-    toc_insert: after
-    toc_source_container: ''
-    toc_element: h2
-    toc_exclusions: ''
-    toc_screen_depth: '1'
-    toc_debug: 0
   scheduler:
     expand_fieldset: when_required
     fields_display_mode: vertical_tab
@@ -33,10 +22,10 @@ third_party_settings:
     unpublish_enable: false
     unpublish_required: false
     unpublish_revision: false
-name: Link
-type: link
-description: 'Use this content type to create links for Quick Links and Agency links.'
+name: 'Featured content list'
+type: featured_content_list
+description: ''
 help: ''
 new_revision: true
-preview_mode: 1
+preview_mode: 0
 display_submitted: false

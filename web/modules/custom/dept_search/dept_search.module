@@ -5,6 +5,7 @@
  * Search related overrides and preprocessing.
  */
 
+use Drupal\block\Entity\Block;
 use Drupal\dept_core\Entity\Department;
 use Drupal\facets\FacetInterface;
 use Drupal\views\ViewExecutable;
@@ -39,7 +40,6 @@ function dept_search_preprocess_facets_summary_item_list(&$variables) {
  * Implements hook_preprocess_facets_item_list().
  */
 function dept_search_preprocess_facets_item_list(array &$variables) {
-
   /** @var \Drupal\facets\FacetInterface $facet */
   $facet = $variables['facet'];
 
