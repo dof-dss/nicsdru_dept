@@ -90,7 +90,7 @@ class FeaturedContentBlock extends BlockBase implements ContainerFactoryPluginIn
     $config = $this->getConfiguration();
 
     $fcl_query = $this->entityTypeManager->getStorage('node')->loadByProperties(
-      ['type' => 'featured_content'],
+      ['type' => 'featured_content_list'],
     );
 
     $fcl_nodes = [];

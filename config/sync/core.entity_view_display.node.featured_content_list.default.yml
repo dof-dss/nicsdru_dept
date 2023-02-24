@@ -1,0 +1,32 @@
+uuid: abde5266-9e74-4bc8-8c60-9db3883eb745
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.featured_content_list.field_domain_access
+    - field.field.node.featured_content_list.field_domain_all_affiliates
+    - field.field.node.featured_content_list.field_domain_source
+    - field.field.node.featured_content_list.field_featured_content
+    - node.type.featured_content_list
+  module:
+    - user
+id: node.featured_content_list.default
+targetEntityType: node
+bundle: featured_content_list
+mode: default
+content:
+  field_featured_content:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
+  langcode: true
+  links: true
+  search_api_excerpt: true
