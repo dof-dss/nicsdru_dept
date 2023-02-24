@@ -51,10 +51,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Node extends FieldableEntity {
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration, StateInterface $state, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, MigrationInterface $migration, StateInterface $state, EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $migration, $state, $entity_type_manager);
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -209,8 +217,13 @@ class Node extends FieldableEntity {
       }
     }
 
+    // If we have no access records, assign it to nigov.
+    if (empty($domain_access_ids)) {
+      $domain_access_ids = ['target_id' => 'nigov'];
+    }
+
     $row->setSourceProperty('domain_access_node', $domain_access_ids);
-    $row->setSourceProperty('domain_source_node', $this->getDomainTargetIds($nid));
+    $row->setSourceProperty('domain_source_node', $this->getDomainSourceTargetId($nid));
 
     return parent::prepareRow($row);
   }
@@ -335,11 +348,18 @@ class Node extends FieldableEntity {
       ->execute()
       ->fetchCol();
 
-    $domain_source_id = $this->select('domain', 'da')
-      ->fields('da', ['machine_name'])
-      ->condition('da.domain_id', $domain_id)
-      ->execute()
-      ->fetchCol();
+    // If we have no records, assign it to nigov.
+    if (empty($domain_id[0])) {
+      $domain_source_id[0] = 'newnigov';
+    }
+    else {
+      $domain_source_id = $this->select('domain', 'da')
+        ->fields('da', ['machine_name'])
+        ->condition('da.domain_id', $domain_id[0])
+        ->execute()
+        ->fetchCol();
+    }
+
     $row_source_properties[] = ['target_id' => MigrateUtils::d7DomianToD9Domain($domain_source_id[0])];
 
     return $row_source_properties;
