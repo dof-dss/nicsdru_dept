@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\dept_node\Entity\Node;
 use Drupal\dept_node\Form\NodeForm;
+use Drupal\dept_node\FormatHelper;
 use Drupal\node\NodeInterface;
 use Drupal\views\ViewExecutable;
 
@@ -38,6 +39,23 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
 
   if (!empty(array_intersect(array_keys($form), $docs_field_ids))) {
     $form['#attached']['library'][] = 'nicsdru_origins_theme/media_library_styles';
+  }
+
+  // Set the Domain source entry if not already provided.
+  if (empty($form['field_domain_source']['widget']['#default_value'])) {
+    $domain_access_ids = $form['field_domain_access']['widget']['#default_value'];
+
+    if (count($domain_access_ids) > 1) {
+      // Exclude NIGov as a domain entry as that site should not be publishing
+      // content.
+      $domain_access_ids = array_values(array_filter(array_map(function ($val) {
+        if ($val !== 'nigov') {
+          return $val;
+        }
+      }, $domain_access_ids)));
+    }
+
+    $form['field_domain_source']['widget']['#default_value'][] = $domain_access_ids[0];
   }
 }
 
