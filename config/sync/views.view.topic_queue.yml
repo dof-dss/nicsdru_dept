@@ -397,37 +397,6 @@ display:
         - user.permissions
       tags:
         - 'config:field.storage.node.field_summary'
-  block_topics_queue:
-    id: block_topics_queue
-    display_title: 'Block Topics Queue'
-    display_plugin: block
-    position: 2
-    display_options:
-      style:
-        type: default
-        options:
-          grouping: {  }
-          row_class: ''
-          default_row_class: false
-      row:
-        type: 'entity:node'
-        options:
-          relationship: none
-          view_mode: teaser
-      defaults:
-        style: false
-        row: false
-      display_description: ''
-      display_extenders: {  }
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - 'user.node_grants:view'
-        - user.permissions
-      tags:
-        - 'config:field.storage.node.field_summary'
   topics_queue:
     id: topics_queue
     display_title: Page
