@@ -1,0 +1,39 @@
+uuid: 3e00960a-3d78-4370-bceb-28fecf7a6bef
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.full
+    - field.field.node.featured_content_list.field_domain_access
+    - field.field.node.featured_content_list.field_domain_all_affiliates
+    - field.field.node.featured_content_list.field_domain_source
+    - field.field.node.featured_content_list.field_featured_content
+    - node.type.featured_content_list
+  module:
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.featured_content_list.full
+targetEntityType: node
+bundle: featured_content_list
+mode: full
+content:
+  field_featured_content:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: teaser_with_image
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
+  langcode: true
+  links: true
+  search_api_excerpt: true
