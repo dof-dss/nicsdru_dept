@@ -1,9 +1,7 @@
-uuid: fc2ba1d1-c1e8-4080-a12d-c9109356a93b
+uuid: 92a17860-1c36-41e2-b4f3-30c226be046a
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: a_-GKEfAlGpB0JfwaUlAGgPxvpvSwBoAza82Po4Soms
 id: node_heritage_site
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -77,6 +75,23 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
+  field_address:
+    -
+      plugin: callback
+      callable:
+        - \Drupal\dept_migrate\AddressFieldMerge
+        - convertToAddressFieldFormat
+      source:
+        - field_address_line_1
+        - field_address_line_2
+        - ''
+        - ''
+        - ''
+        - field_county
+        - field_town
+        - field_postcode
+    -
+      plugin: addressfield
   field_address_line_1: field_address_line_1
   field_address_line_2: field_address_line_2
   field_town: field_town

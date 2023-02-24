@@ -231,6 +231,9 @@
             ]
         },
         "patches": {
+            "drupal/address": {
+                "Allow to set a list of preferred countries": "https://www.drupal.org/files/issues/2023-01-06/2626982-45.preferred_countries.patch"
+            },
             "drupal/core": {
                 "Prevent leftover fields from causing errors like 'Call to a member function getLabel() after enabling layout_builder'": "https://www.drupal.org/files/issues/2020-01-20/2985882-53.patch",
                 "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch",
