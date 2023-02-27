@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.heritage_site.body
+    - field.field.node.heritage_site.field_address
     - field.field.node.heritage_site.field_address_line_1
     - field.field.node.heritage_site.field_address_line_2
     - field.field.node.heritage_site.field_county
@@ -28,9 +29,11 @@ dependencies:
     - node.type.heritage_site
     - workflows.workflow.nics_editorial_workflow
   module:
+    - address
     - chosen_field
     - content_moderation
     - field_group
+    - geolocation_address
     - geolocation_google_maps
     - link
     - media_library
@@ -44,12 +47,13 @@ third_party_settings:
       children:
         - field_address_line_1
         - field_address_line_2
-        - field_town
+        - field_county
         - field_postcode
-      label: Address
-      region: content
+        - field_town
+      label: 'LEGACY Address'
+      region: hidden
       parent_name: ''
-      weight: 3
+      weight: 25
       format_type: details
       format_settings:
         classes: ''
@@ -66,7 +70,7 @@ third_party_settings:
       label: Contact
       region: content
       parent_name: ''
-      weight: 5
+      weight: 6
       format_type: details
       format_settings:
         classes: ''
@@ -85,7 +89,23 @@ third_party_settings:
       label: 'Additional Information'
       region: content
       parent_name: ''
-      weight: 6
+      weight: 7
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: false
+        description: ''
+        required_fields: true
+    group_address_details:
+      children:
+        - field_address
+        - field_map_location
+      label: 'Address details'
+      region: content
+      parent_name: ''
+      weight: 3
       format_type: details
       format_settings:
         classes: ''
@@ -101,7 +121,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 8
+    weight: 9
     region: content
     settings:
       rows: 9
@@ -111,48 +131,33 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 11
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_address_line_1:
-    type: string_textfield
+  field_address:
+    type: address_default
     weight: 4
     region: content
     settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_address_line_2:
-    type: string_textfield
-    weight: 5
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-  field_county:
-    type: options_select
-    weight: 4
-    region: content
-    settings: {  }
+      preferred_countries: {  }
     third_party_settings: {  }
   field_domain_access:
     type: options_buttons
-    weight: 40
+    weight: 22
     region: content
     settings: {  }
     third_party_settings: {  }
   field_domain_all_affiliates:
     type: boolean_checkbox
-    weight: 41
+    weight: 23
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   field_domain_source:
     type: options_select
-    weight: 42
+    weight: 24
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -182,7 +187,7 @@ content:
     third_party_settings: {  }
   field_map_location:
     type: geolocation_googlegeocoder
-    weight: 29
+    weight: 5
     region: content
     settings:
       auto_client_location: ''
@@ -248,7 +253,7 @@ content:
                   north: ''
                   east: ''
                 region: ''
-            enabled: true
+            enabled: false
           google_maps_layer_bicycling:
             weight: 0
             enabled: false
@@ -483,10 +488,40 @@ content:
         height: 400px
         width: 100%
         gestureHandling: auto
-    third_party_settings: {  }
+    third_party_settings:
+      geolocation_address:
+        enable: true
+        address_field: field_address
+        geocoder: google_geocoding_api
+        settings:
+          label: Address
+          description: 'Enter an address to be localized.'
+          autocomplete_min_length: 1
+          component_restrictions:
+            route: ''
+            country: 'UK, IE'
+            administrative_area: ''
+            locality: ''
+            postal_code: ''
+          boundary_restriction:
+            south: ''
+            west: ''
+            north: ''
+            east: ''
+          region: ''
+        sync_mode: auto
+        button_position: LEFT_TOP
+        direction: duplex
+        ignore:
+          organization: false
+          address-line1: false
+          address-line2: false
+          locality: false
+          administrative-area: false
+          postal-code: false
   field_metatags:
     type: metatag_firehose
-    weight: 28
+    weight: 21
     region: content
     settings:
       sidebar: true
@@ -516,18 +551,10 @@ content:
     third_party_settings: {  }
   field_photo:
     type: media_library_widget
-    weight: 7
+    weight: 8
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
-  field_postcode:
-    type: string_textfield
-    weight: 7
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
     third_party_settings: {  }
   field_site_subtopics:
     type: chosen_select
@@ -549,14 +576,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_town:
-    type: string_textfield
-    weight: 6
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   field_website:
     type: link_default
     weight: 10
@@ -572,14 +591,14 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 9
+    weight: 10
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 21
+    weight: 19
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -610,7 +629,7 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 22
+    weight: 20
     region: content
     settings:
       display_label: true
@@ -632,7 +651,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 10
+    weight: 11
     region: content
     settings:
       match_operator: CONTAINS
@@ -653,14 +672,16 @@ content:
     settings: {  }
     third_party_settings: {  }
   url_redirects:
-    weight: 20
+    weight: 18
     region: content
     settings: {  }
     third_party_settings: {  }
 hidden:
   entitygroupfield: true
-  field_domain_access: true
-  field_domain_all_affiliates: true
-  field_domain_source: true
+  field_address_line_1: true
+  field_address_line_2: true
+  field_county: true
   field_map: true
+  field_postcode: true
+  field_town: true
   groups: true
