@@ -41,6 +41,10 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
     $form['#attached']['library'][] = 'nicsdru_origins_theme/media_library_styles';
   }
 
+  // Set Domain Source as required as we need this for features such as LinkIt
+  // to function properly.
+  $form['field_domain_source']['widget']['#required'] = TRUE;
+
   // Set the Domain source entry if not already provided.
   if (empty($form['field_domain_source']['widget']['#default_value'])) {
     $domain_access_ids = $form['field_domain_access']['widget']['#default_value'];
