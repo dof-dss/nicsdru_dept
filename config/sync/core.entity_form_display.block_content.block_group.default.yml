@@ -1,0 +1,41 @@
+uuid: bb89804f-5615-41a3-aab3-fc26898dbbbe
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.block_group
+    - field.field.block_content.block_group.body
+    - field.field.block_content.block_group.field_blocks
+  module:
+    - block_field
+id: block_content.block_group.default
+targetEntityType: block_content
+bundle: block_group
+mode: default
+content:
+  field_blocks:
+    type: block_field_default
+    weight: 26
+    region: content
+    settings:
+      plugin_id: ''
+      settings: {  }
+      configuration_form: full
+    third_party_settings: {  }
+  info:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 1
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+hidden:
+  body: true
