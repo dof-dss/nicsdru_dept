@@ -1,0 +1,26 @@
+uuid: 4add7fe3-ab78-46a9-b43d-93806430fdcd
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.block_group
+    - field.field.block_content.block_group.body
+    - field.field.block_content.block_group.field_blocks
+  module:
+    - block_field
+id: block_content.block_group.default
+targetEntityType: block_content
+bundle: block_group
+mode: default
+content:
+  field_blocks:
+    type: block_field
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  langcode: true
+  search_api_excerpt: true
