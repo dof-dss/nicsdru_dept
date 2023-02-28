@@ -28,18 +28,59 @@ class HomepageController extends ControllerBase {
   /**
    * Default callback.
    *
-   * Site themes content is provided by a views block:
-   * views_block__site_themes_site_themes_home_page
-   * which is only shows on <front>.
-   *
-   * Featured content follows the same pattern (block id: featuredcontent),
-   * but is displayed in the page bottom region on the <front> route.
-   *
    * @return array
    *   Return a render array.
    */
   public function default() {
-    return [];
+    $build = [];
+
+    // Render a FCL node for the active domain.
+    /** @var \Drupal\dept_core\DepartmentManager $dept */
+    $dept = \Drupal::service('department.manager');
+    $active_dept = $dept->getCurrentDepartment();
+
+    $fcl_query = \Drupal::entityQuery('node')
+      ->condition('type', 'featured_content_list')
+      ->condition('status', 1)
+      ->condition('field_domain_source', $active_dept->id())
+      ->range(0, 1)
+      ->accessCheck(TRUE)
+      ->execute();
+
+    $fcl_node = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($fcl_query);
+
+    if (empty($fcl_node)) {
+      return $build;
+    }
+    else {
+      $fcl_node = reset($fcl_node);
+    }
+
+    // Create render element for the node.
+    $fcl_render = \Drupal::entityTypeManager()
+      ->getViewBuilder('node')
+      ->view($fcl_node, 'full');
+
+    $build['featured_news'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'section',
+      '#weight' => -1,
+      '#attributes' => [
+        'class' => [
+          'section--featured-highlights',
+          'section--featured section-front',
+          'section-front--featured',
+        ],
+      ],
+    ];
+    $build['featured_news']['title'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h2',
+      '#value' => t('Featured news'),
+    ];
+    $build['featured_news']['fcl'] = $fcl_render;
+
+    return $build;
   }
 
 }
