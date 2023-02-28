@@ -3,6 +3,9 @@
 namespace Drupal\dept_homepage\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\dept_core\DepartmentManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Controller for handling the site root path.
@@ -26,6 +29,39 @@ use Drupal\Core\Controller\ControllerBase;
 class HomepageController extends ControllerBase {
 
   /**
+   * @var \Drupal\dept_core\DepartmentManager
+   */
+  protected $deptManager;
+
+  /**
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $etManager;
+
+  /**
+   * Constructor for controller class.
+   *
+   * @param \Drupal\dept_core\DepartmentManager $dept_manager
+   *   Department manager service object.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager service object.
+   */
+  public function __construct(DepartmentManager $dept_manager, EntityTypeManagerInterface $entity_type_manager) {
+    $this->deptManager = $dept_manager;
+    $this->etManager = $entity_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('department.manager'),
+      $container->get('entity_type.manager')
+    );
+  }
+
+  /**
    * Default callback.
    *
    * @return array
@@ -33,13 +69,12 @@ class HomepageController extends ControllerBase {
    */
   public function default() {
     $build = [];
+    $node_storage = $this->etManager->getStorage('node');
 
     // Render a FCL node for the active domain.
-    /** @var \Drupal\dept_core\DepartmentManager $dept */
-    $dept = \Drupal::service('department.manager');
-    $active_dept = $dept->getCurrentDepartment();
+    $active_dept = $this->deptManager->getCurrentDepartment();
 
-    $fcl_query = \Drupal::entityQuery('node')
+    $fcl_query = $node_storage->getQuery()
       ->condition('type', 'featured_content_list')
       ->condition('status', 1)
       ->condition('field_domain_source', $active_dept->id())
@@ -47,7 +82,7 @@ class HomepageController extends ControllerBase {
       ->accessCheck(TRUE)
       ->execute();
 
-    $fcl_node = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($fcl_query);
+    $fcl_node = $node_storage->loadMultiple($fcl_query);
 
     if (empty($fcl_node)) {
       return $build;
@@ -57,7 +92,7 @@ class HomepageController extends ControllerBase {
     }
 
     // Create render element for the node.
-    $fcl_render = \Drupal::entityTypeManager()
+    $fcl_render = $this->etManager
       ->getViewBuilder('node')
       ->view($fcl_node, 'full');
 
