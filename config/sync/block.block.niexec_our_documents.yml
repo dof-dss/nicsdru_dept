@@ -1,0 +1,38 @@
+uuid: aeefac46-edd5-48dd-a2b8-1b1645e93450
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:block_group:27d3b95c-b0e9-4887-b755-69cb0f360082'
+  module:
+    - block_content
+    - domain
+    - system
+  theme:
+    - nicsdru_dept_theme
+id: niexec_our_documents
+theme: nicsdru_dept_theme
+region: content
+weight: -14
+provider: null
+plugin: 'block_content:27d3b95c-b0e9-4887-b755-69cb0f360082'
+settings:
+  id: 'block_content:27d3b95c-b0e9-4887-b755-69cb0f360082'
+  label: 'NIExec: Our documents'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  domain:
+    id: domain
+    negate: false
+    context_mapping:
+      domain: '@domain.current_domain_context:domain'
+    domains:
+      nigov: nigov
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'

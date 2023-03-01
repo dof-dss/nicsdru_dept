@@ -948,7 +948,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
@@ -1087,11 +1087,11 @@ display:
           default_row_class: false
           type: ul
           wrapper_class: ''
-          class: list--hyphen-bullet
+          class: ''
       row:
         type: fields
         options:
-          default_field_elements: true
+          default_field_elements: false
           inline: {  }
           separator: ''
           hide_empty: false
@@ -1239,7 +1239,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
@@ -1368,20 +1368,16 @@ display:
       style:
         type: html_list
         options:
-          grouping:
-            -
-              field: field_link_type
-              rendered: true
-              rendered_strip: false
+          grouping: {  }
           row_class: ''
-          default_row_class: true
+          default_row_class: false
           type: ul
           wrapper_class: ''
-          class: list--hyphen-bullet
+          class: ''
       row:
         type: fields
         options:
-          default_field_elements: true
+          default_field_elements: false
           inline: {  }
           separator: ''
           hide_empty: false
@@ -1528,7 +1524,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
@@ -1667,11 +1663,11 @@ display:
           default_row_class: false
           type: ul
           wrapper_class: ''
-          class: list--hyphen-bullet
+          class: ''
       row:
         type: fields
         options:
-          default_field_elements: true
+          default_field_elements: false
           inline: {  }
           separator: ''
           hide_empty: false
