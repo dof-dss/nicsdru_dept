@@ -35,6 +35,13 @@ function dept_topics_preprocess_node(array &$variables) {
         $content_links = \Drupal::service('dept_topics.subtopics')
           ->getSubtopicContent($subtopic_id);
 
+        // Prefix all included content with 'node:' to form suitable cache tags.
+        $cache_tags = preg_filter('/^/', 'node:', array_keys($content_links));
+        // Add the content stack view tag so that when draggableviews expires
+        // the view tags relating to any changes, that we regenerate any
+        // html relating to this render element as required.
+        $cache_tags[] = 'config:views.view.content_stacks';
+
         // Add render array elements we can call from the node-topic--full template.
         $variables['content']['subtopics_list'][] = [
           '#theme' => 'subtopic_content_list',
@@ -52,6 +59,7 @@ function dept_topics_preprocess_node(array &$variables) {
           ),
           '#cache' => [
             'keys' => ['subtopic_' . $subtopic_id],
+            'tags' => $cache_tags,
           ]
         ];
       }

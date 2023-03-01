@@ -93,7 +93,7 @@ class ContentSubTopics {
       }
 
       foreach ($subtopic_content as $row) {
-        $content[] = Link::createFromRoute($row->title, 'entity.node.canonical', ['node' => $row->nid])->toString();
+        $content[$row->nid] = Link::createFromRoute($row->title, 'entity.node.canonical', ['node' => $row->nid])->toString();
       }
     }
 
