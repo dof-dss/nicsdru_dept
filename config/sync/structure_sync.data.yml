@@ -1,0 +1,107 @@
+blocks:
+  -
+    info: 'niexec: pfg'
+    langcode: en
+    uuid: ccc0d53e-810b-40c0-a368-2de586eb7771
+    bundle: basic
+    revision_id: null
+    rev_id_current: null
+    fields:
+      body:
+        -
+          value: "<h3>Programme for Government</h3>\r\n<div class=\"card card--no-border card--no-padding\">\r\n\r\n<div class=\"card__image\">\r\n<drupal-media data-align=\"center\" data-entity-type=\"media\" data-entity-uuid=\"397bdb06-afa6-421e-8d23-911d10fd9f49\" data-view-mode=\"feature_card\"></drupal-media>\r\n</div>\r\n\r\n<div class=\"card__body\">\r\n<p>The Programme for Government (PfG) sets the strategic context for both the Budget and the Investment Strategy for Northern Ireland.</p>\r\n\r\n<p><a href=\"/node/152663\">Find out more about the PfG</a></p>\r\n</div>\r\n</div>\r\n"
+          summary: ''
+          format: full_html
+  -
+    info: 'niexec: budget'
+    langcode: en
+    uuid: bab5e511-c70f-40d0-9539-a9a1b00d909e
+    bundle: basic
+    revision_id: null
+    rev_id_current: null
+    fields:
+      body:
+        -
+          value: "<h3>Budget</h3>\r\n<div class=\"card card--no-border card--no-padding\">\r\n\r\n<div class=\"card__image\">\r\n<drupal-media data-align=\"center\" data-entity-type=\"media\" data-entity-uuid=\"52143c3d-ca63-4bc0-95ab-36bbefcfd6d2\" data-view-mode=\"feature_card\"></drupal-media>\r\n</div>\r\n\r\n<div class=\"card__body\">\r\n<p>The Budget provides the Executive with an opportunity to improve the lives of people in Northern Ireland by allocating resources to high priority areas.</p>\r\n\r\n<p><a href=\"/node/153129\">Find out more about The Budget</a></p>\r\n</div>\r\n</div>\r\n"
+          summary: ''
+          format: full_html
+  -
+    info: 'NIExec: Our documents'
+    langcode: en
+    uuid: 27d3b95c-b0e9-4887-b755-69cb0f360082
+    bundle: block_group
+    revision_id: null
+    rev_id_current: null
+    fields:
+      body: {  }
+      field_blocks:
+        -
+          plugin_id: 'block_content:bab5e511-c70f-40d0-9539-a9a1b00d909e'
+          settings:
+            id: 'block_content:bab5e511-c70f-40d0-9539-a9a1b00d909e'
+            label: 'niexec: budget'
+            label_display: false
+            provider: block_content
+            status: true
+            info: ''
+            view_mode: full
+        -
+          plugin_id: 'block_content:ccc0d53e-810b-40c0-a368-2de586eb7771'
+          settings:
+            id: 'block_content:ccc0d53e-810b-40c0-a368-2de586eb7771'
+            label: 'niexec: pfg'
+            label_display: false
+            provider: block_content
+            status: true
+            info: ''
+            view_mode: full
+        -
+          plugin_id: 'views_block:frontpage_our_documents-block_all_depts_latest_consultations'
+          settings:
+            id: 'views_block:frontpage_our_documents-block_all_depts_latest_consultations'
+            label: ''
+            label_display: visible
+            provider: views
+            views_label: ''
+            items_per_page: none
+            context_mapping: {  }
+        -
+          plugin_id: 'views_block:frontpage_our_documents-block_all_depts_latest_publications'
+          settings:
+            id: 'views_block:frontpage_our_documents-block_all_depts_latest_publications'
+            label: ''
+            label_display: visible
+            provider: views
+            views_label: ''
+            items_per_page: none
+            context_mapping: {  }
+  -
+    info: 'Our documents'
+    langcode: en
+    uuid: 1d79f382-db2f-45db-9dd3-aab54a05fb19
+    bundle: block_group
+    revision_id: null
+    rev_id_current: null
+    fields:
+      body: {  }
+      field_blocks:
+        -
+          plugin_id: 'views_block:frontpage_our_documents-block_latest_consultations'
+          settings:
+            id: 'views_block:frontpage_our_documents-block_latest_consultations'
+            label: ''
+            label_display: visible
+            provider: views
+            views_label: ''
+            items_per_page: none
+            context_mapping: {  }
+        -
+          plugin_id: 'views_block:frontpage_our_documents-block_latest_publications'
+          settings:
+            id: 'views_block:frontpage_our_documents-block_latest_publications'
+            label: ''
+            label_display: visible
+            provider: views
+            views_label: ''
+            items_per_page: none
+            context_mapping: {  }
