@@ -14,8 +14,14 @@ use Drupal\node\NodeInterface;
  * Implements hook_preprocess_page().
  */
 function dept_core_preprocess_page(&$variables) {
-  $dept_manager = \Drupal::service('department.manager');
-  $variables['department'] = $dept_manager->getCurrentDepartment();
+  dept_core_append_dept_info_for_templates($variables);
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function dept_core_preprocess_node(&$variables) {
+  dept_core_append_dept_info_for_templates($variables);
 }
 
 /**
@@ -57,4 +63,23 @@ function dept_core_preprocess_menu(&$variables) {
     }
 
   }
+}
+
+/**
+ * Function that adds department object metadata to
+ * preprocess variables for use in templates.
+ */
+function dept_core_append_dept_info_for_templates(array &$variables) {
+  $dept_manager = \Drupal::service('department.manager');
+  /** @var \Drupal\dept_core\Entity\Department $dept */
+  $dept = $dept_manager->getCurrentDepartment();
+
+  // Object properties/method values set as preprocess variables
+  // to remain compliant with Twig sandbox configuration which
+  // prohibits direct access to many object properties (security reasons)
+  // except for those on a pre-defined method allow-list.
+  // See https://chromatichq.com/insights/custom-entity-methods-twig-templates/
+  // and https://www.drupal.org/forum/support/theme-development/2018-09-05/twig-sandbox-security-error-when-calling-object-method
+  $variables['department']['id'] = $dept->id();
+  $variables['department']['name'] = $dept->name();
 }
