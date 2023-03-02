@@ -251,7 +251,7 @@ display:
     display_plugin: block
     position: 1
     display_options:
-      title: Consultations
+      title: 'Latest consultations'
       fields:
         title:
           id: title
@@ -583,7 +583,7 @@ display:
       display_description: ''
       use_more: true
       use_more_always: true
-      use_more_text: 'See all our consultations'
+      use_more_text: 'See all consultations'
       link_display: custom_url
       link_url: /consultations
       display_extenders: {  }
@@ -605,7 +605,7 @@ display:
     display_plugin: block
     position: 1
     display_options:
-      title: Publications
+      title: 'Latest publications'
       fields:
         title:
           id: title
@@ -937,7 +937,7 @@ display:
       display_description: ''
       use_more: true
       use_more_always: true
-      use_more_text: 'See all our publications'
+      use_more_text: 'See all publications'
       link_display: custom_url
       link_url: /publications
       display_extenders: {  }
