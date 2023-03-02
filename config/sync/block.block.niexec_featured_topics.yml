@@ -1,0 +1,38 @@
+uuid: 10d97e57-4416-4e6c-8f4e-ba96010627a2
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:block_group:4e9b2662-00ce-4467-90cb-ce9e13b9101d'
+  module:
+    - block_content
+    - domain
+    - system
+  theme:
+    - nicsdru_dept_theme
+id: niexec_featured_topics
+theme: nicsdru_dept_theme
+region: content
+weight: -16
+provider: null
+plugin: 'block_content:4e9b2662-00ce-4467-90cb-ce9e13b9101d'
+settings:
+  id: 'block_content:4e9b2662-00ce-4467-90cb-ce9e13b9101d'
+  label: 'niexec: featured topics'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  domain:
+    id: domain
+    negate: false
+    context_mapping:
+      domain: '@domain.current_domain_context:domain'
+    domains:
+      nigov: nigov
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'
