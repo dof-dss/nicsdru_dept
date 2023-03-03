@@ -6,12 +6,10 @@
  * of topics, subtopics and related content.
  */
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Link;
 use Drupal\dept_core\Department;
 use Drupal\node\NodeInterface;
-use Drupal\views\Plugin\views\query\QueryPluginBase;
-use Drupal\views\ViewExecutable;
-use Drupal\views\Views;
 
 /**
  * Implements hook_preprocess_node().
@@ -41,6 +39,8 @@ function dept_topics_preprocess_node(array &$variables) {
         // the view tags relating to any changes, that we regenerate any
         // html relating to this render element as required.
         $cache_tags[] = 'config:views.view.content_stacks';
+        // Add cache tag for the related subtopic node id.
+        $cache_tags[] = 'node:' . $subtopic_id;
 
         // Add render array elements we can call from the node-topic--full template.
         $variables['content']['subtopics_list'][] = [
@@ -58,7 +58,7 @@ function dept_topics_preprocess_node(array &$variables) {
             ['node' => $subtopic_id],
           ),
           '#cache' => [
-            'keys' => ['subtopic_' . $subtopic_id],
+            'keys' => ['subtopic_stack:' . $subtopic_id],
             'tags' => $cache_tags,
           ]
         ];
@@ -92,4 +92,18 @@ function dept_topics_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function dept_topics_node_insert(NodeInterface $node) {
+  $subtopic_ids = array_column($node->get('field_site_subtopics')->getValue(), 'target_id');
+
+  if ($node->isPublished() && !empty($subtopic_ids)) {
+    $subtopic_cache_tags = preg_filter('/^/', 'subtopic_stack:', $subtopic_ids);
+    // Published nodes with subtopic values should expire the cache
+    // tags for subtopic content stack render elements.
+    Cache::invalidateTags($subtopic_cache_tags);
+  }
 }
