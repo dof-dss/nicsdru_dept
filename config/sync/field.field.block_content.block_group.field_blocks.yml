@@ -13,7 +13,7 @@ entity_type: block_content
 bundle: block_group
 label: blocks
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
@@ -30,7 +30,6 @@ settings:
       'Custom menu link fields': 'Custom menu link fields'
       'Departmental sites': 'Departmental sites'
       'Department fields': 'Department fields'
-      'Department Homepage': 'Department Homepage'
       Devel: Devel
       Development: Development
       Domain: Domain
