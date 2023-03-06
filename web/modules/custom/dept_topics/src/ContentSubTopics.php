@@ -49,51 +49,63 @@ class ContentSubTopics {
     }
 
     if ($node instanceof NodeInterface && $node->bundle() === 'subtopic') {
-      $draggable_view_sql = "SELECT
-        nfd.nid,
-        nfd.type,
-        nfd.title
+      // A common table expression (CTE) is used here to paper over an especially
+      // awkward three-part data set when assembling what content to show.
+      // We can't rely exclusively on the draggableviews table because new nodes
+      // with a matching subtopic field value aren't saved to this table until
+      // the order is changed and saved by an admin. So in effect, we're doing this:
+      // - Create a big single table structure that wraps up:
+      //   - Anything from the draggable_views table with that subtopic id arg
+      //   - Any articles tagged with that subtopic id value.
+      //   - Any subtopics tagged with that subtopic id value but uses
+      //     a different field to join on from the above.
+      // - Select distinct everything from the CTE and order it
+      //   so any draggable views ordered stuff comes first and new stuff
+      //   sits underneath that.
+      $cte_sql = "WITH content_stack_cte (nid, type, title, weight) AS (
+        SELECT
+          nfd.nid,
+          nfd.type,
+          nfd.title,
+          ds.weight
         FROM {draggableviews_structure} ds
         JOIN {node_field_data} nfd ON nfd.nid = ds.entity_id
         WHERE ds.view_name = 'content_stacks'
-        AND ds.view_display = 'subtopic_articles'
-        AND ds.args = :subtopic_id
-        AND nfd.status = 1
-        ORDER BY ds.weight ASC
-      ";
-      $subtopic_content = \Drupal::database()
-        ->query($draggable_view_sql, [':subtopic_id' => '["' . $node->id() . '"]'])
-        ->fetchAll();
-
-      if (empty($subtopic_content)) {
-        // Fetch articles tagged with this subtopic, as well as subtopics
-        // referencing it from the parent subtopic field.
-        $subtopic_content_sql = "SELECT
+          AND ds.view_display = 'subtopic_articles'
+          AND ds.args = :subtopic_id_arg_format
+          AND nfd.status = 1
+        UNION
+        SELECT
           st_nfd.nid,
           st_nfd.type,
-          st_nfd.title
-          FROM {node_field_data} st_nfd
-          JOIN {node__field_parent_subtopic} nfps ON st_nfd.nid = nfps.entity_id
-          WHERE st_nfd.type = 'subtopic' AND nfps.field_parent_subtopic_target_id = :subtopic_id
-          AND st_nfd.status = 1
+          st_nfd.title,
+          99 as weight
+        FROM {node_field_data} st_nfd
+        JOIN {node__field_parent_subtopic} nfps ON st_nfd.nid = nfps.entity_id
+        WHERE st_nfd.type = 'subtopic' AND nfps.field_parent_subtopic_target_id = :subtopic_id
+        AND st_nfd.status = 1
         UNION
-          SELECT
+        SELECT
           ar_nfd.nid,
           ar_nfd.type,
-          ar_nfd.title
-          FROM {node_field_data} ar_nfd
-          JOIN {node__field_site_subtopics} nfss ON ar_nfd.nid = nfss.entity_id
-          WHERE ar_nfd.type = 'article' AND nfss.field_site_subtopics_target_id = :subtopic_id
-          AND ar_nfd.status = 1
-        ORDER BY title ASC";
-
-        $subtopic_content = \Drupal::database()
-          ->query($subtopic_content_sql, [':subtopic_id' => $node->id()])
-          ->fetchAll();
-      }
+          ar_nfd.title,
+          99 as weight
+        FROM {node_field_data} ar_nfd
+        JOIN {node__field_site_subtopics} nfss ON ar_nfd.nid = nfss.entity_id
+        WHERE ar_nfd.type = 'article' AND nfss.field_site_subtopics_target_id = :subtopic_id
+        AND ar_nfd.status = 1
+        )
+        SELECT DISTINCT nid, type, title FROM content_stack_cte
+        ORDER BY weight, title
+      ";
+      $subtopic_content = \Drupal::database()
+        ->query($cte_sql, [
+          ':subtopic_id_arg_format' => '["' . $node->id() . '"]',
+          ':subtopic_id' => $node->id()
+        ])->fetchAll();
 
       foreach ($subtopic_content as $row) {
-        $content[] = Link::createFromRoute($row->title, 'entity.node.canonical', ['node' => $row->nid])->toString();
+        $content[$row->nid] = Link::createFromRoute($row->title, 'entity.node.canonical', ['node' => $row->nid])->toString();
       }
     }
 
