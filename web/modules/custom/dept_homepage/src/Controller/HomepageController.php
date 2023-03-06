@@ -111,7 +111,7 @@ class HomepageController extends ControllerBase {
     $build['featured_news']['title'] = [
       '#type' => 'html_tag',
       '#tag' => 'h2',
-      '#value' => t('Featured news'),
+      '#value' => t('Featured'),
     ];
     $build['featured_news']['fcl'] = $fcl_render;
 
