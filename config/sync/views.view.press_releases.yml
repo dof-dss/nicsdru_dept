@@ -3,14 +3,15 @@ langcode: en
 status: true
 dependencies:
   config:
+    - domain.record.nigov
     - field.storage.node.field_published_date
     - field.storage.node.field_summary
     - node.type.news
   module:
     - datetime
+    - domain
     - node
     - text
-    - user
 id: press_releases
 label: 'Press Releases'
 module: views
@@ -353,9 +354,10 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: perm
+        type: domain
         options:
-          perm: 'access content'
+          domain:
+            nigov: nigov
       cache:
         type: tag
         options: {  }
@@ -434,8 +436,8 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url.site
         - 'user.node_grants:view'
-        - user.permissions
       tags:
         - 'config:field.storage.node.field_published_date'
         - 'config:field.storage.node.field_summary'
@@ -469,8 +471,8 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url.site
         - 'user.node_grants:view'
-        - user.permissions
       tags:
         - 'config:field.storage.node.field_published_date'
         - 'config:field.storage.node.field_summary'

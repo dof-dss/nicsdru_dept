@@ -3,10 +3,21 @@ langcode: en
 status: true
 dependencies:
   config:
+    - domain.record.communities
+    - domain.record.daera
+    - domain.record.economy
+    - domain.record.education
+    - domain.record.executiveoffice
+    - domain.record.finance
+    - domain.record.health
+    - domain.record.infrastructure
+    - domain.record.justice
+    - domain.record.nigov
     - field.storage.node.body
     - search_api.index.news_index
   module:
     - dept_search
+    - domain
     - search_api
     - text
 id: news_search
@@ -370,6 +381,19 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      access:
+        type: domain
+        options:
+          domain:
+            daera: daera
+            communities: communities
+            economy: economy
+            education: education
+            finance: finance
+            health: health
+            infrastructure: infrastructure
+            justice: justice
+            executiveoffice: executiveoffice
       filters:
         search_api_fulltext:
           id: search_api_fulltext
@@ -477,6 +501,7 @@ display:
         groups:
           1: AND
       defaults:
+        access: false
         cache: true
         css_class: false
         filters: false
@@ -529,6 +554,11 @@ display:
     position: 2
     display_options:
       title: 'Press releases'
+      access:
+        type: domain
+        options:
+          domain:
+            nigov: nigov
       arguments:
         field_domain_access:
           id: field_domain_access
@@ -561,6 +591,7 @@ display:
           break_phrase: false
           not: false
       defaults:
+        access: false
         cache: true
         title: false
         css_class: false
