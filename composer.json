@@ -90,7 +90,6 @@
         "drupal/easychart": "^4",
         "drupal/entity_browser": "^2.6",
         "drupal/entity_embed": "^1.1",
-        "drupal/entitygroupfield": "^1.0@alpha",
         "drupal/eu_cookie_compliance": "^1.14",
         "drupal/facets": "^2.0",
         "drupal/facets_pretty_paths": "^1.2",
@@ -258,19 +257,6 @@
             },
             "drupal/domain": {
                 "Migration path for domain": "https://www.drupal.org/files/issues/2020-02-27/domain-migration-path-for-domain-2882837-13.patch"
-            },
-            "drupal/domain_group": {
-                "Add missing frontpage field to Group Domain Settings form": "https://www.drupal.org/files/issues/2021-04-24/add-missing-frontpage-field-3210536-3.patch",
-                "WSD in initial install - TypeError: Argument 1 passed to Drupal\\domain_group\\EventSubscriber\\LoginPageRedirect": "https://www.drupal.org/files/issues/2021-08-23/3229261-2.patch"
-            },
-            "drupal/group_content_menu": {
-                "Fatal error when un-checking the \"Provide a menu link\" checkbox on a node form": "https://git.drupalcode.org/project/group_content_menu/-/merge_requests/1.diff"
-            },
-            "drupal/group": {
-              "Access to Revisions of Group Content is Broken": "https://www.drupal.org/files/issues/2022-03-30/group-3256998-35.patch",
-              "Add a computed field for entity's group(s)": "https://www.drupal.org/files/issues/2022-07-07/group-computed-fields-2718195-65.patch",
-              "Group Permission Callbacks Create White Screen Error on Group Type Permissions Page": "https://www.drupal.org/files/issues/2022-07-27/group-3294949-2.patch",
-              "Node update hook is triggered upon group content create": "https://www.drupal.org/files/issues/2022-01-04/2872697-45.patch"
             },
             "drupal/devel": {
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://raw.githubusercontent.com/politsin/snipets/master/patch/kint.patch"
