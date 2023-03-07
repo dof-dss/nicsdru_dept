@@ -155,11 +155,15 @@ class DeptMigrationCommands extends DrushCommands {
         continue;
       }
 
-      // TODO: Find the featured content for this dept in D7.
+      // TODO: Find the nodes for the content featured for this dept in D7.
+      $d7_featured_nodes = [];
 
       // TODO: Find them in D9 and add them as the values for the FCL items.
+      $d9_featured_nodes = [];
+      $fcl_node->field_featured_content->setValue($d9_featured_nodes);
 
       // TODO: Save the FCL node.
+      $fcl_node->save();
 
     }
 
