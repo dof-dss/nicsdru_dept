@@ -3,8 +3,11 @@
 namespace Drupal\dept_migrate\Commands;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
+use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -29,12 +32,28 @@ class DeptMigrationCommands extends DrushCommands {
   protected $lookupManager;
 
   /**
+   * EntityTypeManager service object.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Department manager service object.
+   *
+   * @var \Drupal\dept_core\DepartmentManager
+   */
+  protected $departmentManager;
+
+  /**
    * Command constructor.
    */
-  public function __construct(Connection $database, MigrateUuidLookupManager $lookup_manager) {
+  public function __construct(Connection $database, MigrateUuidLookupManager $lookup_manager, EntityTypeManagerInterface $etm, DepartmentManager $dept_manager) {
     parent::__construct();
     $this->dbConn = $database;
     $this->lookupManager = $lookup_manager;
+    $this->entityTypeManager = $etm;
+    $this->departmentManager = $dept_manager;
   }
 
   /**
@@ -96,6 +115,54 @@ class DeptMigrationCommands extends DrushCommands {
 
       $this->io()->writeln(" ✅");
     }
+    $this->io()->success("Finished");
+  }
+
+  /**
+   * Syncs the featured content shown on the homepage from D7 to D9.
+   *
+   * @command dept:sync-homepage-content
+   * @aliases shc
+   */
+  public function syncHomepageFeaturedContent() {
+    $this->io()->title("Synchronising homepage featured content from D7 to D9");
+    $node_storage = $this->entityTypeManager->getStorage('node');
+
+    // For each dept, find the FCL for it.
+    $depts = $this->departmentManager->getAllDepartments();
+
+    foreach ($depts as $dept) {
+      $this->io()->writeln('Processing ' . $dept->label());
+
+      // NB: accessCheck = FALSE because otherwise we can't load the node object.
+      $query = $node_storage->getQuery()
+        ->condition('type', 'featured_content_list')
+        ->condition('status', 1)
+        ->condition('field_fcl_type', 'homepage_news')
+        ->condition('field_domain_source', $dept->id())
+        ->range(0, 1)
+        ->accessCheck(FALSE)
+        ->execute();
+
+      if (empty($query)) {
+        continue;
+      }
+
+      $fcl_nid = reset($query);
+      $fcl_node = $node_storage->load($fcl_nid);
+
+      if ($fcl_node instanceof NodeInterface === FALSE) {
+        continue;
+      }
+
+      // TODO: Find the featured content for this dept in D7.
+
+      // TODO: Find them in D9 and add them as the values for the FCL items.
+
+      // TODO: Save the FCL node.
+
+    }
+
     $this->io()->success("Finished");
   }
 
