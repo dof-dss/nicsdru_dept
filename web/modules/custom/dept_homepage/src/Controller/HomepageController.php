@@ -69,7 +69,7 @@ class HomepageController extends ControllerBase {
    */
   public function default() {
     $build = [];
-    $node_storage = $this->deptManager->getStorage('node');
+    $node_storage = $this->etManager->getStorage('node');
 
     // Render a FCL node for the active domain.
     $active_dept = $this->deptManager->getCurrentDepartment();
