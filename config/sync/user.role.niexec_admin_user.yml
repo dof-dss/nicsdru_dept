@@ -2,6 +2,8 @@ uuid: ef04125e-e903-4b05-8cbe-fa2e7be604ca
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.featured_content_list
   module:
     - content_moderation
     - media
@@ -33,3 +35,7 @@ permissions:
   - 'view any unpublished protected_area content'
   - 'view any unpublished publication content'
   - 'view any unpublished ual content'
+  - 'edit any featured_content_list content'
+  - 'edit own featured_content_list content'
+  - 'revert featured_content_list revisions'
+  - 'view featured_content_list revisions'
