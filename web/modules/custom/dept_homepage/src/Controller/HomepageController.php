@@ -34,21 +34,13 @@ class HomepageController extends ControllerBase {
   protected $deptManager;
 
   /**
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $etManager;
-
-  /**
    * Constructor for controller class.
    *
    * @param \Drupal\dept_core\DepartmentManager $dept_manager
    *   Department manager service object.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity type manager service object.
    */
-  public function __construct(DepartmentManager $dept_manager, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(DepartmentManager $dept_manager) {
     $this->deptManager = $dept_manager;
-    $this->etManager = $entity_type_manager;
   }
 
   /**
@@ -56,8 +48,7 @@ class HomepageController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('department.manager'),
-      $container->get('entity_type.manager')
+      $container->get('department.manager')
     );
   }
 
@@ -69,7 +60,7 @@ class HomepageController extends ControllerBase {
    */
   public function default() {
     $build = [];
-    $node_storage = $this->etManager->getStorage('node');
+    $node_storage = $this->entityTypeManager()->getStorage('node');
 
     // Render a FCL node for the active domain.
     $active_dept = $this->deptManager->getCurrentDepartment();
@@ -92,7 +83,7 @@ class HomepageController extends ControllerBase {
     }
 
     // Create render element for the node.
-    $fcl_render = $this->etManager
+    $fcl_render = $this->entityTypeManager()
       ->getViewBuilder('node')
       ->view($fcl_node, 'full');
 
