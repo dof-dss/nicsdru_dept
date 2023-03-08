@@ -98,12 +98,15 @@ function dept_topics_theme($existing, $type, $theme, $path) {
  * Implements hook_ENTITY_TYPE_insert().
  */
 function dept_topics_node_insert(NodeInterface $node) {
-  $subtopic_ids = array_column($node->get('field_site_subtopics')->getValue(), 'target_id');
+  if ($node->hasField('field_site_subtopics')) {
+    $subtopic_ids = array_column($node->get('field_site_subtopics')
+      ->getValue(), 'target_id');
 
-  if ($node->isPublished() && !empty($subtopic_ids)) {
-    $subtopic_cache_tags = preg_filter('/^/', 'subtopic_stack:', $subtopic_ids);
-    // Published nodes with subtopic values should expire the cache
-    // tags for subtopic content stack render elements.
-    Cache::invalidateTags($subtopic_cache_tags);
+    if ($node->isPublished() && !empty($subtopic_ids)) {
+      $subtopic_cache_tags = preg_filter('/^/', 'subtopic_stack:', $subtopic_ids);
+      // Published nodes with subtopic values should expire the cache
+      // tags for subtopic content stack render elements.
+      Cache::invalidateTags($subtopic_cache_tags);
+    }
   }
 }
