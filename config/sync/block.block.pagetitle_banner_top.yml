@@ -1,15 +1,17 @@
-uuid: c910c7c1-175e-4053-97b9-cb65d2ac3ed6
+uuid: a20fe118-822a-4c45-8c5c-225d4f5939d1
 langcode: en
 status: true
 dependencies:
+  config:
+    - block_visibility_groups.block_visibility_group.banner_page_title
   module:
-    - system
+    - block_visibility_groups
   theme:
     - nicsdru_dept_theme
 id: pagetitle_banner_top
 theme: nicsdru_dept_theme
 region: top_banner
-weight: -17
+weight: 0
 provider: null
 plugin: page_title_block
 settings:
@@ -18,7 +20,7 @@ settings:
   label_display: '0'
   provider: core
 visibility:
-  request_path:
-    id: request_path
+  condition_group:
+    id: condition_group
     negate: false
-    pages: "<front>\r\n/publications\r\n/publications/date/*\r\n/publications/topic/*\r\n/publications/type/*\r\n/consultations\r\n/consultations/date/*\r\n/consultations/topic/*\r\n/news\r\n/news/date/*\r\n/news/topic/*\r\n/press-releases\r\n/press-releases/*"
+    block_visibility_group: banner_page_title
