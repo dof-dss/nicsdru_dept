@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
@@ -82,4 +83,20 @@ function dept_core_append_dept_info_for_templates(array &$variables) {
   // and https://www.drupal.org/forum/support/theme-development/2018-09-05/twig-sandbox-security-error-when-calling-object-method
   $variables['department']['id'] = $dept->id();
   $variables['department']['name'] = $dept->name();
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function dept_core_entity_update(EntityInterface $entity) {
+
+  // Update the corresponding Department label when a Domain label is updated.
+  if ($entity->getEntityType()->id() == 'domain' && !$entity->isNew()) {
+    $department = \Drupal::entityTypeManager()->getStorage('department')->load($entity->id());
+
+    if (!empty($department) && $department->label() !== $entity->label()) {
+      $department->set('label', $entity->label());
+      $department->save();
+    }
+  }
 }
