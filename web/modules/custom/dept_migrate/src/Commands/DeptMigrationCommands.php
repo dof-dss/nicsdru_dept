@@ -25,6 +25,13 @@ class DeptMigrationCommands extends DrushCommands {
   protected $dbConn;
 
   /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $d7conn;
+
+  /**
    * Migration Lookup Manager.
    *
    * @var \Drupal\dept_migrate\MigrateUuidLookupManager
@@ -48,9 +55,10 @@ class DeptMigrationCommands extends DrushCommands {
   /**
    * Command constructor.
    */
-  public function __construct(Connection $database, MigrateUuidLookupManager $lookup_manager, EntityTypeManagerInterface $etm, DepartmentManager $dept_manager) {
+  public function __construct(Connection $database, Connection $d7_database, MigrateUuidLookupManager $lookup_manager, EntityTypeManagerInterface $etm, DepartmentManager $dept_manager) {
     parent::__construct();
     $this->dbConn = $database;
+    $this->d7conn = $d7_database;
     $this->lookupManager = $lookup_manager;
     $this->entityTypeManager = $etm;
     $this->departmentManager = $dept_manager;
@@ -157,14 +165,49 @@ class DeptMigrationCommands extends DrushCommands {
 
       // TODO: Find the nodes for the content featured for this dept in D7.
       $d7_featured_nodes = [];
+      $d7_query = $this->d7conn->query("SELECT DISTINCT
+        n.nid,
+        n.type,
+        n.title,
+        d.sitename
+        FROM {node} n
+        JOIN {domain_access} da on da.nid = n.nid
+        JOIN {domain} d on d.domain_id = da.gid
+        JOIN {flagging} f on f.entity_id = n.nid
+        JOIN {flag} on flag.fid = f.fid
+        JOIN {flag_counts} fc on fc.entity_id = n.nid
+        WHERE d.sitename = :site_id
+        AND n.status = 1
+        AND flag.name IN ('home_page_display', 'featured_news')
+        ORDER BY fc.last_updated DESC, n.created DESC
+        LIMIT 10", [':site_id' => $dept->id()]
+      );
 
-      // TODO: Find them in D9 and add them as the values for the FCL items.
+      if (empty($d7_query)) {
+        continue;
+      }
+
+      // Find them in D9 and add them as the values for the FCL items.
       $d9_featured_nodes = [];
-      $fcl_node->field_featured_content->setValue($d9_featured_nodes);
 
-      // TODO: Save the FCL node.
-      $fcl_node->save();
+      foreach ($d7_query as $row) {
+        $d9_lookup = $this->lookupManager->lookupBySourceNodeId([$row->nid]);
 
+        if (empty($d9_lookup)) {
+          $this->io()->warning('No lookup result found for D7 node ' . $row->nid . ' - ' . $row->title);
+          continue;
+        }
+
+        $d9_lookup = reset($d9_lookup);
+        if (!empty($d9_lookup['nid'])) {
+          $d9_featured_nodes[] = $d9_lookup['nid'];
+        }
+      }
+
+      if (!empty($d9_featured_nodes)) {
+        $fcl_node->field_featured_content->setValue($d9_featured_nodes);
+        $fcl_node->save();
+      }
     }
 
     $this->io()->success("Finished");
