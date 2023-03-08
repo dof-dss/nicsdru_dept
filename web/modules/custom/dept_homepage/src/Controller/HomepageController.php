@@ -83,7 +83,7 @@ class HomepageController extends ControllerBase {
     }
 
     // Create render element for the node.
-    $fcl_render = $this->etManager
+    $fcl_render = $this->entityTypeManager()
       ->getViewBuilder('node')
       ->view($fcl_node, 'full');
 
