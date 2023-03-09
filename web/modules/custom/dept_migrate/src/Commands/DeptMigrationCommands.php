@@ -153,17 +153,25 @@ class DeptMigrationCommands extends DrushCommands {
         ->execute();
 
       if (empty($query)) {
-        continue;
+        // Create a new FCL node for this dept if we have none already.
+        $fcl_node = $node_storage->create([
+          'title' => $dept->label() . ' homepage featured content',
+          'type' => 'featured_content_list',
+          'status' => 1,
+          'field_domain_source' => $dept->id(),
+          'field_fcl_type' => 'homepage_news',
+        ]);
       }
-
-      $fcl_nid = reset($query);
-      $fcl_node = $node_storage->load($fcl_nid);
+      else {
+        $fcl_nid = reset($query);
+        $fcl_node = $node_storage->load($fcl_nid);
+      }
 
       if ($fcl_node instanceof NodeInterface === FALSE) {
         continue;
       }
 
-      // TODO: Find the nodes for the content featured for this dept in D7.
+      // Find the nodes for the content featured for this dept in D7.
       $d7_featured_nodes = [];
       $d7_query = $this->d7conn->query("SELECT DISTINCT
             n.nid,
