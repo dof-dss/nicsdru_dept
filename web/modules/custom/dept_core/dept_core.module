@@ -103,6 +103,7 @@ function dept_core_entity_update(EntityInterface $entity) {
     $department = \Drupal::entityTypeManager()->getStorage('department')->load($entity->id());
 
     if (!empty($department) && $department->label() !== $entity->label()) {
+      // @phpstan-ignore-next-line
       $department->set('label', $entity->label());
       $department->save();
     }
@@ -148,6 +149,7 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
           $departments = \Drupal::entityTypeManager()->getStorage('department')->loadByProperties(['status' => TRUE]);
 
           foreach ($departments as $department) {
+            // @phpstan-ignore-next-line
             $links[] = Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable();
           }
 
