@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.featured_content_list.field_domain_access
     - field.field.node.featured_content_list.field_domain_all_affiliates
     - field.field.node.featured_content_list.field_domain_source
+    - field.field.node.featured_content_list.field_fcl_type
     - field.field.node.featured_content_list.field_featured_content
     - node.type.featured_content_list
   module:
@@ -25,6 +26,7 @@ hidden:
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
+  field_fcl_type: true
   field_featured_content: true
   langcode: true
   search_api_excerpt: true
