@@ -158,7 +158,8 @@ class DeptMigrationCommands extends DrushCommands {
           'title' => $dept->label() . ' homepage featured content',
           'type' => 'featured_content_list',
           'status' => 1,
-          'field_domain_source' => $dept->id(),
+          'field_domain_source' => ['target_id' => $dept->id()],
+          'field_domain_access' => ['target_id' => $dept->id()],
           'field_fcl_type' => 'homepage_news',
         ]);
       }
