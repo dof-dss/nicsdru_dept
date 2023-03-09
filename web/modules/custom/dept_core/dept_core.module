@@ -6,8 +6,10 @@
  */
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
+use Drupal\Core\Link;
 use Drupal\node\NodeInterface;
 
 /**
@@ -89,4 +91,80 @@ function dept_core_append_dept_info_for_templates(array &$variables) {
   // and https://www.drupal.org/forum/support/theme-development/2018-09-05/twig-sandbox-security-error-when-calling-object-method
   $variables['department']['id'] = $dept->id();
   $variables['department']['name'] = $dept->name();
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function dept_core_entity_update(EntityInterface $entity) {
+
+  // Update the corresponding Department label when a Domain label is updated.
+  if ($entity->getEntityType()->id() == 'domain' && !$entity->isNew()) {
+    $department = \Drupal::entityTypeManager()->getStorage('department')->load($entity->id());
+
+    if (!empty($department) && $department->label() !== $entity->label()) {
+      // @phpstan-ignore-next-line
+      $department->set('label', $entity->label());
+      $department->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function dept_core_token_info() {
+
+  $types['departmental'] = [
+    'name' => t("Departmental"),
+    'description' => t("Departmental site tokens"),
+  ];
+
+  $tokens['all-departments-links'] = [
+    'name' => t("Departments links"),
+    'description' => t("Displays a list of links to each department site"),
+  ];
+
+  return [
+    'types' => $types,
+    'tokens' => [
+      'departmental' => $tokens,
+    ],
+  ];
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleable_metadata) {
+
+  $replacements = [];
+
+  if ($type === 'departmental') {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        // Display a list of links to each Department.
+        case 'all-departments-links':
+
+          $departments = \Drupal::entityTypeManager()->getStorage('department')->loadByProperties(['status' => TRUE]);
+          $links = [];
+
+          foreach ($departments as $department) {
+            // @phpstan-ignore-next-line
+            $links[] = Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable();
+          }
+
+          $link_list = [
+            '#theme' => 'item_list',
+            '#list_type' => 'ul',
+            '#items' => $links,
+          ];
+
+          $replacements[$original] = \Drupal::service('renderer')->render($link_list);
+          break;
+      }
+    }
+  }
+
+  return $replacements;
 }
