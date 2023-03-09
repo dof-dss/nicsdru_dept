@@ -147,6 +147,7 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
         case 'all-departments-links':
 
           $departments = \Drupal::entityTypeManager()->getStorage('department')->loadByProperties(['status' => TRUE]);
+          $links = [];
 
           foreach ($departments as $department) {
             // @phpstan-ignore-next-line
