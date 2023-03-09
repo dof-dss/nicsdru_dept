@@ -81,7 +81,7 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
       '#type' => 'select',
       '#title' => $this->t('Information to display'),
       '#options' => $options,
-      '#default_value' => $this->configuration['display_field'],
+      '#default_value' => $this->configuration['display_field'] ?? '',
     ];
     return $form;
   }
