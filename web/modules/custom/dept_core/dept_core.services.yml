@@ -10,6 +10,11 @@ services:
   rel2abs_url:
     class: Drupal\dept_core\Rel2AbsUrl
     arguments: ['@entity_type.manager', '@department.manager', '@path_alias.manager']
+  department.context:
+    class: Drupal\dept_core\ContextProvider\DepartmentContext
+    arguments: ['@department.manager']
+    tags:
+      - { name: 'context_provider' }
 parameters:
   topic_route_patterns:
     - /publications/(topic)/(\d+)
