@@ -20,44 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *  }
  * )
  */
-class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPluginInterface {
-
-  /**
-   * The Department manager service.
-   *
-   * @var \Drupal\dept_core\DepartmentManager
-   */
-  protected $departmentManager;
-
-  /**
-   * Constructs a new MasqueradeBlock object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\dept_core\DepartmentManager $department_manager
-   *   The department manager service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, DepartmentManager $department_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->departmentManager = $department_manager;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('department.manager')
-    );
-  }
+class DepartmentalDetailsBlock extends BlockBase {
 
   /**
    * {@inheritdoc}
