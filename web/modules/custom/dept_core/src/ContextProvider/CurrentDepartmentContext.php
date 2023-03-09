@@ -8,7 +8,7 @@ use Drupal\Core\Plugin\Context\EntityContext;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_core\DepartmentManager;
 
-class DepartmentContext implements ContextProviderInterface {
+class CurrentDepartmentContext implements ContextProviderInterface {
 
   use StringTranslationTrait;
 
