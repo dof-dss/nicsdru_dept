@@ -14,7 +14,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Block(
  *   id = "dept_core_departmental_details",
  *   admin_label = @Translation("Departmental details"),
- *   category = @Translation("Departmental sites")
+ *   category = @Translation("Departmental sites"),
+ *   context_definitions = {
+ *    "current_department" = @ContextDefinition("entity:department")
+ *  }
  * )
  */
 class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPluginInterface {
@@ -97,8 +100,8 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
    * {@inheritdoc}
    */
   public function build() {
-    $dept = $this->departmentManager->getCurrentDepartment();
     $build = [];
+    $dept = $this->getContextValue('current_department');
 
     if (is_object($dept) && method_exists($dept, 'id')) {
       $build = [
