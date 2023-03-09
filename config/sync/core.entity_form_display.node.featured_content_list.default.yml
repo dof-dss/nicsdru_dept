@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.featured_content_list.field_domain_access
     - field.field.node.featured_content_list.field_domain_all_affiliates
     - field.field.node.featured_content_list.field_domain_source
+    - field.field.node.featured_content_list.field_fcl_type
     - field.field.node.featured_content_list.field_featured_content
     - node.type.featured_content_list
   module:
@@ -37,6 +38,12 @@ content:
   field_domain_source:
     type: options_select
     weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_fcl_type:
+    type: options_select
+    weight: 26
     region: content
     settings: {  }
     third_party_settings: {  }

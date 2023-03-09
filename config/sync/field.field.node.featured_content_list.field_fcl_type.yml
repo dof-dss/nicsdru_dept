@@ -1,0 +1,21 @@
+uuid: dfb4c6dd-8134-4fe0-b3ff-3765d0b98033
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_fcl_type
+    - node.type.featured_content_list
+  module:
+    - options
+id: node.featured_content_list.field_fcl_type
+field_name: field_fcl_type
+entity_type: node
+bundle: featured_content_list
+label: 'FCL type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string
