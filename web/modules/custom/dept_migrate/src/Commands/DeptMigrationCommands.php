@@ -166,20 +166,22 @@ class DeptMigrationCommands extends DrushCommands {
       // TODO: Find the nodes for the content featured for this dept in D7.
       $d7_featured_nodes = [];
       $d7_query = $this->d7conn->query("SELECT DISTINCT
-        n.nid,
-        n.type,
-        n.title,
-        d.sitename
+            n.nid,
+            n.type,
+            n.title,
+            d.sitename
         FROM {node} n
-        JOIN {domain_access} da on da.nid = n.nid
-        JOIN {domain} d on d.domain_id = da.gid
-        JOIN {flagging} f on f.entity_id = n.nid
-        JOIN {flag} on flag.fid = f.fid
+        JOIN {domain_access} da ON da.nid = n.nid
+        JOIN {domain} d ON d.domain_id = da.gid
+        JOIN {flagging} fn_flag ON fn_flag.entity_id = n.nid AND fn_flag.fid = 1
+        JOIN {flagging} hp_flag ON hp_flag.entity_id = n.nid AND hp_flag.fid = 2
         JOIN {flag_counts} fc on fc.entity_id = n.nid
-        WHERE d.sitename = :site_id
-        AND n.status = 1
-        AND flag.name IN ('home_page_display', 'featured_news')
-        ORDER BY fc.last_updated DESC, n.created DESC
+        JOIN {field_data_field_published_date} fdfpd ON fdfpd.entity_id = n.nid
+        WHERE d.sitename = :site_id AND n.status = 1
+        ORDER BY
+            fn_flag.uid IS NOT NULL DESC,
+            hp_flag.uid IS NOT NULL DESC,
+            fdfpd.field_published_date_value DESC
         LIMIT 10", [':site_id' => $dept->id()]
       );
 
