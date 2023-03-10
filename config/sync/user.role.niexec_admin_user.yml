@@ -6,6 +6,7 @@ dependencies:
     - node.type.featured_content_list
   module:
     - content_moderation
+    - domain
     - media
     - node
 id: niexec_admin_user
@@ -16,6 +17,9 @@ permissions:
   - 'access media overview'
   - 'create media'
   - 'delete media'
+  - 'edit any featured_content_list content'
+  - 'edit own featured_content_list content'
+  - 'revert featured_content_list revisions'
   - 'update media'
   - 'update niexec_homepage_news entityqueue'
   - 'view all revisions'
@@ -35,7 +39,5 @@ permissions:
   - 'view any unpublished protected_area content'
   - 'view any unpublished publication content'
   - 'view any unpublished ual content'
-  - 'edit any featured_content_list content'
-  - 'edit own featured_content_list content'
-  - 'revert featured_content_list revisions'
   - 'view featured_content_list revisions'
+  - 'view domain list'

@@ -7,6 +7,7 @@ dependencies:
     - node.type.landing_page
   module:
     - content_moderation
+    - domain
     - domain_access
     - filter
     - media
@@ -35,3 +36,4 @@ permissions:
   - 'view any unpublished landing_page content'
   - 'view landing_page revisions'
   - 'view scheduled transitions node landing_page'
+  - 'view domain list'

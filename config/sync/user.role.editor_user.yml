@@ -13,7 +13,9 @@ dependencies:
   module:
     - book
     - content_moderation
+    - domain
     - domain_access
+    - draggableviews
     - filter
     - flag
     - media
@@ -165,3 +167,4 @@ permissions:
   - 'view scheduled transitions node ual'
   - 'view subtopic revisions'
   - 'view topic revisions'
+  - 'view domain list'

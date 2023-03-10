@@ -9,6 +9,7 @@ dependencies:
     - node.type.infogram
   module:
     - content_moderation
+    - domain
     - domain_access
     - easychart
     - media
@@ -112,3 +113,4 @@ permissions:
   - 'view scheduled transitions node heritage_site'
   - 'view scheduled transitions node page'
   - 'view taxonomy term revisions'
+  - 'view domain list'
