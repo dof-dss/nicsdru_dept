@@ -80,6 +80,7 @@ class DepartmentalDetailsBlock extends BlockBase {
       ]);
 
       if (array_key_exists("#field_name", $field_data)) {
+        // @phpstan-ignore-next-line  Doesn't like magic methods.
         $build['content'] = $dept->get($field_data['#field_name'])->view('default');
       }
     }
