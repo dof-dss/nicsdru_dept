@@ -14,47 +14,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Block(
  *   id = "dept_core_departmental_details",
  *   admin_label = @Translation("Departmental details"),
- *   category = @Translation("Departmental sites")
+ *   category = @Translation("Departmental sites"),
+ *   context_definitions = {
+ *    "current_department" = @ContextDefinition("entity:department")
+ *  }
  * )
  */
-class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPluginInterface {
-
-  /**
-   * The Department manager service.
-   *
-   * @var \Drupal\dept_core\DepartmentManager
-   */
-  protected $departmentManager;
-
-  /**
-   * Constructs a new MasqueradeBlock object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\dept_core\DepartmentManager $department_manager
-   *   The department manager service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, DepartmentManager $department_manager) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->departmentManager = $department_manager;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('department.manager')
-    );
-  }
+class DepartmentalDetailsBlock extends BlockBase {
 
   /**
    * {@inheritdoc}
@@ -81,7 +47,7 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
       '#type' => 'select',
       '#title' => $this->t('Information to display'),
       '#options' => $options,
-      '#default_value' => $this->configuration['display_field'],
+      '#default_value' => $this->configuration['display_field'] ?? '',
     ];
     return $form;
   }
@@ -97,8 +63,8 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
    * {@inheritdoc}
    */
   public function build() {
-    $dept = $this->departmentManager->getCurrentDepartment();
     $build = [];
+    $dept = $this->getContextValue('current_department');
 
     if (is_object($dept) && method_exists($dept, 'id')) {
       $build = [
@@ -114,6 +80,7 @@ class DepartmentalDetailsBlock extends BlockBase implements ContainerFactoryPlug
       ]);
 
       if (array_key_exists("#field_name", $field_data)) {
+        // @phpstan-ignore-next-line  Doesn't like magic methods.
         $build['content'] = $dept->get($field_data['#field_name'])->view('default');
       }
     }
