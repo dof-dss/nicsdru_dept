@@ -79,7 +79,7 @@ hooks:
     mv ckeditor4-fix-widget-dnd/build/ckeditor web/core/assets/vendor/ckeditor
     rm -rf ckeditor4-fix-widget-dnd
     echo ">>> Install Platform CLI tool"
-    curl -sS https://platform.sh/cli/installer | php
+    curl -fsSL https://raw.githubusercontent.com/platformsh/cli/main/installer.sh | bash
   # The deploy hook runs after your application has been deployed and started.
   deploy: |
     set -e
