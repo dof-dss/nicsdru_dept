@@ -33,6 +33,7 @@ dependencies:
   module:
     - book
     - content_moderation
+    - domain
     - domain_access
     - draggableviews
     - filter
@@ -340,3 +341,4 @@ permissions:
   - 'view subtopic revisions'
   - 'view topic revisions'
   - 'view ual revisions'
+  - 'view domain list'

@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - content_moderation
+    - domain
     - media
     - node
     - scheduled_transitions
@@ -40,3 +41,4 @@ permissions:
   - 'view scheduled transitions node heritage_site'
   - 'view scheduled transitions node page'
   - 'view scheduled transitions node topic'
+  - 'view domain list'
