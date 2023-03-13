@@ -28,6 +28,7 @@ dependencies:
     - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
+    - domain
     - domain_access
     - filter
     - media
@@ -218,3 +219,4 @@ permissions:
   - 'view scheduled transitions node publication'
   - 'view scheduled transitions node ual'
   - 'view ual revisions'
+  - 'view domain list'
