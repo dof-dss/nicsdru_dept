@@ -28,7 +28,7 @@ function dept_topics_preprocess_node(array &$variables) {
       ->getSubtopicsForTopic($node);
 
     if (!empty($subtopics_to_display)) {
-      foreach ($subtopics_to_display as $subtopic_id => $subtopic_title) {
+      foreach ($subtopics_to_display as $subtopic_id => $subtopic) {
         // Service to pull in subtopic content instead of the fixed code here.
         $content_links = \Drupal::service('dept_topics.subtopics')
           ->getSubtopicContent($subtopic_id);
@@ -45,12 +45,15 @@ function dept_topics_preprocess_node(array &$variables) {
         // Add render array elements we can call from the node-topic--full template.
         $variables['content']['subtopics_list'][] = [
           '#theme' => 'subtopic_content_list',
-          '#title' => $subtopic_title,
+          '#title' => $subtopic['title'],
           '#title_link' => Link::createFromRoute(
-            $subtopic_title,
+            $subtopic['title'],
             'entity.node.canonical',
             ['node' => $subtopic_id],
           ),
+          '#content_summary' => [
+            '#markup' => $subtopic['summary'],
+          ],
           '#content_links' => $content_links,
           '#read_more_link' => Link::createFromRoute(
             t('Read more'),
@@ -87,6 +90,7 @@ function dept_topics_theme($existing, $type, $theme, $path) {
       'variables' => [
         'title' => NULL,
         'title_link' => NULL,
+        'content_summary' => NULL,
         'content_links' => NULL,
         'read_more_link' => NULL,
       ],
