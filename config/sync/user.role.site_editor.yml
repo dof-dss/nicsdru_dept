@@ -7,6 +7,7 @@ dependencies:
     - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
+    - domain
     - media
     - node
 id: site_editor
@@ -31,3 +32,4 @@ permissions:
   - 'view all revisions'
   - 'view any unpublished content'
   - 'view latest version'
+  - 'view domain list'

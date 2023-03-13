@@ -7,6 +7,7 @@ dependencies:
     - filter.format.filtered_html
     - filter.format.filtered_html_with_no_images
   module:
+    - domain
     - domain_access
     - filter
     - media
@@ -44,3 +45,4 @@ permissions:
   - 'view own unpublished content'
   - 'view revisions'
   - 'view the administration theme'
+  - 'view domain list'
