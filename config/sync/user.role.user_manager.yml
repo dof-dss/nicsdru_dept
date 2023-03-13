@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - content_moderation
+    - domain
     - domain_access
     - media
 id: user_manager
@@ -26,3 +27,4 @@ permissions:
   - 'force password change'
   - 'view any unpublished content'
   - 'view user email addresses'
+  - 'view domain list'

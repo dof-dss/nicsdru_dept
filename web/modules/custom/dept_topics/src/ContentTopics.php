@@ -124,7 +124,10 @@ class ContentTopics {
       ->getStorage('node')->loadMultiple(array_keys($ids));
 
     foreach ($subtopic_nodes as $node) {
-      $subtopics[$node->id()] = $node->label();
+      $subtopics[$node->id()] = [
+        'title' => $node->label(),
+        'summary' => $node->field_summary->value,
+      ];
     }
 
     return $subtopics;

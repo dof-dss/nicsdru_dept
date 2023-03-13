@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - domain
     - flag
     - media
     - node
@@ -23,3 +24,4 @@ permissions:
   - 'unflag display_on_rss_feeds'
   - 'unflag rss_feed_display'
   - 'view all revisions'
+  - 'view domain list'
