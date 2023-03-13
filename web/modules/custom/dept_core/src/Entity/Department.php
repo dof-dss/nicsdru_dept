@@ -46,6 +46,7 @@ use Drupal\user\EntityOwnerTrait;
  *     "label" = "label",
  *     "uuid" = "uuid",
  *     "owner" = "uid",
+ *     "weight" = "weight",
  *   },
  *   revision_metadata_keys = {
  *     "revision_user" = "revision_uid",
@@ -219,6 +220,20 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the department was last edited.'));
 
+    $fields['weight'] = BaseFieldDefinition::create('integer')
+      ->setLabel(t('Weight'))
+      ->setDescription(t('The weight/order of this Department.'))
+      ->setDefaultValue(0)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'number_integer',
+        'weight' => 25,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'number',
+        'weight' => 50,
+      ]);
+
     return $fields;
   }
 
@@ -273,6 +288,14 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
     return $production_hostname ? $this->hostnames[0] : $this->hostnames[1];
   }
+
+  /**
+   * Order/sort weight.
+   */
+  public function weight() {
+    return (int) $this->get('weight')->getValue() ?? 0;
+  }
+
 
   /**
    * Management and Structure details.
