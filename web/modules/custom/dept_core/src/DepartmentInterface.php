@@ -11,4 +11,25 @@ use Drupal\user\EntityOwnerInterface;
  */
 interface DepartmentInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
 
+
+  /**
+   * Returns the weight among shortcuts with the same depth.
+   *
+   * @return int
+   *   The shortcut weight.
+   */
+  public function getWeight();
+
+  /**
+   * Sets the weight among shortcuts with the same depth.
+   *
+   * @param int $weight
+   *   The shortcut weight.
+   *
+   * @return $this
+   *   The called shortcut entity.
+   */
+  public function setWeight($weight);
+
+
 }

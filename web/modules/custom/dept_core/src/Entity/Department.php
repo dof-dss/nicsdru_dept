@@ -289,13 +289,21 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
     return $production_hostname ? $this->hostnames[0] : $this->hostnames[1];
   }
 
+
   /**
-   * Order/sort weight.
+   * {@inheritdoc}
    */
-  public function weight() {
-    return (int) $this->get('weight')->getValue() ?? 0;
+  public function getWeight() {
+    return $this->get('weight')->value;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function setWeight($weight) {
+    $this->set('weight', $weight);
+    return $this;
+  }
 
   /**
    * Management and Structure details.

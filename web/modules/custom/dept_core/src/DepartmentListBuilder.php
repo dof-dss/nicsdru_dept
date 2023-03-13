@@ -48,6 +48,18 @@ class DepartmentListBuilder extends EntityListBuilder {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public function load() {
+    $department_ids = $this->getStorage()
+      ->getQuery()
+      ->sort('weight')
+      ->execute();
+
+    return $this->storage->loadMultiple($department_ids);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function render() {
@@ -68,6 +80,7 @@ class DepartmentListBuilder extends EntityListBuilder {
    */
   public function buildHeader() {
     $header['id'] = $this->t('ID');
+    $header['weight'] = $this->t('Weight');
     $header['label'] = $this->t('Label');
     $header['status'] = $this->t('Status');
     $header['uid'] = $this->t('Author');
@@ -82,6 +95,7 @@ class DepartmentListBuilder extends EntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     /** @var \Drupal\dept_core\DepartmentInterface $entity */
     $row['id'] = $entity->id();
+    $row['weight'] = $entity->get('weight')->value;
     $row['label'] = $entity->toLink();
     $row['status'] = $entity->get('status')->value ? $this->t('Enabled') : $this->t('Disabled');
     $row['uid']['data'] = [
