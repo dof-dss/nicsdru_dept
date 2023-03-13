@@ -146,7 +146,11 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
         // Display a list of links to each Department.
         case 'all-departments-links':
 
-          $departments = \Drupal::entityTypeManager()->getStorage('department')->loadByProperties(['status' => TRUE]);
+          $dept_storage = \Drupal::entityTypeManager()->getStorage('department');
+
+          $department_ids = $dept_storage->getQuery()->sort('weight')->execute();
+
+          $departments = $dept_storage->loadMultiple($department_ids);
           $links = [];
 
           foreach ($departments as $department) {
