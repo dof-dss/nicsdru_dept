@@ -184,7 +184,10 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
               if ($index == count($menu)) {
                 $classes[] = 'related-sites-last';
               }
-              $links[] = ['#wrapper_attributes' => ['class' => implode(' ', $classes)], Link::fromTextAndUrl($item->link->getTitle(), $item->link->getUrlObject())->toRenderable()];
+              $links[] = [
+                '#wrapper_attributes' => ['class' => implode(' ', $classes)],
+                Link::fromTextAndUrl($item->link->getTitle(), $item->link->getUrlObject())->toRenderable()
+              ];
               $classes = [];
             }
           }
@@ -241,7 +244,10 @@ function dept_core_department_links(): array {
       $classes[] = 'department-sites-last';
     }
     // @phpstan-ignore-next-line
-    $links[] = ['#wrapper_attributes' => ['class' => implode(' ', $classes)], Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable()];
+    $links[] = [
+      '#wrapper_attributes' => ['class' => implode(' ', $classes)],
+      Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable()
+    ];
     $classes = [];
   }
   return $links;
