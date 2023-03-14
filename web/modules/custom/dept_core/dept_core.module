@@ -7,6 +7,7 @@
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
@@ -125,6 +126,11 @@ function dept_core_token_info() {
     'description' => t("Displays a list of links to each department site"),
   ];
 
+  $tokens['related-sites'] = [
+    'name' => t("Related sites"),
+    'description' => t("Displays a list of related and departmental sites"),
+  ];
+
   return [
     'types' => $types,
     'tokens' => [
@@ -165,6 +171,39 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
           ];
 
           $replacements[$original] = \Drupal::service('renderer')->render($link_list);
+          break;
+        case 'related-sites':
+
+          $dept_storage = \Drupal::entityTypeManager()->getStorage('department');
+
+          $department_ids = $dept_storage->getQuery()->sort('weight')->execute();
+
+          $departments = $dept_storage->loadMultiple($department_ids);
+          $links = [];
+
+          foreach ($departments as $department) {
+            // @phpstan-ignore-next-line
+            $links[] = Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable();
+          }
+
+          $parameters = new MenuTreeParameters();
+
+          $menu = \Drupal::menuTree()->load('footer-related-sites', $parameters);
+
+          foreach ($menu as $item) {
+            if ($item->link->isEnabled()) {
+              $links[] = Link::fromTextAndUrl($item->link->getTitle(), $item->link->getUrlObject())->toRenderable();
+            }
+          }
+
+          $link_list = [
+            '#theme' => 'item_list',
+            '#list_type' => 'ul',
+            '#items' => $links,
+          ];
+
+          $replacements[$original] = \Drupal::service('renderer')->render($link_list);
+
           break;
       }
     }
