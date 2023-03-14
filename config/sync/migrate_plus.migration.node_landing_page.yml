@@ -1,9 +1,7 @@
-uuid: 16f36284-b508-4d24-aea4-c9d133df0aff
+uuid: 0779896e-e2bd-459d-bdb9-55f2e76885e7
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: 7STNWFAyVb4OoEu0QtX6M6KJ_ubhR6gykUEE5dyAPV0
 id: node_landing_page
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -86,6 +84,7 @@ process:
           -
             plugin: d7_file_lookup
             source: fid
+            entity_type: media
   field_banner_image_overlay:
     -
       plugin: sub_process

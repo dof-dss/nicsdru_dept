@@ -62,9 +62,8 @@ then
 
   for type in users files nodes
   do
-    $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_group_$type/config/install -y
+    $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_$type/config/install -y
   done
-  echo "NB: Content moderation config is temporarily turned off as it interferes with importing changes from D7..."
 
 #  echo "Migrating D7 taxonomy data"
 #  $DRUSH migrate:import --group=migrate_drupal_7_taxo --force
@@ -120,6 +119,9 @@ then
 
   echo "Updating content links"
   $DRUSH dept:updatelinks
+
+  echo "Syncing featured content on the department hompages"
+  $DRUSH dept:sync-homepage-content
 
   echo "Restoring config from config/sync"
   $DRUSH cim -y
