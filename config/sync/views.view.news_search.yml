@@ -231,7 +231,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: 'Enter keywords'
+            label: 'Search news and choose filters to show only the results you want'
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
@@ -321,7 +321,7 @@ display:
       style:
         type: default
         options:
-          row_class: card
+          row_class: ''
           default_row_class: false
           uses_fields: false
       row:
@@ -507,7 +507,7 @@ display:
         filters: false
         filter_groups: false
         header: false
-      css_class: 'card-deck card-deck--search-results'
+      css_class: ''
       header:
         result:
           id: result
@@ -637,7 +637,7 @@ display:
               admin_user: '0'
               user_manager: '0'
             expose_fields: false
-            placeholder: Keywords
+            placeholder: ''
             searched_fields_id: search_api_fulltext_searched_fields
           is_grouped: false
           group_info:
@@ -705,7 +705,7 @@ display:
         filters: false
         filter_groups: false
         header: false
-      css_class: 'card-deck card-deck--search-results'
+      css_class: ''
       display_description: ''
       header:
         result:
