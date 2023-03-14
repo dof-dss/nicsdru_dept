@@ -164,6 +164,11 @@ function dept_node_preprocess_node(array &$variables) {
       '#weight' => count($variables['content']) + 1,
     ];
   }
+
+  if ($node->bundle() === 'heritage_site') {
+    $variables['content']['field_historic_map_viewer_link'][0]['#title'] = t('View on the Historic Environment Map Viewer');
+    $variables['content']['field_nismr_link'][0]['#title'] = t('View details on the NI Sites & Monuments Record (NISMR)');
+  }
 }
 
 /**
