@@ -182,8 +182,8 @@ class DeptMigrationCommands extends DrushCommands {
         FROM {node} n
         JOIN {domain_access} da ON da.nid = n.nid
         JOIN {domain} d ON d.domain_id = da.gid
-        JOIN {flagging} fn_flag ON fn_flag.entity_id = n.nid AND fn_flag.fid = 1
-        JOIN {flagging} hp_flag ON hp_flag.entity_id = n.nid AND hp_flag.fid = 2
+        LEFT JOIN {flagging} fn_flag ON fn_flag.entity_id = n.nid AND fn_flag.fid = 1
+        LEFT JOIN {flagging} hp_flag ON hp_flag.entity_id = n.nid AND hp_flag.fid = 2
         JOIN {flag_counts} fc on fc.entity_id = n.nid
         JOIN {field_data_field_published_date} fdfpd ON fdfpd.entity_id = n.nid
         WHERE d.sitename = :site_id AND n.status = 1
@@ -218,6 +218,9 @@ class DeptMigrationCommands extends DrushCommands {
       if (!empty($d9_featured_nodes)) {
         $fcl_node->field_featured_content->setValue($d9_featured_nodes);
         $fcl_node->save();
+      }
+      else {
+        $this->io()->warning("No featured content found for " . $dept->label());
       }
     }
 
