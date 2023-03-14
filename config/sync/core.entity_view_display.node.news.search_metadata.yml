@@ -23,6 +23,7 @@ dependencies:
   module:
     - datetime
     - layout_builder
+    - smart_trim
     - user
 third_party_settings:
   layout_builder:
@@ -40,6 +41,27 @@ content:
       timezone_override: ''
       format_type: medium_date
     third_party_settings: {  }
+    weight: 1
+    region: content
+  field_summary:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 45
+      trim_type: words
+      trim_suffix: ...
+      wrap_output: false
+      wrap_class: trimmed
+      more_link: false
+      more_class: more-link
+      more_text: More
+      more_aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
+    third_party_settings: {  }
     weight: 0
     region: content
 hidden:
@@ -56,7 +78,6 @@ hidden:
   field_photo: true
   field_site_subtopics: true
   field_site_topics: true
-  field_summary: true
   field_teaser: true
   field_video: true
   groups: true

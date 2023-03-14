@@ -3,3 +3,5 @@ type: module
 description: 'Provides topics/subtopics functionality and enhancements for departmental sites'
 package: 'NICS: Departmental'
 core_version_requirement: ^8 || ^9
+dependencies:
+  - dept_migrate
