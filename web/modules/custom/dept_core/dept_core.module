@@ -151,18 +151,7 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
       switch ($name) {
         // Display a list of links to each Department.
         case 'all-departments-links':
-
-          $dept_storage = \Drupal::entityTypeManager()->getStorage('department');
-
-          $department_ids = $dept_storage->getQuery()->sort('weight')->execute();
-
-          $departments = $dept_storage->loadMultiple($department_ids);
-          $links = [];
-
-          foreach ($departments as $department) {
-            // @phpstan-ignore-next-line
-            $links[] = Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable();
-          }
+          $links = departmentLinks();
 
           $link_list = [
             '#theme' => 'item_list',
@@ -173,22 +162,8 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
           $replacements[$original] = \Drupal::service('renderer')->render($link_list);
           break;
         case 'related-sites':
-
-          $dept_storage = \Drupal::entityTypeManager()->getStorage('department');
-
-          $department_ids = $dept_storage->getQuery()->sort('weight')->execute();
-
-          $departments = $dept_storage->loadMultiple($department_ids);
-          $links = [];
-
-          foreach ($departments as $department) {
-            // @phpstan-ignore-next-line
-            $links[] = Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable();
-          }
-
-          $parameters = new MenuTreeParameters();
-
-          $menu = \Drupal::menuTree()->load('footer-related-sites', $parameters);
+          $links = departmentLinks();
+          $menu = \Drupal::menuTree()->load('footer-related-sites', new MenuTreeParameters());
 
           foreach ($menu as $item) {
             if ($item->link->isEnabled()) {
@@ -203,11 +178,30 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
           ];
 
           $replacements[$original] = \Drupal::service('renderer')->render($link_list);
-
           break;
       }
     }
   }
 
   return $replacements;
+}
+
+/**
+ * Return a list of Department links.
+ *
+ * @return array
+ */
+function departmentLinks(): array {
+  $dept_storage = \Drupal::entityTypeManager()->getStorage('department');
+
+  $department_ids = $dept_storage->getQuery()->sort('weight')->execute();
+
+  $departments = $dept_storage->loadMultiple($department_ids);
+  $links = [];
+
+  foreach ($departments as $department) {
+    // @phpstan-ignore-next-line
+    $links[] = Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable();
+  }
+  return $links;
 }
