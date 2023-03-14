@@ -238,14 +238,14 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   }
 
   /**
-   * Department name.
+   * {@inheritdoc}
    */
   public function name() {
     return $this->label();
   }
 
   /**
-   * Domain.
+   * {@inheritdoc}
    */
   public function domain() {
     // Cannot inject services into entities (https://www.drupal.org/project/drupal/issues/2142515)
@@ -288,7 +288,6 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
     return $production_hostname ? $this->hostnames[0] : $this->hostnames[1];
   }
-
 
   /**
    * {@inheritdoc}

@@ -151,7 +151,7 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
       switch ($name) {
         // Display a list of links to each Department.
         case 'all-departments-links':
-          $links = departmentLinks();
+          $links = dept_core_department_links();
 
           $link_list = [
             '#theme' => 'item_list',
@@ -165,9 +165,11 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
           ];
 
           $replacements[$original] = \Drupal::service('renderer')->render($link_list);
+
           break;
+
         case 'related-sites':
-          $links = departmentLinks();
+          $links = dept_core_department_links();
           $menu = \Drupal::menuTree()->load('footer-related-sites', new MenuTreeParameters());
 
           foreach ($menu as $item) {
@@ -191,6 +193,7 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
           ];
 
           $replacements[$original] = \Drupal::service('renderer')->render($link_list);
+
           break;
       }
     }
@@ -203,8 +206,9 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
  * Return a list of Department links.
  *
  * @return array
+ *   List of active department links, sorted by weight.
  */
-function departmentLinks(): array {
+function dept_core_department_links(): array {
   $dept_storage = \Drupal::entityTypeManager()->getStorage('department');
 
   $department_ids = $dept_storage->getQuery()
