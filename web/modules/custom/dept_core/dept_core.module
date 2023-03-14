@@ -171,12 +171,21 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
         case 'related-sites':
           $links = dept_core_department_links();
           $menu = \Drupal::menuTree()->load('footer-related-sites', new MenuTreeParameters());
+          $classes = [];
+          $index = 0;
 
           foreach ($menu as $item) {
             if ($item->link->isEnabled()) {
-              $link = $item->link->getUrlObject();
-              $link->setOption('attributes', ['class' => 'related-site']);
-              $links[] = Link::fromTextAndUrl($item->link->getTitle(), $link)->toRenderable();
+              $index++;
+              if ($index == 1) {
+                $classes[] = 'related-sites-first';
+              }
+
+              if ($index == count($menu)) {
+                $classes[] = 'related-sites-last';
+              }
+              $links[] = ['#wrapper_attributes' => ['class' => implode(' ', $classes)], Link::fromTextAndUrl($item->link->getTitle(), $item->link->getUrlObject())->toRenderable()];
+              $classes = [];
             }
           }
 
@@ -219,10 +228,21 @@ function dept_core_department_links(): array {
 
   $departments = $dept_storage->loadMultiple($department_ids);
   $links = [];
+  $classes = [];
+  $index = 0;
 
   foreach ($departments as $department) {
+    $index++;
+    if ($index == 1) {
+      $classes[] = 'department-sites-first';
+    }
+
+    if ($index == count($departments)) {
+      $classes[] = 'department-sites-last';
+    }
     // @phpstan-ignore-next-line
-    $links[] = Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable();
+    $links[] = ['#wrapper_attributes' => ['class' => implode(' ', $classes)], Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable()];
+    $classes = [];
   }
   return $links;
 }
