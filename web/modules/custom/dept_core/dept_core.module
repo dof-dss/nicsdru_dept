@@ -175,7 +175,7 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
           foreach ($menu as $item) {
             if ($item->link->isEnabled()) {
               $link = $item->link->getUrlObject();
-              $link->setOption('attributes', ['class' => 'related-website']);
+              $link->setOption('attributes', ['class' => 'related-site']);
               $links[] = Link::fromTextAndUrl($item->link->getTitle(), $link)->toRenderable();
             }
           }
@@ -183,6 +183,7 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
           $link_list = [
             '#theme' => 'item_list',
             '#list_type' => 'ul',
+            '#attributes' => ['class' => 'related-websites-list'],
             '#items' => $links,
             '#cache' => [
               'tags' => [
