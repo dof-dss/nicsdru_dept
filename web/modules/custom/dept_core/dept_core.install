@@ -1,0 +1,15 @@
+<?php
+
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Add weight to Department entity
+ */
+function dept_core_update_8001() {
+  $field_storage_definition = BaseFieldDefinition::create('integer')
+    ->setLabel(t('Weight'))
+    ->setDescription(t('The weight/order of this Department'))
+    ->setDefaultValue(0);
+
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('weight', 'department', 'dept_core', $field_storage_definition);
+}

@@ -46,6 +46,7 @@ use Drupal\user\EntityOwnerTrait;
  *     "label" = "label",
  *     "uuid" = "uuid",
  *     "owner" = "uid",
+ *     "weight" = "weight",
  *   },
  *   revision_metadata_keys = {
  *     "revision_user" = "revision_uid",
@@ -219,18 +220,32 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
       ->setLabel(t('Changed'))
       ->setDescription(t('The time that the department was last edited.'));
 
+    $fields['weight'] = BaseFieldDefinition::create('integer')
+      ->setLabel(t('Weight'))
+      ->setDescription(t('The weight/order of this Department.'))
+      ->setDefaultValue(0)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'number_integer',
+        'weight' => 25,
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'number',
+        'weight' => 50,
+      ]);
+
     return $fields;
   }
 
   /**
-   * Department name.
+   * {@inheritdoc}
    */
   public function name() {
     return $this->label();
   }
 
   /**
-   * Domain.
+   * {@inheritdoc}
    */
   public function domain() {
     // Cannot inject services into entities (https://www.drupal.org/project/drupal/issues/2142515)
@@ -272,6 +287,21 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
     }
 
     return $production_hostname ? $this->hostnames[0] : $this->hostnames[1];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWeight() {
+    return $this->get('weight')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setWeight($weight) {
+    $this->set('weight', $weight);
+    return $this;
   }
 
   /**

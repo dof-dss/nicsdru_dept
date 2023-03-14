@@ -7,6 +7,7 @@
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
@@ -125,6 +126,11 @@ function dept_core_token_info() {
     'description' => t("Displays a list of links to each department site"),
   ];
 
+  $tokens['related-sites'] = [
+    'name' => t("Related sites"),
+    'description' => t("Displays a list of related and departmental sites"),
+  ];
+
   return [
     'types' => $types,
     'tokens' => [
@@ -145,26 +151,78 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
       switch ($name) {
         // Display a list of links to each Department.
         case 'all-departments-links':
-
-          $departments = \Drupal::entityTypeManager()->getStorage('department')->loadByProperties(['status' => TRUE]);
-          $links = [];
-
-          foreach ($departments as $department) {
-            // @phpstan-ignore-next-line
-            $links[] = Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable();
-          }
+          $links = dept_core_department_links();
 
           $link_list = [
             '#theme' => 'item_list',
             '#list_type' => 'ul',
             '#items' => $links,
+            '#cache' => [
+              'tags' => [
+                'department_list',
+              ],
+            ],
           ];
 
           $replacements[$original] = \Drupal::service('renderer')->render($link_list);
+
+          break;
+
+        case 'related-sites':
+          $links = dept_core_department_links();
+          $menu = \Drupal::menuTree()->load('footer-related-sites', new MenuTreeParameters());
+
+          foreach ($menu as $item) {
+            if ($item->link->isEnabled()) {
+              $link = $item->link->getUrlObject();
+              $link->setOption('attributes', ['class' => 'related-site']);
+              $links[] = Link::fromTextAndUrl($item->link->getTitle(), $link)->toRenderable();
+            }
+          }
+
+          $link_list = [
+            '#theme' => 'item_list',
+            '#list_type' => 'ul',
+            '#attributes' => ['class' => 'related-websites-list'],
+            '#items' => $links,
+            '#cache' => [
+              'tags' => [
+                'config:system.menu.footer-related-sites',
+                'department_list',
+              ],
+            ],
+          ];
+
+          $replacements[$original] = \Drupal::service('renderer')->render($link_list);
+
           break;
       }
     }
   }
 
   return $replacements;
+}
+
+/**
+ * Return a list of Department links.
+ *
+ * @return array
+ *   List of active department links, sorted by weight.
+ */
+function dept_core_department_links(): array {
+  $dept_storage = \Drupal::entityTypeManager()->getStorage('department');
+
+  $department_ids = $dept_storage->getQuery()
+    ->condition('status', TRUE)
+    ->sort('weight')
+    ->execute();
+
+  $departments = $dept_storage->loadMultiple($department_ids);
+  $links = [];
+
+  foreach ($departments as $department) {
+    // @phpstan-ignore-next-line
+    $links[] = Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable();
+  }
+  return $links;
 }
