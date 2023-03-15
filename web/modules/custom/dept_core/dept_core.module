@@ -243,9 +243,9 @@ function dept_core_department_links(): array {
     if ($index == count($departments)) {
       $classes[] = 'department-sites-last';
     }
-    // @phpstan-ignore-next-line
     $links[] = [
       '#wrapper_attributes' => ['class' => implode(' ', $classes)],
+      // @phpstan-ignore-next-line
       Link::fromTextAndUrl($department->label(), Url::fromUri('https://' . $department->hostname()))->toRenderable()
     ];
     $classes = [];
