@@ -174,7 +174,48 @@ class DeptMigrationCommands extends DrushCommands {
 
       // Find the nodes for the content featured for this dept in D7.
       $d7_featured_nodes = [];
-      $d7_query = $this->d7conn->query("SELECT DISTINCT
+
+      if ($dept->id() === 'nigov' || $dept->id() === 'executiveoffice') {
+        $d7_query = $this->d7conn->query("SELECT
+            cf.data
+          FROM {cache_field} cf
+          WHERE
+              cf.cid = :cache_id
+        ", [':cache_id' => 'field:entityqueue_subqueue:1']
+        );
+
+        if (empty($d7_query)) {
+          continue;
+        }
+
+        $d9_featured_nodes = [];
+
+        foreach ($d7_query as $row) {
+          // Unserialise the data contents of the cache item.
+          $data = unserialize($row->data, ['allowed_classes' => FALSE]);
+
+          $d7_nids = [];
+          foreach ($data['eq_node']['und'] as $ref_nids) {
+            $d7_nids[] = $ref_nids['target_id'];
+          }
+
+          foreach ($d7_nids as $d7nid) {
+            $d9_lookup = $this->lookupManager->lookupBySourceNodeId([$d7nid]);
+
+            if (empty($d9_lookup)) {
+              $this->io()->warning('No lookup result found for D7 node ' . $row->nid . ' - ' . $row->title);
+              continue;
+            }
+
+            $d9_lookup = reset($d9_lookup);
+            if (!empty($d9_lookup['nid'])) {
+              $d9_featured_nodes[] = $d9_lookup['nid'];
+            }
+          }
+        }
+      }
+      else {
+        $d7_query = $this->d7conn->query("SELECT DISTINCT
             n.nid,
             n.type,
             n.title,
@@ -192,26 +233,27 @@ class DeptMigrationCommands extends DrushCommands {
             hp_flag.uid IS NOT NULL DESC,
             fdfpd.field_published_date_value DESC
         LIMIT 10", [':site_id' => $dept->id()]
-      );
+        );
 
-      if (empty($d7_query)) {
-        continue;
-      }
-
-      // Find them in D9 and add them as the values for the FCL items.
-      $d9_featured_nodes = [];
-
-      foreach ($d7_query as $row) {
-        $d9_lookup = $this->lookupManager->lookupBySourceNodeId([$row->nid]);
-
-        if (empty($d9_lookup)) {
-          $this->io()->warning('No lookup result found for D7 node ' . $row->nid . ' - ' . $row->title);
+        if (empty($d7_query)) {
           continue;
         }
 
-        $d9_lookup = reset($d9_lookup);
-        if (!empty($d9_lookup['nid'])) {
-          $d9_featured_nodes[] = $d9_lookup['nid'];
+        // Find them in D9 and add them as the values for the FCL items.
+        $d9_featured_nodes = [];
+
+        foreach ($d7_query as $row) {
+          $d9_lookup = $this->lookupManager->lookupBySourceNodeId([$row->nid]);
+
+          if (empty($d9_lookup)) {
+            $this->io()->warning('No lookup result found for D7 node ' . $row->nid . ' - ' . $row->title);
+            continue;
+          }
+
+          $d9_lookup = reset($d9_lookup);
+          if (!empty($d9_lookup['nid'])) {
+            $d9_featured_nodes[] = $d9_lookup['nid'];
+          }
         }
       }
 
