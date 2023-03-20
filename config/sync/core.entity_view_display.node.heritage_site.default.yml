@@ -67,12 +67,11 @@ third_party_settings:
       weight: 7
       format_type: details
       format_settings:
-        classes: ''
+        classes: additional-info
         show_empty_fields: false
         id: ''
         open: false
         description: ''
-        required_fields: false
 id: node.heritage_site.default
 targetEntityType: node
 bundle: heritage_site
