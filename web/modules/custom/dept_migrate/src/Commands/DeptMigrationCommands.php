@@ -176,12 +176,15 @@ class DeptMigrationCommands extends DrushCommands {
       $d7_featured_nodes = [];
 
       if ($dept->id() === 'nigov' || $dept->id() === 'executiveoffice') {
-        $d7_query = $this->d7conn->query("SELECT
-            cf.data
-          FROM {cache_field} cf
-          WHERE
-              cf.cid = :cache_id
-        ", [':cache_id' => 'field:entityqueue_subqueue:1']
+        $d7_query = $this->d7conn->query("SELECT n.nid
+          FROM {node} n
+          JOIN {field_data_eq_node} fdeqn ON fdeqn.eq_node_target_id = n.nid AND fdeqn.bundle = 'niexec_homepage_news'
+          JOIN {entityqueue_subqueue} eqs ON fdeqn.entity_id = eqs.subqueue_id AND eqs.name = 'niexec_homepage_news'
+          LEFT JOIN {domain_access} da ON n.nid = da.nid
+          WHERE n.status = 1
+          AND n.type = 'news'
+          AND da.gid <= 1
+          ORDER BY fdeqn.delta ASC"
         );
 
         if (empty($d7_query)) {
@@ -191,26 +194,16 @@ class DeptMigrationCommands extends DrushCommands {
         $d9_featured_nodes = [];
 
         foreach ($d7_query as $row) {
-          // Unserialise the data contents of the cache item.
-          $data = unserialize($row->data, ['allowed_classes' => FALSE]);
+          $d9_lookup = $this->lookupManager->lookupBySourceNodeId([$row->nid]);
 
-          $d7_nids = [];
-          foreach ($data['eq_node']['und'] as $ref_nids) {
-            $d7_nids[] = $ref_nids['target_id'];
+          if (empty($d9_lookup)) {
+            $this->io()->warning('No lookup result found for D7 node ' . $row->nid . ' - ' . $row->title);
+            continue;
           }
 
-          foreach ($d7_nids as $d7nid) {
-            $d9_lookup = $this->lookupManager->lookupBySourceNodeId([$d7nid]);
-
-            if (empty($d9_lookup)) {
-              $this->io()->warning('No lookup result found for D7 node ' . $row->nid . ' - ' . $row->title);
-              continue;
-            }
-
-            $d9_lookup = reset($d9_lookup);
-            if (!empty($d9_lookup['nid'])) {
-              $d9_featured_nodes[] = $d9_lookup['nid'];
-            }
+          $d9_lookup = reset($d9_lookup);
+          if (!empty($d9_lookup['nid'])) {
+            $d9_featured_nodes[] = $d9_lookup['nid'];
           }
         }
       }
