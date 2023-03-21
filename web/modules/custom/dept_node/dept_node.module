@@ -164,6 +164,18 @@ function dept_node_preprocess_node(array &$variables) {
       '#weight' => count($variables['content']) + 1,
     ];
   }
+
+  if ($node->bundle() === 'heritage_site') {
+    $historic_map = $node->get('field_historic_map_viewer_link')->getValue();
+    $nismr = $node->get('field_nismr_link')->getValue();
+
+    if (!empty($historic_map[0]['uri'])) {
+      $variables['content']['field_historic_map_viewer_link'][0]['#title'] = t('View on the Historic Environment Map Viewer');
+    }
+    if (!empty($nismr[0]['uri'])) {
+      $variables['content']['field_nismr_link'][0]['#title'] = t('View details on the NI Sites & Monuments Record (NISMR)');
+    }
+  }
 }
 
 /**

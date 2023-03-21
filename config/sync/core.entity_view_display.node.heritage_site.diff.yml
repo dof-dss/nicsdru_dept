@@ -1,9 +1,9 @@
-uuid: 7bc91a40-4b1c-4731-9422-5301b762099c
+uuid: a522e050-a43d-4863-ad73-188b35da3893
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.full
+    - core.entity_view_mode.node.diff
     - field.field.node.heritage_site.body
     - field.field.node.heritage_site.field_address
     - field.field.node.heritage_site.field_address_line_1
@@ -46,19 +46,15 @@ third_party_settings:
       label: Contact
       parent_name: ''
       region: content
-      weight: 7
-      format_type: html_element
+      weight: 2
+      format_type: details
       format_settings:
         classes: ''
         show_empty_fields: false
         id: ''
-        element: div
-        show_label: true
-        label_element: h2
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
+        open: false
+        description: ''
+        required_fields: false
     group_additional_info:
       children:
         - field_open_to_the_public
@@ -69,19 +65,14 @@ third_party_settings:
       label: 'Additional Information'
       parent_name: ''
       region: content
-      weight: 8
-      format_type: html_element
+      weight: 3
+      format_type: details
       format_settings:
         classes: additional-info
         show_empty_fields: false
         id: ''
-        element: div
-        show_label: true
-        label_element: h2
-        label_element_classes: ''
-        attributes: ''
-        effect: none
-        speed: fast
+        open: false
+        description: ''
     group_address:
       children:
         - field_address_line_1
@@ -105,20 +96,40 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
+    group_additional_content_details:
+      children:
+        - field_site_topics
+        - field_site_subtopics
+      label: 'Additional content details'
+      parent_name: ''
+      region: content
+      weight: 6
+      format_type: html_element
+      format_settings:
+        classes: field-collection
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
   layout_builder:
     enabled: false
     allow_custom: false
-id: node.heritage_site.full
+id: node.heritage_site.diff
 targetEntityType: node
 bundle: heritage_site
-mode: full
+mode: diff
 content:
   body:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 9
+    weight: 4
     region: content
   field_address_line_1:
     type: string
@@ -148,7 +159,7 @@ content:
     label: inline
     settings: {  }
     third_party_settings: {  }
-    weight: 8
+    weight: 17
     region: content
   field_grid_reference:
     type: string
@@ -156,7 +167,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 9
+    weight: 3
     region: content
   field_historic_map_viewer_link:
     type: link
@@ -165,23 +176,23 @@ content:
       trim_length: 80
       url_only: false
       url_plain: false
-      rel: '0'
-      target: '0'
+      rel: ''
+      target: ''
     third_party_settings: {  }
-    weight: 10
+    weight: 4
     region: content
   field_map_location:
     type: gmaps_lazy_load_formatter
     label: hidden
     settings:
+      zoom: '10'
       map_type: roadmap
-      zoom: '15'
       placeholder: empty
       link_text: ''
-      map_width: '600'
-      map_height: '400'
+      map_width: '300'
+      map_height: '300'
     third_party_settings: {  }
-    weight: 11
+    weight: 5
     region: content
   field_nismr_link:
     type: link
@@ -190,17 +201,17 @@ content:
       trim_length: 80
       url_only: false
       url_plain: false
-      rel: '0'
-      target: '0'
+      rel: ''
+      target: ''
     third_party_settings: {  }
-    weight: 12
+    weight: 6
     region: content
   field_open_to_the_public:
     type: list_default
     label: inline
     settings: {  }
     third_party_settings: {  }
-    weight: 8
+    weight: 2
     region: content
   field_phone:
     type: string
@@ -208,7 +219,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 7
+    weight: 15
     region: content
   field_photo:
     type: entity_reference_entity_view
@@ -227,13 +238,29 @@ content:
     third_party_settings: {  }
     weight: 5
     region: content
+  field_site_subtopics:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 15
+    region: content
+  field_site_topics:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 14
+    region: content
   field_sm_number:
     type: string
     label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 11
+    weight: 5
     region: content
   field_town:
     type: string
@@ -253,7 +280,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 9
+    weight: 18
     region: content
 hidden:
   content_moderation_control: true
@@ -263,8 +290,6 @@ hidden:
   field_domain_all_affiliates: true
   field_domain_source: true
   field_metatags: true
-  field_site_subtopics: true
-  field_site_topics: true
   groups: true
   groups_type_department_site: true
   langcode: true
