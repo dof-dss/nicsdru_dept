@@ -1,9 +1,7 @@
-uuid: 2e8e2fb8-93d7-41e6-a543-453f19c0b459
+uuid: 44bea4b4-3dfd-4c58-b6f4-05b9d02e6319
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: UgzILIUYwhOVMfWzcN4-Ai9b8VdYrNdOGpcaALxh-P4
 id: dept_book
 class: null
 field_plugin_method: null
@@ -23,10 +21,7 @@ process:
     -
       plugin: d7_node_lookup
       source: bid
-  book/weight:
-    -
-      plugin: get
-      source: weight
+  book/weight: weight
   book/pid:
     -
       plugin: skip_on_empty
@@ -35,10 +30,6 @@ process:
     -
       plugin: migration_lookup
       migration: dept_book
-  book/p2:
-    -
-      plugin: d7_node_lookup
-      source: p2
 destination:
   plugin: book
 migration_dependencies:
