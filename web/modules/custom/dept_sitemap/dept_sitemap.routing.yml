@@ -1,0 +1,7 @@
+dept_sitemap.sitemap:
+  path: '/sitemap.xml'
+  defaults:
+    _title: 'Sitemap'
+    _controller: '\Drupal\dept_sitemap\Controller\SitemapController::build'
+  requirements:
+    _permission: 'access content'
