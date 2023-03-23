@@ -39,7 +39,6 @@ class SitemapAdminController extends ControllerBase {
         $row['link_total'] = $active_sitemaps[$id]->getLinkCount();
         $row['status'] = $this->t('Pending');
 
-
         /** @var \Drupal\simple_sitemap\Entity\SimpleSitemapInterface $entity */
         if ($active_sitemaps[$id]->fromPublishedAndUnpublished()->getChunkCount()) {
           switch ($active_sitemaps[$id]->contentStatus()) {
@@ -51,7 +50,7 @@ class SitemapAdminController extends ControllerBase {
             case SimpleSitemap::SITEMAP_PUBLISHED:
             case SimpleSitemap::SITEMAP_PUBLISHED_GENERATING:
               $created = \Drupal::service('date.formatter')->format($active_sitemaps[$id]->fromPublished()->getCreated());
-            $row['status'] = $active_sitemaps[$id]->contentStatus() === SimpleSitemap::SITEMAP_PUBLISHED
+              $row['status'] = $active_sitemaps[$id]->contentStatus() === SimpleSitemap::SITEMAP_PUBLISHED
                 ? $this->t('Published on @time', ['@time' => $created])
                 : $this->t('Published on @time, regenerating', ['@time' => $created]);
               break;
@@ -104,10 +103,17 @@ class SitemapAdminController extends ControllerBase {
       '#rows' => $rows,
     ];
 
-
     return $build;
   }
 
+  /**
+   * Create a sitemap for a given Department.
+   *
+   * @param string $department
+   *   The department id.
+   * @return array
+   *   The response render array.
+   */
   public function add($department) {
 
     /** @var \Drupal\simple_sitemap\Entity\SimpleSitemapInterface $simple_sitemap */
@@ -147,7 +153,8 @@ class SitemapAdminController extends ControllerBase {
 
       return $build;
 
-    } else {
+    }
+    else {
       return [
         '#markup' => $this->t('There was an issue creating a sitemap for @department', ['@department' => $department])
       ];

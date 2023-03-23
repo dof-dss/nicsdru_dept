@@ -1,12 +1,15 @@
 <?php
 
-use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
-
 /**
  * @file
  * Primary module hooks for Departmental sites: Sitemaps module.
  */
 
+use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
+
+/**
+ * Implements hook_simple_sitemap_links_alter().
+ */
 function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInterface $sitemap) {
 
   /** @var \Drupal\domain\Entity\Domain $domain */

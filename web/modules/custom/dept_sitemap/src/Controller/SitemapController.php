@@ -16,6 +16,9 @@ class SitemapController extends ControllerBase {
    */
   protected $domainNegotiator;
 
+  /**
+   * {@inheritdoc}
+   */
   public function __construct(DomainNegotiator $domain_negotiator) {
     $this->domainNegotiator = $domain_negotiator;
   }
