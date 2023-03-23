@@ -8,3 +8,8 @@ entity.department.collection:
   description: 'List of departments.'
   route_name: entity.department.collection
   parent: system.admin_content
+departmental.admin:
+  title: Departmental
+  parent: system.admin_config
+  description: 'Departmental settings and configuration'
+  route_name: departmental.admin_config
