@@ -35,13 +35,14 @@ class SitemapAdminController extends ControllerBase {
       $links = [];
 
       if (array_key_exists($domain->id(), $active_sitemaps)) {
-        $row['sitemap'] = $active_sitemaps[$id]->getType()->label();
-        $row['link_total'] = $active_sitemaps[$id]->getLinkCount();
+        /** @var \Drupal\simple_sitemap\Entity\SimpleSitemapInterface $sitemap */
+        $sitemap = $active_sitemaps[$id];
+        $row['sitemap'] = $sitemap->getType()->label();
+        $row['link_total'] = $sitemap->getLinkCount();
         $row['status'] = $this->t('Pending');
 
-        /** @var \Drupal\simple_sitemap\Entity\SimpleSitemapInterface $entity */
-        if ($active_sitemaps[$id]->fromPublishedAndUnpublished()->getChunkCount()) {
-          switch ($active_sitemaps[$id]->contentStatus()) {
+        if ($sitemap->fromPublishedAndUnpublished()->getChunkCount()) {
+          switch ($sitemap->contentStatus()) {
 
             case SimpleSitemap::SITEMAP_UNPUBLISHED:
               $row['status'] = $this->t('Generating');
@@ -49,8 +50,8 @@ class SitemapAdminController extends ControllerBase {
 
             case SimpleSitemap::SITEMAP_PUBLISHED:
             case SimpleSitemap::SITEMAP_PUBLISHED_GENERATING:
-              $created = \Drupal::service('date.formatter')->format($active_sitemaps[$id]->fromPublished()->getCreated());
-              $row['status'] = $active_sitemaps[$id]->contentStatus() === SimpleSitemap::SITEMAP_PUBLISHED
+              $created = \Drupal::service('date.formatter')->format($sitemap->fromPublished()->getCreated());
+              $row['status'] = $sitemap->contentStatus() === SimpleSitemap::SITEMAP_PUBLISHED
                 ? $this->t('Published on @time', ['@time' => $created])
                 : $this->t('Published on @time, regenerating', ['@time' => $created]);
               break;
