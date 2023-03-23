@@ -26,7 +26,11 @@ class DepartmentalDetailsBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return [];
+    return [
+      'context_mapping' => [
+        'current_department' => '@department.current_department_context:department',
+      ],
+    ] + parent::defaultConfiguration();
   }
 
   /**
