@@ -5,3 +5,11 @@ dept_sitemap.sitemap:
     _controller: '\Drupal\dept_sitemap\Controller\SitemapController::build'
   requirements:
     _permission: 'access content'
+
+dept_sitemap.sitemap_admin:
+  path: '/admin/config/departmental/sitemap'
+  defaults:
+    _title: 'Departmental sitemaps'
+    _controller: '\Drupal\dept_sitemap\Controller\SitemapAdminController::build'
+  requirements:
+    _permission: 'administer sitemap settings'
