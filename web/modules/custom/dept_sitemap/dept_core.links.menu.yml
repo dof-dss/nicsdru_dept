@@ -1,5 +1,5 @@
-dept_sitemap.admin:
+dept_sitemap.sitemaps:
   title: Departmental sitemaps
   parent: departmental.admin_config
-  description: 'Departmental sitemaps settings'
-  route_name: dept_sitemap.sitemap_admin
+  description: 'Departmental sitemaps'
+  route_name: dept_sitemap.list

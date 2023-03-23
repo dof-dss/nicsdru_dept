@@ -27,7 +27,7 @@ class SitemapAdminController extends ControllerBase {
     foreach ($dept_domains as $id => $domain) {
       $row = [
         'department' => $domain->label(),
-        'sitemap' => $this->t('No'),
+        'sitemap' => $this->t(''),
         'link_total' => '',
         'status' => '',
       ];
@@ -35,7 +35,7 @@ class SitemapAdminController extends ControllerBase {
       $links = [];
 
       if (array_key_exists($domain->id(), $active_sitemaps)) {
-        $row['sitemap'] = $this->t('Yes');
+        $row['sitemap'] = $active_sitemaps[$id]->getType()->label();
         $row['link_total'] = $active_sitemaps[$id]->getLinkCount();
         $row['status'] = $this->t('Pending');
 
@@ -73,10 +73,10 @@ class SitemapAdminController extends ControllerBase {
 
       }
       else {
-        $links['create'] = [
-          'title' => t('Create'),
-          'url' => Url::fromRoute('simple_sitemap.sitemap_variant', [
-            'variant' => $id,
+        $links['add'] = [
+          'title' => t('Add'),
+          'url' => Url::fromRoute('dept_sitemap.add', [
+            'department' => $id,
           ]),
         ];
         $row['operations'] = [
@@ -106,6 +106,53 @@ class SitemapAdminController extends ControllerBase {
 
 
     return $build;
+  }
+
+  public function add($department) {
+
+    /** @var \Drupal\simple_sitemap\Entity\SimpleSitemapInterface $simple_sitemap */
+    $simple_sitemap = $this->entityTypeManager()->getStorage('simple_sitemap')->create();
+    $simple_sitemap->set('id', $department);
+    $simple_sitemap->set('label', ucfirst($department));
+    $simple_sitemap->set('type', 'default_hreflang');
+    $result = $simple_sitemap->save();
+
+    if ($result > 0) {
+      $build = [];
+
+      $build['intro'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'h3',
+        '#value' => $this->t('Sitemap sucessfully created for @department.', ['@department' => $department])
+      ];
+
+      $build['inclusions_text'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $this->t("A sitemap will not be generated for this department until the 'Inclusions' configuration is set.")
+      ];
+
+      $build['inclusions_link'] = [
+        '#type' => 'link',
+        '#title' => $this->t('Assign Inclusions for this sitemap'),
+        '#url' => Url::fromRoute('simple_sitemap.entities')
+      ];
+
+      $build['sitemaps_link'] = [
+        '#type' => 'link',
+        '#title' => $this->t('View list of department sitemaps'),
+        '#url' => Url::fromRoute('dept_sitemap.list'),
+        '#prefix' => ' or ',
+      ];
+
+      return $build;
+
+    } else {
+      return [
+        '#markup' => $this->t('There was an issue creating a sitemap for @department', ['@department' => $department])
+      ];
+    }
+
   }
 
 }
