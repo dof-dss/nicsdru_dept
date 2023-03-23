@@ -1,6 +1,23 @@
 <?php
 
+use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
+
 /**
  * @file
  * Primary module hooks for Departmental sites: Sitemaps module.
  */
+
+function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInterface $sitemap) {
+
+  /** @var \Drupal\domain\Entity\Domain $domain */
+  $domain = \Drupal::entityTypeManager()->getStorage('domain')->load($sitemap->id());
+
+  $dept_path = $domain->getPath();
+
+  foreach ($links as $key => $link) {
+    if (!str_starts_with($link['url'], $dept_path)) {
+      unset($links[$key]);
+    }
+
+  }
+}
