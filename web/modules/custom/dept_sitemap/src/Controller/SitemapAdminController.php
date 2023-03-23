@@ -3,13 +3,42 @@
 namespace Drupal\dept_sitemap\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Url;
 use Drupal\simple_sitemap\Entity\SimpleSitemap;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Returns responses for Departmental sites: Sitemaps routes.
  */
-class SitemapAdminController extends ControllerBase {
+class SitemapAdminController extends ControllerBase implements ContainerInjectionInterface {
+
+  /**
+   * The date formatter service.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
+   * Constructor.
+   *
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter service.
+   */
+  public function __construct(DateFormatterInterface $date_formatter) {
+    $this->dateFormatter = $date_formatter;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('date.formatter'),
+    );
+  }
 
   /**
    * Builds the response.
@@ -50,7 +79,7 @@ class SitemapAdminController extends ControllerBase {
 
             case SimpleSitemap::SITEMAP_PUBLISHED:
             case SimpleSitemap::SITEMAP_PUBLISHED_GENERATING:
-              $created = \Drupal::service('date.formatter')->format($sitemap->fromPublished()->getCreated());
+              $created = $this->dateFormatter->format($sitemap->fromPublished()->getCreated());
               $row['status'] = $sitemap->contentStatus() === SimpleSitemap::SITEMAP_PUBLISHED
                 ? $this->t('Published on @time', ['@time' => $created])
                 : $this->t('Published on @time, regenerating', ['@time' => $created]);
