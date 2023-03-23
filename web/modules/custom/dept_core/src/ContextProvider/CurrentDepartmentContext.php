@@ -47,7 +47,7 @@ class CurrentDepartmentContext implements ContextProviderInterface {
     $context->addCacheableDependency($cacheability);
 
     $result = [
-      'current_department' => $context,
+      'department' => $context,
     ];
 
     return $result;
