@@ -144,7 +144,7 @@ class SitemapAdminController extends ControllerBase implements ContainerInjectio
    * @return array
    *   The response render array.
    */
-  public function add($department) {
+  public function add(string $department) {
 
     /** @var \Drupal\simple_sitemap\Entity\SimpleSitemapInterface $simple_sitemap */
     $simple_sitemap = $this->entityTypeManager()->getStorage('simple_sitemap')->create();
@@ -182,14 +182,12 @@ class SitemapAdminController extends ControllerBase implements ContainerInjectio
       ];
 
       return $build;
-
     }
     else {
       return [
         '#markup' => $this->t('There was an issue creating a sitemap for @department', ['@department' => $department])
       ];
     }
-
   }
 
 }

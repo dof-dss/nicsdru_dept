@@ -17,6 +17,8 @@ function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInt
 
   $dept_path = $domain->getPath();
 
+  // Remove any links for the current sitemap variant that don't belong to this
+  // variants' domain.
   foreach ($links as $key => $link) {
     if (!str_starts_with($link['url'], $dept_path)) {
       unset($links[$key]);
