@@ -5,3 +5,11 @@ entity.department.settings:
     _title: 'Department'
   requirements:
     _permission: 'administer department'
+departmental.admin_config:
+  path: '/admin/config/departmental'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Departmental'
+  requirements:
+    _permission: 'access administration pages'
+

@@ -5,6 +5,11 @@ parameters:
     - '#Plugin definitions cannot be altered.#'
     - '#Missing cache backend declaration for performance.#'
     - '#Plugin manager has cache backend specified but does not declare cache tags.#'
+  drupal:
+  		entityMapping:
+  			simple_sitemap:
+          class: Drupal\simple_sitemap\Entity\SimpleSitemap
+          storage: Drupal\simple_sitemap\Entity\SimpleSitemapStorage
 
   # FROM mglaman/drupal-check/phpstan/base_config.neon
   reportUnmatchedIgnoredErrors: false
