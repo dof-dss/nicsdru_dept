@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Departmental sites: Sitemaps module.
+ */
+
+use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
+
+/**
+ * Implements hook_simple_sitemap_links_alter().
+ */
+function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInterface $sitemap) {
+
+  /** @var \Drupal\domain\Entity\Domain $domain */
+  $domain = \Drupal::entityTypeManager()->getStorage('domain')->load($sitemap->id());
+
+  $dept_path = $domain->getPath();
+
+  // Remove any links for the current sitemap variant that don't belong to this
+  // variants' domain.
+  foreach ($links as $key => $link) {
+    if (!str_starts_with($link['url'], $dept_path)) {
+      unset($links[$key]);
+    }
+
+  }
+}
