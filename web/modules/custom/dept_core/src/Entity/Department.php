@@ -276,14 +276,29 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    *   Return production hostname if true, else return the configuration hostname.
    */
   public function hostname(bool $production_hostname = TRUE): string|null {
-    // Cannot inject services into entities (https://www.drupal.org/project/drupal/issues/2142515)
-    // So instead we lazy load the hostnames via the static Drupal calls.
-    if (empty($this->hostnames)) {
-      // Get Production and config domain hostnames.
-      foreach (['config.storage.sync', 'config.storage'] as $config_store) {
-        $config = \Drupal::service($config_store)->read('domain.record.' . $this->id());
-        $this->hostnames[] = $config['hostname'];
-      }
+
+    /** @var \Drupal\config_split\ConfigSplitManager $split_manager */
+    $split_manager = \Drupal::service('config_split.manager');
+    /** @var \Drupal\config_filter\ConfigFilterStorageFactory $conf_filter */
+    $conf_filter = \Drupal::service('config_filter.storage_factory');
+
+    $split_ids = [
+      'config_split.config_split.production',
+      'config_split.config_split.development',
+      'config_split.config_split.local',
+    ];
+
+    foreach ($split_ids as $split_id) {
+      /** @var \Drupal\Core\Config\ImmutableConfig $split_config */
+      $split_config = $split_manager->getSplitConfig($split_id);
+      $storage = $split_manager->singleExportTarget($split_config);
+
+      /** @var \Drupal\config_filter\Config\FilteredStorageInterface $filtered */
+      $filtered = $conf_filter->getFilteredStorage($storage, ['config.storage']);
+
+      $config = $filtered->read('domain.record.' . $this->id());
+      $this->hostnames[] = $config['hostname'];
+
     }
 
     return $production_hostname ? $this->hostnames[0] : $this->hostnames[1];
