@@ -65,11 +65,9 @@ function dept_search_preprocess_facets_item_list(array &$variables) {
     /** @var \Drupal\Core\Url $url */
     $url = $variables['items'][$index]['#url'];
 
-    if (isset($url)) {
-      $options = $url->getOptions();
-      $options['attributes']['data-self-ref'] = 'false';
-      $variables['items'][$index]['#url']->mergeOptions($options);
-    }
+    $options = $url->getOptions();
+    $options['attributes']['data-self-ref'] = 'false';
+    $variables['items'][$index]['#url']->mergeOptions($options);
   }
 }
 
