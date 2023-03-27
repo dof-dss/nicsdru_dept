@@ -272,21 +272,18 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   /**
    * Hostname.
    *
-   * @param bool $production_hostname
-   *   Return production hostname if true, else return the configuration hostname.
+   * @param string $environment
+   *   Return hostname for the given environment.
    */
-  public function hostname(bool $production_hostname = TRUE): string|null {
+  public function hostname(string $environment = 'production'): string|null {
 
     /** @var \Drupal\config_split\ConfigSplitManager $split_manager */
     $split_manager = \Drupal::service('config_split.manager');
     /** @var \Drupal\config_filter\ConfigFilterStorageFactory $conf_filter */
     $conf_filter = \Drupal::service('config_filter.storage_factory');
 
-    $split_ids = [
-      'config_split.config_split.production',
-      'config_split.config_split.development',
-      'config_split.config_split.local',
-    ];
+    $split_ids = $split_manager->listAll();
+
 
     foreach ($split_ids as $split_id) {
       /** @var \Drupal\Core\Config\ImmutableConfig $split_config */
@@ -297,10 +294,10 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
       $config_store = $conf_filter->getFilteredStorage($storage, ['config.storage']);
 
       $config = $config_store->read('domain.record.' . $this->id());
-      $this->hostnames[] = $config['hostname'];
+      $this->hostnames[substr($split_id, 26)] = $config['hostname'];
     }
 
-    return $production_hostname ? $this->hostnames[0] : $this->hostnames[1];
+    return array_key_exists($environment) ? $this->hostnames[$environment] : null;
   }
 
   /**
