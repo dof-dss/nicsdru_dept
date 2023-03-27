@@ -278,6 +278,8 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   public function hostname(string $environment = "active"): string|null {
     $active_split = '';
 
+    // Iterate each config split, loading the hostname into an associative
+    // array consisting <environment> => <hostname>.
     if (empty($this->hostnames)) {
       /** @var \Drupal\config_split\ConfigSplitManager $split_manager */
       $split_manager = \Drupal::service('config_split.manager');
@@ -302,7 +304,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
     $environment = ($environment == 'active') ? substr($active_split, 26) : $environment;
 
-    return array_key_exists($environment, $this->hostnames) ? $this->hostnames[$environment] : NULL;
+    return array_key_exists($environment, $this->hostnames) ? $this->hostnames[$environment] : '';
   }
 
   /**
