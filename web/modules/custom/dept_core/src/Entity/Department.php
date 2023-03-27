@@ -293,12 +293,11 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
       $split_config = $split_manager->getSplitConfig($split_id);
       $storage = $split_manager->singleExportTarget($split_config);
 
-      /** @var \Drupal\config_filter\Config\FilteredStorageInterface $filtered */
-      $filtered = $conf_filter->getFilteredStorage($storage, ['config.storage']);
+      /** @var \Drupal\config_filter\Config\FilteredStorageInterface $config_store */
+      $config_store = $conf_filter->getFilteredStorage($storage, ['config.storage']);
 
-      $config = $filtered->read('domain.record.' . $this->id());
+      $config = $config_store->read('domain.record.' . $this->id());
       $this->hostnames[] = $config['hostname'];
-
     }
 
     return $production_hostname ? $this->hostnames[0] : $this->hostnames[1];
