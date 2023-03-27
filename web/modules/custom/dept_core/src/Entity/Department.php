@@ -277,29 +277,32 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    */
   public function hostname(string $environment = "active"): string|null {
     $active_split = '';
-    /** @var \Drupal\config_split\ConfigSplitManager $split_manager */
-    $split_manager = \Drupal::service('config_split.manager');
-    /** @var \Drupal\config_filter\ConfigFilterStorageFactory $conf_filter */
-    $conf_filter = \Drupal::service('config_filter.storage_factory');
-    $split_ids = $split_manager->listAll();
 
-    foreach ($split_ids as $split_id) {
-      /** @var \Drupal\Core\Config\ImmutableConfig $split_config */
-      $split_config = $split_manager->getSplitConfig($split_id);
-      $storage = $split_manager->singleExportTarget($split_config);
+    if (empty($this->hostnames)) {
+      /** @var \Drupal\config_split\ConfigSplitManager $split_manager */
+      $split_manager = \Drupal::service('config_split.manager');
+      /** @var \Drupal\config_filter\ConfigFilterStorageFactory $conf_filter */
+      $conf_filter = \Drupal::service('config_filter.storage_factory');
+      $split_ids = $split_manager->listAll();
 
-      /** @var \Drupal\config_filter\Config\FilteredStorageInterface $config_store */
-      $config_store = $conf_filter->getFilteredStorage($storage, ['config.storage']);
+      foreach ($split_ids as $split_id) {
+        /** @var \Drupal\Core\Config\ImmutableConfig $split_config */
+        $split_config = $split_manager->getSplitConfig($split_id);
+        $storage = $split_manager->singleExportTarget($split_config);
 
-      $config = $config_store->read('domain.record.' . $this->id());
-      $this->hostnames[substr($split_id, 26)] = $config['hostname'];
+        /** @var \Drupal\config_filter\Config\FilteredStorageInterface $config_store */
+        $config_store = $conf_filter->getFilteredStorage($storage, ['config.storage']);
 
-      $active_split = $split_config->get('status') ? $split_id : $active_split;
+        $config = $config_store->read('domain.record.' . $this->id());
+        $this->hostnames[substr($split_id, 26)] = $config['hostname'];
+
+        $active_split = $split_config->get('status') ? $split_id : $active_split;
+      }
     }
 
     $environment = ($environment == 'active') ? substr($active_split, 26) : $environment;
 
-    return array_key_exists($environment, $this->hostnames) ? $this->hostnames[$environment] : null;
+    return array_key_exists($environment, $this->hostnames) ? $this->hostnames[$environment] : NULL;
   }
 
   /**
