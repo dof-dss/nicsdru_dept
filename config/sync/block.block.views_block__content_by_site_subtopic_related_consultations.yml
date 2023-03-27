@@ -5,6 +5,7 @@ dependencies:
   config:
     - views.view.content_by_site_subtopic
   module:
+    - block_visibility_groups
     - node
     - views
   theme:
@@ -31,3 +32,8 @@ visibility:
       node: '@node.node_route_context:node'
     bundles:
       subtopic: subtopic
+      topic: topic
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
