@@ -62,7 +62,7 @@ function dept_search_preprocess_facets_item_list(array &$variables) {
   // Prevent dept_node/link-manager.js disabling self referential facet links.
   foreach ($variables['items'] as $index => &$item) {
 
-    /** @var \Drupal\core\Url $url */
+    /** @var \Drupal\Core\Url $url */
     $url = $variables['items'][$index]['#url'];
 
     if (isset($url)) {
