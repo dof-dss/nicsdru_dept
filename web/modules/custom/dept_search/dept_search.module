@@ -40,17 +40,34 @@ function dept_search_preprocess_facets_summary_item_list(&$variables) {
  * Implements hook_preprocess_facets_item_list().
  */
 function dept_search_preprocess_facets_item_list(array &$variables) {
+
+  // Early return if no items to process.
+  if (empty($variables['items'])) {
+    return;
+  }
+
   /** @var \Drupal\facets\FacetInterface $facet */
   $facet = $variables['facet'];
 
   // Remove NIGov from press releases department facet.
-  if ($facet->id() === 'pr_department' && !empty($variables['items'])) {
+  if ($facet->id() === 'pr_department') {
     foreach ($variables['items'] as $index => $item) {
       if ($item['#title']['#value'] === 'NIGov') {
         unset($variables['items'][$index]);
       }
     }
 
+  }
+
+  // Prevent dept_node/link-manager.js disabling self referential facet links.
+  foreach ($variables['items'] as $index => &$item) {
+
+    /** @var \Drupal\Core\Url $url */
+    $url = $variables['items'][$index]['#url'];
+
+    $options = $url->getOptions();
+    $options['attributes']['data-self-ref'] = 'false';
+    $variables['items'][$index]['#url']->mergeOptions($options);
   }
 }
 
