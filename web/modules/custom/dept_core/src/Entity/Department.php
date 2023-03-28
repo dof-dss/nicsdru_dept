@@ -261,7 +261,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    * Full URL (protocol and hostname).
    *
    * @param string $environment
-   *   Environment to return the URL for.
+   *   Environment to return the URL for. Defaults to the active environment.
    * @param bool $secure_protocol
    *   Return URL with HTTPS or HTTP protocol.
    */
@@ -273,7 +273,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    * Hostname.
    *
    * @param string $environment
-   *   Return hostname for the given environment.
+   *   Return hostname for the given environment. Defaults to the active environment.
    */
   public function hostname(string $environment = "active"): string|null {
     $active_split = '';
