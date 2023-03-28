@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - block_visibility_groups
     - node
   theme:
     - nicsdru_dept_theme
@@ -16,7 +17,7 @@ settings:
   id: 'block_content:a3f8de89-b39b-4be1-8aaa-86336269ee53'
   label: 'Access to information'
   label_display: visible
-  provider: block_content
+  provider: core
   status: true
   info: ''
   view_mode: full
@@ -28,3 +29,8 @@ visibility:
       node: '@node.node_route_context:node'
     bundles:
       subtopic: subtopic
+      topic: topic
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
