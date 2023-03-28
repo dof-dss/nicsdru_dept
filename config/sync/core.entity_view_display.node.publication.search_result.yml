@@ -21,7 +21,9 @@ dependencies:
     - field.field.node.publication.field_summary
     - node.type.publication
   module:
+    - datetime
     - layout_builder
+    - options
     - smart_trim
     - user
 third_party_settings:
@@ -33,13 +35,29 @@ targetEntityType: node
 bundle: publication
 mode: search_result
 content:
+  field_publication_type:
+    type: list_default
+    label: visually_hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_published_date:
+    type: datetime_default
+    label: visually_hidden
+    settings:
+      timezone_override: ''
+      format_type: medium_date
+    third_party_settings: {  }
+    weight: 1
+    region: content
   field_summary:
     type: smart_trim
     label: hidden
     settings:
-      trim_length: 20
+      trim_length: 45
       trim_type: words
-      trim_suffix: ''
+      trim_suffix: ...
       wrap_output: false
       wrap_class: trimmed
       more_link: false
@@ -67,8 +85,6 @@ hidden:
   field_metatags: true
   field_publication_files: true
   field_publication_secure_files: true
-  field_publication_type: true
-  field_published_date: true
   field_site_subtopics: true
   field_site_topics: true
   groups: true

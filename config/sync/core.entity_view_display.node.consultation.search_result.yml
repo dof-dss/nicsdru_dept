@@ -21,6 +21,7 @@ dependencies:
     - field.field.node.consultation.field_summary
     - node.type.consultation
   module:
+    - datetime
     - layout_builder
     - smart_trim
     - user
@@ -52,6 +53,15 @@ content:
         trim_zero: false
         replace_tokens: false
     third_party_settings: {  }
+    weight: 1
+    region: content
+  field_published_date:
+    type: datetime_default
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: medium_date
+    third_party_settings: {  }
     weight: 0
     region: content
 hidden:
@@ -66,7 +76,6 @@ hidden:
   field_global_topics: true
   field_metatags: true
   field_postal: true
-  field_published_date: true
   field_respond_online: true
   field_site_subtopics: true
   field_site_topics: true
