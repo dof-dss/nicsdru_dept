@@ -18,7 +18,7 @@ use Drupal\Core\Url;
 function dept_dev_toolbar() {
   $items = [];
 
-  $config_hostnames = \Drupal::config('dept_dev.settings.toolbar_sites')->get('config_hostnames') ?? 1;
+  $environment = \Drupal::config('dept_dev.settings.toolbar_sites')->get('config_hostnames') ? 'active' : 'production';
   $url_protocol = \Drupal::config('dept_dev.settings.toolbar_sites')->get('url_protocol') ?? 0;
   $department_manager = \Drupal::service('department.manager');
 
@@ -30,7 +30,7 @@ function dept_dev_toolbar() {
 
     $links[] = [
       'title' => $department->name(),
-      'url' => Url::fromUri($department->url(!$config_hostnames, $url_protocol)),
+      'url' => Url::fromUri($department->url($environment, $url_protocol)),
     ];
   }
 
