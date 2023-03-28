@@ -260,33 +260,51 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   /**
    * Full URL (protocol and hostname).
    *
-   * @param bool $live_url
-   *   Return live URL if true, else return the configuration Url.
+   * @param string $environment
+   *   Environment to return the URL for. Defaults to the active environment.
    * @param bool $secure_protocol
    *   Return URL with HTTPS or HTTP protocol.
    */
-  public function url(bool $live_url = TRUE, bool $secure_protocol = TRUE): string {
-    return ($secure_protocol ? "https://" : "http://") . $this->hostname($live_url);
+  public function url(string $environment = 'active', bool $secure_protocol = TRUE): string {
+    return ($secure_protocol ? "https://" : "http://") . $this->hostname($environment);
   }
 
   /**
    * Hostname.
    *
-   * @param bool $production_hostname
-   *   Return production hostname if true, else return the configuration hostname.
+   * @param string $environment
+   *   Return hostname for the given environment. Defaults to the active environment.
    */
-  public function hostname(bool $production_hostname = TRUE): string|null {
-    // Cannot inject services into entities (https://www.drupal.org/project/drupal/issues/2142515)
-    // So instead we lazy load the hostnames via the static Drupal calls.
+  public function hostname(string $environment = "active"): string|null {
+    $active_split = '';
+
+    // Iterate each config split, loading the hostname into an associative
+    // array consisting <environment> => <hostname>.
     if (empty($this->hostnames)) {
-      // Get Production and config domain hostnames.
-      foreach (['config.storage.sync', 'config.storage'] as $config_store) {
-        $config = \Drupal::service($config_store)->read('domain.record.' . $this->id());
-        $this->hostnames[] = $config['hostname'];
+      /** @var \Drupal\config_split\ConfigSplitManager $split_manager */
+      $split_manager = \Drupal::service('config_split.manager');
+      /** @var \Drupal\config_filter\ConfigFilterStorageFactory $conf_filter */
+      $conf_filter = \Drupal::service('config_filter.storage_factory');
+      $split_ids = $split_manager->listAll();
+
+      foreach ($split_ids as $split_id) {
+        /** @var \Drupal\Core\Config\ImmutableConfig $split_config */
+        $split_config = $split_manager->getSplitConfig($split_id);
+        $storage = $split_manager->singleExportTarget($split_config);
+
+        /** @var \Drupal\config_filter\Config\FilteredStorageInterface $config_store */
+        $config_store = $conf_filter->getFilteredStorage($storage, ['config.storage']);
+
+        $config = $config_store->read('domain.record.' . $this->id());
+        $this->hostnames[substr($split_id, 26)] = $config['hostname'];
+
+        $active_split = $split_config->get('status') ? $split_id : $active_split;
       }
     }
 
-    return $production_hostname ? $this->hostnames[0] : $this->hostnames[1];
+    $environment = ($environment == 'active') ? substr($active_split, 26) : $environment;
+
+    return array_key_exists($environment, $this->hostnames) ? $this->hostnames[$environment] : '';
   }
 
   /**
