@@ -283,13 +283,15 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
     if (empty($this->hostnames)) {
       /** @var \Drupal\config_split\ConfigSplitManager $split_manager */
       $split_manager = \Drupal::service('config_split.manager');
+      $split_ids = $split_manager->listAll();
+
       /** @var \Drupal\config_filter\ConfigFilterStorageFactory $conf_filter */
       $conf_filter = \Drupal::service('config_filter.storage_factory');
-      $split_ids = $split_manager->listAll();
 
       foreach ($split_ids as $split_id) {
         /** @var \Drupal\Core\Config\ImmutableConfig $split_config */
         $split_config = $split_manager->getSplitConfig($split_id);
+
         $storage = $split_manager->singleExportTarget($split_config);
 
         /** @var \Drupal\config_filter\Config\FilteredStorageInterface $config_store */
@@ -298,11 +300,11 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
         $config = $config_store->read('domain.record.' . $this->id());
         $this->hostnames[substr($split_id, 26)] = $config['hostname'];
 
-        $active_split = $split_config->get('status') ? $split_id : $active_split;
+        $active_split = $split_config->get('status') ? substr($split_id, 26) : $active_split;
       }
-    }
 
-    $environment = ($environment == 'active') ? substr($active_split, 26) : $environment;
+      $this->hostnames['active'] = $this->hostnames[$active_split];
+    }
 
     return array_key_exists($environment, $this->hostnames) ? $this->hostnames[$environment] : '';
   }
