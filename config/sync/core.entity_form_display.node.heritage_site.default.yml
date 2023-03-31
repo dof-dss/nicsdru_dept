@@ -111,7 +111,7 @@ third_party_settings:
         classes: ''
         show_empty_fields: false
         id: ''
-        open: false
+        open: true
         description: ''
         required_fields: true
 id: node.heritage_site.default
@@ -624,6 +624,11 @@ content:
   publish_state:
     type: options_select
     weight: 26
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
