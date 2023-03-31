@@ -18,6 +18,8 @@ settings:
   label: 'Map location'
   label_display: visible
   provider: dept_core
+  context_mapping:
+    current_department: '@department.current_department_context:department'
   display_field: location
 visibility:
   request_path:

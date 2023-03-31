@@ -117,17 +117,15 @@ display:
             offset_label: Offset
           quantity: 9
       exposed_form:
-        type: input_required
+        type: basic
         options:
-          submit_button: Apply
+          submit_button: Search
           reset_button: false
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
-          expose_sort_order: false
+          expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
-          text_input_required: 'Select any filter and click on Apply to see results'
-          text_input_required_format: basic_html
       access:
         type: none
         options: {  }
@@ -261,7 +259,11 @@ display:
             - field_summary
             - title_fulltext
       style:
-        type: html_list
+        type: default
+        options:
+          row_class: ''
+          default_row_class: false
+          uses_fields: false
       row:
         type: search_api
         options:
@@ -298,7 +300,7 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: '@total items'
+          content: '<h2 class="view--count">@total results</h2>'
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -319,6 +321,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      exposed_block: true
       display_extenders: {  }
       path: search
     cache_metadata:

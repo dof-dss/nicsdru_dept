@@ -10,7 +10,7 @@ dependencies:
 id: department_details_management_and_structure
 theme: nicsdru_dept_theme
 region: content
-weight: -11
+weight: -10
 provider: null
 plugin: dept_core_departmental_details
 settings:
@@ -18,6 +18,8 @@ settings:
   label: 'Department details - management and structure'
   label_display: '0'
   provider: dept_core
+  context_mapping:
+    current_department: '@department.current_department_context:department'
   display_field: managementAndStructure
 visibility:
   request_path:
