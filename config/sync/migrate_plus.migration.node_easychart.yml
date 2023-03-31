@@ -1,4 +1,4 @@
-uuid: 15220523-aaef-4d36-b919-288bf7fd099c
+uuid: b7a1fa14-f6a2-407d-995b-a8a5edeecc75
 langcode: en
 status: true
 dependencies: {  }
@@ -56,12 +56,20 @@ process:
       plugin: get
       source: body
     -
-      plugin: media_wysiwyg_filter
-    -
       plugin: str_replace
       regex: true
       search: '/(<p>[<br>|\s]*&nbsp;<\/p>)/im'
       replace: ''
+    -
+      plugin: str_replace
+      search: '&nbsp;</p>'
+      replace: '</p>'
+    -
+      plugin: str_replace
+      search: '&nbsp;'
+      replace: ' '
+    -
+      plugin: media_wysiwyg_filter
   body/0/format:
     -
       plugin: static_map
