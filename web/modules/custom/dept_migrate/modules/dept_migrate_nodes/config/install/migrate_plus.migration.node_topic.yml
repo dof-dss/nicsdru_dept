@@ -44,11 +44,17 @@ process:
   body:
     - plugin: get
       source: body
-    - plugin: media_wysiwyg_filter
     - plugin: str_replace
       regex: true
       search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
       replace: ''
+    - plugin: str_replace
+      search: '&nbsp;</p>'
+      replace: '</p>'
+    - plugin: str_replace
+      search: '&nbsp;'
+      replace: ' '
+    - plugin: media_wysiwyg_filter
   body/0/format:
     - plugin: static_map
       source: body/0/format
@@ -81,6 +87,7 @@ process:
         target_id:
           - plugin: d7_file_lookup
             source: fid
+            entity_type: media
   field_domain_access:
     - plugin: sub_process
       source: domain_access_node

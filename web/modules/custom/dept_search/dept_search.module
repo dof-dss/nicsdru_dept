@@ -90,7 +90,8 @@ function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$a
   $dept_manager = in_array($view->id(), [
     'news_search',
     'news_search',
-    'publications_search'
+    'publications_search',
+    'site_search',
   ]) ? \Drupal::service('department.manager') : NULL;
 
   if ($view->id() === 'news_search' && $display_id === 'news_search') {
