@@ -1,16 +1,17 @@
-uuid: c35e7033-5ff1-4fe9-9962-6874b2d57091
+uuid: 4c603ec5-48eb-4b0f-bbca-0084f0c57afe
 langcode: en
 status: true
 dependencies:
   module:
+    - block_visibility_groups
     - search_api_block
     - system
   theme:
     - nicsdru_dept_theme
-id: searchapiform
+id: searchapiform_search_page
 theme: nicsdru_dept_theme
-region: header
-weight: -18
+region: content
+weight: -21
 provider: null
 plugin: search_api_form_block
 settings:
@@ -18,15 +19,20 @@ settings:
   label: 'Site search'
   label_display: '0'
   provider: search_api_block
+  context_mapping: {  }
   action_url: /search
   input_name: query
-  input_placeholder: ''
+  input_placeholder: 'Search this site...'
   submit_value: ''
-  pass_get_params: false
-  input_label: ''
+  pass_get_params: 0
+  input_label: 'Search this site'
   input_label_visibility: invisible
 visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
   request_path:
     id: request_path
-    negate: true
-    pages: "/search\r\n/search*"
+    negate: false
+    pages: /search

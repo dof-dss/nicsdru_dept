@@ -18,6 +18,8 @@ settings:
   label: 'Departmental details - Contact'
   label_display: '0'
   provider: dept_core
+  context_mapping:
+    current_department: '@department.current_department_context:department'
   display_field: contactInformation
 visibility:
   request_path:

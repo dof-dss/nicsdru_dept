@@ -11,7 +11,7 @@ dependencies:
 id: departmental_details_social_links
 theme: nicsdru_dept_theme
 region: content
-weight: -18
+weight: -17
 provider: null
 plugin: dept_core_departmental_details
 settings:
@@ -19,6 +19,8 @@ settings:
   label: 'Departmental details - social links'
   label_display: '0'
   provider: dept_core
+  context_mapping:
+    current_department: '@department.current_department_context:department'
   display_field: socialMediaLinks
 visibility:
   domain:
