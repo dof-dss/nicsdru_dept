@@ -1,0 +1,35 @@
+uuid: 91f85ba8-4baa-4e04-9eb4-273b6d985514
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:block_group:091183ce-00df-49cb-a64a-d5171b10d141'
+  module:
+    - block_content
+    - block_visibility_groups
+    - system
+  theme:
+    - nicsdru_dept_theme
+id: niexecourdocumentsd7
+theme: nicsdru_dept_theme
+region: content
+weight: -14
+provider: null
+plugin: 'block_content:091183ce-00df-49cb-a64a-d5171b10d141'
+settings:
+  id: 'block_content:091183ce-00df-49cb-a64a-d5171b10d141'
+  label: 'Our documents (d7)'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'
