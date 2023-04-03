@@ -1,0 +1,53 @@
+uuid: 0a77c296-9d58-4e44-b6e0-40864cc14930
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.default_content
+    - views.view.search
+  module:
+    - views
+    - search_api_autocomplete
+id: search
+label: Search
+index_id: default_content
+suggester_settings:
+  live_results:
+    fields: {  }
+    highlight:
+      enabled: false
+      field: ''
+    suggest_keys: false
+    view_modes:
+      'entity:node':
+        application: ''
+        article: ''
+        consultation: ''
+        contact: ''
+        landing_page: ''
+        news: ''
+        page: ''
+        profile: ''
+        project: ''
+        protected_area: ''
+        publication: ''
+        subtopic: ''
+        topic: ''
+        ual: ''
+suggester_weights:
+  live_results: 0
+suggester_limits:
+  live_results: 5
+search_settings:
+  'views:search':
+    displays:
+      default: true
+      selected:
+        - site_search
+options:
+  limit: 5
+  min_length: 3
+  show_count: false
+  delay: 500
+  submit_button_selector: ':submit'
+  autosubmit: true
