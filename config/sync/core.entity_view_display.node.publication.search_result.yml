@@ -35,12 +35,20 @@ targetEntityType: node
 bundle: publication
 mode: search_result
 content:
+  field_domain_source:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
   field_publication_type:
     type: list_default
     label: visually_hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
   field_published_date:
     type: datetime_default
@@ -49,13 +57,13 @@ content:
       timezone_override: ''
       format_type: medium_date
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
   field_summary:
     type: smart_trim
     label: hidden
     settings:
-      trim_length: 45
+      trim_length: 35
       trim_type: words
       trim_suffix: ...
       wrap_output: false
@@ -78,7 +86,6 @@ hidden:
   field_attachment: true
   field_domain_access: true
   field_domain_all_affiliates: true
-  field_domain_source: true
   field_external_publication: true
   field_global_topics: true
   field_last_updated: true

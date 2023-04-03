@@ -5,6 +5,9 @@ dependencies:
   config:
     - core.entity_view_mode.node.search_result
     - field.field.node.topic.body
+    - field.field.node.topic.field_domain_access
+    - field.field.node.topic.field_domain_all_affiliates
+    - field.field.node.topic.field_domain_source
     - field.field.node.topic.field_metatags
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
@@ -26,9 +29,9 @@ content:
     type: smart_trim
     label: hidden
     settings:
-      trim_length: 20
+      trim_length: 35
       trim_type: words
-      trim_suffix: ''
+      trim_suffix: ...
       wrap_output: false
       wrap_class: trimmed
       more_link: false
