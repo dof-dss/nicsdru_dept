@@ -65,6 +65,10 @@ class HomepageController extends ControllerBase {
     // Render a FCL node for the active domain.
     $active_dept = $this->deptManager->getCurrentDepartment();
 
+    if (empty($active_dept->id())) {
+      return $build;
+    }
+
     $fcl_query = $node_storage->getQuery()
       ->condition('type', 'featured_content_list')
       ->condition('status', 1)
