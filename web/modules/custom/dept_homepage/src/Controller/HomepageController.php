@@ -65,7 +65,7 @@ class HomepageController extends ControllerBase {
     // Render a FCL node for the active domain.
     $active_dept = $this->deptManager->getCurrentDepartment();
 
-    if (empty($active_dept->id())) {
+    if (empty($active_dept) || empty($active_dept->id())) {
       return $build;
     }
 
