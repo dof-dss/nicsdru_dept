@@ -4,3 +4,15 @@
  * @file
  * Provides functionality for pulling data from the D7 department sites.
  */
+
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_pre_execute().
+ */
+function dept_d7_data_sources_views_pre_execute(ViewExecutable $view) {
+  if ($view->id() == 'd7_site_search') {
+    $search_query = \Drupal::request()->query->get('query');
+    $view->query->options["json_file"] = $view->query->options["json_file"] . "?query=" . $search_query;
+  }
+}
