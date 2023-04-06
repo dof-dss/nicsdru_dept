@@ -1,0 +1,54 @@
+uuid: 0a77c296-9d58-4e44-b6e0-40864cc14930
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.default_content
+    - views.view.search
+    - core.entity_view_mode.node.search_autocomplete
+  module:
+    - views
+    - search_api_autocomplete
+id: search
+label: Search
+index_id: default_content
+suggester_settings:
+  live_results:
+    fields: {  }
+    highlight:
+      enabled: false
+      field: ''
+    suggest_keys: false
+    view_modes:
+      'entity:node':
+        application: search_autocomplete
+        article: search_autocomplete
+        consultation: search_autocomplete
+        contact: search_autocomplete
+        landing_page: search_autocomplete
+        news: search_autocomplete
+        page: search_autocomplete
+        profile: search_autocomplete
+        project: search_autocomplete
+        protected_area: search_autocomplete
+        publication: search_autocomplete
+        subtopic: search_autocomplete
+        topic: search_autocomplete
+        ual: search_autocomplete
+suggester_weights:
+  live_results: 0
+suggester_limits:
+  live_results: 5
+search_settings:
+  'views:search':
+    displays:
+      default: true
+      selected:
+        - default
+options:
+  limit: 5
+  min_length: 3
+  show_count: false
+  delay: 500
+  submit_button_selector: ':submit'
+  autosubmit: true

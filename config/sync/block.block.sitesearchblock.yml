@@ -1,0 +1,30 @@
+uuid: a6446b6a-7b1d-4d15-80b4-98a337effbc1
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - dept_search
+    - system
+  theme:
+    - nicsdru_dept_theme
+id: sitesearchblock
+theme: nicsdru_dept_theme
+region: header
+weight: -22
+provider: null
+plugin: site_search_block
+settings:
+  id: site_search_block
+  label: 'Site search block'
+  label_display: '0'
+  provider: dept_search
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/search*'
