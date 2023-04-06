@@ -34,6 +34,14 @@ targetEntityType: node
 bundle: consultation
 mode: search_result
 content:
+  field_domain_source:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
   field_published_date:
     type: datetime_default
     label: hidden
@@ -41,13 +49,13 @@ content:
       timezone_override: ''
       format_type: medium_date
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
   field_summary:
     type: smart_trim
     label: hidden
     settings:
-      trim_length: 45
+      trim_length: 35
       trim_type: words
       trim_suffix: ...
       wrap_output: false
@@ -72,7 +80,6 @@ hidden:
   field_consultation_dates: true
   field_domain_access: true
   field_domain_all_affiliates: true
-  field_domain_source: true
   field_email_address: true
   field_global_topics: true
   field_metatags: true
