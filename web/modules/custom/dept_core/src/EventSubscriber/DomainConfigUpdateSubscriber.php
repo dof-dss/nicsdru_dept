@@ -6,7 +6,6 @@ use Drupal\Core\Config\ConfigEvents;
 use Drupal\Core\Config\ConfigImporterEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-
 /**
  * Departmental sites: core event subscriber.
  */
@@ -23,6 +22,7 @@ class DomainConfigUpdateSubscriber implements EventSubscriberInterface {
 
     $changes = $event->getConfigImporter()->getProcessedConfiguration();
 
+    // Check the list of updates for changes to Domain record config.
     if (!empty($changes['update'])) {
       $domain_updates = array_filter($changes['update'], function ($value, $key) {
         return str_starts_with($value, 'domain.record.');
@@ -30,6 +30,8 @@ class DomainConfigUpdateSubscriber implements EventSubscriberInterface {
 
     }
 
+    // Update the Department label with the latest Domain label. We don't allow
+    // editing of the Department id or label to keep things synced.
     foreach ($domain_updates as $update) {
       $id = \Drupal::config($update)->get('id');
       $name = \Drupal::config($update)->get('name');
@@ -39,7 +41,6 @@ class DomainConfigUpdateSubscriber implements EventSubscriberInterface {
       $dept->save();
     }
   }
-
 
   /**
    * {@inheritdoc}
