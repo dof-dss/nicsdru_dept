@@ -181,7 +181,7 @@ function dept_search_preprocess_node(array &$variables) {
 
     if ($dept->id() != 'nigov') {
       // Hide the domain source field.
-       unset($variables['content']['field_domain_source']);
+      unset($variables['content']['field_domain_source']);
     }
   }
 }
