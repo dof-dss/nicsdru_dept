@@ -1,0 +1,56 @@
+uuid: f38a63cc-7368-4894-9c9c-74e749b47736
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_autocomplete
+    - field.field.node.subtopic.body
+    - field.field.node.subtopic.field_banner_image
+    - field.field.node.subtopic.field_banner_link
+    - field.field.node.subtopic.field_domain_access
+    - field.field.node.subtopic.field_domain_all_affiliates
+    - field.field.node.subtopic.field_domain_source
+    - field.field.node.subtopic.field_link
+    - field.field.node.subtopic.field_metatags
+    - field.field.node.subtopic.field_parent_subtopic
+    - field.field.node.subtopic.field_parent_topic
+    - field.field.node.subtopic.field_summary
+    - node.type.subtopic
+  module:
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.subtopic.search_autocomplete
+targetEntityType: node
+bundle: subtopic
+mode: search_autocomplete
+content:
+  field_domain_source:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  content_moderation_control: true
+  entitygroupfield: true
+  field_banner_image: true
+  field_banner_link: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_link: true
+  field_metatags: true
+  field_parent_subtopic: true
+  field_parent_topic: true
+  field_summary: true
+  groups: true
+  groups_type_department_site: true
+  langcode: true
+  links: true
+  search_api_excerpt: true
