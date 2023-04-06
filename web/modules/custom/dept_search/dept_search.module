@@ -162,3 +162,26 @@ function dept_search_views_data_alter(array &$data) {
   ];
   return $data;
 }
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function dept_search_preprocess_node(array &$variables) {
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = &$variables['node'];
+  $view_mode = $variables['view_mode'];
+
+  if ($view_mode === 'search_autocomplete') {
+    $dept = \Drupal::service('department.manager')->getCurrentDepartment();
+
+    // @phpstan-ignore-next-line
+    if (empty($dept)) {
+      return;
+    }
+
+    if ($dept->id() != 'nigov') {
+      // Hide the domain source field.
+       unset($variables['content']['field_domain_source']);
+    }
+  }
+}

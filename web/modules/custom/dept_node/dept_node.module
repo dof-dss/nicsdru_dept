@@ -127,6 +127,12 @@ function dept_node_preprocess_node(array &$variables) {
   // Add the topic banner to the output, if relevant.
   dept_node_topic_banner($variables);
 
+  // Exit early if it's autocomplete - see dept_search.module
+  // preprocess_node for handling of autocomplete results.
+  if ($view_mode === 'search_autocomplete') {
+    return;
+  }
+
   if (str_starts_with($view_mode, 'search_') && $node->bundle() === 'news') {
     // Add the department metadata on the press-releases listing.
     if ($routename != 'view.news_search.press_release_search') {

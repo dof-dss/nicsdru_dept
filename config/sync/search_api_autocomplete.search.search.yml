@@ -5,6 +5,7 @@ dependencies:
   config:
     - search_api.index.default_content
     - views.view.search
+    - core.entity_view_mode.node.search_autocomplete
   module:
     - views
     - search_api_autocomplete
@@ -20,20 +21,20 @@ suggester_settings:
     suggest_keys: false
     view_modes:
       'entity:node':
-        application: ''
-        article: ''
-        consultation: ''
-        contact: ''
-        landing_page: ''
-        news: ''
-        page: ''
-        profile: ''
-        project: ''
-        protected_area: ''
-        publication: ''
-        subtopic: ''
-        topic: ''
-        ual: ''
+        application: search_autocomplete
+        article: search_autocomplete
+        consultation: search_autocomplete
+        contact: search_autocomplete
+        landing_page: search_autocomplete
+        news: search_autocomplete
+        page: search_autocomplete
+        profile: search_autocomplete
+        project: search_autocomplete
+        protected_area: search_autocomplete
+        publication: search_autocomplete
+        subtopic: search_autocomplete
+        topic: search_autocomplete
+        ual: search_autocomplete
 suggester_weights:
   live_results: 0
 suggester_limits:
@@ -43,7 +44,7 @@ search_settings:
     displays:
       default: true
       selected:
-        - site_search
+        - default
 options:
   limit: 5
   min_length: 3
