@@ -1,0 +1,48 @@
+uuid: e8f5ad3a-256a-447b-88d0-836498130501
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_autocomplete
+    - field.field.node.page.body
+    - field.field.node.page.field_domain_access
+    - field.field.node.page.field_domain_all_affiliates
+    - field.field.node.page.field_domain_source
+    - field.field.node.page.field_metatags
+    - field.field.node.page.field_next_audit_due
+    - node.type.page
+  module:
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+_core:
+  default_config_hash: g1S3_GLaxq4l3I9RIca5Mlz02MxI2KmOquZpHw59akM
+id: node.page.search_autocomplete
+targetEntityType: node
+bundle: page
+mode: search_autocomplete
+content:
+  field_domain_source:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  content_moderation_control: true
+  entitygroupfield: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_metatags: true
+  field_next_audit_due: true
+  groups: true
+  groups_type_department_site: true
+  langcode: true
+  links: true
+  search_api_excerpt: true
