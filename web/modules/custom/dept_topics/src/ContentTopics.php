@@ -120,8 +120,22 @@ class ContentTopics {
       ->orderBy('weight', 'ASC');
 
     $ids = $query->execute()->fetchAllAssoc('entity_id');
-    $subtopic_nodes = \Drupal::entityTypeManager()
-      ->getStorage('node')->loadMultiple(array_keys($ids));
+
+    if (!empty($ids)) {
+      $subtopic_nodes = \Drupal::entityTypeManager()
+        ->getStorage('node')->loadMultiple(array_keys($ids));
+    }
+    else {
+      // No draggable views ordering, extract by parent topic id.
+      $subtopics_query = \Drupal::entityQuery('node')
+        ->condition('type', 'subtopic')
+        ->condition('status', 1)
+        ->condition('field_parent_topic', $node->id())
+        ->execute();
+
+      $subtopic_nodes = \Drupal::entityTypeManager()
+        ->getStorage('node')->loadMultiple(array_values($subtopics_query));
+    }
 
     foreach ($subtopic_nodes as $node) {
       $subtopics[$node->id()] = [
