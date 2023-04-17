@@ -1,0 +1,10 @@
+uuid: 431d921f-22bc-4f2e-b0f9-ce9f6fb41a67
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.featured_news_thumbnail
+label: 'Featured news thumbnail'
+targetEntityType: media
+cache: true
