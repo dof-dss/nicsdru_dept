@@ -7,7 +7,6 @@ dependencies:
     - filter.format.filtered_html
     - filter.format.filtered_html_with_no_images
   module:
-    - domain
     - domain_access
     - filter
     - media
@@ -24,27 +23,26 @@ label: 'authenticated user'
 weight: 1
 is_admin: false
 permissions:
-  - 'access administration menu'
-  - 'access administration pages'
-  - 'access content'
-  - 'access media browser'
-  - 'access toolbar'
-  - 'create url aliases'
-  - 'diff view changes'
-  - 'edit domain content'
-  - 'notify of path changes'
-  - 'revert revisions'
-  - 'use media wysiwyg'
-  - 'use text format basic_html'
-  - 'use text format filtered_html'
-  - 'use text format filtered_html_with_no_images'
-  - use_search_api_live_results
-  - 'view domain list'
-  - 'view field_external_publication'
-  - 'view files'
-  - 'view media'
-  - 'view own field_external_publication'
-  - 'view own unpublished content'
-  - 'view revisions'
-  - 'view the administration theme'
-  - 'use search_api_autocomplete for search'
+  0: 'access administration menu'
+  1: 'access administration pages'
+  2: 'access content'
+  3: 'access media browser'
+  4: 'access toolbar'
+  5: 'create url aliases'
+  6: 'diff view changes'
+  7: 'edit domain content'
+  8: 'notify of path changes'
+  9: 'revert revisions'
+  10: 'use media wysiwyg'
+  11: 'use search_api_autocomplete for search'
+  12: 'use text format basic_html'
+  13: 'use text format filtered_html'
+  14: 'use text format filtered_html_with_no_images'
+  15: use_search_api_live_results
+  17: 'view field_external_publication'
+  18: 'view files'
+  19: 'view media'
+  20: 'view own field_external_publication'
+  21: 'view own unpublished content'
+  22: 'view revisions'
+  23: 'view the administration theme'

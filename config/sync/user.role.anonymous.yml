@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   module:
-    - domain
     - eu_cookie_compliance
     - media
     - search_api_autocomplete
@@ -15,13 +14,12 @@ label: 'anonymous user'
 weight: 0
 is_admin: false
 permissions:
-  - 'access content'
-  - 'diff view changes'
-  - 'display eu cookie compliance popup'
-  - use_search_api_live_results
-  - 'view domain list'
-  - 'view field_external_publication'
-  - 'view files'
-  - 'view media'
-  - 'view own field_external_publication'
-  - 'use search_api_autocomplete for search'
+  0: 'access content'
+  1: 'diff view changes'
+  2: 'display eu cookie compliance popup'
+  3: 'use search_api_autocomplete for search'
+  4: use_search_api_live_results
+  6: 'view field_external_publication'
+  7: 'view files'
+  8: 'view media'
+  9: 'view own field_external_publication'

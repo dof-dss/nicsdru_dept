@@ -13,7 +13,6 @@ dependencies:
     - node.type.page
   module:
     - content_moderation
-    - domain
     - filter
     - media
     - node
@@ -50,4 +49,3 @@ permissions:
   - 'use text format full_html'
   - 'view all revisions'
   - 'view any unpublished content'
-  - 'view domain list'
