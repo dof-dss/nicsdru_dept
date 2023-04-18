@@ -1,0 +1,21 @@
+uuid: 74666251-70fc-4e06-8aeb-31a6f716436b
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.nigov_landscape_300x200_x1
+    - image.style.nigov_landscape_600x400_x2
+id: featured_news_thumbnail
+label: 'Featured news thumbnail'
+image_style_mappings:
+  -
+    image_mapping_type: sizes
+    image_mapping:
+      sizes: 100vw
+      sizes_image_styles:
+        - nigov_landscape_300x200_x1
+        - nigov_landscape_600x400_x2
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: nigov_landscape_300x200_x1
