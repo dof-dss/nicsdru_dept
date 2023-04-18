@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - content_moderation
-    - domain
     - media
     - node
 id: stats_author_user
@@ -21,4 +20,3 @@ permissions:
   - 'view all revisions'
   - 'view any unpublished content'
   - 'view any unpublished secure_publication content'
-  - 'view domain list'
