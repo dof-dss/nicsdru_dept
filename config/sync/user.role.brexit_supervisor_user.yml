@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - content_moderation
-    - domain
     - media
     - node
 id: brexit_supervisor_user
@@ -21,4 +20,3 @@ permissions:
   - 'update media'
   - 'view all revisions'
   - 'view any unpublished content'
-  - 'view domain list'
