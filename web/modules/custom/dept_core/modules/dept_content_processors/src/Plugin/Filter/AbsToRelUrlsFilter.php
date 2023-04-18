@@ -86,13 +86,14 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
           $url_portions = parse_url($href);
           $host = $url_portions['host'];
 
-          if ($this->hostnameMatchesKnownDepartment($host, $dept->id())) {
+          if (!empty($url_portions['path']) && $this->hostnameMatchesKnownDepartment($host, $dept->id())) {
             $new_href = $url_portions['path'];
             if (!empty($url_portions['query'])) {
               $new_href .= '?' . $url_portions['query'];
             }
 
             $link->setAttribute('href', $new_href);
+            $result = new FilterProcessResult($dom->saveHTML());
           }
         }
         else {
@@ -100,8 +101,6 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
           continue;
         }
       }
-
-      $result = new FilterProcessResult($dom->saveHTML());
     }
 
     return $result;
