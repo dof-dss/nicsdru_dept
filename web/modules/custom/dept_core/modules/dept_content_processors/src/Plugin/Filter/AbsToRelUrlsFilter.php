@@ -5,6 +5,7 @@ namespace Drupal\dept_content_processors\Plugin\Filter;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dept_core\DepartmentManager;
+use Drupal\dept_core\Entity\Department;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -72,7 +73,8 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
     }
 
     // Check we are on a Departmental site we recognise.
-    if (!empty($dept = $this->departmentManager->getCurrentDepartment())) {
+    $dept = $this->departmentManager->getCurrentDepartment();
+    if ($dept instanceof Department) {
       $dom = Html::load($text);
       $link_elements = $dom->getElementsByTagName('a');
 
@@ -84,27 +86,57 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
           // then remove the hostname from the attribute and update the
           // dom element.
           $url_portions = parse_url($href);
-          $host = $url_portions['host'];
 
-          if (!empty($url_portions['path']) && $this->hostnameMatchesKnownDepartment($host, $dept->id())) {
-            $new_href = $url_portions['path'];
+          if ($this->hostnameMatchesKnownDepartment($url_portions['host'], $dept->id())
+            && $this->shouldRewriteUrl($url_portions)) {
+
+            $new_href = '';
+
+            if (!empty($url_portions['path'])) {
+              $new_href .= $url_portions['path'];
+            }
             if (!empty($url_portions['query'])) {
               $new_href .= '?' . $url_portions['query'];
             }
+            if (!empty($url_portions['fragment'])) {
+              $new_href .= '#' . $url_portions['fragment'];
+            }
 
             $link->setAttribute('href', $new_href);
-            $result = new FilterProcessResult($dom->saveHTML());
           }
         }
         else {
           // Skip over non-absolute links.
           continue;
         }
+
+        $result = new FilterProcessResult($dom->saveHTML());
       }
     }
 
     return $result;
 
+  }
+
+  /**
+   * Function to assess whether to process a URL or not
+   * based on the presence or absence of certain url components.
+   *
+   * @param array $url_portions
+   *   Array or URL components, as specified in parse_url().
+   *   https://www.php.net/manual/en/function.parse-url.php.
+   */
+  protected function shouldRewriteUrl(array $url_portions): bool {
+    $shouldRewrite = FALSE;
+
+    foreach (['path', 'query', 'fragment'] as $item) {
+      if (!empty($url_portions[$item])) {
+        $shouldRewrite = TRUE;
+        break;
+      }
+    }
+
+    return $shouldRewrite;
   }
 
   /**
@@ -119,15 +151,9 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
    *   Whether there's a match between the two.
    */
   protected function hostnameMatchesKnownDepartment(string $host, string $dept_id): bool {
-    $match = FALSE;
-
     // Simplistic matching process - if the dept id is in the hostname
     // then assume it's a match and exit the loop.
-    if (preg_match('/' . $dept_id . '/', $host)) {
-      $match = TRUE;
-    }
-
-    return $match;
+    return (bool) preg_match('/' . $dept_id . '/', $host);
   }
 
 }
