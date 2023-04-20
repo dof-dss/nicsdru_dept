@@ -20,8 +20,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   description = @Translation("Converts any absolute URLs for the current department to relative ones."),
  *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_REVERSIBLE,
  * )
- *
- * @internal
  */
 class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInterface {
 
@@ -74,6 +72,7 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
 
     // Check we are on a Departmental site we recognise.
     $dept = $this->departmentManager->getCurrentDepartment();
+
     if ($dept instanceof Department) {
       $dom = Html::load($text);
       $link_elements = $dom->getElementsByTagName('a');
