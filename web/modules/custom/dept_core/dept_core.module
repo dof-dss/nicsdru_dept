@@ -84,6 +84,9 @@ function dept_core_append_dept_info_for_templates(array &$variables) {
   /** @var \Drupal\dept_core\Entity\Department $dept */
   $dept = $dept_manager->getCurrentDepartment();
 
+  if (is_null($dept)) {
+    return;
+  }
   // Object properties/method values set as preprocess variables
   // to remain compliant with Twig sandbox configuration which
   // prohibits direct access to many object properties (security reasons)
