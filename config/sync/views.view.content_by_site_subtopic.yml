@@ -421,7 +421,7 @@ display:
             type: none
             fail: 'not found'
           validate_options: {  }
-          break_phrase: false
+          break_phrase: true
           not: false
         field_parent_subtopic_target_id:
           id: field_parent_subtopic_target_id
@@ -461,7 +461,7 @@ display:
             type: none
             fail: 'not found'
           validate_options: {  }
-          break_phrase: false
+          break_phrase: true
           not: false
       filters:
         status:
