@@ -63,3 +63,21 @@ Disallow: /index.php/user/login
 Disallow: /index.php/user/logout
 Disallow: /index.php/media/oembed
 Disallow: /index.php/*/media/oembed
+
+# NICS custom
+
+# Files
+Disallow: /*.pdf
+Disallow: /*.doc
+Disallow: /*.docx
+Disallow: /*.xls
+Disallow: /*.xlsx
+Disallow: /*.xlsm
+Disallow: /*.ppt
+Disallow: /*.pptx
+Disallow: /*.odt
+Disallow: /*.ods
+Disallow: /*.odp
+Disallow: /*.dot
+Disallow: /*.zip
+
