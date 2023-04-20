@@ -307,11 +307,11 @@ display:
       tags: {  }
   articles:
     id: articles
-    display_title: Articles
+    display_title: 'Related content'
     display_plugin: block
     position: 1
     display_options:
-      title: 'Related articles'
+      title: 'Related content'
       fields:
         title:
           id: title
@@ -382,6 +382,87 @@ display:
         type: none
         options:
           offset: 0
+      arguments:
+        field_site_subtopics_target_id:
+          id: field_site_subtopics_target_id
+          table: node__field_site_subtopics
+          field: field_site_subtopics_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: numeric
+          default_action: default
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: current_entity_field_value
+          default_argument_options:
+            entity_type_id: node
+            field_name: 'field_site_subtopics:target_id'
+            empty_value: ''
+            multiple_values: concatenate
+            multiple_values_separator: +
+            single_value_delta: '0'
+          default_argument_skip_url: false
+          summary_options:
+            base_path: ''
+            count: true
+            override: false
+            items_per_page: 25
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          break_phrase: true
+          not: false
+        field_parent_subtopic_target_id:
+          id: field_parent_subtopic_target_id
+          table: node__field_parent_subtopic
+          field: field_parent_subtopic_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: numeric
+          default_action: default
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: current_entity_field_value
+          default_argument_options:
+            entity_type_id: node
+            field_name: 'field_site_subtopics:target_id'
+            empty_value: ''
+            multiple_values: concatenate
+            multiple_values_separator: +
+            single_value_delta: '0'
+          default_argument_skip_url: false
+          summary_options:
+            base_path: ''
+            count: true
+            override: false
+            items_per_page: 25
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          break_phrase: true
+          not: false
       filters:
         status:
           id: status
@@ -447,15 +528,15 @@ display:
         type: html_list
         options:
           grouping: {  }
-          row_class: nav-item
+          row_class: ''
           default_row_class: false
           type: ul
           wrapper_class: ''
-          class: nav-menu
+          class: ''
       row:
         type: fields
         options:
-          default_field_elements: true
+          default_field_elements: false
           inline: {  }
           separator: ''
           hide_empty: false
@@ -467,7 +548,7 @@ display:
         row: false
         relationships: false
         fields: false
-        arguments: true
+        arguments: false
         filters: false
         filter_groups: false
       relationships: {  }
