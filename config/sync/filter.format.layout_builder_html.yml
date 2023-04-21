@@ -70,12 +70,18 @@ filters:
     settings:
       process_domains:
         nigov: nigov
-        daera: '0'
         communities: '0'
+        daera: '0'
         economy: '0'
         education: '0'
+        executiveoffice: '0'
         finance: '0'
         health: '0'
         infrastructure: '0'
         justice: '0'
-        executiveoffice: '0'
+  dept_abs2rel_url:
+    id: dept_abs2rel_url
+    provider: dept_content_processors
+    status: true
+    weight: 0
+    settings: {  }
