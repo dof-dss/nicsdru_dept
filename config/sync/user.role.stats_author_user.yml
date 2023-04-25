@@ -6,10 +6,12 @@ dependencies:
     - node.type.publication
     - workflows.workflow.nics_editorial_workflow
   module:
+    - book
     - content_moderation
     - dept_publications
     - domain_access
     - media
+    - moderation_sidebar
     - node
 id: stats_author_user
 label: 'stats author user'
@@ -18,6 +20,7 @@ is_admin: null
 permissions:
   - 'access content overview'
   - 'access media overview'
+  - 'add content to books'
   - 'create media'
   - 'create publication content'
   - 'create publication content on assigned domains'
@@ -27,11 +30,14 @@ permissions:
   - 'publish to any assigned domain'
   - 'update media'
   - 'update secure_publication content on assigned domains'
+  - 'use moderation sidebar'
   - 'use nics_editorial_workflow transition create_new_draft'
   - 'use nics_editorial_workflow transition draft_of_published'
   - 'use nics_editorial_workflow transition submit_for_review'
   - 'view all revisions'
   - 'view any unpublished content'
   - 'view any unpublished secure_publication content'
+  - 'view latest version'
   - 'view own unpublished secure publication'
   - 'view publication revisions'
+  - 'view unpublished domain content'

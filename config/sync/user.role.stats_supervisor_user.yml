@@ -6,10 +6,12 @@ dependencies:
     - node.type.publication
     - workflows.workflow.nics_editorial_workflow
   module:
+    - book
     - content_moderation
     - dept_publications
     - domain_access
     - media
+    - moderation_sidebar
     - node
     - scheduled_transitions
 id: stats_supervisor_user
@@ -19,6 +21,7 @@ is_admin: null
 permissions:
   - 'access content overview'
   - 'access media overview'
+  - 'add content to books'
   - 'add scheduled transitions node publication'
   - 'create media'
   - 'create publication content'
@@ -38,10 +41,12 @@ permissions:
   - 'reschedule scheduled transitions node heritage_site'
   - 'reschedule scheduled transitions node page'
   - 'reschedule scheduled transitions node publication'
+  - 'revert publication revisions'
   - 'schedule revisions'
   - 'update media'
   - 'update publication content on assigned domains'
   - 'update secure_publication content on assigned domains'
+  - 'use moderation sidebar'
   - 'use nics_editorial_workflow transition archive'
   - 'use nics_editorial_workflow transition create_new_draft'
   - 'use nics_editorial_workflow transition draft_of_published'
@@ -56,6 +61,7 @@ permissions:
   - 'view any unpublished content'
   - 'view any unpublished secure publication'
   - 'view any unpublished secure_publication content'
+  - 'view latest version'
   - 'view own private files'
   - 'view own unpublished secure publication'
   - 'view publication revisions'
@@ -68,3 +74,4 @@ permissions:
   - 'view scheduled transitions node page'
   - 'view scheduled transitions node publication'
   - 'view scheduled transitions node topic'
+  - 'view unpublished domain content'
