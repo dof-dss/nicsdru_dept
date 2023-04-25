@@ -2,9 +2,13 @@ uuid: b71a4ef2-58b2-463f-9109-8f7ae4c0421c
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.publication
+    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - dept_publications
+    - domain_access
     - media
     - node
     - scheduled_transitions
@@ -13,11 +17,19 @@ label: 'stats supervisor user'
 weight: 9
 is_admin: null
 permissions:
+  - 'access content overview'
   - 'access media overview'
+  - 'add scheduled transitions node publication'
   - 'create media'
+  - 'create publication content'
+  - 'create publication content on assigned domains'
   - 'create secure_publication content on assigned domains'
+  - 'delete any publication content'
   - 'delete media'
+  - 'delete publication content on assigned domains'
   - 'delete secure_publication content on assigned domains'
+  - 'edit any publication content'
+  - 'publish to any assigned domain'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
   - 'reschedule scheduled transitions node consultation'
@@ -25,15 +37,28 @@ permissions:
   - 'reschedule scheduled transitions node easychart'
   - 'reschedule scheduled transitions node heritage_site'
   - 'reschedule scheduled transitions node page'
+  - 'reschedule scheduled transitions node publication'
   - 'schedule revisions'
   - 'update media'
+  - 'update publication content on assigned domains'
   - 'update secure_publication content on assigned domains'
+  - 'use nics_editorial_workflow transition archive'
+  - 'use nics_editorial_workflow transition create_new_draft'
+  - 'use nics_editorial_workflow transition draft_of_published'
+  - 'use nics_editorial_workflow transition publish'
+  - 'use nics_editorial_workflow transition quick_publish'
+  - 'use nics_editorial_workflow transition reject'
+  - 'use nics_editorial_workflow transition restore'
+  - 'use nics_editorial_workflow transition restore_to_draft'
+  - 'use nics_editorial_workflow transition submit_for_review'
   - 'view all revisions'
   - 'view all scheduled transitions'
   - 'view any unpublished content'
+  - 'view any unpublished secure publication'
   - 'view any unpublished secure_publication content'
   - 'view own private files'
   - 'view own unpublished secure publication'
+  - 'view publication revisions'
   - 'view scheduled transitions node application'
   - 'view scheduled transitions node article'
   - 'view scheduled transitions node consultation'
@@ -41,4 +66,5 @@ permissions:
   - 'view scheduled transitions node easychart'
   - 'view scheduled transitions node heritage_site'
   - 'view scheduled transitions node page'
+  - 'view scheduled transitions node publication'
   - 'view scheduled transitions node topic'

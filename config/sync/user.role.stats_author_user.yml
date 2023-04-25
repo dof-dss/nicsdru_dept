@@ -2,8 +2,13 @@ uuid: 5af6de02-4a47-4f5b-b1b4-93f620319e42
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.publication
+    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
+    - dept_publications
+    - domain_access
     - media
     - node
 id: stats_author_user
@@ -11,12 +16,22 @@ label: 'stats author user'
 weight: 3
 is_admin: null
 permissions:
+  - 'access content overview'
   - 'access media overview'
   - 'create media'
+  - 'create publication content'
+  - 'create publication content on assigned domains'
   - 'create secure_publication content on assigned domains'
   - 'delete media'
+  - 'edit own publication content'
+  - 'publish to any assigned domain'
   - 'update media'
   - 'update secure_publication content on assigned domains'
+  - 'use nics_editorial_workflow transition create_new_draft'
+  - 'use nics_editorial_workflow transition draft_of_published'
+  - 'use nics_editorial_workflow transition submit_for_review'
   - 'view all revisions'
   - 'view any unpublished content'
   - 'view any unpublished secure_publication content'
+  - 'view own unpublished secure publication'
+  - 'view publication revisions'
