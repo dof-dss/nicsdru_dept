@@ -18,12 +18,58 @@ dependencies:
     - node.type.subtopic
   module:
     - layout_builder
+    - layout_builder_restrictions
+    - layout_discovery
     - text
     - user
 third_party_settings:
   layout_builder:
-    enabled: false
-    allow_custom: false
+    enabled: true
+    allow_custom: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          342e741d-bc65-4d61-88bb-86e92b8a4a18:
+            uuid: 342e741d-bc65-4d61-88bb-86e92b8a4a18
+            region: content
+            configuration:
+              id: 'field_block:node:subtopic:field_summary'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+          b70017a9-a0a4-4227-b499-98d8f3c67145:
+            uuid: b70017a9-a0a4-4227-b499-98d8f3c67145
+            region: content
+            configuration:
+              id: 'field_block:node:subtopic:body'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+        third_party_settings: {  }
+  layout_builder_restrictions:
+    allowed_block_categories: {  }
+    entity_view_mode_restriction:
+      allowed_layouts: {  }
+      denylisted_blocks: {  }
+      allowlisted_blocks: {  }
+      restricted_categories: {  }
 id: node.subtopic.full
 targetEntityType: node
 bundle: subtopic
