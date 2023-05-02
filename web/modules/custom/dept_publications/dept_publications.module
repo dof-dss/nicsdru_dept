@@ -5,7 +5,11 @@
  * Primary module hooks for Dept Publications module.
  */
 
+use Drupal\Core\Access\AccessResultForbidden;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -19,6 +23,9 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
   // Toggle the display of the media fields depending on the required
   // attachment type.
   if ($node->bundle() === 'publication') {
+    // Verify access to secure publications.
+    dept_publications_secure_publication_access($form, $form_state);
+
     $form['publication_attachment_type'] = [
       '#type' => 'radios',
       '#title' => t('Attachment(s) type'),
@@ -90,4 +97,45 @@ function dept_publications_validate_publication(&$form, FormStateInterface $form
     }
   }
 
+}
+
+/**
+ * Implements hook_entity_access().
+ */
+function dept_publications_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ($account->isAnonymous()) {
+    return;
+  }
+
+  if ($entity instanceof NodeInterface && $entity->getType() === 'publication') {
+    // If there is a secure file field value assume this is a secure publication
+    // and continue to perform access checks.
+    if (empty($entity->get('field_publication_secure_files')->referencedEntities())) {
+      return;
+    }
+
+    if (!$account->hasPermission('view own unpublished secure publication') &&
+      !$account->hasPermission('view any unpublished secure publication')) {
+
+      return AccessResultForbidden::forbidden();
+    }
+  }
+}
+
+/**
+ *
+ */
+function dept_publications_secure_publication_access(&$form, FormStateInterface $form_state) {
+  return;
+  $current_user = \Drupal::currentUser();
+
+  // TODO: replace with route subscriber??
+
+  if ($current_user->hasPermission('view any unpublished secure publication')) {
+
+  }
+
+  if ($current_user->hasPermission('view own unpublished secure publication')) {
+
+  }
 }
