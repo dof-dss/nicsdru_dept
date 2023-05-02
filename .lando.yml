@@ -42,6 +42,14 @@ services:
         # Ensure PHPStorm->Preferences->PHP->Servers->Name is set to appserver.
         PHP_IDE_CONFIG: "serverName=appserver"
         XDEBUG_SESSION_START: lando
+        SIMPLETEST_BASE_URL: "http://nigov.lndo.site" # Change projectname to the same as the name key above.
+        SIMPLETEST_DB: "sqlite://localhost//dev/shm/test.sqlite"
+        MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", {"browserName":"chrome","chromeOptions":{"args":["--disable-gpu","--headless"]}}, "http://chrome:9515"]'
+  chrome:
+    type: compose
+    services:
+      image: drupalci/webdriver-chromedriver:production
+      command: chromedriver --log-path=/tmp/chromedriver.log --verbose --whitelisted-ips=
   redis:
     type: redis:5.0
     # Use persist: true to persist the cache's data between restarts and rebuilds.
@@ -85,9 +93,8 @@ tooling:
     # Add dirs to check below, as needed.
     cmd: /app/phpcs.sh "/app" "/app/web/modules/origins /app/web/modules/custom /app/web/themes/custom"
   phpunit:
-    description: "Run PHPUnit tests. You can pass options, e.g. --group=sitename"
     service: appserver
-    cmd: cd /app/web/core && /app/vendor/bin/phpunit -c /app/web/core/phpunit.xml
+    cmd: "php /app/vendor/bin/phpunit -c /app/phpunit.xml"
   xdebug-on:
     service: appserver
     description: Enable xdebug
