@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "375ab00e17cca090f217b9ed7b2f08c9",
+    "content-hash": "8aac6c3316cb17bc17d29fccd133325a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3488,6 +3488,54 @@
             "homepage": "https://www.drupal.org/project/date_facet_drilldown",
             "support": {
                 "source": "https://git.drupalcode.org/project/date_facet_drilldown"
+            }
+        },
+        {
+            "name": "drupal/datetime_flatpickr",
+            "version": "2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/datetime_flatpickr.git",
+                "reference": "2.0.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/datetime_flatpickr-2.0.6.zip",
+                "reference": "2.0.6",
+                "shasum": "54c51eaf5e5eff0db5b2b98ab6ce463116907ea4"
+            },
+            "require": {
+                "drupal/core": "^8.9 || ^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.6",
+                    "datestamp": "1678470246",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "mr.york",
+                    "homepage": "https://www.drupal.org/user/52785"
+                },
+                {
+                    "name": "nagy.balint",
+                    "homepage": "https://www.drupal.org/user/1763952"
+                }
+            ],
+            "description": "Implements the <a href=\"https://flatpickr.js.org/\" target=\"_blank\">flatpickr</a> javascript library.",
+            "homepage": "https://www.drupal.org/project/datetime_flatpickr",
+            "support": {
+                "source": "https://git.drupalcode.org/project/datetime_flatpickr"
             }
         },
         {
