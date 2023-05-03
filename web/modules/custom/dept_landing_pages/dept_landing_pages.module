@@ -158,6 +158,10 @@ function dept_landing_pages_block_form_alter(array $element, FormStateInterface 
     $element['field_teaser']['widget'][0]['value']['#attributes']['cols'] = 60;
   }
 
+  if (!empty($element['#block']) && $element['#block']->bundle() === 'text') {
+    $element['body']['widget'][0]['#format'] = 'layout_builder_html';
+  }
+
   return $element;
 }
 
@@ -723,3 +727,12 @@ function dept_landing_pages_render_article_teasers_by_topic(int $tid, array &$ca
   }
   return $results;
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dept_landing_pages_form_node_subtopic_layout_builder_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Hide revision information section.
+  $form['revision_information']['#access'] = FALSE;
+}
+
