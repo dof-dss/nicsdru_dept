@@ -67,7 +67,10 @@ third_party_settings:
   layout_builder_restrictions:
     allowed_block_categories: {  }
     entity_view_mode_restriction:
-      allowed_layouts: {  }
+      allowed_layouts:
+        - layout_onecol
+        - teasers_x3
+        - teasers_x2
       denylisted_blocks: {  }
       allowlisted_blocks:
         'Content fields':
@@ -80,6 +83,7 @@ third_party_settings:
         'Inline blocks':
           - 'inline_block:banner_deep'
           - 'inline_block:card_standard'
+          - 'inline_block:text'
       restricted_categories:
         - 'Custom blocks'
         - 'Departmental sites'
