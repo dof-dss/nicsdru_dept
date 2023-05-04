@@ -14,6 +14,7 @@ dependencies:
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
     - field.field.node.topic.field_top_level_topic
+    - field.field.node.topic.field_topic_content
     - node.type.topic
   module:
     - smart_trim
@@ -55,6 +56,7 @@ hidden:
   field_metatags: true
   field_photo: true
   field_top_level_topic: true
+  field_topic_content: true
   groups: true
   langcode: true
   links: true

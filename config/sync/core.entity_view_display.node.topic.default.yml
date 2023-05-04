@@ -4,14 +4,19 @@ status: true
 dependencies:
   config:
     - field.field.node.topic.body
+    - field.field.node.topic.field_banner_image
+    - field.field.node.topic.field_banner_link
     - field.field.node.topic.field_domain_access
     - field.field.node.topic.field_domain_all_affiliates
     - field.field.node.topic.field_domain_source
     - field.field.node.topic.field_metatags
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
+    - field.field.node.topic.field_top_level_topic
+    - field.field.node.topic.field_topic_content
     - node.type.topic
   module:
+    - link
     - metatag
     - text
     - user
@@ -26,6 +31,26 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 2
+    region: content
+  field_banner_image:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_banner_link:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 4
     region: content
   field_metatags:
     type: metatag_empty_formatter
@@ -49,6 +74,24 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_top_level_topic:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_topic_content:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 7
     region: content
 hidden:
   content_moderation_control: true

@@ -1,0 +1,31 @@
+uuid: 0ab7beb9-749b-4c80-be92-cd617b2269c0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_topic_content
+    - node.type.application
+    - node.type.article
+    - node.type.topic
+id: node.topic.field_topic_content
+field_name: field_topic_content
+entity_type: node
+bundle: topic
+label: 'Topic content'
+description: 'List of content to display for this topic'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      application: application
+      article: article
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: application
+field_type: entity_reference
