@@ -1,8 +1,9 @@
-uuid: 3c5a94ad-ba0d-498d-a13c-74136f08dbfb
+uuid: 32fe7409-9d80-4891-a3af-55ef31c41eeb
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.full
     - field.field.node.topic.body
     - field.field.node.topic.field_banner_image
     - field.field.node.topic.field_banner_link
@@ -16,14 +17,19 @@ dependencies:
     - field.field.node.topic.field_topic_content
     - node.type.topic
   module:
+    - layout_builder
     - link
     - metatag
     - text
     - user
-id: node.topic.default
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.topic.full
 targetEntityType: node
 bundle: topic
-mode: default
+mode: full
 content:
   body:
     type: text_default
@@ -33,9 +39,10 @@ content:
     weight: 4
     region: content
   field_banner_image:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: hidden
     settings:
+      view_mode: default
       link: true
     third_party_settings: {  }
     weight: 1
@@ -76,10 +83,11 @@ content:
     weight: 3
     region: content
   field_topic_content:
-    type: entity_reference_label
+    type: entity_reference_entity_view
     label: hidden
     settings:
-      link: true
+      view_mode: topics_teaser
+      link: false
     third_party_settings: {  }
     weight: 6
     region: content

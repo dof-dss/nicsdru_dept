@@ -6,6 +6,8 @@ dependencies:
     - field.storage.node.field_topic_content
     - node.type.application
     - node.type.article
+    - node.type.contact
+    - node.type.publication
     - node.type.topic
 id: node.topic.field_topic_content
 field_name: field_topic_content
@@ -13,7 +15,7 @@ entity_type: node
 bundle: topic
 label: 'Topic content'
 description: 'List of content to display for this topic'
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
@@ -23,6 +25,9 @@ settings:
     target_bundles:
       application: application
       article: article
+      contact: contact
+      publication: publication
+      topic: topic
     sort:
       field: _none
       direction: ASC
