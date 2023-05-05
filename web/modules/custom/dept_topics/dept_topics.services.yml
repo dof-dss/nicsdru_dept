@@ -1,0 +1,4 @@
+services:
+  topic.manager:
+    class: Drupal\dept_topics\TopicManager
+    arguments: ['@domain.negotiator', '@entity_type.manager']

@@ -36,5 +36,15 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
       ];
     }
   }
+}
 
+/**
+ * Implements hook_form_ENTITY_form_alter().
+ */
+function dept_topics_form_node_form_alter(&$form, $form_state) {
+  // Move the 'top level topic' field to the 'Promotion options' in the
+  // advanced section.
+  if (isset($form['field_top_level_topic'])) {
+    $form['field_top_level_topic']['#group'] = 'options';
+  }
 }
