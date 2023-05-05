@@ -78,11 +78,18 @@ third_party_settings:
           - 'field_block:node:subtopic:field_summary'
           - 'field_block:node:subtopic:field_banner_image'
         'Custom block types':
+          - accordion_menu
           - banner_deep
+          - card_contact
           - card_standard
+          - card_wide
+          - text
         'Inline blocks':
+          - 'inline_block:accordion_menu'
           - 'inline_block:banner_deep'
+          - 'inline_block:card_contact'
           - 'inline_block:card_standard'
+          - 'inline_block:card_wide'
           - 'inline_block:text'
       restricted_categories:
         - 'Custom blocks'

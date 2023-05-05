@@ -1,0 +1,11 @@
+uuid: c0ec89ed-1319-4499-bab1-bdd914340801
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.accordion_menu
+id: block_content.accordion_menu
+target_entity_type_id: block_content
+target_bundle: accordion_menu
+default_langcode: site_default
+language_alterable: false
