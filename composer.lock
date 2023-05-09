@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ccaed27e1f7570f0f0f6113ef78d55ba",
+    "content-hash": "0ec5ce6b852bb4d074f6d36505dd1e3d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1988,16 +1988,16 @@
         },
         {
             "name": "dof-dss/nicsdru_dept_theme",
-            "version": "0.0.18",
+            "version": "0.0.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dof-dss/nicsdru_dept_theme.git",
-                "reference": "e4cf199d08d9c8b86aec9765deeddf52e5e2a78d"
+                "reference": "80f6e3360217736a57ee6126e1c220be6b9d349b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_dept_theme/zipball/e4cf199d08d9c8b86aec9765deeddf52e5e2a78d",
-                "reference": "e4cf199d08d9c8b86aec9765deeddf52e5e2a78d",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_dept_theme/zipball/80f6e3360217736a57ee6126e1c220be6b9d349b",
+                "reference": "80f6e3360217736a57ee6126e1c220be6b9d349b",
                 "shasum": ""
             },
             "require": {
@@ -2022,9 +2022,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dof-dss/nicsdru_dept_theme/issues",
-                "source": "https://github.com/dof-dss/nicsdru_dept_theme/tree/0.0.18"
+                "source": "https://github.com/dof-dss/nicsdru_dept_theme/tree/0.0.19"
             },
-            "time": "2023-04-07T12:36:24+00:00"
+            "time": "2023-05-09T09:42:10+00:00"
         },
         {
             "name": "dof-dss/nicsdru_nidirect_theme",
@@ -4128,27 +4128,27 @@
         },
         {
             "name": "drupal/easychart",
-            "version": "4.0.9",
+            "version": "4.0.8",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/easychart.git",
-                "reference": "4.0.9"
+                "reference": "4.0.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/easychart-4.0.9.zip",
-                "reference": "4.0.9",
-                "shasum": "872c23bbd1a30281905d467a02be4b7762cfb19a"
+                "url": "https://ftp.drupal.org/files/projects/easychart-4.0.8.zip",
+                "reference": "4.0.8",
+                "shasum": "a1776657ea3db4a8757700f8b5ac5c6d8814f54a"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9 || ^10",
+                "drupal/core": "^8.8 || ^9",
                 "drupal/entity_embed": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.0.9",
-                    "datestamp": "1683554152",
+                    "version": "4.0.8",
+                    "datestamp": "1675691242",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10502,16 +10502,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.11.17",
+            "version": "v0.11.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "3dc5d4018dabd80bceb8fe1e3191ba8460569f0a"
+                "reference": "151b145906804eea8e5d71fea23bfb470c904bfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/3dc5d4018dabd80bceb8fe1e3191ba8460569f0a",
-                "reference": "3dc5d4018dabd80bceb8fe1e3191ba8460569f0a",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/151b145906804eea8e5d71fea23bfb470c904bfb",
+                "reference": "151b145906804eea8e5d71fea23bfb470c904bfb",
                 "shasum": ""
             },
             "require": {
@@ -10572,9 +10572,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
-                "source": "https://github.com/bobthecow/psysh/tree/v0.11.17"
+                "source": "https://github.com/bobthecow/psysh/tree/v0.11.16"
             },
-            "time": "2023-05-05T20:02:42+00:00"
+            "time": "2023-04-26T12:53:57+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -17121,16 +17121,16 @@
         },
         {
             "name": "sebastian/diff",
-            "version": "4.0.5",
+            "version": "4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "74be17022044ebaaecfdf0c5cd504fc9cd5a7131"
+                "reference": "3461e3fccc7cfdfc2720be910d3bd73c69be590d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/74be17022044ebaaecfdf0c5cd504fc9cd5a7131",
-                "reference": "74be17022044ebaaecfdf0c5cd504fc9cd5a7131",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/3461e3fccc7cfdfc2720be910d3bd73c69be590d",
+                "reference": "3461e3fccc7cfdfc2720be910d3bd73c69be590d",
                 "shasum": ""
             },
             "require": {
@@ -17175,7 +17175,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/diff/issues",
-                "source": "https://github.com/sebastianbergmann/diff/tree/4.0.5"
+                "source": "https://github.com/sebastianbergmann/diff/tree/4.0.4"
             },
             "funding": [
                 {
@@ -17183,7 +17183,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-05-07T05:35:17+00:00"
+            "time": "2020-10-26T13:10:38+00:00"
         },
         {
             "name": "sebastian/environment",
