@@ -23,9 +23,6 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
   // Toggle the display of the media fields depending on the required
   // attachment type.
   if ($node->bundle() === 'publication') {
-    // Verify access to secure publications.
-    dept_publications_secure_publication_access($form, $form_state);
-
     $form['publication_attachment_type'] = [
       '#type' => 'radios',
       '#title' => t('Attachment(s) type'),
@@ -114,28 +111,10 @@ function dept_publications_entity_access(EntityInterface $entity, $operation, Ac
       return;
     }
 
-    if (!$account->hasPermission('view own unpublished secure publication') &&
-      !$account->hasPermission('view any unpublished secure publication')) {
+    $is_own_publication = $entity->getOwnerId() === $account->id();
 
+    if ($is_own_publication === FALSE && !$account->hasPermission('view any unpublished secure publication')) {
       return AccessResultForbidden::forbidden();
     }
-  }
-}
-
-/**
- *
- */
-function dept_publications_secure_publication_access(&$form, FormStateInterface $form_state) {
-  return;
-  $current_user = \Drupal::currentUser();
-
-  // TODO: replace with route subscriber??
-
-  if ($current_user->hasPermission('view any unpublished secure publication')) {
-
-  }
-
-  if ($current_user->hasPermission('view own unpublished secure publication')) {
-
   }
 }
