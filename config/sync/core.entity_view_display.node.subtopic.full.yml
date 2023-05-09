@@ -65,7 +65,33 @@ third_party_settings:
             additional: {  }
         third_party_settings: {  }
   layout_builder_restrictions:
-    allowed_block_categories: {  }
+    allowed_block_categories:
+      - 'Content fields'
+      - 'Custom block types'
+      - 'Custom blocks'
+      - 'Departmental sites'
+      - 'Departmental sites: search'
+      - Devel
+      - Development
+      - Domain
+      - 'EU Cookie Compliance'
+      - Facets
+      - 'Facets summary (Experimental)'
+      - Forms
+      - Geolocation
+      - Help
+      - 'Inline blocks'
+      - 'Landing pages'
+      - 'Lists (Views)'
+      - Menus
+      - Origins
+      - 'Origins: Social Sharing'
+      - System
+      - User
+      - Views
+      - Webform
+      - core
+      - mdash
     entity_view_mode_restriction:
       allowed_layouts:
         - layout_onecol
@@ -83,14 +109,22 @@ third_party_settings:
           - card_contact
           - card_standard
           - card_wide
+          - plain_cards
           - text
+          - video
+          - video_and_caption
         'Inline blocks':
           - 'inline_block:accordion_menu'
           - 'inline_block:banner_deep'
           - 'inline_block:card_contact'
           - 'inline_block:card_standard'
           - 'inline_block:card_wide'
+          - 'inline_block:plain_cards'
           - 'inline_block:text'
+          - 'inline_block:video'
+          - 'inline_block:video_and_caption'
+        'Lists (Views)':
+          - 'views_block:content_by_site_subtopic-articles'
       restricted_categories:
         - 'Custom blocks'
         - 'Departmental sites'
@@ -104,7 +138,7 @@ third_party_settings:
         - Forms
         - Geolocation
         - Help
-        - 'Lists (Views)'
+        - 'Landing pages'
         - Menus
         - Origins
         - 'Origins: Social Sharing'
