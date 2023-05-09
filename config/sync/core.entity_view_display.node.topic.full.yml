@@ -5,15 +5,12 @@ dependencies:
   config:
     - core.entity_view_mode.node.full
     - field.field.node.topic.body
-    - field.field.node.topic.field_banner_image
-    - field.field.node.topic.field_banner_link
     - field.field.node.topic.field_domain_access
     - field.field.node.topic.field_domain_all_affiliates
     - field.field.node.topic.field_domain_source
     - field.field.node.topic.field_metatags
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
-    - field.field.node.topic.field_top_level_topic
     - field.field.node.topic.field_topic_content
     - node.type.topic
   module:
@@ -37,27 +34,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 4
-    region: content
-  field_banner_image:
-    type: entity_reference_entity_view
-    label: hidden
-    settings:
-      view_mode: default
-      link: true
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  field_banner_link:
-    type: link
-    label: hidden
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    weight: 2
     region: content
   field_metatags:
     type: metatag_empty_formatter
@@ -96,7 +72,6 @@ hidden:
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
-  field_top_level_topic: true
   groups: true
   langcode: true
   links: true
