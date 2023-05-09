@@ -735,4 +735,3 @@ function dept_landing_pages_form_node_subtopic_layout_builder_form_alter(&$form,
   // Hide revision information section.
   $form['revision_information']['#access'] = FALSE;
 }
-
