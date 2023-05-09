@@ -1,0 +1,34 @@
+uuid: 94fa4fc0-a007-4430-944a-e9ad2cf3812d
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.plain_cards
+    - field.storage.block_content.field_plain_cards
+    - paragraphs.paragraphs_type.card_plain
+  module:
+    - entity_reference_revisions
+id: block_content.plain_cards.field_plain_cards
+field_name: field_plain_cards
+entity_type: block_content
+bundle: plain_cards
+label: 'Plain cards'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      card_plain: card_plain
+    negate: 0
+    target_bundles_drag_drop:
+      accordion_section:
+        weight: 3
+        enabled: false
+      card_plain:
+        weight: 4
+        enabled: true
+field_type: entity_reference_revisions
