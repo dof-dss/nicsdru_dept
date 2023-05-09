@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.subtopic.field_parent_subtopic
     - field.field.node.subtopic.field_parent_topic
     - field.field.node.subtopic.field_summary
+    - field.field.node.subtopic.field_topic_content
     - node.type.subtopic
   module:
     - layout_builder
@@ -63,6 +64,7 @@ hidden:
   field_metatags: true
   field_parent_subtopic: true
   field_parent_topic: true
+  field_topic_content: true
   groups: true
   groups_type_department_site: true
   langcode: true

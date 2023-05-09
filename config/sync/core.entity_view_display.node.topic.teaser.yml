@@ -5,15 +5,12 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.topic.body
-    - field.field.node.topic.field_banner_image
-    - field.field.node.topic.field_banner_link
     - field.field.node.topic.field_domain_access
     - field.field.node.topic.field_domain_all_affiliates
     - field.field.node.topic.field_domain_source
     - field.field.node.topic.field_metatags
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
-    - field.field.node.topic.field_top_level_topic
     - field.field.node.topic.field_topic_content
     - node.type.topic
   module:
@@ -45,6 +42,14 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  field_topic_content:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
   body: true
   content_moderation_control: true
@@ -56,7 +61,6 @@ hidden:
   field_metatags: true
   field_photo: true
   field_top_level_topic: true
-  field_topic_content: true
   groups: true
   langcode: true
   links: true

@@ -1,4 +1,4 @@
-uuid: 0ab7beb9-749b-4c80-be92-cd617b2269c0
+uuid: 7f61108a-6120-4dda-93df-8b92c634b253
 langcode: en
 status: true
 dependencies:
@@ -9,15 +9,14 @@ dependencies:
     - node.type.contact
     - node.type.publication
     - node.type.subtopic
-    - node.type.topic
-id: node.topic.field_topic_content
+id: node.subtopic.field_topic_content
 field_name: field_topic_content
 entity_type: node
-bundle: topic
-label: 'Topic content'
-description: 'List of content to display for this topic'
+bundle: subtopic
+label: 'Subtopic content'
+description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
@@ -29,7 +28,6 @@ settings:
       contact: contact
       publication: publication
       subtopic: subtopic
-      topic: topic
     sort:
       field: _none
       direction: ASC

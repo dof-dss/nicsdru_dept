@@ -14,6 +14,7 @@ dependencies:
     - field.field.node.subtopic.field_parent_subtopic
     - field.field.node.subtopic.field_parent_topic
     - field.field.node.subtopic.field_summary
+    - field.field.node.subtopic.field_topic_content
     - node.type.subtopic
     - workflows.workflow.nics_editorial_workflow
   module:
@@ -107,6 +108,16 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+  field_topic_content:
+    type: entity_reference_autocomplete
+    weight: 43
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   flag:
     weight: 10
     region: content
@@ -147,6 +158,11 @@ content:
   publish_state:
     type: options_select
     weight: 26
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
