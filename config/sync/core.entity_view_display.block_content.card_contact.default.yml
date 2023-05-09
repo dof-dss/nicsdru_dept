@@ -6,8 +6,10 @@ dependencies:
     - block_content.type.card_contact
     - field.field.block_content.card_contact.body
     - field.field.block_content.card_contact.field_card_style
+    - field.field.block_content.card_contact.field_telephone
   module:
     - options
+    - telephone_plus
     - text
 id: block_content.card_contact.default
 targetEntityType: block_content
@@ -19,14 +21,22 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
   field_card_style:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
+    region: content
+  field_telephone:
+    type: telephone_plus_link
+    label: hidden
+    settings:
+      vcard: true
+    third_party_settings: {  }
+    weight: 2
     region: content
 hidden:
   langcode: true
