@@ -60,7 +60,7 @@
         "composer/installers": "^1.9",
         "cweagans/composer-patches": "^1.7",
         "deaemth/easychart": "^3.1",
-        "dof-dss/nicsdru_dept_theme": "^0.0.18",
+        "dof-dss/nicsdru_dept_theme": "^0.0.19",
         "dof-dss/nicsdru_nidirect_theme": "*",
         "dof-dss/nicsdru_origins_modules": "^2.0.3",
         "dof-dss/nicsdru_origins_theme": "^0.4.0",
@@ -82,6 +82,7 @@
         "drupal/core-recommended": "^9.2",
         "drupal/csp": "^1.15",
         "drupal/date_facet_drilldown": "2.x-dev@dev",
+        "drupal/datetime_flatpickr": "^2.0",
         "drupal/devel": "^4.1",
         "drupal/devel_entity_updates": "^4.0",
         "drupal/diff": "^1.0",
@@ -241,14 +242,14 @@
                 "Allow to set a list of preferred countries": "https://www.drupal.org/files/issues/2023-01-06/2626982-45.preferred_countries.patch"
             },
             "drupal/core": {
-                "Prevent leftover fields from causing errors like 'Call to a member function getLabel() after enabling layout_builder'": "https://www.drupal.org/files/issues/2020-01-20/2985882-53.patch",
                 "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch",
                 "[IGNORE] Composer-friendly patches for filename sanitation while #2492171 awaits #3032390 (https://www.drupal.org/project/drupal/issues/2492171#comment-14173724)": "https://www.drupal.org/files/issues/2021-07-26/2492171-311.patch",
                 "Illegal mix of collations leads to error 500 #3188740": "https://www.drupal.org/files/issues/2020-12-21/3188740-3.patch",
                 "Provide link to latest revision of moderated entity": "https://www.drupal.org/files/issues/2021-11-29/2906455-34.patch",
                 "Non-default entity revisions are migrated as default revision because EntityContentComplete does not allows creating forward (and non-default) revisions": "https://www.drupal.org/files/issues/2021-03-01/core-allow_migrating_forward_revisions-3200949-9.patch",
                 "Mark an entity as 'syncing' during a migration update": "https://www.drupal.org/files/issues/2022-06-16/3052115-53.patch",
-                "Views RSS row plugin incorrectly assumes links are relative #2918784": "https://www.drupal.org/files/issues/2021-07-01/2918784_42.patch"
+                "Views RSS row plugin incorrectly assumes links are relative #2918784": "https://www.drupal.org/files/issues/2021-07-01/2918784_42.patch",
+                "Remove sample date from date field error message and title attribute": "https://www.drupal.org/files/issues/2022-03-31/2791693-63.remove-sample-date.patch"
             },
             "drupal/easy_install": {
                 "Handle missing core version": "https://www.drupal.org/files/issues/2019-12-19/easy_install_core_version-3101883-0.patch"
@@ -293,7 +294,7 @@
                 "No scheduled revisions appear for migrated nodes": "https://www.drupal.org/files/issues/2021-11-01/scheduled_transitions_base_language_3091006_2x.patch"
             },
             "drupal/admin_toolbar": {
-                "Make the menu dropdown as scrollable": "https://www.drupal.org/files/issues/2023-01-14/admin_toolbar-added_multi_column_menu_dropdown-2917168-42.patch"
+                "Make the menu dropdown as scrollable": "https://www.drupal.org/files/issues/2023-04-28/admin_toolbar-added_multi_column_menu_dropdown-2917168-46.patch"
             }
         }
     }
