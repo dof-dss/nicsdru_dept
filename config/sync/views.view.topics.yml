@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - node.type.topic
+    - system.menu.admin
     - system.menu.main
   module:
     - draggableviews
@@ -386,7 +387,7 @@ display:
       display_extenders: {  }
       path: admin/content/topics
       menu:
-        type: none
+        type: normal
         title: Topics
         description: ''
         weight: 0
