@@ -8,7 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\dept_node\Entity\Node;
-use Drupal\dept_node\Form\NodeForm;
+use Drupal\dept_node\Form\DeptNodeForm;
 use Drupal\dept_node\FormatHelper;
 use Drupal\node\NodeInterface;
 use Drupal\views\ViewExecutable;
@@ -300,7 +300,7 @@ function dept_node_entity_type_alter(&$entity_types) {
 
   if (isset($entity_types['node'])) {
     foreach (['default', 'edit'] as $operation) {
-      $entity_types['node']->setFormClass($operation, NodeForm::class);
+      $entity_types['node']->setFormClass($operation, DeptNodeForm::class);
     }
   }
 }

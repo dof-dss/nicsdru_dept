@@ -15,14 +15,6 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
 
   if ($context instanceof \Drupal\node\NodeInterface && $context->bundle() === "topic") {
     /** @var $context \Drupal\node\NodeInterface */
-
-    $build['actions']['secondary']['add_topic'] = [
-      '#title' => 'Add topic',
-      '#type' => 'link',
-      '#url' => Url::fromRoute('node.add', ['node_type' => 'topic'], ['query' => ['topic' => $context->id()]]),
-      '#attributes' => ['class' => ['moderation-sidebar-link', 'button']],
-    ];
-
     $bundle_fields = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions('node', 'topic');
     $field_definition = $bundle_fields['field_topic_content'];
     $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
@@ -35,16 +27,5 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
         '#attributes' => ['class' => ['moderation-sidebar-link', 'button']],
       ];
     }
-  }
-}
-
-/**
- * Implements hook_form_ENTITY_form_alter().
- */
-function dept_topics_form_node_form_alter(&$form, $form_state) {
-  // Move the 'top level topic' field to the 'Promotion options' in the
-  // advanced section.
-  if (isset($form['field_top_level_topic'])) {
-    $form['field_top_level_topic']['#group'] = 'options';
   }
 }

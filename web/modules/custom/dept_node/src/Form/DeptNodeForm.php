@@ -13,7 +13,7 @@ use Drupal\Core\Form\FormStateInterface;
  * #internal Drupal\node\NodeForm.
  *
  */
-class NodeForm extends \Drupal\node\NodeForm {
+class DeptNodeForm extends \Drupal\node\NodeForm {
 
   /**
    * {@inheritdoc}
