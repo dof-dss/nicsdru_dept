@@ -44,11 +44,6 @@ services:
         XDEBUG_SESSION_START: lando
         SIMPLETEST_BASE_URL: "http://nigov.lndo.site"
         SIMPLETEST_DB: "sqlite://localhost//dev/shm/test.sqlite"
-  chrome:
-    type: compose
-    services:
-      image: drupalci/webdriver-chromedriver:production
-      command: chromedriver --log-path=/tmp/chromedriver.log --verbose --whitelisted-ips=
   redis:
     type: redis:5.0
     # Use persist: true to persist the cache's data between restarts and rebuilds.
