@@ -3,6 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
+    - media.type.document
+    - media.type.image
+    - media.type.secure_file
     - node.type.publication
     - workflows.workflow.nics_editorial_workflow
   module:
@@ -21,12 +24,22 @@ permissions:
   - 'access content overview'
   - 'access media overview'
   - 'add content to books'
+  - 'create document media'
+  - 'create image media'
   - 'create media'
   - 'create publication content'
   - 'create publication content on assigned domains'
+  - 'create secure_file media'
   - 'create secure_publication content on assigned domains'
   - 'delete media'
+  - 'delete own document media'
+  - 'delete own image media'
+  - 'delete own publication content'
+  - 'delete own secure_file media'
+  - 'edit own document media'
+  - 'edit own image media'
   - 'edit own publication content'
+  - 'edit own secure_file media'
   - 'publish to any assigned domain'
   - 'update media'
   - 'update secure_publication content on assigned domains'
@@ -38,6 +51,7 @@ permissions:
   - 'view any unpublished content'
   - 'view any unpublished secure_publication content'
   - 'view latest version'
+  - 'view own unpublished media'
   - 'view own unpublished secure publication'
   - 'view publication revisions'
   - 'view unpublished domain content'

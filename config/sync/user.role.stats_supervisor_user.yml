@@ -3,6 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
+    - media.type.document
+    - media.type.image
+    - media.type.secure_file
     - node.type.publication
     - workflows.workflow.nics_editorial_workflow
   module:
@@ -10,29 +13,51 @@ dependencies:
     - content_moderation
     - dept_publications
     - domain_access
+    - file
     - media
     - moderation_sidebar
     - node
+    - origins_metatag
     - scheduled_transitions
+    - scheduler
 id: stats_supervisor_user
 label: 'stats supervisor user'
 weight: 9
 is_admin: null
 permissions:
   - 'access content overview'
+  - 'access files overview'
   - 'access media overview'
   - 'add content to books'
   - 'add scheduled transitions node publication'
+  - 'create document media'
+  - 'create image media'
   - 'create media'
   - 'create publication content'
   - 'create publication content on assigned domains'
+  - 'create secure_file media'
   - 'create secure_publication content on assigned domains'
+  - 'delete any image media'
   - 'delete any publication content'
+  - 'delete any secure_file media'
   - 'delete media'
+  - 'delete own document media'
+  - 'delete own image media'
+  - 'delete own publication content'
+  - 'delete own secure_file media'
   - 'delete publication content on assigned domains'
+  - 'delete publication revisions'
   - 'delete secure_publication content on assigned domains'
+  - 'edit any document media'
   - 'edit any publication content'
+  - 'edit any secure_file media'
+  - 'edit basic meta tags'
+  - 'edit own document media'
+  - 'edit own image media'
+  - 'edit own publication content'
+  - 'edit own secure_file media'
   - 'publish to any assigned domain'
+  - 'publish to any domain'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
   - 'reschedule scheduled transitions node consultation'
@@ -42,6 +67,7 @@ permissions:
   - 'reschedule scheduled transitions node page'
   - 'reschedule scheduled transitions node publication'
   - 'revert publication revisions'
+  - 'schedule publishing of nodes'
   - 'schedule revisions'
   - 'update media'
   - 'update publication content on assigned domains'
@@ -63,8 +89,10 @@ permissions:
   - 'view any unpublished secure_publication content'
   - 'view latest version'
   - 'view own private files'
+  - 'view own unpublished media'
   - 'view own unpublished secure publication'
   - 'view publication revisions'
+  - 'view scheduled content'
   - 'view scheduled transitions node application'
   - 'view scheduled transitions node article'
   - 'view scheduled transitions node consultation'
