@@ -100,7 +100,7 @@ function dept_publications_validate_publication(&$form, FormStateInterface $form
  * Implements hook_entity_access().
  */
 function dept_publications_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
-  if ($account->isAnonymous()) {
+  if ($account->isAnonymous() || $account->hasPermission('bypass node access')) {
     return;
   }
 
@@ -111,10 +111,14 @@ function dept_publications_entity_access(EntityInterface $entity, $operation, Ac
       return;
     }
 
-    $is_own_publication = $entity->getOwnerId() === $account->id();
+    // This check is intended to override any broad/generic permissions
+    // eg: 'view any unpublished content'.
+    if ($entity->isPublished() === FALSE || $entity->isDefaultRevision() === FALSE) {
+      $is_own_publication = $entity->getOwnerId() === $account->id();
 
-    if ($is_own_publication === FALSE && !$account->hasPermission('view any unpublished secure publication')) {
-      return AccessResultForbidden::forbidden();
+      if (!$is_own_publication && !$account->hasPermission('view any unpublished secure publication')) {
+        return AccessResultForbidden::forbidden();
+      }
     }
   }
 }
