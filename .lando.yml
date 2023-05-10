@@ -42,9 +42,8 @@ services:
         # Ensure PHPStorm->Preferences->PHP->Servers->Name is set to appserver.
         PHP_IDE_CONFIG: "serverName=appserver"
         XDEBUG_SESSION_START: lando
-        SIMPLETEST_BASE_URL: "http://nigov.lndo.site" # Change projectname to the same as the name key above.
+        SIMPLETEST_BASE_URL: "http://nigov.lndo.site"
         SIMPLETEST_DB: "sqlite://localhost//dev/shm/test.sqlite"
-        MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", {"browserName":"chrome","chromeOptions":{"args":["--disable-gpu","--headless"]}}, "http://chrome:9515"]'
   chrome:
     type: compose
     services:
