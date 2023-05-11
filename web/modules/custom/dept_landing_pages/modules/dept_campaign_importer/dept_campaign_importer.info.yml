@@ -1,8 +1,0 @@
-name: 'Dept Campaign Importer'
-type: module
-description: 'Import Drupal 7 landing pages.'
-core_version_requirement: ^8.8 || ^9
-package: 'NICS: Departmental'
-dependencies:
-  - drupal:layout_builder
-  - drupal:block
