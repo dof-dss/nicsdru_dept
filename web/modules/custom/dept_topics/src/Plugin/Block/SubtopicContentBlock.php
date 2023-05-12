@@ -85,12 +85,12 @@ class SubtopicContentBlock extends BlockBase implements ContainerFactoryPluginIn
       return [];
     }
 
-    $subtopics_content = $this->subtopics->getSubtopicContent($node->id());
+    $content = $this->subtopics->getSubtopicContent($node->id());
 
     $build['content'] = [
       '#theme' => 'item_list',
       '#list_type' => 'ul',
-      '#items' => $subtopics_content,
+      '#items' => $content,
     ];
 
     return $build;
