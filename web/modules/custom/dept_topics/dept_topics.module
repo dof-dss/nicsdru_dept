@@ -12,70 +12,11 @@ use Drupal\dept_core\Department;
 use Drupal\node\NodeInterface;
 
 /**
- * Implements hook_preprocess_node().
- */
-function dept_topics_preprocess_node(array &$variables) {
-  $node = &$variables['node'];
-  $view_mode = $variables['view_mode'];
-
-  if (!$node instanceof NodeInterface) {
-    return;
-  }
-
-  if ($node->bundle() === 'topic' && $view_mode === 'full') {
-
-    $subtopics_to_display = \Drupal::service('dept_topics.topics')
-      ->getSubtopicsForTopic($node);
-
-    if (!empty($subtopics_to_display)) {
-      foreach ($subtopics_to_display as $subtopic_id => $subtopic) {
-        // Service to pull in subtopic content instead of the fixed code here.
-        $content_links = \Drupal::service('dept_topics.subtopics')
-          ->getSubtopicContent($subtopic_id);
-
-        // Prefix all included content with 'node:' to form suitable cache tags.
-        $cache_tags = preg_filter('/^/', 'node:', array_keys($content_links));
-        // Add the content stack view tag so that when draggableviews expires
-        // the view tags relating to any changes, that we regenerate any
-        // html relating to this render element as required.
-        $cache_tags[] = 'config:views.view.content_stacks';
-        // Add cache tag for the related subtopic node id.
-        $cache_tags[] = 'node:' . $subtopic_id;
-
-        // Add render array elements we can call from the node-topic--full template.
-        $variables['content']['subtopics_list'][] = [
-          '#theme' => 'subtopic_content_list',
-          '#title' => $subtopic['title'],
-          '#title_link' => Link::createFromRoute(
-            $subtopic['title'],
-            'entity.node.canonical',
-            ['node' => $subtopic_id],
-          ),
-          '#content_summary' => [
-            '#markup' => $subtopic['summary'],
-          ],
-          '#content_links' => $content_links,
-          '#read_more_link' => Link::createFromRoute(
-            t('Read more'),
-            'entity.node.canonical',
-            ['node' => $subtopic_id],
-          ),
-          '#cache' => [
-            'keys' => ['subtopic_stack:' . $subtopic_id],
-            'tags' => $cache_tags,
-          ]
-        ];
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_theme().
  */
 function dept_topics_theme($existing, $type, $theme, $path) {
   return [
-    'subtopic_content_list' => [
+    'subtopic_content_list__item' => [
       'variables' => [
         'title' => NULL,
         'title_link' => NULL,
