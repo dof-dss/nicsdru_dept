@@ -284,9 +284,6 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Hostname.
-   *
-   * @param string $environment
-   *   Return hostname for the given environment.
    */
   public function hostname(): string|null {
     return \Drupal::config('domain.record.' . $this->id())->get('hostname');
