@@ -266,7 +266,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    *   Return URL with HTTPS or HTTP protocol.
    */
   public function url(string $environment = 'active', bool $secure_protocol = TRUE): string {
-    $hostname = $this->hostname($environment);
+    $hostname = $this->hostname();
     // Situational override: if we know we're on a development environment of
     // PSH where the hostname can vary by git branch name; exceeds what
     // config_split can accommodate.
