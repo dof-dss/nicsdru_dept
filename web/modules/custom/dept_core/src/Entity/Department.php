@@ -286,40 +286,10 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    * Hostname.
    *
    * @param string $environment
-   *   Return hostname for the given environment. Defaults to the active environment.
+   *   Return hostname for the given environment.
    */
-  public function hostname(string $environment = "active"): string|null {
-    $active_split = '';
-
-    // Iterate each config split, loading the hostname into an associative
-    // array consisting <environment> => <hostname>.
-    if (empty($this->hostnames)) {
-      /** @var \Drupal\config_split\ConfigSplitManager $split_manager */
-      $split_manager = \Drupal::service('config_split.manager');
-      $split_ids = $split_manager->listAll();
-
-      /** @var \Drupal\config_filter\ConfigFilterStorageFactory $conf_filter */
-      $conf_filter = \Drupal::service('config_filter.storage_factory');
-
-      foreach ($split_ids as $split_id) {
-        /** @var \Drupal\Core\Config\ImmutableConfig $split_config */
-        $split_config = $split_manager->getSplitConfig($split_id);
-
-        $storage = $split_manager->singleExportTarget($split_config);
-
-        /** @var \Drupal\config_filter\Config\FilteredStorageInterface $config_store */
-        $config_store = $conf_filter->getFilteredStorage($storage, ['config.storage']);
-
-        $config = $config_store->read('domain.record.' . $this->id());
-        $this->hostnames[substr($split_id, 26)] = $config['hostname'];
-
-        $active_split = $split_config->get('status') ? substr($split_id, 26) : $active_split;
-      }
-
-      $this->hostnames['active'] = $this->hostnames[$active_split];
-    }
-
-    return array_key_exists($environment, $this->hostnames) ? $this->hostnames[$environment] : '';
+  public function hostname(): string|null {
+    return \Drupal::config('domain.record.' . $this->id())->get('hostname');
   }
 
   /**
