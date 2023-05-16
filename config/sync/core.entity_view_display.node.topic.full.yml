@@ -91,7 +91,32 @@ third_party_settings:
             additional: {  }
         third_party_settings: {  }
   layout_builder_restrictions:
-    allowed_block_categories: {  }
+    allowed_block_categories:
+      - 'Content fields'
+      - 'Custom block types'
+      - 'Custom blocks'
+      - 'Departmental sites'
+      - 'Departmental sites: search'
+      - Devel
+      - Development
+      - Domain
+      - 'EU Cookie Compliance'
+      - Facets
+      - 'Facets summary (Experimental)'
+      - Forms
+      - Geolocation
+      - Help
+      - 'Inline blocks'
+      - 'Lists (Views)'
+      - Menus
+      - Origins
+      - 'Origins: Social Sharing'
+      - System
+      - User
+      - Views
+      - Webform
+      - core
+      - mdash
     entity_view_mode_restriction:
       allowed_layouts:
         - layout_onecol
@@ -147,6 +172,132 @@ third_party_settings:
         - Webform
         - core
         - mdash
+    entity_view_mode_restriction_by_region:
+      allowed_layouts:
+        - layout_onecol
+        - teasers_x3
+        - teasers_x2
+      allowlisted_blocks:
+        layout_onecol:
+          all_regions:
+            'Content fields':
+              - 'field_block:node:topic:body'
+              - 'field_block:node:topic:field_photo'
+              - 'field_block:node:topic:field_summary'
+            'Custom block types':
+              - accordion_menu
+              - banner_deep
+              - card_contact
+              - plain_cards
+              - text
+              - video_and_caption
+            'Custom blocks':
+              - dept_topics_topic_content_block
+            'Inline blocks':
+              - 'inline_block:accordion_menu'
+              - 'inline_block:banner_deep'
+              - 'inline_block:card_contact'
+              - 'inline_block:plain_cards'
+              - 'inline_block:text'
+              - 'inline_block:video_and_caption'
+        teasers_x2:
+          all_regions:
+            'Custom block types':
+              - card_contact
+              - card_wide
+              - text
+              - video
+            'Inline blocks':
+              - 'inline_block:card_contact'
+              - 'inline_block:card_wide'
+              - 'inline_block:text'
+              - 'inline_block:video'
+        teasers_x3:
+          all_regions:
+            'Custom block types':
+              - card_contact
+              - card_standard
+              - text
+              - video
+            'Inline blocks':
+              - 'inline_block:card_contact'
+              - 'inline_block:card_standard'
+              - 'inline_block:text'
+              - 'inline_block:video'
+      restricted_categories:
+        layout_onecol:
+          all_regions:
+            - 'Departmental sites'
+            - 'Departmental sites: search'
+            - Devel
+            - Development
+            - Domain
+            - 'EU Cookie Compliance'
+            - Facets
+            - 'Facets summary (Experimental)'
+            - Forms
+            - Geolocation
+            - Help
+            - 'Lists (Views)'
+            - Menus
+            - Origins
+            - 'Origins: Social Sharing'
+            - System
+            - User
+            - Views
+            - Webform
+            - core
+            - mdash
+        teasers_x3:
+          all_regions:
+            - 'Content fields'
+            - 'Custom blocks'
+            - 'Departmental sites'
+            - 'Departmental sites: search'
+            - Devel
+            - Development
+            - Domain
+            - 'EU Cookie Compliance'
+            - Facets
+            - 'Facets summary (Experimental)'
+            - Forms
+            - Geolocation
+            - Help
+            - 'Lists (Views)'
+            - Menus
+            - Origins
+            - 'Origins: Social Sharing'
+            - System
+            - User
+            - Views
+            - Webform
+            - core
+            - mdash
+        teasers_x2:
+          all_regions:
+            - 'Content fields'
+            - 'Custom blocks'
+            - 'Departmental sites'
+            - 'Departmental sites: search'
+            - Devel
+            - Development
+            - Domain
+            - 'EU Cookie Compliance'
+            - Facets
+            - 'Facets summary (Experimental)'
+            - Forms
+            - Geolocation
+            - Help
+            - 'Lists (Views)'
+            - Menus
+            - Origins
+            - 'Origins: Social Sharing'
+            - System
+            - User
+            - Views
+            - Webform
+            - core
+            - mdash
 id: node.topic.full
 targetEntityType: node
 bundle: topic
