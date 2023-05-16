@@ -18,6 +18,19 @@ use Drupal\redirect\Entity\Redirect;
 use Drupal\taxonomy\Entity\Term;
 
 /**
+ * Implements hook_page_attachments().
+ */
+function dept_landing_pages_page_attachments(array &$attachments) {
+  // Add landing page js if we are creating or editing
+  // a landing page node.
+  $this_route = \Drupal::routeMatch()->getRouteName();
+  if ($this_route == 'layout_builder.overrides.node.view') {
+    $attachments['#attached']['library'][] = 'dept_landing_pages/landing_page_admin';
+  }
+}
+
+
+/**
  * Implements hook_ENTITY_TYPE_form_alter().
  */
 function dept_landing_pages_form_alter(&$form, FormStateInterface $form_state, $form_id) {

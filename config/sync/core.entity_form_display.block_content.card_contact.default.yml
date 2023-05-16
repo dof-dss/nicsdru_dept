@@ -6,7 +6,9 @@ dependencies:
     - block_content.type.card_contact
     - field.field.block_content.card_contact.body
     - field.field.block_content.card_contact.field_card_style
+    - field.field.block_content.card_contact.field_telephone
   module:
+    - telephone_plus
     - text
 id: block_content.card_contact.default
 targetEntityType: block_content
@@ -26,6 +28,12 @@ content:
   field_card_style:
     type: options_select
     weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_telephone:
+    type: telephone_plus_widget
+    weight: 26
     region: content
     settings: {  }
     third_party_settings: {  }
