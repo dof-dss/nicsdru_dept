@@ -262,4 +262,94 @@ class DeptMigrationCommands extends DrushCommands {
     $this->io()->success("Finished");
   }
 
+
+  /**
+   * Update Topic content field entries
+   *
+   *    * @param string $domain_id
+   *   The domain id to update.
+   *
+   * @command dept:update-topic-references
+   * @aliases utr
+   */
+  public function updateTopicReferences($domain_id) {
+
+    if (empty($domain_id)) {
+      return;
+    }
+
+    $topic_content_sql ="
+      WITH content_stack_cte (nid, type, title, weight) AS (
+        SELECT
+          n.nid,
+          n.type,
+          n.title,
+          ds.weight
+        FROM draggableviews_structure ds
+        JOIN node n ON n.nid = ds.entity_id
+        WHERE ds.view_name = 'draggable_subtopics'
+        AND ds.view_display = 'panel_pane_1'
+        AND ds.args LIKE '[\":nid\",\":nid\"]'
+        AND n.status = 1
+        UNION
+        SELECT
+          st_n.nid,
+          st_n.type,
+          st_n.title,
+          99 as weight
+        FROM node st_n
+        JOIN field_data_field_parent_topic nfps ON st_n.nid = nfps.entity_id
+        LEFT OUTER JOIN field_data_field_parent_subtopic nfpst ON st_n.nid = nfpst.entity_id
+        WHERE st_n.type = 'subtopic'
+        AND nfps.field_parent_topic_target_id = :nid
+        AND st_n.status = 1
+        AND nfpst.entity_id IS NULL
+        UNION
+        SELECT
+          ar_n.nid,
+          ar_n.type,
+          ar_n.title,
+          99 as weight
+        FROM node ar_n
+        JOIN field_data_field_site_subtopics nfss ON ar_n.nid = nfss.entity_id
+        WHERE ar_n.type = 'article' AND nfss.field_site_subtopics_target_id = :nid
+        AND ar_n.status = 1
+      )
+      SELECT DISTINCT nid, type, title FROM content_stack_cte
+      ORDER BY weight, title";
+
+
+    $domain_topics_d9 = $this->dbConn->query("
+        SELECT ds.entity_id, nfd.vid FROM node__field_domain_source ds
+        INNER JOIN node_field_data nfd
+        ON ds.entity_id = nfd.nid
+        WHERE ds.bundle = 'topic'
+        AND ds.field_domain_source_target_id = '$domain_id'"
+    )->fetchAllAssoc('entity_id');
+
+    $domain_topics_d7 = $this->lookupManager->lookupByDestinationNodeIds(array_keys($domain_topics_d9));
+
+    foreach ($domain_topics_d7 as $topic_id => $topic) {
+      // Fetch D7 topic content nodes.
+      $topic_ref_nodes_d7 = $this->d7conn->query($topic_content_sql, [':nid' => $topic['d7nid']])->fetchAllKeyed(0, 2);
+      $topic_ref_nodes_d9 = [];
+      $delta = 0;
+
+      foreach ($topic_ref_nodes_d7 as $d7_node_id => $title) {
+        $node = $this->lookupManager->lookupBySourceNodeId([$d7_node_id]);
+
+        $this->dbConn->insert('node__field_topic_content')
+        ->fields([
+          'bundle' => 'Topic',
+          'deleted' => 0,
+          'entity_id' => $topic['nid'],
+          'revision_id' => $topic['vid'],
+          'langcode' => 'en',
+          'delta' => $delta++,
+          'field_topic_content_target_id' => $node[$d7_node_id]['nid'],
+        ])
+        ->execute();
+      }
+    }
+  }
 }
