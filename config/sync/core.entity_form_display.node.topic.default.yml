@@ -10,8 +10,8 @@ dependencies:
     - field.field.node.topic.field_metatags
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
+    - field.field.node.topic.layout_builder__layout
     - node.type.topic
-    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - media_library
@@ -125,6 +125,11 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   status:
     type: boolean_checkbox
     weight: 17
@@ -178,3 +183,4 @@ hidden:
   entitygroupfield: true
   groups: true
   groups_type_department_site: true
+  layout_builder__layout: true
