@@ -33,7 +33,7 @@ $databases['drupal7db']['default'] = array (
 // Redis Cache.
 // Due to issues with enabling Redis during install/config import. We cannot enable the cache backend by default.
 // Once you have a site/db installed. Enable the Redis module and change the $redis_enabled to true.
-$redis_enabled = FALSE;
+$redis_enabled = TRUE;
 if ($redis_enabled && !\Drupal\Core\Installer\InstallerKernel::installationAttempted() && extension_loaded('redis') && class_exists('Drupal\redis\ClientFactory')){
     $settings['redis.connection']['interface'] = 'PhpRedis';
     $settings['redis.connection']['host'] = getenv('REDIS_HOSTNAME');
