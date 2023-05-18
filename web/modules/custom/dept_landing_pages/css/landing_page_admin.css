@@ -1,0 +1,66 @@
+#drupal-off-canvas a.inline-block-list__item,
+#drupal-off-canvas a.inline-block-list__item:focus {
+  display: block;
+  background: transparent url("/modules/custom/dept_landing_pages/img/block-icons/default.png") 15px center / 30px 30px no-repeat;
+  padding: 15px 15px 15px 60px;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+#drupal-off-canvas a.inline-block-list__item:focus {
+  outline: 2px solid white;
+}
+
+#drupal-off-canvas a.inline-block-list__item[href*="accordion_menu"] {
+  background-image: url("/modules/custom/dept_landing_pages/img/block-icons/accordion_menu.png");
+}
+
+#drupal-off-canvas a.inline-block-list__item[href*="banner_deep"] {
+  background-image: url("/modules/custom/dept_landing_pages/img/block-icons/banner_deep.png");
+}
+
+#drupal-off-canvas a.inline-block-list__item[href*="plain_cards"] {
+  background-image: url("/modules/custom/dept_landing_pages/img/block-icons/plain_cards.png");
+}
+
+#drupal-off-canvas a.inline-block-list__item[href*="card_contact"] {
+  background-image: url("/modules/custom/dept_landing_pages/img/block-icons/phone.svg");
+}
+
+#drupal-off-canvas a.inline-block-list__item[href*="card_standard"] {
+  background-image: url("/modules/custom/dept_landing_pages/img/block-icons/card_standard.png");
+}
+
+#drupal-off-canvas a.inline-block-list__item[href*="card_wide"] {
+  background-image: url("/modules/custom/dept_landing_pages/img/block-icons/card_wide.png");
+}
+
+#drupal-off-canvas a.inline-block-list__item[href*="video"] {
+  background-image: url("/modules/custom/dept_landing_pages/img/block-icons/video_and_caption.png");
+}
+
+#drupal-off-canvas a.inline-block-list__item[href*="text"] {
+  background-image: url("/modules/custom/dept_landing_pages/img/block-icons/text.png");
+}
+
+#drupal-off-canvas .inline-block-list li {
+  position: relative;
+}
+
+#drupal-off-canvas a.inline-block-list__item ~ .ajax-spinner {
+  position: absolute;
+  display: block;
+  width: 100%;
+  padding: 12px 12px 12px 60px;
+  transform: translateY(-100%);
+  background-color: rgba(0, 0, 0, .5);
+}
+
+#drupal-off-canvas .ajax-spinner__label {
+  color: #fff;
+  font-size: 16px;
+}
+
+#drupal-off-canvas .ajax-spinner div {
+  background-color: #fff;
+}

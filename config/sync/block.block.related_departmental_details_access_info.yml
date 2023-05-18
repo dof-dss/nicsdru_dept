@@ -1,4 +1,4 @@
-uuid: f826074b-1de5-4400-89b6-4693a02ace05
+uuid: c2d34fd7-fc40-47f7-bba4-eb192fd5fbc9
 langcode: en
 status: true
 dependencies:
@@ -8,7 +8,7 @@ dependencies:
     - node
   theme:
     - nicsdru_dept_theme
-id: departmentaldetails
+id: related_departmental_details_access_info
 theme: nicsdru_dept_theme
 region: related
 weight: 0
@@ -16,7 +16,7 @@ provider: null
 plugin: dept_core_departmental_details
 settings:
   id: dept_core_departmental_details
-  label: 'Access to information'
+  label: 'Departmental details - access info (related page footer)'
   label_display: visible
   provider: dept_core
   context_mapping:

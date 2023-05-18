@@ -115,6 +115,7 @@
         "drupal/migrate_tools": "^6",
         "drupal/moderation_sidebar": "^1.4",
         "drupal/noreferrer": "^1.10",
+        "drupal/paragraphs": "^1.15",
         "drupal/pathauto": "^1.8",
         "drupal/permissions_filter": "^1.2",
         "drupal/redirect": "^1.6",
@@ -134,6 +135,7 @@
         "drupal/structure_sync": "^2.0",
         "drupal/taxonomy_access_fix": "^3.1",
         "drupal/taxonomy_manager": "^2.0",
+        "drupal/telephone_plus": "^9.1",
         "drupal/token": "^1.9",
         "drupal/token_filter": "^1.2",
         "drupal/twig_field_value": "^2.0",
@@ -293,9 +295,6 @@
             },
             "drupal/scheduled_transitions": {
                 "No scheduled revisions appear for migrated nodes": "https://www.drupal.org/files/issues/2021-11-01/scheduled_transitions_base_language_3091006_2x.patch"
-            },
-            "drupal/admin_toolbar": {
-                "Make the menu dropdown as scrollable": "https://www.drupal.org/files/issues/2023-04-28/admin_toolbar-added_multi_column_menu_dropdown-2917168-46.patch"
             }
         }
     }

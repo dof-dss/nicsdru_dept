@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.topic.field_metatags
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
+    - field.field.node.topic.layout_builder__layout
     - node.type.topic
   module:
     - layout_builder
@@ -58,5 +59,6 @@ hidden:
   groups: true
   groups_type_department_site: true
   langcode: true
+  layout_builder__layout: true
   links: true
   search_api_excerpt: true

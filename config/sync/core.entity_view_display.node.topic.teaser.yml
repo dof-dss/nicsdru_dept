@@ -5,9 +5,13 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.topic.body
+    - field.field.node.topic.field_domain_access
+    - field.field.node.topic.field_domain_all_affiliates
+    - field.field.node.topic.field_domain_source
     - field.field.node.topic.field_metatags
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
+    - field.field.node.topic.layout_builder__layout
     - node.type.topic
   module:
     - smart_trim
@@ -48,5 +52,6 @@ hidden:
   field_photo: true
   groups: true
   langcode: true
+  layout_builder__layout: true
   links: true
   search_api_excerpt: true

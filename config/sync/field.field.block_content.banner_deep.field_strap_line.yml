@@ -1,0 +1,19 @@
+uuid: e6520a85-30a4-4ec5-8995-908617be8dc7
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.banner_deep
+    - field.storage.block_content.field_strap_line
+id: block_content.banner_deep.field_strap_line
+field_name: field_strap_line
+entity_type: block_content
+bundle: banner_deep
+label: 'Strap line'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

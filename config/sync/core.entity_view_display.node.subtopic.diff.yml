@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.subtopic.field_parent_subtopic
     - field.field.node.subtopic.field_parent_topic
     - field.field.node.subtopic.field_summary
+    - field.field.node.subtopic.layout_builder__layout
     - node.type.subtopic
   module:
     - field_group
@@ -118,5 +119,6 @@ hidden:
   field_link: true
   field_metatags: true
   langcode: true
+  layout_builder__layout: true
   links: true
   search_api_excerpt: true
