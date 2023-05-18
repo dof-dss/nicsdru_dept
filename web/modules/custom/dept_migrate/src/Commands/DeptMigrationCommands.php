@@ -352,4 +352,127 @@ class DeptMigrationCommands extends DrushCommands {
       }
     }
   }
+
+
+  /**
+   * Update Topic sub content field entries
+   *
+   *    * @param string $domain_id
+   *   The domain id to update.
+   *
+   * @command dept:update-topic-content-references
+   * @aliases utcr
+   */
+  public function updateTopicContentReferences($domain_id) {
+    $domain_topics_d9 = $this->dbConn->query("
+    SELECT ds.entity_id FROM node__field_domain_source ds
+    INNER JOIN node_field_data nfd
+    ON ds.entity_id = nfd.nid
+    WHERE ds.bundle = 'topic'
+    AND ds.field_domain_source_target_id = '$domain_id'"
+    )->fetchCol();
+
+    $topic_nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($domain_topics_d9);
+
+    // Loop Topics and get node ids
+    foreach ($topic_nodes as $topic_node) {
+      $topic_content_references = $topic_node->get('field_topic_content');
+
+      foreach ($topic_content_references as $reference) {
+        $topic_nid = $reference->get('entity')->getTargetIdentifier();
+        $topic_data = $this->lookupManager->lookupByDestinationNodeIds([$topic_nid]);
+        $this->processRefNodes($topic_data[$topic_nid]['d7nid']);
+      }
+    }
+  }
+
+  function processRefNodes($nid) {
+    $child_nodes = $this->fetchD7NodeContents($nid);
+    $parent_data = $this->lookupManager->lookupbySourceNodeId([$nid]);
+    $parent_node = $this->entityTypeManager->getStorage('node')->load($parent_data[$nid]['nid']);
+
+    foreach ($child_nodes as $child_node) {
+      $child_data = $this->lookupManager->lookupBySourceNodeId([$child_node->nid]);
+      $this->createRefLink($parent_node, $child_data[$child_node->nid]['nid']);
+      if ($child_node->type === 'subtopic') {
+        $this->processRefNodes($child_node->nid);
+      }
+    }
+  }
+
+  /**
+   * Fetch the child nodes of the given nid from Drupal 7.
+   *
+   * @param $nid
+   * @return array
+   */
+  function fetchD7NodeContents($nid) {
+    $subcontent_sql = "WITH content_stack_cte (nid, type, title, weight) AS (
+    SELECT
+        n.nid,
+        n.type,
+        n.title,
+        ds.weight
+    FROM draggableviews_structure ds
+    JOIN node n ON n.nid = ds.entity_id
+    WHERE ds.view_name = 'draggable_subtopics'
+      AND ds.view_display = 'panel_pane_2'
+      AND ds.args = :nidargs
+      AND n.status = 1
+     UNION
+         SELECT
+        st_n.nid,
+        st_n.type,
+        st_n.title,
+        99 as weight
+    FROM node st_n
+    JOIN field_data_field_parent_topic nfps ON st_n.nid = nfps.entity_id
+    LEFT OUTER JOIN field_data_field_parent_subtopic nfpst ON st_n.nid = nfpst.entity_id
+    WHERE st_n.type = 'subtopic'
+    AND nfps.field_parent_topic_target_id = :nid
+    AND st_n.status = 1
+    AND nfpst.entity_id IS NULL
+    UNION
+    SELECT
+        ar_n.nid,
+        ar_n.type,
+        ar_n.title,
+        99 as weight
+    FROM node ar_n
+    JOIN field_data_field_site_subtopics nfss ON ar_n.nid = nfss.entity_id
+    WHERE ar_n.type = 'article' AND nfss.field_site_subtopics_target_id = :nid
+      AND ar_n.status = 1
+
+)
+SELECT DISTINCT nid, type, title FROM content_stack_cte
+ORDER BY weight, title";
+
+    $node_contents = $this->d7conn->query($subcontent_sql, [
+      ':nidargs' => '["' . $nid . '","' . $nid . '"]',
+      ':nid' => $nid
+    ])->fetchAll();
+
+    return $node_contents;
+  }
+
+  function createRefLink($parent_node, $target_nid) {
+    $delta = $this->dbConn->query("SELECT MAX(delta) FROM node__field_topic_content WHERE entity_id = :parent_nid", [
+      ':parent_nid' => $parent_node->id()
+    ])->fetchField(0);
+
+    $delta = $delta ?? -1;
+
+    $this->dbConn->insert('node__field_topic_content')
+      ->fields([
+        'bundle' => $parent_node->bundle(),
+        'deleted' => 0,
+        'entity_id' => $parent_node->id(),
+        'revision_id' => $parent_node->getRevisionId(),
+        'langcode' => 'en',
+        'delta' => ++$delta,
+        'field_topic_content_target_id' => $target_nid,
+      ])
+      ->execute();
+  }
+
 }
