@@ -251,7 +251,7 @@
                 "Non-default entity revisions are migrated as default revision because EntityContentComplete does not allows creating forward (and non-default) revisions": "https://www.drupal.org/files/issues/2021-03-01/core-allow_migrating_forward_revisions-3200949-9.patch",
                 "Mark an entity as 'syncing' during a migration update": "https://www.drupal.org/files/issues/2022-06-16/3052115-53.patch",
                 "Views RSS row plugin incorrectly assumes links are relative #2918784": "https://www.drupal.org/files/issues/2021-07-01/2918784_42.patch",
-                "Cannot save unpublished versions of published content for users without manage book privileges": "https://www.drupal.org/files/issues/2020-10-18/2918537-63.patch",
+                "Cannot save unpublished versions of published content for users without manage book privileges": "https://www.drupal.org/files/issues/2022-12-14/2918537-92.patch",
                 "Remove sample date from date field error message and title attribute": "https://www.drupal.org/files/issues/2022-03-31/2791693-63.remove-sample-date.patch"
             },
             "drupal/easy_install": {
@@ -295,6 +295,9 @@
             },
             "drupal/scheduled_transitions": {
                 "No scheduled revisions appear for migrated nodes": "https://www.drupal.org/files/issues/2021-11-01/scheduled_transitions_base_language_3091006_2x.patch"
+            },
+            "drupal/admin_toolbar": {
+                "Make the menu dropdown as scrollable": "https://www.drupal.org/files/issues/2023-04-28/admin_toolbar-added_multi_column_menu_dropdown-2917168-46.patch"
             }
         }
     }

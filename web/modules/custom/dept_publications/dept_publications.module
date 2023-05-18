@@ -5,7 +5,11 @@
  * Primary module hooks for Dept Publications module.
  */
 
+use Drupal\Core\Access\AccessResultForbidden;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -90,4 +94,31 @@ function dept_publications_validate_publication(&$form, FormStateInterface $form
     }
   }
 
+}
+
+/**
+ * Implements hook_entity_access().
+ */
+function dept_publications_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ($account->isAnonymous() || $account->hasPermission('bypass node access')) {
+    return;
+  }
+
+  if ($entity instanceof NodeInterface && $entity->getType() === 'publication') {
+    // If there is a secure file field value assume this is a secure publication
+    // and continue to perform access checks.
+    if (empty($entity->get('field_publication_secure_files')->referencedEntities())) {
+      return;
+    }
+
+    // This check is intended to override any broad/generic permissions
+    // eg: 'view any unpublished content'.
+    if ($entity->isPublished() === FALSE || $entity->isDefaultRevision() === FALSE) {
+      $is_own_publication = $entity->getOwnerId() === $account->id();
+
+      if (!$is_own_publication && !$account->hasPermission('view any unpublished secure publication')) {
+        return AccessResultForbidden::forbidden();
+      }
+    }
+  }
 }

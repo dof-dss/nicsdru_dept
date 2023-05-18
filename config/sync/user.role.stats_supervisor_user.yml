@@ -2,41 +2,104 @@ uuid: b71a4ef2-58b2-463f-9109-8f7ae4c0421c
 langcode: en
 status: true
 dependencies:
+  config:
+    - media.type.document
+    - media.type.image
+    - media.type.secure_file
+    - node.type.publication
+    - workflows.workflow.nics_editorial_workflow
   module:
+    - book
     - content_moderation
+    - dept_publications
+    - domain_access
+    - file
     - media
+    - moderation_sidebar
     - node
+    - origins_metatag
     - scheduled_transitions
+    - scheduler
 id: stats_supervisor_user
 label: 'stats supervisor user'
 weight: 9
 is_admin: null
 permissions:
-  0: 'access media overview'
-  1: 'create media'
-  2: 'create secure_publication content on assigned domains'
-  3: 'delete media'
-  4: 'delete secure_publication content on assigned domains'
-  5: 'reschedule scheduled transitions node application'
-  6: 'reschedule scheduled transitions node article'
-  7: 'reschedule scheduled transitions node consultation'
-  8: 'reschedule scheduled transitions node contact'
-  9: 'reschedule scheduled transitions node easychart'
-  10: 'reschedule scheduled transitions node heritage_site'
-  11: 'reschedule scheduled transitions node page'
-  12: 'schedule revisions'
-  13: 'update media'
-  14: 'update secure_publication content on assigned domains'
-  15: 'view all revisions'
-  16: 'view all scheduled transitions'
-  17: 'view any unpublished content'
-  18: 'view any unpublished secure_publication content'
-  20: 'view own private files'
-  21: 'view scheduled transitions node application'
-  22: 'view scheduled transitions node article'
-  23: 'view scheduled transitions node consultation'
-  24: 'view scheduled transitions node contact'
-  25: 'view scheduled transitions node easychart'
-  26: 'view scheduled transitions node heritage_site'
-  27: 'view scheduled transitions node page'
-  28: 'view scheduled transitions node topic'
+  - 'access content overview'
+  - 'access files overview'
+  - 'access media overview'
+  - 'add content to books'
+  - 'add scheduled transitions node publication'
+  - 'create document media'
+  - 'create image media'
+  - 'create media'
+  - 'create publication content'
+  - 'create publication content on assigned domains'
+  - 'create secure_file media'
+  - 'create secure_publication content on assigned domains'
+  - 'delete any image media'
+  - 'delete any publication content'
+  - 'delete any secure_file media'
+  - 'delete media'
+  - 'delete own document media'
+  - 'delete own image media'
+  - 'delete own publication content'
+  - 'delete own secure_file media'
+  - 'delete publication content on assigned domains'
+  - 'delete publication revisions'
+  - 'delete secure_publication content on assigned domains'
+  - 'edit any document media'
+  - 'edit any publication content'
+  - 'edit any secure_file media'
+  - 'edit basic meta tags'
+  - 'edit own document media'
+  - 'edit own image media'
+  - 'edit own publication content'
+  - 'edit own secure_file media'
+  - 'publish to any assigned domain'
+  - 'publish to any domain'
+  - 'reschedule scheduled transitions node application'
+  - 'reschedule scheduled transitions node article'
+  - 'reschedule scheduled transitions node consultation'
+  - 'reschedule scheduled transitions node contact'
+  - 'reschedule scheduled transitions node easychart'
+  - 'reschedule scheduled transitions node heritage_site'
+  - 'reschedule scheduled transitions node page'
+  - 'reschedule scheduled transitions node publication'
+  - 'revert publication revisions'
+  - 'schedule publishing of nodes'
+  - 'schedule revisions'
+  - 'update media'
+  - 'update publication content on assigned domains'
+  - 'update secure_publication content on assigned domains'
+  - 'use moderation sidebar'
+  - 'use nics_editorial_workflow transition archive'
+  - 'use nics_editorial_workflow transition create_new_draft'
+  - 'use nics_editorial_workflow transition draft_of_published'
+  - 'use nics_editorial_workflow transition publish'
+  - 'use nics_editorial_workflow transition quick_publish'
+  - 'use nics_editorial_workflow transition reject'
+  - 'use nics_editorial_workflow transition restore'
+  - 'use nics_editorial_workflow transition restore_to_draft'
+  - 'use nics_editorial_workflow transition submit_for_review'
+  - 'view all revisions'
+  - 'view all scheduled transitions'
+  - 'view any unpublished content'
+  - 'view any unpublished secure publication'
+  - 'view any unpublished secure_publication content'
+  - 'view latest version'
+  - 'view own private files'
+  - 'view own unpublished media'
+  - 'view own unpublished secure publication'
+  - 'view publication revisions'
+  - 'view scheduled content'
+  - 'view scheduled transitions node application'
+  - 'view scheduled transitions node article'
+  - 'view scheduled transitions node consultation'
+  - 'view scheduled transitions node contact'
+  - 'view scheduled transitions node easychart'
+  - 'view scheduled transitions node heritage_site'
+  - 'view scheduled transitions node page'
+  - 'view scheduled transitions node publication'
+  - 'view scheduled transitions node topic'
+  - 'view unpublished domain content'
