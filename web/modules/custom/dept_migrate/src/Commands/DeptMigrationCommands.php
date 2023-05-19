@@ -269,8 +269,8 @@ class DeptMigrationCommands extends DrushCommands {
    *    * @param string $domain_id
    *   The domain id to update.
    *
-   * @command dept:update-topic-references
-   * @aliases utr
+   * @command dept:topics-update-child-references
+   * @aliases tucr
    */
   public function updateTopicReferences($domain_id) {
 
@@ -355,13 +355,36 @@ class DeptMigrationCommands extends DrushCommands {
 
 
   /**
+   * Display D7 child nodes for the given d9 nid
+   *
+   *    * @param string $nid
+   *   The node id to display child nodes.
+   *    * @param string $version
+   *   The version of the site the nid comes from (d9 or d7).
+   *
+   * @command dept:topics-node-child-nodes
+   * @aliases tncn
+   */
+  public function displayNodeChildren($nid, $version = 'd9') {
+    if ($version === 'd9') {
+      $d7_nid = $this->lookupManager->lookupByDestinationNodeIds([$nid]);
+      $node_id = $d7_nid[$nid]['d7nid'];
+    } else {
+      $node_id = $nid;
+    }
+    print "Child nodes for $version node " . $nid . " ";
+    print_r($this->fetchD7NodeContents($node_id));
+  }
+
+
+  /**
    * Update Topic sub content field entries
    *
    *    * @param string $domain_id
    *   The domain id to update.
    *
-   * @command dept:update-topic-content-references
-   * @aliases utcr
+   * @command dept:topics-update-sub-content
+   * @aliases tusc
    */
   public function updateTopicContentReferences($domain_id) {
     $domain_topics_d9 = $this->dbConn->query("
@@ -393,7 +416,12 @@ class DeptMigrationCommands extends DrushCommands {
 
     foreach ($child_nodes as $child_node) {
       $child_data = $this->lookupManager->lookupBySourceNodeId([$child_node->nid]);
-      $this->createRefLink($parent_node, $child_data[$child_node->nid]['nid']);
+
+      $child_node_id = $child_data[$child_node->nid]['nid'];
+      if (!is_null($child_node_id)) {
+        $this->createRefLink($parent_node, $child_data[$child_node->nid]['nid']);
+      }
+
       if ($child_node->type === 'subtopic') {
         $this->processRefNodes($child_node->nid);
       }
