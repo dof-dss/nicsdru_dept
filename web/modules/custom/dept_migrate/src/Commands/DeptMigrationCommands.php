@@ -54,18 +54,18 @@ class DeptMigrationCommands extends DrushCommands {
   protected $departmentManager;
 
   /**
-   * Counter for self referencing Subtopic nodes.
+   * List of self referencing Subtopic nodes.
    *
-   * @var int
+   * @var array
    */
-  private $selfReferencedTopicsCount = 0;
+  private $selfReferencedTopicsCount = [];
 
   /**
-   * Counter for missing Subtopic child nodes.
+   * List of missing Subtopic child nodes.
    *
-   * @var int
+   * @var array
    */
-  private $missingTopicsContentCount = 0;
+  private $missingTopicsContentCount = [];
 
   /**
    * Command constructor.
@@ -420,12 +420,14 @@ class DeptMigrationCommands extends DrushCommands {
       foreach ($topic_content_references as $reference) {
         $topic_nid = $reference->get('entity')->getTargetIdentifier();
         $topic_data = $this->lookupManager->lookupByDestinationNodeIds([$topic_nid]);
-        $this->processRefNodes($topic_data[$topic_nid]['d7nid']);
+        $this->processSubtopicChildContent($topic_data[$topic_nid]['d7nid']);
       }
     }
 
     $this->io()->caution("Rubber chickens awarded: " . $this->selfReferencedTopicsCount . " 🐔");
-    $this->io()->caution("Missing topic content nodes: " . $this->missingTopicsContentCount);
+    $this->io()->writeln(implode(",",$this->selfReferencedTopicsCount));
+    $this->io()->caution("Missing topic content nodes: " . $this->missingTopicsContentCount . " 🙈 ");
+    $this->io()->writeln(implode(",",$this->missingTopicsContentCount));
     $this->io()->success("Topic content entity references finished");
   }
 
@@ -446,16 +448,14 @@ class DeptMigrationCommands extends DrushCommands {
 
       // If the child node is a reference to the parent, ignore it.
       if ($child_node->nid == $nid) {
-        $this->selfReferencedTopicsCount++;
+        $this->selfReferencedTopicsCount[] = $nid;
         continue;
       }
 
-      $child_node_id = $child_data[$child_node->nid]['nid'];
-
       // If we don't have a D9 nid it might be that the node in question hasn't
       // been migrated so skip adding it.
-      if (is_null($child_node_id)) {
-        $this->missingTopicsContentCount++;
+      if (!array_key_exists('nid', $child_data[$child_node->nid]) || is_null($child_data[$child_node->nid]['nid'])) {
+        $this->missingTopicsContentCount[] = $child_node->nid;
       }
       else {
         $this->createSubtopicContentRefLink($parent_node, $child_data[$child_node->nid]['nid']);
