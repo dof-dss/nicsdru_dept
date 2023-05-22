@@ -1,0 +1,5 @@
+services:
+  secure_publications.route_subscriber:
+    class: Drupal\dept_publications\Routing\SecurePublicationsRouteSubscriber
+    tags:
+      - { name: event_subscriber }
