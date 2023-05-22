@@ -13,100 +13,11 @@ use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Drupal\node\NodeInterface;
 
-
-function subtopic_content($nid) {
-
-  $d7conn = \Drupal\Core\Database\Database::getConnection('default', 'drupal7db');
-
-  $subcontent_sql = "WITH content_stack_cte (nid, type, title, weight) AS (
-    SELECT
-        n.nid,
-        n.type,
-        n.title,
-        ds.weight
-    FROM draggableviews_structure ds
-    JOIN node n ON n.nid = ds.entity_id
-    WHERE ds.view_name = 'draggable_subtopics'
-      AND ds.view_display = 'panel_pane_2'
-      AND ds.args = :nidargs
-      AND n.status = 1
-     UNION
-         SELECT
-        st_n.nid,
-        st_n.type,
-        st_n.title,
-        99 as weight
-    FROM node st_n
-    JOIN field_data_field_parent_topic nfps ON st_n.nid = nfps.entity_id
-    LEFT OUTER JOIN field_data_field_parent_subtopic nfpst ON st_n.nid = nfpst.entity_id
-    WHERE st_n.type = 'subtopic'
-    AND nfps.field_parent_topic_target_id = :nid
-    AND st_n.status = 1
-    AND nfpst.entity_id IS NULL
-    UNION
-    SELECT
-        ar_n.nid,
-        ar_n.type,
-        ar_n.title,
-        99 as weight
-    FROM node ar_n
-    JOIN field_data_field_site_subtopics nfss ON ar_n.nid = nfss.entity_id
-    WHERE ar_n.type = 'article' AND nfss.field_site_subtopics_target_id = :nid
-      AND ar_n.status = 1
-
-)
-SELECT DISTINCT nid, type, title FROM content_stack_cte
-ORDER BY weight, title";
-
-  $topic_ref_nodes_d7 = $d7conn->query($subcontent_sql, [
-    ':nidargs' => '["' . $nid . '","' . $nid . '"]',
-    ':nid' => $nid
-  ])->fetchAll();
-
-  return $topic_ref_nodes_d7;
-}
-
-
-
 /**
  * Implements hook_preprocess_page().
  */
 function dept_core_preprocess_page(&$variables) {
   dept_core_append_dept_info_for_templates($variables);
-
-  $d9dbConn = \Drupal::database();
-  $lookupManager = \Drupal::service('dept_migrate.migrate_uuid_lookup_manager');
-
-    $domain_topics_d9 = $d9dbConn->query("
-    SELECT ds.entity_id FROM node__field_domain_source ds
-    INNER JOIN node_field_data nfd
-    ON ds.entity_id = nfd.nid
-    WHERE ds.bundle = 'topic'
-    AND ds.field_domain_source_target_id = 'finance'"
-  )->fetchCol();
-
-   $topic_nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($domain_topics_d9);
-
-   foreach ($topic_nodes as $topic_node) {
-     $topic_content_references = $topic_node->get('field_topic_content');
-     $target_ids = [];
-
-//     ksm("####### " . $topic_node->label() . " ########");
-
-     // Fetch content reference target ids.
-     foreach ($topic_content_references as $reference) {
-       $target_ids[] = $reference->get('entity')->getTargetIdentifier();
-     }
-
-     $source_ids = $lookupManager->lookupByDestinationNodeIds($target_ids);
-
-     foreach ($source_ids as $source_id) {
-        if ($source_id['type'] === 'subtopic') {
-          $subtopic_contents = subtopic_content($source_id['d7nid']);
-        }
-//       ksm($source_id['title'] . " (" . $source_id['d7nid'] . ")", $subtopic_contents);
-     }
-   }
 }
 
 /**

@@ -397,7 +397,7 @@ class DeptMigrationCommands extends DrushCommands {
 
     $topic_nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($domain_topics_d9);
 
-    // Loop Topics and get node ids
+    // Loop Topics and get node ids.
     foreach ($topic_nodes as $topic_node) {
       $topic_content_references = $topic_node->get('field_topic_content');
 
@@ -409,6 +409,12 @@ class DeptMigrationCommands extends DrushCommands {
     }
   }
 
+  /**
+   * Fetch child nodes and add as a reference to the parent.
+   *
+   * @param $nid
+   *   Drupal 7 parent node ID.
+   */
   function processRefNodes($nid) {
     $child_nodes = $this->fetchD7NodeContents($nid);
     $parent_data = $this->lookupManager->lookupbySourceNodeId([$nid]);
@@ -416,6 +422,11 @@ class DeptMigrationCommands extends DrushCommands {
 
     foreach ($child_nodes as $child_node) {
       $child_data = $this->lookupManager->lookupBySourceNodeId([$child_node->nid]);
+
+      // If the child node is a reference to the parent, ignore it.
+      if ($child_node->nid == $nid) {
+        continue;
+      }
 
       $child_node_id = $child_data[$child_node->nid]['nid'];
       if (!is_null($child_node_id)) {
@@ -483,7 +494,17 @@ ORDER BY weight, title";
     return $node_contents;
   }
 
+  /**
+   * Creates an entity reference link in the topic content field
+   *
+   * @param $parent_node
+   *   Node to add the entity reference to.
+   * @param $target_nid
+   *   Entity reference node id.
+   */
   function createRefLink($parent_node, $target_nid) {
+    // Fetch the max delta number, so we can add our new entity reference
+    // to the bottom of the list.
     $delta = $this->dbConn->query("SELECT MAX(delta) FROM node__field_topic_content WHERE entity_id = :parent_nid", [
       ':parent_nid' => $parent_node->id()
     ])->fetchField(0);
