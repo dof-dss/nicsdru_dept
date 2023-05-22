@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
+use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 
@@ -52,7 +53,18 @@ class DeptMigrationCommands extends DrushCommands {
    */
   protected $departmentManager;
 
+  /**
+   * Counter for self referencing Subtopic nodes.
+   *
+   * @var int
+   */
   private $selfReferencedTopicsCount = 0;
+
+  /**
+   * Counter for missing Subtopic child nodes.
+   *
+   * @var int
+   */
   private $missingTopicsContentCount = 0;
 
   /**
@@ -265,7 +277,6 @@ class DeptMigrationCommands extends DrushCommands {
     $this->io()->success("Finished");
   }
 
-
   /**
    * Insert content field entries for Topic (top level) nodes.
    *
@@ -281,7 +292,7 @@ class DeptMigrationCommands extends DrushCommands {
       return;
     }
 
-    $topic_content_sql ="
+    $topic_content_sql = "
       WITH content_stack_cte (nid, type, title, weight) AS (
         SELECT
           n.nid,
@@ -345,20 +356,19 @@ class DeptMigrationCommands extends DrushCommands {
         $node = $this->lookupManager->lookupBySourceNodeId([$d7_node_id]);
 
         $this->dbConn->insert('node__field_topic_content')
-        ->fields([
-          'bundle' => 'Topic',
-          'deleted' => 0,
-          'entity_id' => $topic['nid'],
-          'revision_id' => $topic['vid'],
-          'langcode' => 'en',
-          'delta' => $delta++,
-          'field_topic_content_target_id' => $node[$d7_node_id]['nid'],
-        ])
-        ->execute();
+          ->fields([
+            'bundle' => 'Topic',
+            'deleted' => 0,
+            'entity_id' => $topic['nid'],
+            'revision_id' => $topic['vid'],
+            'langcode' => 'en',
+            'delta' => $delta++,
+            'field_topic_content_target_id' => $node[$d7_node_id]['nid'],
+          ])
+          ->execute();
       }
     }
   }
-
 
   /**
    * Debug D7 child nodes for the given nid.
@@ -375,13 +385,13 @@ class DeptMigrationCommands extends DrushCommands {
     if ($version === 'd9') {
       $d7_nid = $this->lookupManager->lookupByDestinationNodeIds([$nid]);
       $node_id = $d7_nid[$nid]['d7nid'];
-    } else {
+    }
+    else {
       $node_id = $nid;
     }
     print "Child nodes for $version node " . $nid . " ";
     print_r($this->fetchD7NodeContents($node_id));
   }
-
 
   /**
    * Insert content field entries for Topic (top level) nodes.
@@ -422,10 +432,10 @@ class DeptMigrationCommands extends DrushCommands {
   /**
    * Fetch subtopic child nodes and add as a reference to the parent.
    *
-   * @param $nid
+   * @param int $nid
    *   Drupal 7 parent node ID.
    */
-  function processSubtopicChildContent($nid) {
+  private function processSubtopicChildContent($nid) {
     $child_nodes = $this->fetchSubtopicChildContent($nid);
     // Fetch the D9/D7 data for the parent node.
     $parent_data = $this->lookupManager->lookupbySourceNodeId([$nid]);
@@ -461,12 +471,12 @@ class DeptMigrationCommands extends DrushCommands {
   /**
    * Fetch the child nodes of the given Drupal 7 subtopic.
    *
-   * @param $nid
+   * @param int $nid
    *   Subtopic node id.
    * @return array
    *   Array elements containing node id, type and title.
    */
-  function fetchSubtopicChildContent($nid) {
+  private function fetchSubtopicChildContent($nid) {
     // Select nodes from the draggable view, with associated parent term or
     // subtopic term.
     $subcontent_sql = "WITH content_stack_cte (nid, type, title, weight) AS (
@@ -520,12 +530,12 @@ ORDER BY weight, title";
   /**
    * Creates an entity reference link in the topic contents field
    *
-   * @param $parent_node
+   * @param \Drupal\node\Entity\Node $parent_node
    *   Node to which we add the entity reference.
-   * @param $child_nid
+   * @param int $child_nid
    *   Entity reference node id.
    */
-  function createSubtopicContentRefLink($parent_node, $child_nid) {
+  private function createSubtopicContentRefLink($parent_node, $child_nid) {
     // Fetch the max delta number, so we can add our new entity reference
     // to the bottom of the list.
     $delta = $this->dbConn->query("SELECT MAX(delta) FROM node__field_topic_content WHERE entity_id = :parent_nid", [

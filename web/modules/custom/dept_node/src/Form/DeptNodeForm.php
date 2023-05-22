@@ -3,17 +3,17 @@
 namespace Drupal\dept_node\Form;
 
 use Drupal\Core\Form\FormStateInterface;
-
+use Drupal\node\NodeForm;
 
 /**
  * Form handler for the node add/edit forms.
  *
- * Handles the 'Publish to' display and relationship of nodes to Group entities.
+ * Provides additional functionality to process child nodes to Topica/Subtopics.
  *
  * #internal Drupal\node\NodeForm.
  *
  */
-class DeptNodeForm extends \Drupal\node\NodeForm {
+class DeptNodeForm extends NodeForm {
 
   /**
    * {@inheritdoc}
@@ -23,8 +23,15 @@ class DeptNodeForm extends \Drupal\node\NodeForm {
     $insert = $node->isNew();
     $node->save();
     $node_link = $node->toLink($this->t('View'))->toString();
-    $context = ['@type' => $node->getType(), '%title' => $node->label(), 'link' => $node_link];
-    $t_args = ['@type' => node_get_type_label($node), '%title' => $node->toLink()->toString()];
+    $context = [
+      '@type' => $node->getType(),
+      '%title' => $node->label(),
+      'link' => $node_link
+    ];
+    $t_args = [
+      '@type' => node_get_type_label($node),
+      '%title' => $node->toLink()->toString()
+    ];
 
     if ($insert) {
       $this->logger('content')->notice('@type: added %title.', $context);
@@ -59,10 +66,7 @@ class DeptNodeForm extends \Drupal\node\NodeForm {
       $form_state->setRebuild();
     }
 
-    /**
-     * DEPARTMENTAL ALTERATIONS
-     */
-
+    // DEPARTMENTAL ALTERATIONS (everything above is Drupal Core)
     $topic_id = \Drupal::request()->get('topic');
 
     if (!empty($topic_id)) {
