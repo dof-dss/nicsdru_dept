@@ -4,10 +4,10 @@ namespace Drupal\dept_migrate\Commands;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannel;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
-use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 
@@ -54,6 +54,13 @@ class DeptMigrationCommands extends DrushCommands {
   protected $departmentManager;
 
   /**
+   * Drupal\Core\Logger\LoggerChannel definition.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannel
+   */
+  protected $logger;
+
+  /**
    * List of self referencing Subtopic nodes.
    *
    * @var array
@@ -70,13 +77,14 @@ class DeptMigrationCommands extends DrushCommands {
   /**
    * Command constructor.
    */
-  public function __construct(Connection $database, Connection $d7_database, MigrateUuidLookupManager $lookup_manager, EntityTypeManagerInterface $etm, DepartmentManager $dept_manager) {
+  public function __construct(Connection $database, Connection $d7_database, MigrateUuidLookupManager $lookup_manager, EntityTypeManagerInterface $etm, DepartmentManager $dept_manager, LoggerChannel $logger) {
     parent::__construct();
     $this->dbConn = $database;
     $this->d7conn = $d7_database;
     $this->lookupManager = $lookup_manager;
     $this->entityTypeManager = $etm;
     $this->departmentManager = $dept_manager;
+    $this->logger = $logger;
   }
 
   /**
@@ -424,11 +432,19 @@ class DeptMigrationCommands extends DrushCommands {
       }
     }
 
-    $this->io()->caution("Rubber chickens awarded: " . $this->selfReferencedTopicsCount . " 🐔");
-    $this->io()->writeln(implode(",",$this->selfReferencedTopicsCount));
-    $this->io()->caution("Missing topic content nodes: " . $this->missingTopicsContentCount . " 🙈 ");
-    $this->io()->writeln(implode(",",$this->missingTopicsContentCount));
-    $this->io()->success("Topic content entity references finished");
+    if (count($this->selfReferencedTopicsCount) > 0) {
+      $selfRefList = implode(",", $this->selfReferencedTopicsCount);
+      $this->io()->caution("Rubber chickens awarded: " . count($this->selfReferencedTopicsCount) . " 🐔");
+      $this->logger->warning("Self referencing topics: " . $selfRefList);
+    }
+
+    if (count($this->missingTopicsContentCount) > 0) {
+      $missingContentList = implode(",", $this->missingTopicsContentCount);
+      $this->io()->caution("Missing topic content nodes: " . count($this->missingTopicsContentCount) . " 🙈 ");
+      $this->logger->warning("Missing subtopic content nodes: " . $missingContentList);
+    }
+
+    $this->io()->success("Subtopic content entity references completed");
   }
 
   /**
