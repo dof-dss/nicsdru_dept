@@ -52,6 +52,9 @@ class DeptMigrationCommands extends DrushCommands {
    */
   protected $departmentManager;
 
+  private $selfReferencedTopicsCount = 0;
+  private $missingTopicsContentCount = 0;
+
   /**
    * Command constructor.
    */
@@ -264,15 +267,15 @@ class DeptMigrationCommands extends DrushCommands {
 
 
   /**
-   * Update Topic content field entries
+   * Insert content field entries for Topic (top level) nodes.
    *
    *    * @param string $domain_id
    *   The domain id to update.
    *
-   * @command dept:topics-update-child-references
-   * @aliases tucr
+   * @command dept:topic-child-content
+   * @aliases tcc
    */
-  public function updateTopicReferences($domain_id) {
+  public function createTopicChildContent($domain_id) {
 
     if (empty($domain_id)) {
       return;
@@ -318,7 +321,6 @@ class DeptMigrationCommands extends DrushCommands {
       SELECT DISTINCT nid, type, title FROM content_stack_cte
       ORDER BY weight, title";
 
-
     $domain_topics_d9 = $this->dbConn->query("
         SELECT ds.entity_id, nfd.vid FROM node__field_domain_source ds
         INNER JOIN node_field_data nfd
@@ -330,11 +332,15 @@ class DeptMigrationCommands extends DrushCommands {
     $domain_topics_d7 = $this->lookupManager->lookupByDestinationNodeIds(array_keys($domain_topics_d9));
 
     foreach ($domain_topics_d7 as $topic_id => $topic) {
-      // Fetch D7 topic content nodes.
-      $topic_ref_nodes_d7 = $this->d7conn->query($topic_content_sql, [':nid' => $topic['d7nid']])->fetchAllKeyed(0, 2);
-      $topic_ref_nodes_d9 = [];
+      // Fetch the nid, type and title of D7 topic child content nodes.
+      $topic_ref_nodes_d7 = $this->d7conn->query(
+        $topic_content_sql, [
+          ':nid' => $topic['d7nid']
+        ])->fetchAllKeyed(0, 2);
       $delta = 0;
 
+      // Loop through each child node, lookup the D9 counterpart node and
+      // insert into the topic content entity references for the topic.
       foreach ($topic_ref_nodes_d7 as $d7_node_id => $title) {
         $node = $this->lookupManager->lookupBySourceNodeId([$d7_node_id]);
 
@@ -355,17 +361,17 @@ class DeptMigrationCommands extends DrushCommands {
 
 
   /**
-   * Display D7 child nodes for the given d9 nid
+   * Debug D7 child nodes for the given nid.
    *
    *    * @param string $nid
    *   The node id to display child nodes.
    *    * @param string $version
    *   The version of the site the nid comes from (d9 or d7).
    *
-   * @command dept:topics-node-child-nodes
-   * @aliases tncn
+   * @command dept:topic-child-content
+   * @aliases dscc
    */
-  public function displayNodeChildren($nid, $version = 'd9') {
+  public function displaySubtopicChildContent($nid, $version = 'd9') {
     if ($version === 'd9') {
       $d7_nid = $this->lookupManager->lookupByDestinationNodeIds([$nid]);
       $node_id = $d7_nid[$nid]['d7nid'];
@@ -378,15 +384,15 @@ class DeptMigrationCommands extends DrushCommands {
 
 
   /**
-   * Update Topic sub content field entries
+   * Insert content field entries for Topic (top level) nodes.
    *
    *    * @param string $domain_id
    *   The domain id to update.
    *
-   * @command dept:topics-update-sub-content
-   * @aliases tusc
+   * @command dept:dept:subtopic-child-content
+   * @aliases scc
    */
-  public function updateTopicContentReferences($domain_id) {
+  public function createSubtopicContentReferences($domain_id) {
     $domain_topics_d9 = $this->dbConn->query("
     SELECT ds.entity_id FROM node__field_domain_source ds
     INNER JOIN node_field_data nfd
@@ -407,16 +413,21 @@ class DeptMigrationCommands extends DrushCommands {
         $this->processRefNodes($topic_data[$topic_nid]['d7nid']);
       }
     }
+
+    $this->io()->caution("Rubber chickens awarded: " . $this->selfReferencedTopicsCount . " 🐔");
+    $this->io()->caution("Missing topic content nodes: " . $this->missingTopicsContentCount);
+    $this->io()->success("Topic content entity references finished");
   }
 
   /**
-   * Fetch child nodes and add as a reference to the parent.
+   * Fetch subtopic child nodes and add as a reference to the parent.
    *
    * @param $nid
    *   Drupal 7 parent node ID.
    */
-  function processRefNodes($nid) {
-    $child_nodes = $this->fetchD7NodeContents($nid);
+  function processSubtopicChildContent($nid) {
+    $child_nodes = $this->fetchSubtopicChildContent($nid);
+    // Fetch the D9/D7 data for the parent node.
     $parent_data = $this->lookupManager->lookupbySourceNodeId([$nid]);
     $parent_node = $this->entityTypeManager->getStorage('node')->load($parent_data[$nid]['nid']);
 
@@ -425,27 +436,39 @@ class DeptMigrationCommands extends DrushCommands {
 
       // If the child node is a reference to the parent, ignore it.
       if ($child_node->nid == $nid) {
+        $this->selfReferencedTopicsCount++;
         continue;
       }
 
       $child_node_id = $child_data[$child_node->nid]['nid'];
-      if (!is_null($child_node_id)) {
-        $this->createRefLink($parent_node, $child_data[$child_node->nid]['nid']);
+
+      // If we don't have a D9 nid it might be that the node in question hasn't
+      // been migrated so skip adding it.
+      if (is_null($child_node_id)) {
+        $this->missingTopicsContentCount++;
+      }
+      else {
+        $this->createSubtopicContentRefLink($parent_node, $child_data[$child_node->nid]['nid']);
       }
 
+      // If the child node is a subtopic then process it for child content.
       if ($child_node->type === 'subtopic') {
-        $this->processRefNodes($child_node->nid);
+        $this->processSubtopicChildContent($child_node->nid);
       }
     }
   }
 
   /**
-   * Fetch the child nodes of the given nid from Drupal 7.
+   * Fetch the child nodes of the given Drupal 7 subtopic.
    *
    * @param $nid
+   *   Subtopic node id.
    * @return array
+   *   Array elements containing node id, type and title.
    */
-  function fetchD7NodeContents($nid) {
+  function fetchSubtopicChildContent($nid) {
+    // Select nodes from the draggable view, with associated parent term or
+    // subtopic term.
     $subcontent_sql = "WITH content_stack_cte (nid, type, title, weight) AS (
     SELECT
         n.nid,
@@ -486,29 +509,31 @@ class DeptMigrationCommands extends DrushCommands {
 SELECT DISTINCT nid, type, title FROM content_stack_cte
 ORDER BY weight, title";
 
-    $node_contents = $this->d7conn->query($subcontent_sql, [
+    $nodes = $this->d7conn->query($subcontent_sql, [
       ':nidargs' => '["' . $nid . '","' . $nid . '"]',
       ':nid' => $nid
     ])->fetchAll();
 
-    return $node_contents;
+    return $nodes;
   }
 
   /**
-   * Creates an entity reference link in the topic content field
+   * Creates an entity reference link in the topic contents field
    *
    * @param $parent_node
-   *   Node to add the entity reference to.
-   * @param $target_nid
+   *   Node to which we add the entity reference.
+   * @param $child_nid
    *   Entity reference node id.
    */
-  function createRefLink($parent_node, $target_nid) {
+  function createSubtopicContentRefLink($parent_node, $child_nid) {
     // Fetch the max delta number, so we can add our new entity reference
     // to the bottom of the list.
     $delta = $this->dbConn->query("SELECT MAX(delta) FROM node__field_topic_content WHERE entity_id = :parent_nid", [
       ':parent_nid' => $parent_node->id()
     ])->fetchField(0);
 
+    // If we don't have a delta, set to -1 as we will increment in the insert
+    // call and the delta is zero indexed.
     $delta = $delta ?? -1;
 
     $this->dbConn->insert('node__field_topic_content')
@@ -519,7 +544,7 @@ ORDER BY weight, title";
         'revision_id' => $parent_node->getRevisionId(),
         'langcode' => 'en',
         'delta' => ++$delta,
-        'field_topic_content_target_id' => $target_nid,
+        'field_topic_content_target_id' => $child_nid,
       ])
       ->execute();
   }
