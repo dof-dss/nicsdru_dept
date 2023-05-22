@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
+use Drupal\views\ResultRow;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -145,11 +146,4 @@ function dept_publications_entity_operation_alter(array &$operations, EntityInte
       }
     }
   }
-}
-
-/**
- * Implements hook_preprocess().
- */
-function dept_publications_preprocess(&$variables, $hook) {
-  // dump($hook);
 }
