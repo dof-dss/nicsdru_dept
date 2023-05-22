@@ -378,7 +378,7 @@ class DeptMigrationCommands extends DrushCommands {
    *    * @param string $version
    *   The version of the site the nid comes from (d9 or d7).
    *
-   * @command dept:topic-child-content
+   * @command dept:debug-subtopic-child-content
    * @aliases dscc
    */
   public function displaySubtopicChildContent($nid, $version = 'd9') {
@@ -399,7 +399,7 @@ class DeptMigrationCommands extends DrushCommands {
    *    * @param string $domain_id
    *   The domain id to update.
    *
-   * @command dept:dept:subtopic-child-content
+   * @command dept:subtopic-child-content
    * @aliases scc
    */
   public function createSubtopicContentReferences($domain_id) {
