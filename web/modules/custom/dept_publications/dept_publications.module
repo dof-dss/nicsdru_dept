@@ -122,3 +122,27 @@ function dept_publications_entity_access(EntityInterface $entity, $operation, Ac
     }
   }
 }
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function dept_publications_entity_operation_alter(array &$operations, EntityInterface $entity) {
+  if ($entity instanceof NodeInterface && $entity->getType() === 'publication') {
+    // If there is a secure file field value assume this is a secure publication
+    // and continue to perform access checks.
+    if (empty($entity->get('field_publication_secure_files')->referencedEntities())) {
+      return;
+    }
+
+    // This check is intended to override any broad/generic permissions
+    // as well as the general NICS editorial workflow options. Eg:
+    // prevents an non-admin and non-stats-* role from publishing
+    // embargoed/secure publication content as this must be done
+    // by a stats supervisor author or Administrator.
+    if ($entity->isPublished() === FALSE) {
+      if (!\Drupal::currentUser()->hasPermission('publish secure publication')) {
+        return $operations;
+      }
+    }
+  }
+}
