@@ -4,4 +4,7 @@ description: Provides features for Publications and secure publications
 package: 'NICS: Departmental'
 core_version_requirement: ^8 || ^9
 dependencies:
+  - dept_core
+  - dept_node
   - drupal:node
+  - domain_access

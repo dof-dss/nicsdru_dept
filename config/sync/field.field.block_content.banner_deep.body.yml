@@ -1,0 +1,23 @@
+uuid: 25d626b9-3318-4f12-9bd9-b6ac720062dc
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.banner_deep
+    - field.storage.block_content.body
+  module:
+    - text
+id: block_content.banner_deep.body
+field_name: body
+entity_type: block_content
+bundle: banner_deep
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+  required_summary: false
+field_type: text_with_summary

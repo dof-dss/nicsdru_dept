@@ -1,0 +1,23 @@
+uuid: b5d96ae2-8e5a-4ab9-a728-b8e39815962f
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.plain_cards
+    - field.storage.block_content.field_card_layout
+  module:
+    - options
+id: block_content.plain_cards.field_card_layout
+field_name: field_card_layout
+entity_type: block_content
+bundle: plain_cards
+label: 'Card layout'
+description: 'Choose how cards should be laid out on larger screens.  One column is easier for readers to scan quickly.  Two and three column layouts are more compact.'
+required: false
+translatable: false
+default_value:
+  -
+    value: '--x2'
+default_value_callback: ''
+settings: {  }
+field_type: list_string

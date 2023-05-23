@@ -1,0 +1,37 @@
+uuid: c2d34fd7-fc40-47f7-bba4-eb192fd5fbc9
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - dept_core
+    - node
+  theme:
+    - nicsdru_dept_theme
+id: related_departmental_details_access_info
+theme: nicsdru_dept_theme
+region: related
+weight: 0
+provider: null
+plugin: dept_core_departmental_details
+settings:
+  id: dept_core_departmental_details
+  label: 'Departmental details - access info (related page footer)'
+  label_display: visible
+  provider: dept_core
+  context_mapping:
+    current_department: '@department.current_department_context:department'
+  display_field: accessToInformation
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      subtopic: subtopic
+      topic: topic

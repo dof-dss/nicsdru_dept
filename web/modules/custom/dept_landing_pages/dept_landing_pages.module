@@ -1,0 +1,156 @@
+<?php
+
+/**
+ * @file
+ * Contains dept_landing_pages.module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\Language;
+use Drupal\Core\Link;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\redirect\Entity\Redirect;
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function dept_landing_pages_page_attachments(array &$attachments) {
+  // Add landing page js if we are creating or editing
+  // a landing page node.
+  $this_route = \Drupal::routeMatch()->getRouteName();
+  if ($this_route == 'layout_builder.overrides.node.view') {
+    $attachments['#attached']['library'][] = 'dept_landing_pages/landing_page_admin';
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_form_alter().
+ */
+function dept_landing_pages_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  if ($form_id === 'layout_builder_add_block' || $form_id === 'layout_builder_update_block') {
+
+    // Add process callback that will allow us to alter block form element rendering.
+    if (!empty($form['settings']['block_form'])) {
+      $form['settings']['block_form']['#process'][] = 'dept_landing_pages_block_form_alter';
+    }
+
+    // Depending on block name, set the title and hide it or prevent authors hiding it.
+    if (!empty($form['settings']['block_form']['#block'])) {
+      $block_name = $form['settings']['block_form']['#block']->bundle();
+      switch ($block_name) {
+        case 'banner_deep':
+        case 'card_contact':
+        case 'plain_cards':
+        case 'video':
+        case 'text':
+          // The title defaults to the block type name and is not displayed.
+          $form['settings']['label']['#default_value'] = $block_name;
+          $form['settings']['label']['#type'] = 'hidden';
+          $form['settings']['label_display']['#default_value'] = FALSE;
+          $form['settings']['label_display']['#access'] = FALSE;
+          break;
+
+        case 'card_standard':
+        case 'card_wide':
+        case 'card_plain':
+          // The title must be displayed.
+          $form['settings']['label_display']['#default_value'] = TRUE;
+          $form['settings']['label_display']['#access'] = FALSE;
+          break;
+
+      }
+    }
+  }
+}
+
+/**
+ * Process callback for landing page custom block forms.
+ */
+function dept_landing_pages_block_form_alter(array $element, FormStateInterface $form_state) {
+
+  if (!empty($element['#block']) && $element['#block']->bundle() === 'card_contact') {
+    // Remove container-inline class from the telephone plus fieldsets.
+    if (!empty($element['field_telephone']) && !empty($element['field_telephone']['widget'])) {
+      $classes = &$element['field_telephone']['widget'][0]['#attributes']['class'];
+      $classes = array_filter($classes, function ($e) {
+        return $e != 'container-inline';
+      });
+    }
+  }
+
+  // Use layout_builder_html for text block body fields.
+  if (!empty($element['#block']) && $element['#block']->bundle() === 'text') {
+    $element['body']['widget'][0]['#format'] = 'layout_builder_html';
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function dept_landing_pages_element_info_alter(array &$info) {
+  if (!empty($info['text_format'])) {
+    $info['text_format']['#process'][] = 'dept_landing_pages_process_format';
+  }
+}
+
+/**
+ * Callback for processing text format element.
+ */
+function dept_landing_pages_process_format($element) {
+  // If we're on the layout builder custom block config route
+  // and we don't possess high level administrator permission
+  // then hide the basic_html option in favour of the landing_page_html
+  // format which is a slightly tailored text format.
+  $lb_routes = [
+    'layout_builder.update_block',
+    'layout_builder.add_block',
+  ];
+
+  if (in_array(\Drupal::routeMatch()->getRouteName(), $lb_routes) &&
+    \Drupal::currentUser()->hasPermission('use text format full_html') === FALSE) {
+
+    unset($element['format']['format']['#options']['basic_html']);
+    $element['format']['format']['#default_value'] = 'layout_builder_html';
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function dept_landing_pages_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  if (!empty($variables['elements']['content']['#block_content'])) {
+    $bundle = $variables['elements']['content']['#block_content']->bundle();
+
+    // Theme suggestion for custom nested card types.
+    if ($bundle === 'card_nested_standard' || $bundle === 'card_nested_wide') {
+      array_unshift($suggestions, 'block__inline_block__nested_card');
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dept_landing_pages_form_node_subtopic_layout_builder_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Hide revision information section.
+  $form['revision_information']['#access'] = FALSE;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dept_landing_pages_form_node_topic_layout_builder_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Hide revision information section.
+  $form['revision_information']['#access'] = FALSE;
+}

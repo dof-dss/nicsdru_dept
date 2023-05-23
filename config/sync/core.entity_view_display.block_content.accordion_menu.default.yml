@@ -1,0 +1,35 @@
+uuid: 5129ce25-131b-463c-a6e3-cc15c0a383b9
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.accordion_menu
+    - field.field.block_content.accordion_menu.body
+    - field.field.block_content.accordion_menu.field_accordion_sections
+  module:
+    - entity_reference_revisions
+    - text
+id: block_content.accordion_menu.default
+targetEntityType: block_content
+bundle: accordion_menu
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_accordion_sections:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

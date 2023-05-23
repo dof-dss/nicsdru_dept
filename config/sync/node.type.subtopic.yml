@@ -15,10 +15,10 @@ third_party_settings:
     toc_title: 'On this page'
     toc_location: .page-summary
     toc_insert: after
-    toc_source_container: '#main-article'
+    toc_source_container: .page-body
     toc_element: h2
     toc_exclusions: ''
-    toc_screen_depth: '1'
+    toc_screen_depth: '2'
     toc_debug: 0
   scheduler:
     expand_fieldset: when_required

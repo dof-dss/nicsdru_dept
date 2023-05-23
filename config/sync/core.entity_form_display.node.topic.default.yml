@@ -11,8 +11,8 @@ dependencies:
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
     - field.field.node.topic.field_topic_content
+    - field.field.node.topic.layout_builder__layout
     - node.type.topic
-    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - field_group
@@ -196,3 +196,4 @@ hidden:
   entitygroupfield: true
   groups: true
   groups_type_department_site: true
+  layout_builder__layout: true

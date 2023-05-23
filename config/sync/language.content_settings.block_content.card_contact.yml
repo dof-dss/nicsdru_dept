@@ -1,0 +1,11 @@
+uuid: dd2680de-7891-4d15-870f-f0a7b4a97ae2
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.card_contact
+id: block_content.card_contact
+target_entity_type_id: block_content
+target_bundle: card_contact
+default_langcode: site_default
+language_alterable: false
