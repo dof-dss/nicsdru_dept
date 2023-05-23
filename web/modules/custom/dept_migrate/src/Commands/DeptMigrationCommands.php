@@ -425,17 +425,18 @@ class DeptMigrationCommands extends DrushCommands {
 
     if (count($this->selfReferencedTopicsCount) > 0) {
       $selfRefList = implode(",", $this->selfReferencedTopicsCount);
-      $this->io()->caution("Rubber chickens awarded: " . count($this->selfReferencedTopicsCount) . " 🐔");
       $this->logger->warning("Self referencing topics: " . $selfRefList);
+      $this->io()->caution("Rubber chickens awarded: " . count($this->selfReferencedTopicsCount) . " 🐔");
     }
 
     if (count($this->missingTopicsContentCount) > 0) {
       $missingContentList = implode(",", $this->missingTopicsContentCount);
-      $this->io()->caution("Missing topic content nodes: " . count($this->missingTopicsContentCount) . " 🙈 ");
       $this->logger->warning("Missing subtopic content nodes: " . $missingContentList);
+      $this->io()->caution("Missing topic content nodes: " . count($this->missingTopicsContentCount));
     }
 
     $this->io()->success("Subtopic content entity references completed");
+    $this->io()->note("Caches will need to be rebuilt for topic content to display");
   }
 
   /**

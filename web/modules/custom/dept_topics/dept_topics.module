@@ -6,6 +6,7 @@
  * of topics, subtopics and related content.
  */
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 
@@ -29,4 +30,49 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
       ];
     }
   }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function dept_topics_cron() {
+  $dbConn = \Drupal::database();
+
+  // Fetch the parent node ID's of referenced topic content nodes that no
+  // longer exist.
+  $nids = $dbConn->query("
+    SELECT nftc.entity_id FROM node__field_topic_content nftc
+    LEFT JOIN node n
+    ON nftc.field_topic_content_target_id = n.nid
+    WHERE n.nid IS NULL;
+  ")->fetchCol(0);
+
+  if (empty($nids)) {
+    return;
+  }
+
+  // Remove duplicate parent nids and create a list of node cache tags.
+  $cids = array_map(function ($nid) {
+    return 'values:node:' . $nid;
+  }, array_unique($nids));
+  // Remove any topic content reference field entries that point to deleted
+  // nodes.
+  $dbConn->query("
+    DELETE nftc FROM node__field_topic_content nftc
+    LEFT JOIN node n
+    ON nftc.field_topic_content_target_id = n.nid
+    WHERE n.nid IS NULL;
+  ")->execute();
+
+  $dbConn->query("
+    DELETE nrftc FROM node_revision__field_topic_content nrftc
+    LEFT JOIN node n
+    ON nrftc.field_topic_content_target_id = n.nid
+    WHERE n.nid IS NULL;
+  ")->execute();
+
+  // Check the caching of the entity info to update the topic content reference
+  // field on the node edit form.
+  $cache_entity = \Drupal::service('cache.entity');
+  $cache_entity->deleteMultiple($cids);
 }
