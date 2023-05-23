@@ -1,9 +1,6 @@
 services:
   dept_migrate.commands:
     class: \Drupal\dept_migrate\Commands\DeptMigrationCommands
-    arguments: ['@database', '@dept_migrate.database_d7', '@dept_migrate.migrate_uuid_lookup_manager', '@entity_type.manager', '@department.manager', '@logger.channel.dept_migrate']
+    arguments: ['@database', '@dept_migrate.database_d7', '@dept_migrate.migrate_uuid_lookup_manager', '@entity_type.manager', '@department.manager']
     tags:
       - { name: drush.command }
-  logger.channel.dept_migrate:
-    parent: logger.channel_base
-    arguments: [ 'dept_migrate' ]

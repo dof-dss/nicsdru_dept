@@ -4,7 +4,6 @@ namespace Drupal\dept_migrate\Commands;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Logger\LoggerChannel;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
@@ -54,13 +53,6 @@ class DeptMigrationCommands extends DrushCommands {
   protected $departmentManager;
 
   /**
-   * Drupal\Core\Logger\LoggerChannel definition.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannel
-   */
-  protected $logger;
-
-  /**
    * List of self referencing Subtopic nodes.
    *
    * @var array
@@ -77,14 +69,13 @@ class DeptMigrationCommands extends DrushCommands {
   /**
    * Command constructor.
    */
-  public function __construct(Connection $database, Connection $d7_database, MigrateUuidLookupManager $lookup_manager, EntityTypeManagerInterface $etm, DepartmentManager $dept_manager, LoggerChannel $logger) {
+  public function __construct(Connection $database, Connection $d7_database, MigrateUuidLookupManager $lookup_manager, EntityTypeManagerInterface $etm, DepartmentManager $dept_manager) {
     parent::__construct();
     $this->dbConn = $database;
     $this->d7conn = $d7_database;
     $this->lookupManager = $lookup_manager;
     $this->entityTypeManager = $etm;
     $this->departmentManager = $dept_manager;
-    $this->logger = $logger;
   }
 
   /**
