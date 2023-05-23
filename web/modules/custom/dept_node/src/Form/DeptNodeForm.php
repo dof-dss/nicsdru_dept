@@ -21,9 +21,10 @@ class DeptNodeForm extends NodeForm {
   public function save(array $form, FormStateInterface $form_state) {
     $node = $this->entity;
     $insert = $node->isNew();
-    $node->save();
+    $result = $node->save();
     $node_link = $node->toLink($this->t('View'))->toString();
     $context = [
+      // @phpstan-ignore-next-line
       '@type' => $node->getType(),
       '%title' => $node->label(),
       'link' => $node_link
@@ -79,7 +80,7 @@ class DeptNodeForm extends NodeForm {
         $topic->save();
       }
     }
-
+    return $result;
   }
 
 }

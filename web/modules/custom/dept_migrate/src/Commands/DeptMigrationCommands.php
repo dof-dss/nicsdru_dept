@@ -389,7 +389,7 @@ class DeptMigrationCommands extends DrushCommands {
       $node_id = $nid;
     }
     print "Child nodes for $version node " . $nid . " ";
-    print_r($this->fetchD7NodeContents($node_id));
+    print_r($this->fetchSubtopicChildContent($node_id));
   }
 
   /**
@@ -417,6 +417,7 @@ class DeptMigrationCommands extends DrushCommands {
       $topic_content_references = $topic_node->get('field_topic_content');
 
       foreach ($topic_content_references as $reference) {
+        // @phpstan-ignore-next-line
         $topic_nid = $reference->get('entity')->getTargetIdentifier();
         $topic_data = $this->lookupManager->lookupByDestinationNodeIds([$topic_nid]);
         $this->processSubtopicChildContent($topic_data[$topic_nid]['d7nid']);

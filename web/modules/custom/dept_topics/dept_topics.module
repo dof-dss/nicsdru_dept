@@ -6,7 +6,6 @@
  * of topics, subtopics and related content.
  */
 
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 
@@ -16,7 +15,6 @@ use Drupal\node\NodeInterface;
 function dept_topics_moderation_sidebar_alter(&$build, &$context) {
 
   if ($context instanceof NodeInterface && $context->bundle() === "topic") {
-    /** @var $context \NodeInterface */
     $bundle_fields = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions('node', 'topic');
     $field_definition = $bundle_fields['field_topic_content'];
     $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
