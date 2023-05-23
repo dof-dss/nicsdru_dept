@@ -77,6 +77,7 @@ if (!empty(getenv('PLATFORM_BRANCH'))) {
   // Environment specific settings and services.
   switch (getenv('PLATFORM_BRANCH')) {
     case 'main':
+    case 'staging':
       $config['config_split.config_split.production']['status'] = TRUE;
       break;
 
