@@ -12,11 +12,10 @@ dependencies:
     - field.field.node.topic.field_summary
     - field.field.node.topic.field_topic_content
     - node.type.topic
-  module:
-    - link
     - field.field.node.topic.layout_builder__layout
     - node.type.topic
   module:
+    - link
     - layout_builder
     - layout_builder_restrictions
     - metatag
