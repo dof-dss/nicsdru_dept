@@ -120,11 +120,18 @@ then
   echo "Updating content links"
   $DRUSH dept:updatelinks
 
-  echo "Syncing featured content on the department hompages"
+  echo "Syncing featured content on the department homepages"
   $DRUSH dept:sync-homepage-content
 
   echo "Restoring config from config/sync"
   $DRUSH cim -y
+
+   for domain in daera communities economy education finance health infrastructure justice executiveoffice
+    do
+      echo "Creating Topic/Subtopic content entries for ${domain}"
+      $DRUSH dept:topic-child-content $domain
+      $DRUSH dept:subtopic-child-content $domain
+    done
 
   echo ".... DONE"
 fi
