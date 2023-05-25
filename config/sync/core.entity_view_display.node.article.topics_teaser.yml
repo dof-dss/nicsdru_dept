@@ -1,0 +1,61 @@
+uuid: baffc27f-3e5a-453e-b819-4cf988aeea25
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.topics_teaser
+    - field.field.node.article.body
+    - field.field.node.article.field_domain_access
+    - field.field.node.article.field_domain_all_affiliates
+    - field.field.node.article.field_domain_source
+    - field.field.node.article.field_global_topics
+    - field.field.node.article.field_metatags
+    - field.field.node.article.field_site_subtopics
+    - field.field.node.article.field_site_topics
+    - field.field.node.article.field_summary
+    - node.type.article
+  module:
+    - layout_builder
+    - metatag
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+_core:
+  default_config_hash: ChmU3AVqDKU32A_fyChG0W9dTRKmVBR58B6OClCLvZI
+id: node.article.topics_teaser
+targetEntityType: node
+bundle: article
+mode: topics_teaser
+content:
+  field_metatags:
+    type: metatag_empty_formatter
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_summary:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  content_moderation_control: true
+  entitygroupfield: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
+  field_global_topics: true
+  field_site_subtopics: true
+  field_site_topics: true
+  groups: true
+  groups_type_department_site: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

@@ -1,9 +1,9 @@
-uuid: 5b43375d-b632-4afd-b0e8-300f7afb9bdf
+uuid: 5aa21118-7c9a-429b-b5c0-70217527139f
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.search_result
+    - core.entity_view_mode.node.topics_teaser
     - field.field.node.subtopic.body
     - field.field.node.subtopic.field_banner_image
     - field.field.node.subtopic.field_banner_link
@@ -16,41 +16,42 @@ dependencies:
     - field.field.node.subtopic.field_parent_topic
     - field.field.node.subtopic.field_summary
     - field.field.node.subtopic.field_topic_content
-    - field.field.node.subtopic.layout_builder__layout
     - node.type.subtopic
   module:
     - layout_builder
-    - smart_trim
+    - metatag
+    - text
     - user
 third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: node.subtopic.search_result
+id: node.subtopic.topics_teaser
 targetEntityType: node
 bundle: subtopic
-mode: search_result
+mode: topics_teaser
 content:
-  field_summary:
-    type: smart_trim
+  field_metatags:
+    type: metatag_empty_formatter
     label: hidden
-    settings:
-      trim_length: 35
-      trim_type: words
-      trim_suffix: ...
-      wrap_output: false
-      wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      more_aria_label: 'Read more about [node:title]'
-      summary_handler: full
-      trim_options:
-        text: true
-        trim_zero: false
-        replace_tokens: false
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_summary:
+    type: text_default
+    label: hidden
+    settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_topic_content:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
   body: true
@@ -62,13 +63,10 @@ hidden:
   field_domain_all_affiliates: true
   field_domain_source: true
   field_link: true
-  field_metatags: true
   field_parent_subtopic: true
   field_parent_topic: true
-  field_topic_content: true
   groups: true
   groups_type_department_site: true
   langcode: true
-  layout_builder__layout: true
   links: true
   search_api_excerpt: true

@@ -10,9 +10,12 @@ dependencies:
     - field.field.node.topic.field_metatags
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
+    - field.field.node.topic.field_topic_content
+    - node.type.topic
     - field.field.node.topic.layout_builder__layout
     - node.type.topic
   module:
+    - link
     - layout_builder
     - layout_builder_restrictions
     - metatag
@@ -64,14 +67,14 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 4
     region: content
   field_metatags:
     type: metatag_empty_formatter
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 5
     region: content
   field_photo:
     type: entity_reference_entity_view
@@ -87,7 +90,15 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 3
+    region: content
+  field_topic_content:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
     region: content
 hidden:
   content_moderation_control: true

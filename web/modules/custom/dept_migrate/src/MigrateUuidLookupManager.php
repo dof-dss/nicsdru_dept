@@ -511,6 +511,7 @@ class MigrateUuidLookupManager {
 
       $map[$node->id()] = [
         'nid' => $node->id(),
+        'vid' => $node->getRevisionId(),
         'title' => $node->label(),
         'type' => $node->bundle(),
         'uuid' => $node->uuid(),

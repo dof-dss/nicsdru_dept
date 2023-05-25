@@ -6,41 +6,71 @@
  * of topics, subtopics and related content.
  */
 
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Link;
-use Drupal\dept_core\Department;
+use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 
 /**
- * Implements hook_theme().
+ * Implements hook_moderation_sidebar_alter().
  */
-function dept_topics_theme($existing, $type, $theme, $path) {
-  return [
-    'subtopic_content_list__item' => [
-      'variables' => [
-        'title' => NULL,
-        'title_link' => NULL,
-        'content_summary' => NULL,
-        'content_links' => NULL,
-        'read_more_link' => NULL,
-      ],
-    ],
-  ];
+function dept_topics_moderation_sidebar_alter(&$build, &$context) {
+
+  if ($context instanceof NodeInterface && $context->bundle() === "topic") {
+    $bundle_fields = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions('node', 'topic');
+    $field_definition = $bundle_fields['field_topic_content'];
+    $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
+
+    foreach ($target_bundles as $bundle => $label) {
+      $build['actions']['secondary']['add_' . $bundle] = [
+        '#title' => 'Add ' . $label,
+        '#type' => 'link',
+        '#url' => Url::fromRoute('node.add', ['node_type' => $bundle], ['query' => ['topic' => $context->id()]]),
+        '#attributes' => ['class' => ['moderation-sidebar-link', 'button']],
+      ];
+    }
+  }
 }
 
 /**
- * Implements hook_ENTITY_TYPE_insert().
+ * Implements hook_cron().
  */
-function dept_topics_node_insert(NodeInterface $node) {
-  if ($node->hasField('field_site_subtopics')) {
-    $subtopic_ids = array_column($node->get('field_site_subtopics')
-      ->getValue(), 'target_id');
+function dept_topics_cron() {
+  $dbConn = \Drupal::database();
 
-    if ($node->isPublished() && !empty($subtopic_ids)) {
-      $subtopic_cache_tags = preg_filter('/^/', 'subtopic_stack:', $subtopic_ids);
-      // Published nodes with subtopic values should expire the cache
-      // tags for subtopic content stack render elements.
-      Cache::invalidateTags($subtopic_cache_tags);
-    }
+  // Fetch the parent node ID's of referenced topic content nodes that no
+  // longer exist.
+  $nids = $dbConn->query("
+    SELECT nftc.entity_id FROM node__field_topic_content nftc
+    LEFT JOIN node n
+    ON nftc.field_topic_content_target_id = n.nid
+    WHERE n.nid IS NULL;
+  ")->fetchCol(0);
+
+  if (empty($nids)) {
+    return;
   }
+
+  // Remove duplicate parent nids and create a list of node cache tags.
+  $cids = array_map(function ($nid) {
+    return 'values:node:' . $nid;
+  }, array_unique($nids));
+  // Remove any topic content reference field entries that point to deleted
+  // nodes.
+  $dbConn->query("
+    DELETE nftc FROM node__field_topic_content nftc
+    LEFT JOIN node n
+    ON nftc.field_topic_content_target_id = n.nid
+    WHERE n.nid IS NULL;
+  ")->execute();
+
+  $dbConn->query("
+    DELETE nrftc FROM node_revision__field_topic_content nrftc
+    LEFT JOIN node n
+    ON nrftc.field_topic_content_target_id = n.nid
+    WHERE n.nid IS NULL;
+  ")->execute();
+
+  // Check the caching of the entity info to update the topic content reference
+  // field on the node edit form.
+  $cache_entity = \Drupal::service('cache.entity');
+  $cache_entity->deleteMultiple($cids);
 }
