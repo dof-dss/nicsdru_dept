@@ -74,3 +74,49 @@ function dept_topics_cron() {
   $cache_entity = \Drupal::service('cache.entity');
   $cache_entity->deleteMultiple($cids);
 }
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function dept_topics_preprocess_node(array &$variables) {
+  $bundle_fields = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions('node', 'topic');
+  $field_definition = $bundle_fields['field_topic_content'];
+  $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
+
+  if (in_array($variables['node']->bundle(), $target_bundles)) {
+    $parent = fetch_parent_node($variables['node']->id(), 1);
+
+    $variables['topics']['top'] = [
+      '#type' => 'link',
+      '#title' => 'The Top level term',
+      '#url' => URL::fromRoute('entity.node.canonical', ['node' => $parent->nid]),
+      '#suffix' => ',&nbsp;'
+    ];
+
+    $variables['topics']['parent'] = [
+      '#type' => 'link',
+      '#title' => $parent->title,
+      '#url' => URL::fromRoute('entity.node.canonical', ['node' => $parent->nid]),
+    ];
+  }
+
+}
+
+function fetch_parent_node($nid, $depth = NULL) {
+  $dbConn = \Drupal::database();
+  $count = 0;
+
+  do {
+    $parent = $dbConn->query("SELECT n.nid, nfd.title FROM node n
+        LEFT JOIN node_field_data nfd
+        ON nfd.nid = n.nid
+        LEFT JOIN node__field_topic_content ftc
+        ON ftc.entity_id = n.nid
+        WHERE ftc.field_topic_content_target_id = :nid", [':nid' => $nid])->fetch();
+
+    $count++;
+    $nid = $parent->nid;
+  } while ($depth > $count);
+
+  return $parent;
+}
