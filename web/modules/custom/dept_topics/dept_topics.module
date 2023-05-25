@@ -85,11 +85,12 @@ function dept_topics_preprocess_node(array &$variables) {
 
   if (in_array($variables['node']->bundle(), $target_bundles)) {
     $parent = fetch_parent_node($variables['node']->id(), 1);
+    $top = fetch_parent_node($variables['node']->id(), 99);
 
     $variables['topics']['top'] = [
       '#type' => 'link',
-      '#title' => 'The Top level term',
-      '#url' => URL::fromRoute('entity.node.canonical', ['node' => $parent->nid]),
+      '#title' => $top->title,
+      '#url' => URL::fromRoute('entity.node.canonical', ['node' => $top->nid]),
       '#suffix' => ',&nbsp;'
     ];
 
@@ -102,19 +103,25 @@ function dept_topics_preprocess_node(array &$variables) {
 
 }
 
-function fetch_parent_node($nid, $depth = NULL) {
+function fetch_parent_node($nid, $depth = 0) {
   $dbConn = \Drupal::database();
   $count = 0;
 
   do {
-    $parent = $dbConn->query("SELECT n.nid, nfd.title FROM node n
+    $parent = $dbConn->query("SELECT n.nid, nfd.title, nfd.type FROM node n
         LEFT JOIN node_field_data nfd
         ON nfd.nid = n.nid
         LEFT JOIN node__field_topic_content ftc
         ON ftc.entity_id = n.nid
         WHERE ftc.field_topic_content_target_id = :nid", [':nid' => $nid])->fetch();
 
-    $count++;
+    if ($parent->type === 'topic') {
+      $depth = $count;
+    }
+    else {
+      $count++;
+    }
+
     $nid = $parent->nid;
   } while ($depth > $count);
 
