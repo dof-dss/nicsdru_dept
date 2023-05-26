@@ -8,7 +8,7 @@
 
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-
+use Symfony\Component\HttpFoundation\Request;
 /**
  * Implements hook_moderation_sidebar_alter().
  */
@@ -93,6 +93,11 @@ function dept_topics_preprocess_node(array &$variables) {
       '#value' => t('Topics') . ': ',
     ];
 
+    if ($top->noCache || $parent->noCache) {
+      $variables['topics_subtopics_list']['#cache']['max-age'] = 0;
+    }
+
+
     if (!empty($top)) {
       $variables['topics_subtopics_list']['top'] = [
         '#type' => 'link',
@@ -124,18 +129,40 @@ function dept_topics_preprocess_node(array &$variables) {
 function dept_topics_fetch_parent_node($nid, $depth = 1) {
   $dbConn = \Drupal::database();
   $count = 0;
+  $referer = \Drupal::request()->headers->get('referer');
 
   do {
     /** @var stdClass $parent */
-    $parent = $dbConn->query("SELECT n.nid, nfd.title, nfd.type FROM node n
+    $parents = $dbConn->query("SELECT n.nid, nfd.title, nfd.type FROM node n
         LEFT JOIN node_field_data nfd
         ON nfd.nid = n.nid
         LEFT JOIN node__field_topic_content ftc
         ON ftc.entity_id = n.nid
-        WHERE ftc.field_topic_content_target_id = :nid", [':nid' => $nid])->fetch();
+        WHERE ftc.field_topic_content_target_id = :nid", [':nid' => $nid])->fetchAllAssoc('nid');
 
-    if (!$parent) {
+    if (!$parents) {
       return NULL;
+    }
+
+    $parent = current($parents);
+    $parent->noCache = FALSE;
+
+    if (count($parents) > 1 && $referer) {
+      $base_url = Request::createFromGlobals()->getSchemeAndHttpHost();
+      $path = substr($referer, strlen($base_url));
+      $params = Url::fromUri("internal:" . $path)->getRouteParameters();
+
+      if (key($params) === 'node') {
+        $node = \Drupal::entityTypeManager()->getStorage('node')->load($params['node']);
+
+        if ($node) {
+          $parent = new stdClass();
+          $parent->nid = $node->id();
+          $parent->title = $node->label();
+          $parent->type = $node->bundle();
+          $parent->noCache = TRUE;
+        }
+      }
     }
 
     if ($parent->type === 'topic') {
