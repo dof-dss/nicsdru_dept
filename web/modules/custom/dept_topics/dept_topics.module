@@ -87,8 +87,14 @@ function dept_topics_preprocess_node(array &$variables) {
     $top = dept_topics_fetch_parent_node($variables['node']->id(), 20);
     $parent = dept_topics_fetch_parent_node($variables['node']->id());
 
+    $variables['topics_subtopics_list'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'span',
+      '#value' => t('Topics') . ': ',
+    ];
+
     if (!empty($top)) {
-      $variables['topics']['top'] = [
+      $variables['topics_subtopics_list']['top'] = [
         '#type' => 'link',
         '#title' => $top->title,
         '#url' => URL::fromRoute('entity.node.canonical', ['node' => $top->nid]),
@@ -98,17 +104,21 @@ function dept_topics_preprocess_node(array &$variables) {
 
     // Prevent duplicate terms.
     if (!empty($parent) && $parent->nid !== $top->nid) {
-      $variables['topics']['parent'] = [
+      $variables['topics_subtopics_list']['parent'] = [
         '#type' => 'link',
         '#title' => $parent->title,
         '#url' => URL::fromRoute('entity.node.canonical', ['node' => $parent->nid]),
       ];
     }
+
+    if (empty($top) && empty($parent)) {
+      $variables['show_topics'] = FALSE;
+    }
   }
 
 }
 
-/*
+/**
  * Return a parent node for the given depth.
  */
 function dept_topics_fetch_parent_node($nid, $depth = 1) {
