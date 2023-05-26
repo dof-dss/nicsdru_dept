@@ -126,6 +126,7 @@ function dept_topics_fetch_parent_node($nid, $depth = 1) {
   $count = 0;
 
   do {
+    /** @var stdClass $parent */
     $parent = $dbConn->query("SELECT n.nid, nfd.title, nfd.type FROM node n
         LEFT JOIN node_field_data nfd
         ON nfd.nid = n.nid
@@ -133,7 +134,7 @@ function dept_topics_fetch_parent_node($nid, $depth = 1) {
         ON ftc.entity_id = n.nid
         WHERE ftc.field_topic_content_target_id = :nid", [':nid' => $nid])->fetch();
 
-    if (empty($parent)) {
+    if (!$parent) {
       return NULL;
     }
 
