@@ -370,6 +370,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
           ->execute();
       }
     }
+    // @phpstan-ignore-next-line
     $process = $this->processManager()->drush($this->siteAliasManager()->getSelf(), 'cache:rebuild', []);
     $process->mustRun();
 
@@ -443,6 +444,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       $this->io()->caution("Missing topic content nodes: " . count($this->missingTopicsContentCount));
     }
 
+    // @phpstan-ignore-next-line
     $process = $this->processManager()->drush($this->siteAliasManager()->getSelf(), 'cache:rebuild', []);
     $process->mustRun();
 
