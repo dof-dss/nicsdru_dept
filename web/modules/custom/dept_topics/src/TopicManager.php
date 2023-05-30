@@ -8,8 +8,13 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 /**
  * Defines a service provider for the Departmental sites: topics module.
  */
-class TopicManager  {
+class TopicManager {
 
+  /**
+   * Array of parent nodes.
+   *
+   * @var array
+   */
   protected $parents = [];
 
   /**
@@ -43,10 +48,15 @@ class TopicManager  {
   }
 
   /**
-   * {@inheritdoc}
+   * Returns parent nodes for the given node ID.
+   *
+   * @param int $nid
+   *   Node id to return the parent for.
+   *
+   * @return array|mixed
+   *   Node ID indexed array comprising id, title and type.
    */
-  public function getParentNodes ($nid) {
-
+  public function getParentNodes($nid) {
     $parents = $this->dbConn->query("SELECT n.nid, nfd.title, nfd.type FROM node n
         LEFT JOIN node_field_data nfd
         ON nfd.nid = n.nid
