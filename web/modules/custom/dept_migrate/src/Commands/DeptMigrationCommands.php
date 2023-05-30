@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_migrate\Commands;
 
+use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -9,13 +10,15 @@ use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
+use Drush\SiteAlias\SiteAliasManagerAwareInterface;
 
 /**
  * Drush commands processing Departmental migrations.
  */
-class DeptMigrationCommands extends DrushCommands {
+class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwareInterface {
 
   use StringTranslationTrait;
+  use SiteAliasManagerAwareTrait;
 
   /**
    * The database connection.
@@ -345,8 +348,8 @@ class DeptMigrationCommands extends DrushCommands {
       // Fetch the nid, type and title of D7 topic child content nodes.
       $topic_ref_nodes_d7 = $this->d7conn->query(
         $topic_content_sql, [
-          ':nid' => $topic['d7nid']
-        ])->fetchAllKeyed(0, 2);
+        ':nid' => $topic['d7nid']
+      ])->fetchAllKeyed(0, 2);
       $delta = 0;
 
       // Loop through each child node, lookup the D9 counterpart node and
@@ -367,6 +370,11 @@ class DeptMigrationCommands extends DrushCommands {
           ->execute();
       }
     }
+    // @phpstan-ignore-next-line
+    $process = $this->processManager()->drush($this->siteAliasManager()->getSelf(), 'cache:rebuild', []);
+    $process->mustRun();
+
+    $this->io()->success("Topic content entity references completed");
   }
 
   /**
@@ -436,8 +444,12 @@ class DeptMigrationCommands extends DrushCommands {
       $this->io()->caution("Missing topic content nodes: " . count($this->missingTopicsContentCount));
     }
 
+    // @phpstan-ignore-next-line
+    $process = $this->processManager()->drush($this->siteAliasManager()->getSelf(), 'cache:rebuild', []);
+    $process->mustRun();
+
     $this->io()->success("Subtopic content entity references completed");
-    $this->io()->note("Caches will need to be rebuilt for topic content to display");
+
   }
 
   /**
