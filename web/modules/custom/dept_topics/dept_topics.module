@@ -84,8 +84,9 @@ function dept_topics_preprocess_node(array &$variables) {
   $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
 
   if (in_array($variables['node']->bundle(), $target_bundles)) {
-    $top = dept_topics_fetch_parent_node($variables['node']->id(), 20);
-    $parent = dept_topics_fetch_parent_node($variables['node']->id());
+    $topicManager = \Drupal::service('topic.manager');
+
+    $parents = $topicManager->getParentNodes($variables['node']->id());
 
     $variables['topics_subtopics_list'] = [
       '#type' => 'html_tag',
@@ -93,87 +94,16 @@ function dept_topics_preprocess_node(array &$variables) {
       '#value' => t('Topics') . ': ',
     ];
 
-    if ($top->noCache || $parent->noCache) {
-      $variables['topics_subtopics_list']['#cache']['max-age'] = 0;
-    }
-
-
-    if (!empty($top)) {
-      $variables['topics_subtopics_list']['top'] = [
-        '#type' => 'link',
-        '#title' => $top->title,
-        '#url' => URL::fromRoute('entity.node.canonical', ['node' => $top->nid]),
-        '#suffix' => ',&nbsp;'
-      ];
-    }
-
-    // Prevent duplicate terms.
-    if (!empty($parent) && $parent->nid !== $top->nid) {
-      $variables['topics_subtopics_list']['parent'] = [
+    foreach ($parents as $id => $parent) {
+      $variables['topics_subtopics_list'][$id] = [
         '#type' => 'link',
         '#title' => $parent->title,
         '#url' => URL::fromRoute('entity.node.canonical', ['node' => $parent->nid]),
+        '#suffix' => array_key_last($parents) == $id ? '' : ', ',
       ];
     }
 
-    if (empty($top) && empty($parent)) {
-      $variables['show_topics'] = FALSE;
-    }
+    $variables['show_topics'] = !empty($parents);
   }
 
-}
-
-/**
- * Return a parent node for the given depth.
- */
-function dept_topics_fetch_parent_node($nid, $depth = 1) {
-  $dbConn = \Drupal::database();
-  $count = 0;
-  $referer = \Drupal::request()->headers->get('referer');
-
-  do {
-    /** @var stdClass $parent */
-    $parents = $dbConn->query("SELECT n.nid, nfd.title, nfd.type FROM node n
-        LEFT JOIN node_field_data nfd
-        ON nfd.nid = n.nid
-        LEFT JOIN node__field_topic_content ftc
-        ON ftc.entity_id = n.nid
-        WHERE ftc.field_topic_content_target_id = :nid", [':nid' => $nid])->fetchAllAssoc('nid');
-
-    if (!$parents) {
-      return NULL;
-    }
-
-    $parent = current($parents);
-    $parent->noCache = FALSE;
-
-    if (count($parents) > 1 && $referer) {
-      $base_url = Request::createFromGlobals()->getSchemeAndHttpHost();
-      $path = substr($referer, strlen($base_url));
-      $params = Url::fromUri("internal:" . $path)->getRouteParameters();
-
-      if (key($params) === 'node') {
-        $node = \Drupal::entityTypeManager()->getStorage('node')->load($params['node']);
-
-        if ($node) {
-          $parent = new stdClass();
-          $parent->nid = $node->id();
-          $parent->title = $node->label();
-          $parent->type = $node->bundle();
-          $parent->noCache = TRUE;
-        }
-      }
-    }
-
-    if ($parent->type === 'topic') {
-      $depth = $count;
-    }
-    else {
-      $count++;
-    }
-
-    $nid = $parent->nid;
-  } while ($depth > $count);
-
-  return $parent;
 }
