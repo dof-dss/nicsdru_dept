@@ -1,0 +1,11 @@
+uuid: a338e916-d4c8-40cd-8701-8752a9a6eb9e
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.banner_deep
+id: block_content.banner_deep
+target_entity_type_id: block_content
+target_bundle: banner_deep
+default_langcode: site_default
+language_alterable: false

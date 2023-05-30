@@ -1,0 +1,23 @@
+uuid: 84856be7-6a08-4f76-a9a6-9aae42057deb
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.card_contact
+    - field.storage.block_content.field_card_style
+  module:
+    - options
+id: block_content.card_contact.field_card_style
+field_name: field_card_style
+entity_type: block_content
+bundle: card_contact
+label: 'Card style'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: dept
+default_value_callback: ''
+settings: {  }
+field_type: list_string

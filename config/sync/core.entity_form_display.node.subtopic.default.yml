@@ -14,6 +14,8 @@ dependencies:
     - field.field.node.subtopic.field_parent_subtopic
     - field.field.node.subtopic.field_parent_topic
     - field.field.node.subtopic.field_summary
+    - field.field.node.subtopic.field_topic_content
+    - field.field.node.subtopic.layout_builder__layout
     - node.type.subtopic
     - workflows.workflow.nics_editorial_workflow
   module:
@@ -41,7 +43,7 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 9
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -62,26 +64,26 @@ content:
     third_party_settings: {  }
   field_domain_access:
     type: options_buttons
-    weight: 40
+    weight: 22
     region: content
     settings: {  }
     third_party_settings: {  }
   field_domain_all_affiliates:
     type: boolean_checkbox
-    weight: 41
+    weight: 23
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   field_domain_source:
     type: options_select
-    weight: 42
+    weight: 24
     region: content
     settings: {  }
     third_party_settings: {  }
   field_metatags:
     type: metatag_firehose
-    weight: 28
+    weight: 21
     region: content
     settings:
       sidebar: true
@@ -107,14 +109,24 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+  field_topic_content:
+    type: entity_reference_autocomplete
+    weight: 7
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   flag:
-    weight: 10
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 7
+    weight: 8
     region: content
     settings:
       include_locked: true
@@ -133,7 +145,7 @@ content:
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 11
+    weight: 13
     region: content
     settings:
       display_label: true
@@ -150,6 +162,11 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  simple_sitemap:
+    weight: 12
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   status:
     type: boolean_checkbox
     weight: 20
@@ -159,7 +176,7 @@ content:
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 12
+    weight: 14
     region: content
     settings:
       display_label: true
@@ -174,7 +191,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 8
+    weight: 9
     region: content
     settings:
       match_operator: CONTAINS
@@ -204,3 +221,4 @@ hidden:
   field_link: true
   groups: true
   groups_type_department_site: true
+  layout_builder__layout: true

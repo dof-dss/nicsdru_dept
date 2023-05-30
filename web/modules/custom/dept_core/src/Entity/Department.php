@@ -266,47 +266,27 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    *   Return URL with HTTPS or HTTP protocol.
    */
   public function url(string $environment = 'active', bool $secure_protocol = TRUE): string {
-    return ($secure_protocol ? "https://" : "http://") . $this->hostname($environment);
+    $hostname = $this->hostname();
+    // Situational override: if we know we're on a development environment of
+    // PSH where the hostname can vary by git branch name; exceeds what
+    // config_split can accommodate.
+    if (!empty(getenv('PLATFORM_BRANCH') && (getenv('PLATFORM_ENVIRONMENT_TYPE') === 'development'))) {
+      $dept_site = explode('.', $hostname)[0];
+      $hostname = sprintf("%s.%s-%s.%s.platformsh.site",
+        $dept_site,
+        getenv('PLATFORM_ENVIRONMENT'),
+        getenv('PLATFORM_PROJECT'),
+        'uk-1');
+    }
+
+    return ($secure_protocol ? "https://" : "http://") . $hostname;
   }
 
   /**
    * Hostname.
-   *
-   * @param string $environment
-   *   Return hostname for the given environment. Defaults to the active environment.
    */
-  public function hostname(string $environment = "active"): string|null {
-    $active_split = '';
-
-    // Iterate each config split, loading the hostname into an associative
-    // array consisting <environment> => <hostname>.
-    if (empty($this->hostnames)) {
-      /** @var \Drupal\config_split\ConfigSplitManager $split_manager */
-      $split_manager = \Drupal::service('config_split.manager');
-      $split_ids = $split_manager->listAll();
-
-      /** @var \Drupal\config_filter\ConfigFilterStorageFactory $conf_filter */
-      $conf_filter = \Drupal::service('config_filter.storage_factory');
-
-      foreach ($split_ids as $split_id) {
-        /** @var \Drupal\Core\Config\ImmutableConfig $split_config */
-        $split_config = $split_manager->getSplitConfig($split_id);
-
-        $storage = $split_manager->singleExportTarget($split_config);
-
-        /** @var \Drupal\config_filter\Config\FilteredStorageInterface $config_store */
-        $config_store = $conf_filter->getFilteredStorage($storage, ['config.storage']);
-
-        $config = $config_store->read('domain.record.' . $this->id());
-        $this->hostnames[substr($split_id, 26)] = $config['hostname'];
-
-        $active_split = $split_config->get('status') ? substr($split_id, 26) : $active_split;
-      }
-
-      $this->hostnames['active'] = $this->hostnames[$active_split];
-    }
-
-    return array_key_exists($environment, $this->hostnames) ? $this->hostnames[$environment] : '';
+  public function hostname(): string|null {
+    return \Drupal::config('domain.record.' . $this->id())->get('hostname');
   }
 
   /**

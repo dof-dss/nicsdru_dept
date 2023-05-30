@@ -1,0 +1,36 @@
+uuid: 78f4145b-0972-4b26-afe2-78432e6f8504
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_topic_content
+    - node.type.application
+    - node.type.article
+    - node.type.contact
+    - node.type.publication
+    - node.type.subtopic
+id: node.subtopic.field_topic_content
+field_name: field_topic_content
+entity_type: node
+bundle: subtopic
+label: 'Subtopic content'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      application: application
+      article: article
+      contact: contact
+      publication: publication
+      subtopic: subtopic
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: application
+field_type: entity_reference

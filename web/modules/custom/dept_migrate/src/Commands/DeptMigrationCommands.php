@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_migrate\Commands;
 
+use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -9,13 +10,15 @@ use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
+use Drush\SiteAlias\SiteAliasManagerAwareInterface;
 
 /**
  * Drush commands processing Departmental migrations.
  */
-class DeptMigrationCommands extends DrushCommands {
+class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwareInterface {
 
   use StringTranslationTrait;
+  use SiteAliasManagerAwareTrait;
 
   /**
    * The database connection.
@@ -51,6 +54,20 @@ class DeptMigrationCommands extends DrushCommands {
    * @var \Drupal\dept_core\DepartmentManager
    */
   protected $departmentManager;
+
+  /**
+   * List of self referencing Subtopic nodes.
+   *
+   * @var array
+   */
+  private $selfReferencedTopicsCount = [];
+
+  /**
+   * List of missing Subtopic child nodes.
+   *
+   * @var array
+   */
+  private $missingTopicsContentCount = [];
 
   /**
    * Command constructor.
@@ -260,6 +277,307 @@ class DeptMigrationCommands extends DrushCommands {
     }
 
     $this->io()->success("Finished");
+  }
+
+  /**
+   * Insert content field entries for Topic (top level) nodes.
+   *
+   *    * @param string $domain_id
+   *   The domain id to update.
+   *
+   * @command dept:topic-child-content
+   * @aliases tcc
+   */
+  public function createTopicChildContent($domain_id) {
+
+    if (empty($domain_id)) {
+      return;
+    }
+
+    $topic_content_sql = "
+      WITH content_stack_cte (nid, type, title, weight) AS (
+        SELECT
+          n.nid,
+          n.type,
+          n.title,
+          ds.weight
+        FROM draggableviews_structure ds
+        JOIN node n ON n.nid = ds.entity_id
+        WHERE ds.view_name = 'draggable_subtopics'
+        AND ds.view_display = 'panel_pane_1'
+        AND ds.args LIKE '[\":nid\",\":nid\"]'
+        AND n.status = 1
+        UNION
+        SELECT
+          st_n.nid,
+          st_n.type,
+          st_n.title,
+          99 as weight
+        FROM node st_n
+        JOIN field_data_field_parent_topic nfps ON st_n.nid = nfps.entity_id
+        LEFT OUTER JOIN field_data_field_parent_subtopic nfpst ON st_n.nid = nfpst.entity_id
+        WHERE st_n.type = 'subtopic'
+        AND nfps.field_parent_topic_target_id = :nid
+        AND st_n.status = 1
+        AND nfpst.entity_id IS NULL
+        UNION
+        SELECT
+          ar_n.nid,
+          ar_n.type,
+          ar_n.title,
+          99 as weight
+        FROM node ar_n
+        JOIN field_data_field_site_subtopics nfss ON ar_n.nid = nfss.entity_id
+        WHERE ar_n.type = 'article' AND nfss.field_site_subtopics_target_id = :nid
+        AND ar_n.status = 1
+      )
+      SELECT DISTINCT nid, type, title FROM content_stack_cte
+      ORDER BY weight, title";
+
+    $domain_topics_d9 = $this->dbConn->query("
+        SELECT ds.entity_id, nfd.vid FROM node__field_domain_source ds
+        INNER JOIN node_field_data nfd
+        ON ds.entity_id = nfd.nid
+        WHERE ds.bundle = 'topic'
+        AND ds.field_domain_source_target_id = '$domain_id'"
+    )->fetchAllAssoc('entity_id');
+
+    $domain_topics_d7 = $this->lookupManager->lookupByDestinationNodeIds(array_keys($domain_topics_d9));
+
+    foreach ($domain_topics_d7 as $topic_id => $topic) {
+      // Fetch the nid, type and title of D7 topic child content nodes.
+      $topic_ref_nodes_d7 = $this->d7conn->query(
+        $topic_content_sql, [
+        ':nid' => $topic['d7nid']
+      ])->fetchAllKeyed(0, 2);
+      $delta = 0;
+
+      // Loop through each child node, lookup the D9 counterpart node and
+      // insert into the topic content entity references for the topic.
+      foreach ($topic_ref_nodes_d7 as $d7_node_id => $title) {
+        $node = $this->lookupManager->lookupBySourceNodeId([$d7_node_id]);
+
+        $this->dbConn->insert('node__field_topic_content')
+          ->fields([
+            'bundle' => 'Topic',
+            'deleted' => 0,
+            'entity_id' => $topic['nid'],
+            'revision_id' => $topic['vid'],
+            'langcode' => 'en',
+            'delta' => $delta++,
+            'field_topic_content_target_id' => $node[$d7_node_id]['nid'],
+          ])
+          ->execute();
+      }
+    }
+    // @phpstan-ignore-next-line
+    $process = $this->processManager()->drush($this->siteAliasManager()->getSelf(), 'cache:rebuild', []);
+    $process->mustRun();
+
+    $this->io()->success("Topic content entity references completed");
+  }
+
+  /**
+   * Debug D7 child nodes for the given nid.
+   *
+   *    * @param string $nid
+   *   The node id to display child nodes.
+   *    * @param string $version
+   *   The version of the site the nid comes from (d9 or d7).
+   *
+   * @command dept:debug-subtopic-child-content
+   * @aliases dscc
+   */
+  public function displaySubtopicChildContent($nid, $version = 'd9') {
+    if ($version === 'd9') {
+      $d7_nid = $this->lookupManager->lookupByDestinationNodeIds([$nid]);
+      $node_id = $d7_nid[$nid]['d7nid'];
+    }
+    else {
+      $node_id = $nid;
+    }
+    print "Child nodes for $version node " . $nid . " ";
+    print_r($this->fetchSubtopicChildContent($node_id));
+  }
+
+  /**
+   * Insert content field entries for Topic (top level) nodes.
+   *
+   *    * @param string $domain_id
+   *   The domain id to update.
+   *
+   * @command dept:subtopic-child-content
+   * @aliases scc
+   */
+  public function createSubtopicContentReferences($domain_id) {
+    $domain_topics_d9 = $this->dbConn->query("
+    SELECT ds.entity_id FROM node__field_domain_source ds
+    INNER JOIN node_field_data nfd
+    ON ds.entity_id = nfd.nid
+    WHERE ds.bundle = 'topic'
+    AND ds.field_domain_source_target_id = '$domain_id'"
+    )->fetchCol();
+
+    $topic_nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($domain_topics_d9);
+
+    // Loop Topics and get node ids.
+    foreach ($topic_nodes as $topic_node) {
+      $topic_content_references = $topic_node->get('field_topic_content');
+
+      foreach ($topic_content_references as $reference) {
+        // @phpstan-ignore-next-line
+        $topic_nid = $reference->get('entity')->getTargetIdentifier();
+        $topic_data = $this->lookupManager->lookupByDestinationNodeIds([$topic_nid]);
+        $this->processSubtopicChildContent($topic_data[$topic_nid]['d7nid']);
+      }
+    }
+
+    if (count($this->selfReferencedTopicsCount) > 0) {
+      $selfRefList = implode(",", $this->selfReferencedTopicsCount);
+      $this->logger->warning("Self referencing topics: " . $selfRefList);
+      $this->io()->caution("Rubber chickens awarded: " . count($this->selfReferencedTopicsCount) . " 🐔");
+    }
+
+    if (count($this->missingTopicsContentCount) > 0) {
+      $missingContentList = implode(",", $this->missingTopicsContentCount);
+      $this->logger->warning("Missing subtopic content nodes: " . $missingContentList);
+      $this->io()->caution("Missing topic content nodes: " . count($this->missingTopicsContentCount));
+    }
+
+    // @phpstan-ignore-next-line
+    $process = $this->processManager()->drush($this->siteAliasManager()->getSelf(), 'cache:rebuild', []);
+    $process->mustRun();
+
+    $this->io()->success("Subtopic content entity references completed");
+
+  }
+
+  /**
+   * Fetch subtopic child nodes and add as a reference to the parent.
+   *
+   * @param int $nid
+   *   Drupal 7 parent node ID.
+   */
+  private function processSubtopicChildContent($nid) {
+    $child_nodes = $this->fetchSubtopicChildContent($nid);
+    // Fetch the D9/D7 data for the parent node.
+    $parent_data = $this->lookupManager->lookupbySourceNodeId([$nid]);
+    $parent_node = $this->entityTypeManager->getStorage('node')->load($parent_data[$nid]['nid']);
+
+    foreach ($child_nodes as $child_node) {
+      $child_data = $this->lookupManager->lookupBySourceNodeId([$child_node->nid]);
+
+      // If the child node is a reference to the parent, ignore it.
+      if ($child_node->nid == $nid) {
+        $this->selfReferencedTopicsCount[] = $nid;
+        continue;
+      }
+
+      // If we don't have a D9 nid it might be that the node in question hasn't
+      // been migrated so skip adding it.
+      if (!array_key_exists('nid', $child_data[$child_node->nid]) || is_null($child_data[$child_node->nid]['nid'])) {
+        $this->missingTopicsContentCount[] = $child_node->nid;
+      }
+      else {
+        $this->createSubtopicContentRefLink($parent_node, $child_data[$child_node->nid]['nid']);
+      }
+
+      // If the child node is a subtopic then process it for child content.
+      if ($child_node->type === 'subtopic') {
+        $this->processSubtopicChildContent($child_node->nid);
+      }
+    }
+  }
+
+  /**
+   * Fetch the child nodes of the given Drupal 7 subtopic.
+   *
+   * @param int $nid
+   *   Subtopic node id.
+   * @return array
+   *   Array elements containing node id, type and title.
+   */
+  private function fetchSubtopicChildContent($nid) {
+    // Select nodes from the draggable view, with associated parent term or
+    // subtopic term.
+    $subcontent_sql = "WITH content_stack_cte (nid, type, title, weight) AS (
+    SELECT
+        n.nid,
+        n.type,
+        n.title,
+        ds.weight
+    FROM draggableviews_structure ds
+    JOIN node n ON n.nid = ds.entity_id
+    WHERE ds.view_name = 'draggable_subtopics'
+      AND ds.view_display = 'panel_pane_2'
+      AND ds.args = :nidargs
+      AND n.status = 1
+     UNION
+         SELECT
+        st_n.nid,
+        st_n.type,
+        st_n.title,
+        99 as weight
+    FROM node st_n
+    JOIN field_data_field_parent_topic nfps ON st_n.nid = nfps.entity_id
+    LEFT OUTER JOIN field_data_field_parent_subtopic nfpst ON st_n.nid = nfpst.entity_id
+    WHERE st_n.type = 'subtopic'
+    AND nfps.field_parent_topic_target_id = :nid
+    AND st_n.status = 1
+    AND nfpst.entity_id IS NULL
+    UNION
+    SELECT
+        ar_n.nid,
+        ar_n.type,
+        ar_n.title,
+        99 as weight
+    FROM node ar_n
+    JOIN field_data_field_site_subtopics nfss ON ar_n.nid = nfss.entity_id
+    WHERE ar_n.type = 'article' AND nfss.field_site_subtopics_target_id = :nid
+      AND ar_n.status = 1
+
+)
+SELECT DISTINCT nid, type, title FROM content_stack_cte
+ORDER BY weight, title";
+
+    $nodes = $this->d7conn->query($subcontent_sql, [
+      ':nidargs' => '["' . $nid . '","' . $nid . '"]',
+      ':nid' => $nid
+    ])->fetchAll();
+
+    return $nodes;
+  }
+
+  /**
+   * Creates an entity reference link in the topic contents field
+   *
+   * @param \Drupal\node\Entity\Node $parent_node
+   *   Node to which we add the entity reference.
+   * @param int $child_nid
+   *   Entity reference node id.
+   */
+  private function createSubtopicContentRefLink($parent_node, $child_nid) {
+    // Fetch the max delta number, so we can add our new entity reference
+    // to the bottom of the list.
+    $delta = $this->dbConn->query("SELECT MAX(delta) FROM node__field_topic_content WHERE entity_id = :parent_nid", [
+      ':parent_nid' => $parent_node->id()
+    ])->fetchField(0);
+
+    // If we don't have a delta, set to -1 as we will increment in the insert
+    // call and the delta is zero indexed.
+    $delta = $delta ?? -1;
+
+    $this->dbConn->insert('node__field_topic_content')
+      ->fields([
+        'bundle' => $parent_node->bundle(),
+        'deleted' => 0,
+        'entity_id' => $parent_node->id(),
+        'revision_id' => $parent_node->getRevisionId(),
+        'langcode' => 'en',
+        'delta' => ++$delta,
+        'field_topic_content_target_id' => $child_nid,
+      ])
+      ->execute();
   }
 
 }

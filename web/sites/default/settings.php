@@ -77,6 +77,7 @@ if (!empty(getenv('PLATFORM_BRANCH'))) {
   // Environment specific settings and services.
   switch (getenv('PLATFORM_BRANCH')) {
     case 'main':
+    case 'staging':
       $config['config_split.config_split.production']['status'] = TRUE;
       break;
 
@@ -91,11 +92,6 @@ $settings['simple_environment_indicator'] = sprintf('%s %s', $env_colour, $env_n
 // Set classic migrate mode to skip revisions on import.
 // https://www.drupal.org/node/3105503.
 $settings['migrate_node_migrate_type_classic'] = TRUE;
-
-// Domain hostname negotiation and overrides.
-if (file_exists($app_root . '/' . $site_path . '/settings.domain.php')) {
-  include $app_root . '/' . $site_path . '/settings.domain.php';
-}
 
 // Local settings. These come last so that they can override anything.
 if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {

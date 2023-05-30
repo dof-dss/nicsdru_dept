@@ -6,111 +6,71 @@
  * of topics, subtopics and related content.
  */
 
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Link;
-use Drupal\dept_core\Department;
+use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 
 /**
- * Implements hook_preprocess_node().
+ * Implements hook_moderation_sidebar_alter().
  */
-function dept_topics_preprocess_node(array &$variables) {
-  $node = &$variables['node'];
-  $view_mode = $variables['view_mode'];
+function dept_topics_moderation_sidebar_alter(&$build, &$context) {
 
-  if (!$node instanceof NodeInterface) {
+  if ($context instanceof NodeInterface && $context->bundle() === "topic") {
+    $bundle_fields = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions('node', 'topic');
+    $field_definition = $bundle_fields['field_topic_content'];
+    $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
+
+    foreach ($target_bundles as $bundle => $label) {
+      $build['actions']['secondary']['add_' . $bundle] = [
+        '#title' => 'Add ' . $label,
+        '#type' => 'link',
+        '#url' => Url::fromRoute('node.add', ['node_type' => $bundle], ['query' => ['topic' => $context->id()]]),
+        '#attributes' => ['class' => ['moderation-sidebar-link', 'button']],
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function dept_topics_cron() {
+  $dbConn = \Drupal::database();
+
+  // Fetch the parent node ID's of referenced topic content nodes that no
+  // longer exist.
+  $nids = $dbConn->query("
+    SELECT nftc.entity_id FROM node__field_topic_content nftc
+    LEFT JOIN node n
+    ON nftc.field_topic_content_target_id = n.nid
+    WHERE n.nid IS NULL;
+  ")->fetchCol(0);
+
+  if (empty($nids)) {
     return;
   }
 
-  if ($node->bundle() === 'topic' && $view_mode === 'full') {
+  // Remove duplicate parent nids and create a list of node cache tags.
+  $cids = array_map(function ($nid) {
+    return 'values:node:' . $nid;
+  }, array_unique($nids));
+  // Remove any topic content reference field entries that point to deleted
+  // nodes.
+  $dbConn->query("
+    DELETE nftc FROM node__field_topic_content nftc
+    LEFT JOIN node n
+    ON nftc.field_topic_content_target_id = n.nid
+    WHERE n.nid IS NULL;
+  ")->execute();
 
-    $subtopics_to_display = \Drupal::service('dept_topics.topics')
-      ->getSubtopicsForTopic($node);
+  $dbConn->query("
+    DELETE nrftc FROM node_revision__field_topic_content nrftc
+    LEFT JOIN node n
+    ON nrftc.field_topic_content_target_id = n.nid
+    WHERE n.nid IS NULL;
+  ")->execute();
 
-    if (!empty($subtopics_to_display)) {
-      foreach ($subtopics_to_display as $subtopic_id => $subtopic) {
-        // Service to pull in subtopic content instead of the fixed code here.
-        $content_links = \Drupal::service('dept_topics.subtopics')
-          ->getSubtopicContent($subtopic_id);
-
-        // Prefix all included content with 'node:' to form suitable cache tags.
-        $cache_tags = preg_filter('/^/', 'node:', array_keys($content_links));
-        // Add the content stack view tag so that when draggableviews expires
-        // the view tags relating to any changes, that we regenerate any
-        // html relating to this render element as required.
-        $cache_tags[] = 'config:views.view.content_stacks';
-        // Add cache tag for the related subtopic node id.
-        $cache_tags[] = 'node:' . $subtopic_id;
-
-        // Add render array elements we can call from the node-topic--full template.
-        $variables['content']['subtopics_list'][] = [
-          '#theme' => 'subtopic_content_list',
-          '#title' => $subtopic['title'],
-          '#title_link' => Link::createFromRoute(
-            $subtopic['title'],
-            'entity.node.canonical',
-            ['node' => $subtopic_id],
-          ),
-          '#content_summary' => [
-            '#markup' => $subtopic['summary'],
-          ],
-          '#content_links' => $content_links,
-          '#read_more_link' => Link::createFromRoute(
-            t('Read more'),
-            'entity.node.canonical',
-            ['node' => $subtopic_id],
-          ),
-          '#cache' => [
-            'keys' => ['subtopic_stack:' . $subtopic_id],
-            'tags' => $cache_tags,
-          ]
-        ];
-      }
-    }
-  }
-
-  if ($node->bundle() === 'subtopic' && $view_mode === 'full') {
-    $subtopics_content = \Drupal::service('dept_topics.subtopics')
-      ->getSubtopicContent($node->id());
-
-    $variables['content'][] = [
-      '#theme' => 'item_list',
-      '#list_type' => 'ul',
-      '#items' => $subtopics_content,
-    ];
-  }
-}
-
-/**
- * Implements hook_theme().
- */
-function dept_topics_theme($existing, $type, $theme, $path) {
-  return [
-    'subtopic_content_list' => [
-      'variables' => [
-        'title' => NULL,
-        'title_link' => NULL,
-        'content_summary' => NULL,
-        'content_links' => NULL,
-        'read_more_link' => NULL,
-      ],
-    ],
-  ];
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function dept_topics_node_insert(NodeInterface $node) {
-  if ($node->hasField('field_site_subtopics')) {
-    $subtopic_ids = array_column($node->get('field_site_subtopics')
-      ->getValue(), 'target_id');
-
-    if ($node->isPublished() && !empty($subtopic_ids)) {
-      $subtopic_cache_tags = preg_filter('/^/', 'subtopic_stack:', $subtopic_ids);
-      // Published nodes with subtopic values should expire the cache
-      // tags for subtopic content stack render elements.
-      Cache::invalidateTags($subtopic_cache_tags);
-    }
-  }
+  // Check the caching of the entity info to update the topic content reference
+  // field on the node edit form.
+  $cache_entity = \Drupal::service('cache.entity');
+  $cache_entity->deleteMultiple($cids);
 }

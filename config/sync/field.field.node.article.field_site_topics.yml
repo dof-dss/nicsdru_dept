@@ -11,7 +11,7 @@ entity_type: node
 bundle: article
 label: 'Site topics'
 description: 'Choose relevant site topic(s) for this article. Hold down Ctrl to choose multiple site topics.'
-required: true
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
