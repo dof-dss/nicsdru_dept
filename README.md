@@ -58,7 +58,7 @@ The 'drupal7db' database may be imported into your local Lando site as follows:
 
 See `.lando.yml` and the `proxy` configuration section for local hostnames to represent the different sites.
 
-* For administrators, we recommend using `https://dept.lndo.site` for general site administration.
+* For administrators, we recommend using `https://nigov.lndo.site` for general site administration.
 * All other authenticated users should sign in to the site that they are managing content for, eg: `https://finance.lndo.site`
 
 When running locally it's important that the environment settings are set to local, this will ensure that the 'local' config split will import and this includes all of the recommended
