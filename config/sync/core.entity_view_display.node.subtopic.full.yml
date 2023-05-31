@@ -47,7 +47,7 @@ third_party_settings:
                 label: hidden
                 settings: {  }
                 third_party_settings: {  }
-            weight: 0
+            weight: 2
             additional: {  }
           6f98c850-ba96-41de-83f3-093bcc56cf8a:
             uuid: 6f98c850-ba96-41de-83f3-093bcc56cf8a
@@ -62,7 +62,7 @@ third_party_settings:
                 label: hidden
                 settings: {  }
                 third_party_settings: {  }
-            weight: 1
+            weight: 3
             additional: {  }
           6a2294e2-f89d-4c6c-8e0a-d01c0f93cf88:
             uuid: 6a2294e2-f89d-4c6c-8e0a-d01c0f93cf88
@@ -78,7 +78,26 @@ third_party_settings:
                 settings:
                   link: true
                 third_party_settings: {  }
-            weight: 2
+            weight: 4
+            additional: {  }
+          118d94a8-a8e4-4182-83b3-66cf00ceac2c:
+            uuid: 118d94a8-a8e4-4182-83b3-66cf00ceac2c
+            region: content
+            configuration:
+              id: 'field_block:node:subtopic:field_banner_image'
+              label: 'Thin banner image'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: hidden
+                settings:
+                  view_mode: banner_thin
+                third_party_settings: {  }
+            weight: 1
             additional: {  }
         third_party_settings: {  }
   layout_builder_restrictions:
