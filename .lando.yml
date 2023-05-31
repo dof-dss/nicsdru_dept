@@ -20,7 +20,6 @@ proxy:
   # Proxy patterns here are matched on naming structure found under
   # config/sync/domain.record.group_*.yml + overridden in web/sites/default/settings.domain.php
   appserver:
-    - dept.lndo.site
     - nigov.lndo.site
     - communities-ni.lndo.site
     - daera-ni.lndo.site
