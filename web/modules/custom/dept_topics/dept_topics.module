@@ -74,3 +74,36 @@ function dept_topics_cron() {
   $cache_entity = \Drupal::service('cache.entity');
   $cache_entity->deleteMultiple($cids);
 }
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function dept_topics_preprocess_node(array &$variables) {
+  $bundle_fields = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions('node', 'topic');
+  $field_definition = $bundle_fields['field_topic_content'];
+  $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
+
+  if (in_array($variables['node']->bundle(), $target_bundles)) {
+    $topicManager = \Drupal::service('topic.manager');
+
+    $parents = $topicManager->getParentNodes($variables['node']->id());
+
+    $variables['topics_subtopics_list'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'span',
+      '#value' => t('Topics') . ': ',
+    ];
+
+    foreach ($parents as $id => $parent) {
+      $variables['topics_subtopics_list'][$id] = [
+        '#type' => 'link',
+        '#title' => $parent->title,
+        '#url' => URL::fromRoute('entity.node.canonical', ['node' => $parent->nid]),
+        '#suffix' => array_key_last($parents) == $id ? '' : ', ',
+      ];
+    }
+
+    $variables['show_topics'] = !empty($parents);
+  }
+
+}
