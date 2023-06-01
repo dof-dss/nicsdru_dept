@@ -7,12 +7,12 @@ dependencies:
 id: infogrames
 label: Infogrames
 type: 'canonical_entities:node'
-pattern: 'indicators/[node:field_indicators]/infograms/[node:field_chart_type]'
+pattern: 'indicators/[node:field_indicators]/infograms/[node:field_chart_taxonomy:entity]'
 selection_criteria:
-  8d2fb9e2-906d-4162-8bab-32c6a1940fd3:
+  7af02ce0-9ce4-4b7a-b2b7-bb4a5eb7026f:
     id: 'entity_bundle:node'
     negate: false
-    uuid: 8d2fb9e2-906d-4162-8bab-32c6a1940fd3
+    uuid: 7af02ce0-9ce4-4b7a-b2b7-bb4a5eb7026f
     context_mapping:
       node: node
     bundles:
