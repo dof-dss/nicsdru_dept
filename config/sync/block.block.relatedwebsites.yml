@@ -2,10 +2,7 @@ uuid: c684d611-3814-4c11-8d1c-476cf90bfcc0
 langcode: en
 status: true
 dependencies:
-  content:
-    - 'block_content:basic:62f5a8bd-cbc7-4b45-b7d2-03a4dee53623'
   module:
-    - block_content
     - block_visibility_groups
   theme:
     - nicsdru_dept_theme
