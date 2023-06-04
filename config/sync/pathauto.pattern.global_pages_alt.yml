@@ -1,0 +1,22 @@
+uuid: c683815f-0396-4c34-babb-56fd0ee8bd7a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: global_pages_alt
+label: 'Global pages - alt'
+type: 'canonical_entities:node'
+pattern: '[node:title]-[current-domain:machine-name]'
+selection_criteria:
+  6ff54907-6471-48b7-817c-036fd85375d0:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 6ff54907-6471-48b7-817c-036fd85375d0
+    context_mapping:
+      node: node
+    bundles:
+      global_page: global_page
+selection_logic: and
+weight: -5
+relationships: {  }

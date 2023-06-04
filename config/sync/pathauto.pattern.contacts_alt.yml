@@ -1,0 +1,22 @@
+uuid: e17ae47f-169a-45b4-8be1-1860e020dfec
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: contacts_alt
+label: 'Contacts -alt'
+type: 'canonical_entities:node'
+pattern: 'contacts/[node:title]-[current-domain:machine-name]'
+selection_criteria:
+  c8d2b671-f3cb-4a95-8fc7-7fcfa5e80c9e:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: c8d2b671-f3cb-4a95-8fc7-7fcfa5e80c9e
+    context_mapping:
+      node: node
+    bundles:
+      contact: contact
+selection_logic: and
+weight: -5
+relationships: {  }

@@ -1,0 +1,22 @@
+uuid: 81f79ef2-801b-4f8d-af4d-e9eb06482357
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: actions_alt
+label: 'Actions - alt'
+type: 'canonical_entities:node'
+pattern: 'actions/[node:title]-[current-domain:machine-name]'
+selection_criteria:
+  9165cad7-e506-4071-97bb-664b64759792:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 9165cad7-e506-4071-97bb-664b64759792
+    context_mapping:
+      node: node
+    bundles:
+      actions: actions
+selection_logic: and
+weight: -5
+relationships: {  }
