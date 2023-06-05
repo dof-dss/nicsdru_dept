@@ -75,25 +75,6 @@ function dept_publications_validate_publication(&$form, FormStateInterface $form
       $form_state->setErrorByName('field_publication_secure_files', t('You must provide a secure attachment'));
     }
   }
-
-  // Validate that external publications point to a departmental domain.
-  $department_manager = \Drupal::service('department.manager');
-  $departments = $department_manager->getAllDepartments();
-
-  // Build a list of allowed urls.
-  $allowed_domains = [];
-  foreach ($departments as $department) {
-    $allowed_domains[] = $department->hostname();
-  }
-
-  if (!empty($values['field_external_publication'][0]["uri"])) {
-    $regex = '/https?:\/\/(?:www.)?(' . rtrim(implode('|', $allowed_domains), '|') . ')\/publications\/.+/m';
-
-    if (preg_match($regex, $values['field_external_publication'][0]['uri']) !== 1) {
-      $form_state->setErrorByName('field_external_publication', t('External publications links can only be to departmental websites e.g http://www.health-ni.gov.uk/publications/alternative-languages-and-accessible-formats'));
-    }
-  }
-
 }
 
 /**
