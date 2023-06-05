@@ -79,13 +79,9 @@ function dept_topics_cron() {
  * Implements hook_preprocess_node().
  */
 function dept_topics_preprocess_node(array &$variables) {
-  $bundle_fields = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions('node', 'topic');
-  $field_definition = $bundle_fields['field_topic_content'];
-  $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
+  $topicManager = \Drupal::service('topic.manager');
 
-  if (in_array($variables['node']->bundle(), $target_bundles)) {
-    $topicManager = \Drupal::service('topic.manager');
-
+  if (in_array($variables['node']->bundle(), $topicManager->getTopicChildNodeTypes())) {
     $parents = $topicManager->getParentNodes($variables['node']->id());
 
     $variables['topics_subtopics_list'] = [
@@ -113,12 +109,10 @@ function dept_topics_preprocess_node(array &$variables) {
  */
 function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
 
-  $bundle_fields = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions('node', 'topic');
-  $field_definition = $bundle_fields['field_topic_content'];
-  $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
+  $topicManager = \Drupal::service('topic.manager');
 
   $node = \Drupal::routeMatch()->getParameter('node');
-  if ($node instanceof NodeInterface && in_array($node->bundle(), $target_bundles)) {
+  if ($node instanceof NodeInterface && in_array($node->bundle(), $topicManager->getTopicChildNodeTypes())) {
     $topicManager = \Drupal::service('topic.manager');
 
     $parents = $topicManager->getParentNodes($node->id());
