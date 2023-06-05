@@ -107,3 +107,45 @@ function dept_topics_preprocess_node(array &$variables) {
   }
 
 }
+
+/**
+ * Implements hook_metatags_attachments_alter().
+ */
+function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
+
+  $bundle_fields = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions('node', 'topic');
+  $field_definition = $bundle_fields['field_topic_content'];
+  $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
+
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof NodeInterface && in_array($node->bundle(), $target_bundles)) {
+    $topicManager = \Drupal::service('topic.manager');
+
+    $parents = $topicManager->getParentNodes($node->id());
+
+    if ($parents) {
+
+      foreach ($metatag_attachments['#attached']['html_head'] as $index => $tag) {
+        if ($tag[1] == 'article_tag_0' || $tag[1] == 'article_tag_1') {
+          unset($metatag_attachments['#attached']['html_head'][$index]);
+        }
+      }
+
+      $index = 0;
+      foreach ($parents as $parent) {
+        $metatag_attachments['#attached']['html_head'][] =
+          [
+            [
+              '#tag' => 'meta',
+              '#attributes' => [
+                'property' => "article:tag",
+                'content' => $parent->title
+              ]
+            ],
+            'article_tag_' . $index,
+          ];
+        $index++;
+      }
+    }
+  }
+}
