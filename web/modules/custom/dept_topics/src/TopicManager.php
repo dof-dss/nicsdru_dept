@@ -7,7 +7,7 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
- * Defines a service provider for the Departmental sites: topics module.
+ * Provides methods for managing Sub/Topic referenced (child) content.
  */
 class TopicManager {
 
@@ -106,7 +106,7 @@ class TopicManager {
     if (empty($this->targetBundles)) {
       $bundle_fields = $this->entityFieldManager->getFieldDefinitions('node', 'topic');
       $field_definition = $bundle_fields['field_topic_content'];
-      $this->target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
+      $this->targetBundles = $field_definition->getSetting('handler_settings')['target_bundles'];
     }
 
     return $this->targetBundles;
