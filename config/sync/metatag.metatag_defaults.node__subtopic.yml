@@ -7,7 +7,6 @@ label: 'Content: Subtopic'
 tags:
   article_modified_time: '[node:changed:custom:c]'
   article_published_time: '[node:created:custom:c]'
-  article_tag: '[node:field_parent_topic],[node:field_parent_subtopic]'
   canonical_url: '[current-page:url:absolute]'
   description: '[node:field_summary]'
   og_description: '[node:field_summary]'

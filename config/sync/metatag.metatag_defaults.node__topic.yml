@@ -7,7 +7,6 @@ label: 'Content: Topic'
 tags:
   article_modified_time: '[node:changed:custom:c]'
   article_published_time: '[node:created:custom:c]'
-  article_tag: '[node:field_site_topics],[node:field_site_subtopics]'
   canonical_url: '[current-page:url:absolute]'
   description: '[node:field_summary]'
   og_description: '[node:field_summary]'
