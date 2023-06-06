@@ -68,25 +68,6 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  field_global_topics:
-    - plugin: sub_process
-      source: field_global_topics
-      process:
-        target_id: tid
-  field_site_subtopics:
-    - plugin: sub_process
-      source: field_site_subtopics
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
-  field_site_topics:
-    - plugin: sub_process
-      source: field_site_topics
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
   status: status
   moderation_state:
     plugin: static_map
@@ -120,4 +101,3 @@ migration_dependencies:
     - users
     - node_subtopic
     - node_topic
-    - d7_taxonomy_term_global_topics
