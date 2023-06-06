@@ -8,12 +8,14 @@ dependencies:
     - field.field.node.application.field_domain_access
     - field.field.node.application.field_domain_all_affiliates
     - field.field.node.application.field_domain_source
+    - field.field.node.application.field_global_topics
     - field.field.node.application.field_link
     - field.field.node.application.field_metatags
     - field.field.node.application.field_summary
     - node.type.application
     - workflows.workflow.nics_editorial_workflow
   module:
+    - chosen_field
     - content_moderation
     - link
     - metatag
@@ -38,6 +40,12 @@ content:
   created:
     type: datetime_timestamp
     weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_global_topics:
+    type: chosen_select
+    weight: 1
     region: content
     settings: {  }
     third_party_settings: {  }

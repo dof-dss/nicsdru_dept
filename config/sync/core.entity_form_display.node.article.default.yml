@@ -7,11 +7,13 @@ dependencies:
     - field.field.node.article.field_domain_access
     - field.field.node.article.field_domain_all_affiliates
     - field.field.node.article.field_domain_source
+    - field.field.node.application.field_global_topics
     - field.field.node.article.field_metatags
     - field.field.node.article.field_summary
     - node.type.article
     - workflows.workflow.nics_editorial_workflow
   module:
+    - chosen_field
     - content_moderation
     - metatag
     - path
@@ -66,6 +68,12 @@ content:
     settings:
       sidebar: true
       use_details: true
+    third_party_settings: {  }
+  field_global_topics:
+    type: chosen_select
+    weight: 1
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_summary:
     type: text_textarea
