@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.contact.field_domain_access
     - field.field.node.contact.field_domain_all_affiliates
     - field.field.node.contact.field_domain_source
-    - field.field.node.application.field_global_topics
     - field.field.node.contact.field_map_location
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
@@ -62,12 +61,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_global_topics:
-    type: chosen_select
-    weight: 1
-    region: content
-    settings: { }
-    third_party_settings: { }
   field_map_location:
     type: geolocation_googlegeocoder
     weight: 15
