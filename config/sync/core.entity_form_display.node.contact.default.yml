@@ -10,11 +10,8 @@ dependencies:
     - field.field.node.contact.field_map_location
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
-    - field.field.node.contact.field_site_subtopics
-    - field.field.node.contact.field_site_topics
     - node.type.contact
     - workflows.workflow.nics_editorial_workflow
-    - filter.format.plain_text
   module:
     - chosen_field
     - content_moderation
@@ -382,18 +379,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_site_subtopics:
-    type: chosen_select
-    weight: 2
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  field_site_topics:
-    type: chosen_select
-    weight: 1
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   flag:
     weight: 8
     region: content
@@ -434,6 +419,11 @@ content:
   publish_state:
     type: options_select
     weight: 27
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
