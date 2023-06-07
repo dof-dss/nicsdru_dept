@@ -3,10 +3,11 @@
 namespace Drupal\dept_topics;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
- * Defines a service provider for the Departmental sites: topics module.
+ * Provides methods for managing Sub/Topic referenced (child) content.
  */
 class TopicManager {
 
@@ -16,6 +17,13 @@ class TopicManager {
    * @var array
    */
   protected $parents = [];
+
+  /**
+   * Array of target bundes.
+   *
+   * @var array
+   */
+  protected $targetBundles = [];
 
   /**
    * The entity type manager.
@@ -32,19 +40,31 @@ class TopicManager {
   protected $dbConn;
 
   /**
+   * The entity field manager.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   */
+  protected $entityFieldManager;
+
+  /**
    * Constructs a TopicManager object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The Entity Type Manager service.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection.
+   * @param \Drupal\Core\Entity\EntityFieldManager $entity_field_manager
+   *   The Entity Field Manager service.
+   *
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
-    Connection $connection
+    Connection $connection,
+    EntityFieldManagerInterface $entity_field_manager
     ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->dbConn = $connection;
+    $this->entityFieldManager = $entity_field_manager;
   }
 
   /**
@@ -74,6 +94,22 @@ class TopicManager {
     }
 
     return $this->parents;
+  }
+
+  /**
+   * Returns a list of bundles that can be referenced from a topic or subtopic
+   *
+   * @return array|mixed
+   *   Array of bundle ID's.
+   */
+  public function getTopicChildNodeTypes() {
+    if (empty($this->targetBundles)) {
+      $bundle_fields = $this->entityFieldManager->getFieldDefinitions('node', 'topic');
+      $field_definition = $bundle_fields['field_topic_content'];
+      $this->targetBundles = $field_definition->getSetting('handler_settings')['target_bundles'];
+    }
+
+    return $this->targetBundles;
   }
 
 }

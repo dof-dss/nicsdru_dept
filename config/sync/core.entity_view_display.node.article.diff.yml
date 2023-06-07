@@ -10,8 +10,6 @@ dependencies:
     - field.field.node.article.field_domain_source
     - field.field.node.article.field_global_topics
     - field.field.node.article.field_metatags
-    - field.field.node.article.field_site_subtopics
-    - field.field.node.article.field_site_topics
     - field.field.node.article.field_summary
     - node.type.article
   module:
@@ -64,24 +62,8 @@ content:
     label: inline
     settings:
       link: true
-    third_party_settings: {  }
+    third_party_settings: { }
     weight: 5
-    region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 7
-    region: content
-  field_site_topics:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 6
     region: content
   field_summary:
     type: text_default

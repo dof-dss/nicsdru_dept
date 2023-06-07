@@ -79,13 +79,9 @@ function dept_topics_cron() {
  * Implements hook_preprocess_node().
  */
 function dept_topics_preprocess_node(array &$variables) {
-  $bundle_fields = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions('node', 'topic');
-  $field_definition = $bundle_fields['field_topic_content'];
-  $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
+  $topicManager = \Drupal::service('topic.manager');
 
-  if (in_array($variables['node']->bundle(), $target_bundles)) {
-    $topicManager = \Drupal::service('topic.manager');
-
+  if (in_array($variables['node']->bundle(), $topicManager->getTopicChildNodeTypes())) {
     $parents = $topicManager->getParentNodes($variables['node']->id());
 
     $variables['topics_subtopics_list'] = [
@@ -106,4 +102,45 @@ function dept_topics_preprocess_node(array &$variables) {
     $variables['show_topics'] = !empty($parents);
   }
 
+}
+
+/**
+ * Implements hook_metatags_attachments_alter().
+ */
+function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
+  $topicManager = \Drupal::service('topic.manager');
+  $node = \Drupal::routeMatch()->getParameter('node');
+
+  if ($node instanceof NodeInterface && in_array($node->bundle(), $topicManager->getTopicChildNodeTypes())) {
+    $topicManager = \Drupal::service('topic.manager');
+    $parents = $topicManager->getParentNodes($node->id());
+    $tag_index = -1;
+
+    if ($parents) {
+      foreach ($metatag_attachments['#attached']['html_head'] as $index => $tag) {
+        preg_match_all('/article_tag_(\d)/m', $tag[1], $matches, PREG_SET_ORDER, 0);
+
+        if ($matches) {
+          $tag_index = $matches[0][1];
+        }
+      }
+
+      // Create a new article tag for each parent node.
+      $tag_index++;
+      foreach ($parents as $parent) {
+        $metatag_attachments['#attached']['html_head'][] =
+          [
+            [
+              '#tag' => 'meta',
+              '#attributes' => [
+                'property' => "article:tag",
+                'content' => $parent->title
+              ]
+            ],
+            'article_tag_' . $tag_index,
+          ];
+        $tag_index++;
+      }
+    }
+  }
 }

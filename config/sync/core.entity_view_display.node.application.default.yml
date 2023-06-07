@@ -11,8 +11,6 @@ dependencies:
     - field.field.node.application.field_global_topics
     - field.field.node.application.field_link
     - field.field.node.application.field_metatags
-    - field.field.node.application.field_site_subtopics
-    - field.field.node.application.field_site_topics
     - field.field.node.application.field_summary
     - node.type.application
   module:
@@ -65,22 +63,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 7
-    region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  field_site_topics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 1
     region: content
   field_summary:
     type: text_default

@@ -67,20 +67,6 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  field_parent_subtopic:
-    - plugin: sub_process
-      source: field_parent_subtopic
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
-  field_parent_topic:
-    - plugin: sub_process
-      source: field_parent_topic
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
   field_summary: field_summary
   field_summary/0/format:
     - plugin: static_map

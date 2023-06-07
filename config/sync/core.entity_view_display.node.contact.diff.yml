@@ -5,16 +5,17 @@ dependencies:
   config:
     - core.entity_view_mode.node.diff
     - field.field.node.contact.body
+    - field.field.node.contact.field_domain_access
+    - field.field.node.contact.field_domain_all_affiliates
+    - field.field.node.contact.field_domain_source
     - field.field.node.contact.field_map_location
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
-    - field.field.node.contact.field_site_subtopics
-    - field.field.node.contact.field_site_topics
     - filter.format.plain_text
     - node.type.contact
   module:
     - field_group
-    - geolocation_google_maps
+    - geolocation
     - layout_builder
     - text
     - user
@@ -366,22 +367,6 @@ content:
       data_provider_settings: {  }
     third_party_settings: {  }
     weight: 1
-    region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 11
-    region: content
-  field_site_topics:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 10
     region: content
 hidden:
   content_moderation_control: true
