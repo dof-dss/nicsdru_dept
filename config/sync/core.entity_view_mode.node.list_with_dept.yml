@@ -1,0 +1,10 @@
+uuid: 2606a5df-49ec-47b2-a5f7-c6673cccd521
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.list_with_dept
+label: 'List with dept'
+targetEntityType: node
+cache: true
