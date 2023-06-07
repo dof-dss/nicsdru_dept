@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.list_with_dept
     - core.entity_view_mode.node.list_with_publish_date
     - field.storage.node.field_domain_source
     - field.storage.node.field_published_date
@@ -285,7 +286,7 @@ display:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: list_with_publish_date
+          view_mode: list_with_dept
       query:
         type: views_query
         options:
@@ -505,6 +506,9 @@ display:
         options:
           offset: 0
           items_per_page: 7
+      access:
+        type: none
+        options: {  }
       filters:
         status:
           id: status
@@ -577,19 +581,21 @@ display:
         groups:
           1: AND
       style:
-        type: default
+        type: html_list
         options:
-          grouping: {  }
           row_class: ''
           default_row_class: false
+          uses_fields: false
+          type: ul
+          wrapper_class: ''
+          class: list--hyphen-bullet
       row:
-        type: fields
+        type: 'entity:node'
         options:
-          default_field_elements: false
-          inline: {  }
-          separator: ''
-          hide_empty: false
+          relationship: none
+          view_mode: list_with_dept
       defaults:
+        access: false
         title: false
         pager: false
         style: false
@@ -605,7 +611,6 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - 'user.node_grants:view'
-        - user.permissions
       tags:
         - 'config:field.storage.node.field_domain_source'
   featured_news:
