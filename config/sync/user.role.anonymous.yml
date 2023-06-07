@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - domain
     - eu_cookie_compliance
     - media
     - search_api_autocomplete
@@ -19,6 +20,7 @@ permissions:
   - 'display eu cookie compliance popup'
   - 'use search_api_autocomplete for search'
   - use_search_api_live_results
+  - 'view domain list'
   - 'view field_external_publication'
   - 'view files'
   - 'view media'
