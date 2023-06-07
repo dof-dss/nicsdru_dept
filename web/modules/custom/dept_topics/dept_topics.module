@@ -114,17 +114,19 @@ function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
   if ($node instanceof NodeInterface && in_array($node->bundle(), $topicManager->getTopicChildNodeTypes())) {
     $topicManager = \Drupal::service('topic.manager');
     $parents = $topicManager->getParentNodes($node->id());
+    $tag_index = -1;
 
     if ($parents) {
       foreach ($metatag_attachments['#attached']['html_head'] as $index => $tag) {
-        // Simply delete any existing article tags.
-        if ($tag[1] == 'article_tag_0' || $tag[1] == 'article_tag_1') {
-          unset($metatag_attachments['#attached']['html_head'][$index]);
+        preg_match_all('/article_tag_(\d)/m', $tag[1], $matches, PREG_SET_ORDER, 0);
+
+        if ($matches) {
+          $tag_index = $matches[0][1];
         }
       }
 
       // Create a new article tag for each parent node.
-      $index = 0;
+      $tag_index++;
       foreach ($parents as $parent) {
         $metatag_attachments['#attached']['html_head'][] =
           [
@@ -135,9 +137,9 @@ function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
                 'content' => $parent->title
               ]
             ],
-            'article_tag_' . $index,
+            'article_tag_' . $tag_index,
           ];
-        $index++;
+        $tag_index++;
       }
     }
   }
