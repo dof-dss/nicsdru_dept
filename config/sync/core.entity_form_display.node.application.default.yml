@@ -11,8 +11,6 @@ dependencies:
     - field.field.node.application.field_global_topics
     - field.field.node.application.field_link
     - field.field.node.application.field_metatags
-    - field.field.node.application.field_site_subtopics
-    - field.field.node.application.field_site_topics
     - field.field.node.application.field_summary
     - node.type.application
     - workflows.workflow.nics_editorial_workflow
@@ -45,6 +43,12 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_global_topics:
+    type: chosen_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_additional_info:
     type: text_textarea
     weight: 7
@@ -72,12 +76,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_global_topics:
-    type: chosen_select
-    weight: 1
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_link:
     type: link_default
     weight: 6
@@ -93,18 +91,6 @@ content:
     settings:
       sidebar: true
       use_details: true
-    third_party_settings: {  }
-  field_site_subtopics:
-    type: chosen_select
-    weight: 3
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  field_site_topics:
-    type: chosen_select
-    weight: 2
-    region: content
-    settings: {  }
     third_party_settings: {  }
   field_summary:
     type: text_textarea
@@ -154,6 +140,11 @@ content:
   publish_state:
     type: options_select
     weight: 26
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
