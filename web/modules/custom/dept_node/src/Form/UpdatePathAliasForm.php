@@ -3,6 +3,7 @@
 namespace Drupal\dept_node\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormBase;
@@ -61,6 +62,7 @@ class UpdatePathAliasForm extends FormBase {
     $form['actions'] = [
       '#type' => 'actions',
     ];
+
     $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Update'),
@@ -71,6 +73,20 @@ class UpdatePathAliasForm extends FormBase {
       ],
       '#ajax' => [
         'callback' => [$this, 'submitFormAjax'],
+        'event' => 'click',
+      ],
+    ];
+
+    $form['actions']['cancel'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('cancel'),
+      '#attributes' => [
+        'class' => [
+          'use-ajax',
+        ],
+      ],
+      '#ajax' => [
+        'callback' => [$this, 'closeModalAjax'],
         'event' => 'click',
       ],
     ];
@@ -99,6 +115,14 @@ class UpdatePathAliasForm extends FormBase {
 
       $response->addCommand(new RedirectCommand(Url::fromRoute('entity.node.canonical', ['node' => $form_state->getValue('nid')])->toString()));
     }
+
+    return $response;
+  }
+
+  public function closeModalAjax() {
+    $command = new CloseModalDialogCommand();
+    $response = new AjaxResponse();
+    $response->addCommand($command);
 
     return $response;
   }
