@@ -132,7 +132,12 @@ class UpdatePathAliasForm extends FormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $dbConn = \Drupal::database();
-    $results = $dbConn->query("SELECT pa.path, pa.alias FROM path_alias pa WHERE pa.alias = :alias", [':alias' => $form_state->getValue('new_alias')])->fetchCol(1);
+    $values = $form_state->getValues();
+
+    $results = $dbConn->query("SELECT pa.path, pa.alias FROM path_alias pa WHERE pa.alias = :alias AND pa.path <> :path ", [
+      ':alias' => $values['new_alias'],
+      ':path' => '/node/' . $values['nid'],
+    ])->fetchCol(1);
 
     if ($results) {
       $form_state->setErrorByName('new_alias', 'Alias already in use, please try another');
