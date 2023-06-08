@@ -11,7 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
- * Provides a Departmental sites: node form.
+ * Provides a form for altering a node path alias.
  */
 class UpdatePathAliasForm extends FormBase {
 
@@ -29,8 +29,8 @@ class UpdatePathAliasForm extends FormBase {
    *   A nested array form elements comprising the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
-   * @param string $source
-   *   The source system path.
+   * @param string $nid
+   *   The node id of the path alias.
    */
   public function buildForm(array $form, FormStateInterface $form_state, $nid = '') {
 
@@ -96,7 +96,14 @@ class UpdatePathAliasForm extends FormBase {
     return $form;
   }
 
-
+  /**
+   * Ajax callback for form submission.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
   public function submitFormAjax(array $form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
 
@@ -110,7 +117,7 @@ class UpdatePathAliasForm extends FormBase {
 
       $dbConn->update('path_alias')
         ->fields(['alias' => $form_state->getValue('new_alias')])
-        ->condition('path', $node_path , '=')
+        ->condition('path', $node_path, '=')
         ->execute();
 
       $response->addCommand(new RedirectCommand(Url::fromRoute('entity.node.canonical', ['node' => $form_state->getValue('nid')])->toString()));
@@ -119,6 +126,9 @@ class UpdatePathAliasForm extends FormBase {
     return $response;
   }
 
+  /**
+   * Ajax callback to close the modal.
+   */
   public function closeModalAjax() {
     $command = new CloseModalDialogCommand();
     $response = new AjaxResponse();
