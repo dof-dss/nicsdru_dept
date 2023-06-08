@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
 use Drupal\dept_node\Entity\Node;
 use Drupal\dept_node\Form\DeptNodeForm;
 use Drupal\dept_node\FormatHelper;
@@ -292,5 +291,19 @@ function dept_node_entity_type_alter(&$entity_types) {
     foreach (['default', 'edit'] as $operation) {
       $entity_types['node']->setFormClass($operation, DeptNodeForm::class);
     }
+  }
+}
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ */
+function dept_node_pathauto_alias_alter(&$alias, array &$context) {
+  $dbConn = \Drupal::database();
+
+  $results = $dbConn->query("SELECT pa.path, pa.alias FROM path_alias pa WHERE pa.alias = :alias", [':alias' => $alias])->fetchCol();
+
+  if ($results && $results[0] !== $context['source']) {
+    $domain = \Drupal::service('domain.negotiator')->getActiveDomain()->id();
+    $alias .= '-' . $domain;
   }
 }
