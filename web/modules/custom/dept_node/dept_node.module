@@ -7,6 +7,7 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Url;
 use Drupal\dept_node\Entity\Node;
 use Drupal\dept_node\Form\DeptNodeForm;
 use Drupal\dept_node\FormatHelper;
@@ -306,6 +307,9 @@ function dept_node_pathauto_alias_alter(&$alias, array &$context) {
   if ($results && $results[0] !== $context['source']) {
     $domain = \Drupal::service('domain.negotiator')->getActiveDomain()->id();
     $alias .= '-' . $domain;
-    \Drupal::messenger()->addMessage("A url alias for this content is in use, the department name has been appended to the end.", MessengerInterface::TYPE_WARNING);
+
+    $update_link = '<a class="use-ajax" data-dialog-type="modal" href="' . Url::fromRoute('dept_node.update_path_alias', ['nid' => substr($context['source'], strrpos($context['source'], '/' )+1)])->toString() . '">edit alias.</a>';
+
+    \Drupal::messenger()->addMessage("A url alias for this content is in use, the department name has been appended to the end. You can $update_link", MessengerInterface::TYPE_WARNING);
   }
 }
