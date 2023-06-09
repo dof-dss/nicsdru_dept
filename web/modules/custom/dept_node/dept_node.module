@@ -193,42 +193,21 @@ function dept_node_topic_banner(array &$variables) {
     return;
   }
 
-  // Look up referenced topics.
-  $site_topics = NULL;
-  foreach (['field_site_topics', 'field_parent_topic'] as $topic_field_name) {
-    if ($node->hasField($topic_field_name)) {
-      $site_topics = $node->get($topic_field_name)->referencedEntities();
-    }
-  }
+  // If current node has a banner, return it.
+  // Fetch parents, if parents have banner use it.
 
-  if (empty($site_topics)) {
-    return;
-  }
+  $topic_manager = \Drupal::service('topic.manager');
 
-  /** @var \Drupal\node\NodeInterface $topic_node */
-  $topic_node = $site_topics[0];
-
-  // Is there a landing page with the same topic reference with a banner?
-  $lp_query_ids = \Drupal::entityQuery('node')
-    ->condition('type', 'landing_page')
-    ->condition('status', 1)
-    ->condition('field_site_topics', $topic_node->id())
-    ->range(0, 1)
-    ->execute();
-
-  $landing_page_node = \Drupal::entityTypeManager()
+  $parent_nids = $topic_manager->getParentNodes($node->id());
+  $parent_nodes = \Drupal::entityTypeManager()
     ->getStorage('node')
-    ->loadMultiple($lp_query_ids);
-  $landing_page_node = reset($landing_page_node);
+    ->loadMultiple($parent_nids);
 
-  if (empty($landing_page_node)) {
-    return;
+  foreach ($parent_nodes as $parent_node) {
+    $banner_media = reset($parent_node
+      ->get('field_banner_image')
+      ->referencedEntities());
   }
-
-  $banner_media = reset($landing_page_node
-    ->get('field_banner_image')
-    ->referencedEntities()
-  );
 
   if (empty($banner_media)) {
     return;
