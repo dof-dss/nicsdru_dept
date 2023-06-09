@@ -302,7 +302,7 @@ function dept_node_entity_type_alter(&$entity_types) {
 function dept_node_pathauto_alias_alter(&$alias, array &$context) {
   $dbConn = \Drupal::database();
 
-  $results = $dbConn->query("SELECT pa.path, pa.alias FROM path_alias pa WHERE pa.alias = :alias", [':alias' => $alias])->fetchCol();
+  $results = $dbConn->query("SELECT pa.path, pa.alias FROM {path_alias} pa WHERE pa.alias = :alias", [':alias' => $alias])->fetchCol();
 
   // If we have an existing alias, append the department id and notify the user.
   if ($results && $results[0] !== $context['source']) {
