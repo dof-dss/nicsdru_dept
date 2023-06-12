@@ -85,17 +85,16 @@ function dept_topics_preprocess_node(array &$variables) {
     $parents = $topicManager->getParentNodes($variables['node']->id());
 
     $variables['topics_subtopics_list'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'span',
-      '#value' => t('Topics') . ': ',
+      '#theme' => 'item_list__topics_subtopics_list',
+      '#list_type' => 'ul',
+      '#title' => 'Topics',
     ];
 
     foreach ($parents as $id => $parent) {
-      $variables['topics_subtopics_list'][$id] = [
+      $variables['topics_subtopics_list']['#items'][] = [
         '#type' => 'link',
         '#title' => $parent->title,
         '#url' => URL::fromRoute('entity.node.canonical', ['node' => $parent->nid]),
-        '#suffix' => array_key_last($parents) == $id ? '' : ', ',
       ];
     }
 
