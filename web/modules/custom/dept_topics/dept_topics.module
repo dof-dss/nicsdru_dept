@@ -87,7 +87,7 @@ function dept_topics_preprocess_node(array &$variables) {
     $variables['topics_subtopics_list'] = [
       '#theme' => 'item_list__topics_subtopics_list',
       '#list_type' => 'ul',
-      '#title' => 'Topics',
+      '#title' => t('Topics'),
     ];
 
     foreach ($parents as $id => $parent) {
