@@ -10,7 +10,6 @@ dependencies:
     - node.type.consultation
     - node.type.news
     - node.type.publication
-    - node.type.subtopic
   module:
     - datetime
     - datetime_range
@@ -101,22 +100,7 @@ display:
         type: tag
         options: {  }
       empty: {  }
-      sorts:
-        title:
-          id: title
-          table: node_field_data
-          field: title
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: title
-          plugin_id: standard
-          order: ASC
-          expose:
-            label: ''
-            field_identifier: ''
-          exposed: false
+      sorts: {  }
       arguments:
         field_site_topics_target_id:
           id: field_site_topics_target_id
@@ -276,8 +260,8 @@ display:
             target: ''
             nl2br: false
             max_length: 0
-            word_boundary: false
-            ellipsis: false
+            word_boundary: true
+            ellipsis: true
             more_link: false
             more_link_text: ''
             more_link_path: ''
@@ -292,7 +276,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: false
+          element_default_classes: true
           empty: ''
           hide_empty: false
           empty_zero: false
@@ -301,7 +285,7 @@ display:
           type: string
           settings:
             link_to_entity: true
-          group_column: entity_id
+          group_column: value
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -311,6 +295,22 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+      sorts:
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments:
         nid:
           id: nid
@@ -376,7 +376,6 @@ display:
           value:
             application: application
             article: article
-            subtopic: subtopic
           group: 1
           exposed: false
           expose:
@@ -418,7 +417,7 @@ display:
           default_row_class: false
           type: ul
           wrapper_class: ''
-          class: list--hyphen-bullet
+          class: ''
       row:
         type: fields
         options:
@@ -443,17 +442,18 @@ display:
         row: false
         relationships: false
         fields: false
+        sorts: false
         arguments: false
         filters: false
         filter_groups: false
       relationships:
-        reverse__node__field_topic_content_1:
-          id: reverse__node__field_topic_content_1
+        reverse__node__field_topic_content:
+          id: reverse__node__field_topic_content
           table: node_field_data
           field: reverse__node__field_topic_content
           relationship: none
           group_type: group
-          admin_label: 'content using field_topic_content'
+          admin_label: 'Content using field_topic_content'
           entity_type: node
           plugin_id: entity_reverse
           required: false
@@ -461,12 +461,12 @@ display:
           id: field_topic_content
           table: node__field_topic_content
           field: field_topic_content
-          relationship: reverse__node__field_topic_content_1
+          relationship: reverse__node__field_topic_content
           group_type: group
           admin_label: 'field_topic_content: Content'
           plugin_id: standard
-          required: false
-      group_by: false
+          required: true
+      group_by: true
       display_description: ''
       display_extenders: {  }
     cache_metadata:
