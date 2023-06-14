@@ -124,11 +124,38 @@ class RedirectMigrateSubscriber implements EventSubscriberInterface {
   public function onMigratePostImport(MigrateImportEvent $event) {
     $event_id = $event->getMigration()->getBaseId();
 
-    if ($event_id === 'node_page') {
-      $nids = $this->d7dbconn->query("SELECT n.nid, a.alias FROM {node} n LEFT JOIN {url_alias} a ON CONCAT('node/', n.nid) = a.source WHERE n.type = 'page'")
-        ->fetchAllKeyed();
+    if ($event_id === 'node_page' || $event_id === 'node_subtopic') {
+      $this->createRedirectsByType(substr($event_id, 5));
+    }
+  }
 
-      foreach ($nids as $nid => $alias) {
+  /**
+   * {@inheritdoc}
+   */
+  public static function getSubscribedEvents() : array {
+    $events = [];
+    // NB: MigrateEvents is a migrate_plus namespace.
+    $events[MigratePlusEvents::PREPARE_ROW] = ['onPrepareRow'];
+    $events[MigrateEvents::POST_IMPORT] = ['onMigratePostImport'];
+    return $events;
+  }
+
+
+  /**
+   * Create redirect when a bundle has a different alias pattern from d7.
+   *
+   * @param $bundle
+   *   Bundle type to process.
+   */
+  protected function createRedirectsByType($bundle) {
+    $nids = $this->d7dbconn->query("SELECT n.nid, a.alias FROM {node} n LEFT JOIN {url_alias} a ON CONCAT('node/', n.nid) = a.source WHERE n.type = :type",
+      [':type' => $bundle])
+      ->fetchAllKeyed();
+
+    foreach ($nids as $nid => $alias) {
+      $redirect_exists = $this->entityTypeManager->getStorage('redirect')->loadByProperties(['redirect_source' => $alias]);
+
+      if (!$redirect_exists) {
         $d9_info = $this->lookupManager->lookupBySourceNodeId([$nid]);
 
         if (is_array($d9_info)) {
@@ -145,18 +172,7 @@ class RedirectMigrateSubscriber implements EventSubscriberInterface {
           }
         }
       }
+
     }
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function getSubscribedEvents() : array {
-    $events = [];
-    // NB: MigrateEvents is a migrate_plus namespace.
-    $events[MigratePlusEvents::PREPARE_ROW] = ['onPrepareRow'];
-    $events[MigrateEvents::POST_IMPORT] = ['onMigratePostImport'];
-    return $events;
-  }
-
 }
