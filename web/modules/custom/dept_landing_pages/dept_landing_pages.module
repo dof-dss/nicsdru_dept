@@ -154,3 +154,12 @@ function dept_landing_pages_form_node_topic_layout_builder_form_alter(&$form, Fo
   // Hide revision information section.
   $form['revision_information']['#access'] = FALSE;
 }
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function dept_landing_pages_preprocess_block(&$variables) {
+  if (!empty($variables['configuration']['provider']) && $variables['configuration']['provider'] == 'layout_builder') {
+    $variables['label'] = !empty($variables['configuration']['label_display']) ? $variables['configuration']['label'] : '';
+  }
+}
