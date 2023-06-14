@@ -198,16 +198,17 @@ function dept_node_topic_banner(array &$variables) {
   // Fetch parents, if parents have banner use it.
 
   $topic_manager = \Drupal::service('topic.manager');
+//
+  $parent_nids = array_keys($topic_manager->getParentNodes($node->id()));
 
-  $parent_nids = $topic_manager->getParentNodes($node->id());
   $parent_nodes = \Drupal::entityTypeManager()
     ->getStorage('node')
     ->loadMultiple($parent_nids);
 
   foreach ($parent_nodes as $parent_node) {
-    $banner_media = reset($parent_node
-      ->get('field_banner_image')
-      ->referencedEntities());
+    $banner_media = $parent_node
+      ->get('field_banner_image_thin')
+      ->referencedEntities();
   }
 
   if (empty($banner_media)) {
@@ -216,7 +217,7 @@ function dept_node_topic_banner(array &$variables) {
 
   $banner_render = \Drupal::entityTypeManager()
     ->getViewBuilder('media')
-    ->view($banner_media, 'banner_thin');
+    ->view(reset($banner_media), 'banner_thin');
 
   // Put the media render array into the preprocess vars to blend
   // with the overlay image at the template layer.
