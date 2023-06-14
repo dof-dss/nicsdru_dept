@@ -140,14 +140,14 @@ class RedirectMigrateSubscriber implements EventSubscriberInterface {
     return $events;
   }
 
-
   /**
    * Create redirect when a bundle has a different alias pattern from d7.
    *
-   * @param $bundle
+   * @param string $bundle
    *   Bundle type to process.
    */
-  protected function createRedirectsByType($bundle) {
+  protected function createRedirectsByType(string $bundle) {
+    // Fetch the D7 path aliases for the bundle.
     $nids = $this->d7dbconn->query("SELECT n.nid, a.alias FROM {node} n LEFT JOIN {url_alias} a ON CONCAT('node/', n.nid) = a.source WHERE n.type = :type",
       [':type' => $bundle])
       ->fetchAllKeyed();
@@ -175,4 +175,5 @@ class RedirectMigrateSubscriber implements EventSubscriberInterface {
 
     }
   }
+
 }
