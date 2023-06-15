@@ -6,7 +6,7 @@ dependencies:
     - views.view.content_by_site_subtopic
   module:
     - block_visibility_groups
-    - system
+    - node
     - views
   theme:
     - nicsdru_dept_theme
@@ -29,7 +29,11 @@ visibility:
     id: condition_group
     negate: false
     block_visibility_group: ''
-  request_path:
-    id: request_path
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
     negate: false
-    pages: "/articles/*\r\n/services/*"
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      application: application
+      article: article

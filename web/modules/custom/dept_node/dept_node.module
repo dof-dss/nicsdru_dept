@@ -300,6 +300,8 @@ function dept_node_pathauto_alias_alter(&$alias, array &$context) {
 
     $update_link = '<a class="use-ajax" data-dialog-type="modal" href="' . Url::fromRoute('dept_node.update_path_alias', ['nid' => substr($context['source'], strrpos($context['source'], '/') + 1)])->toString() . '">edit the alias.</a>';
 
-    \Drupal::messenger()->addMessage("A url alias for this content is already in use so additional text has been appended to the end. You can $update_link", MessengerInterface::TYPE_WARNING);
+    if (PHP_SAPI != 'cli') {
+      \Drupal::messenger()->addMessage("A url alias for this content is already in use so additional text has been appended to the end. You can $update_link", MessengerInterface::TYPE_WARNING);
+    }
   }
 }
