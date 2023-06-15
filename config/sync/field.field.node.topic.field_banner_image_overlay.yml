@@ -1,16 +1,16 @@
-uuid: b108b802-fb16-491b-86fd-3450d0340f69
+uuid: 27e1a158-5353-41ac-a48c-ff3d8adb16e4
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_banner_image
+    - field.storage.node.field_banner_image_overlay
     - media.type.image
-    - node.type.subtopic
-id: node.subtopic.field_banner_image
-field_name: field_banner_image
+    - node.type.topic
+id: node.topic.field_banner_image_overlay
+field_name: field_banner_image_overlay
 entity_type: node
-bundle: subtopic
-label: 'Banner image'
+bundle: topic
+label: 'Banner image overlay'
 description: ''
 required: false
 translatable: false

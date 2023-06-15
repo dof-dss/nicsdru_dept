@@ -1,19 +1,19 @@
-uuid: b108b802-fb16-491b-86fd-3450d0340f69
+uuid: 92dccd03-9649-441f-893f-502b3b631098
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_banner_image
+    - field.storage.node.field_banner_image_thin
     - media.type.image
     - node.type.subtopic
-id: node.subtopic.field_banner_image
-field_name: field_banner_image
+id: node.subtopic.field_banner_image_thin
+field_name: field_banner_image_thin
 entity_type: node
 bundle: subtopic
-label: 'Banner image'
-description: ''
+label: 'Banner image thin'
+description: 'Smaller banner image displayed on topic/subtopic child pages.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

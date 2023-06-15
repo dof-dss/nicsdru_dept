@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.field.node.landing_page.body
     - field.field.node.landing_page.field_banner_image
-    - field.field.node.landing_page.field_banner_image_overlay
     - field.field.node.landing_page.field_domain_access
     - field.field.node.landing_page.field_domain_all_affiliates
     - field.field.node.landing_page.field_domain_source
@@ -18,14 +17,12 @@ dependencies:
     - field.field.node.landing_page.field_teaser
     - field.field.node.landing_page.field_tweet_count
     - field.field.node.landing_page.field_twitter_user
-    - image.style.thumbnail
     - node.type.landing_page
     - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
     - field_group
-    - image
     - metatag
     - path
     - scheduler
@@ -122,14 +119,6 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
-    third_party_settings: {  }
-  field_banner_image_overlay:
-    type: image_image
-    weight: 3
-    region: content
-    settings:
-      progress_indicator: throbber
-      preview_image_style: thumbnail
     third_party_settings: {  }
   field_domain_access:
     type: options_buttons
@@ -256,6 +245,11 @@ content:
   publish_state:
     type: options_select
     weight: 29
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }

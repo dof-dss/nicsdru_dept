@@ -189,55 +189,44 @@ function dept_node_topic_banner(array &$variables) {
     return;
   }
 
-  // Assume topic nodes present this banner as part of $content.
-  if ($node->bundle() === 'topic') {
+  $topic_manager = \Drupal::service('topic.manager');
+
+  if (!array_key_exists($node->bundle(), $topic_manager->getTopicChildNodeTypes())) {
     return;
   }
 
-  // Look up referenced topics.
-  $site_topics = NULL;
-  foreach (['field_site_topics', 'field_parent_topic'] as $topic_field_name) {
-    if ($node->hasField($topic_field_name)) {
-      $site_topics = $node->get($topic_field_name)->referencedEntities();
+  if ($node->hasField('field_banner_image') && !is_null($node->get('field_banner_image'))) {
+    return;
+  }
+
+  // If current node has a banner, return it.
+  // Fetch parents, if parents have banner use it.
+  $parent_nids = array_keys($topic_manager->getParentNodes($node->id()));
+  $banner_link = '';
+
+  $parent_nodes = \Drupal::entityTypeManager()
+    ->getStorage('node')
+    ->loadMultiple($parent_nids);
+
+  // Iterate each parent checking for a thin banner image.
+  foreach ($parent_nodes as $parent_node) {
+    if ($parent_node->hasField('field_banner_image_thin') && !$parent_node->get('field_banner_image_thin')->isEmpty()) {
+      $banner_media = $parent_node
+        ->get('field_banner_image_thin')
+        ->referencedEntities();
+      $banner_link = Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]);
     }
   }
-
-  if (empty($site_topics)) {
-    return;
-  }
-
-  /** @var \Drupal\node\NodeInterface $topic_node */
-  $topic_node = $site_topics[0];
-
-  // Is there a landing page with the same topic reference with a banner?
-  $lp_query_ids = \Drupal::entityQuery('node')
-    ->condition('type', 'landing_page')
-    ->condition('status', 1)
-    ->condition('field_site_topics', $topic_node->id())
-    ->range(0, 1)
-    ->execute();
-
-  $landing_page_node = \Drupal::entityTypeManager()
-    ->getStorage('node')
-    ->loadMultiple($lp_query_ids);
-  $landing_page_node = reset($landing_page_node);
-
-  if (empty($landing_page_node)) {
-    return;
-  }
-
-  $banner_media = reset($landing_page_node
-    ->get('field_banner_image')
-    ->referencedEntities()
-  );
 
   if (empty($banner_media)) {
     return;
   }
 
+  $variables['banner_link'] = $banner_link->toString();
+
   $banner_render = \Drupal::entityTypeManager()
     ->getViewBuilder('media')
-    ->view($banner_media, 'banner_thin');
+    ->view(reset($banner_media), 'banner_thin');
 
   // Put the media render array into the preprocess vars to blend
   // with the overlay image at the template layer.
