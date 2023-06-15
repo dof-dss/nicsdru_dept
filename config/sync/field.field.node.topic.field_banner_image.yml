@@ -1,19 +1,19 @@
-uuid: b108b802-fb16-491b-86fd-3450d0340f69
+uuid: c274fb1c-696b-4db0-b84c-7d470c8d6507
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_banner_image
     - media.type.image
-    - node.type.subtopic
-id: node.subtopic.field_banner_image
+    - node.type.topic
+id: node.topic.field_banner_image
 field_name: field_banner_image
 entity_type: node
-bundle: subtopic
+bundle: topic
 label: 'Banner image'
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:

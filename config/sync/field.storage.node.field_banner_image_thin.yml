@@ -1,16 +1,17 @@
-uuid: 59f725ac-aaea-4887-b78d-f7973a3737a5
+uuid: 52c3a284-d914-4484-9d4c-d610c9791650
 langcode: en
 status: true
 dependencies:
   module:
-    - link
+    - media
     - node
-id: node.field_banner_link
-field_name: field_banner_link
+id: node.field_banner_image_thin
+field_name: field_banner_image_thin
 entity_type: node
-type: link
-settings: {  }
-module: link
+type: entity_reference
+settings:
+  target_type: media
+module: core
 locked: false
 cardinality: 1
 translatable: true
