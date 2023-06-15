@@ -189,16 +189,18 @@ function dept_node_topic_banner(array &$variables) {
     return;
   }
 
-  // Assume topic nodes present this banner as part of $content.
-  if ($node->bundle() === 'topic') {
+  $topic_manager = \Drupal::service('topic.manager');
+
+  if (!array_key_exists($node->bundle(), $topic_manager->getTopicChildNodeTypes())) {
+    return;
+  }
+
+  if ($node->hasField('field_banner_image') && !is_null($node->get('field_banner_image'))) {
     return;
   }
 
   // If current node has a banner, return it.
   // Fetch parents, if parents have banner use it.
-
-  $topic_manager = \Drupal::service('topic.manager');
-//
   $parent_nids = array_keys($topic_manager->getParentNodes($node->id()));
 
   $parent_nodes = \Drupal::entityTypeManager()
@@ -206,14 +208,19 @@ function dept_node_topic_banner(array &$variables) {
     ->loadMultiple($parent_nids);
 
   foreach ($parent_nodes as $parent_node) {
-    $banner_media = $parent_node
-      ->get('field_banner_image_thin')
-      ->referencedEntities();
+    if ($parent_node->hasField('field_banner_image_thin') && !is_null($node->get('field_banner_image_thin'))) {
+      $banner_media = $parent_node
+        ->get('field_banner_image_thin')
+        ->referencedEntities();
+      $banner_link = Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]);
+    }
   }
 
   if (empty($banner_media)) {
     return;
   }
+
+  $variables['banner_link'] = $banner_link;
 
   $banner_render = \Drupal::entityTypeManager()
     ->getViewBuilder('media')
