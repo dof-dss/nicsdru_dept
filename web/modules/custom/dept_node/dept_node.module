@@ -202,11 +202,13 @@ function dept_node_topic_banner(array &$variables) {
   // If current node has a banner, return it.
   // Fetch parents, if parents have banner use it.
   $parent_nids = array_keys($topic_manager->getParentNodes($node->id()));
+  $banner_link = '';
 
   $parent_nodes = \Drupal::entityTypeManager()
     ->getStorage('node')
     ->loadMultiple($parent_nids);
 
+  // Iterate each parent checking for a thin banner image.
   foreach ($parent_nodes as $parent_node) {
     if ($parent_node->hasField('field_banner_image_thin') && !$parent_node->get('field_banner_image_thin')->isEmpty()) {
       $banner_media = $parent_node
