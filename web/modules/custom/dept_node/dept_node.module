@@ -208,7 +208,7 @@ function dept_node_topic_banner(array &$variables) {
     ->loadMultiple($parent_nids);
 
   foreach ($parent_nodes as $parent_node) {
-    if ($parent_node->hasField('field_banner_image_thin') && !is_null($node->get('field_banner_image_thin'))) {
+    if ($parent_node->hasField('field_banner_image_thin') && !$parent_node->get('field_banner_image_thin')->isEmpty()) {
       $banner_media = $parent_node
         ->get('field_banner_image_thin')
         ->referencedEntities();
@@ -220,7 +220,7 @@ function dept_node_topic_banner(array &$variables) {
     return;
   }
 
-  $variables['banner_link'] = $banner_link;
+  $variables['banner_link'] = $banner_link->toString();
 
   $banner_render = \Drupal::entityTypeManager()
     ->getViewBuilder('media')
