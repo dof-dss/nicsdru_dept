@@ -90,7 +90,7 @@ process:
     - plugin: sub_process
       source: field_link
       process:
-        uri: value
+        uri: url
         title: title
         options: attributes
   field_domain_access:
