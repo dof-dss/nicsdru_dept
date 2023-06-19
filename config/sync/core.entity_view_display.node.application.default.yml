@@ -15,6 +15,7 @@ dependencies:
     - node.type.application
   module:
     - link
+    - metatag
     - text
     - user
 id: node.application.default
@@ -48,6 +49,13 @@ content:
     third_party_settings: {  }
     weight: 2
     region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
   field_summary:
     type: text_default
     label: hidden
@@ -62,7 +70,6 @@ hidden:
   field_domain_all_affiliates: true
   field_domain_source: true
   field_global_topics: true
-  field_metatags: true
   groups: true
   groups_type_department_site: true
   langcode: true
