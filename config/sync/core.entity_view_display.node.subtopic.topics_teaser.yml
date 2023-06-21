@@ -19,7 +19,7 @@ dependencies:
   module:
     - layout_builder
     - metatag
-    - text
+    - smart_trim
     - user
 third_party_settings:
   layout_builder:
@@ -38,9 +38,23 @@ content:
     weight: 2
     region: content
   field_summary:
-    type: text_default
+    type: smart_trim
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 600
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more_link: false
+      more_class: more-link
+      more_text: More
+      more_aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
     third_party_settings: {  }
     weight: 0
     region: content
