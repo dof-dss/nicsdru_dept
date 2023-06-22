@@ -36,7 +36,6 @@ dependencies:
     - domain_access
     - draggableviews
     - filter
-    - flag
     - media
     - node
     - redirect
@@ -44,8 +43,8 @@ dependencies:
     - scheduler
 _core:
   default_config_hash: CtfC5LDjVNnbLPFruCI4NqxrtR8ml1OZSXRF58iAYdo
-id: supervisor_user
-label: 'supervisor user'
+id: supervisor
+label: Supervisor
 weight: 5
 is_admin: null
 permissions:
