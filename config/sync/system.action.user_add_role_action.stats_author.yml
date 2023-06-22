@@ -3,12 +3,12 @@ langcode: en
 status: true
 dependencies:
   config:
-    - user.role.stats_author_user
+    - user.role.stats_author
   module:
     - user
-id: user_add_role_action.stats_author_user
-label: 'Add the stats author user role to the selected user(s)'
+id: user_add_role_action.stats_author
+label: 'Add the stats author role to the selected user(s)'
 type: user
 plugin: user_add_role_action
 configuration:
-  rid: stats_author_user
+  rid: stats_author

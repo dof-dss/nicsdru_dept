@@ -3,12 +3,12 @@ langcode: en
 status: true
 dependencies:
   config:
-    - user.role.editor_user
+    - user.role.topic_supervisor
   module:
     - user
-id: user_remove_role_action.editor_user
-label: 'Remove the editor user role from the selected user(s)'
+id: user_remove_role_action.topic_supervisor
+label: 'Remove the topic supervisor role from the selected user(s)'
 type: user
 plugin: user_remove_role_action
 configuration:
-  rid: editor_user
+  rid: topic_supervisor
