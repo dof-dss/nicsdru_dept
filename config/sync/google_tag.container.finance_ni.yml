@@ -1,0 +1,69 @@
+uuid: 08ebe658-529c-4e94-a590-6af668e0178a
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - node
+    - taxonomy
+    - webform
+id: finance_ni
+label: 'Department of Finance'
+weight: 0
+container_id: GTM-PT94H45
+data_layer: dataLayer
+include_classes: false
+whitelist_classes: ''
+blacklist_classes: ''
+include_environment: false
+environment_id: ''
+environment_token: ''
+path_toggle: 'exclude listed'
+path_list: |-
+  /admin*
+  /batch*
+  /node/add*
+  /node/*/edit
+  /node/*/delete
+  /user/*/edit*
+  /user/*/cancel*
+role_toggle: 'exclude listed'
+role_list: {  }
+status_toggle: 'exclude listed'
+status_list: |-
+  403
+  404
+conditions:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles: {  }
+  'entity_bundle:taxonomy_term':
+    id: 'entity_bundle:taxonomy_term'
+    negate: false
+    context_mapping:
+      taxonomy_term: '@taxonomy_term.taxonomy_term_route_context:taxonomy_term'
+    bundles: {  }
+  'entity_bundle:webform_submission':
+    id: 'entity_bundle:webform_submission'
+    negate: false
+    context_mapping:
+      webform_submission: '@webform.webform_submission_route_context:webform_submission'
+    bundles: {  }
+  gtag_domain:
+    id: gtag_domain
+    context_mapping: {  }
+    domain_toggle: 'include listed'
+    domain_list:
+      finance: finance
+  webform:
+    id: webform
+    negate: false
+    context_mapping: {  }
+    webforms: {  }
