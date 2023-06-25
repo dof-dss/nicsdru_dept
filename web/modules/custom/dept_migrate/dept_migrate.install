@@ -18,3 +18,32 @@ function dept_migrate_update_8001() {
   $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
   $pdo->exec($query);
 }
+
+/**
+ * Update existing user role names.
+ */
+function dept_migrate_update_8002() {
+  $connection = Database::getConnection();
+
+  $rename_roles = [
+    'author_user' => 'author',
+    'supervisor_user' => 'supervisor',
+    'admin_user' => 'admin',
+    'domain_admin_user' => 'homepage_supervisor',
+    'editor_user' => 'topic_supervisor',
+    'niexec_admin_user' => 'homepage_supervisor',
+    'stats_author_user' => 'stats_author',
+    'stats_supervisor_user' => 'stats_supervisor',
+    'landing_page_supervisor_user' => 'topic_layout_supervisor',
+  ];
+
+  foreach ($rename_roles as $existing => $rename) {
+    $connection->update('user__roles')
+      ->fields([
+        'roles_target_id' => $rename
+      ])
+      ->condition('roles_target_id', $existing, '=')
+      ->execute();
+  }
+
+}
