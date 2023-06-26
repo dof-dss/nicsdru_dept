@@ -46,4 +46,18 @@ function dept_migrate_update_8002() {
       ->execute();
   }
 
+  $delete_roles = [
+    'admin_user',
+    'brexit_supervisor_user',
+    'pfg_supervisor_user',
+    'rss_user',
+    'user_manager',
+    'landing_page_author_user',
+  ];
+
+  foreach ($delete_roles as $role) {
+    $connection->delete('user__roles')
+      ->condition('roles_target_id', $role, '=')
+      ->execute();
+  }
 }
