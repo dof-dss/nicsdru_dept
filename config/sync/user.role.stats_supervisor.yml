@@ -3,6 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
+    - filter.format.basic_html
+    - filter.format.filtered_html
+    - filter.format.filtered_html_with_no_images
     - media.type.document
     - media.type.image
     - media.type.secure_file
@@ -14,6 +17,7 @@ dependencies:
     - dept_publications
     - domain_access
     - file
+    - filter
     - media
     - moderation_sidebar
     - node
@@ -46,7 +50,6 @@ permissions:
   - 'delete own publication content'
   - 'delete own secure_file media'
   - 'delete publication content on assigned domains'
-  - 'delete publication revisions'
   - 'delete secure_publication content on assigned domains'
   - 'edit any document media'
   - 'edit any publication content'
@@ -58,13 +61,6 @@ permissions:
   - 'edit own secure_file media'
   - 'publish to any assigned domain'
   - 'publish to any domain'
-  - 'reschedule scheduled transitions node application'
-  - 'reschedule scheduled transitions node article'
-  - 'reschedule scheduled transitions node consultation'
-  - 'reschedule scheduled transitions node contact'
-  - 'reschedule scheduled transitions node easychart'
-  - 'reschedule scheduled transitions node heritage_site'
-  - 'reschedule scheduled transitions node page'
   - 'reschedule scheduled transitions node publication'
   - 'revert publication revisions'
   - 'schedule publishing of nodes'
@@ -82,6 +78,9 @@ permissions:
   - 'use nics_editorial_workflow transition restore'
   - 'use nics_editorial_workflow transition restore_to_draft'
   - 'use nics_editorial_workflow transition submit_for_review'
+  - 'use text format basic_html'
+  - 'use text format filtered_html'
+  - 'use text format filtered_html_with_no_images'
   - 'view all revisions'
   - 'view all scheduled transitions'
   - 'view any unpublished content'
@@ -93,13 +92,5 @@ permissions:
   - 'view own unpublished secure publication'
   - 'view publication revisions'
   - 'view scheduled content'
-  - 'view scheduled transitions node application'
-  - 'view scheduled transitions node article'
-  - 'view scheduled transitions node consultation'
-  - 'view scheduled transitions node contact'
-  - 'view scheduled transitions node easychart'
-  - 'view scheduled transitions node heritage_site'
-  - 'view scheduled transitions node page'
   - 'view scheduled transitions node publication'
-  - 'view scheduled transitions node topic'
   - 'view unpublished domain content'

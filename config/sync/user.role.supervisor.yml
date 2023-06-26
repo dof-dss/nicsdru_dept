@@ -11,6 +11,7 @@ dependencies:
     - media.type.remote_video
     - media.type.secure_file
     - media.type.video
+    - node.type.actions
     - node.type.application
     - node.type.article
     - node.type.book
@@ -72,6 +73,8 @@ permissions:
   - 'add scheduled transitions node ual'
   - 'administer book outlines'
   - 'administer redirects'
+  - 'create actions content'
+  - 'create actions content on assigned domains'
   - 'create application content'
   - 'create application content on assigned domains'
   - 'create article content'
@@ -110,6 +113,7 @@ permissions:
   - 'create ual content'
   - 'create ual content on assigned domains'
   - 'create video media'
+  - 'delete actions content on assigned domains'
   - 'delete all revisions'
   - 'delete any application content'
   - 'delete any article content'
@@ -226,6 +230,8 @@ permissions:
   - 'revert heritage_site revisions'
   - 'revert link revisions'
   - 'revert page revisions'
+  - 'revert profile revisions'
+  - 'revert project revisions'
   - 'revert protected_area revisions'
   - 'revert publication revisions'
   - 'revert subtopic revisions'
@@ -242,6 +248,7 @@ permissions:
   - 'unflag home_page_display'
   - 'unflag scheduled_delete'
   - 'unflag topic_page_display'
+  - 'update actions content on assigned domains'
   - 'update application content on assigned domains'
   - 'update article content on assigned domains'
   - 'update book content on assigned domains'
@@ -306,6 +313,8 @@ permissions:
   - 'view moderation messages'
   - 'view own files'
   - 'view page revisions'
+  - 'view profile revisions'
+  - 'view project revisions'
   - 'view protected_area revisions'
   - 'view publication revisions'
   - 'view scheduled transitions node application'
