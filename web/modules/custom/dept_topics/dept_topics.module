@@ -84,32 +84,31 @@ function dept_topics_preprocess_node(array &$variables) {
   $topicManager = \Drupal::service('topic.manager');
   $node = $variables['node'];
   $parents = [];
+  $parent_topics = [];
+  $parent_subtopics = [];
 
   // First check if node has fields referencing parent topics/subtopics.
-  if ($node->hasField('field_site_topics') || $node->hasField('field_site_subtopics')) {
-    $topics = [];
-    $subtopics = [];
-
-    if ($node->hasField('field_site_topics')) {
-      $topics = $node->get('field_site_topics')->referencedEntities();
-    }
-
-    if ($node->hasField('field_site_subtopics')) {
-      $subtopics = $node->get('field_site_subtopics')->referencedEntities();
-    }
-
-    $all_topics = array_merge($topics, $subtopics);
-
-    foreach ($all_topics as $topic) {
-      $parents[] = (object) [
-        'nid' => $topic->id(),
-        'title' => $topic->label(),
-        'type' => $topic->bundle(),
-      ];
-    }
+  if ($node->hasField('field_site_topics')) {
+    $parent_topics = $node->get('field_site_topics')->referencedEntities();
   }
-  // Otherwise, check if any topics/subtopics are referencing the node...
-  elseif (in_array($variables['node']->bundle(), $topicManager->getTopicChildNodeTypes())) {
+
+  if ($node->hasField('field_site_subtopics')) {
+    $parent_subtopics = $node->get('field_site_subtopics')->referencedEntities();
+  }
+
+  $all_topics = array_merge($parent_topics, $parent_subtopics);
+
+  foreach ($all_topics as $topic) {
+    $parents[] = (object) [
+      'nid' => $topic->id(),
+      'title' => $topic->label(),
+      'type' => $topic->bundle(),
+    ];
+  }
+
+  // If this node is not referencing any topics/subtopics, check if any
+  // topics/subtopics are referencing the node.
+  if (empty($parents) && in_array($variables['node']->bundle(), $topicManager->getTopicChildNodeTypes())) {
     $parents = $topicManager->getParentNodes($variables['node']->id());
   }
 
