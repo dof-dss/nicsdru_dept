@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
-    - core.entity_view_mode.node.topics_teaser
     - node.type.topic
     - system.menu.main
   module:
@@ -277,7 +276,7 @@ display:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: topics_teaser
+          view_mode: teaser
       defaults:
         style: false
         row: false
@@ -530,7 +529,7 @@ display:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: topics_teaser
+          view_mode: teaser
       defaults:
         style: false
         row: false
