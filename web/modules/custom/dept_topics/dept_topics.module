@@ -127,10 +127,9 @@ function dept_topics_preprocess_node(array &$variables) {
         '#url' => URL::fromRoute('entity.node.canonical', ['node' => $parent->nid]),
       ];
     }
-
-    $variables['show_topics'] = !empty($parents);
   }
 
+  $variables['show_topics'] = !empty($parents);
 }
 
 /**
