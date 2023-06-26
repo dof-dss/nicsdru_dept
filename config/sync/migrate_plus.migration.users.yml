@@ -1,15 +1,10 @@
-uuid: e89c36cc-7728-4e74-8936-921b9395bd06
-langcode: en
-status: true
-dependencies: {  }
 id: users
-class: Drupal\migrate\Plugin\Migration
-field_plugin_method: alterFieldInstanceMigration
-cck_plugin_method: null
+label: Users
+migration_group: migrate_users
 migration_tags:
   - dept_sites
-migration_group: migrate_users
-label: Users
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: alterFieldInstanceMigration
 source:
   plugin: d7_user_uuid
   track_changes: true
@@ -44,11 +39,23 @@ process:
     fallback_to_site_default: true
   init: init
   roles:
-    plugin: migration_lookup
-    migration: d7_user_role
-    source: roles
+    - plugin: static_map
+      source: roles
+      map:
+        3: 'author'
+        4: 'supervisor'
+        5: 'admin'
+        6: 'homepage_supervisor'
+        8: 'topic_supervisor'
+        9: null
+        10: 'homepage_supervisor'
+        11: 'stats_author'
+        12: 'stats_supervisor'
+        13: null
+        14: null
+        15: 'topic_layout_supervisor'
+        16: null
+        17: null
+        default_value: null
 destination:
-  plugin: 'entity:user'
-migration_dependencies:
-  required:
-    - d7_user_role
+  plugin: entity:user

@@ -1,0 +1,59 @@
+uuid: 13357855-f386-4933-a53e-bef1368f7a1f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_display.node.subtopic.full
+    - core.entity_view_display.node.topic.full
+    - filter.format.filtered_html_with_templates
+    - filter.format.layout_builder_html
+    - node.type.subtopic
+    - node.type.topic
+  module:
+    - content_moderation
+    - domain_access
+    - filter
+    - layout_builder
+    - media
+    - node
+    - scheduled_transitions
+id: topic_layout_supervisor
+label: 'Topic layout supervisor'
+weight: 10
+is_admin: null
+permissions:
+  - 'access media overview'
+  - 'add scheduled transitions node subtopic'
+  - 'add scheduled transitions node topic'
+  - 'configure editable subtopic node layout overrides'
+  - 'configure editable topic node layout overrides'
+  - 'create and edit custom blocks'
+  - 'create media'
+  - 'create subtopic content'
+  - 'create subtopic content on assigned domains'
+  - 'create topic content'
+  - 'create topic content on assigned domains'
+  - 'delete any subtopic content'
+  - 'delete any topic content'
+  - 'delete media'
+  - 'delete subtopic content on assigned domains'
+  - 'delete topic content on assigned domains'
+  - 'edit any subtopic content'
+  - 'edit any topic content'
+  - 'reschedule scheduled transitions node subtopic'
+  - 'reschedule scheduled transitions node topic'
+  - 'revert subtopic revisions'
+  - 'revert topic revisions'
+  - 'update landing_page content on assigned domains'
+  - 'update media'
+  - 'update subtopic content on assigned domains'
+  - 'update topic content on assigned domains'
+  - 'use text format filtered_html_with_templates'
+  - 'use text format layout_builder_html'
+  - 'view all revisions'
+  - 'view any unpublished content'
+  - 'view any unpublished landing_page content'
+  - 'view scheduled transitions node subtopic'
+  - 'view scheduled transitions node topic'
+  - 'view subtopic revisions'
+  - 'view topic revisions'
