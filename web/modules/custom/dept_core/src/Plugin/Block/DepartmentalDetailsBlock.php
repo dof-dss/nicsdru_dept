@@ -2,11 +2,11 @@
 
 namespace Drupal\dept_core\Plugin\Block;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\dept_core\DepartmentManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\dept_core\Annotations\DepartmentField;
+use Drupal\dept_core\Entity\Department;
 
 /**
  * Provides a departmental details block.
@@ -38,14 +38,22 @@ class DepartmentalDetailsBlock extends BlockBase {
    */
   public function blockForm($form, FormStateInterface $form_state) {
 
-    // Methods of the Department class to call.
-    $options = [
-      'accessToInformation' => 'Access to information',
-      'contactInformation' => 'Contact Information',
-      'managementAndStructure' => 'Management and structure',
-      'socialMediaLinks' => 'Social media links',
-      'location' => 'Location',
-    ];
+    // Extract the DepartmentField annotations to create select list.
+    $reader = new AnnotationReader();
+    $reflection = new \ReflectionClass(Department::class);
+
+    $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
+    $options = [];
+
+    foreach ($methods as $method) {
+      $annotations = $reader->getMethodAnnotations(new \ReflectionMethod(Department::class, $method->name));
+
+      foreach ($annotations as $annotation) {
+        if ($annotation instanceof DepartmentField) {
+          $options[$method->name] = $annotation->label();
+        }
+      }
+    }
 
     $form['display_field'] = [
       '#type' => 'select',

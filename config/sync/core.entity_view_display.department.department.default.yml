@@ -6,6 +6,7 @@ dependencies:
     - field.field.department.department.field_dept_access_to_info
     - field.field.department.department.field_dept_accessibility
     - field.field.department.department.field_dept_contact_info
+    - field.field.department.department.field_dept_footer_links
     - field.field.department.department.field_dept_location
     - field.field.department.department.field_dept_management_structure
     - field.field.department.department.field_dept_social_media_links
@@ -58,6 +59,18 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 23
+    region: content
+  field_dept_footer_links:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 27
     region: content
   field_dept_location:
     type: gmaps_lazy_load_formatter
