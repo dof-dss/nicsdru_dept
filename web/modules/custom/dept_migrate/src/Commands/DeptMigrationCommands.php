@@ -357,17 +357,29 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       foreach ($topic_ref_nodes_d7 as $d7_node_id => $title) {
         $node = $this->lookupManager->lookupBySourceNodeId([$d7_node_id]);
 
-        $this->dbConn->insert('node__field_topic_content')
-          ->fields([
-            'bundle' => 'topic',
-            'deleted' => 0,
-            'entity_id' => $topic['nid'],
-            'revision_id' => $topic['vid'],
-            'langcode' => 'en',
-            'delta' => $delta++,
-            'field_topic_content_target_id' => $node[$d7_node_id]['nid'],
-          ])
-          ->execute();
+        $existing_topic_content = $this->dbConn->query("SELECT
+          * FROM {node__field_topic_content}
+          WHERE entity_id = :entity_id
+          AND revision_id = :rev_id
+          AND field_topic_content_target_id = :target_id", [
+            ':entity_id' => $topic['nid'],
+            ':rev_id' => $topic['vid'],
+            ':target_id' => $node[$d7_node_id]['nid'],
+          ])->fetchAll();
+
+        if (empty($existing_topic_content)) {
+          $this->dbConn->insert('node__field_topic_content')
+            ->fields([
+              'bundle' => 'topic',
+              'deleted' => 0,
+              'entity_id' => $topic['nid'],
+              'revision_id' => $topic['vid'],
+              'langcode' => 'en',
+              'delta' => $delta++,
+              'field_topic_content_target_id' => $node[$d7_node_id]['nid'],
+            ])
+            ->execute();
+        }
       }
     }
     // @phpstan-ignore-next-line
