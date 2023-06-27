@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\RevisionableContentEntityBase;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\dept_core\Annotations\DepartmentDetails;
 use Drupal\dept_core\DepartmentInterface;
 use Drupal\user\EntityOwnerTrait;
 
@@ -344,7 +345,13 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    */
   public function accessibilityStatement() {
     return (empty($this->get('field_dept_accessibility')->referencedEntities())) ? NULL : $this->get('field_dept_accessibility')->referencedEntities()[0];
+  }
 
+  /**
+   * Page footer links.
+   */
+  public function footerLinks() {
+    return $this->get('field_dept_footer_links')->view();
   }
 
 }
