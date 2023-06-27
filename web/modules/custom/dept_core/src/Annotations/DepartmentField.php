@@ -8,7 +8,7 @@ namespace Drupal\dept_core\Annotations;
  * @Annotation
  * @Target({"METHOD"})
  */
-class DepartmentDetails {
+class DepartmentField {
 
   /**
    * Field label.

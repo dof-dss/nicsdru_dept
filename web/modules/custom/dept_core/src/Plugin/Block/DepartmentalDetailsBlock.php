@@ -3,15 +3,10 @@
 namespace Drupal\dept_core\Plugin\Block;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use ReflectionClass;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\dept_core\Annotations\DepartmentDetails;
-use Drupal\dept_core\DepartmentManager;
+use Drupal\dept_core\Annotations\DepartmentField;
 use Drupal\dept_core\Entity\Department;
-use ReflectionMethod;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a departmental details block.
@@ -43,17 +38,18 @@ class DepartmentalDetailsBlock extends BlockBase {
    */
   public function blockForm($form, FormStateInterface $form_state) {
 
+    // Extract the DepartmentField annotations to create select list.
     $reader = new AnnotationReader();
-    $reflection = new ReflectionClass(Department::class);
+    $reflection = new \ReflectionClass(Department::class);
 
-    $methods = $reflection->getMethods(ReflectionMethod::IS_PUBLIC);
+    $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
     $options = [];
 
     foreach ($methods as $method) {
-      $annotations = $reader->getMethodAnnotations(new ReflectionMethod(Department::class, $method->name));
+      $annotations = $reader->getMethodAnnotations(new \ReflectionMethod(Department::class, $method->name));
 
       foreach ($annotations as $annotation) {
-        if ($annotation instanceof DepartmentDetails) {
+        if ($annotation instanceof DepartmentField) {
           $options[$method->name] = $annotation->label();
         }
       }
