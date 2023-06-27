@@ -13,7 +13,7 @@ class DepartmentField {
   /**
    * Field label.
    *
-   * @var string|mixed
+   * @var string
    */
   private string $label;
 
@@ -24,7 +24,9 @@ class DepartmentField {
    *   Annotation values.
    */
   public function __construct(array $values) {
-    $this->label = $values['label'];
+    if (array_key_exists('label', $values)) {
+      $this->label = $values['label'];
+    }
   }
 
   /**
