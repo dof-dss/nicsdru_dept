@@ -357,17 +357,29 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       foreach ($topic_ref_nodes_d7 as $d7_node_id => $title) {
         $node = $this->lookupManager->lookupBySourceNodeId([$d7_node_id]);
 
-        $this->dbConn->insert('node__field_topic_content')
-          ->fields([
-            'bundle' => 'Topic',
-            'deleted' => 0,
-            'entity_id' => $topic['nid'],
-            'revision_id' => $topic['vid'],
-            'langcode' => 'en',
-            'delta' => $delta++,
-            'field_topic_content_target_id' => $node[$d7_node_id]['nid'],
-          ])
-          ->execute();
+        $existing_topic_content = $this->dbConn->query("SELECT
+          * FROM {node__field_topic_content}
+          WHERE entity_id = :entity_id
+          AND revision_id = :rev_id
+          AND field_topic_content_target_id = :target_id", [
+            ':entity_id' => $topic['nid'],
+            ':rev_id' => $topic['vid'],
+            ':target_id' => $node[$d7_node_id]['nid'],
+          ])->fetchAll();
+
+        if (empty($existing_topic_content)) {
+          $this->dbConn->insert('node__field_topic_content')
+            ->fields([
+              'bundle' => 'topic',
+              'deleted' => 0,
+              'entity_id' => $topic['nid'],
+              'revision_id' => $topic['vid'],
+              'langcode' => 'en',
+              'delta' => $delta++,
+              'field_topic_content_target_id' => $node[$d7_node_id]['nid'],
+            ])
+            ->execute();
+        }
       }
     }
     // @phpstan-ignore-next-line
@@ -475,7 +487,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
 
       // If we don't have a D9 nid it might be that the node in question hasn't
       // been migrated so skip adding it.
-      if (!array_key_exists('nid', $child_data[$child_node->nid]) || is_null($child_data[$child_node->nid]['nid'])) {
+      if (!array_key_exists('nid', $child_data[$child_node->nid]) || empty($child_data[$child_node->nid]['nid'])) {
         $this->missingTopicsContentCount[] = $child_node->nid;
       }
       else {
@@ -567,17 +579,30 @@ ORDER BY weight, title";
     // call and the delta is zero indexed.
     $delta = $delta ?? -1;
 
-    $this->dbConn->insert('node__field_topic_content')
-      ->fields([
-        'bundle' => $parent_node->bundle(),
-        'deleted' => 0,
-        'entity_id' => $parent_node->id(),
-        'revision_id' => $parent_node->getRevisionId(),
-        'langcode' => 'en',
-        'delta' => ++$delta,
-        'field_topic_content_target_id' => $child_nid,
-      ])
-      ->execute();
+    $existing_topic_data = $this->dbConn->query("SELECT
+        nftc.*
+        FROM {node__field_topic_content} nftc
+        WHERE nftc.entity_id = :entity_id
+        AND nftc.revision_id = :rev_id
+        AND nftc.field_topic_content_target_id = :target_id", [
+          ':entity_id' => $parent_node->id(),
+          ':rev_id' => $parent_node->getRevisionId(),
+          ':target_id' => $child_nid,
+        ])->fetchAll();
+
+    if (empty($existing_topic_data)) {
+      $this->dbConn->insert('node__field_topic_content')
+        ->fields([
+          'bundle' => $parent_node->bundle(),
+          'deleted' => 0,
+          'entity_id' => $parent_node->id(),
+          'revision_id' => $parent_node->getRevisionId(),
+          'langcode' => 'en',
+          'delta' => ++$delta,
+          'field_topic_content_target_id' => $child_nid,
+        ])
+        ->execute();
+    }
   }
 
 }
