@@ -254,7 +254,8 @@
                 "Views RSS row plugin incorrectly assumes links are relative #2918784": "https://www.drupal.org/files/issues/2021-07-01/2918784_42.patch",
                 "Cannot save unpublished versions of published content for users without manage book privileges": "https://www.drupal.org/files/issues/2022-12-14/2918537-92.patch",
                 "Remove sample date from date field error message and title attribute": "https://www.drupal.org/files/issues/2022-03-31/2791693-63.remove-sample-date.patch",
-                "Length of menu_tree.url and menu_tree.route_param_key are too short (255 characters)": "https://www.drupal.org/files/issues/2023-05-24/3106205-length-menu-tree-too-short.patch"
+                "Length of menu_tree.url and menu_tree.route_param_key are too short (255 characters)": "https://www.drupal.org/files/issues/2023-05-24/3106205-length-menu-tree-too-short.patch",
+                "Avoid error when $options is NULL in buildUrl()": "https://www.drupal.org/files/issues/2022-10-03/2871217-68_0.patch"
             },
             "drupal/easy_install": {
                 "Handle missing core version": "https://www.drupal.org/files/issues/2019-12-19/easy_install_core_version-3101883-0.patch"
