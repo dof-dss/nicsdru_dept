@@ -43,6 +43,12 @@ process:
   field_caption: field_file_image_caption_text
   field_media_image_alt_text: field_file_image_alt_text
   field_media_image_title_text: field_file_image_title_text
+  domain_access:
+    - plugin: d7_media_domain
+      source: fid
+  domain_source:
+    - plugin: d7_media_domain
+      source: fid
 destination:
   plugin: entity:media
 migration_dependencies:
