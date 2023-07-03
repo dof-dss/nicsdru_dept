@@ -86,6 +86,7 @@
         "drupal/devel": "^4.1",
         "drupal/devel_entity_updates": "^4.0",
         "drupal/diff": "^1.0",
+        "drupal/domain_entity": "^1.0@RC",
         "drupal/domain_path": "^1.0@beta",
         "drupal/domain_site_settings": "^1.4",
         "drupal/draggableviews": "^2.1",
@@ -289,9 +290,6 @@
             "drupal/linkit": {
                 "Link shown after the autocomplete selection is the bare node/xxx link, not the alias": "https://www.drupal.org/files/issues/2020-11-03/show_alias_in_autocomplete_selection-2877535-16.patch",
                 "Deprecated function : Return type of Drupal\\linkit\\Suggestion\\SimpleSuggestion::jsonSerialize() should either be compatible with JsonSerializable::jsonSerialize()": "https://www.drupal.org/files/issues/2022-04-26/linkit-jsonserialize-3262401-11.patch"
-            },
-            "drupal/migrate_tools": {
-                "Provide a drush wrapper to destroy/delete migration tables": "https://www.drupal.org/files/issues/2021-08-23/migrate_tools-drush-command-to-remove-tables-5.x-2997576-16.patch"
             },
             "drupal/migrate_plus": {
                 "Source plugin to only pull in certain URL aliases": "https://www.drupal.org/files/issues/2022-02-18/migrate_plus-n3063778-15.patch"

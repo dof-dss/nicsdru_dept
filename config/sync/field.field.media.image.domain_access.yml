@@ -1,0 +1,33 @@
+uuid: 3d5c14c6-98ba-4c1f-bfa7-89011954d577
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.domain_access
+    - media.type.image
+  module:
+    - domain_entity
+third_party_settings:
+  domain_entity:
+    domains:
+      nigov: nigov
+    behavior: user
+id: media.image.domain_access
+field_name: domain_access
+entity_type: media
+bundle: image
+label: 'Domain Access'
+description: 'Select the affiliate domain(s) for this content'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:domain'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: weight
+      direction: ASC
+    auto_create: false
+field_type: entity_reference
