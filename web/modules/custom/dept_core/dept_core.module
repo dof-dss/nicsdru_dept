@@ -7,6 +7,7 @@
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
@@ -255,4 +256,29 @@ function dept_core_department_links(): array {
     $classes = [];
   }
   return $links;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (str_starts_with(\Drupal::routeMatch()->getRouteName(), 'view.media_library')) {
+    if ($form_id === 'views_exposed_form') {
+      if (!empty($form['dept'])) {
+        // Change to select list of known depts.
+        $depts = \Drupal::service('department.manager')->getAllDepartments();
+
+        $form['dept'] = [
+          '#type' => 'select',
+          '#multiple' => FALSE,
+          '#empty_value' => '',
+          '#sort_options' => TRUE,
+        ];
+
+        foreach ($depts as $dept) {
+          $form['dept']['#options'][$dept->id()] = $dept->label();
+        }
+      }
+    }
+  }
 }
