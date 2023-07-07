@@ -2,12 +2,14 @@
 
 namespace Drupal\dept_topics\Plugin\Field\FieldWidget;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -58,37 +60,39 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
-    $element = parent::formElement($items, $delta, $element, $form, $form_state);
-
     if (!empty($form['field_domain_access']['widget']['#default_value'])) {
       $current_dept = current($form['field_domain_access']['widget']['#default_value']);
     }
 
-    $options = ['' => $this->t('Please select')];
+    $topic_manager = \Drupal::service('topic.manager');
+    $topics = $topic_manager->getTopicsForDepartment($current_dept);
+    $options = [];
 
-    $root_topics = $this->entityTypeManager->getStorage('node')->loadByProperties([
-      'type' => 'topic',
-      'field_domain_access' => $current_dept
-    ]);
-
-    foreach ($root_topics as $topic) {
-      $options[$topic->id()] = $topic->label();
+    foreach ($topics as $nid => $topic) {
+      $options[$nid] = $topic->label();
     }
 
     $element['value'] = $element + [
       '#type' => 'select',
       '#options' => $options,
       '#default_value' => $items[$delta]->value ?? NULL,
-      '#ajax' => [
-        'callback' => '::myAjaxCallback',
-        'disable-refocus' => FALSE,
-        'event' => 'change',
-        'wrapper' => 'edit-output',
-        'progress' => [
-          'type' => 'throbber',
-        ],
-      ]
     ];
+
+    $element['value'] = $element + [
+    '#title' => t('Topic tree'),
+    '#type' => 'link',
+    '#url' => Url::fromRoute('dept_topics.topic_tree.form'),
+    '#attributes' => [
+      'class' => 'use-ajax',
+      'data-dialog-type' => 'modal',
+      'data-dialog-options' => Json::encode([
+        'width' => 800,
+        'minHeight' => 800,
+      ]),
+    ],
+  ];
+
+
     return $element;
   }
 

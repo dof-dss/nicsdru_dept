@@ -21,7 +21,7 @@
           data: {
             url: function(node) {
               return Drupal.url(
-                "admin/topics/json"
+                "/admin/topics/topic_tree/json"
               );
             },
             data: function(node) {
