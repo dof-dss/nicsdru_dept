@@ -3,19 +3,18 @@
  * Topic tree JS.
  */
 
-// Codes run both on normal page loads and when data is loaded by AJAX (or BigPipe!)
-// @See https://www.drupal.org/docs/8/api/javascript-api/javascript-api-overview
 (function($, Drupal, once) {
   Drupal.behaviors.topicTree = {
     attach: function(context, settings) {
       $('#topic-tree-wrapper')
         .on('changed.jstree', function (e, data) {
-          var i, j, r = [];
-          for(i = 0, j = data.selected.length; i < j; i++) {
+          // Unselect all selected options on the field select.
+          $("#edit-field-site-topics option:selected").prop("selected", false)
+
+          // Select the options on the field select element to match the tree.
+          for(i = 0; i < data.selected.length; i++) {
             $("#edit-field-site-topics option[value='" + data.instance.get_node(data.selected[i]).id + "']").prop("selected", true);
-            r.push(data.instance.get_node(data.selected[i]).id);
           }
-          console.log('nids: ' + r.join(', '));
         })
         .jstree({
         core: {
