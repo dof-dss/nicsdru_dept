@@ -8,7 +8,16 @@
 (function($, Drupal, once) {
   Drupal.behaviors.topicTree = {
     attach: function(context, settings) {
-      $('#topic-tree-wrapper').jstree({
+      $('#topic-tree-wrapper')
+        .on('changed.jstree', function (e, data) {
+          var i, j, r = [];
+          for(i = 0, j = data.selected.length; i < j; i++) {
+            $("#edit-field-site-topics option[value='" + data.instance.get_node(data.selected[i]).id + "']").prop("selected", true);
+            r.push(data.instance.get_node(data.selected[i]).id);
+          }
+          console.log('nids: ' + r.join(', '));
+        })
+        .jstree({
         core: {
           data: {
             url: function(node) {

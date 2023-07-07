@@ -1,7 +1,9 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace Drupal\topic_tree\Form;
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -21,22 +23,6 @@ final class TreeForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-
-
-    // Search filter box.
-    $form['tree_search'] = [
-      '#type' => 'textfield',
-      '#title' => $this
-        ->t('Search'),
-      '#size' => 60,
-      '#attributes' => [
-        'id' => [
-          'entity-reference-tree-search',
-        ],
-      ],
-    ];
-
-    // JsTree container.
     $form['tree_container'] = [
       '#type' => 'html_tag',
       '#tag' => 'div',
@@ -45,19 +31,17 @@ final class TreeForm extends FormBase {
         'id' => ['topic-tree-wrapper'],
       ],
     ];
-    // Submit button.
+
     $form['actions'] = ['#type' => 'actions'];
     $form['actions']['send'] = [
       '#type' => 'submit',
       '#value' => $this->t('Submit'),
-      '#attributes' => [
-        'class' => [
-          'use-ajax',
-        ],
-      ],
       '#ajax' => [
         'callback' => [$this, 'submitForm'],
         'event' => 'click',
+      ],
+      '#attributes' => [
+        'class' => ['use-ajax'],
       ],
     ];
 
@@ -71,25 +55,11 @@ final class TreeForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state): void {
-    // @todo Validate the form here.
-    // Example:
-    // @code
-    //   if (mb_strlen($form_state->getValue('message')) < 10) {
-    //     $form_state->setErrorByName(
-    //       'message',
-    //       $this->t('Message should be at least 10 characters.'),
-    //     );
-    //   }
-    // @endcode
-  }
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
+    $response->addCommand(new CloseDialogCommand());
 
-  /**
-   * {@inheritdoc}
-   */
-  public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $this->messenger()->addStatus($this->t('The message has been sent.'));
-    $form_state->setRedirect('<front>');
+    return $response;
   }
 
 }
