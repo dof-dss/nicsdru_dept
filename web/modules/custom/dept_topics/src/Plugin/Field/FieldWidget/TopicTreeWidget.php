@@ -5,7 +5,7 @@ namespace Drupal\dept_topics\Plugin\Field\FieldWidget;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\Field\WidgetBase;
+use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   multiple_values = TRUE
  * )
  */
-final class TopicTreeWidget extends WidgetBase implements ContainerFactoryPluginInterface {
+final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFactoryPluginInterface {
 
   /**
    * The entity type manager service.
@@ -58,8 +58,13 @@ final class TopicTreeWidget extends WidgetBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
+    $element = parent::formElement($items, $delta, $element, $form, $form_state);
 
-    $current_dept = current($form['field_domain_access']['widget']['#default_value']);
+    if (!empty($form['field_domain_access']['widget']['#default_value'])) {
+      $current_dept = current($form['field_domain_access']['widget']['#default_value']);
+    }
+
+    $options = ['' => $this->t('Please select')];
 
     $root_topics = $this->entityTypeManager->getStorage('node')->loadByProperties([
       'type' => 'topic',
@@ -73,10 +78,25 @@ final class TopicTreeWidget extends WidgetBase implements ContainerFactoryPlugin
     $element['value'] = $element + [
       '#type' => 'select',
       '#options' => $options,
-      '#multiple' => TRUE,
       '#default_value' => $items[$delta]->value ?? NULL,
+      '#ajax' => [
+        'callback' => '::myAjaxCallback',
+        'disable-refocus' => FALSE,
+        'event' => 'change',
+        'wrapper' => 'edit-output',
+        'progress' => [
+          'type' => 'throbber',
+        ],
+      ]
     ];
     return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function supportsGroups() {
+    return FALSE;
   }
 
 }

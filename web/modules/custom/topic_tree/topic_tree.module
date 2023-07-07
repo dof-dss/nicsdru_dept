@@ -1,6 +1,31 @@
 <?php
 
+use Drupal\Component\Serialization\Json;
+
 /**
  * @file
  * Primary module hooks for Topic tree module.
  */
+
+function topic_tree_form_node_form_alter(&$form, $form_state) {
+
+  $form['#attached']['library'][] = 'dept_topic/topic_tree';
+
+  if (!empty($form['field_domain_access']['widget']['#default_value'])) {
+    $current_dept = current($form['field_domain_access']['widget']['#default_value']);
+  }
+
+  $form['topic_tree'] = [
+    '#title' => t('Topic tree'),
+    '#type' => 'link',
+    '#url' => \Drupal\Core\Url::fromRoute('topic_tree.tree_form'),
+    '#attributes' => [
+      'class' => 'use-ajax',
+      'data-dialog-type' => 'modal',
+      'data-dialog-options' => Json::encode([
+        'width' => 800,
+        'minHeight' => 800,
+      ]),
+    ],
+  ];
+}

@@ -8,7 +8,7 @@
 (function($, Drupal, once) {
   Drupal.behaviors.topicTree = {
     attach: function(context, settings) {
-      $('.topic-tree-tree').jstree({
+      $('#topic-tree-wrapper').jstree({
         core: {
           data: {
             url: function(node) {

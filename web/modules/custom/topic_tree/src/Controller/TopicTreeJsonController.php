@@ -13,21 +13,16 @@ class TopicTreeJsonController {
     return new JsonResponse($this->parentTopics());
   }
 
-  protected $topics;
+  protected $topics = [];
 
   /**
    * A helper function returning results.
    */
-  public function parentTopics() {
-
-    $current_dept = 'finance';
-
+  public function parentTopics($department = 'finance') {
     $root_topics = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
       'type' => 'topic',
-      'field_domain_access' => $current_dept
+      'field_domain_access' => $department
     ]);
-
-    $topics = [];
 
     foreach ($root_topics as $topic) {
 
@@ -37,19 +32,21 @@ class TopicTreeJsonController {
         'parent' => '#',
       ];
 
-      $subtopics = $this->subtopics($topic->id());
-
+      $subtopics = $this->subtopics($topic);
     }
 
     return $this->topics;
   }
 
   public function subtopics($parent) {
+    $child_content = $parent->field_topic_content->referencedEntities();
 
-    for ($i=1; $i < 3; $i++) {
-      $this->topics[] = ['id' => $parent . '-' . $i, 'text' => 'child ' . $i, 'parent' => $parent];
+    foreach ($child_content as $child) {
+      if ($child->bundle() === 'subtopic') {
+        $this->topics[] = ['id' => $child->id(), 'text' => $child->label(), 'parent' => $parent->id()];
+        $this->subtopics($child);
+      }
     }
-
   }
 
 }

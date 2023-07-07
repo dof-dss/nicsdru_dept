@@ -22,25 +22,48 @@ final class TreeForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
 
+
+    // Search filter box.
+    $form['tree_search'] = [
+      '#type' => 'textfield',
+      '#title' => $this
+        ->t('Search'),
+      '#size' => 60,
+      '#attributes' => [
+        'id' => [
+          'entity-reference-tree-search',
+        ],
+      ],
+    ];
+
+    // JsTree container.
+    $form['tree_container'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#attributes' => [
+        'class' => ['jstree'],
+        'id' => ['topic-tree-wrapper'],
+      ],
+    ];
+    // Submit button.
+    $form['actions'] = ['#type' => 'actions'];
+    $form['actions']['send'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Submit'),
+      '#attributes' => [
+        'class' => [
+          'use-ajax',
+        ],
+      ],
+      '#ajax' => [
+        'callback' => [$this, 'submitForm'],
+        'event' => 'click',
+      ],
+    ];
+
     $form['#attached']['library'][] = 'topic_tree/jstree';
     $form['#attached']['library'][] = 'topic_tree/topic_tree';
     $form['#attached']['library'][] = 'topic_tree/jstree_theme';
-
-    $form['tree'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'div',
-      '#attributes' => [['class' => 'jstree']],
-    ];
-
-
-
-    $form['actions'] = [
-      '#type' => 'actions',
-      'submit' => [
-        '#type' => 'submit',
-        '#value' => $this->t('Submit'),
-      ],
-    ];
 
     return $form;
   }
