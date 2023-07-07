@@ -5,6 +5,7 @@ namespace Drupal\dept_topics;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Provides methods for managing Sub/Topic referenced (child) content.
@@ -17,6 +18,13 @@ class TopicManager {
    * @var array
    */
   protected $parents = [];
+
+  /**
+   * Array of department topics.
+   *
+   * @var array
+   */
+  protected $deptTopics = [];
 
   /**
    * Array of target bundes.
@@ -110,6 +118,30 @@ class TopicManager {
     }
 
     return $this->targetBundles;
+  }
+
+  public function getTopicsForDepartment(string $department_id) {
+    $parent_topics = $this->entityTypeManager->getStorage('node')->loadByProperties([
+      'type' => 'topic',
+      'field_domain_source' => $department_id,
+    ]);
+
+    foreach ($parent_topics as $nid => $parent) {
+      $this->deptTopics[$parent->id()] = $parent;
+      $this->getChildTopics($parent);
+    }
+
+    return $this->deptTopics;
+  }
+  private function getChildTopics(NodeInterface $topic) {
+    $child_content = $topic->field_topic_content->referencedEntities();
+
+    foreach ($child_content as $child) {
+      if ($child->bundle() === 'subtopic') {
+        $this->deptTopics[$child->id()] = $child;
+        $this->getChildTopics($child);
+      }
+    }
   }
 
 }
