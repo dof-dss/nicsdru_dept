@@ -67,21 +67,26 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $topic_manager = \Drupal::service('topic.manager');
     $topics = $topic_manager->getTopicsForDepartment($current_dept);
     $options = [];
+    $field = $this->fieldDefinition->getName();
 
     foreach ($topics as $nid => $topic) {
       $options[$nid] = $topic->label();
     }
 
-    $element['value'] = $element + [
+    $element = [
       '#type' => 'select',
       '#options' => $options,
-      '#default_value' => $items[$delta]->value ?? NULL,
+      '#default_value' => $this->getSelectedOptions($items),
+      '#multiple' => TRUE,
     ];
 
-    $element['value'] = $element + [
+    $element['#field_suffix'] = [
     '#title' => t('Topic tree'),
     '#type' => 'link',
-    '#url' => Url::fromRoute('dept_topics.topic_tree.form'),
+    '#url' => Url::fromRoute('dept_topics.topic_tree.form',[
+      'department'=> $current_dept,
+      'field'=> $field,
+    ]),
     '#attributes' => [
       'class' => 'use-ajax',
       'data-dialog-type' => 'modal',
@@ -91,7 +96,6 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       ]),
     ],
   ];
-
 
     return $element;
   }

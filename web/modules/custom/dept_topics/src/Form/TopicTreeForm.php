@@ -22,7 +22,8 @@ final class TopicTreeForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state): array {
+  public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL): array {
+
     $form['tree_container'] = [
       '#type' => 'html_tag',
       '#tag' => 'div',
@@ -48,6 +49,11 @@ final class TopicTreeForm extends FormBase {
     $form['#attached']['library'][] = 'dept_topics/jstree';
     $form['#attached']['library'][] = 'dept_topics/topic_tree';
     $form['#attached']['library'][] = 'dept_topics/jstree_theme';
+
+    $form['#attached']['drupalSettings'] = [
+      'topic_tree.department' => $department,
+      'topic_tree.field' => $field,
+    ];
 
     return $form;
   }

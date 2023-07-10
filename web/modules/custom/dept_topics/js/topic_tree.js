@@ -3,7 +3,7 @@
  * Topic tree JS.
  */
 
-(function($, Drupal, once) {
+(function($, Drupal, drupalSettings) {
   Drupal.behaviors.topicTree = {
     attach: function(context, settings) {
       $('#topic-tree-wrapper')
@@ -21,7 +21,9 @@
             data: {
               url: function(node) {
                 return Drupal.url(
-                  "admin/topics/topic_tree/json"
+                  "admin/topics/topic_tree/json/"
+                  + drupalSettings["topic_tree.department"] + '/'
+                  + drupalSettings["topic_tree.field"]
                 );
               },
               data: function(node) {
@@ -40,5 +42,5 @@
         });
     }
   }
-})(jQuery, Drupal, once);
+})(jQuery, Drupal, drupalSettings);
 

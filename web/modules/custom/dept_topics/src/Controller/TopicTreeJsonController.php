@@ -9,8 +9,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class TopicTreeJsonController {
 
-  public function parents() {
-    return new JsonResponse($this->parentTopics());
+  public function parents($department, $field) {
+    return new JsonResponse($this->parentTopics($department));
   }
 
   protected $topics = [];
@@ -18,7 +18,7 @@ class TopicTreeJsonController {
   /**
    * A helper function returning results.
    */
-  public function parentTopics($department = 'finance') {
+  public function parentTopics($department) {
     $root_topics = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
       'type' => 'topic',
       'field_domain_access' => $department
