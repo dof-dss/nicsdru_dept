@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class TopicTreeJsonController {
 
-  public function parents($department, $field) {
+  public function parents($department) {
     return new JsonResponse($this->parentTopics($department));
   }
 

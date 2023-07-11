@@ -68,6 +68,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $topics = $topic_manager->getTopicsForDepartment($current_dept);
     $options = [];
     $field = $this->fieldDefinition->getName();
+    $default_values = $this->getSelectedOptions($items);
 
     foreach ($topics as $nid => $topic) {
       $options[$nid] = $topic->label();
@@ -76,7 +77,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $element = [
       '#type' => 'select',
       '#options' => $options,
-      '#default_value' => $this->getSelectedOptions($items),
+      '#default_value' => $default_values,
       '#multiple' => TRUE,
     ];
 
@@ -86,6 +87,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     '#url' => Url::fromRoute('dept_topics.topic_tree.form',[
       'department'=> $current_dept,
       'field'=> $field,
+      'selected' => is_array($default_values) ? implode('+', $default_values) : ''
     ]),
     '#attributes' => [
       'class' => 'use-ajax',

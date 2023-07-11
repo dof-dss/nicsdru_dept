@@ -1,5 +1,5 @@
 dept_topics.topic_tree.json:
-  path: '/admin/topics/topic_tree/json/{department}/{field}'
+  path: '/admin/topics/topic_tree/json/{department}'
   defaults:
     _title: 'Tree JSON'
     _controller: '\Drupal\dept_topics\Controller\TopicTreeJsonController::parents'
@@ -7,9 +7,10 @@ dept_topics.topic_tree.json:
     _permission: 'access content'
 
 dept_topics.topic_tree.form:
-  path: '/admin/topics/topic_tree/{department}/{field}'
+  path: '/admin/topics/topic_tree/{department}/{field}/{selected}'
   defaults:
     _title: 'Topics'
     _form: 'Drupal\dept_topics\Form\TopicTreeForm'
+    selected: ''
   requirements:
     _permission: 'access content'

@@ -22,8 +22,7 @@ final class TopicTreeForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL): array {
-
+  public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL, $selected = NULL): array {
     $form['tree_container'] = [
       '#type' => 'html_tag',
       '#tag' => 'div',
@@ -53,6 +52,7 @@ final class TopicTreeForm extends FormBase {
     $form['#attached']['drupalSettings'] = [
       'topic_tree.department' => $department,
       'topic_tree.field' => $field,
+      'topic_tree.selected' => $selected,
     ];
 
     return $form;
