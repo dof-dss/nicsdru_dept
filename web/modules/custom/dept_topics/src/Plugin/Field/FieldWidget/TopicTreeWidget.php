@@ -56,11 +56,12 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     );
   }
 
-
   /**
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
+    $current_dept = '';
+
     if (!empty($form['field_domain_access']['widget']['#default_value'])) {
       $current_dept = current($form['field_domain_access']['widget']['#default_value']);
     }
@@ -87,22 +88,22 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     ];
 
     $element['#field_suffix'] = [
-    '#title' => t('Topic tree'),
-    '#type' => 'link',
-    '#url' => Url::fromRoute('dept_topics.topic_tree.form',[
-      'department'=> $current_dept,
-      'field'=> $field_id,
-      'selected' => is_array($default_values) ? implode('+', $default_values) : ''
-    ]),
-    '#attributes' => [
-      'class' => 'use-ajax',
-      'data-dialog-type' => 'modal',
-      'data-dialog-options' => Json::encode([
-        'width' => 800,
-        'minHeight' => 800,
+      '#title' => t('Topic tree'),
+      '#type' => 'link',
+      '#url' => Url::fromRoute('dept_topics.topic_tree.form', [
+        'department' => $current_dept,
+        'field' => $field_id,
+        'selected' => is_array($default_values) ? implode('+', $default_values) : ''
       ]),
-    ],
-  ];
+      '#attributes' => [
+        'class' => 'use-ajax',
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => Json::encode([
+          'width' => 800,
+          'minHeight' => 800,
+        ]),
+      ],
+    ];
 
     return $element;
   }

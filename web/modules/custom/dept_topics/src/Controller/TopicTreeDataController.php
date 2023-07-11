@@ -2,17 +2,31 @@
 
 namespace Drupal\dept_topics\Controller;
 
+use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Returns responses for Topic tree routes.
  */
-class TopicTreeJsonController {
+class TopicTreeDataController {
 
-  public function parents($department) {
+  /**
+   * Return all topics and subtopics for a department.
+   *
+   * @param string $department_id
+   *   The department machine name.
+   *
+   * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   JSON dataset adhering to the format outlined in https://www.jstree.com/docs/json/.
+   */
+  public function allDepartmentTopics($department) {
     return new JsonResponse($this->parentTopics($department));
   }
 
+  /**
+   * List of topics for a department.
+   * @var array
+   */
   protected $topics = [];
 
   /**
@@ -38,12 +52,22 @@ class TopicTreeJsonController {
     return $this->topics;
   }
 
-  public function subtopics($parent) {
+  /**
+   * Extracts child subtopics for a given topic/subtopic node.
+   *
+   * @param \Drupal\node\NodeInterface $parent
+   *   Parent topic to extract child content from.
+   */
+  public function subtopics(NodeInterface $parent) {
     $child_content = $parent->field_topic_content->referencedEntities();
 
     foreach ($child_content as $child) {
       if ($child->bundle() === 'subtopic') {
-        $this->topics[] = ['id' => $child->id(), 'text' => $child->label(), 'parent' => $parent->id()];
+        $this->topics[] = [
+          'id' => $child->id(),
+          'text' => $child->label(),
+          'parent' => $parent->id()
+        ];
         $this->subtopics($child);
       }
     }

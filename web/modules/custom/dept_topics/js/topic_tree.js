@@ -17,6 +17,7 @@
           }
         })
         .on("ready.jstree", function(e, data) {
+          // Check all tree elements matching the selected options.
           data.instance.select_node($(select_field).val());
         })
         .jstree({

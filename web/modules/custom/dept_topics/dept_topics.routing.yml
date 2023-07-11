@@ -2,7 +2,7 @@ dept_topics.topic_tree.json:
   path: '/admin/topics/topic_tree/json/{department}'
   defaults:
     _title: 'Tree JSON'
-    _controller: '\Drupal\dept_topics\Controller\TopicTreeJsonController::parents'
+    _controller: '\Drupal\dept_topics\Controller\TopicTreeDataController::allDepartmentTopics'
   requirements:
     _permission: 'access content'
 

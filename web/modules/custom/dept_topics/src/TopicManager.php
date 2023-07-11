@@ -105,7 +105,7 @@ class TopicManager {
   }
 
   /**
-   * Returns a list of bundles that can be referenced from a topic or subtopic
+   * Returns a list of bundles that can be referenced from a topic or subtopic.
    *
    * @return array|mixed
    *   Array of bundle ID's.
@@ -120,6 +120,15 @@ class TopicManager {
     return $this->targetBundles;
   }
 
+  /**
+   * Returns a list of topics and subtopics for a department.
+   *
+   * @param string $department_id
+   *   The department machine name.
+   *
+   * @return array
+   *   Array of Topic/Subtopic nodes, indexed by node ID.
+   */
   public function getTopicsForDepartment(string $department_id) {
     $parent_topics = $this->entityTypeManager->getStorage('node')->loadByProperties([
       'type' => 'topic',
@@ -133,6 +142,13 @@ class TopicManager {
 
     return $this->deptTopics;
   }
+
+  /**
+   * Update the topics property with a list of child nodes.
+   *
+   * @param \Drupal\node\NodeInterface $topic
+   *   The topic/subtopic node to extract child subtopics from.
+   */
   private function getChildTopics(NodeInterface $topic) {
     $child_content = $topic->field_topic_content->referencedEntities();
 
