@@ -1,0 +1,26 @@
+uuid: f1b645a2-cb04-4939-929d-7b1d713967c6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_domain_source
+    - media.type.audio
+id: media.audio.field_domain_source
+field_name: field_domain_source
+entity_type: media
+bundle: audio
+label: 'Domain Source'
+description: 'Select the canonical domain for this entity.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:domain'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: weight
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

@@ -1,0 +1,26 @@
+uuid: a9f485f1-6a9c-453b-8a60-86dbd83f2975
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_domain_source
+    - media.type.remote_video
+id: media.remote_video.field_domain_source
+field_name: field_domain_source
+entity_type: media
+bundle: remote_video
+label: 'Domain Source'
+description: 'Select the canonical domain for this entity.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:domain'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: weight
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

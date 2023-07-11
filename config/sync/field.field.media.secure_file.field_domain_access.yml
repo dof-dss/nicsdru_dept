@@ -1,0 +1,26 @@
+uuid: 91cacdd4-2730-4fee-bbaf-0ccb8366c08b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_domain_access
+    - media.type.secure_file
+id: media.secure_file.field_domain_access
+field_name: field_domain_access
+entity_type: media
+bundle: secure_file
+label: 'Domain Access'
+description: 'Select the affiliate domain(s) for this content'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:domain'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: weight
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

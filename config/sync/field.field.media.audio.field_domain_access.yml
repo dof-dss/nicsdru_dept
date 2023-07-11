@@ -1,0 +1,26 @@
+uuid: 9f7c19d0-d472-499a-8f5f-6b0053863fad
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_domain_access
+    - media.type.audio
+id: media.audio.field_domain_access
+field_name: field_domain_access
+entity_type: media
+bundle: audio
+label: 'Domain Access'
+description: 'Select the affiliate domain(s) for this content'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:domain'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: weight
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

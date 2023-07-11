@@ -1,0 +1,26 @@
+uuid: 1ea06db2-497e-4f01-8b0c-69bcf78716e2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_domain_source
+    - media.type.secure_file
+id: media.secure_file.field_domain_source
+field_name: field_domain_source
+entity_type: media
+bundle: secure_file
+label: 'Domain Source'
+description: 'Select the canonical domain for this entity.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:domain'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: weight
+      direction: ASC
+    auto_create: false
+field_type: entity_reference
