@@ -5,6 +5,12 @@ dependencies:
   config:
     - field.storage.media.field_domain_source
     - media.type.document
+  module:
+    - domain_entity
+third_party_settings:
+  domain_entity:
+    exclude_routes:
+      canonical: canonical
 id: media.document.field_domain_source
 field_name: field_domain_source
 entity_type: media
