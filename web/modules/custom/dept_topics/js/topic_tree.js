@@ -16,14 +16,15 @@
             $("#edit-field-site-topics option[value='" + data.instance.get_node(data.selected[i]).id + "']").prop("selected", true);
           }
         })
+        .on("ready.jstree", function(e, data) {
+          data.instance.select_node($("#edit-field-site-topics").val());
+        })
         .jstree({
           core: {
             data: {
               url: function(node) {
                 return Drupal.url(
-                  "admin/topics/topic_tree/json/"
-                  + drupalSettings["topic_tree.department"] + '/'
-                  + drupalSettings["topic_tree.field"]
+                  "admin/topics/topic_tree/json/" + drupalSettings["topic_tree.department"]
                 );
               },
               data: function(node) {
