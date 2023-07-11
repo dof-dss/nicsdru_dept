@@ -60,18 +60,26 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
+    $field = $this->fieldDefinition->getName();
+    $field_id = Html::getUniqueId($field);
+    $default_values = $this->getSelectedOptions($items);
     $current_dept = '';
+    $options = [];
+    $topic_manager = \Drupal::service('topic.manager');
 
+    // Get current department from the domain_access field.
     if (!empty($form['field_domain_access']['widget']['#default_value'])) {
       $current_dept = current($form['field_domain_access']['widget']['#default_value']);
     }
 
-    $topic_manager = \Drupal::service('topic.manager');
+    // If we cannot determine the department via domain_access, use the current domain department.
+    if (empty($current_dept)) {
+      $domain = \Drupal::service('domain.negotiator')->getActiveDomain();
+      $current_dept = $domain->id();
+    }
+
+    // Only list topics/subtopics assigned to the department.
     $topics = $topic_manager->getTopicsForDepartment($current_dept);
-    $options = [];
-    $field = $this->fieldDefinition->getName();
-    $default_values = $this->getSelectedOptions($items);
-    $field_id = Html::getUniqueId($field);
 
     foreach ($topics as $nid => $topic) {
       $options[$nid] = $topic->label();
@@ -87,6 +95,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       ],
     ];
 
+    // Affix the topic tree link to the field.
     $element['#field_suffix'] = [
       '#title' => t('Topic tree'),
       '#type' => 'link',

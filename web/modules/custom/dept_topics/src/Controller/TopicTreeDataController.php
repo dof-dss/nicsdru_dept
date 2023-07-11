@@ -6,7 +6,7 @@ use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * Returns responses for Topic tree routes.
+ * Returns dataset responses for topic tree field widget.
  */
 class TopicTreeDataController {
 
@@ -39,7 +39,7 @@ class TopicTreeDataController {
     ]);
 
     foreach ($root_topics as $topic) {
-
+      // See 'Alternative JSON' format at https://www.jstree.com/docs/json/
       $this->topics[] = [
         'id' => $topic->id(),
         'text' => $topic->label(),

@@ -16,13 +16,14 @@ final class TopicTreeForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId(): string {
-    return 'topic_tree_tree';
+    return 'dept_topics.topic_tree';
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL, $selected = NULL): array {
+    // Container to load JsTree into.
     $form['tree_container'] = [
       '#type' => 'html_tag',
       '#tag' => 'div',
@@ -49,6 +50,7 @@ final class TopicTreeForm extends FormBase {
     $form['#attached']['library'][] = 'dept_topics/topic_tree';
     $form['#attached']['library'][] = 'dept_topics/jstree_theme';
 
+    // Data to pass to the JsTree instance.
     $form['#attached']['drupalSettings'] = [
       'topic_tree.department' => $department,
       'topic_tree.field' => $field,
