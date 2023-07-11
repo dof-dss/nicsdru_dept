@@ -6,18 +6,18 @@
 (function($, Drupal, drupalSettings) {
   Drupal.behaviors.topicTree = {
     attach: function(context, settings) {
+      let select_field = "#" + drupalSettings["topic_tree.field"];
       $('#topic-tree-wrapper')
         .on('changed.jstree', function (e, data) {
           // Unselect all selected options on the field select.
-          $("#edit-field-site-topics option:selected").prop("selected", false)
-
+          $(select_field + " option:selected").prop("selected", false)
           // Select the options on the field select element to match the tree.
           for(i = 0; i < data.selected.length; i++) {
-            $("#edit-field-site-topics option[value='" + data.instance.get_node(data.selected[i]).id + "']").prop("selected", true);
+            $(select_field + " option[value='" + data.instance.get_node(data.selected[i]).id + "']").prop("selected", true);
           }
         })
         .on("ready.jstree", function(e, data) {
-          data.instance.select_node($("#edit-field-site-topics").val());
+          data.instance.select_node($(select_field).val());
         })
         .jstree({
           core: {

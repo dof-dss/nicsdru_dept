@@ -3,6 +3,7 @@
 namespace Drupal\dept_topics\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -69,6 +70,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $options = [];
     $field = $this->fieldDefinition->getName();
     $default_values = $this->getSelectedOptions($items);
+    $field_id = Html::getUniqueId($field);
 
     foreach ($topics as $nid => $topic) {
       $options[$nid] = $topic->label();
@@ -79,6 +81,9 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       '#options' => $options,
       '#default_value' => $default_values,
       '#multiple' => TRUE,
+      '#attributes' => [
+        'id' => $field_id
+      ],
     ];
 
     $element['#field_suffix'] = [
@@ -86,7 +91,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     '#type' => 'link',
     '#url' => Url::fromRoute('dept_topics.topic_tree.form',[
       'department'=> $current_dept,
-      'field'=> $field,
+      'field'=> $field_id,
       'selected' => is_array($default_values) ? implode('+', $default_values) : ''
     ]),
     '#attributes' => [
