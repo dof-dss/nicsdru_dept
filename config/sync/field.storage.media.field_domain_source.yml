@@ -5,8 +5,8 @@ dependencies:
   module:
     - domain
     - media
-id: media.domain_source
-field_name: domain_source
+id: media.field_domain_source
+field_name: field_domain_source
 entity_type: media
 type: entity_reference
 settings:

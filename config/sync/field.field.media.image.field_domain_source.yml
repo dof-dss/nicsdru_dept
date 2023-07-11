@@ -1,14 +1,14 @@
-uuid: f6b4d33e-acf1-430d-83c7-9e4e140b0458
+uuid: 3611b846-add0-419f-9cf5-04098b4c564e
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.media.domain_source
-    - media.type.document
-id: media.document.domain_source
-field_name: domain_source
+    - field.storage.media.field_domain_source
+    - media.type.image
+id: media.image.field_domain_source
+field_name: field_domain_source
 entity_type: media
-bundle: document
+bundle: image
 label: 'Domain Source'
 description: 'Select the canonical domain for this entity.'
 required: false
