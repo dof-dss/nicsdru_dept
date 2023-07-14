@@ -40,8 +40,17 @@
           checkbox: {
             three_state: false
           },
-          plugins: ["changed", "checkbox", "conditionalselect"]
+          plugins: ["changed", "checkbox", "conditionalselect", "search"],
+          "search": {
+            "case_sensitive": false,
+            "show_only_matches": true,
+          }
         });
+
+      $('#topic-tree-search').keyup(function() {
+        let search_text = $(this).val();
+        $('#topic-tree-wrapper').jstree('search', search_text);
+      });
     }
   }
 })(jQuery, Drupal, drupalSettings);

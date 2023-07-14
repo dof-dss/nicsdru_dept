@@ -23,6 +23,15 @@ final class TopicTreeForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL, $selected = NULL): array {
+    $form['tree_search'] = [
+      '#type' => 'textfield',
+      '#prefix' => 'Search',
+      '#attributes' => [
+        'id' => 'topic-tree-search',
+        'placeholder' => 'Search termsgst'
+      ],
+    ];
+
     // Container to load JsTree into.
     $form['tree_container'] = [
       '#type' => 'html_tag',

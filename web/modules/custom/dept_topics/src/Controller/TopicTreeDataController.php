@@ -13,7 +13,7 @@ class TopicTreeDataController {
   /**
    * Return all topics and subtopics for a department.
    *
-   * @param string $department_id
+   * @param string $department
    *   The department machine name.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
