@@ -24,6 +24,7 @@ dependencies:
     - chosen_field
     - content_moderation
     - datetime
+    - dept_topics
     - link
     - media_library
     - metatag
@@ -125,13 +126,13 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_site_subtopics:
-    type: chosen_select
+    type: dept_topic_tree_widget
     weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
   field_site_topics:
-    type: chosen_select
+    type: dept_topic_tree_widget
     weight: 2
     region: content
     settings: {  }
