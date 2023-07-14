@@ -28,7 +28,7 @@ final class TopicTreeForm extends FormBase {
       '#prefix' => 'Search',
       '#attributes' => [
         'id' => 'topic-tree-search',
-        'placeholder' => 'Search termsgst'
+        'placeholder' => 'Search terms...'
       ],
     ];
 

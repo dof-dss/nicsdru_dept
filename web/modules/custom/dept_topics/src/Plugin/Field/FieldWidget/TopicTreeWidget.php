@@ -97,7 +97,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
 
     // Affix the topic tree link to the field.
     $element['#field_suffix'] = [
-      '#title' => t('Topic tree'),
+      '#title' => t('Open topic tree'),
       '#type' => 'link',
       '#url' => Url::fromRoute('dept_topics.topic_tree.form', [
         'department' => $current_dept,
