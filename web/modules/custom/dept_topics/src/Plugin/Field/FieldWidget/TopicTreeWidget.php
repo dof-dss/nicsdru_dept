@@ -90,6 +90,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       '#options' => $options,
       '#default_value' => $default_values,
       '#multiple' => TRUE,
+      '#chosen' => FALSE,
       '#attributes' => [
         'id' => $field_id
       ],
