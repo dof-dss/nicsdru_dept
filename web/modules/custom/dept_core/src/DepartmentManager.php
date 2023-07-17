@@ -3,8 +3,8 @@
 namespace Drupal\dept_core;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\domain\DomainNegotiatorInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\domain\DomainNegotiatorInterface;
 
 /**
  * Service class for managing Department objects.

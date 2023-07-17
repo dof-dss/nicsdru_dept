@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.media.media_library
+    - field.field.media.secure_file.field_domain_access
+    - field.field.media.secure_file.field_domain_source
     - field.field.media.secure_file.field_media_file_1
     - media.type.secure_file
 id: media.secure_file.media_library
@@ -13,6 +15,8 @@ mode: media_library
 content: {  }
 hidden:
   created: true
+  field_domain_access: true
+  field_domain_source: true
   field_media_file_1: true
   langcode: true
   name: true

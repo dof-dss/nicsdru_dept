@@ -8,8 +8,8 @@
 use Drupal\block\Entity\Block;
 use Drupal\dept_core\Entity\Department;
 use Drupal\facets\FacetInterface;
-use Drupal\views\ViewExecutable;
 use Drupal\facets_summary\Entity\FacetsSummary;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_form_FORM_ID_alter().

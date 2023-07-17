@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_migrate\Plugin\migrate\process;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
@@ -11,7 +12,6 @@ use Drupal\migrate\Row;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Drupal\Core\Database\Connection;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 /**
