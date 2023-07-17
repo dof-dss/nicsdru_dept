@@ -4,6 +4,8 @@ status: false
 dependencies:
   config:
     - core.entity_view_mode.media.preview
+    - field.field.media.remote_video.field_domain_access
+    - field.field.media.remote_video.field_domain_source
     - field.field.media.remote_video.field_media_oembed_video
     - media.type.remote_video
   module:
@@ -21,6 +23,8 @@ mode: preview
 content: {  }
 hidden:
   created: true
+  field_domain_access: true
+  field_domain_source: true
   field_media_oembed_video: true
   langcode: true
   name: true

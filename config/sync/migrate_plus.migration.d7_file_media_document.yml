@@ -2,8 +2,6 @@ uuid: 2e8d31bc-58a9-417e-8c08-11fa5b34e89d
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: 6EbpUGt6ul-m0f2EuJbOp0TQB1vwJxhqtCQpacjJmyg
 id: d7_file_media_document
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -66,6 +64,14 @@ process:
     -
       plugin: default_value
       default_value: 99316
+  field_domain_access:
+    -
+      plugin: d7_media_domain
+      source: fid
+  field_domain_source:
+    -
+      plugin: d7_media_domain
+      source: fid
 destination:
   plugin: 'entity:media'
 migration_dependencies:
