@@ -278,7 +278,7 @@ function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) 
       }
 
       // Change to select list of known depts.
-      $depts = \Drupal::service('department.manager')->getAllDepartments();
+      $depts = $dept_manager->getAllDepartments();
 
       $form['dept'] = [
         '#type' => 'select',
