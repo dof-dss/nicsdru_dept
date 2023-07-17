@@ -1,0 +1,22 @@
+topic_tree:
+  version: 1.x
+  js:
+    js/topic_tree.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.form
+    - core/drupalSettings
+    - core/drupal.dialog.ajax
+jstree:
+  version: 3.3.15
+  js:
+    js/jstree.min.js: { minified: true }
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    - core/once
+jstree_theme:
+  version: 3.3.15
+  css:
+    theme:
+      css/jstree/style.min.css: { minified: true }

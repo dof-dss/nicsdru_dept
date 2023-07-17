@@ -2,4 +2,3 @@ services:
   topic.manager:
     class: Drupal\dept_topics\TopicManager
     arguments: ['@entity_type.manager', '@database', '@entity_field.manager']
-

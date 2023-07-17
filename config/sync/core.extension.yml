@@ -1,6 +1,7 @@
 _core:
   default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc
 module:
+  webform_clientside_validation: -1
   address: 0
   admin_toolbar: 0
   admin_toolbar_tools: 0
@@ -16,6 +17,8 @@ module:
   chosen_field: 0
   chosen_lib: 0
   ckeditor: 0
+  clientside_validation: 0
+  clientside_validation_jquery: 0
   config: 0
   config_delete: 0
   config_filter: 0
@@ -90,6 +93,7 @@ module:
   help: 0
   http_cache_control: 0
   image: 0
+  inline_form_errors: 0
   interval: 0
   jquery_ui: 0
   jquery_ui_autocomplete: 0
