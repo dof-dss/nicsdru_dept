@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.media_library
+    - field.field.media.secure_file.field_domain_access
+    - field.field.media.secure_file.field_domain_source
     - field.field.media.secure_file.field_media_file_1
     - image.style.medium
     - media.type.secure_file
@@ -27,6 +29,8 @@ content:
     region: content
 hidden:
   created: true
+  field_domain_access: true
+  field_domain_source: true
   field_media_file_1: true
   langcode: true
   name: true

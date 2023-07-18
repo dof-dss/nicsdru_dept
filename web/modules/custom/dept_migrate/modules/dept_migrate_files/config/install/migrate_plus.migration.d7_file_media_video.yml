@@ -38,6 +38,12 @@ process:
     -
       source: uri
       plugin: video_url
+  field_domain_access:
+    - plugin: d7_media_domain
+      source: fid
+  field_domain_source:
+    - plugin: d7_media_domain
+      source: fid
 destination:
   plugin: entity:media
 migration_dependencies:

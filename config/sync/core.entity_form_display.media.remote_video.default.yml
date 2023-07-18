@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.remote_video.field_domain_access
+    - field.field.media.remote_video.field_domain_source
     - field.field.media.remote_video.field_media_oembed_video
     - media.type.remote_video
   module:
@@ -20,6 +22,26 @@ content:
     weight: 3
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_domain_access:
+    type: entity_reference_autocomplete
+    weight: 26
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_domain_source:
+    type: entity_reference_autocomplete
+    weight: 27
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_media_oembed_video:
     type: oembed_textfield

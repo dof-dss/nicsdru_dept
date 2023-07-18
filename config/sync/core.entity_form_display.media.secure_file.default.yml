@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.secure_file.field_domain_access
+    - field.field.media.secure_file.field_domain_source
     - field.field.media.secure_file.field_media_file_1
     - media.type.secure_file
   module:
@@ -18,6 +20,26 @@ content:
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_domain_access:
+    type: entity_reference_autocomplete
+    weight: 101
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_domain_source:
+    type: entity_reference_autocomplete
+    weight: 102
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_media_file_1:
     type: file_generic

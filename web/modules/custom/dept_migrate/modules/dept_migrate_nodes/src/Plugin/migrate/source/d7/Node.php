@@ -2,14 +2,14 @@
 
 namespace Drupal\dept_migrate_nodes\Plugin\migrate\source\d7;
 
-use Drupal\dept_migrate\MigrateUtils;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\migrate\Row;
-use Drupal\migrate_drupal\Plugin\migrate\source\d7\FieldableEntity;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\dept_migrate\MigrateUtils;
 use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\Row;
+use Drupal\migrate_drupal\Plugin\migrate\source\d7\FieldableEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

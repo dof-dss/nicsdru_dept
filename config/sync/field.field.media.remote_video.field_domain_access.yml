@@ -1,0 +1,32 @@
+uuid: fddbf7c8-1a7e-4fac-9ac3-f3b776ef62b3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_domain_access
+    - media.type.remote_video
+  module:
+    - domain_entity
+third_party_settings:
+  domain_entity:
+    domains: {  }
+    behavior: auto
+id: media.remote_video.field_domain_access
+field_name: field_domain_access
+entity_type: media
+bundle: remote_video
+label: 'Domain Access'
+description: 'Select the affiliate domain(s) for this content'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:domain'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: weight
+      direction: ASC
+    auto_create: false
+field_type: entity_reference
