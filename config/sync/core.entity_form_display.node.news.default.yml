@@ -25,6 +25,7 @@ dependencies:
     - content_moderation
     - datetime
     - media_library
+    - media_library_edit
     - metatag
     - path
     - scheduler
@@ -103,7 +104,9 @@ content:
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: '1'
   field_published_date:
     type: datetime_default
     weight: 6
@@ -143,8 +146,12 @@ content:
     weight: 10
     region: content
     settings:
-      media_types: {  }
-    third_party_settings: {  }
+      media_types:
+        - remote_video
+        - video
+    third_party_settings:
+      media_library_edit:
+        show_edit: '1'
   flag:
     weight: 15
     region: content
