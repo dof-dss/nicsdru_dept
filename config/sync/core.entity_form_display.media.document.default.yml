@@ -8,6 +8,25 @@ dependencies:
   module:
     - file
     - path
+third_party_settings:
+  field_group:
+    group_domain_settings:
+      children:
+        - field_domain_access
+        - field_domain_source
+      label: 'Domain settings'
+      region: content
+      parent_name: ''
+      weight: 8
+      format_type: details_sidebar
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+        weight: 0
 id: media.document.default
 targetEntityType: media
 bundle: document
@@ -64,4 +83,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  field_domain_access: true
+  field_domain_source: true
