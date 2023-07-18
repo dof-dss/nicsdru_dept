@@ -182,24 +182,24 @@ function dept_node_preprocess_node(array &$variables) {
 function dept_node_topic_banner(array &$variables) {
   /** @var \Drupal\node\NodeInterface $node */
   $node = &$variables['node'];
-  $view_mode = $variables['view_mode'];
 
   // Only show the banner on full view mode.
-  if ($view_mode != 'full') {
+  if ($variables['view_mode'] != 'full') {
     return;
   }
 
   $topic_manager = \Drupal::service('topic.manager');
 
+  // Only display banners for bundles that belong to the topics' system.
   if (!array_key_exists($node->bundle(), $topic_manager->getTopicChildNodeTypes())) {
     return;
   }
 
+  // If current node has a banner, return as it'll be displayed in the view mode or layout.
   if ($node->hasField('field_banner_image') && !is_null($node->get('field_banner_image'))) {
     return;
   }
 
-  // If current node has a banner, return it.
   // Fetch parents, if parents have banner use it.
   $parent_nids = array_keys($topic_manager->getParentNodes($node->id()));
   $banner_link = '';
@@ -214,6 +214,7 @@ function dept_node_topic_banner(array &$variables) {
       $banner_media = $parent_node
         ->get('field_banner_image_thin')
         ->referencedEntities();
+
       $banner_link = Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]);
     }
   }
