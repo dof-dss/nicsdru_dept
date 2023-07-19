@@ -87,18 +87,26 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
 
     $element = [
       '#type' => 'select',
+      '#title' => t('Topic'),
+      '#description' => t('Select a topic for this content. You can choose more than one topic, but choose sparingly and choose the most relevant and specific topic available.'),
       '#options' => $options,
       '#default_value' => $default_values,
       '#multiple' => TRUE,
       '#chosen' => FALSE,
       '#attributes' => [
-        'id' => $field_id
+        'id' => $field_id,
+        'class' => ['topic-select'],
+      ],
+      '#attached' => [
+        'library' => [
+          'dept_topics/topic_select',
+        ],
       ],
     ];
 
     // Affix the topic tree link to the field.
-    $element['#field_suffix'] = [
-      '#title' => t('Open topic tree'),
+    $element['#field_prefix'] = [
+      '#title' => t('Select topic'),
       '#type' => 'link',
       '#url' => Url::fromRoute('dept_topics.topic_tree.form', [
         'department' => $current_dept,
@@ -106,7 +114,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
         'selected' => is_array($default_values) ? implode('+', $default_values) : ''
       ]),
       '#attributes' => [
-        'class' => 'use-ajax',
+        'class' => ['button', 'use-ajax'],
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode([
           'width' => 800,

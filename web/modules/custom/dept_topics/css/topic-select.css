@@ -1,0 +1,31 @@
+select.topic-select,
+select.topic-select:focus,
+select.topic-select:hover {
+  appearance: none;
+  background-image: none;
+  display: none;
+  width: auto;
+  height: auto;
+  max-height: 5em;
+  overflow: auto;
+  padding: 3px 6px;
+  margin: 6px 0;
+  text-wrap: wrap;
+}
+
+select.topic-select:has(option:checked) {
+  display: block;
+}
+
+select.topic-select option {
+  appearance: none;
+  display: inline-block;
+  margin: 5px 5px 0 0;
+  padding: 3px 6px;
+  background-color: #ddd;
+  border-radius: 5px;
+}
+
+select.topic-select option:not(:checked) {
+  display: none;
+}
