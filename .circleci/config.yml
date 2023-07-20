@@ -53,11 +53,11 @@ jobs:
     steps:
       - checkout_code
       - check_build_constraints
-      - composer_tasks__no_cache
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - ./
+#      - composer_tasks__no_cache
+#      - persist_to_workspace:
+#          root: ./
+#          paths:
+#            - ./
   # Test for coding standards - will inherit the workspace/filesystem changes from build step, above.
   coding_standards:
     <<: *docker_image
@@ -139,10 +139,15 @@ commands:
     description: "Checks for any known composer package restrictions or limits"
     steps:
       - run:
+          name: Add jq package to assist in parsing JSON (not bundled with this docker image)
+          command: |
+            sudo curl https://github.com/jqlang/jq/releases/download/jq-1.6/jq-linux64 --no-progress-meter --output /usr/bin/jq
+            sudo chmod +x /usr/bin/jq
+      - run:
           name: Check composer lock file is complaint with DoF package constraints
           command: |
             cd $PROJECT_ROOT/.circleci
-            ./build_check.sh constraints.txt ../composer.lock
+            bash -x build_check.sh constraints.txt ../composer.lock
   checkout_code:
     description: "Handle composer access tokens, SSH key fingerprints and code checkout"
     steps:

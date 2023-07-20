@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Check if jq is installed
+if ! command -v jq &>/dev/null; then
+  echo "Error: jq is not installed. Please install jq to run this script."
+  exit 1
+fi
+
 constraints_file=${1:-"constraints.txt"}
 lock_file=${2:-"../composer.lock"}
 
