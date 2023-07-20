@@ -23,6 +23,9 @@ final class TopicTreeForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL, $selected = NULL): array {
+
+    $form['#title'] = $this->t('Select topic');
+
     $form['tree_search'] = [
       '#type' => 'textfield',
       '#prefix' => 'Search',
