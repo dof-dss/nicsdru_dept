@@ -1,31 +1,82 @@
-select.topic-select,
-select.topic-select:focus,
-select.topic-select:hover {
-  appearance: none;
-  background-image: none;
+.topic-select {
   display: none;
+  position: relative;
+  overflow: hidden;
+  margin: 10px 0 0;
+  padding: 0 5px;
   width: auto;
   height: auto;
-  max-height: 5em;
-  overflow: auto;
-  padding: 3px 6px;
-  margin: 6px 0;
-  text-wrap: wrap;
+  max-width: 600px;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  background-image: linear-gradient(#eee 1%, #fff 15%);
+  cursor: text;
 }
 
-select.topic-select:has(option:checked) {
-  display: block;
+.topic-select:focus,
+.topic-select:hover {
+  border: 1px solid #5897fb;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
-select.topic-select option {
-  appearance: none;
-  display: inline-block;
-  margin: 5px 5px 0 0;
-  padding: 3px 6px;
-  background-color: #ddd;
-  border-radius: 5px;
+.topic-select:has(input:checked) {
+  display: flex;
+  flex-flow: row wrap;
 }
 
-select.topic-select option:not(:checked) {
+.topic-select .form-type-checkbox {
   display: none;
+  margin: 3px 5px 3px 0;
+}
+
+.topic-select .form-type-checkbox:has(input:checked) {
+  display: inline-block;
+  position: relative;
+}
+
+.topic-select .form-type-checkbox label {
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  padding: 3px 20px 3px 5px;
+  border: 1px solid #aaa;
+  max-width: 100%;
+  border-radius: 3px;
+  background-color: #eeeeee;
+  background-image: linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eee 100%);
+  background-size: 100% 19px;
+  background-repeat: repeat-x;
+  background-clip: padding-box;
+  box-shadow: 0 0 2px #fff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  color: #333;
+  line-height: 13px;
+  cursor: default;
+}
+
+.topic-select .form-type-checkbox label::before,
+.topic-select .form-type-checkbox label::after {
+  position: absolute;
+  content: '';
+  top: calc(50% - 1px);
+  right: 4px;
+  width: 11px;
+  height: 3px;
+  background-color: #888;
+}
+
+.topic-select .form-type-checkbox label::before {
+  transform: rotate(45deg);
+}
+
+.topic-select .form-type-checkbox label::after {
+  transform: rotate(135deg);
+}
+
+.topic-select .form-type-checkbox input {
+  appearance: none;
+  border: none;
+  background: none;
+  font-size: 1px;
+  line-height: 1px;
+  position: absolute;
 }
