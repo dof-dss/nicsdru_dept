@@ -140,7 +140,9 @@ commands:
     steps:
       - run:
           name: Check composer lock file is complaint with DoF package constraints
-          command: $PROJECT_ROOT/.circleci/build_check.sh constraints.txt ../composer.lock
+          command: |
+            cd $PROJECT_ROOT/.circleci
+            ./build_check.sh constraints.txt ../composer.lock
   checkout_code:
     description: "Handle composer access tokens, SSH key fingerprints and code checkout"
     steps:
