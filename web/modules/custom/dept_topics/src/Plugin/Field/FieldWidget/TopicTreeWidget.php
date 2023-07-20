@@ -91,6 +91,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       '#description' => t('Select a topic for this content. You can choose more than one topic, but choose sparingly and choose the most relevant and specific topic available.'),
       '#options' => $options,
       '#default_value' => $default_values,
+      '#required' => TRUE,
       '#attached' => [
         'library' => [
           'dept_topics/topic_select',
