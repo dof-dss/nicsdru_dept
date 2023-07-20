@@ -72,25 +72,39 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     return $settings;
   }
 
-
   /**
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $bundle_info = \Drupal::service('entity_type.bundle.info');
     $bundles = $bundle_info->getBundleInfo('node');
+    $selected_bundles = array_keys($this->getSettings(), TRUE);
 
     if (!empty($bundles)) {
       foreach ($bundles as $bundle_id => $bundle_info) {
         $element[$bundle_id] = [
           '#type' => 'checkbox',
           '#title' => $bundle_info['label'],
+          '#default_value' => in_array($bundle_id, $selected_bundles),
         ];
       }
     }
 
     return $element;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsSummary() {
+    $summary = [];
+
+    $bundles = array_keys($this->getSettings(), TRUE);
+    $summary[] = $this->t('topic child content: @bundles', ['@bundles' => implode(', ', $bundles)]);
+
+    return $summary;
+  }
+
 
   /**
    * {@inheritdoc}
