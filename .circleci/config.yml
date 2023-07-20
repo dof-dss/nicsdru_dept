@@ -46,27 +46,13 @@ workflows:
     jobs:
       - sync_data
 
-  # A workflow to execute our functional tests against our edge branch environment.
-#  functional-tests:
-#    triggers:
-#      - schedule:
-#          cron: "0 3 * * 1-5"
-#          filters:
-#            branches:
-#              only:
-#                - DEPT-edge
-#    jobs:
-#      - build
-#      - functional_tests:
-#          requires:
-#            - build
-
 jobs:
   # Tests the integrity of the build, stores the results in a workspace for re-use in later jobs.
   build:
     <<: *docker_image
     steps:
       - checkout_code
+      - check_build_constraints
       - composer_tasks__no_cache
       - persist_to_workspace:
           root: ./
@@ -99,49 +85,6 @@ jobs:
             CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/modules/origins"
             CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/themes/custom"
             vendor/bin/drupal-check $CHECK_DIRS
-  # Functional tests with headless browser; run against our edge environment.
-#  functional_tests:
-#    docker:
-#      - image: cimg/php:8.1.0-browsers
-#        environment:
-#          TEST_TAGS: "dept_core"
-#          EDGE_BUILD_BRANCH: "DEPT-edge"
-#      - image: drupalci/chromedriver:production
-#        environment:
-#          CHROMEDRIVER_WHITELISTED_IPS: ""
-#          CHROMEDRIVER_URL_BASE: "/wd/hub"
-#    steps:
-#      - attach_workspace:
-#          at: ./
-#      - install_psh_cli
-#      - run:
-#          name: Get our environment URL and store as a local shell variable
-#          command: |
-#            # Chromedriver doesn't use https so we need to find the http url we want.
-#            echo 'export PLATFORM_ENV_URL=$(platform url -p $PLATFORM_PROJECT -e $EDGE_BUILD_BRANCH --pipe | sed -e "s|\/$||" | grep -e "^http://[^www]")' >> $BASH_ENV
-#      - run:
-#          name: Configure nightwatch settings and files
-#          command: |
-#            # Create a folder to store our nightwatch reports and screenshots
-#            mkdir -p ~/nightwatch-reports
-#            # Copy Nightwatch conf files into place.
-#            cat $CIRCLE_WORKING_DIRECTORY/web/core/.env.example | sed -e "s|\(^DRUPAL_TEST_BASE_URL\)\(.\+\)|\1=$PLATFORM_ENV_URL|g" > $CIRCLE_WORKING_DIRECTORY/web/core/.env
-#            sed -i -e "s|\(#\)\(DRUPAL_NIGHTWATCH_SEARCH_DIRECTORY\)=|\2=../|g" $CIRCLE_WORKING_DIRECTORY/web/core/.env
-#            sed -i -e "s|\(^DRUPAL_TEST_WEBDRIVER_HOSTNAME\)=localhost|\1=127.0.0.1|g" $CIRCLE_WORKING_DIRECTORY/web/core/.env
-#            sed -i -e "s|^DRUPAL_TEST_CHROMEDRIVER_AUTOSTART=true|DRUPAL_TEST_CHROMEDRIVER_AUTOSTART=false|g" $CIRCLE_WORKING_DIRECTORY/web/core/.env
-#            sed -i -e "s|\(#\)\(DRUPAL_TEST_WEBDRIVER_CHROME_ARGS\)=|\2=\"--disable-gpu --headless --no-sandbox\"|g" $CIRCLE_WORKING_DIRECTORY/web/core/.env
-#            sed -i -e "s|\(^DRUPAL_NIGHTWATCH_OUTPUT\)=reports/nightwatch|\1=~/nightwatch-reports|g" $CIRCLE_WORKING_DIRECTORY/web/core/.env
-#
-#            # Install npm packages for the projects/repos we know need them.
-#            for dir in core modules/custom; do
-#              cd ~/project/web/$dir && npm install
-#            done
-#      - run:
-#          name: Run tests with Nightwatch.js
-#          command: |
-#            yarn --cwd=$CIRCLE_WORKING_DIRECTORY/web/core test:nightwatch $(for tag in $TEST_TAGS; do echo --tag $tag; done)
-#      - store_artifacts:
-#          path: /home/circleci/nightwatch-reports
 
   # Task to build the edge site.
   build_edge:
@@ -192,6 +135,12 @@ jobs:
 
 # Re-usable commands.
 commands:
+  check_build_constraints:
+    description: "Checks for any known composer package restrictions or limits"
+    steps:
+      - run:
+          name: Check composer lock file is complaint with DoF package constraints
+          command: $PROJECT_ROOT/.circleci/build_check.sh constraints.txt ../composer.lock
   checkout_code:
     description: "Handle composer access tokens, SSH key fingerprints and code checkout"
     steps:
