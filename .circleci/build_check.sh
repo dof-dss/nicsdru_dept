@@ -9,6 +9,12 @@ fi
 constraints_file=${1:-"constraints.txt"}
 lock_file=${2:-"../composer.lock"}
 
+# Check if composer.lock file exists
+if [ ! -f "$lock_file" ]; then
+  echo "Error: composer.lock file not found: $lock_file"
+  exit 1
+fi
+
 # Flag to track if a match is found
 match_found=0
 
