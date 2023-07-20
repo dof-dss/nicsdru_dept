@@ -80,6 +80,12 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $bundles = $bundle_info->getBundleInfo('node');
     $selected_bundles = array_keys($this->getSettings(), TRUE);
 
+    $element['intro'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' => $this->t('Select the bundles which should be added/removed as child content to the selected topics.')
+    ];
+
     if (!empty($bundles)) {
       foreach ($bundles as $bundle_id => $bundle_info) {
         $element[$bundle_id] = [
@@ -100,11 +106,10 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $summary = [];
 
     $bundles = array_keys($this->getSettings(), TRUE);
-    $summary[] = $this->t('topic child content: @bundles', ['@bundles' => implode(', ', $bundles)]);
+    $summary[] = $this->t('Topic content: @bundles', ['@bundles' => implode(', ', $bundles)]);
 
     return $summary;
   }
-
 
   /**
    * {@inheritdoc}
