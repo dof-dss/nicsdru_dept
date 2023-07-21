@@ -100,13 +100,27 @@ class DeptNodeForm extends NodeForm {
         if (in_array($node->bundle(), $child_bundles)) {
           $node_storage = $this->entityTypeManager->getStorage('node');
 
+          // Add topic content references.
           foreach ($site_topics_new as $new) {
             $topic_node = $node_storage->load($new);
             $topic_node->get('field_topic_content')->appendItem([
               'target_id' => $node->id()
             ]);
             $topic_node->save();
+          }
 
+          // Remove any topic content references.
+          foreach ($site_topics_removed as $remove) {
+            $topic_node = $node_storage->load($remove);
+            $child_refs = $topic_node->get('field_topic_content');
+
+            for ($i = 0; $i < $child_refs->count(); $i++) {
+              if ($child_refs->get($i)->target_id == $node->id()) {
+                $child_refs->removeItem($i);
+                $i--;
+              }
+            }
+            $topic_node->save();
           }
         }
       }
