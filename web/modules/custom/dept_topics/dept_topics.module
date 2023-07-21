@@ -6,7 +6,7 @@
  * of topics, subtopics and related content.
  */
 
-use Drupal\Component\Serialization\Json;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 
@@ -185,6 +185,39 @@ function dept_topics_form_node_form_alter(&$form, $form_state) {
     // Select the site topic passed by the querystring parameter (coming from the moderation sidebar).
     if (array_key_exists('field_site_topics', $form)) {
       $form['field_site_topics']['widget']['#default_value'] = $topic_id;
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function dept_topics_entity_delete(EntityInterface $entity) {
+
+  if ($entity instanceof NodeInterface) {
+    /** @var \Drupal\dept_topics\TopicManager $topic_manager */
+    $topic_manager = \Drupal::service('topic.manager');
+
+    $bundle = $entity->bundle();
+    $child_cts = $topic_manager->getTopicChildNodeTypes();
+
+    if (in_array($bundle, $child_cts)) {
+      $parents = $topic_manager->getParentNodes($entity->id());
+      $node_manager = \Drupal::entityTypeManager()->getStorage('node');
+
+      foreach ($parents as $parent => $data) {
+        $topic_node = $node_manager->load($parent);
+        $child_refs = $topic_node->get('field_topic_content');
+
+        for ($i = 0; $i < $child_refs->count(); $i++) {
+          if ($child_refs->get($i)->target_id == $entity->id()) {
+            $child_refs->removeItem($i);
+            $i--;
+          }
+        }
+        $topic_node->save();
+      }
+
     }
   }
 
