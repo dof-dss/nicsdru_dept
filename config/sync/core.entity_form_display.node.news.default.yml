@@ -19,7 +19,6 @@ dependencies:
     - field.field.node.news.field_teaser
     - field.field.node.news.field_video
     - node.type.news
-    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
@@ -126,8 +125,8 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_summary:
-    type: text_textarea
-    weight: 8
+    type: string_textarea
+    weight: 4
     region: content
     settings:
       rows: 5
