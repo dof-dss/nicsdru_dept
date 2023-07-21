@@ -103,10 +103,21 @@ class DeptNodeForm extends NodeForm {
           // Add topic content references.
           foreach ($site_topics_new as $new) {
             $topic_node = $node_storage->load($new);
-            $topic_node->get('field_topic_content')->appendItem([
-              'target_id' => $node->id()
-            ]);
-            $topic_node->save();
+            $child_refs = $topic_node->get('field_topic_content');
+            $ref_exists = FALSE;
+
+            foreach ($child_refs as $ref) {
+              if ($ref->target_id == $node->id()) {
+                $ref_exists = TRUE;
+              }
+            }
+
+            if (!$ref_exists) {
+              $topic_node->get('field_topic_content')->appendItem([
+                'target_id' => $node->id()
+              ]);
+              $topic_node->save();
+            }
           }
 
           // Remove any topic content references.
