@@ -89,10 +89,27 @@ class DeptNodeForm extends NodeForm {
 
       $site_topics_original = $form['field_site_topics']['widget']['#default_value'];
       $site_topics_new = $form_state->getValue('field_site_topics');
-
       $site_topics_removed = array_diff($site_topics_original, $site_topics_new);
-      $site_topics_added = array_diff($site_topics_new, $site_topics_original);
 
+      if ($form_object instanceof ContentEntityForm) {
+        $form_display = $this->entityTypeManager->getStorage('entity_form_display')->load('node' . '.' . $node->bundle() . '.' . 'default');
+        $specific_widget_type = $form_display->getComponent('field_site_topics');
+
+        $child_bundles = array_keys($specific_widget_type['settings'],'1');
+
+        if (in_array($node->bundle(), $child_bundles)) {
+          $node_storage = $this->entityTypeManager->getStorage('node');
+
+          foreach ($site_topics_new as $new) {
+            $topic_node = $node_storage->load($new);
+            $topic_node->get('field_topic_content')->appendItem([
+              'target_id' => $node->id()
+            ]);
+            $topic_node->save();
+
+          }
+        }
+      }
     }
 
     return $result;
