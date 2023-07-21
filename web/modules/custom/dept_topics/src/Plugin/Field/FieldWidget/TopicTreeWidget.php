@@ -118,6 +118,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $field = $this->fieldDefinition->getName();
     $field_id = Html::getUniqueId($field);
     $default_values = $this->getSelectedOptions($items);
+    $settings = $this->getSettings();
     $current_dept = '';
     $options = [];
     $topic_manager = \Drupal::service('topic.manager');

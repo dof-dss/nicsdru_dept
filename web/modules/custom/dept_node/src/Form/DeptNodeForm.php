@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_node\Form;
 
+use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeForm;
 
@@ -19,6 +20,8 @@ class DeptNodeForm extends NodeForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
+    ksm($form, $form_state);
+    // DRUPAL CORE CODE - DO NOT EDIT (unless there are core changes)
     $node = $this->entity;
     $insert = $node->isNew();
     $result = $node->save();
@@ -80,6 +83,18 @@ class DeptNodeForm extends NodeForm {
         $topic->save();
       }
     }
+
+    if ($form_state->hasValue('field_site_topics') && $node->moderation_state->value === 'published') {
+      $form_object = $form_state->getFormObject();
+
+      $site_topics_original = $form['field_site_topics']['widget']['#default_value'];
+      $site_topics_new = $form_state->getValue('field_site_topics');
+
+      $site_topics_removed = array_diff($site_topics_original, $site_topics_new);
+      $site_topics_added = array_diff($site_topics_new, $site_topics_original);
+
+    }
+
     return $result;
   }
 
