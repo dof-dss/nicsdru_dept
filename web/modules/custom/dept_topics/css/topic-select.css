@@ -2,12 +2,13 @@
   display: none;
   position: relative;
   overflow: hidden;
-  margin: 10px 0 0;
-  padding: 0 5px;
+  margin: .5em 0 0;
+  padding: .5em .5em 0;
   width: auto;
   height: auto;
-  max-width: 600px;
-  border: 1px solid #aaa;
+  max-width: 60em;
+  box-shadow: 0 0 0 1px #999;
+  border: 0px solid transparent;
   background-color: #fff;
   background-image: linear-gradient(#eee 1%, #fff 15%);
   cursor: text;
@@ -15,8 +16,7 @@
 
 .topic-select:focus,
 .topic-select:hover {
-  border: 1px solid #5897fb;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 0 2px #555;
 }
 
 .topic-select:has(input:checked) {
@@ -24,59 +24,66 @@
   flex-flow: row wrap;
 }
 
-.topic-select .form-type-checkbox {
+.topic-select .form-item:has(input[type="checkbox"]) {
   display: none;
-  margin: 3px 5px 3px 0;
+  margin: 0 .5em .5em 0;
 }
 
-.topic-select .form-type-checkbox:has(input:checked) {
+.topic-select .form-item:has(input:checked) {
   display: inline-block;
   position: relative;
 }
 
-.topic-select .form-type-checkbox label {
+.topic-select .form-item:has(input[type="checkbox"]) label {
   display: inline-block;
   position: relative;
   margin: 0;
-  padding: 3px 20px 3px 5px;
+  padding: .5em 2rem .5em .5em;
   border: 1px solid #aaa;
   max-width: 100%;
-  border-radius: 3px;
-  background-color: #eeeeee;
-  background-image: linear-gradient(#f4f4f4 20%, #f0f0f0 50%, #e8e8e8 52%, #eee 100%);
-  background-size: 100% 19px;
-  background-repeat: repeat-x;
-  background-clip: padding-box;
-  box-shadow: 0 0 2px #fff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  border-radius: .2rem;
   color: #333;
-  line-height: 13px;
+  background-color: #eee;
+  font-size: 1em;
+  line-height: 1em;
   cursor: default;
 }
 
-.topic-select .form-type-checkbox label::before,
-.topic-select .form-type-checkbox label::after {
+.topic-select .form-item:has(input[type="checkbox"]) label::before,
+.topic-select .form-item:has(input[type="checkbox"]) label::after {
   position: absolute;
   content: '';
-  top: calc(50% - 1px);
-  right: 4px;
-  width: 11px;
-  height: 3px;
+  top: calc(50% - .1em);
+  right: .5em;
+  width: 1em;
+  height: .25em;
   background-color: #888;
 }
 
-.topic-select .form-type-checkbox label::before {
+.topic-select .form-item:has(input[type="checkbox"]):hover label::before,
+.topic-select .form-item:has(input[type="checkbox"]):hover label::after {
+  background-color: #333;
+}
+
+.topic-select .form-item:has(input[type="checkbox"]) label::before {
   transform: rotate(45deg);
 }
 
-.topic-select .form-type-checkbox label::after {
+.topic-select .form-item:has(input[type="checkbox"]) label::after {
   transform: rotate(135deg);
 }
 
-.topic-select .form-type-checkbox input {
-  appearance: none;
-  border: none;
-  background: none;
-  font-size: 1px;
-  line-height: 1px;
-  position: absolute;
+.topic-select .form-item:has(input[type="checkbox"]) input {
+  appearance: none !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  white-space: nowrap !important;
+  width: 1px !important;
+  border: none !important;
+  outline: none !important;
+  background: none !important;
+  box-shadow: none !important;
 }
