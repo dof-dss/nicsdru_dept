@@ -10,15 +10,17 @@
       $('#topic-tree-wrapper')
         .on('changed.jstree', function (e, data) {
           // Unselect all selected options on the field select.
-          $(select_field + " option:selected").prop("selected", false)
+          $(select_field + " input:checked").prop("checked", false)
           // Select the options on the field select element to match the tree.
           for(i = 0; i < data.selected.length; i++) {
-            $(select_field + " option[value='" + data.instance.get_node(data.selected[i]).id + "']").prop("selected", true);
+            $(select_field + " input[value='" + data.instance.get_node(data.selected[i]).id + "']").prop("checked", true);
           }
         })
         .on("ready.jstree", function(e, data) {
           // Check all tree elements matching the selected options.
-          data.instance.select_node($(select_field).val());
+          $(select_field + " input:checked").each(function () {
+            data.instance.select_node($(this).val());
+          });
         })
         .jstree({
           core: {

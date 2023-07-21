@@ -101,7 +101,7 @@ class D7MediaDomain extends ProcessPluginBase implements ContainerFactoryPluginI
         ':fid' => $value,
       ])->fetchAll();
 
-    if (empty($d7_file_query) || count($d7_file_query) > 1) {
+    if (empty($d7_file_query)) {
       return 'nigov';
     }
 
