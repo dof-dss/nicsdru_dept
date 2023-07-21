@@ -73,7 +73,7 @@ function dept_migrate_nodes_update_8001() {
     $field_config->save();
   }
 
-  // Inject existing dummary data into new fields.
+  // Inject existing summary data into new fields.
   if (!empty($summary_data)) {
     foreach ($summary_data as $row) {
       $database->insert('node__field_summary')
