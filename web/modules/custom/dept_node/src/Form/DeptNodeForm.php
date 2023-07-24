@@ -92,10 +92,11 @@ class DeptNodeForm extends NodeForm {
       $site_topics_removed = array_diff($site_topics_original, $site_topics_new);
 
       if ($form_object instanceof ContentEntityForm) {
+        // Fetch the Topic tree widget settings.
         $form_display = $this->entityTypeManager->getStorage('entity_form_display')->load('node' . '.' . $node->bundle() . '.' . 'default');
         $specific_widget_type = $form_display->getComponent('field_site_topics');
-
-        $child_bundles = array_keys($specific_widget_type['settings'],'1');
+        // Node bundles which should have topic content entries.
+        $child_bundles = array_keys($specific_widget_type['settings'], '1');
 
         if (in_array($node->bundle(), $child_bundles)) {
           $node_storage = $this->entityTypeManager->getStorage('node');
@@ -106,6 +107,7 @@ class DeptNodeForm extends NodeForm {
             $child_refs = $topic_node->get('field_topic_content');
             $ref_exists = FALSE;
 
+            // Check if an entry exists to prevent duplicates.
             foreach ($child_refs as $ref) {
               if ($ref->target_id == $node->id()) {
                 $ref_exists = TRUE;

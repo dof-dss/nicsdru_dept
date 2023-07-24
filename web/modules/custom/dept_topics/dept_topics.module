@@ -199,12 +199,13 @@ function dept_topics_entity_delete(EntityInterface $entity) {
     $topic_manager = \Drupal::service('topic.manager');
 
     $bundle = $entity->bundle();
-    $child_cts = $topic_manager->getTopicChildNodeTypes();
+    $child_bundles = $topic_manager->getTopicChildNodeTypes();
 
-    if (in_array($bundle, $child_cts)) {
+    if (in_array($bundle, $child_bundles)) {
       $parents = $topic_manager->getParentNodes($entity->id());
       $node_manager = \Drupal::entityTypeManager()->getStorage('node');
 
+      // Remove all topic content refernces for this node in topic/subtopic nodes.
       foreach ($parents as $parent => $data) {
         $topic_node = $node_manager->load($parent);
         $child_refs = $topic_node->get('field_topic_content');
