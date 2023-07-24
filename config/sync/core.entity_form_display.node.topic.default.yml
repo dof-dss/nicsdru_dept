@@ -16,7 +16,6 @@ dependencies:
     - field.field.node.topic.field_topic_content
     - field.field.node.topic.layout_builder__layout
     - node.type.topic
-    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - field_group
@@ -127,8 +126,8 @@ content:
       media_types: {  }
     third_party_settings: {  }
   field_summary:
-    type: text_textarea
-    weight: 2
+    type: string_textarea
+    weight: 4
     region: content
     settings:
       rows: 5

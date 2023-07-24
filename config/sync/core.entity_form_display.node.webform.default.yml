@@ -120,7 +120,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   simple_sitemap:
-    weight: 7
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -183,5 +183,6 @@ content:
     third_party_settings: {  }
 hidden:
   entitygroupfield: true
+  field_teaser: true
   groups: true
   groups_type_department_site: true

@@ -142,20 +142,23 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     }
 
     $element = [
-      '#type' => 'select',
+      '#type' => 'checkboxes',
       '#title' => t('Topic'),
       '#description' => t('Select a topic for this content. You can choose more than one topic, but choose sparingly and choose the most relevant and specific topic available.'),
       '#options' => $options,
       '#default_value' => $default_values,
-      '#multiple' => TRUE,
-      '#chosen' => FALSE,
-      '#attributes' => [
-        'id' => $field_id,
-        'class' => ['topic-select'],
-      ],
+      '#required' => TRUE,
       '#attached' => [
         'library' => [
           'dept_topics/topic_select',
+        ],
+      ],
+      '#theme_wrappers' => [
+        'container' => [
+          '#attributes' => [
+            'id' => $field_id,
+            'class' => 'topic-select',
+          ],
         ],
       ],
     ];

@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.gallery.field_site_topics
     - field.field.node.gallery.field_summary
     - node.type.gallery
-    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - media_library
@@ -99,7 +98,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_summary:
-    type: text_textarea
+    type: string_textarea
     weight: 4
     region: content
     settings:

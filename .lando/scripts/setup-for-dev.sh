@@ -14,4 +14,8 @@ lando_blue "Cloning DEPT theme"
 rm -rf /app/web/themes/custom/nicsdru_dept_theme
 git clone git@github.com:dof-dss/nicsdru_dept_theme.git /app/web/themes/custom/nicsdru_dept_theme
 
+lando_blue "Cloning Origins modules"
+rm -rf /app/web/modules/origins
+git clone git@github.com:dof-dss/nicsdru_origins_modules.git /app/web/modules/origins
+
 lando_green "Go develop!";
