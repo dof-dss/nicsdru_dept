@@ -121,6 +121,19 @@ class TopicManager {
   }
 
   /**
+   * Return true or false if the provided bundle name is enabled as a topic child content option.
+   *
+   * @param string $type
+   *   The bundle name.
+   *
+   * @return bool
+   *   True if a topic child content type.
+   */
+  public function isTopicChildBundle($type) {
+    return in_array($type, $this->getTopicChildNodeTypes());
+  }
+
+  /**
    * Returns a list of topics and subtopics for a department.
    *
    * @param string $department_id
