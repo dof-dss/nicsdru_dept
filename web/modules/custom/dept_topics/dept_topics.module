@@ -211,6 +211,7 @@ function dept_topics_entity_delete(EntityInterface $entity) {
         $child_refs = $topic_node->get('field_topic_content');
 
         for ($i = 0; $i < $child_refs->count(); $i++) {
+          // @phpstan-ignore-next-line
           if ($child_refs->get($i)->target_id == $entity->id()) {
             $child_refs->removeItem($i);
             $i--;
