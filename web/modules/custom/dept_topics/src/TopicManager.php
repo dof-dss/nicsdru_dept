@@ -130,15 +130,19 @@ class TopicManager {
   }
 
   /**
-   * Return true or false if the provided bundle name is enabled as a topic child content option.
+   * Return true or false if the provided type is enabled as a topic child content option.
    *
-   * @param string $type
-   *   The bundle name.
+   * @param mixed $type
+   *   A node entity or bundle name.
    *
    * @return bool
    *   True if a topic child content type.
    */
-  public function isTopicChildBundle($type) {
+  public function isValidTopicChild(mixed $type) {
+    if ($type instanceof NodeInterface) {
+      return in_array($type->bundle(), $this->getTopicChildNodeTypes());
+    }
+
     return in_array($type, $this->getTopicChildNodeTypes());
   }
 
@@ -171,8 +175,8 @@ class TopicManager {
    * @param $entity
    *   The entity to use as a child reference.
    */
-  public function setTopicContentReferences($entity) {
-    if ($entity->hasField('field_site_topics') && $this->isTopicChildBundle($entity->bundle())) {
+  public function setTopicChild($entity) {
+    if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
       $site_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
 
@@ -224,7 +228,7 @@ class TopicManager {
    * @param $entity
    *   The entity to remove all references for.
    */
-  public function removeTopicContentReferences($entity) {
+  public function removeTopicChild($entity) {
     $parent_nids = array_keys($this->getParentNodes($entity->id()));
 
     foreach ($parent_nids as $parent) {
