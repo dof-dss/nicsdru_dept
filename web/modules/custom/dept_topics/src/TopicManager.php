@@ -175,7 +175,7 @@ class TopicManager {
    * @param $entity
    *   The entity to use as a child reference.
    */
-  public function setTopicChild($entity) {
+  public function updateChildOnTopics($entity) {
     if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
       $site_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
@@ -228,7 +228,7 @@ class TopicManager {
    * @param $entity
    *   The entity to remove all references for.
    */
-  public function removeTopicChild($entity) {
+  public function removeChildFromTopics($entity) {
     $parent_nids = array_keys($this->getParentNodes($entity->id()));
 
     foreach ($parent_nids as $parent) {

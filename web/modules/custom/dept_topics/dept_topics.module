@@ -7,6 +7,7 @@
  */
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 
@@ -223,4 +224,31 @@ function dept_topics_entity_delete(EntityInterface $entity) {
     }
   }
 
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dept_topics_form_moderation_sidebar_quick_transition_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $entity = $form_state->get('entity');
+
+  if ($entity instanceof NodeInterface) {
+    if (\Drupal::service('topic.manager')->isTopicChildBundle($entity->bundle())) {
+      $form['#submit'][] = 'dept_topics_process_topic_child_contents';
+    }
+  }
+}
+
+/**
+ * Submit callback for Moderation Sidebar Quick Transition form.
+ */
+function dept_topics_process_topic_child_contents($form, FormStateInterface $form_state) {
+  $entity = $form_state->get('entity');
+  $op = $form_state->getValue('op');
+
+  if ($op === 'Quick Publish') {
+    \Drupal::service('topic.manager')->updateChildOnTopics($entity);
+  } elseif ($op === 'Archive') {
+    \Drupal::service('topic.manager')->removeChildFromTopics($entity);
+  }
 }
