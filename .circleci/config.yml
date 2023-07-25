@@ -140,14 +140,12 @@ commands:
     steps:
       - run:
           name: Add jq package to assist in parsing JSON (not bundled with this docker image)
-          command: |
-            sudo curl https://github.com/jqlang/jq/releases/download/jq-1.6/jq-linux64 --no-progress-meter --output /usr/bin/jq
-            sudo chmod +x /usr/bin/jq
+          command: sudo apt update && sudo apt install jq -y
       - run:
-          name: Check composer lock file is complaint with DoF package constraints
+          name: Check composer lock file is compliant with DoF package constraints
           command: |
             cd $PROJECT_ROOT/.circleci
-            bash -x build_check.sh constraints.txt ../composer.lock
+            ./build_check.sh constraints.txt ../composer.lock
   checkout_code:
     description: "Handle composer access tokens, SSH key fingerprints and code checkout"
     steps:
