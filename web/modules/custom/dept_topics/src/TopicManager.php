@@ -6,6 +6,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\node\NodeStorage;
 
 /**
  * Provides methods for managing Sub/Topic referenced (child) content.
@@ -55,6 +56,13 @@ class TopicManager {
   protected $entityFieldManager;
 
   /**
+   * Node storage instance.
+   *
+   * @var \Drupal\node\NodeStorage
+   */
+  protected $nodeStorage;
+
+  /**
    * Constructs a TopicManager object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -73,6 +81,7 @@ class TopicManager {
     $this->entityTypeManager = $entity_type_manager;
     $this->dbConn = $connection;
     $this->entityFieldManager = $entity_field_manager;
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
   }
 
   /**
@@ -154,6 +163,53 @@ class TopicManager {
     }
 
     return $this->deptTopics;
+  }
+
+  public function setTopicContentReferences($entity) {
+    if ($entity->hasField('field_site_topics') && $this->isTopicChildBundle($entity->bundle())) {
+      $parent_nids = array_keys($this->getParentNodes($entity->id()));
+      $site_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
+
+      $site_topics_removed = array_diff($parent_nids, $site_topics);
+      $site_topics_new = array_diff($site_topics, $parent_nids);
+
+      // Add topic content references.
+      foreach ($site_topics_new as $new) {
+        $topic_node = $this->nodeStorage->load($new);
+
+        $child_refs = $topic_node->get('field_topic_content');
+        $ref_exists = FALSE;
+
+        // Check if an entry exists to prevent duplicates.
+        foreach ($child_refs as $ref) {
+          if ($ref->target_id == $entity->id()) {
+            $ref_exists = TRUE;
+          }
+        }
+
+        if (!$ref_exists) {
+          $topic_node->get('field_topic_content')->appendItem([
+            'target_id' => $entity->id()
+          ]);
+          $topic_node->save();
+        }
+      }
+
+      // Remove any topic content references.
+      foreach ($site_topics_removed as $remove) {
+        $topic_node = $this->nodeStorage->load($remove);
+        $child_refs = $topic_node->get('field_topic_content');
+
+        for ($i = 0; $i < $child_refs->count(); $i++) {
+          if ($child_refs->get($i)->target_id == $entity->id()) {
+            $child_refs->removeItem($i);
+            $i--;
+          }
+        }
+
+        $topic_node->save();
+      }
+    }
   }
 
   /**
