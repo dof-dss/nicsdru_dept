@@ -53,11 +53,11 @@ jobs:
     steps:
       - checkout_code
       - check_build_constraints
-#      - composer_tasks__no_cache
-#      - persist_to_workspace:
-#          root: ./
-#          paths:
-#            - ./
+      - composer_tasks
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./
   # Test for coding standards - will inherit the workspace/filesystem changes from build step, above.
   coding_standards:
     <<: *docker_image
