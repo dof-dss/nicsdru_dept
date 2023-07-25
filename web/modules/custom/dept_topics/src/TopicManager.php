@@ -165,6 +165,12 @@ class TopicManager {
     return $this->deptTopics;
   }
 
+  /**
+   * Add and remove an entity to topic child content lists based on the Site Topic field values.
+   *
+   * @param $entity
+   *   The entity to use as a child reference.
+   */
   public function setTopicContentReferences($entity) {
     if ($entity->hasField('field_site_topics') && $this->isTopicChildBundle($entity->bundle())) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
@@ -209,6 +215,30 @@ class TopicManager {
 
         $topic_node->save();
       }
+    }
+  }
+
+  /**
+   * Remove all topic child references for the given entity.
+   *
+   * @param $entity
+   *   The entity to remove all references for.
+   */
+  public function removeTopicContentReferences($entity) {
+    $parent_nids = array_keys($this->getParentNodes($entity->id()));
+
+    foreach ($parent_nids as $parent) {
+      $topic_node = $this->nodeStorage->load($parent);
+      $child_refs = $topic_node->get('field_topic_content');
+
+      for ($i = 0; $i < $child_refs->count(); $i++) {
+        if ($child_refs->get($i)->target_id == $entity->id()) {
+          $child_refs->removeItem($i);
+          $i--;
+        }
+      }
+
+      $topic_node->save();
     }
   }
 
