@@ -9,6 +9,7 @@
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 
 /**
@@ -179,7 +180,7 @@ function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
  * Implements hook_form_ENTITY_form_alter().
  */
 function dept_topics_form_node_form_alter(&$form, $form_state) {
-
+  $form_object = $form_state->getFormObject();
   $topic_id = \Drupal::request()->query->get('topic');
 
   if (!empty($topic_id)) {
@@ -187,6 +188,12 @@ function dept_topics_form_node_form_alter(&$form, $form_state) {
     if (array_key_exists('field_site_topics', $form)) {
       $form['field_site_topics']['widget']['#default_value'] = $topic_id;
     }
+  }
+
+  $bundle = $form_object->getEntity()->bundle();
+
+  if (\Drupal::service('topic.manager')->isValidTopicChild($bundle)) {
+    $form['actions']['submit']['#submit'][] = 'dept_topics_process_topic_child_contents';
   }
 }
 
@@ -233,7 +240,7 @@ function dept_topics_form_moderation_sidebar_quick_transition_form_alter(&$form,
   $entity = $form_state->get('entity');
 
   if ($entity instanceof NodeInterface) {
-    if (\Drupal::service('topic.manager')->isTopicChildBundle($entity->bundle())) {
+    if (\Drupal::service('topic.manager')->isValidTopicChild($entity->bundle())) {
       $form['#submit'][] = 'dept_topics_process_topic_child_contents';
     }
   }
@@ -245,10 +252,17 @@ function dept_topics_form_moderation_sidebar_quick_transition_form_alter(&$form,
 function dept_topics_process_topic_child_contents($form, FormStateInterface $form_state) {
   $entity = $form_state->get('entity');
   $op = $form_state->getValue('op');
+  $mod_state = $form_state->getValue('moderation_state');
 
-  if ($op === 'Quick Publish') {
+  if (empty($entity)) {
+    $nid = $form_state->getValue('nid');
+    $entity = Node::load($nid);
+  }
+
+  // Moderation sidebar.
+  if ($op === 'Quick Publish' || $mod_state[0]['value'] === 'published') {
     \Drupal::service('topic.manager')->updateChildOnTopics($entity);
-  } elseif ($op === 'Archive') {
+  } elseif ($op === 'Archive' || $mod_state[0]['value'] === 'archived') {
     \Drupal::service('topic.manager')->removeChildFromTopics($entity);
   }
 }
