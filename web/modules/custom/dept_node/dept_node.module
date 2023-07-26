@@ -276,18 +276,6 @@ function dept_node_preprocess_page(&$variables) {
 }
 
 /**
- * Implements hook_entity_type_alter().
- */
-function dept_node_entity_type_alter(&$entity_types) {
-
-  if (isset($entity_types['node'])) {
-    foreach (['default', 'edit'] as $operation) {
-      $entity_types['node']->setFormClass($operation, DeptNodeForm::class);
-    }
-  }
-}
-
-/**
  * Implements hook_pathauto_alias_alter().
  */
 function dept_node_pathauto_alias_alter(&$alias, array &$context) {
