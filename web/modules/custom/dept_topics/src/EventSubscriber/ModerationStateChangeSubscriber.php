@@ -5,9 +5,6 @@ namespace Drupal\dept_topics\EventSubscriber;
 use Drupal\dept_topics\TopicManager;
 use Drupal\origins_workflow\Event\ModerationStateChangeEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Departmental sites: topics event subscriber.
@@ -24,8 +21,8 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
   /**
    * Constructs a ModerationStateChangeSubscriber object.
    *
-   * @param \Drupal\dept_topics\TopicManager $manager
-   *   The topic.manager service.
+   * @param \Drupal\dept_topics\TopicManager $topic_manager
+   *   The Topic Manager service.
    */
   public function __construct(TopicManager $topic_manager) {
     $this->topicManager = $topic_manager;
@@ -40,12 +37,17 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
     ];
   }
 
+  /**
+   * Updates Topic child content references when moderation state is changed via Origins Workflow.
+   *
+   * @param \Drupal\origins_workflow\Event\ModerationStateChangeEvent $event
+   *   The Origins Workflow moderation change event.
+   */
   public function onModerationStateChange(ModerationStateChangeEvent $event) {
-    $state = $event->getState();
-
-    if ($state === 'published') {
+    if ($event->isPublished()) {
       $this->topicManager->updateChildOnTopics($event->getEntity());
-    } elseif ($state === 'archived') {
+    }
+    elseif ($event->isArchived()) {
       $this->topicManager->removeChildFromTopics($event->getEntity());
     }
   }

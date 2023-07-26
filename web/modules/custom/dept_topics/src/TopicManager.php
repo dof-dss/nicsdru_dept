@@ -172,7 +172,7 @@ class TopicManager {
   /**
    * Add and remove an entity to topic child content lists based on the Site Topic field values.
    *
-   * @param $entity
+   * @param \Drupal\node\NodeInterface $entity
    *   The entity to use as a child reference.
    */
   public function updateChildOnTopics($entity) {
@@ -192,6 +192,7 @@ class TopicManager {
 
         // Check if an entry exists to prevent duplicates.
         foreach ($child_refs as $ref) {
+          // @phpstan-ignore-next-line
           if ($ref->target_id == $entity->id()) {
             $ref_exists = TRUE;
           }
@@ -211,6 +212,7 @@ class TopicManager {
         $child_refs = $topic_node->get('field_topic_content');
 
         for ($i = 0; $i < $child_refs->count(); $i++) {
+          // @phpstan-ignore-next-line
           if ($child_refs->get($i)->target_id == $entity->id()) {
             $child_refs->removeItem($i);
             $i--;
@@ -225,7 +227,7 @@ class TopicManager {
   /**
    * Remove all topic child references for the given entity.
    *
-   * @param $entity
+   * @param \Drupal\node\NodeInterface $entity
    *   The entity to remove all references for.
    */
   public function removeChildFromTopics($entity) {
@@ -236,6 +238,7 @@ class TopicManager {
       $child_refs = $topic_node->get('field_topic_content');
 
       for ($i = 0; $i < $child_refs->count(); $i++) {
+        // @phpstan-ignore-next-line
         if ($child_refs->get($i)->target_id == $entity->id()) {
           $child_refs->removeItem($i);
           $i--;
