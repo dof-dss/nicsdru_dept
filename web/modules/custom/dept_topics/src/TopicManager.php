@@ -187,6 +187,10 @@ class TopicManager {
       foreach ($site_topics_new as $new) {
         $topic_node = $this->nodeStorage->load($new);
 
+        if (empty($topic_node)) {
+          continue;
+        }
+
         $child_refs = $topic_node->get('field_topic_content');
         $ref_exists = FALSE;
 
@@ -209,6 +213,11 @@ class TopicManager {
       // Remove any topic content references.
       foreach ($site_topics_removed as $remove) {
         $topic_node = $this->nodeStorage->load($remove);
+
+        if (empty($topic_node)) {
+          continue;
+        }
+
         $child_refs = $topic_node->get('field_topic_content');
 
         for ($i = 0; $i < $child_refs->count(); $i++) {
