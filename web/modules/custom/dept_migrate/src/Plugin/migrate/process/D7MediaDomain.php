@@ -105,10 +105,13 @@ class D7MediaDomain extends ProcessPluginBase implements ContainerFactoryPluginI
       return 'nigov';
     }
 
+    $depts = [];
+
     foreach ($d7_file_query as $row) {
-      // Take first result only.
-      return MigrateUtils::d7DomianToD9Domain($row->machine_name) ?? 'nigov';
+      $depts[] = MigrateUtils::d7DomianToD9Domain($row->machine_name) ?? 'nigov';
     }
+
+    return $depts;
   }
 
 }
