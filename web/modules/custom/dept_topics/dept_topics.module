@@ -8,9 +8,25 @@
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_help().
+ */
+function dept_topics_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the antibot module.
+    case 'help.page.dept_topics':
+      $output = '';
+      $output .= '<h3>' . t('Help') . '</h3>';
+      $output .= '<p>' . t('For a comprehensive overview of the Topics system please see the readme file in the module root.') . '</p>';
+      return $output;
+  }
+}
+
 
 /**
  * Implements hook_moderation_sidebar_alter().
@@ -259,7 +275,7 @@ function dept_topics_process_topic_child_contents($form, FormStateInterface $for
     $entity = Node::load($nid);
   }
 
-  // Moderation sidebar.
+  // Update topic entries from Node form or Moderation sidebar.
   if ($op === 'Quick Publish' || $mod_state[0]['value'] === 'published') {
     \Drupal::service('topic.manager')->updateChildOnTopics($entity);
   }
