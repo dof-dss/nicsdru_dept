@@ -4,6 +4,8 @@ namespace Drupal\dept_topics\EventSubscriber;
 
 use Drupal\dept_topics\TopicManager;
 use Drupal\origins_workflow\Event\ModerationStateChangeEvent;
+use Drupal\scheduled_transitions\Event\ScheduledTransitionsEvents;
+use Drupal\scheduled_transitions\Event\ScheduledTransitionsNewRevisionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -34,6 +36,7 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     return [
       ModerationStateChangeEvent::CHANGE => ['onModerationStateChange'],
+      ScheduledTransitionsEvents::NEW_REVISION => ['newRevision'],
     ];
   }
 
@@ -50,6 +53,12 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
     elseif ($event->isArchived()) {
       $this->topicManager->removeChildFromTopics($event->getEntity());
     }
+  }
+
+  public function newRevision(ScheduledTransitionsNewRevisionEvent $event) {
+    $scheduledTransition = $event->getScheduledTransition();
+    $entity = $scheduledTransition->getEntity();
+    $revision = $event->getNewRevision();
   }
 
 }
