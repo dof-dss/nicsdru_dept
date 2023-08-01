@@ -121,7 +121,7 @@ class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterfa
     foreach ($parent_nodes as $parent_node) {
       if ($parent_node->hasField('field_banner_image_thin') && !$parent_node->get('field_banner_image_thin')->isEmpty()) {
 
-        $display = EntityViewDisplay::collectRenderDisplay($node, 'default')->getComponent('field_banner_image_thin');
+        $display = EntityViewDisplay::collectRenderDisplay($parent_node, 'default')->getComponent('field_banner_image_thin');
         $build['banner'] = $parent_node->get('field_banner_image_thin')->view($display);
 
         $build['link'] = Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]);
