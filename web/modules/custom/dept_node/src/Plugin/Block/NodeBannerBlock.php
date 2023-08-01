@@ -78,10 +78,12 @@ class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function build() {
+    $build = [];
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->getContextValue('node');
+
     $banner_bundles = $this->topicManager->getTopicChildNodeTypes();
-    // Manually add 'topic' as this is not a topic child content type but has a banner.
+    // Manually add 'topic' as this is not a topic child content type but has the option to display a banner.
     $banner_bundles['topic'] = 'topic';
 
     // Only display banners for bundles that belong to the topics' system.
@@ -89,18 +91,21 @@ class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterfa
       return;
     }
 
-    // If current node uses layout builder then return as the banner wll be in the layout.
+    // If current node uses layout builder then return as the banner will be in the layout.
     if ($node->hasField('layout_builder__layout') && !empty($node->get('layout_builder__layout')->getValue())) {
       return;
     }
 
-    // If current node has a banner, return as it'll be displayed in the view mode or layout.
+    // To render the banners we load the display settings for the field in the topic/subtopic default
+    // display mode, thus changing those settings will affect the banner displayed by this block.
+
+    // If current node has a banner process that and any overlay image.
     if ($node->hasField('field_banner_image') && !$node->get('field_banner_image')->isEmpty()) {
       // Banner background image.
       $display = EntityViewDisplay::collectRenderDisplay($node, 'default')->getComponent('field_banner_image');
       $build['banner'] = $node->get('field_banner_image')->view($display);
 
-      // Banner overlay image
+      // Banner overlay image.
       if (!$node->get('field_banner_image_overlay')->isEmpty()) {
         $display = EntityViewDisplay::collectRenderDisplay($node, 'default')->getComponent('field_banner_image_overlay');
         $build['banner_overlay'] = $node->get('field_banner_image_overlay')->view($display);
