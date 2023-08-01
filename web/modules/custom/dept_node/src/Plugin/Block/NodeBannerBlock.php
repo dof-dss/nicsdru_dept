@@ -76,12 +76,48 @@ class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function build() {
+    /** @var \Drupal\node\NodeInterface $node */
+    $node = $this->getContextValue('node');
 
-    $entity = $this->getContextValue('node');
+    // Only display banners for bundles that belong to the topics' system.
+    if (!array_key_exists($node->bundle(), $this->topicManager->getTopicChildNodeTypes())) {
+      return;
+    }
 
-    $build['content'] = [
-      '#markup' => $entity->label(),
-    ];
+    // If current node has a banner, return as it'll be displayed in the view mode or layout.
+    if ($node->hasField('field_banner_image') && !is_null($node->get('field_banner_image'))) {
+      return;
+    }
+
+    // Fetch parents, if parents have banner use it.
+    $parent_nids = array_keys($this->topicManager->getParentNodes($node->id()));
+    $banner_link = '';
+
+    $parent_nodes = $this->entityTypeManager
+      ->getStorage('node')
+      ->loadMultiple($parent_nids);
+
+    // Iterate each parent checking for a thin banner image.
+    foreach ($parent_nodes as $parent_node) {
+      if ($parent_node->hasField('field_banner_image_thin') && !$parent_node->get('field_banner_image_thin')->isEmpty()) {
+        $banner_media = $parent_node
+          ->get('field_banner_image_thin')
+          ->referencedEntities();
+
+        if (!empty($banner_media)) {
+          break;
+        }
+      }
+    }
+
+    if (empty($banner_media)) {
+      return;
+    }
+
+    $build['content'] = $this->entityTypeManager
+      ->getViewBuilder('media')
+      ->view(reset($banner_media), 'banner_thin');
+
     return $build;
   }
 
