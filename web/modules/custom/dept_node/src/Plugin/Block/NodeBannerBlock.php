@@ -95,13 +95,13 @@ class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterfa
     }
 
     // If current node has a banner, return as it'll be displayed in the view mode or layout.
-    if ($node->hasField('field_banner_image') && !is_null($node->get('field_banner_image')->target_id)) {
+    if ($node->hasField('field_banner_image') && !$node->get('field_banner_image')->isEmpty()) {
       // Banner background image.
       $display = EntityViewDisplay::collectRenderDisplay($node, 'default')->getComponent('field_banner_image');
       $build['banner'] = $node->get('field_banner_image')->view($display);
 
       // Banner overlay image
-      if (!is_null($node->get('field_banner_image_overlay')->target_id)) {
+      if (!$node->get('field_banner_image_overlay')->isEmpty()) {
         $display = EntityViewDisplay::collectRenderDisplay($node, 'default')->getComponent('field_banner_image_overlay');
         $build['banner_overlay'] = $node->get('field_banner_image_overlay')->view($display);
       }
@@ -120,24 +120,14 @@ class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterfa
     // Iterate each parent checking for a thin banner image.
     foreach ($parent_nodes as $parent_node) {
       if ($parent_node->hasField('field_banner_image_thin') && !$parent_node->get('field_banner_image_thin')->isEmpty()) {
-        $banner_media = $parent_node
-          ->get('field_banner_image_thin')
-          ->referencedEntities();
 
-        if (!empty($banner_media)) {
-          $build['link'] = Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]);
-          break;
-        }
+        $display = EntityViewDisplay::collectRenderDisplay($node, 'default')->getComponent('field_banner_image_thin');
+        $build['banner'] = $parent_node->get('field_banner_image_thin')->view($display);
+
+        $build['link'] = Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]);
+        break;
       }
     }
-
-    if (empty($banner_media)) {
-      return;
-    }
-
-    $build['banner'] = $this->entityTypeManager
-      ->getViewBuilder('media')
-      ->view(reset($banner_media), 'banner_thin');
 
     return $build;
   }
