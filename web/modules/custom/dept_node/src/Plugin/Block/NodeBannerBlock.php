@@ -5,6 +5,7 @@ namespace Drupal\dept_node\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Url;
 use Drupal\dept_topics\TopicManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -105,6 +106,7 @@ class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterfa
           ->referencedEntities();
 
         if (!empty($banner_media)) {
+          $build['link'] = Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]);
           break;
         }
       }
@@ -114,7 +116,7 @@ class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterfa
       return;
     }
 
-    $build['content'] = $this->entityTypeManager
+    $build['media'] = $this->entityTypeManager
       ->getViewBuilder('media')
       ->view(reset($banner_media), 'banner_thin');
 
