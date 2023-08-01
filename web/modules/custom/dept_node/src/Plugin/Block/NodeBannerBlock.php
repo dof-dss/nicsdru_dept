@@ -86,7 +86,7 @@ class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterfa
     }
 
     // If current node has a banner, return as it'll be displayed in the view mode or layout.
-    if ($node->hasField('field_banner_image') && !is_null($node->get('field_banner_image'))) {
+    if ($node->hasField('field_banner_image') && !is_null($node->get('field_banner_image')->target_id)) {
       return;
     }
 
