@@ -3,6 +3,7 @@
 namespace Drupal\dept_node\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
@@ -79,15 +80,33 @@ class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterfa
   public function build() {
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->getContextValue('node');
+    $banner_bundles = $this->topicManager->getTopicChildNodeTypes();
+    // Manually add 'topic' as this is not a topic child content type but has a banner.
+    $banner_bundles['topic'] = 'topic';
 
     // Only display banners for bundles that belong to the topics' system.
-    if (!array_key_exists($node->bundle(), $this->topicManager->getTopicChildNodeTypes())) {
+    if (!array_key_exists($node->bundle(), $banner_bundles)) {
+      return;
+    }
+
+    // If current node uses layout builder then return as the banner wll be in the layout.
+    if ($node->hasField('layout_builder__layout') && !empty($node->get('layout_builder__layout')->getValue())) {
       return;
     }
 
     // If current node has a banner, return as it'll be displayed in the view mode or layout.
     if ($node->hasField('field_banner_image') && !is_null($node->get('field_banner_image')->target_id)) {
-      return;
+      // Banner background image.
+      $display = EntityViewDisplay::collectRenderDisplay($node, 'default')->getComponent('field_banner_image');
+      $build['banner'] = $node->get('field_banner_image')->view($display);
+
+      // Banner overlay image
+      if (!is_null($node->get('field_banner_image_overlay')->target_id)) {
+        $display = EntityViewDisplay::collectRenderDisplay($node, 'default')->getComponent('field_banner_image_overlay');
+        $build['banner_overlay'] = $node->get('field_banner_image_overlay')->view($display);
+      }
+
+      return $build;
     }
 
     // Fetch parents, if parents have banner use it.
@@ -116,7 +135,7 @@ class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterfa
       return;
     }
 
-    $build['media'] = $this->entityTypeManager
+    $build['banner'] = $this->entityTypeManager
       ->getViewBuilder('media')
       ->view(reset($banner_media), 'banner_thin');
 
