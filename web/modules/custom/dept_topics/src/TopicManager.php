@@ -3,6 +3,7 @@
 namespace Drupal\dept_topics;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
@@ -35,7 +36,7 @@ class TopicManager {
   protected $targetBundles = [];
 
   /**
-   * The entity type manager.
+   * The Entity Type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
@@ -49,18 +50,25 @@ class TopicManager {
   protected $dbConn;
 
   /**
-   * The entity field manager.
+   * The Entity Field manager.
    *
    * @var \Drupal\Core\Entity\EntityFieldManagerInterface
    */
   protected $entityFieldManager;
 
   /**
-   * Node storage instance.
+   * Node Storage instance.
    *
    * @var \Drupal\node\NodeStorage
    */
   protected $nodeStorage;
+
+  /**
+   * The Entity Display Repository.
+   *
+   * @var \Drupal\Core\Entity\EntityDisplayRepository
+   */
+  protected $entityDisplayRepository;
 
   /**
    * Constructs a TopicManager object.
@@ -71,17 +79,21 @@ class TopicManager {
    *   The database connection.
    * @param \Drupal\Core\Entity\EntityFieldManager $entity_field_manager
    *   The Entity Field Manager service.
+   * @param \Drupal\Core\Entity\EntityDisplayRepository $entity_display_repository
+   *   The Entity Display Repository service.
    *
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     Connection $connection,
-    EntityFieldManagerInterface $entity_field_manager
+    EntityFieldManagerInterface $entity_field_manager,
+    EntityDisplayRepository $entity_display_repository,
     ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->dbConn = $connection;
     $this->entityFieldManager = $entity_field_manager;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->entityDisplayRepository = $entity_display_repository;
   }
 
   /**
@@ -175,7 +187,7 @@ class TopicManager {
    * @param \Drupal\node\NodeInterface $entity
    *   The entity to use as a child reference.
    */
-  public function updateChildOnTopics($entity) {
+  public function updateChildOnTopics(NodeInterface $entity) {
     if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
       $site_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
@@ -239,7 +251,7 @@ class TopicManager {
    * @param \Drupal\node\NodeInterface $entity
    *   The entity to remove all references for.
    */
-  public function removeChildFromTopics($entity) {
+  public function removeChildFromTopics(NodeInterface $entity) {
     $parent_nids = array_keys($this->getParentNodes($entity->id()));
 
     foreach ($parent_nids as $parent) {
@@ -273,6 +285,37 @@ class TopicManager {
         $this->getChildTopics($child);
       }
     }
+  }
+
+  /**
+   *  Return true or false if the entity type is allowed to be automatically added/removed from
+   *  Topics/subtopics.
+   *
+   * @param \Drupal\node\NodeInterface $entity
+   *   The entity to check.
+   * @return bool
+   *   True if the entity type can be automatically added, otherwise false.
+   */
+  private function isExcludedFromChildTopics(NodeInterface $entity) {
+    if ($this->isValidTopicChild($entity)) {
+      $form_display = $this->entityDisplayRepository->getFormDisplay('node', $entity->bundle());
+      $form_content = $form_display->get('content');
+      // We determine if the bundle is excluded via the site topics 'TopicTree' widget settings.
+      $field_form_config = $form_content['field_site_topics'];
+
+      if (empty($field_form_config['settings'])) {
+        return FALSE;
+      }
+
+      if (array_key_exists('excluded', $field_form_config['settings']) && $field_form_config['settings']['excluded'] == 1) {
+        return TRUE;
+      }
+      else {
+        return FALSE;
+      }
+    }
+
+    return FALSE;
   }
 
 }
