@@ -107,6 +107,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $field = $this->fieldDefinition->getName();
     $field_id = Html::getUniqueId($field);
     $default_values = $this->getSelectedOptions($items);
+    $entity = $form_state->getFormObject()->getEntity();
     $settings = $this->getSettings();
     $current_dept = '';
     $options = [];
@@ -150,6 +151,10 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
         ],
       ],
     ];
+
+    if (!$this->topicManager->isExcludedFromChildTopics($entity)) {
+      $element['#suffix'] = $this->t('This content will be automatically added to/removed from the topics as child content.');
+    }
 
     // Affix the topic tree link to the field.
     $element['#field_prefix'] = [

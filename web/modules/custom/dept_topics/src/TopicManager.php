@@ -298,7 +298,7 @@ class TopicManager {
    * @return bool
    *   True if the entity type can be automatically added, otherwise false.
    */
-  private function isExcludedFromChildTopics(NodeInterface $entity) {
+  public function isExcludedFromChildTopics(NodeInterface $entity) {
     if ($this->isValidTopicChild($entity)) {
       $form_display = $this->entityDisplayRepository->getFormDisplay('node', $entity->bundle());
       $form_content = $form_display->get('content');
