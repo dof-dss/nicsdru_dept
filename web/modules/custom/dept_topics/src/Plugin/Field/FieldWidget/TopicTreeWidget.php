@@ -12,6 +12,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
 use Drupal\dept_topics\TopicManager;
 use Drupal\domain\DomainNegotiatorInterface;
+use Drupal\node\NodeForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -152,7 +153,8 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       ],
     ];
 
-    if (!$this->topicManager->isExcludedFromChildTopics($entity)) {
+
+    if ($form_state->getFormObject() instanceof NodeForm && !$this->topicManager->isExcludedFromChildTopics($entity)) {
       $element['#suffix'] = $this->t('This content will be automatically added to/removed from the topics as child content.');
     }
 
