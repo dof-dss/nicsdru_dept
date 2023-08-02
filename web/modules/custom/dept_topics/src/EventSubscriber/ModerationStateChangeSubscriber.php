@@ -59,7 +59,7 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
    * Updates Topic child content references when moderation state is changed via Scheduled Transitions.
    *
    * @param \Drupal\scheduled_transitions\Event\ScheduledTransitionsNewRevisionEvent $event
-   *    Scheduled Transition event.
+   *   Scheduled Transition event.
    */
   public function newRevision(ScheduledTransitionsNewRevisionEvent $event) {
     $scheduledTransition = $event->getScheduledTransition();

@@ -154,7 +154,6 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       ],
     ];
 
-
     if ($form_state->getFormObject() instanceof NodeForm && !$this->topicManager->isExcludedFromChildTopics($entity)) {
       $element['#suffix'] = $this->t('This content will be automatically added to/removed from the topics as child content.');
     }
