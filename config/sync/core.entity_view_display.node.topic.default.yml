@@ -20,6 +20,7 @@ dependencies:
     - layout_builder
     - layout_builder_restrictions
     - metatag
+    - smart_trim
     - text
     - user
 third_party_settings:
@@ -68,7 +69,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 5
     region: content
   field_banner_image:
     type: entity_reference_entity_view
@@ -88,12 +89,21 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  field_banner_image_thin:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: banner_thin
+      link: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
   field_metatags:
     type: metatag_empty_formatter
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 5
+    weight: 6
     region: content
   field_photo:
     type: entity_reference_entity_view
@@ -102,14 +112,28 @@ content:
       view_mode: article_full
       link: false
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
   field_summary:
-    type: text_default
+    type: smart_trim
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 600
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
   field_topic_content:
     type: entity_reference_label
@@ -117,11 +141,10 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 6
+    weight: 7
     region: content
 hidden:
   content_moderation_control: true
-  field_banner_image_thin: true
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
