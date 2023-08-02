@@ -84,7 +84,14 @@ process:
         paste_format: plain_text
         plain_text: plain_text
   field_news_type: field_news_type
-  field_summary: field_summary
+  field_summary:
+    -
+      plugin: callback
+      callable: strip_tags
+      source: field_summary/0/value
+    -
+      plugin: callback
+      callable: html_entity_decode
   field_notes_to_editors: field_notes_to_editors
   field_notes_to_editors/0/format: basic_html
   field_teaser: field_teaser
