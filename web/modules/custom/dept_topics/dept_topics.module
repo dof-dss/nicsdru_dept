@@ -6,9 +6,26 @@
  * of topics, subtopics and related content.
  */
 
-use Drupal\Component\Serialization\Json;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_help().
+ */
+function dept_topics_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the antibot module.
+    case 'help.page.dept_topics':
+      $output = '';
+      $output .= '<h3>' . t('Help') . '</h3>';
+      $output .= '<p>' . t('For a comprehensive overview of the Topics system please see the readme file in the module root.') . '</p>';
+      return $output;
+  }
+}
 
 /**
  * Implements hook_moderation_sidebar_alter().
@@ -178,14 +195,91 @@ function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
  * Implements hook_form_ENTITY_form_alter().
  */
 function dept_topics_form_node_form_alter(&$form, $form_state) {
-
+  $form_object = $form_state->getFormObject();
   $topic_id = \Drupal::request()->query->get('topic');
 
   if (!empty($topic_id)) {
     // Select the site topic passed by the querystring parameter (coming from the moderation sidebar).
     if (array_key_exists('field_site_topics', $form)) {
-      $form['field_site_topics']['widget']['#default_value'] = $topic_id;
+      $form['field_site_topics']['widget']['#default_value'] = [$topic_id];
     }
+  }
+
+  $bundle = $form_object->getEntity()->bundle();
+
+  if (\Drupal::service('topic.manager')->isValidTopicChild($bundle)) {
+    $form['actions']['submit']['#submit'][] = 'dept_topics_process_topic_child_contents';
+  }
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function dept_topics_entity_delete(EntityInterface $entity) {
+
+  if ($entity instanceof NodeInterface) {
+    /** @var \Drupal\dept_topics\TopicManager $topic_manager */
+    $topic_manager = \Drupal::service('topic.manager');
+
+    $bundle = $entity->bundle();
+    $child_bundles = $topic_manager->getTopicChildNodeTypes();
+
+    if (in_array($bundle, $child_bundles)) {
+      $parents = $topic_manager->getParentNodes($entity->id());
+      $node_manager = \Drupal::entityTypeManager()->getStorage('node');
+
+      // Remove all topic content refernces for this node in topic/subtopic nodes.
+      foreach ($parents as $parent => $data) {
+        $topic_node = $node_manager->load($parent);
+        $child_refs = $topic_node->get('field_topic_content');
+
+        for ($i = 0; $i < $child_refs->count(); $i++) {
+          // @phpstan-ignore-next-line
+          if ($child_refs->get($i)->target_id == $entity->id()) {
+            $child_refs->removeItem($i);
+            $i--;
+          }
+        }
+        $topic_node->save();
+      }
+
+    }
+  }
+
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dept_topics_form_moderation_sidebar_quick_transition_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $entity = $form_state->get('entity');
+
+  if ($entity instanceof NodeInterface) {
+    if (\Drupal::service('topic.manager')->isValidTopicChild($entity->bundle())) {
+      $form['#submit'][] = 'dept_topics_process_topic_child_contents';
+    }
+  }
+}
+
+/**
+ * Submit callback for Moderation Sidebar Quick Transition form.
+ */
+function dept_topics_process_topic_child_contents($form, FormStateInterface $form_state) {
+  $entity = $form_state->get('entity');
+  $op = $form_state->getValue('op');
+  $mod_state = $form_state->getValue('moderation_state');
+
+  if (empty($entity)) {
+    $nid = $form_state->getValue('nid');
+    $entity = Node::load($nid);
+  }
+
+  // Update topic entries from Node form or Moderation sidebar.
+  if ($op === 'Quick Publish' || $mod_state[0]['value'] === 'published') {
+    \Drupal::service('topic.manager')->updateChildOnTopics($entity);
+  }
+  elseif ($op === 'Archive' || $mod_state[0]['value'] === 'archived') {
+    \Drupal::service('topic.manager')->removeChildFromTopics($entity);
   }
 
 }

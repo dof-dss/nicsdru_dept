@@ -1,4 +1,9 @@
 services:
   topic.manager:
     class: Drupal\dept_topics\TopicManager
-    arguments: ['@entity_type.manager', '@database', '@entity_field.manager']
+    arguments: ['@entity_type.manager', '@database', '@entity_field.manager', '@entity_display.repository']
+  topic.moderation_state_change_subscriber:
+    class: Drupal\dept_topics\EventSubscriber\ModerationStateChangeSubscriber
+    arguments: ['@topic.manager']
+    tags:
+      - { name: event_subscriber }

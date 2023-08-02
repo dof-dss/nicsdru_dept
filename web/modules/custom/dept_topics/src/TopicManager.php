@@ -3,9 +3,11 @@
 namespace Drupal\dept_topics;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\node\NodeStorage;
 
 /**
  * Provides methods for managing Sub/Topic referenced (child) content.
@@ -34,7 +36,7 @@ class TopicManager {
   protected $targetBundles = [];
 
   /**
-   * The entity type manager.
+   * The Entity Type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
@@ -48,11 +50,25 @@ class TopicManager {
   protected $dbConn;
 
   /**
-   * The entity field manager.
+   * The Entity Field manager.
    *
    * @var \Drupal\Core\Entity\EntityFieldManagerInterface
    */
   protected $entityFieldManager;
+
+  /**
+   * Node Storage instance.
+   *
+   * @var \Drupal\node\NodeStorage
+   */
+  protected $nodeStorage;
+
+  /**
+   * The Entity Display Repository.
+   *
+   * @var \Drupal\Core\Entity\EntityDisplayRepository
+   */
+  protected $entityDisplayRepository;
 
   /**
    * Constructs a TopicManager object.
@@ -63,16 +79,21 @@ class TopicManager {
    *   The database connection.
    * @param \Drupal\Core\Entity\EntityFieldManager $entity_field_manager
    *   The Entity Field Manager service.
+   * @param \Drupal\Core\Entity\EntityDisplayRepository $entity_display_repository
+   *   The Entity Display Repository service.
    *
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     Connection $connection,
-    EntityFieldManagerInterface $entity_field_manager
+    EntityFieldManagerInterface $entity_field_manager,
+    EntityDisplayRepository $entity_display_repository,
     ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->dbConn = $connection;
     $this->entityFieldManager = $entity_field_manager;
+    $this->nodeStorage = $entity_type_manager->getStorage('node');
+    $this->entityDisplayRepository = $entity_display_repository;
   }
 
   /**
@@ -121,6 +142,23 @@ class TopicManager {
   }
 
   /**
+   * Return true or false if the provided type is enabled as a topic child content option.
+   *
+   * @param mixed $type
+   *   A node entity or bundle name.
+   *
+   * @return bool
+   *   True if a topic child content type.
+   */
+  public function isValidTopicChild(mixed $type) {
+    if ($type instanceof NodeInterface) {
+      return in_array($type->bundle(), $this->getTopicChildNodeTypes());
+    }
+
+    return in_array($type, $this->getTopicChildNodeTypes());
+  }
+
+  /**
    * Returns a list of topics and subtopics for a department.
    *
    * @param string $department_id
@@ -144,6 +182,97 @@ class TopicManager {
   }
 
   /**
+   * Add and remove an entity to topic child content lists based on the Site Topic field values.
+   *
+   * @param \Drupal\node\NodeInterface $entity
+   *   The entity to use as a child reference.
+   */
+  public function updateChildOnTopics(NodeInterface $entity) {
+    if ($entity->hasField('field_site_topics') && !$this->isExcludedFromChildTopics($entity)) {
+      $parent_nids = array_keys($this->getParentNodes($entity->id()));
+      $site_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
+
+      $site_topics_removed = array_diff($parent_nids, $site_topics);
+      $site_topics_new = array_diff($site_topics, $parent_nids);
+
+      // Add topic content references.
+      foreach ($site_topics_new as $new) {
+        $topic_node = $this->nodeStorage->load($new);
+
+        if (empty($topic_node)) {
+          continue;
+        }
+
+        $child_refs = $topic_node->get('field_topic_content');
+        $ref_exists = FALSE;
+
+        // Check if an entry exists to prevent duplicates.
+        foreach ($child_refs as $ref) {
+          // @phpstan-ignore-next-line
+          if ($ref->target_id == $entity->id()) {
+            $ref_exists = TRUE;
+          }
+        }
+
+        if (!$ref_exists) {
+          $topic_node->get('field_topic_content')->appendItem([
+            'target_id' => $entity->id()
+          ]);
+          $topic_node->save();
+        }
+      }
+
+      // Remove any topic content references.
+      foreach ($site_topics_removed as $remove) {
+        $topic_node = $this->nodeStorage->load($remove);
+
+        if (empty($topic_node)) {
+          continue;
+        }
+
+        $child_refs = $topic_node->get('field_topic_content');
+
+        for ($i = 0; $i < $child_refs->count(); $i++) {
+          // @phpstan-ignore-next-line
+          if ($child_refs->get($i)->target_id == $entity->id()) {
+            $child_refs->removeItem($i);
+            $i--;
+          }
+        }
+
+        $topic_node->save();
+      }
+    }
+  }
+
+  /**
+   * Remove all topic child references for the given entity.
+   *
+   * @param \Drupal\node\NodeInterface $entity
+   *   The entity to remove all references for.
+   */
+  public function removeChildFromTopics(NodeInterface $entity) {
+    if ($entity->hasField('field_site_topics') && !$this->isExcludedFromChildTopics($entity)) {
+      $parent_nids = array_keys($this->getParentNodes($entity->id()));
+
+      foreach ($parent_nids as $parent) {
+        $topic_node = $this->nodeStorage->load($parent);
+        $child_refs = $topic_node->get('field_topic_content');
+
+        for ($i = 0; $i < $child_refs->count(); $i++) {
+          // @phpstan-ignore-next-line
+          if ($child_refs->get($i)->target_id == $entity->id()) {
+            $child_refs->removeItem($i);
+            $i--;
+          }
+        }
+
+        $topic_node->save();
+      }
+    }
+  }
+
+  /**
    * Update the topics property with a list of child nodes.
    *
    * @param \Drupal\node\NodeInterface $topic
@@ -158,6 +287,37 @@ class TopicManager {
         $this->getChildTopics($child);
       }
     }
+  }
+
+  /**
+   *  Return true or false if the entity type is allowed to be automatically added/removed from
+   *  Topics/subtopics.
+   *
+   * @param \Drupal\node\NodeInterface $entity
+   *   The entity to check.
+   * @return bool
+   *   True if the entity type can be automatically added, otherwise false.
+   */
+  public function isExcludedFromChildTopics(NodeInterface $entity) {
+    if ($this->isValidTopicChild($entity)) {
+      $form_display = $this->entityDisplayRepository->getFormDisplay('node', $entity->bundle());
+      $form_content = $form_display->get('content');
+      // We determine if the bundle is excluded via the site topics 'TopicTree' widget settings.
+      $field_form_config = $form_content['field_site_topics'];
+
+      if (empty($field_form_config['settings'])) {
+        return FALSE;
+      }
+
+      if (array_key_exists('excluded', $field_form_config['settings']) && $field_form_config['settings']['excluded'] == 1) {
+        return TRUE;
+      }
+      else {
+        return FALSE;
+      }
+    }
+
+    return FALSE;
   }
 
 }

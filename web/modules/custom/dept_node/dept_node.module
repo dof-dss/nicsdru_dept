@@ -5,6 +5,7 @@
  * Departmental Node module for Departmental sites.
  */
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
@@ -208,18 +209,6 @@ function dept_node_preprocess_page(&$variables) {
 }
 
 /**
- * Implements hook_entity_type_alter().
- */
-function dept_node_entity_type_alter(&$entity_types) {
-
-  if (isset($entity_types['node'])) {
-    foreach (['default', 'edit'] as $operation) {
-      $entity_types['node']->setFormClass($operation, DeptNodeForm::class);
-    }
-  }
-}
-
-/**
  * Implements hook_pathauto_alias_alter().
  */
 function dept_node_pathauto_alias_alter(&$alias, array &$context) {
@@ -237,5 +226,25 @@ function dept_node_pathauto_alias_alter(&$alias, array &$context) {
     if (PHP_SAPI != 'cli') {
       \Drupal::messenger()->addMessage("A url alias for this content is already in use so additional text has been appended to the end. You can $update_link", MessengerInterface::TYPE_WARNING);
     }
+  }
+}
+
+/**
+ * Temporary fix to Site Topics field when using Topics Tree widget.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity to process Site Topics field data.
+ */
+function dept_node_entity_presave(EntityInterface $entity) {
+  if ($entity instanceof NodeInterface && $entity->hasField('field_site_topics')) {
+    $site_topics = $entity->get('field_site_topics')->getValue();
+
+    // Site topics field dumps all topics/subtopics into the field value, here
+    // we filter out only those with a target_id.
+    $site_topics = array_filter($site_topics, function ($value, $key) {
+      return $value['target_id'] !== 0;
+    }, ARRAY_FILTER_USE_BOTH);
+
+    $entity->set('field_site_topics', $site_topics);
   }
 }
