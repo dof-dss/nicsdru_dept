@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.article.field_site_topics
     - field.field.node.article.field_summary
     - node.type.article
+    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
@@ -80,7 +81,8 @@ content:
     type: dept_topic_tree_widget
     weight: 1
     region: content
-    settings: {  }
+    settings:
+      excluded: 0
     third_party_settings: {  }
   field_summary:
     type: string_textarea
