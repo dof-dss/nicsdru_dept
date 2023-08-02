@@ -60,15 +60,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
    * {@inheritdoc}
    */
   public static function defaultSettings() {
-    $settings = [];
-
-    $bundle_info = \Drupal::service('entity_type.bundle.info');
-    $bundles = $bundle_info->getBundleInfo('node');
-
-    foreach ($bundles as $bundle_id => $bundle_info) {
-      $settings[$bundle_id] = FALSE;
-    }
-
+    $settings['excluded'] = TRUE;
     return $settings;
   }
 
@@ -76,25 +68,12 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $bundle_info = \Drupal::service('entity_type.bundle.info');
-    $bundles = $bundle_info->getBundleInfo('node');
-    $selected_bundles = array_keys($this->getSettings(), TRUE);
-
-    $element['intro'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'p',
-      '#value' => $this->t('Select the bundles which should be added/removed as child content to the selected topics.')
+    $element['excluded'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Exclude from topic child content.'),
+      '#description' => $this->t('Prevents this bundle (%bundle) from automatically being added or removed as child content to the selected topics.', ['%bundle' => $form['#bundle']]),
+      '#default_value' => $this->getSetting('excluded'),
     ];
-
-    if (!empty($bundles)) {
-      foreach ($bundles as $bundle_id => $bundle_info) {
-        $element[$bundle_id] = [
-          '#type' => 'checkbox',
-          '#title' => $bundle_info['label'],
-          '#default_value' => in_array($bundle_id, $selected_bundles),
-        ];
-      }
-    }
 
     return $element;
   }
@@ -105,8 +84,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
   public function settingsSummary() {
     $summary = [];
 
-    $bundles = array_keys($this->getSettings(), TRUE);
-    $summary[] = $this->t('Topic content: @bundles', ['@bundles' => implode(', ', $bundles)]);
+    $summary[] = $this->t('Excluded: @excluded', ['@excluded' => ($this->getSetting('excluded')) ? 'Yes' : 'No']);
 
     return $summary;
   }
