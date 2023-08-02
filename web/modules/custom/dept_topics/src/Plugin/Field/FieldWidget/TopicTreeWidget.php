@@ -5,12 +5,13 @@ namespace Drupal\dept_topics\Plugin\Field\FieldWidget;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
+use Drupal\dept_topics\TopicManager;
+use Drupal\domain\DomainNegotiatorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -35,25 +36,36 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
   protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
-   * {@inheritdoc}
+   * The Topic manager service.
+   *
+   * @var \Drupal\dept_topics\TopicManager
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeManagerInterface $entity_type_manager) {
-    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
-    $this->entityTypeManager = $entity_type_manager;
-  }
+  protected TopicManager $topicManager;
+
+  /**
+   * The Domain negotiator service.
+   *
+   * @var \Drupal\domain\DomainNegotiatorInterface
+   */
+  protected DomainNegotiatorInterface $domainNegotiator;
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
+    $instance = new static(
       $plugin_id,
       $plugin_definition,
       $configuration['field_definition'],
       $configuration['settings'],
-      $configuration['third_party_settings'],
-      $container->get('entity_type.manager')
+      $configuration['third_party_settings']
     );
+
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->topicManager = $container->get('topic.manager');
+    $instance->domainNegotiator = $container->get('domain.negotiator');
+
+    return $instance;
   }
 
   /**
@@ -83,7 +95,6 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
    */
   public function settingsSummary() {
     $summary = [];
-
     $summary[] = $this->t('Excluded: @excluded', ['@excluded' => ($this->getSetting('excluded')) ? 'Yes' : 'No']);
 
     return $summary;
@@ -99,7 +110,6 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $settings = $this->getSettings();
     $current_dept = '';
     $options = [];
-    $topic_manager = \Drupal::service('topic.manager');
 
     // Get current department from the domain_access field.
     if (!empty($form['field_domain_access']['widget']['#default_value'])) {
@@ -108,12 +118,12 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
 
     // If we cannot determine the department via domain_access, use the current domain department.
     if (empty($current_dept)) {
-      $domain = \Drupal::service('domain.negotiator')->getActiveDomain();
+      $domain = $this->domainNegotiator->getActiveDomain();
       $current_dept = $domain->id();
     }
 
     // Only list topics/subtopics assigned to the department.
-    $topics = $topic_manager->getTopicsForDepartment($current_dept);
+    $topics = $this->topicManager->getTopicsForDepartment($current_dept);
 
     foreach ($topics as $nid => $topic) {
       $options[$nid] = $topic->label();
