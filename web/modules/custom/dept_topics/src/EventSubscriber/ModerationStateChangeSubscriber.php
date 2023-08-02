@@ -55,10 +55,16 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
     }
   }
 
+  /**
+   * Updates Topic child content references when moderation state is changed via Scheduled Transitions.
+   *
+   * @param ScheduledTransitionsNewRevisionEvent $event
+   */
   public function newRevision(ScheduledTransitionsNewRevisionEvent $event) {
     $scheduledTransition = $event->getScheduledTransition();
     $entity = $scheduledTransition->getEntity();
     $revision = $event->getNewRevision();
+    // TODO: Update topics when scheduled revisions are working.
   }
 
 }
