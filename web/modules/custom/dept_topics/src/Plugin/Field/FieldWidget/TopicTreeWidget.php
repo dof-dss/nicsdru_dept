@@ -108,6 +108,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $field = $this->fieldDefinition->getName();
     $field_id = Html::getUniqueId($field);
     $default_values = $this->getSelectedOptions($items);
+    // @phpstan-ignore-next-line
     $entity = $form_state->getFormObject()->getEntity();
     $settings = $this->getSettings();
     $current_dept = '';
