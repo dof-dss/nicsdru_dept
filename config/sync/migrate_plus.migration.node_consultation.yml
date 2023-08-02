@@ -83,7 +83,14 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
-  field_summary: field_summary
+  field_summary:
+    -
+      plugin: callback
+      callable: strip_tags
+      source: field_summary/0/value
+    -
+      plugin: callback
+      callable: html_entity_decode
   field_consultation_dates:
     plugin: sub_process
     source: field_consultation_dates
