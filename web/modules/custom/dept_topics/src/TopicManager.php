@@ -188,7 +188,7 @@ class TopicManager {
    *   The entity to use as a child reference.
    */
   public function updateChildOnTopics(NodeInterface $entity) {
-    if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
+    if ($entity->hasField('field_site_topics') && !$this->isExcludedFromChildTopics($entity)) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
       $site_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
 
@@ -252,21 +252,23 @@ class TopicManager {
    *   The entity to remove all references for.
    */
   public function removeChildFromTopics(NodeInterface $entity) {
-    $parent_nids = array_keys($this->getParentNodes($entity->id()));
+    if ($entity->hasField('field_site_topics') && !$this->isExcludedFromChildTopics($entity)) {
+      $parent_nids = array_keys($this->getParentNodes($entity->id()));
 
-    foreach ($parent_nids as $parent) {
-      $topic_node = $this->nodeStorage->load($parent);
-      $child_refs = $topic_node->get('field_topic_content');
+      foreach ($parent_nids as $parent) {
+        $topic_node = $this->nodeStorage->load($parent);
+        $child_refs = $topic_node->get('field_topic_content');
 
-      for ($i = 0; $i < $child_refs->count(); $i++) {
-        // @phpstan-ignore-next-line
-        if ($child_refs->get($i)->target_id == $entity->id()) {
-          $child_refs->removeItem($i);
-          $i--;
+        for ($i = 0; $i < $child_refs->count(); $i++) {
+          // @phpstan-ignore-next-line
+          if ($child_refs->get($i)->target_id == $entity->id()) {
+            $child_refs->removeItem($i);
+            $i--;
+          }
         }
-      }
 
-      $topic_node->save();
+        $topic_node->save();
+      }
     }
   }
 
