@@ -1,7 +1,7 @@
 [![CircleCI](https://circleci.com/gh/dof-dss/nicsdru_dept/tree/development.svg?style=svg)](https://circleci.com/gh/dof-dss/nicsdru_dept/tree/development)
 
 **NOTE: NIGov (northernireland.gov.uk)**
-Teh custom modules automatically grant access to all news press releases, publications and consultations from the NIGov domain.
+The custom modules automatically grant access to all news press releases, publications and consultations from the NIGov domain.
 
 
 # Departmental sites codebase
