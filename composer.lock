@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2fe587d55db6ebe0171cc0c11a67e206",
+    "content-hash": "10183283833c6270e9b659c9a5e27177",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6768,28 +6768,29 @@
         },
         {
             "name": "drupal/scheduled_transitions",
-            "version": "2.3.0",
+            "version": "2.4.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/scheduled_transitions.git",
-                "reference": "2.3.0"
+                "reference": "2.4.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/scheduled_transitions-2.3.0.zip",
-                "reference": "2.3.0",
-                "shasum": "240e389d549141e24ec9d7d7c2223cca7b4357ca"
+                "url": "https://ftp.drupal.org/files/projects/scheduled_transitions-2.4.0-beta2.zip",
+                "reference": "2.4.0-beta2",
+                "shasum": "d98f45f658acd5d0dfd78e8212a53f3758e985b5"
             },
             "require": {
-                "drupal/core": "^9.2 || ^10",
+                "drupal/core": "^9.5 || ^10",
                 "drupal/dynamic_entity_reference": "^1.0 || ^2.0 || ^3.0 || ^4.0",
-                "php": ">=8.0"
+                "php": ">=8.1"
             },
             "require-dev": {
-                "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
+                "dealerdirect/phpcodesniffer-composer-installer": "dev-main",
                 "drupal/coder": "^8.3",
                 "drush/drush": "^10 || ^11",
                 "mglaman/phpstan-drupal": "^1",
+                "mockery/mockery": "^1.5",
                 "phpstan/phpstan": "^1",
                 "phpstan/phpstan-deprecation-rules": "*"
             },
@@ -6799,11 +6800,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.3.0",
-                    "datestamp": "1670235101",
+                    "version": "2.4.0-beta2",
+                    "datestamp": "1685526511",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 },
                 "drush": {
@@ -18870,6 +18871,7 @@
         "drupal/domain_path": 10,
         "drupal/flag": 10,
         "drupal/migrate_conditions": 10,
+        "drupal/scheduled_transitions": 10,
         "drupal/ultimate_cron": 15,
         "drupal/views_tree": 15,
         "drupal/masquerade": 10
