@@ -72,6 +72,28 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
   /**
    * {@inheritdoc}
    */
+  public static function defaultSettings() {
+    $settings['excluded'] = TRUE;
+    return $settings;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsForm(array $form, FormStateInterface $form_state) {
+    $element['excluded'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Exclude from topic child content.'),
+      '#description' => $this->t('Prevents this bundle (%bundle) from automatically being added or removed as child content to the selected topics.', ['%bundle' => $form['#bundle']]),
+      '#default_value' => $this->getSetting('excluded'),
+    ];
+
+    return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function settingsSummary() {
     $summary = [];
     $summary[] = $this->t('Excluded: @excluded', ['@excluded' => ($this->getSetting('excluded')) ? 'Yes' : 'No']);
