@@ -187,7 +187,7 @@ class TopicManager {
    * @param \Drupal\node\NodeInterface $entity
    *   The entity to use as a child reference.
    */
-  public function updateChildOnTopics(NodeInterface $entity) {
+  public function updateChildDisplayOnTopics(NodeInterface $entity) {
     if ($entity->hasField('field_site_topics') && !$this->isExcludedFromChildTopics($entity)) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
       $site_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
@@ -251,7 +251,7 @@ class TopicManager {
    * @param \Drupal\node\NodeInterface $entity
    *   The entity to remove all references for.
    */
-  public function removeChildFromTopics(NodeInterface $entity) {
+  public function removeChildDisplayFromTopics(NodeInterface $entity) {
     if ($entity->hasField('field_site_topics') && !$this->isExcludedFromChildTopics($entity)) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
 
@@ -288,36 +288,4 @@ class TopicManager {
       }
     }
   }
-
-  /**
-   *  Return true or false if the entity type is allowed to be automatically added/removed from
-   *  Topics/subtopics.
-   *
-   * @param \Drupal\node\NodeInterface $entity
-   *   The entity to check.
-   * @return bool
-   *   True if the entity type can be automatically added, otherwise false.
-   */
-  public function isExcludedFromChildTopics(NodeInterface $entity) {
-    if ($this->isValidTopicChild($entity)) {
-      $form_display = $this->entityDisplayRepository->getFormDisplay('node', $entity->bundle());
-      $form_content = $form_display->get('content');
-      // We determine if the bundle is excluded via the site topics 'TopicTree' widget settings.
-      $field_form_config = $form_content['field_site_topics'];
-
-      if (empty($field_form_config['settings'])) {
-        return FALSE;
-      }
-
-      if (array_key_exists('excluded', $field_form_config['settings']) && $field_form_config['settings']['excluded'] == 1) {
-        return TRUE;
-      }
-      else {
-        return FALSE;
-      }
-    }
-
-    return FALSE;
-  }
-
 }
