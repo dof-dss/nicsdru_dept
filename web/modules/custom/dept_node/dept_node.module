@@ -228,23 +228,3 @@ function dept_node_pathauto_alias_alter(&$alias, array &$context) {
     }
   }
 }
-
-/**
- * Temporary fix to Site Topics field when using Topics Tree widget.
- *
- * @param \Drupal\Core\Entity\EntityInterface $entity
- *   The entity to process Site Topics field data.
- */
-function dept_node_entity_presave(EntityInterface $entity) {
-  if ($entity instanceof NodeInterface && $entity->hasField('field_site_topics')) {
-    $site_topics = $entity->get('field_site_topics')->getValue();
-
-    // Site topics field dumps all topics/subtopics into the field value, here
-    // we filter out only those with a target_id.
-    $site_topics = array_filter($site_topics, function ($value, $key) {
-      return $value['target_id'] !== 0;
-    }, ARRAY_FILTER_USE_BOTH);
-
-    $entity->set('field_site_topics', $site_topics);
-  }
-}

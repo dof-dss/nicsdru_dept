@@ -158,6 +158,18 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
   /**
    * {@inheritdoc}
    */
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+    // Remove any values that are not from a selected checkbox.
+    $new_values = array_filter($values, function ($value, $key) {
+      return $value !== 0;
+    }, ARRAY_FILTER_USE_BOTH);
+
+    return $new_values;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function supportsGroups() {
     return FALSE;
   }
