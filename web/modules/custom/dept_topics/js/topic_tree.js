@@ -22,6 +22,15 @@
             data.instance.select_node($(this).val());
           });
         })
+        .on("select_node.jstree", function(e, data) {
+          for (const [key, value] of Object.entries(data.node.parents)) {
+            data.instance.deselect_node(value);
+          }
+
+          for (const [key, value] of Object.entries(data.node.children)) {
+            data.instance.deselect_node(value);
+          }
+        })
         .jstree({
           core: {
             data: {
