@@ -188,7 +188,7 @@ class TopicManager {
    *   The entity to use as a child reference.
    */
   public function updateChildDisplayOnTopics(NodeInterface $entity) {
-    if ($entity->hasField('field_site_topics') && !$this->isExcludedFromChildTopics($entity)) {
+    if ($entity->hasField('field_site_topics') && !$this->isValidTopicChild($entity)) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
       $site_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
 
