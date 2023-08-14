@@ -7,6 +7,7 @@
   Drupal.behaviors.topicTree = {
     attach: function(context, settings) {
       let select_field = "#" + drupalSettings["topic_tree.field"];
+
       $('#topic-tree-wrapper')
         .on('changed.jstree', function (e, data) {
           // Unselect all selected options on the field select.
@@ -23,11 +24,13 @@
           });
         })
         .on("select_node.jstree", function(e, data) {
+          // Deselect all parents.
           for (const [key, value] of Object.entries(data.node.parents)) {
             data.instance.deselect_node(value);
           }
 
-          for (const [key, value] of Object.entries(data.node.children)) {
+          // Deselect all children.
+          for (const [key, value] of Object.entries(data.node.children_d)) {
             data.instance.deselect_node(value);
           }
         })
