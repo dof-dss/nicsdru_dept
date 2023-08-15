@@ -22,13 +22,22 @@ final class TopicTreeForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL, $selected = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL, $limit = NULL, $selected = NULL): array {
 
     $form['#title'] = $this->t('Select topic');
 
+    $form['selection_count'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'strong',
+      '#value' => 'Selected: <span>0</span> of ' . $limit . ' topics',
+      '#attributes' => [
+        'id' => 'topic-tree-count',
+        'style' => ['float: right'],
+      ]
+    ];
+
     $form['tree_search'] = [
       '#type' => 'textfield',
-      '#prefix' => 'Search',
       '#attributes' => [
         'id' => 'topic-tree-search',
         'placeholder' => 'Search topics...'

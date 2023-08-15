@@ -173,7 +173,8 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       '#url' => Url::fromRoute('dept_topics.topic_tree.form', [
         'department' => $current_dept,
         'field' => $field_id,
-        'selected' => is_array($default_values) ? implode('+', $default_values) : ''
+        'limit' => $this->getSetting('limit'),
+        'selected' => is_array($default_values) ? implode('+', $default_values) : '',
       ]),
       '#attributes' => [
         'class' => ['button', 'use-ajax'],
