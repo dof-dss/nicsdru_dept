@@ -4,6 +4,7 @@ namespace Drupal\dept_topics\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseDialogCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -54,10 +55,15 @@ final class TopicTreeForm extends FormBase {
       ],
     ];
 
+    $form['field'] = [
+      '#type' => 'hidden',
+      '#default_value' => $field,
+    ];
+
     $form['selected_topics'] = [
       '#type' => 'hidden',
       '#attributes' => [
-        'id' => ['topic-tree-selected'],
+        'id' => ['field-site-topics'],
       ],
     ];
 
@@ -69,10 +75,6 @@ final class TopicTreeForm extends FormBase {
         'callback' => [$this, 'submitForm'],
         'event' => 'click',
       ],
-//      '#attributes' => [
-//        'class' => ['use-ajax'],
-//        'id' => 'topic-tree-submit',
-//      ],
     ];
 
     $form['#attached']['library'][] = 'dept_topics/jstree';
@@ -93,8 +95,8 @@ final class TopicTreeForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    ksm($form, $form_state->getValue('tree_container'));
     $response = new AjaxResponse();
+    $response->addCommand(new InvokeCommand(NULL, 'topicTreeAjaxCallback', [$form_state->getValue('field'), $form_state->getValue('selected_topics')]));
     $response->addCommand(new CloseDialogCommand());
 
     return $response;
