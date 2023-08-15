@@ -9,14 +9,6 @@
       let select_field = "#" + drupalSettings["topic_tree.field"];
 
       $('#topic-tree-wrapper')
-        .on('changed.jstree', function (e, data) {
-          // Unselect all selected options on the field select.
-          $(select_field + " input:checked").prop("checked", false)
-          // Select the options on the field select element to match the tree.
-          for(i = 0; i < data.selected.length; i++) {
-            $(select_field + " input[value='" + data.instance.get_node(data.selected[i]).id + "']").prop("checked", true);
-          }
-        })
         .on("ready.jstree", function(e, data) {
           // Check all tree elements matching the selected options.
           $(select_field + " input:checked").each(function () {
@@ -32,6 +24,13 @@
           // Deselect all children.
           for (const [key, value] of Object.entries(data.node.children_d)) {
             data.instance.deselect_node(value);
+          }
+
+          $('#topic-tree-count span').text(data.instance.get_selected().length);
+
+          if (data.instance.get_selected().length > 3) {
+            data.instance.deselect_node(data.node);
+            alert('Topic selection limit reached.');
           }
         })
         .jstree({
@@ -65,6 +64,17 @@
         let search_text = $(this).val();
         $('#topic-tree-wrapper').jstree('search', search_text);
       });
+
+      // $('#topic-tree-submit').on('click', function(e) {
+      //   e.preventDefault();
+      //   $(select_field + " input:checked").prop("checked", false)
+      //   // Select the options on the field select element to match the tree.
+      //   $('#topic-tree-wrapper').jstree().get_bottom_selected().forEach((topic) => {
+      //     $(select_field + " input[value='" + topic + "']").prop("checked", true);
+      //   });
+      //
+      // });
+
     }
   }
 })(jQuery, Drupal, drupalSettings);

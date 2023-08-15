@@ -54,6 +54,13 @@ final class TopicTreeForm extends FormBase {
       ],
     ];
 
+    $form['selected_topics'] = [
+      '#type' => 'hidden',
+      '#attributes' => [
+        'id' => ['topic-tree-selected'],
+      ],
+    ];
+
     $form['actions'] = ['#type' => 'actions'];
     $form['actions']['send'] = [
       '#type' => 'submit',
@@ -62,9 +69,10 @@ final class TopicTreeForm extends FormBase {
         'callback' => [$this, 'submitForm'],
         'event' => 'click',
       ],
-      '#attributes' => [
-        'class' => ['use-ajax'],
-      ],
+//      '#attributes' => [
+//        'class' => ['use-ajax'],
+//        'id' => 'topic-tree-submit',
+//      ],
     ];
 
     $form['#attached']['library'][] = 'dept_topics/jstree';
@@ -85,6 +93,7 @@ final class TopicTreeForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    ksm($form, $form_state->getValue('tree_container'));
     $response = new AjaxResponse();
     $response->addCommand(new CloseDialogCommand());
 
