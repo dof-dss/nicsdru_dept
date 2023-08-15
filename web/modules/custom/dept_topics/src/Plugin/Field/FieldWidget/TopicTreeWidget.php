@@ -73,8 +73,10 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
    * {@inheritdoc}
    */
   public static function defaultSettings() {
-    $settings['excluded'] = TRUE;
-    return $settings;
+    return [
+      'excluded' => TRUE,
+      'limit' => 3,
+    ];
   }
 
   /**
@@ -88,6 +90,15 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       '#default_value' => $this->getSetting('excluded'),
     ];
 
+    $element['limit'] = array(
+      '#type' => 'number',
+      '#title' => $this->t('Selection limit'),
+      '#description' => $this->t('The upper limit for the number of topics that can be selected.'),
+      '#min' => 1,
+      '#max' => 10,
+      '#default_value' => $this->getSetting('limit'),
+    );
+
     return $element;
   }
 
@@ -97,6 +108,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
   public function settingsSummary() {
     $summary = [];
     $summary[] = $this->t('Excluded: @excluded', ['@excluded' => ($this->getSetting('excluded')) ? 'Yes' : 'No']);
+    $summary[] = $this->t('Selection limit: @limit', ['@limit' => $this->getSetting('limit')]);
 
     return $summary;
   }
