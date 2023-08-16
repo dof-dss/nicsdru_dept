@@ -19,10 +19,12 @@ dependencies:
     - field.field.node.news.field_teaser
     - field.field.node.news.field_video
     - node.type.news
+    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
     - datetime
+    - dept_topics
     - media_library
     - media_library_edit
     - metatag
@@ -119,10 +121,11 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_site_topics:
-    type: chosen_select
+    type: dept_topic_tree_widget
     weight: 4
     region: content
-    settings: {  }
+    settings:
+      excluded: true
     third_party_settings: {  }
   field_summary:
     type: string_textarea

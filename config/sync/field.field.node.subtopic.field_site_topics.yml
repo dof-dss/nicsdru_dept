@@ -1,18 +1,17 @@
-uuid: 1547e523-e868-4bf7-8547-e946f0e106dd
+uuid: 03dc5ab7-a264-482c-9010-aedd17c39780
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_site_topics
-    - node.type.news
     - node.type.subtopic
     - node.type.topic
-id: node.news.field_site_topics
+id: node.subtopic.field_site_topics
 field_name: field_site_topics
 entity_type: node
-bundle: news
+bundle: subtopic
 label: 'Site topics'
-description: 'Choose relevant site topic(s) for this news item. Hold down Ctrl to choose multiple site topics.'
+description: ''
 required: false
 translatable: true
 default_value: {  }
