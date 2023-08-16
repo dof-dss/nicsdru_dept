@@ -90,14 +90,14 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       '#default_value' => $this->getSetting('excluded'),
     ];
 
-    $element['limit'] = array(
+    $element['limit'] = [
       '#type' => 'number',
       '#title' => $this->t('Selection limit'),
       '#description' => $this->t('The upper limit for the number of topics that can be selected.'),
       '#min' => 1,
       '#max' => 10,
       '#default_value' => $this->getSetting('limit'),
-    );
+    ];
 
     return $element;
   }

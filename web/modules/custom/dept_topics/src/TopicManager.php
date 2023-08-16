@@ -252,7 +252,7 @@ class TopicManager {
    *   The entity to remove all references for.
    */
   public function removeChildDisplayFromTopics(NodeInterface $entity) {
-    if ($entity->hasField('field_site_topics') && !$this->isExcludedFromChildTopics($entity)) {
+    if ($entity->hasField('field_site_topics') && !$this->isValidTopicChild($entity)) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
 
       foreach ($parent_nids as $parent) {
@@ -288,4 +288,5 @@ class TopicManager {
       }
     }
   }
+
 }

@@ -48,10 +48,10 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
    */
   public function onModerationStateChange(ModerationStateChangeEvent $event) {
     if ($event->isPublished()) {
-      $this->topicManager->updateChildOnTopics($event->getEntity());
+      $this->topicManager->updateChildDisplayOnTopics($event->getEntity());
     }
     elseif ($event->isArchived()) {
-      $this->topicManager->removeChildFromTopics($event->getEntity());
+      $this->topicManager->removeChildDisplayFromTopics($event->getEntity());
     }
   }
 

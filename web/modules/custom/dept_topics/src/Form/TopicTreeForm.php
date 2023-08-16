@@ -97,7 +97,10 @@ final class TopicTreeForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
-    $response->addCommand(new InvokeCommand(NULL, 'topicTreeAjaxCallback', [$form_state->getValue('field'), $form_state->getValue('selected_topics')]));
+    $response->addCommand(new InvokeCommand(NULL, 'topicTreeAjaxCallback', [
+      $form_state->getValue('field'),
+      $form_state->getValue('selected_topics')
+    ]));
     $response->addCommand(new CloseDialogCommand());
 
     return $response;
