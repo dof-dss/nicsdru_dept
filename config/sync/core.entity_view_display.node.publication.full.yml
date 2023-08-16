@@ -16,7 +16,6 @@ dependencies:
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
     - field.field.node.publication.field_published_date
-    - field.field.node.publication.field_site_subtopics
     - field.field.node.publication.field_site_topics
     - field.field.node.publication.field_summary
     - node.type.publication
@@ -106,7 +105,6 @@ hidden:
   field_global_topics: true
   field_metatags: true
   field_publication_type: true
-  field_site_subtopics: true
   field_site_topics: true
   groups: true
   langcode: true
