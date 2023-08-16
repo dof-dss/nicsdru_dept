@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.subtopic.field_domain_all_affiliates
     - field.field.node.subtopic.field_domain_source
     - field.field.node.subtopic.field_metatags
+    - field.field.node.subtopic.field_site_topics
     - field.field.node.subtopic.field_summary
     - field.field.node.subtopic.field_topic_content
     - field.field.node.subtopic.layout_builder__layout
@@ -101,6 +102,7 @@ hidden:
   field_domain_all_affiliates: true
   field_domain_source: true
   field_metatags: true
+  field_site_topics: true
   field_topic_content: true
   langcode: true
   layout_builder__layout: true
