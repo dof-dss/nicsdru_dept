@@ -5,6 +5,7 @@ namespace Drupal\dept_topics;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\node\NodeStorage;
@@ -184,11 +185,11 @@ class TopicManager {
   /**
    * Add and remove an entity to topic child content lists based on the Site Topic field values.
    *
-   * @param \Drupal\node\NodeInterface $entity
+   * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to use as a child reference.
    */
-  public function updateChildDisplayOnTopics(NodeInterface $entity) {
-    if ($entity->hasField('field_site_topics') && !$this->isValidTopicChild($entity)) {
+  public function updateChildDisplayOnTopics(EntityInterface $entity) {
+    if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
       $site_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
 
@@ -248,11 +249,11 @@ class TopicManager {
   /**
    * Remove all topic child references for the given entity.
    *
-   * @param \Drupal\node\NodeInterface $entity
+   * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to remove all references for.
    */
-  public function removeChildDisplayFromTopics(NodeInterface $entity) {
-    if ($entity->hasField('field_site_topics') && !$this->isValidTopicChild($entity)) {
+  public function removeChildDisplayFromTopics(EntityInterface $entity) {
+    if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
 
       foreach ($parent_nids as $parent) {
