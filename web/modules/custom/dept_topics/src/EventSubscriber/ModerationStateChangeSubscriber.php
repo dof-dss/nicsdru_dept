@@ -36,7 +36,7 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     return [
       ModerationStateChangeEvent::CHANGE => ['onModerationStateChange'],
-      ScheduledTransitionsEvents::NEW_REVISION => ['newRevision'],
+      ScheduledTransitionsEvents::NEW_REVISION => ['newRevision', 1010],
     ];
   }
 
@@ -48,10 +48,10 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
    */
   public function onModerationStateChange(ModerationStateChangeEvent $event) {
     if ($event->isPublished()) {
-      $this->topicManager->updateChildOnTopics($event->getEntity());
+      $this->topicManager->updateChildDisplayOnTopics($event->getEntity());
     }
     elseif ($event->isArchived()) {
-      $this->topicManager->removeChildFromTopics($event->getEntity());
+      $this->topicManager->removeChildDisplayFromTopics($event->getEntity());
     }
   }
 
@@ -63,9 +63,15 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
    */
   public function newRevision(ScheduledTransitionsNewRevisionEvent $event) {
     $scheduledTransition = $event->getScheduledTransition();
-    $entity = $scheduledTransition->getEntity();
-    $revision = $event->getNewRevision();
-    // TODO: Update topics when scheduled revisions are working.
+    $state = $scheduledTransition->getState();
+
+    if ($state == 'published') {
+      $this->topicManager->updateChildDisplayOnTopics($scheduledTransition->getEntity());
+    }
+
+    if ($state == 'archived') {
+      $this->topicManager->removeChildDisplayFromTopics($scheduledTransition->getEntity());
+    }
   }
 
 }

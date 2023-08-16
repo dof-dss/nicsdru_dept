@@ -15,10 +15,10 @@ dependencies:
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
     - field.field.node.publication.field_published_date
-    - field.field.node.publication.field_site_subtopics
     - field.field.node.publication.field_site_topics
     - field.field.node.publication.field_summary
     - node.type.publication
+    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
@@ -129,17 +129,12 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_site_subtopics:
-    type: dept_topic_tree_widget
-    weight: 3
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_site_topics:
     type: dept_topic_tree_widget
     weight: 2
     region: content
-    settings: {  }
+    settings:
+      excluded: 0
     third_party_settings: {  }
   field_summary:
     type: string_textarea

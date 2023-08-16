@@ -4,6 +4,7 @@ namespace Drupal\dept_topics\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseDialogCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -22,13 +23,22 @@ final class TopicTreeForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL, $selected = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL, $limit = NULL, $selected = NULL): array {
 
     $form['#title'] = $this->t('Select topic');
 
+    $form['selection_count'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'strong',
+      '#value' => 'Selected: <span>0</span> of ' . $limit . ' topics',
+      '#attributes' => [
+        'id' => 'topic-tree-count',
+        'style' => ['float: right'],
+      ]
+    ];
+
     $form['tree_search'] = [
       '#type' => 'textfield',
-      '#prefix' => 'Search',
       '#attributes' => [
         'id' => 'topic-tree-search',
         'placeholder' => 'Search topics...'
@@ -45,6 +55,20 @@ final class TopicTreeForm extends FormBase {
       ],
     ];
 
+    // ID of the field the tree is linked to.
+    $form['field'] = [
+      '#type' => 'hidden',
+      '#default_value' => $field,
+    ];
+
+    // String of selected topics ID's from the tree.
+    $form['selected_topics'] = [
+      '#type' => 'hidden',
+      '#attributes' => [
+        'id' => ['field-site-topics'],
+      ],
+    ];
+
     $form['actions'] = ['#type' => 'actions'];
     $form['actions']['send'] = [
       '#type' => 'submit',
@@ -52,9 +76,6 @@ final class TopicTreeForm extends FormBase {
       '#ajax' => [
         'callback' => [$this, 'submitForm'],
         'event' => 'click',
-      ],
-      '#attributes' => [
-        'class' => ['use-ajax'],
       ],
     ];
 
@@ -67,6 +88,7 @@ final class TopicTreeForm extends FormBase {
       'topic_tree.department' => $department,
       'topic_tree.field' => $field,
       'topic_tree.selected' => $selected,
+      'topic_tree.limit' => $limit,
     ];
 
     return $form;
@@ -77,6 +99,10 @@ final class TopicTreeForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
+    $response->addCommand(new InvokeCommand(NULL, 'topicTreeAjaxCallback', [
+      $form_state->getValue('field'),
+      $form_state->getValue('selected_topics')
+    ]));
     $response->addCommand(new CloseDialogCommand());
 
     return $response;

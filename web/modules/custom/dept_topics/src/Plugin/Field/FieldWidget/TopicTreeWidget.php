@@ -73,8 +73,10 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
    * {@inheritdoc}
    */
   public static function defaultSettings() {
-    $settings['excluded'] = TRUE;
-    return $settings;
+    return [
+      'excluded' => TRUE,
+      'limit' => 3,
+    ];
   }
 
   /**
@@ -88,6 +90,15 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       '#default_value' => $this->getSetting('excluded'),
     ];
 
+    $element['limit'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Selection limit'),
+      '#description' => $this->t('The upper limit for the number of topics that can be selected.'),
+      '#min' => 1,
+      '#max' => 10,
+      '#default_value' => $this->getSetting('limit'),
+    ];
+
     return $element;
   }
 
@@ -97,6 +108,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
   public function settingsSummary() {
     $summary = [];
     $summary[] = $this->t('Excluded: @excluded', ['@excluded' => ($this->getSetting('excluded')) ? 'Yes' : 'No']);
+    $summary[] = $this->t('Selection limit: @limit', ['@limit' => $this->getSetting('limit')]);
 
     return $summary;
   }
@@ -134,11 +146,11 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
 
     $element = [
       '#type' => 'checkboxes',
-      '#title' => t('Topic'),
-      '#description' => t('Select a topic for this content. You can choose more than one topic, but choose sparingly and choose the most relevant and specific topic available.'),
+      '#title' => $this->fieldDefinition->getLabel(),
+      '#description' => $this->fieldDefinition->getDescription(),
       '#options' => $options,
       '#default_value' => $default_values,
-      '#required' => TRUE,
+      '#required' => $this->fieldDefinition->isRequired(),
       '#attached' => [
         'library' => [
           'dept_topics/topic_select',
@@ -154,23 +166,21 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       ],
     ];
 
-    if ($form_state->getFormObject() instanceof NodeForm && !$this->topicManager->isExcludedFromChildTopics($entity)) {
-      $element['#suffix'] = $this->t('This content will be automatically added to/removed from the topics as child content.');
-    }
-
     // Affix the topic tree link to the field.
     $element['#field_prefix'] = [
-      '#title' => t('Select topic'),
+      '#title' => $this->t('Select @label', ['@label' => $this->fieldDefinition->getLabel()]),
       '#type' => 'link',
       '#url' => Url::fromRoute('dept_topics.topic_tree.form', [
         'department' => $current_dept,
         'field' => $field_id,
-        'selected' => is_array($default_values) ? implode('+', $default_values) : ''
+        'limit' => $this->getSetting('limit'),
+        'selected' => is_array($default_values) ? implode('+', $default_values) : '',
       ]),
       '#attributes' => [
         'class' => ['button', 'use-ajax'],
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode([
+          'title' => $this->t('Select @label', ['@label' => $this->fieldDefinition->getLabel()]),
           'width' => 800,
           'minHeight' => 800,
         ]),
@@ -178,6 +188,18 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     ];
 
     return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+    // Remove any values that are not from a selected checkbox.
+    $new_values = array_filter($values, function ($value, $key) {
+      return $value !== 0;
+    }, ARRAY_FILTER_USE_BOTH);
+
+    return $new_values;
   }
 
   /**
