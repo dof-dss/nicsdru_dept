@@ -189,8 +189,10 @@ class TopicManager {
    *   The entity to use as a child reference.
    */
   public function updateChildDisplayOnTopics(EntityInterface $entity) {
+    // @phpstan-ignore-next-line
     if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
+      // @phpstan-ignore-next-line
       $site_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
 
       $site_topics_removed = array_diff($parent_nids, $site_topics);
@@ -253,6 +255,7 @@ class TopicManager {
    *   The entity to remove all references for.
    */
   public function removeChildDisplayFromTopics(EntityInterface $entity) {
+    // @phpstan-ignore-next-line
     if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
 
