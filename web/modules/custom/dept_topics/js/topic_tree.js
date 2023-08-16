@@ -29,12 +29,12 @@
             data.instance.deselect_node(value);
           }
 
-          $('#topic-tree-count span').text(data.instance.get_selected().length);
-
-          if (data.instance.get_selected().length > 3) {
+          if (data.instance.get_selected().length > drupalSettings["topic_tree.limit"]) {
             data.instance.deselect_node(data.node);
             alert('Topic selection limit reached.')
           }
+
+          $('#topic-tree-count span').text(data.instance.get_selected().length);
         })
         .jstree({
           core: {

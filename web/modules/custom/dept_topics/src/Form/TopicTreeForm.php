@@ -86,6 +86,7 @@ final class TopicTreeForm extends FormBase {
       'topic_tree.department' => $department,
       'topic_tree.field' => $field,
       'topic_tree.selected' => $selected,
+      'topic_tree.limit' => $limit,
     ];
 
     return $form;
