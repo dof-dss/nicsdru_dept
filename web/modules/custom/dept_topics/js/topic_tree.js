@@ -10,7 +10,8 @@
 
       $('#topic-tree-wrapper')
         .on('changed.jstree', function (e, data) {
-            $('input[name="selected_topics"]').val(data.instance.get_selected());
+          // Update the hidden form field values when tree changes.
+          $('input[name="selected_topics"]').val(data.instance.get_selected());
         })
         .on("ready.jstree", function(e, data) {
           // Check all tree elements matching the selected options.
@@ -29,6 +30,7 @@
             data.instance.deselect_node(value);
           }
 
+          // Warn when hitting the topic selection limit.
           if (data.instance.get_selected().length > drupalSettings["topic_tree.limit"]) {
             data.instance.deselect_node(data.node);
             alert('Topic selection limit reached.')
@@ -56,7 +58,7 @@
           checkbox: {
             three_state: false
           },
-          plugins: ["changed", "checkbox", "conditionalselect", "search"],
+          plugins: ["changed", "checkbox", "search"],
           "search": {
             "case_sensitive": false,
             "show_only_matches": true,
@@ -71,6 +73,9 @@
   }
 })(jQuery, Drupal, drupalSettings);
 
+/**
+ * Callback for the Topic Tree form submit.
+ */
 (function($) {
   $.fn.topicTreeAjaxCallback = function(field, topics) {
     topics = topics.split(',');

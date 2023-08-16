@@ -55,11 +55,13 @@ final class TopicTreeForm extends FormBase {
       ],
     ];
 
+    // ID of the field the tree is linked to.
     $form['field'] = [
       '#type' => 'hidden',
       '#default_value' => $field,
     ];
 
+    // String of selected topics ID's from the tree.
     $form['selected_topics'] = [
       '#type' => 'hidden',
       '#attributes' => [
