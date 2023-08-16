@@ -75,6 +75,9 @@
   $.fn.topicTreeAjaxCallback = function(field, topics) {
     topics = topics.split(',');
 
+    // Reset all checkboxes before updating with the tree values.
+    $('#' + field + " input[type='checkbox']").prop("checked", false);
+
     topics.forEach((topic) => {
       $('#' + field + " input[value='" + topic + "']").prop("checked", true);
     });
