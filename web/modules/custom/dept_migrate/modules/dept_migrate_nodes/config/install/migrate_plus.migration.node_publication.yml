@@ -84,7 +84,9 @@ process:
           plugin: format_date
           source: value
           from_format: 'Y-m-d H:i:s'
+          from_timezone: 'UTC'
           to_format: 'Y-m-d\TH:i:s'
+          to_timezone: 'UTC'
   field_global_topics:
     - plugin: sub_process
       source: field_global_topics
