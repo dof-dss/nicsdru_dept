@@ -5,6 +5,8 @@ namespace Drupal\dept_topics\Plugin\Field\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 
 /**
  *  'Topic tags' formatter for site topics display.
@@ -36,12 +38,19 @@ class TopicTagsFormatter extends FormatterBase {
         'type' => $entity->bundle(),
       ];
       $parents = $topic_manager->getParentNodes($entity);
+
+      $parents = array_filter($parents, function ($parent) {
+        return ($parent->type == 'topic');
+      });
+
       $nodes = $nodes + $parents;
     }
 
     foreach ($nodes as $node) {
       $element[$node->nid] = [
-        '#markup' => $node->title,
+        '#type' => 'link',
+        '#title' => $node->title,
+        '#url' => Url::fromRoute('entity.node.canonical', ['node' => $node->nid]),
       ];
     }
 
