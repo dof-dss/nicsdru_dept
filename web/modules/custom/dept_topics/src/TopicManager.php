@@ -98,15 +98,18 @@ class TopicManager {
   }
 
   /**
-   * Returns parent nodes for the given node ID.
+   * Returns parent nodes for the given node.
    *
-   * @param int $nid
-   *   Node id to return the parent for.
+   * @param NodeInterface|int $node
+   *   Node or node ID to return the parent for.
    *
    * @return array|mixed
    *   Node ID indexed array comprising id, title and type.
    */
-  public function getParentNodes($nid) {
+  public function getParentNodes($node) {
+
+    $nid = ($node instanceof NodeInterface) ? $node->id() : $node;
+
     $parents = $this->dbConn->query("SELECT n.nid, nfd.title, nfd.type FROM node n
         LEFT JOIN node_field_data nfd
         ON nfd.nid = n.nid
