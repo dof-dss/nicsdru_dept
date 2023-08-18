@@ -329,7 +329,7 @@ display:
         options:
           view_modes:
             'entity:node':
-              news: nigov_search
+              news: search_metadata
       query:
         type: search_api_query
         options:
@@ -375,6 +375,7 @@ display:
       tags:
         - 'config:field.storage.node.body'
         - 'config:search_api.index.news_index'
+        - 'search_api_list:news_index'
   news_search:
     id: news_search
     display_title: Page
@@ -547,6 +548,7 @@ display:
         - 'config:facets.facet.news_topic'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.news_index'
+        - 'search_api_list:news_index'
   press_release_search:
     id: press_release_search
     display_title: 'Press releases'
@@ -747,3 +749,4 @@ display:
         - 'config:facets.facet.pr_topics'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.news_index'
+        - 'search_api_list:news_index'
