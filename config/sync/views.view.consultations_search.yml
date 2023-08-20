@@ -272,7 +272,7 @@ display:
       style:
         type: default
         options:
-          row_class: card
+          row_class: ''
           default_row_class: false
           uses_fields: false
       row:
@@ -326,6 +326,7 @@ display:
       tags:
         - 'config:field.storage.node.body'
         - 'config:search_api.index.consultations_index'
+        - 'search_api_list:consultations_index'
   consultations_search:
     id: consultations_search
     display_title: Page
@@ -357,3 +358,4 @@ display:
         - 'config:facets.facet.consultation_topic'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.consultations_index'
+        - 'search_api_list:consultations_index'
