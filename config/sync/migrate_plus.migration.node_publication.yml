@@ -105,7 +105,7 @@ process:
           from_format: 'Y-m-d H:i:s'
           from_timezone: UTC
           to_format: 'Y-m-d\TH:i:s'
-          to_timezone: UTC
+          to_timezone: Europe/London
   field_global_topics:
     -
       plugin: sub_process
