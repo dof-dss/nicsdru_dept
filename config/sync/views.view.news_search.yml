@@ -268,8 +268,8 @@ display:
       tags:
         - 'config:search_api.index.news_index'
         - 'search_api_list:news_index'
-  feed_1:
-    id: feed_1
+  news_feed:
+    id: news_feed
     display_title: 'News Feed'
     display_plugin: feed
     position: 3
@@ -362,8 +362,8 @@ display:
           label: ''
           exclude: true
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: 'node/{{ nid }}'
             make_link: false
             path: ''
             absolute: false
@@ -653,8 +653,8 @@ display:
           label: ''
           exclude: false
           alter:
-            alter_text: true
-            text: 'node/{{ nid }}'
+            alter_text: false
+            text: ''
             make_link: false
             path: ''
             absolute: false
@@ -1737,8 +1737,8 @@ display:
           label: ''
           exclude: false
           alter:
-            alter_text: true
-            text: 'node/{{ nid }}'
+            alter_text: false
+            text: ''
             make_link: false
             path: ''
             absolute: false
