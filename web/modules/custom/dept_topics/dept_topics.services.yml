@@ -7,3 +7,8 @@ services:
     arguments: ['@topic.manager']
     tags:
       - { name: event_subscriber }
+  topic.solr_query_alter:
+    class: Drupal\dept_topics\EventSubscriber\SolrQueryAlterEventSubscriber
+    arguments: ['@topic.manager']
+    tags:
+      - { name: 'event_subscriber' }
