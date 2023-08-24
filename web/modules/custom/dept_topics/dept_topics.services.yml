@@ -9,6 +9,6 @@ services:
       - { name: event_subscriber }
   topic.solr_query_alter:
     class: Drupal\dept_topics\EventSubscriber\SolrQueryAlterEventSubscriber
-    arguents: ['@topic.manager']
+    arguments: ['@topic.manager']
     tags:
       - { name: 'event_subscriber' }
