@@ -70,7 +70,7 @@ class SolrQueryAlterEventSubscriber implements EventSubscriberInterface {
 
     if (!empty($topic_nids)) {
       // @phpstan-ignore-next-line. Array type is always set, even with 0 length.
-      $solr_topics_field_id = count($topic_nids > 1) ? 'itm_field_site_topics' : 'its_field_site_topics';
+      $solr_topics_field_id = count($topic_nids) > 1 ? 'itm_field_site_topics' : 'its_field_site_topics';
       // Add to the Solr document.
       // @phpstan-ignore-next-line. Grumbles about setField being missing, but it's part of the Document class.
       $solarium_doc->setField($solr_topics_field_id, $topic_nids);
