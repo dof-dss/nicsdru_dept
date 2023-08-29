@@ -90,42 +90,9 @@ class TopicManager {
   }
 
   /**
-   * Returns parent topics for the given node.
-   *
-   * @param NodeInterface|int $node
-   *   Node or node ID to return the parent for.
-   *
-   * @return array|mixed
-   *   Node ID indexed array comprising id, title and type.
-   */
-  public function getTopicTags($node) {
-    $topic_tag_nodes = [];
-
-    if ($node->hasField('field_site_topics')) {
-      $topics = $node->get('field_site_topics')->getValue();
-    }
-
-    foreach ($topics as $topic) {
-      $topic = $this->entityTypeManager->getStorage('node')->load($topic['target_id']);
-      $topic_tag_nodes[$topic->id()] = $topic;
-
-      $parents = $this->getParentNodes($topic);
-
-      foreach ($parents as $parent) {
-        if ($parent->type === 'topic') {
-          $parent = $this->entityTypeManager->getStorage('node')->load($parent->nid);
-          $topic_tag_nodes[$parent->id()] = $parent;
-        }
-      }
-    }
-
-    return $topic_tag_nodes;
-  }
-
-  /**
    * Returns parent nodes for the given node ID.
    *
-   * @param NodeInterface|int $node
+   * @param \Drupal\node\NodeInterface|int $node
    *   Node or Node ID to return the parents for.
    *
    * @param array $parents
@@ -138,7 +105,8 @@ class TopicManager {
 
     if ($node instanceof NodeInterface) {
       $nid = $node->id();
-    } else {
+    }
+    else {
       $nid = $node;
     }
 
