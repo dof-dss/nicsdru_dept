@@ -2,11 +2,14 @@
 
 namespace Drupal\dept_topics\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Entity\ContentEntityTypeInterface;
+use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 
 /**
  *  'Topic tags' formatter for site topics display.
@@ -25,32 +28,33 @@ class TopicTagsFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
+
     $element = [];
     $nodes = [];
     $topic_manager = \Drupal::service('topic.manager');
-
     $entities = $items->referencedEntities();
 
     foreach ($entities as $entity) {
-      $nodes[$entity->id()] = (object) [
-        'nid' => $entity->id(),
-        'title' => $entity->label(),
-        'type' => $entity->bundle(),
-      ];
-      $parents = $topic_manager->getParentNodes($entity);
+      if ($entity->bundle() === 'topic') {
+        $nodes[] = $entity;
+      }
+      elseif ($entity->bundle() === 'subtopic') {
+        $nodes[] = $entity;
+        $parents = $topic_manager->getParentNodes($entity);
 
-      $parents = array_filter($parents, function ($parent) {
-        return ($parent->type == 'topic');
-      });
-
-      $nodes = $nodes + $parents;
+        foreach ($parents as $parent) {
+          if ($parent->type === 'topic') {
+            $nodes[] = Node::load($parent->nid);
+          }
+        }
+      }
     }
 
     foreach ($nodes as $node) {
-      $element[$node->nid] = [
+      $element[$node->id()] = [
         '#type' => 'link',
-        '#title' => $node->title,
-        '#url' => Url::fromRoute('entity.node.canonical', ['node' => $node->nid]),
+        '#title' => $node->label(),
+        '#url' => Url::fromRoute('entity.node.canonical', ['node' => $node->id()]),
       ];
     }
 
