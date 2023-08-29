@@ -81,12 +81,16 @@ process:
         plugin: format_date
         source: value
         from_format: 'Y-m-d H:i:s'
+        from_timezone: 'Europe/London'
         to_format: 'Y-m-d\TH:i:s'
+        to_timezone: 'UTC'
       end_value:
         plugin: format_date
         source: value2
         from_format: 'Y-m-d H:i:s'
+        from_timezone: 'Europe/London'
         to_format: 'Y-m-d\TH:i:s'
+        to_timezone: 'UTC'
   field_global_topics:
     - plugin: sub_process
       source: field_global_topics

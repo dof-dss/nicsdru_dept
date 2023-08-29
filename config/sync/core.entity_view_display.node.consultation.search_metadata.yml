@@ -56,6 +56,14 @@ targetEntityType: node
 bundle: consultation
 mode: search_metadata
 content:
+  field_domain_source:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
   field_published_date:
     type: datetime_default
     label: inline
@@ -63,7 +71,7 @@ content:
       timezone_override: ''
       format_type: medium_date
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
   field_summary:
     type: smart_trim
@@ -74,15 +82,18 @@ content:
       trim_suffix: ...
       wrap_output: false
       wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: full
       trim_options:
         text: true
         trim_zero: false
         replace_tokens: false
-      more_link: false
-      more_class: more-link
-      more_text: More
-      more_aria_label: 'Read more about [node:title]'
     third_party_settings: {  }
     weight: 0
     region: content
@@ -93,7 +104,6 @@ hidden:
   field_consultation_dates: true
   field_domain_access: true
   field_domain_all_affiliates: true
-  field_domain_source: true
   field_email_address: true
   field_global_topics: true
   field_metatags: true
