@@ -55,6 +55,7 @@ class TopicTagsFormatter extends FormatterBase {
         '#type' => 'link',
         '#title' => $node->label(),
         '#url' => Url::fromRoute('entity.node.canonical', ['node' => $node->id()]),
+        '#cache' => ['tags' => ['node:' . $node->id()]],
       ];
     }
 
