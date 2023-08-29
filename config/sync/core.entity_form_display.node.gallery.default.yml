@@ -10,12 +10,13 @@ dependencies:
     - field.field.node.gallery.field_gallery_images
     - field.field.node.gallery.field_global_topics
     - field.field.node.gallery.field_metatags
-    - field.field.node.gallery.field_site_subtopics
     - field.field.node.gallery.field_site_topics
     - field.field.node.gallery.field_summary
     - node.type.gallery
+    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
+    - dept_topics
     - media_library
     - media_library_edit
     - metatag
@@ -85,17 +86,13 @@ content:
       sidebar: true
       use_details: true
     third_party_settings: {  }
-  field_site_subtopics:
-    type: options_select
-    weight: 3
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_site_topics:
-    type: options_select
+    type: dept_topic_tree_widget
     weight: 2
     region: content
-    settings: {  }
+    settings:
+      excluded: true
+      limit: 3
     third_party_settings: {  }
   field_summary:
     type: string_textarea

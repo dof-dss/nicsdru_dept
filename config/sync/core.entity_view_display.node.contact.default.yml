@@ -14,6 +14,7 @@ dependencies:
     - filter.format.plain_text
     - node.type.contact
   module:
+    - dept_topics
     - geolocation
     - metatag
     - user
@@ -101,11 +102,18 @@ content:
         scale: 1
       data_provider_settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
   field_metatags:
     type: metatag_empty_formatter
     label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_site_topics:
+    type: dept_topics_topic_tags
+    label: inline
     settings: {  }
     third_party_settings: {  }
     weight: 0
@@ -119,7 +127,6 @@ hidden:
   field_domain_source: true
   field_map: true
   field_next_audit_due: true
-  field_site_topics: true
   groups: true
   groups_type_department_site: true
   langcode: true

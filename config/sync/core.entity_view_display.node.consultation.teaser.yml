@@ -16,7 +16,6 @@ dependencies:
     - field.field.node.consultation.field_postal
     - field.field.node.consultation.field_published_date
     - field.field.node.consultation.field_respond_online
-    - field.field.node.consultation.field_site_subtopics
     - field.field.node.consultation.field_site_topics
     - field.field.node.consultation.field_summary
     - node.type.consultation
@@ -52,7 +51,6 @@ hidden:
   field_postal: true
   field_published_date: true
   field_respond_online: true
-  field_site_subtopics: true
   field_site_topics: true
   field_summary: true
   groups: true

@@ -15,15 +15,16 @@ dependencies:
     - field.field.node.consultation.field_postal
     - field.field.node.consultation.field_published_date
     - field.field.node.consultation.field_respond_online
-    - field.field.node.consultation.field_site_subtopics
     - field.field.node.consultation.field_site_topics
     - field.field.node.consultation.field_summary
     - node.type.consultation
+    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
     - datetime
     - datetime_range
+    - dept_topics
     - link
     - media_library
     - media_library_edit
@@ -130,17 +131,13 @@ content:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-  field_site_subtopics:
-    type: chosen_select
-    weight: 3
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_site_topics:
-    type: chosen_select
+    type: dept_topic_tree_widget
     weight: 2
     region: content
-    settings: {  }
+    settings:
+      excluded: true
+      limit: 3
     third_party_settings: {  }
   field_summary:
     type: string_textarea

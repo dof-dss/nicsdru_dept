@@ -13,13 +13,12 @@ dependencies:
     - field.field.node.protected_area.field_protected_area_documents
     - field.field.node.protected_area.field_protected_area_feature
     - field.field.node.protected_area.field_protected_area_type
-    - field.field.node.protected_area.field_site_subtopics
     - field.field.node.protected_area.field_site_topics
     - node.type.protected_area
     - workflows.workflow.nics_editorial_workflow
   module:
-    - chosen_field
     - content_moderation
+    - dept_topics
     - field_group
     - metatag
     - path
@@ -127,17 +126,13 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_site_subtopics:
-    type: chosen_select
-    weight: 2
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_site_topics:
-    type: chosen_select
+    type: dept_topic_tree_widget
     weight: 1
     region: content
-    settings: {  }
+    settings:
+      excluded: true
+      limit: 3
     third_party_settings: {  }
   flag:
     weight: 8
@@ -179,6 +174,11 @@ content:
   publish_state:
     type: options_select
     weight: 26
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }

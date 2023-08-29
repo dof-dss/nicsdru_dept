@@ -12,7 +12,6 @@ dependencies:
     - field.field.node.landing_page.field_enable_title
     - field.field.node.landing_page.field_facebook_user
     - field.field.node.landing_page.field_metatags
-    - field.field.node.landing_page.field_site_subtopics
     - field.field.node.landing_page.field_site_topics
     - field.field.node.landing_page.field_summary
     - field.field.node.landing_page.field_teaser
@@ -63,7 +62,6 @@ hidden:
   field_enable_title: true
   field_facebook_user: true
   field_metatags: true
-  field_site_subtopics: true
   field_site_topics: true
   field_teaser: true
   field_tweet_count: true
