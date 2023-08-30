@@ -232,42 +232,49 @@ function dept_topics_process_topic_child_contents($form, FormStateInterface $for
  * Implements hook_node_presave().
  */
 function dept_topics_node_presave(EntityInterface $node) {
-
-  $original = array_column($node->original->get('field_topic_content')->getValue(), 'target_id');
-  $updated = array_column($node->get('field_topic_content')->getValue(), 'target_id');
-
-  if (count($original) > count($updated)) {
-    $removed = array_diff($original, $updated);
-
-    foreach ($removed as $nid) {
-      $child_node = Node::load($nid);
-      $child_topics = $child_node->get('field_site_topics');
-
-      for ($i = 0; $i < $child_topics->count(); $i++) {
-        // @phpstan-ignore-next-line
-        if ($child_topics->get($i)->target_id == $node->id()) {
-          $child_topics->removeItem($i);
-          $i--;
-        }
-      }
-      $child_node->save();
+  // Add or remove site topic tags to nodes that are added or removed from topic child contents.
+  if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
+    if ($node->isNew()) {
+      // Ignore new as we don't have a node ID for the topic.
+      return;
     }
-  }
-  else {
-    $added = array_diff($updated, $original);
 
-    foreach ($added as $nid) {
-      $child_node = Node::load($nid);
-      $child_topic_tags = array_column($child_node->get('field_site_topics')->getValue(), 'target_id');
+    // @phpstan-ignore-next-line
+    $original = array_column($node->original->get('field_topic_content')->getValue(), 'target_id');
+    // @phpstan-ignore-next-line
+    $updated = array_column($node->get('field_topic_content')->getValue(), 'target_id');
 
-      if (!in_array($node->id(), $child_topic_tags)) {
-        $child_node->get('field_site_topics')->appendItem([
-          'target_id' => $node->id()
-        ]);
+    if (count($original) > count($updated)) {
+      $removed = array_diff($original, $updated);
+
+      foreach ($removed as $nid) {
+        $child_node = Node::load($nid);
+        $child_topics = $child_node->get('field_site_topics');
+
+        for ($i = 0; $i < $child_topics->count(); $i++) {
+          // @phpstan-ignore-next-line
+          if ($child_topics->get($i)->target_id == $node->id()) {
+            $child_topics->removeItem($i);
+            $i--;
+          }
+        }
         $child_node->save();
       }
     }
+    else {
+      $added = array_diff($updated, $original);
+
+      foreach ($added as $nid) {
+        $child_node = Node::load($nid);
+        $child_topic_tags = array_column($child_node->get('field_site_topics')->getValue(), 'target_id');
+
+        if (!in_array($node->id(), $child_topic_tags)) {
+          $child_node->get('field_site_topics')->appendItem([
+            'target_id' => $node->id()
+          ]);
+          $child_node->save();
+        }
+      }
+    }
   }
-
 }
-
