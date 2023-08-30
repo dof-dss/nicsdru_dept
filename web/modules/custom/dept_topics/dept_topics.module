@@ -253,6 +253,21 @@ function dept_topics_node_presave(EntityInterface $node) {
       $child_node->save();
     }
   }
+  else {
+    $added = array_diff($updated, $original);
+
+    foreach ($added as $nid) {
+      $child_node = Node::load($nid);
+      $child_topic_tags = array_column($child_node->get('field_site_topics')->getValue(), 'target_id');
+
+      if (!in_array($node->id(), $child_topic_tags)) {
+        $child_node->get('field_site_topics')->appendItem([
+          'target_id' => $node->id()
+        ]);
+        $child_node->save();
+      }
+    }
+  }
 
 }
 
