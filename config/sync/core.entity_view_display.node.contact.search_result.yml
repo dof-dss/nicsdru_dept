@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.contact.field_map_location
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
+    - field.field.node.contact.field_site_topics
     - node.type.contact
   module:
     - layout_builder
@@ -34,15 +35,15 @@ content:
       trim_suffix: ...
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      more_aria_label: 'Read more about [node:title]'
       summary_handler: ignore
       trim_options:
         text: true
         trim_zero: false
         replace_tokens: false
+      more_link: false
+      more_class: more-link
+      more_text: More
+      more_aria_label: 'Read more about [node:title]'
     third_party_settings: {  }
     weight: 0
     region: content
@@ -55,6 +56,7 @@ hidden:
   field_map_location: true
   field_metatags: true
   field_next_audit_due: true
+  field_site_topics: true
   groups: true
   langcode: true
   links: true

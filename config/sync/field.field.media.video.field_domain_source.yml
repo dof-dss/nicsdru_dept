@@ -1,0 +1,32 @@
+uuid: cd604aea-a35b-4b01-a6dd-987f3b0fcf63
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_domain_source
+    - media.type.video
+  module:
+    - domain_entity
+third_party_settings:
+  domain_entity:
+    exclude_routes:
+      canonical: canonical
+id: media.video.field_domain_source
+field_name: field_domain_source
+entity_type: media
+bundle: video
+label: 'Domain Source'
+description: 'Select the canonical domain for this entity.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:domain'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: weight
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

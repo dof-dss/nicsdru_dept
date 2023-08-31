@@ -3,11 +3,32 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.video.field_domain_access
+    - field.field.media.video.field_domain_source
     - field.field.media.video.field_media_video_file
     - media.type.video
   module:
     - file
     - path
+third_party_settings:
+  field_group:
+    group_domain_settings:
+      children:
+        - field_domain_access
+        - field_domain_source
+      label: 'Domain settings'
+      region: content
+      parent_name: ''
+      weight: 8
+      format_type: details_sidebar
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+        weight: 0
 _core:
   default_config_hash: IWfrTzxbpak4LoHml9EaEsRogvsHGOTB0-HQvu-iKqk
 id: media.video.default
@@ -20,6 +41,26 @@ content:
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_domain_access:
+    type: entity_reference_autocomplete
+    weight: 101
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_domain_source:
+    type: entity_reference_autocomplete
+    weight: 102
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_media_video_file:
     type: file_generic

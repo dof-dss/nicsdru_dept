@@ -16,7 +16,6 @@ dependencies:
     - field.field.node.consultation.field_postal
     - field.field.node.consultation.field_published_date
     - field.field.node.consultation.field_respond_online
-    - field.field.node.consultation.field_site_subtopics
     - field.field.node.consultation.field_site_topics
     - field.field.node.consultation.field_summary
     - node.type.consultation
@@ -60,15 +59,15 @@ content:
       trim_suffix: ...
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      more_aria_label: 'Read more about [node:title]'
       summary_handler: full
       trim_options:
         text: true
         trim_zero: false
         replace_tokens: false
+      more_link: false
+      more_class: more-link
+      more_text: More
+      more_aria_label: 'Read more about [node:title]'
     third_party_settings: {  }
     weight: 0
     region: content
@@ -85,7 +84,6 @@ hidden:
   field_metatags: true
   field_postal: true
   field_respond_online: true
-  field_site_subtopics: true
   field_site_topics: true
   groups: true
   groups_type_department_site: true

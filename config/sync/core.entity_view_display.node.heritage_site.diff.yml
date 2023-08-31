@@ -22,7 +22,6 @@ dependencies:
     - field.field.node.heritage_site.field_phone
     - field.field.node.heritage_site.field_photo
     - field.field.node.heritage_site.field_postcode
-    - field.field.node.heritage_site.field_site_subtopics
     - field.field.node.heritage_site.field_site_topics
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
@@ -237,14 +236,6 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 5
-    region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 15
     region: content
   field_site_topics:
     type: entity_reference_label

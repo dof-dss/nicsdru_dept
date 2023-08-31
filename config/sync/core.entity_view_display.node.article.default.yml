@@ -9,10 +9,13 @@ dependencies:
     - field.field.node.article.field_domain_source
     - field.field.node.article.field_global_topics
     - field.field.node.article.field_metatags
+    - field.field.node.article.field_site_topics
     - field.field.node.article.field_summary
     - node.type.article
   module:
+    - dept_topics
     - metatag
+    - smart_trim
     - text
     - user
 _core:
@@ -27,21 +30,42 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
   field_metatags:
     type: metatag_empty_formatter
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
-  field_summary:
-    type: text_default
-    label: hidden
+  field_site_topics:
+    type: dept_topics_topic_tags
+    label: inline
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_summary:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 600
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options: {  }
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
   content_moderation_control: true

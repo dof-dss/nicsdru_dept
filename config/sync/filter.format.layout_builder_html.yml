@@ -5,7 +5,10 @@ dependencies:
   module:
     - cookie_content_blocker
     - dept_content_processors
+    - editor
+    - entity_embed
     - linkit
+    - media
     - noreferrer
     - origins_common
     - token_filter
@@ -19,54 +22,54 @@ filters:
     status: true
     weight: -50
     settings:
-      allowed_html: '<em> <strong> <blockquote cite> <ul type class=""> <ol start type class=""> <li> <h2 id> <h3 id> <h4 id> <div class=""> <p translate class=""> <br> <a href hreflang data-entity-substitution data-entity-type data-entity-uuid title class="">'
+      allowed_html: '<em> <strong> <blockquote cite> <ul type class> <ol start type class> <li> <h2 id> <h3 id> <h4 id> <div class> <p translate class> <br> <a href hreflang data-entity-substitution data-entity-type data-entity-uuid title class>'
       filter_html_help: false
       filter_html_nofollow: false
   filter_align:
     id: filter_align
     provider: filter
     status: false
-    weight: -39
+    weight: -45
     settings: {  }
   linkit:
     id: linkit
     provider: linkit
     status: false
-    weight: -34
+    weight: -49
     settings:
       title: true
   cookie_content_blocker_filter:
     id: cookie_content_blocker_filter
     provider: cookie_content_blocker
     status: false
-    weight: 0
+    weight: -43
     settings:
       disable_xss: '0'
   origins_media_cookie_content_blocker_embed_filter:
     id: origins_media_cookie_content_blocker_embed_filter
     provider: origins_common
     status: false
-    weight: 0
+    weight: -38
     settings:
       replacement_text: 'Click here to view the video content'
   token_filter:
     id: token_filter
     provider: token_filter
     status: false
-    weight: 0
+    weight: -37
     settings:
       replace_empty: '0'
   noreferrer:
     id: noreferrer
     provider: noreferrer
     status: true
-    weight: 10
+    weight: -47
     settings: {  }
   rel_to_abs_url:
     id: rel_to_abs_url
     provider: dept_content_processors
     status: true
-    weight: 100
+    weight: -46
     settings:
       process_domains:
         nigov: nigov
@@ -83,5 +86,63 @@ filters:
     id: dept_abs2rel_url
     provider: dept_content_processors
     status: true
-    weight: 0
+    weight: -48
     settings: {  }
+  editor_file_reference:
+    id: editor_file_reference
+    provider: editor
+    status: false
+    weight: -42
+    settings: {  }
+  entity_embed:
+    id: entity_embed
+    provider: entity_embed
+    status: false
+    weight: -34
+    settings: {  }
+  filter_htmlcorrector:
+    id: filter_htmlcorrector
+    provider: filter
+    status: false
+    weight: -35
+    settings: {  }
+  filter_html_image_secure:
+    id: filter_html_image_secure
+    provider: filter
+    status: false
+    weight: -36
+    settings: {  }
+  filter_url:
+    id: filter_url
+    provider: filter
+    status: false
+    weight: -39
+    settings:
+      filter_url_length: 72
+  filter_caption:
+    id: filter_caption
+    provider: filter
+    status: false
+    weight: -40
+    settings: {  }
+  filter_autop:
+    id: filter_autop
+    provider: filter
+    status: false
+    weight: -41
+    settings: {  }
+  filter_html_escape:
+    id: filter_html_escape
+    provider: filter
+    status: false
+    weight: -44
+    settings: {  }
+  media_embed:
+    id: media_embed
+    provider: media
+    status: false
+    weight: -33
+    settings:
+      default_view_mode: default
+      allowed_view_modes: {  }
+      allowed_media_types: {  }

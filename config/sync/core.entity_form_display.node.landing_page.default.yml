@@ -11,7 +11,6 @@ dependencies:
     - field.field.node.landing_page.field_enable_title
     - field.field.node.landing_page.field_facebook_user
     - field.field.node.landing_page.field_metatags
-    - field.field.node.landing_page.field_site_subtopics
     - field.field.node.landing_page.field_site_topics
     - field.field.node.landing_page.field_summary
     - field.field.node.landing_page.field_teaser
@@ -20,8 +19,8 @@ dependencies:
     - node.type.landing_page
     - workflows.workflow.nics_editorial_workflow
   module:
-    - chosen_field
     - content_moderation
+    - dept_topics
     - field_group
     - metatag
     - path
@@ -48,7 +47,6 @@ third_party_settings:
     group_related_news_items:
       children:
         - field_site_topics
-        - field_site_subtopics
       label: 'Related news items'
       region: content
       parent_name: group_social_media_feeds
@@ -162,21 +160,17 @@ content:
       sidebar: true
       use_details: true
     third_party_settings: {  }
-  field_site_subtopics:
-    type: chosen_select
-    weight: 25
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_site_topics:
-    type: chosen_select
+    type: dept_topic_tree_widget
     weight: 24
     region: content
-    settings: {  }
+    settings:
+      excluded: true
+      limit: 3
     third_party_settings: {  }
   field_summary:
-    type: text_textarea
-    weight: 5
+    type: string_textarea
+    weight: 4
     region: content
     settings:
       rows: 5

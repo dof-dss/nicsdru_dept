@@ -12,10 +12,10 @@ dependencies:
     - field.field.node.profile.field_photo
     - field.field.node.profile.field_summary
     - node.type.profile
-    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - media_library
+    - media_library_edit
     - metatag
     - path
     - scheduler
@@ -82,10 +82,12 @@ content:
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: '1'
   field_summary:
-    type: text_textarea
-    weight: 2
+    type: string_textarea
+    weight: 4
     region: content
     settings:
       rows: 5
@@ -131,6 +133,11 @@ content:
   publish_state:
     type: options_select
     weight: 26
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }

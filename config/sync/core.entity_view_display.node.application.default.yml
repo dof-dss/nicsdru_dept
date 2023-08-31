@@ -11,11 +11,14 @@ dependencies:
     - field.field.node.application.field_global_topics
     - field.field.node.application.field_link
     - field.field.node.application.field_metatags
+    - field.field.node.application.field_site_topics
     - field.field.node.application.field_summary
     - node.type.application
   module:
+    - dept_topics
     - link
     - metatag
+    - smart_trim
     - text
     - user
 id: node.application.default
@@ -28,14 +31,14 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
   field_additional_info:
     type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
   field_link:
     type: link
@@ -47,21 +50,42 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
   field_metatags:
     type: metatag_empty_formatter
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 5
     region: content
-  field_summary:
-    type: text_default
-    label: hidden
+  field_site_topics:
+    type: dept_topics_topic_tags
+    label: inline
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_summary:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 600
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options: {  }
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
   content_moderation_control: true

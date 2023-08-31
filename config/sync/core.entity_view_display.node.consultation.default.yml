@@ -15,14 +15,15 @@ dependencies:
     - field.field.node.consultation.field_postal
     - field.field.node.consultation.field_published_date
     - field.field.node.consultation.field_respond_online
-    - field.field.node.consultation.field_site_subtopics
     - field.field.node.consultation.field_site_topics
     - field.field.node.consultation.field_summary
     - node.type.consultation
   module:
     - datetime_range
+    - dept_topics
     - field_group
     - link
+    - smart_trim
     - text
     - user
 third_party_settings:
@@ -35,7 +36,7 @@ third_party_settings:
       label: 'Ways to respond'
       parent_name: ''
       region: content
-      weight: 4
+      weight: 5
       format_type: html_element
       format_settings:
         classes: ''
@@ -58,7 +59,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
   field_attachment:
     type: entity_reference_entity_view
@@ -67,7 +68,7 @@ content:
       view_mode: embed
       link: false
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
   field_consultation_dates:
     type: daterange_default
@@ -77,7 +78,7 @@ content:
       format_type: medium_date
       separator: ''
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
   field_email_address:
     type: email_mailto
@@ -105,12 +106,33 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  field_summary:
-    type: text_default
-    label: hidden
+  field_site_topics:
+    type: dept_topics_topic_tags
+    label: inline
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
+    region: content
+  field_summary:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 600
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options: {  }
+    third_party_settings: {  }
+    weight: 2
     region: content
 hidden:
   content_moderation_control: true
@@ -121,8 +143,6 @@ hidden:
   field_global_topics: true
   field_metatags: true
   field_published_date: true
-  field_site_subtopics: true
-  field_site_topics: true
   groups: true
   groups_type_department_site: true
   langcode: true

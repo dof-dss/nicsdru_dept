@@ -21,7 +21,6 @@ dependencies:
     - field.field.node.heritage_site.field_phone
     - field.field.node.heritage_site.field_photo
     - field.field.node.heritage_site.field_postcode
-    - field.field.node.heritage_site.field_site_subtopics
     - field.field.node.heritage_site.field_site_topics
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
@@ -30,13 +29,14 @@ dependencies:
     - workflows.workflow.nics_editorial_workflow
   module:
     - address
-    - chosen_field
     - content_moderation
+    - dept_topics
     - field_group
     - geolocation_address
     - geolocation_google_maps
     - link
     - media_library
+    - media_library_edit
     - metatag
     - path
     - scheduler
@@ -555,18 +555,16 @@ content:
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
-  field_site_subtopics:
-    type: chosen_select
-    weight: 2
-    region: content
-    settings: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: '1'
   field_site_topics:
-    type: chosen_select
+    type: dept_topic_tree_widget
     weight: 1
     region: content
-    settings: {  }
+    settings:
+      excluded: true
+      limit: 3
     third_party_settings: {  }
   field_sm_number:
     type: string_textfield

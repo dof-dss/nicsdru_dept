@@ -19,7 +19,6 @@ dependencies:
     - node.type.gallery
     - node.type.heritage_site
     - node.type.news
-    - node.type.page
     - node.type.profile
     - node.type.project
     - node.type.protected_area
@@ -52,7 +51,6 @@ permissions:
   - 'add scheduled transitions node contact'
   - 'add scheduled transitions node heritage_site'
   - 'add scheduled transitions node news'
-  - 'add scheduled transitions node page'
   - 'add scheduled transitions node profile'
   - 'add scheduled transitions node project'
   - 'add scheduled transitions node protected_area'
@@ -80,7 +78,6 @@ permissions:
   - 'create media'
   - 'create news content'
   - 'create news content on assigned domains'
-  - 'create page content'
   - 'create profile content'
   - 'create profile content on assigned domains'
   - 'create project content'
@@ -115,7 +112,6 @@ permissions:
   - 'edit any heritage_site content'
   - 'edit any image media'
   - 'edit any news content'
-  - 'edit any page content'
   - 'edit any profile content'
   - 'edit any project content'
   - 'edit any protected_area content'
@@ -136,7 +132,6 @@ permissions:
   - 'reschedule scheduled transitions node contact'
   - 'reschedule scheduled transitions node heritage_site'
   - 'reschedule scheduled transitions node news'
-  - 'reschedule scheduled transitions node page'
   - 'reschedule scheduled transitions node profile'
   - 'reschedule scheduled transitions node project'
   - 'reschedule scheduled transitions node protected_area'
@@ -150,7 +145,6 @@ permissions:
   - 'revert gallery revisions'
   - 'revert heritage_site revisions'
   - 'revert news revisions'
-  - 'revert page revisions'
   - 'revert profile revisions'
   - 'revert project revisions'
   - 'revert protected_area revisions'
@@ -178,6 +172,7 @@ permissions:
   - 'use nics_editorial_workflow transition submit_for_review'
   - 'use text format filtered_html'
   - 'use text format filtered_html_with_no_images'
+  - 'use topic tree widget'
   - 'use workbench_moderation my drafts tab'
   - 'use workbench_moderation needs review tab'
   - 'view actions revisions'
@@ -207,7 +202,6 @@ permissions:
   - 'view moderation messages'
   - 'view news revisions'
   - 'view own files'
-  - 'view page revisions'
   - 'view profile revisions'
   - 'view project revisions'
   - 'view protected_area revisions'
@@ -218,7 +212,6 @@ permissions:
   - 'view scheduled transitions node contact'
   - 'view scheduled transitions node heritage_site'
   - 'view scheduled transitions node news'
-  - 'view scheduled transitions node page'
   - 'view scheduled transitions node profile'
   - 'view scheduled transitions node project'
   - 'view scheduled transitions node protected_area'

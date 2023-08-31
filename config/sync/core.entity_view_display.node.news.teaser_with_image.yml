@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.news.field_notes_to_editors
     - field.field.node.news.field_photo
     - field.field.node.news.field_published_date
-    - field.field.node.news.field_site_subtopics
     - field.field.node.news.field_site_topics
     - field.field.node.news.field_summary
     - field.field.node.news.field_teaser
@@ -69,15 +68,15 @@ content:
       trim_suffix: ...
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      more_aria_label: 'Read more about [node:title]'
       summary_handler: full
       trim_options:
         text: true
         trim_zero: false
         replace_tokens: false
+      more_link: false
+      more_class: more-link
+      more_text: More
+      more_aria_label: 'Read more about [node:title]'
     third_party_settings: {  }
     weight: 3
     region: content
@@ -90,7 +89,6 @@ hidden:
   field_metatags: true
   field_news_type: true
   field_notes_to_editors: true
-  field_site_subtopics: true
   field_site_topics: true
   field_summary: true
   field_video: true

@@ -10,9 +10,11 @@ dependencies:
     - field.field.node.contact.field_map_location
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
+    - field.field.node.contact.field_site_topics
     - filter.format.plain_text
     - node.type.contact
   module:
+    - dept_topics
     - geolocation
     - metatag
     - user
@@ -100,11 +102,18 @@ content:
         scale: 1
       data_provider_settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
   field_metatags:
     type: metatag_empty_formatter
     label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_site_topics:
+    type: dept_topics_topic_tags
+    label: inline
     settings: {  }
     third_party_settings: {  }
     weight: 0

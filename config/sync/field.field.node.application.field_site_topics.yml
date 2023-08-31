@@ -1,0 +1,31 @@
+uuid: dd088d7d-befe-4115-a2c3-b426cd579f30
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_site_topics
+    - node.type.application
+    - node.type.subtopic
+    - node.type.topic
+id: node.application.field_site_topics
+field_name: field_site_topics
+entity_type: node
+bundle: application
+label: Topics
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      subtopic: subtopic
+      topic: topic
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: subtopic
+field_type: entity_reference

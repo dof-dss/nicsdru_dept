@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.application.field_global_topics
     - field.field.node.application.field_link
     - field.field.node.application.field_metatags
+    - field.field.node.application.field_site_topics
     - field.field.node.application.field_summary
     - node.type.application
   module:
@@ -52,6 +53,7 @@ hidden:
   field_domain_source: true
   field_global_topics: true
   field_link: true
+  field_site_topics: true
   groups: true
   groups_type_department_site: true
   langcode: true

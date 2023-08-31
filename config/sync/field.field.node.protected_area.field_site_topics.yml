@@ -5,21 +5,27 @@ dependencies:
   config:
     - field.storage.node.field_site_topics
     - node.type.protected_area
+    - node.type.subtopic
+    - node.type.topic
 id: node.protected_area.field_site_topics
 field_name: field_site_topics
 entity_type: node
 bundle: protected_area
-label: 'Site topics'
+label: Topics
 description: 'Choose relevant site topic(s) for this protected area. Hold down Ctrl to choose multiple site topics.'
 required: true
 translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: views
+  handler: 'default:node'
   handler_settings:
-    view:
-      view_name: site_topics
-      display_name: entity_reference_topics
-      arguments: {  }
+    target_bundles:
+      subtopic: subtopic
+      topic: topic
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: subtopic
 field_type: entity_reference

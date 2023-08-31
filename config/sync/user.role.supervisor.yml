@@ -21,7 +21,6 @@ dependencies:
     - node.type.heritage_site
     - node.type.link
     - node.type.news
-    - node.type.page
     - node.type.profile
     - node.type.project
     - node.type.protected_area
@@ -50,6 +49,7 @@ weight: 5
 is_admin: null
 permissions:
   - 'access ckeditor link'
+  - 'access content overview'
   - 'access draggableviews'
   - 'access media overview'
   - 'access rules debug'
@@ -63,7 +63,6 @@ permissions:
   - 'add scheduled transitions node easychart'
   - 'add scheduled transitions node heritage_site'
   - 'add scheduled transitions node news'
-  - 'add scheduled transitions node page'
   - 'add scheduled transitions node profile'
   - 'add scheduled transitions node project'
   - 'add scheduled transitions node protected_area'
@@ -98,8 +97,6 @@ permissions:
   - 'create new books'
   - 'create news content'
   - 'create news content on assigned domains'
-  - 'create page content'
-  - 'create page content on assigned domains'
   - 'create profile content'
   - 'create profile content on assigned domains'
   - 'create project content'
@@ -153,7 +150,6 @@ permissions:
   - 'delete own document files'
   - 'delete own image files'
   - 'delete own video files'
-  - 'delete page content on assigned domains'
   - 'delete profile content on assigned domains'
   - 'delete project content on assigned domains'
   - 'delete protected_area content on assigned domains'
@@ -180,7 +176,6 @@ permissions:
   - 'edit any image files'
   - 'edit any link content'
   - 'edit any news content'
-  - 'edit any page content'
   - 'edit any profile content'
   - 'edit any project content'
   - 'edit any protected_area content'
@@ -213,7 +208,6 @@ permissions:
   - 'reschedule scheduled transitions node easychart'
   - 'reschedule scheduled transitions node heritage_site'
   - 'reschedule scheduled transitions node news'
-  - 'reschedule scheduled transitions node page'
   - 'reschedule scheduled transitions node profile'
   - 'reschedule scheduled transitions node project'
   - 'reschedule scheduled transitions node protected_area'
@@ -229,7 +223,6 @@ permissions:
   - 'revert gallery revisions'
   - 'revert heritage_site revisions'
   - 'revert link revisions'
-  - 'revert page revisions'
   - 'revert profile revisions'
   - 'revert project revisions'
   - 'revert protected_area revisions'
@@ -260,7 +253,6 @@ permissions:
   - 'update link content on assigned domains'
   - 'update media'
   - 'update news content on assigned domains'
-  - 'update page content on assigned domains'
   - 'update profile content on assigned domains'
   - 'update project content on assigned domains'
   - 'update protected_area content on assigned domains'
@@ -278,6 +270,7 @@ permissions:
   - 'use nics_editorial_workflow transition submit_for_review'
   - 'use text format filtered_html'
   - 'use text format filtered_html_with_no_images'
+  - 'use topic tree widget'
   - 'use workbench_moderation my drafts tab'
   - 'use workbench_moderation needs review tab'
   - 'view all media revisions'
@@ -312,7 +305,6 @@ permissions:
   - 'view moderation history'
   - 'view moderation messages'
   - 'view own files'
-  - 'view page revisions'
   - 'view profile revisions'
   - 'view project revisions'
   - 'view protected_area revisions'
@@ -324,7 +316,6 @@ permissions:
   - 'view scheduled transitions node easychart'
   - 'view scheduled transitions node heritage_site'
   - 'view scheduled transitions node news'
-  - 'view scheduled transitions node page'
   - 'view scheduled transitions node profile'
   - 'view scheduled transitions node project'
   - 'view scheduled transitions node protected_area'

@@ -5,17 +5,15 @@ dependencies:
   config:
     - field.storage.node.field_summary
     - node.type.subtopic
-  module:
-    - text
 id: node.subtopic.field_summary
 field_name: field_summary
 entity_type: node
 bundle: subtopic
 label: Summary
 description: 'Enter a summary for this subtopic to be displayed on listing pages.'
-required: false
+required: true
 translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: text_long
+field_type: string_long

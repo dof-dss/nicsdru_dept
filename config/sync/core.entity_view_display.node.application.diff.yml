@@ -1,0 +1,106 @@
+uuid: 707b3833-d7c4-49a6-a180-da0177005042
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.diff
+    - field.field.node.application.body
+    - field.field.node.application.field_additional_info
+    - field.field.node.application.field_domain_access
+    - field.field.node.application.field_domain_all_affiliates
+    - field.field.node.application.field_domain_source
+    - field.field.node.application.field_global_topics
+    - field.field.node.application.field_link
+    - field.field.node.application.field_metatags
+    - field.field.node.application.field_site_topics
+    - field.field.node.application.field_summary
+    - node.type.application
+  module:
+    - field_group
+    - layout_builder
+    - link
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+  field_group:
+    group_additional_content_details:
+      children:
+        - field_global_topics
+      label: 'Additional content details'
+      parent_name: ''
+      region: content
+      weight: 4
+      format_type: html_element
+      format_settings:
+        classes: field-collection
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+id: node.application.diff
+targetEntityType: node
+bundle: application
+mode: diff
+content:
+  body:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_additional_info:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_global_topics:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_summary:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  content_moderation_control: true
+  entitygroupfield: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
+  field_metatags: true
+  field_site_topics: true
+  groups: true
+  groups_type_department_site: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

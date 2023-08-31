@@ -15,7 +15,6 @@ dependencies:
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
     - field.field.node.publication.field_published_date
-    - field.field.node.publication.field_site_subtopics
     - field.field.node.publication.field_site_topics
     - field.field.node.publication.field_summary
     - node.type.publication
@@ -24,8 +23,10 @@ dependencies:
     - chosen_field
     - content_moderation
     - datetime
+    - dept_topics
     - link
     - media_library
+    - media_library_edit
     - metatag
     - path
     - scheduler
@@ -104,14 +105,18 @@ content:
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: '1'
   field_publication_secure_files:
     type: media_library_widget
     weight: 10
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: '1'
   field_publication_type:
     type: options_select
     weight: 4
@@ -124,21 +129,16 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_site_subtopics:
-    type: chosen_select
-    weight: 3
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_site_topics:
-    type: chosen_select
+    type: dept_topic_tree_widget
     weight: 2
     region: content
-    settings: {  }
+    settings:
+      excluded: 0
     third_party_settings: {  }
   field_summary:
-    type: text_textarea
-    weight: 7
+    type: string_textarea
+    weight: 4
     region: content
     settings:
       rows: 5

@@ -11,12 +11,14 @@ dependencies:
     - field.field.node.application.field_global_topics
     - field.field.node.application.field_link
     - field.field.node.application.field_metatags
+    - field.field.node.application.field_site_topics
     - field.field.node.application.field_summary
     - node.type.application
     - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
+    - dept_topics
     - link
     - metatag
     - path
@@ -29,7 +31,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 5
+    weight: 4
     region: content
     settings:
       rows: 9
@@ -39,19 +41,13 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  field_global_topics:
-    type: chosen_select
-    weight: 1
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }
   field_additional_info:
     type: text_textarea
-    weight: 7
+    weight: 6
     region: content
     settings:
       rows: 5
@@ -59,26 +55,32 @@ content:
     third_party_settings: {  }
   field_domain_access:
     type: options_buttons
-    weight: 40
+    weight: 20
     region: content
     settings: {  }
     third_party_settings: {  }
   field_domain_all_affiliates:
     type: boolean_checkbox
-    weight: 41
+    weight: 21
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   field_domain_source:
     type: options_select
-    weight: 42
+    weight: 22
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_global_topics:
+    type: chosen_select
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
   field_link:
     type: link_default
-    weight: 6
+    weight: 5
     region: content
     settings:
       placeholder_url: ''
@@ -86,14 +88,21 @@ content:
     third_party_settings: {  }
   field_metatags:
     type: metatag_firehose
-    weight: 28
+    weight: 19
     region: content
     settings:
       sidebar: true
       use_details: true
     third_party_settings: {  }
+  field_site_topics:
+    type: dept_topic_tree_widget
+    weight: 1
+    region: content
+    settings:
+      excluded: 0
+    third_party_settings: {  }
   field_summary:
-    type: text_textarea
+    type: string_textarea
     weight: 4
     region: content
     settings:
@@ -107,33 +116,33 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 8
+    weight: 7
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 20
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }
   path:
     type: path
-    weight: 16
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 12
+    weight: 11
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   publish_on:
     type: datetime_timestamp_no_default
-    weight: 18
+    weight: 15
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -150,14 +159,14 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 21
+    weight: 18
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 13
+    weight: 12
     region: content
     settings:
       display_label: true
@@ -172,7 +181,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 9
+    weight: 8
     region: content
     settings:
       match_operator: CONTAINS
@@ -182,7 +191,7 @@ content:
     third_party_settings: {  }
   unpublish_on:
     type: datetime_timestamp_no_default
-    weight: 17
+    weight: 14
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -193,7 +202,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   url_redirects:
-    weight: 19
+    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }

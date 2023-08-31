@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.protected_area.field_protected_area_documents
     - field.field.node.protected_area.field_protected_area_feature
     - field.field.node.protected_area.field_protected_area_type
-    - field.field.node.protected_area.field_site_subtopics
     - field.field.node.protected_area.field_site_topics
     - node.type.protected_area
   module:
@@ -39,15 +38,15 @@ content:
       trim_suffix: ...
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      more_aria_label: 'Read more about [node:title]'
       summary_handler: ignore
       trim_options:
         text: true
         trim_zero: false
         replace_tokens: false
+      more_link: false
+      more_class: more-link
+      more_text: More
+      more_aria_label: 'Read more about [node:title]'
     third_party_settings: {  }
     weight: 0
     region: content
@@ -62,7 +61,6 @@ hidden:
   field_protected_area_documents: true
   field_protected_area_feature: true
   field_protected_area_type: true
-  field_site_subtopics: true
   field_site_topics: true
   groups: true
   langcode: true
