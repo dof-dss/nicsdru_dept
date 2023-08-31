@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.news.field_notes_to_editors
     - field.field.node.news.field_photo
     - field.field.node.news.field_published_date
-    - field.field.node.news.field_site_subtopics
     - field.field.node.news.field_site_topics
     - field.field.node.news.field_summary
     - field.field.node.news.field_teaser
@@ -106,14 +105,6 @@ content:
       format_type: medium
     third_party_settings: {  }
     weight: 0
-    region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 13
     region: content
   field_site_topics:
     type: entity_reference_label

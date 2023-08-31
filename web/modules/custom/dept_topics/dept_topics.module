@@ -95,62 +95,6 @@ function dept_topics_cron() {
 }
 
 /**
- * Implements hook_preprocess_node().
- */
-function dept_topics_preprocess_node(array &$variables) {
-
-  // Generate list of "parent" topics/subtopics.
-  $topicManager = \Drupal::service('topic.manager');
-  $node = $variables['node'];
-  $parents = [];
-  $parent_topics = [];
-  $parent_subtopics = [];
-
-  // First check if node has fields referencing parent topics/subtopics.
-  if ($node->hasField('field_site_topics')) {
-    $parent_topics = $node->get('field_site_topics')->referencedEntities();
-  }
-
-  if ($node->hasField('field_site_subtopics')) {
-    $parent_subtopics = $node->get('field_site_subtopics')->referencedEntities();
-  }
-
-  $all_topics = array_merge($parent_topics, $parent_subtopics);
-
-  foreach ($all_topics as $topic) {
-    $parents[] = (object) [
-      'nid' => $topic->id(),
-      'title' => $topic->label(),
-      'type' => $topic->bundle(),
-    ];
-  }
-
-  // If this node is not referencing any topics/subtopics, check if any
-  // topics/subtopics are referencing the node.
-  if (empty($parents) && in_array($variables['node']->bundle(), $topicManager->getTopicChildNodeTypes())) {
-    $parents = $topicManager->getParentNodes($variables['node']->id());
-  }
-
-  if (!empty($parents)) {
-    $variables['topics_subtopics_list'] = [
-      '#theme' => 'item_list__topics_subtopics_list',
-      '#list_type' => 'ul',
-      '#title' => t('Topics'),
-    ];
-
-    foreach ($parents as $id => $parent) {
-      $variables['topics_subtopics_list']['#items'][] = [
-        '#type' => 'link',
-        '#title' => $parent->title,
-        '#url' => URL::fromRoute('entity.node.canonical', ['node' => $parent->nid]),
-      ];
-    }
-  }
-
-  $variables['show_topics'] = !empty($parents);
-}
-
-/**
  * Implements hook_metatags_attachments_alter().
  */
 function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
@@ -275,11 +219,80 @@ function dept_topics_process_topic_child_contents($form, FormStateInterface $for
   }
 
   // Update topic entries from Node form or Moderation sidebar.
-  if ($op === 'Quick Publish' || $mod_state[0]['value'] === 'published') {
+  if ($op === 'Quick Publish' || $mod_state[0]['value'] === 'published' || $mod_state[0]['value'] === 'restore') {
     \Drupal::service('topic.manager')->updateChildDisplayOnTopics($entity);
   }
   elseif ($op === 'Archive' || $mod_state[0]['value'] === 'archived') {
     \Drupal::service('topic.manager')->removeChildDisplayFromTopics($entity);
   }
 
+}
+
+/**
+ * Implements hook_node_presave().
+ */
+function dept_topics_node_presave(EntityInterface $node) {
+  // Add or remove site topic tags to nodes that are added or removed from topic child contents.
+  if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
+    if ($node->isNew()) {
+      // Ignore new as we don't have a node ID for the topic.
+      return;
+    }
+
+    // @phpstan-ignore-next-line
+    $original = array_column($node->original->get('field_topic_content')->getValue(), 'target_id');
+    // @phpstan-ignore-next-line
+    $updated = array_column($node->get('field_topic_content')->getValue(), 'target_id');
+
+    if (count($original) > count($updated)) {
+      $removed = array_diff($original, $updated);
+
+      foreach ($removed as $nid) {
+        $child_node = Node::load($nid);
+        $child_topics = $child_node->get('field_site_topics');
+
+        for ($i = 0; $i < $child_topics->count(); $i++) {
+          // @phpstan-ignore-next-line
+          if ($child_topics->get($i)->target_id == $node->id()) {
+            $child_topics->removeItem($i);
+            $i--;
+          }
+        }
+        $child_node->save();
+      }
+    }
+    else {
+      $added = array_diff($updated, $original);
+
+      foreach ($added as $nid) {
+        $child_node = Node::load($nid);
+        $child_topic_tags = array_column($child_node->get('field_site_topics')->getValue(), 'target_id');
+
+        if (!in_array($node->id(), $child_topic_tags)) {
+          $child_node->get('field_site_topics')->appendItem([
+            'target_id' => $node->id()
+          ]);
+          $child_node->save();
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function dept_topics_node_insert(NodeInterface $node) {
+  // For new Topics add as a site topic to the child nodes.
+  if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
+    $child_contents = array_column($node->get('field_topic_content')->getValue(), 'target_id');
+
+    foreach ($child_contents as $nid) {
+      $child_node = Node::load($nid);
+      $child_node->get('field_site_topics')->appendItem([
+        'target_id' => $node->id()
+      ]);
+      $child_node->save();
+    }
+  }
 }

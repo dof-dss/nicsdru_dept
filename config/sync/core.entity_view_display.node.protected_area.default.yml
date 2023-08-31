@@ -13,10 +13,10 @@ dependencies:
     - field.field.node.protected_area.field_protected_area_documents
     - field.field.node.protected_area.field_protected_area_feature
     - field.field.node.protected_area.field_protected_area_type
-    - field.field.node.protected_area.field_site_subtopics
     - field.field.node.protected_area.field_site_topics
     - node.type.protected_area
   module:
+    - dept_topics
     - metatag
     - options
     - text
@@ -76,19 +76,10 @@ content:
     third_party_settings: {  }
     weight: 5
     region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 1
-    region: content
   field_site_topics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
+    type: dept_topics_topic_tags
+    label: inline
+    settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content

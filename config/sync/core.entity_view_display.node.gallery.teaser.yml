@@ -11,7 +11,6 @@ dependencies:
     - field.field.node.gallery.field_gallery_images
     - field.field.node.gallery.field_global_topics
     - field.field.node.gallery.field_metatags
-    - field.field.node.gallery.field_site_subtopics
     - field.field.node.gallery.field_site_topics
     - field.field.node.gallery.field_summary
     - node.type.gallery
@@ -44,7 +43,6 @@ hidden:
   field_gallery_images: true
   field_global_topics: true
   field_metatags: true
-  field_site_subtopics: true
   field_site_topics: true
   field_summary: true
   groups: true

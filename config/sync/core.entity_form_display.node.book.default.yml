@@ -9,13 +9,14 @@ dependencies:
     - field.field.node.book.field_domain_source
     - field.field.node.book.field_global_topics
     - field.field.node.book.field_metatags
-    - field.field.node.book.field_site_subtopics
     - field.field.node.book.field_site_topics
     - field.field.node.book.field_summary
     - node.type.book
+    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
+    - dept_topics
     - metatag
     - path
     - scheduler
@@ -74,17 +75,13 @@ content:
       sidebar: true
       use_details: true
     third_party_settings: {  }
-  field_site_subtopics:
-    type: chosen_select
-    weight: 3
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_site_topics:
-    type: chosen_select
+    type: dept_topic_tree_widget
     weight: 2
     region: content
-    settings: {  }
+    settings:
+      excluded: true
+      limit: 3
     third_party_settings: {  }
   field_summary:
     type: string_textarea

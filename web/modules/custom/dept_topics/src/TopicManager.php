@@ -8,19 +8,11 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
-use Drupal\node\NodeStorage;
 
 /**
  * Provides methods for managing Sub/Topic referenced (child) content.
  */
 class TopicManager {
-
-  /**
-   * Array of parent nodes.
-   *
-   * @var array
-   */
-  protected $parents = [];
 
   /**
    * Array of department topics.
@@ -100,30 +92,41 @@ class TopicManager {
   /**
    * Returns parent nodes for the given node ID.
    *
-   * @param int $nid
-   *   Node id to return the parent for.
+   * @param \Drupal\node\NodeInterface|int $node
+   *   Node or Node ID to return the parents for.
+   *
+   * @param array $parents
+   *   Array of existing parent nodes.
    *
    * @return array|mixed
    *   Node ID indexed array comprising id, title and type.
    */
-  public function getParentNodes($nid) {
-    $parents = $this->dbConn->query("SELECT n.nid, nfd.title, nfd.type FROM node n
+  public function getParentNodes($node, &$parents = []) {
+
+    if ($node instanceof NodeInterface) {
+      $nid = $node->id();
+    }
+    else {
+      $nid = $node;
+    }
+
+    $nodes = $this->dbConn->query("SELECT n.nid, nfd.title, nfd.type FROM node n
         LEFT JOIN node_field_data nfd
         ON nfd.nid = n.nid
         LEFT JOIN node__field_topic_content ftc
         ON ftc.entity_id = n.nid
         WHERE ftc.field_topic_content_target_id = :nid", [':nid' => $nid])->fetchAllAssoc('nid');
 
-    if ($parents === NULL) {
-      return $this->parents;
+    if ($nodes === NULL) {
+      return $parents;
     }
 
-    foreach ($parents as $parent) {
-      $this->parents[$parent->nid] = $parent;
-      $this->getParentNodes($parent->nid);
+    foreach ($nodes as $node) {
+      $parents[$node->nid] = $node;
+      $this->getParentNodes($node->nid, $parents);
     }
 
-    return $this->parents;
+    return $parents;
   }
 
   /**

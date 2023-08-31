@@ -17,7 +17,9 @@ dependencies:
     - field.field.node.subtopic.layout_builder__layout
     - node.type.subtopic
   module:
+    - dept_topics
     - metatag
+    - smart_trim
     - text
     - user
 id: node.subtopic.default
@@ -67,17 +69,30 @@ content:
     weight: 5
     region: content
   field_site_topics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
+    type: dept_topics_topic_tags
+    label: inline
+    settings: {  }
     third_party_settings: {  }
     weight: 7
     region: content
   field_summary:
-    type: text_default
+    type: smart_trim
     label: above
-    settings: {  }
+    settings:
+      trim_length: 600
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options: {  }
     third_party_settings: {  }
     weight: 3
     region: content
