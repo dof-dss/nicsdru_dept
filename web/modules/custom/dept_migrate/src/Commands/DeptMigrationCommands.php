@@ -320,16 +320,6 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
         AND nfps.field_parent_topic_target_id = :nid
         AND st_n.status = 1
         AND nfpst.entity_id IS NULL
-        UNION
-        SELECT
-          ar_n.nid,
-          ar_n.type,
-          ar_n.title,
-          99 as weight
-        FROM node ar_n
-        JOIN field_data_field_site_subtopics nfss ON ar_n.nid = nfss.entity_id
-        WHERE ar_n.type = 'article' AND nfss.field_site_subtopics_target_id = :nid
-        AND ar_n.status = 1
       )
       SELECT DISTINCT nid, type, title FROM content_stack_cte
       ORDER BY weight, title";
@@ -537,17 +527,6 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     AND nfps.field_parent_topic_target_id = :nid
     AND st_n.status = 1
     AND nfpst.entity_id IS NULL
-    UNION
-    SELECT
-        ar_n.nid,
-        ar_n.type,
-        ar_n.title,
-        99 as weight
-    FROM node ar_n
-    JOIN field_data_field_site_subtopics nfss ON ar_n.nid = nfss.entity_id
-    WHERE ar_n.type = 'article' AND nfss.field_site_subtopics_target_id = :nid
-      AND ar_n.status = 1
-
 )
 SELECT DISTINCT nid, type, title FROM content_stack_cte
 ORDER BY weight, title";
