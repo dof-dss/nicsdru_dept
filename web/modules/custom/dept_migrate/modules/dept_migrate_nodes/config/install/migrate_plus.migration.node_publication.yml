@@ -14,6 +14,26 @@ source:
     - secure_publication
   track_changes: true
 process:
+  site_topics:
+    - plugin: sub_process
+      source: field_site_topics
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
+  site_subtopics:
+    - plugin: sub_process
+      source: field_site_subtopics
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
+  field_site_topics:
+    - plugin: get
+      source:
+        - '@site_topics'
+        - '@site_subtopics'
+    - plugin: flatten
   langcode:
     - plugin: default_value
       source: langcode
@@ -92,20 +112,6 @@ process:
       source: field_global_topics
       process:
         target_id: tid
-  field_site_topics:
-    - plugin: sub_process
-      source: field_site_topics
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
-  field_site_subtopics:
-    - plugin: sub_process
-      source: field_site_subtopics
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
   field_published_date:
     - plugin: sub_process
       source: field_published_date
