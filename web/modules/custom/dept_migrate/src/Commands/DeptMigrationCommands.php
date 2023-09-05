@@ -464,10 +464,13 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
    */
   public function removeParentTopicFromSiteTopics() {
     $nids = $this->dbConn->query("SELECT nid FROM node")->fetchCol();
+    $deleted_parents = 0;
 
     foreach ($nids as $nid) {
-      $this->removeParentTopicsFromNodeSiteTopics($nid);
+      $deleted_parents += $this->removeParentTopicsFromNodeSiteTopics($nid);
     }
+
+    $this->logger()->info("Parent topics removed: " . $deleted_parents);
   }
 
   /**
@@ -496,10 +499,14 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     WHERE tc1.lvl > 1
     ORDER BY tc1.lvl DESC;")->fetchCol();
 
-    $del_query = $this->dbConn->delete('node__field_site_topics')
-      ->condition('entity_id', $nid, '=')
-      ->condition('field_site_topics_target_id', array_values($parent_topics), 'IN')
-      ->execute();
+    if (!empty($parent_topics)) {
+      return $this->dbConn->delete('node__field_site_topics')
+        ->condition('entity_id', $nid, '=')
+        ->condition('field_site_topics_target_id', array_values($parent_topics), 'IN')
+        ->execute();
+    } else {
+      return 0;
+    }
   }
 
   /**
