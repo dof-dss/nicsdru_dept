@@ -454,6 +454,40 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
 
   }
 
+
+
+  /**
+   * Remove parent topics from a node site topics if present.
+   *
+   *    * @param int $nid
+   *   The node id to remove parents from.
+   *
+   * @command dept:remove-parent-topics
+   * @aliases rpt
+   */
+  public function removeParentTopicsFromSiteTopics($nid) {
+
+    $parent_topics = $this->dbConn->query("
+    SELECT tc2.entity_id FROM (
+      SELECT
+        @r AS _id,
+        (SELECT @r := entity_id FROM {node__field_topic_content} WHERE field_topic_content_target_id = _id) AS parent_id,
+        @l := @l + 1 AS lvl
+      FROM
+      (SELECT @r := " .$nid . ", @l := 0) vars,
+        {node__field_topic_content} tc
+      WHERE @r <> 0) tc1
+    JOIN {node__field_topic_content} tc2
+    ON tc1._id = tc2.field_topic_content_target_id
+    WHERE tc1.lvl > 1
+    ORDER BY tc1.lvl DESC;")->fetchCol();
+
+    $del_query = $this->dbConn->delete('node__field_site_topics')
+      ->condition('entity_id', $nid, '=')
+      ->condition('field_site_topics_target_id', array_values($parent_topics), 'IN')
+      ->execute();
+  }
+
   /**
    * Fetch subtopic child nodes and add as a reference to the parent.
    *
