@@ -250,16 +250,19 @@ function dept_topics_node_presave(EntityInterface $node) {
 
       foreach ($removed as $nid) {
         $child_node = Node::load($nid);
-        $child_topics = $child_node->get('field_site_topics');
 
-        for ($i = 0; $i < $child_topics->count(); $i++) {
-          // @phpstan-ignore-next-line
-          if ($child_topics->get($i)->target_id == $node->id()) {
-            $child_topics->removeItem($i);
-            $i--;
+        if (!empty($child_node)) {
+          $child_topics = $child_node->get('field_site_topics');
+
+          for ($i = 0; $i < $child_topics->count(); $i++) {
+            // @phpstan-ignore-next-line
+            if ($child_topics->get($i)->target_id == $node->id()) {
+              $child_topics->removeItem($i);
+              $i--;
+            }
           }
+          $child_node->save();
         }
-        $child_node->save();
       }
     }
     else {
@@ -267,13 +270,15 @@ function dept_topics_node_presave(EntityInterface $node) {
 
       foreach ($added as $nid) {
         $child_node = Node::load($nid);
-        $child_topic_tags = array_column($child_node->get('field_site_topics')->getValue(), 'target_id');
+        if (!empty($child_node)) {
+          $child_topic_tags = array_column($child_node->get('field_site_topics')->getValue(), 'target_id');
 
-        if (!in_array($node->id(), $child_topic_tags)) {
-          $child_node->get('field_site_topics')->appendItem([
-            'target_id' => $node->id()
-          ]);
-          $child_node->save();
+          if (!in_array($node->id(), $child_topic_tags)) {
+            $child_node->get('field_site_topics')->appendItem([
+              'target_id' => $node->id()
+            ]);
+            $child_node->save();
+          }
         }
       }
     }

@@ -12,6 +12,26 @@ source:
   node_type: landing_page
   track_changes: true
 process:
+  site_topics:
+    - plugin: sub_process
+      source: field_site_topics
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
+  site_subtopics:
+    - plugin: sub_process
+      source: field_site_subtopics
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
+  field_site_topics:
+    - plugin: get
+      source:
+        - '@site_topics'
+        - '@site_subtopics'
+    - plugin: flatten
   langcode:
     - plugin: default_value
       source: langcode
@@ -90,20 +110,6 @@ process:
     - plugin: callback
       callable: html_entity_decode
   field_teaser: field_teaser
-  field_site_subtopics:
-    - plugin: sub_process
-      source: field_site_subtopics
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
-  field_site_topics:
-    - plugin: sub_process
-      source: field_site_topics
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
   field_facebook_user: field_facebook_user
   field_tweet_count: field_tweet_count
   field_twitter_user: field_twitter_user
