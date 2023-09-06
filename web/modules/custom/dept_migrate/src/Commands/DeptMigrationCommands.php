@@ -455,24 +455,6 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
   }
 
 
-
-  /**
-   * Remove parent topics from a node site topics if present for all nodes.
-   *
-   * @command dept:remove-parent-topics
-   * @aliases rpt
-   */
-  public function removeParentTopicFromSiteTopics() {
-    $nids = $this->dbConn->query("SELECT nid FROM node")->fetchCol();
-    $deleted_parents = 0;
-
-    foreach ($nids as $nid) {
-      $deleted_parents += $this->removeParentTopicsFromNodeSiteTopics($nid);
-    }
-
-    $this->logger()->info("Parent topics removed: " . $deleted_parents);
-  }
-
   /**
    * Remove parent topics from a node site topics if present.
    *
