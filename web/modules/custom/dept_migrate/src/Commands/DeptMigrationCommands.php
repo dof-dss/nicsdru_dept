@@ -454,7 +454,6 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
 
   }
 
-
   /**
    * Remove parent topics from a node site topics if present.
    *
@@ -473,7 +472,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
         (SELECT @r := entity_id FROM {node__field_topic_content} WHERE field_topic_content_target_id = _id) AS parent_id,
         @l := @l + 1 AS lvl
       FROM
-      (SELECT @r := " .$nid . ", @l := 0) vars,
+      (SELECT @r := " . $nid . ", @l := 0) vars,
         {node__field_topic_content} tc
       WHERE @r <> 0) tc1
     JOIN {node__field_topic_content} tc2
@@ -486,7 +485,8 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
         ->condition('entity_id', $nid, '=')
         ->condition('field_site_topics_target_id', array_values($parent_topics), 'IN')
         ->execute();
-    } else {
+    }
+    else {
       return 0;
     }
   }
