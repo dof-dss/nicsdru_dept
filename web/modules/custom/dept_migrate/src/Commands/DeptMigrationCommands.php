@@ -455,6 +455,43 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
   }
 
   /**
+   * Remove parent topics from a node site topics if present.
+   *
+   *    * @param int $nid
+   *   The node id to remove parents from.
+   *
+   * @command dept:remove-node-parent-topics
+   * @aliases rnpt
+   */
+  public function removeParentTopicsFromNodeSiteTopics($nid) {
+
+    $parent_topics = $this->dbConn->query("
+    SELECT tc2.entity_id FROM (
+      SELECT
+        @r AS _id,
+        (SELECT @r := entity_id FROM {node__field_topic_content} WHERE field_topic_content_target_id = _id) AS parent_id,
+        @l := @l + 1 AS lvl
+      FROM
+      (SELECT @r := " . $nid . ", @l := 0) vars,
+        {node__field_topic_content} tc
+      WHERE @r <> 0) tc1
+    JOIN {node__field_topic_content} tc2
+    ON tc1._id = tc2.field_topic_content_target_id
+    WHERE tc1.lvl > 1
+    ORDER BY tc1.lvl DESC;")->fetchCol();
+
+    if (!empty($parent_topics)) {
+      return $this->dbConn->delete('node__field_site_topics')
+        ->condition('entity_id', $nid, '=')
+        ->condition('field_site_topics_target_id', array_values($parent_topics), 'IN')
+        ->execute();
+    }
+    else {
+      return 0;
+    }
+  }
+
+  /**
    * Fetch subtopic child nodes and add as a reference to the parent.
    *
    * @param int $nid
@@ -527,6 +564,16 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     AND nfps.field_parent_topic_target_id = :nid
     AND st_n.status = 1
     AND nfpst.entity_id IS NULL
+    UNION
+    SELECT
+        ar_n.nid,
+        ar_n.type,
+        ar_n.title,
+        99 as weight
+    FROM node ar_n
+    JOIN field_data_field_site_subtopics nfss ON ar_n.nid = nfss.entity_id
+    WHERE ar_n.type = 'article' AND nfss.field_site_subtopics_target_id = :nid
+    AND ar_n.status = 1
 )
 SELECT DISTINCT nid, type, title FROM content_stack_cte
 ORDER BY weight, title";
