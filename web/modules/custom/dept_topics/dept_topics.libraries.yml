@@ -25,3 +25,13 @@ jstree_theme:
   css:
     theme:
       css/jstree/style.min.css: { minified: true }
+topic_tree_widget:
+  version: 1.x
+  css:
+    theme:
+      css/topic-tree-widget.css: { }
+  js:
+    js/topic_tree_widget.js: { }
+  dependencies:
+    - core/jquery
+    - core/drupalSettings

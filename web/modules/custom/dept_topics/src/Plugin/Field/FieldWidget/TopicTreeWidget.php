@@ -176,16 +176,28 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
         'limit' => $this->getSetting('limit'),
         'selected' => is_array($default_values) ? implode('+', $default_values) : '',
       ]),
+      '#disabled' => TRUE,
       '#attributes' => [
-        'class' => ['button', 'use-ajax'],
+        'title' => $this->t('Please wait for the page to fully load'),
+        'class' => [
+          'button',
+          'use-ajax',
+          'topic-tree-button',
+          'link-button-disable'
+        ],
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode([
           'title' => $this->t('Select @label', ['@label' => $this->fieldDefinition->getLabel()]),
           'width' => 800,
-          'minHeight' => 800,
+          'minHeight' => 500,
+          'position' => ['my' => 'center top', 'at' => 'center top'],
+          'draggable' => TRUE,
+          'autoResize' => FALSE,
         ]),
       ],
     ];
+
+    $element['#attached']['library'][] = 'dept_topics/topic_tree_widget';
 
     return $element;
   }
