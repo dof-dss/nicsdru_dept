@@ -1,3 +1,15 @@
+/* Override Drupal core's inline styles that don't correctly calculate min-height for smaller devices */
+.ui-dialog {
+  height: 70% !important;
+}
+
+#drupal-modal {
+  height: 100% !important;
+  width: auto !important;
+  min-height: auto !important;
+  min-width: auto !important;
+}
+
 .topic-select {
   display: none;
   position: relative;
