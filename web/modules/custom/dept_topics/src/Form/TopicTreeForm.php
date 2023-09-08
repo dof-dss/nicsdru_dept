@@ -41,7 +41,7 @@ final class TopicTreeForm extends FormBase {
       '#type' => 'textfield',
       '#attributes' => [
         'id' => 'topic-tree-search',
-        'placeholder' => 'Search topics...'
+        'placeholder' => $this->t('Search topics...'),
       ],
     ];
 
