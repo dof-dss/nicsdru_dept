@@ -1,6 +1,6 @@
 /* Override Drupal core's inline styles that don't correctly calculate min-height for smaller devices */
 .ui-dialog {
-  top: 15% !important;
+  height: 70% !important;
 }
 
 #drupal-modal {
