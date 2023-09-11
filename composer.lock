@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "11c327dd9faef616a545989d69080380",
+    "content-hash": "87b238d2668a72bed65fbf212e1da29d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1793,20 +1793,20 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
-            "version": "0.4.6",
+            "version": "dev-drupal10-upgrade",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dof-dss/nicsdru_origins_theme.git",
-                "reference": "24fc7e56cad451c5ccf1f860bd8a49d41c0e1302"
+                "reference": "1be6c27cdc15bceaf2055eeca801215d0857620b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_theme/zipball/24fc7e56cad451c5ccf1f860bd8a49d41c0e1302",
-                "reference": "24fc7e56cad451c5ccf1f860bd8a49d41c0e1302",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_theme/zipball/1be6c27cdc15bceaf2055eeca801215d0857620b",
+                "reference": "1be6c27cdc15bceaf2055eeca801215d0857620b",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0"
+                "php": ">=8.0"
             },
             "type": "drupal-custom-theme",
             "notification-url": "https://packagist.org/downloads/",
@@ -1819,16 +1819,16 @@
                     "role": "Maintainer"
                 }
             ],
-            "description": "Drupal 8 base theme",
+            "description": "DoF Origins base theme",
             "homepage": "https://github.com/dof-dss/nicsdru_origins_theme",
             "keywords": [
                 "drupal",
                 "theme"
             ],
             "support": {
-                "source": "https://github.com/dof-dss/nicsdru_origins_theme/tree/0.4.6"
+                "source": "https://github.com/dof-dss/nicsdru_origins_theme/tree/drupal10-upgrade"
             },
-            "time": "2023-02-19T17:27:55+00:00"
+            "time": "2023-09-11T15:13:34+00:00"
         },
         {
             "name": "drupal/address",
@@ -18797,6 +18797,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "dof-dss/nicsdru_origins_modules": 20,
+        "dof-dss/nicsdru_origins_theme": 20,
         "drupal/block_field": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
