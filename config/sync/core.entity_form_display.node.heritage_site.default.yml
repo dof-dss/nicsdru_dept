@@ -30,7 +30,6 @@ dependencies:
   module:
     - address
     - content_moderation
-    - dept_topics
     - field_group
     - geolocation_address
     - geolocation_google_maps
@@ -447,7 +446,7 @@ content:
           marker_opacity:
             weight: 0
             settings:
-              opacity: !!float 1
+              opacity: 1.0
             enabled: false
           geolocation_marker_scroll_to_id:
             weight: 0
@@ -559,12 +558,14 @@ content:
       media_library_edit:
         show_edit: '1'
   field_site_topics:
-    type: dept_topic_tree_widget
-    weight: 1
+    type: entity_reference_autocomplete
+    weight: 28
     region: content
     settings:
-      excluded: true
-      limit: 3
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_sm_number:
     type: string_textfield

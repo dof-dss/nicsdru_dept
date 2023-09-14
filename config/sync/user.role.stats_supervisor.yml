@@ -14,7 +14,7 @@ dependencies:
   module:
     - book
     - content_moderation
-    - dept_publications
+    - dept_topics
     - domain_access
     - file
     - filter
@@ -40,7 +40,6 @@ permissions:
   - 'create publication content'
   - 'create publication content on assigned domains'
   - 'create secure_file media'
-  - 'create secure_publication content on assigned domains'
   - 'delete any image media'
   - 'delete any publication content'
   - 'delete any secure_file media'
@@ -50,7 +49,6 @@ permissions:
   - 'delete own publication content'
   - 'delete own secure_file media'
   - 'delete publication content on assigned domains'
-  - 'delete secure_publication content on assigned domains'
   - 'edit any document media'
   - 'edit any publication content'
   - 'edit any secure_file media'
@@ -63,10 +61,8 @@ permissions:
   - 'reschedule scheduled transitions node publication'
   - 'revert publication revisions'
   - 'schedule publishing of nodes'
-  - 'schedule revisions'
   - 'update media'
   - 'update publication content on assigned domains'
-  - 'update secure_publication content on assigned domains'
   - 'use moderation sidebar'
   - 'use nics_editorial_workflow transition archive'
   - 'use nics_editorial_workflow transition create_new_draft'
@@ -84,12 +80,8 @@ permissions:
   - 'view all revisions'
   - 'view all scheduled transitions'
   - 'view any unpublished content'
-  - 'view any unpublished secure publication'
-  - 'view any unpublished secure_publication content'
   - 'view latest version'
-  - 'view own private files'
   - 'view own unpublished media'
-  - 'view own unpublished secure publication'
   - 'view publication revisions'
   - 'view scheduled content'
   - 'view scheduled transitions node publication'

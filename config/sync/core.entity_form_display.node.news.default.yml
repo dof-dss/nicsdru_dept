@@ -23,7 +23,6 @@ dependencies:
     - chosen_field
     - content_moderation
     - datetime
-    - dept_topics
     - media_library
     - media_library_edit
     - metatag
@@ -114,11 +113,14 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_site_topics:
-    type: dept_topic_tree_widget
-    weight: 4
+    type: entity_reference_autocomplete
+    weight: 28
     region: content
     settings:
-      excluded: true
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_summary:
     type: string_textarea

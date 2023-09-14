@@ -24,7 +24,6 @@ dependencies:
     - content_moderation
     - datetime
     - datetime_range
-    - dept_topics
     - link
     - media_library
     - media_library_edit
@@ -132,12 +131,14 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
   field_site_topics:
-    type: dept_topic_tree_widget
-    weight: 2
+    type: entity_reference_autocomplete
+    weight: 43
     region: content
     settings:
-      excluded: true
-      limit: 3
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_summary:
     type: string_textarea
