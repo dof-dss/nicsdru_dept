@@ -5,6 +5,7 @@ namespace Drupal\dept_topics\Plugin\Field\FieldWidget;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget;
 use Drupal\Core\Form\FormStateInterface;
@@ -49,6 +50,18 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
    * @var \Drupal\domain\DomainNegotiatorInterface
    */
   protected DomainNegotiatorInterface $domainNegotiator;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
+    // Set default values for dynamic properties used by parent classes.
+    // See https://www.drupal.org/project/drupal/issues/3046863.
+    $this->required = FALSE;
+    $this->multiple = FALSE;
+    $this->has_value = FALSE;
+  }
 
   /**
    * {@inheritdoc}
