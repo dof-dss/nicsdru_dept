@@ -53,6 +53,7 @@ class DepartmentListBuilder extends EntityListBuilder {
   public function load() {
     $department_ids = $this->getStorage()
       ->getQuery()
+      ->accessCheck(TRUE)
       ->sort('weight')
       ->execute();
 
