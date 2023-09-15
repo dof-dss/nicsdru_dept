@@ -1,0 +1,25 @@
+uuid: eefd6dc7-5bc2-4c4d-9573-6199f064077f
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - help
+  theme:
+    - claro
+id: claro_help
+theme: claro
+region: help
+weight: 0
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''

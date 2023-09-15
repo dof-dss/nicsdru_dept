@@ -5,7 +5,6 @@ dependencies:
   config:
     - facets.facet.consultation_topic
   module:
-    - block_visibility_groups
     - facets
     - system
   theme:
@@ -13,7 +12,7 @@ dependencies:
 id: consultationtopic
 theme: nicsdru_dept_theme
 region: sidebar_first
-weight: -21
+weight: -16
 provider: null
 plugin: 'facet_block:consultation_topic'
 settings:
@@ -27,8 +26,4 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: "/consultations\r\n/consultations/topic/*\r\n/consultations/type/*\r\n/consultations/date/*\r\n/consultations/dept/*"
-  condition_group:
-    id: condition_group
-    negate: false
-    block_visibility_group: ''
+    pages: "/consultations\r\n/consultations/topic/*\r\n/consultations/type/*\r\n/consultations/date/*"

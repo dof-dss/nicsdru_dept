@@ -1,0 +1,24 @@
+uuid: e5a3f56f-09c9-433d-bc50-45c678ff2c22
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+  theme:
+    - claro
+id: claro_primaryadminactions
+theme: claro
+region: content
+weight: -3
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''

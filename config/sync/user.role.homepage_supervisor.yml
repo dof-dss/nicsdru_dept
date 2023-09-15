@@ -10,9 +10,9 @@ dependencies:
   module:
     - content_moderation
     - domain_access
-    - draggableviews
     - filter
     - node
+    - view_unpublished
 id: homepage_supervisor
 label: 'Homepage supervisor'
 weight: 11

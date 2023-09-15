@@ -13,13 +13,14 @@ dependencies:
   module:
     - book
     - content_moderation
+    - dept_topics
     - domain_access
-    - draggableviews
     - filter
     - flag
     - node
     - redirect
     - scheduled_transitions
+    - view_unpublished
 id: topic_supervisor
 label: 'Topic supervisor'
 weight: 13

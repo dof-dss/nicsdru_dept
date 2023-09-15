@@ -27,12 +27,14 @@ dependencies:
     - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
+    - dept_topics
     - domain_access
     - filter
     - media
     - node
     - scheduled_transitions
     - scheduler
+    - view_unpublished
 _core:
   default_config_hash: 3Ozx7iL-HRO465AnGS4QvafYPacfOKCsg_3eLgClUAg
 id: author
