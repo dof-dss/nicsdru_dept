@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.body
     - field.storage.node.field_domain_access
+    - field.storage.node.field_domain_source
     - field.storage.node.field_global_topics
     - field.storage.node.field_published_date
     - field.storage.node.field_site_topics
@@ -83,6 +84,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_domain_access
+  field_domain_source:
+    label: 'Domain Source'
+    datasource_id: 'entity:node'
+    property_path: field_domain_source
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_domain_source
   field_global_topics:
     label: 'Global topics'
     datasource_id: 'entity:node'
@@ -219,6 +228,7 @@ processor_settings:
     fields:
       - body
       - field_domain_access
+      - field_domain_source
       - field_publication_type
       - field_summary
       - global_topics_name

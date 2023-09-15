@@ -113,10 +113,6 @@ then
   $DRUSH migrate:import url_aliases_nodes --force
   $DRUSH migrate:import redirects --force
 
-  echo "Rebuilding Group content relationships"
-  $DRUSH etgrm:removeAll
-  $DRUSH etgrm:createAll
-
   echo "Updating content links"
   $DRUSH dept:updatelinks
 

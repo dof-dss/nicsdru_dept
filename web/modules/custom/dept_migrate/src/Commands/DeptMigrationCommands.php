@@ -376,7 +376,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     $process = $this->processManager()->drush($this->siteAliasManager()->getSelf(), 'cache:rebuild', []);
     $process->mustRun();
 
-    $this->io()->success("Topic content entity references completed");
+    $this->io()->success("Topic content entity references completed for " . $domain_id);
   }
 
   /**
@@ -450,7 +450,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     $process = $this->processManager()->drush($this->siteAliasManager()->getSelf(), 'cache:rebuild', []);
     $process->mustRun();
 
-    $this->io()->success("Subtopic content entity references completed");
+    $this->io()->success("Subtopic content entity references completed for " . $domain_id);
 
   }
 
