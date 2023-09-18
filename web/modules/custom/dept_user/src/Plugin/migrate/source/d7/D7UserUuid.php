@@ -68,7 +68,12 @@ class D7UserUuid extends FieldableEntity {
       ->fetchCol();
     $row->setSourceProperty('roles', $roles);
 
-    $row->setSourceProperty('data', unserialize($row->getSourceProperty('data'), ['allowed_classes' => FALSE]));
+
+    $data = $row->getSourceProperty('data');
+
+    if (!empty($data)) {
+      $row->setSourceProperty('data', unserialize($row->getSourceProperty('data'), ['allowed_classes' => FALSE]));
+    }
 
     // If this entity was translated using Entity Translation, we need to get
     // its source language to get the field values in the right language.
