@@ -68,7 +68,7 @@ class D7UserUuid extends FieldableEntity {
       ->fetchCol();
     $row->setSourceProperty('roles', $roles);
 
-
+    // Fetch data first to prevent unserialize() warning with null values.
     $data = $row->getSourceProperty('data');
 
     if (!empty($data)) {
