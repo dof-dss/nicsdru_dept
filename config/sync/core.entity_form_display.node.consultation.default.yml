@@ -24,6 +24,7 @@ dependencies:
     - content_moderation
     - datetime
     - datetime_range
+    - dept_topics
     - link
     - media_library
     - media_library_edit
@@ -38,7 +39,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 7
+    weight: 6
     region: content
     settings:
       rows: 9
@@ -48,13 +49,13 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 14
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
   field_attachment:
     type: media_library_widget
-    weight: 26
+    weight: 22
     region: content
     settings:
       media_types: {  }
@@ -69,26 +70,26 @@ content:
     third_party_settings: {  }
   field_domain_access:
     type: options_buttons
-    weight: 40
+    weight: 24
     region: content
     settings: {  }
     third_party_settings: {  }
   field_domain_all_affiliates:
     type: boolean_checkbox
-    weight: 41
+    weight: 25
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   field_domain_source:
     type: options_select
-    weight: 42
+    weight: 26
     region: content
     settings: {  }
     third_party_settings: {  }
   field_email_address:
     type: email_default
-    weight: 10
+    weight: 8
     region: content
     settings:
       placeholder: ''
@@ -102,7 +103,7 @@ content:
     third_party_settings: {  }
   field_metatags:
     type: metatag_firehose
-    weight: 29
+    weight: 23
     region: content
     settings:
       sidebar: true
@@ -110,7 +111,7 @@ content:
     third_party_settings: {  }
   field_postal:
     type: string_textarea
-    weight: 11
+    weight: 10
     region: content
     settings:
       rows: 5
@@ -118,27 +119,25 @@ content:
     third_party_settings: {  }
   field_published_date:
     type: datetime_default
-    weight: 4
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
   field_respond_online:
     type: link_default
-    weight: 9
+    weight: 7
     region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
   field_site_topics:
-    type: entity_reference_autocomplete
-    weight: 43
+    type: dept_topic_tree_widget
+    weight: 2
     region: content
     settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      excluded: true
+      limit: 3
     third_party_settings: {  }
   field_summary:
     type: string_textarea
@@ -155,33 +154,33 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 12
+    weight: 11
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 24
+    weight: 20
     region: content
     settings: {  }
     third_party_settings: {  }
   path:
     type: path
-    weight: 20
+    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 16
+    weight: 14
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   publish_on:
     type: datetime_timestamp_no_default
-    weight: 22
+    weight: 18
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -192,20 +191,20 @@ content:
     settings: {  }
     third_party_settings: {  }
   simple_sitemap:
-    weight: 10
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 25
+    weight: 21
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 17
+    weight: 15
     region: content
     settings:
       display_label: true
@@ -220,7 +219,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 13
+    weight: 12
     region: content
     settings:
       match_operator: CONTAINS
@@ -230,7 +229,7 @@ content:
     third_party_settings: {  }
   unpublish_on:
     type: datetime_timestamp_no_default
-    weight: 21
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -241,7 +240,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   url_redirects:
-    weight: 23
+    weight: 19
     region: content
     settings: {  }
     third_party_settings: {  }

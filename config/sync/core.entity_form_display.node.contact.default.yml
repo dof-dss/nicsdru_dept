@@ -16,6 +16,7 @@ dependencies:
   module:
     - content_moderation
     - datetime
+    - dept_topics
     - geolocation_google_maps
     - metatag
     - path
@@ -380,14 +381,12 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_site_topics:
-    type: entity_reference_autocomplete
-    weight: 29
+    type: dept_topic_tree_widget
+    weight: 0
     region: content
     settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      excluded: true
+      limit: 3
     third_party_settings: {  }
   flag:
     weight: 8
