@@ -115,11 +115,10 @@ class HomepageController extends ControllerBase {
     return $build;
   }
 
-
   /**
    * Redirect to the Featured Content node edit form for the current department.
    *
-   * @return RedirectResponse|array
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse|array
    *   Return a redirect or render array.
    */
   public function featuredContentEdit() {
@@ -128,7 +127,7 @@ class HomepageController extends ControllerBase {
     $query = \Drupal::entityQuery('node')
       ->condition('type', 'featured_content_list')
       ->condition('field_domain_source', $current_department->id())
-      ->range(0,1)
+      ->range(0, 1)
       ->accessCheck(TRUE);
     $results = $query->execute();
 
@@ -137,7 +136,8 @@ class HomepageController extends ControllerBase {
         'intro' => [
           '#type' => 'html_tag',
           '#tag' => 'p',
-          '#value' => 'The current department does not have any featured content.'],
+          '#value' => 'The current department does not have any featured content.'
+        ],
         'link' => [
           '#type' => 'link',
           '#title' => $this->t('Create featured content'),
