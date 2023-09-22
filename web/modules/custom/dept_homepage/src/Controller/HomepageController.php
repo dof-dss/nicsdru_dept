@@ -4,6 +4,7 @@ namespace Drupal\dept_homepage\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Url;
 use Drupal\dept_core\DepartmentManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -111,6 +112,20 @@ class HomepageController extends ControllerBase {
     $build['featured_news']['fcl'] = $fcl_render;
 
     return $build;
+  }
+
+
+  public function featuredContentEdit() {
+    $current_department = $this->deptManager->getCurrentDepartment();
+
+    $query = \Drupal::entityQuery('node')
+      ->condition('type', 'featured_content_list')
+      ->condition('field_domain_source', $current_department->id())
+      ->range(0,1)
+      ->accessCheck(TRUE);
+    $results = $query->execute();
+
+    return $this->redirect('entity.node.edit_form', ['node' => current($results)]);
   }
 
 }
