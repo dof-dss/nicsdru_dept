@@ -3,11 +3,9 @@
 namespace Drupal\dept_homepage\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\dept_core\DepartmentManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Controller for handling the site root path.

@@ -11,5 +11,5 @@ dept_homepage.featured_content:
     _controller: '\Drupal\dept_homepage\Controller\HomepageController::featuredContentEdit'
     _title: 'Featured content'
   requirements:
-    _role: 'Homepage supervisor + administrator'
+    _role: 'homepage_supervisor+administrator'
 
