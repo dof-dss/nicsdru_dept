@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\dept_core\DepartmentManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Controller for handling the site root path.
@@ -115,6 +116,12 @@ class HomepageController extends ControllerBase {
   }
 
 
+  /**
+   * Redirect to the Featured Content node edit form for the current department.
+   *
+   * @return RedirectResponse|array
+   *   Return a redirect or render array.
+   */
   public function featuredContentEdit() {
     $current_department = $this->deptManager->getCurrentDepartment();
 
