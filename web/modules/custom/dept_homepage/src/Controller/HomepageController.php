@@ -125,7 +125,22 @@ class HomepageController extends ControllerBase {
       ->accessCheck(TRUE);
     $results = $query->execute();
 
-    return $this->redirect('entity.node.edit_form', ['node' => current($results)]);
+    if (empty($results)) {
+      return [
+        'intro' => [
+          '#type' => 'html_tag',
+          '#tag' => 'p',
+          '#value' => 'The current department does not have any featured content.'],
+        'link' => [
+          '#type' => 'link',
+          '#title' => $this->t('Create featured content'),
+          '#url' => Url::fromRoute('node.add', ['node_type' => 'featured_content_list']),
+        ],
+      ];
+    }
+    else {
+      return $this->redirect('entity.node.edit_form', ['node' => current($results)]);
+    }
   }
 
 }
