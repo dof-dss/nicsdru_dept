@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6784cc913c8db6681caba81464b9a51",
+    "content-hash": "c583a9201eaa7ec0e06c3ed049727d5c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1794,16 +1794,16 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
-            "version": "dev-drupal10-upgrade",
+            "version": "10.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dof-dss/nicsdru_origins_theme.git",
-                "reference": "8ea0b956518ae01ff033a01c6efb0a0471177e61"
+                "reference": "e9754d5fc9376bba0fcc791f36d36fb5c14978d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_theme/zipball/8ea0b956518ae01ff033a01c6efb0a0471177e61",
-                "reference": "8ea0b956518ae01ff033a01c6efb0a0471177e61",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_theme/zipball/e9754d5fc9376bba0fcc791f36d36fb5c14978d4",
+                "reference": "e9754d5fc9376bba0fcc791f36d36fb5c14978d4",
                 "shasum": ""
             },
             "require": {
@@ -1827,9 +1827,9 @@
                 "theme"
             ],
             "support": {
-                "source": "https://github.com/dof-dss/nicsdru_origins_theme/tree/drupal10-upgrade"
+                "source": "https://github.com/dof-dss/nicsdru_origins_theme/tree/10.1.1"
             },
-            "time": "2023-09-15T15:20:58+00:00"
+            "time": "2023-09-22T14:56:41+00:00"
         },
         {
             "name": "drupal/address",
@@ -18875,7 +18875,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "dof-dss/nicsdru_origins_theme": 20,
         "drupal/block_field": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
