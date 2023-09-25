@@ -6,6 +6,7 @@
  * of topics, subtopics and related content.
  */
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -48,6 +49,25 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
       ];
     }
   }
+
+  $build['actions']['secondary']['order_child_topics'] = [
+    '#title' => 'Reorder sub content',
+    '#type' => 'link',
+    '#url' => Url::fromRoute('dept_topics.topic_child_order.form', ['node' => $context->id()], ['query' => ['topic' => $context->id()]]),
+    '#attributes' => [
+      'class' => ['moderation-sidebar-link', 'button', 'use-ajax'],
+      'data-dialog-type' => 'modal',
+      'data-dialog-options' => Json::encode([
+        'title' => t('Topic contents'),
+        'width' => 800,
+        'minHeight' => 500,
+        'position' => ['my' => 'center top', 'at' => 'center top'],
+        'draggable' => TRUE,
+        'autoResize' => FALSE,
+      ]),
+    ],
+  ];
+
 }
 
 /**
