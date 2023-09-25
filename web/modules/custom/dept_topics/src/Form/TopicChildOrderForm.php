@@ -7,6 +7,7 @@ use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\Entity\Node;
 
 /**
  * Provides a form to order Topic child contents.
@@ -25,21 +26,28 @@ final class TopicChildOrderForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, $node = NULL): array {
 
-    $form['#title'] = $this->t('Order contents for topic');
-    $content = \Drupal::service('entity.form_builder')->getForm($node);
+    $form['#title'] = $this->t('Order contents for %title', ['%title' => $node->label()]);
 
-    $children = $node->get('field_topic_content')->getValue();
 
-    $form['topic_content'] = $content['field_topic_content'];
+    $node_form = \Drupal::service('entity.form_builder')->getForm($node);
+    $form['field_topic_content'] = $node_form['field_topic_content'];
+
+    ksm($node_form);
+
+    $form['nid'] = [
+      '#type' => 'hidden',
+      '#value' => $node->id(),
+    ];
+
 
     $form['actions'] = ['#type' => 'actions'];
-    $form['actions']['send'] = [
+    $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Submit'),
-      '#ajax' => [
-        'callback' => [$this, 'submitForm'],
-        'event' => 'click',
-      ],
+//      '#ajax' => [
+//        'callback' => [$this, 'submitForm'],
+//        'event' => 'click',
+//      ],
     ];
 
 
@@ -50,12 +58,33 @@ final class TopicChildOrderForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $response = new AjaxResponse();
-    $response->addCommand(new InvokeCommand(NULL, 'topicTreeAjaxCallback', [
-      $form_state->getValue('field'),
-      $form_state->getValue('selected_topics')
-    ]));
-    $response->addCommand(new CloseDialogCommand());
+
+    ksm($form);
+    $nid = $form_state->getValue('nid');
+//    $children = array_column($form_state->getValue('field_topic_content'), 'target_id');
+    $children = $form_state->getValue('field_topic_content');
+    $updated = [];
+
+    ksm($children);
+
+//    unset($children['add_more']);
+
+//    foreach ($children as $child) {
+//      $updated[] = [
+//        'target_id' => $child['target_id']
+//      ];
+//    }
+
+//w7}aSfNt
+//
+//    $node = Node::load($nid);
+//
+//    $node->field_topic_content = $children;
+//    $node->save();
+
+//    $response = new AjaxResponse();
+//    ksm($nid, $children);
+//    $response->addCommand(new CloseDialogCommand());
 
     return $response;
   }
