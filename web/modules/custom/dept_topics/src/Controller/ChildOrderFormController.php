@@ -41,8 +41,9 @@ class ChildOrderFormController extends ControllerBase {
    * Builds the response.
    */
   public function build($node) {
-
     $form = $this->entityFormBuilder->getForm($node, 'child_order');
+
+    unset($form['advanced']);
 
     unset($form["actions"]["preview"]);
     unset($form["actions"]["delete"]);
