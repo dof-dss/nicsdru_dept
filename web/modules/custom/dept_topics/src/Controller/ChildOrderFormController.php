@@ -7,7 +7,7 @@ use Drupal\Core\Entity\EntityFormBuilderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Returns responses for Departmental sites: topics routes.
+ * Provides form response for the child content order modal.
  */
 class ChildOrderFormController extends ControllerBase {
 
