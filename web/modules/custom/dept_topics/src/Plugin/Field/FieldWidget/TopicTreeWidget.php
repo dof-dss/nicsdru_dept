@@ -193,6 +193,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
           'position' => ['my' => 'center top', 'at' => 'center top'],
           'draggable' => TRUE,
           'autoResize' => FALSE,
+          'dialogClass' => 'topic-widget-modal'
         ]),
       ],
     ];
