@@ -5,11 +5,11 @@
  */
 
 /* Override Drupal core's inline styles that don't correctly calculate min-height for smaller devices */
-.ui-dialog {
+.topic-widget-modal {
   height: 70% !important;
 }
 
-#drupal-modal {
+.topic-widget-modal #drupal-modal {
   height: 100% !important;
   width: auto !important;
   min-height: auto !important;
