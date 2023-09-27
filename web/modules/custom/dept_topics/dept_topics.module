@@ -32,7 +32,8 @@ function dept_topics_help($route_name, RouteMatchInterface $route_match) {
 /**
  * Implements hook_moderation_sidebar_alter().
  */
-function dept_topics_moderation_sidebar_alter(&$build, &$context) {
+function dept_topics_moderation_sidebar_alter(&$build, &$context)
+{
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
 
@@ -50,24 +51,25 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
     }
   }
 
-  $build['actions']['secondary']['order_child_topics'] = [
-    '#title' => 'Reorder sub content',
-    '#type' => 'link',
-    '#url' => Url::fromRoute('dept_topics.topic_child_order.form', ['node' => $context->id()], ['query' => ['topic' => $context->id()]]),
-    '#attributes' => [
-      'class' => ['moderation-sidebar-link', 'button', 'use-ajax'],
-      'data-dialog-type' => 'modal',
-      'data-dialog-options' => Json::encode([
-        'title' => t('Topic contents'),
-        'width' => 800,
-        'minHeight' => 500,
-        'position' => ['my' => 'center top', 'at' => 'center top'],
-        'draggable' => TRUE,
-        'autoResize' => FALSE,
-      ]),
-    ],
-  ];
-
+  if ($context->bundle() === 'subtopic') {
+    $build['actions']['secondary']['order_child_topics'] = [
+      '#title' => 'Reorder sub content',
+      '#type' => 'link',
+      '#url' => Url::fromRoute('dept_topics.topic_child_order.form', ['node' => $context->id()], ['query' => ['topic' => $context->id()]]),
+      '#attributes' => [
+        'class' => ['moderation-sidebar-link', 'button', 'use-ajax'],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => Json::encode([
+          'title' => t('Topic contents'),
+          'width' => 800,
+          'minHeight' => 500,
+          'position' => ['my' => 'center top', 'at' => 'center top'],
+          'draggable' => TRUE,
+          'autoResize' => FALSE,
+        ]),
+      ],
+    ];
+  }
 }
 
 /**
