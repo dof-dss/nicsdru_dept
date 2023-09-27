@@ -398,7 +398,8 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     else {
       $node_id = $nid;
     }
-    print "Child nodes for $version node " . $nid . " ";
+
+    print "Child nodes for $version node " . $nid . " (d7 nid: " . current($d7_nid)['d7nid'] . ") ";
     print_r($this->fetchSubtopicChildContent($node_id));
   }
 
@@ -496,8 +497,12 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
    *
    * @param int $nid
    *   Drupal 7 parent node ID.
+   *
+   * @command dept:process-subtopic-child-content
+   * @aliases pscc
+   *
    */
-  private function processSubtopicChildContent($nid) {
+  public function processSubtopicChildContent($nid) {
     $child_nodes = $this->fetchSubtopicChildContent($nid);
     // Fetch the D9/D7 data for the parent node.
     $parent_data = $this->lookupManager->lookupbySourceNodeId([$nid]);
@@ -564,6 +569,17 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     AND nfps.field_parent_topic_target_id = :nid
     AND st_n.status = 1
     AND nfpst.entity_id IS NULL
+    UNION
+      SELECT
+        st_n.nid,
+        st_n.type,
+        st_n.title,
+        99 as weight
+    FROM node st_n
+    JOIN field_data_field_parent_subtopic nfpst ON st_n.nid = nfpst.entity_id
+    WHERE st_n.type = 'subtopic'
+    AND nfpst.field_parent_subtopic_target_id = :nid
+    AND st_n.status = 1
     UNION
     SELECT
         ar_n.nid,
