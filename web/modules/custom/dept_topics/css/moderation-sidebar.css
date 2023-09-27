@@ -1,0 +1,25 @@
+.ui-dialog-off-canvas #drupal-off-canvas .moderation-sidebar-link {
+  border: none;
+}
+
+#drupal-off-canvas a.moderation-sidebar-link.button.button--secondary {
+  margin-top: 15px;
+  color: #fff;
+  border: none;
+  background: #17a2b8;
+}
+
+#drupal-off-canvas a.moderation-sidebar-link.button.button--secondary:hover {
+  background: #0f7888;
+}
+
+#drupal-off-canvas a.moderation-sidebar-link.button.button--tertiary {
+  margin-top: 15px;
+  color: #333;
+  border: none;
+  background: #ffc107;
+}
+
+#drupal-off-canvas a.moderation-sidebar-link.button.button--tertiary:hover {
+  background: #d7a204;
+}

@@ -46,9 +46,12 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context)
         '#title' => 'Add ' . $label,
         '#type' => 'link',
         '#url' => Url::fromRoute('node.add', ['node_type' => $bundle], ['query' => ['topic' => $context->id()]]),
-        '#attributes' => ['class' => ['moderation-sidebar-link', 'button']],
+        '#attributes' => ['class' => ['moderation-sidebar-link', 'button', 'button--secondary']],
       ];
     }
+
+    $build['#attached']['library'][] = 'dept_topics/moderation_sidebar';
+
   }
 
   if ($context->bundle() === 'subtopic') {
@@ -57,7 +60,7 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context)
       '#type' => 'link',
       '#url' => Url::fromRoute('dept_topics.topic_child_order.form', ['node' => $context->id()], ['query' => ['topic' => $context->id()]]),
       '#attributes' => [
-        'class' => ['moderation-sidebar-link', 'button', 'use-ajax'],
+        'class' => ['moderation-sidebar-link', 'button', 'button--tertiary', 'use-ajax'],
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode([
           'title' => t('Topic contents'),

@@ -45,3 +45,9 @@ child_order:
     - core/jquery.form
     - core/drupal.dialog.ajax
     - core/drupal.tabledrag
+moderation_sidebar:
+  version: 1.x
+  css:
+    theme:
+      css/moderation-sidebar.css: { }
+
