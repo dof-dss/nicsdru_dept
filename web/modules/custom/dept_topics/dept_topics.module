@@ -61,7 +61,7 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
 
   if ($context->bundle() === 'subtopic') {
     $build['actions']['secondary']['order_child_topics'] = [
-      '#title' => 'Reorder sub content',
+      '#title' => t('Reorder child content'),
       '#type' => 'link',
       '#url' => Url::fromRoute('dept_topics.topic_child_order.form', ['node' => $context->id()], ['query' => ['topic' => $context->id()]]),
       '#attributes' => [
