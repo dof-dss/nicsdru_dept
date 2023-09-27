@@ -1,0 +1,91 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.subtopic.body
+    - field.field.node.subtopic.field_banner_image
+    - field.field.node.subtopic.field_banner_image_overlay
+    - field.field.node.subtopic.field_banner_image_thin
+    - field.field.node.subtopic.field_domain_access
+    - field.field.node.subtopic.field_domain_all_affiliates
+    - field.field.node.subtopic.field_domain_source
+    - field.field.node.subtopic.field_metatags
+    - field.field.node.subtopic.field_site_topics
+    - field.field.node.subtopic.field_summary
+    - field.field.node.subtopic.field_topic_content
+    - field.field.node.subtopic.layout_builder__layout
+    - node.type.subtopic
+  module:
+    - field_group
+third_party_settings:
+  field_group:
+    group_banner:
+      children:
+        - field_banner_image
+        - field_banner_image_overlay
+        - field_banner_image_thin
+      label: Banner
+      region: hidden
+      parent_name: ''
+      weight: 2
+      format_type: details
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: false
+        description: ''
+        required_fields: true
+id: node.subtopic.child_order
+targetEntityType: node
+bundle: subtopic
+mode: child_order
+content:
+  field_topic_content:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  publish_state:
+    type: options_select
+    weight: 26
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  unpublish_state:
+    type: options_select
+    weight: 27
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  body: true
+  created: true
+  entitygroupfield: true
+  field_banner_image: true
+  field_banner_image_overlay: true
+  field_banner_image_thin: true
+  field_metatags: true
+  field_site_topics: true
+  field_summary: true
+  flag: true
+  groups: true
+  groups_type_department_site: true
+  langcode: true
+  layout_builder__layout: true
+  moderation_state: true
+  path: true
+  promote: true
+  publish_on: true
+  simple_sitemap: true
+  status: true
+  sticky: true
+  title: true
+  uid: true
+  unpublish_on: true
+  url_redirects: true

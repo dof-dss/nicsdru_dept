@@ -19,7 +19,7 @@ dept_topics.topic_child_order.form:
   path: '/admin/topics/order/{node}'
   defaults:
     _title: 'Topic child order'
-    _form: 'Drupal\dept_topics\Form\TopicChildOrderForm'
+    _controller: '\Drupal\dept_topics\Controller\ChildOrderFormController::build'
     selected: ''
   options:
     parameters:
