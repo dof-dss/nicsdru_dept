@@ -399,7 +399,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       $node_id = $nid;
     }
 
-    print "Child nodes for $version node " . $nid . " (d7 nid: " . current($d7_nid)['d7nid'] . ") ";
+    print "Child nodes for $version node " . $nid;
     print_r($this->fetchSubtopicChildContent($node_id));
   }
 
