@@ -32,8 +32,7 @@ function dept_topics_help($route_name, RouteMatchInterface $route_match) {
 /**
  * Implements hook_moderation_sidebar_alter().
  */
-function dept_topics_moderation_sidebar_alter(&$build, &$context)
-{
+function dept_topics_moderation_sidebar_alter(&$build, &$context) {
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
 
@@ -46,7 +45,13 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context)
         '#title' => 'Add ' . $label,
         '#type' => 'link',
         '#url' => Url::fromRoute('node.add', ['node_type' => $bundle], ['query' => ['topic' => $context->id()]]),
-        '#attributes' => ['class' => ['moderation-sidebar-link', 'button', 'button--secondary']],
+        '#attributes' => [
+          'class' => [
+            'moderation-sidebar-link',
+            'button',
+            'button--secondary'
+          ],
+        ],
       ];
     }
 
@@ -60,7 +65,12 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context)
       '#type' => 'link',
       '#url' => Url::fromRoute('dept_topics.topic_child_order.form', ['node' => $context->id()], ['query' => ['topic' => $context->id()]]),
       '#attributes' => [
-        'class' => ['moderation-sidebar-link', 'button', 'button--tertiary', 'use-ajax'],
+        'class' => [
+          'moderation-sidebar-link',
+          'button',
+          'button--tertiary',
+          'use-ajax'
+        ],
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode([
           'title' => t('Topic contents'),
@@ -355,5 +365,7 @@ function dept_topics_clear_child_caches($node) {
  * Implements hook_entity_type_build().
  */
 function dept_topics_entity_type_build(array &$entity_types) {
+  // Set the default Core node form for our custom Form mode as
+  // we don't need a custom class to override anything.
   $entity_types['node']->setFormClass('child_order', 'Drupal\node\NodeForm');
 }

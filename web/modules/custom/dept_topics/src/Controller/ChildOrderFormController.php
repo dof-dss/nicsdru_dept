@@ -41,6 +41,16 @@ class ChildOrderFormController extends ControllerBase {
    * Builds the response.
    */
   public function build($node) {
+
+    if ($node->bundle() !== 'subtopic') {
+      return [
+        '#markup' => $this->t('This type of bundle (%bundle) cannot have child content reordered.', [
+          '%bundle' => $node->bundle(),
+        ])
+      ];
+    }
+
+    // Fetch the node edit form with the Form mode 'child_order'.
     $form = $this->entityFormBuilder->getForm($node, 'child_order');
 
     unset($form['advanced']);
