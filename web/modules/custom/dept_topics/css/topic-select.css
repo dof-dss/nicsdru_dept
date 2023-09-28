@@ -1,3 +1,9 @@
+/**
+ * @file
+ * Provides styling for the topic field.
+ *
+ */
+
 /* Override Drupal core's inline styles that don't correctly calculate min-height for smaller devices */
 .topic-widget-modal {
   height: 70% !important;
