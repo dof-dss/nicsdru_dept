@@ -40,6 +40,8 @@ child_order:
   css:
     theme:
       css/child-order.css: { }
+  js:
+    js/child_order_modal.js: { }
   dependencies:
     - core/jquery
     - core/jquery.form

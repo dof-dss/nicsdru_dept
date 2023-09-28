@@ -58,6 +58,13 @@ class ChildOrderFormController extends ControllerBase {
     unset($form["actions"]["preview"]);
     unset($form["actions"]["delete"]);
 
+    $form['actions']['cancel'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('cancel'),
+      '#weight' => 10,
+      '#attributes' => ['class' => ['child-order-cancel']],
+    ];
+
     $form['#attached']['library'][] = 'dept_topics/child_order';
 
     return $form;
