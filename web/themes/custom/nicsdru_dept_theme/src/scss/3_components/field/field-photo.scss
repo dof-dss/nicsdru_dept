@@ -1,0 +1,29 @@
+/*
+ * @file
+ * Provides the layout styles for content output from field_photo for any entity.
+ */
+@import '../../init';
+
+.photo {
+  display: inline;
+  font-size: .1px;
+  line-height: 0;
+
+  img {
+    width: 100%;
+    height: auto;
+    margin: 1em 0;
+
+    @include breakpoint($phone) {
+      clear: right;
+      float: right;
+      width: 48.3871%;
+      max-width: 300px;
+      margin-left: 1.5em;
+    }
+
+    @include breakpoint($tab) {
+      margin: 1em 0 1em 1.5em;
+    }
+  }
+}

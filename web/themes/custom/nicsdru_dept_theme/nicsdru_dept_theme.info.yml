@@ -1,0 +1,52 @@
+name: NICS Departmental Theme
+type: theme
+description: 'Base theme for Drupal 9 Departmental sites'
+package: NICS
+core_version_requirement: ^8.8 || ^9 || ^10
+base theme: nicsdru_origins_theme
+
+libraries:
+  - nicsdru_dept_theme/nidirect-global-styles
+  - nicsdru_dept_theme/nidirect-specific-styles
+  - nicsdru_dept_theme/nidirect-accordions
+
+ckeditor_stylesheets:
+  - css/1_base/tables.css
+  - css/3_components/ckeditor.css
+  - css/3_components/content/lists.css
+  - css/3_components/content/responsive-images-ckeditor.css
+  - css/3_components/content/video.css
+
+libraries-override:
+  layout_builder/drupal.layout_builder:
+    css:
+      theme:
+        /core/themes/stable/css/layout_builder/layout-builder.css: false
+  nicsdru_origins_theme/global-styling:
+    css:
+      theme:
+        css/3_components/navigation/pager.css: false
+  eu_cookie_compliance/eu_cookie_compliance_bare:
+    css:
+      state:
+        css/eu_cookie_compliance.bare.css: css/4_state/block/eu-cookie-compliance.css
+  webform/webform.element.counter:
+    css:
+      component:
+        css/webform.element.counter.css: false
+
+regions:
+  header: 'Header'
+  primary_menu: 'Primary menu'
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+  highlighted: 'Highlighted'
+  help: 'Help'
+  top_banner: 'Banner top'
+  content: 'Content'
+  sidebar_first: 'Search'
+  sidebar_second: 'Aside'
+  related: 'Related page footer'
+  bottom_banner: 'Page bottom'
+  feedback: 'Feedback'
+  footer: 'Footer'

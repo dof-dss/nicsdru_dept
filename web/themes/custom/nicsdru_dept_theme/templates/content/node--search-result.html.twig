@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Theme override to display a node in search result view mode.
+#}
+{% set department_name = content.field_domain_source.0["#plain_text"] %}
+<a class="card card--plain no-ext-icon" href="{{ url }}">
+  <h3 class="card__title">{{ label }}</h3>
+  <div class="card__summary">{{ content.field_summary | field_value }}</div>
+  <div class="card__meta">
+    {%- if department.id == 'nigov' and department_name %}
+      {%- if 'Agriculture' in department_name %}
+        <span class="card__meta-item dept-name">{{ 'DAERA'|t }}</span>
+      {% else %}
+        <span class="card__meta-item dept-name">{{ department_name }}</span>
+      {% endif -%}
+    {% endif -%}
+    {%- if content.field_published_date %}
+      <span class="card__meta-item field-published-date">{{ 'Published'|t }} {{ content.field_published_date | field_value }}</span>
+    {% endif -%}
+    {%- if content.field_publication_type %}
+      <span class="card__meta-item field-publication-type">{{ content.field_publication_type | field_value }}</span>
+    {% endif -%}
+    {%- if content.consultation_status %}
+      <span class="card__meta-item consultation-status">{{ 'Consultation'|t }} {{ content.consultation_status["#value"] }}</span>
+    {% endif -%}
+  </div>
+</a>

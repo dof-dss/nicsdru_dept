@@ -1,0 +1,142 @@
+/*
+ * @file
+ * Resets and creates defaults for root html elements.
+ */
+
+@import '../init';
+
+// sass-lint:disable no-vendor-prefixes
+
+// Root
+//
+// The HTML root component contains the doctype, HTML element, HEAD element and BODY element. It also contains the CSS
+// for those elements and the `*` universal selector.
+// An example file for the standard markup is included for completeness, however it is not render in the style guide.
+// Otherwise, the style guide will have multiple HTML and BODY elements.
+//
+// weight: -10
+//
+// Style guide: base.root
+
+// Use the saner border-box model for all elements.
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: $base-font-family; /* 1 */
+  font-size: 100% * ($base-font-size / 16px); /* 3 */
+  line-height: 1.5;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased; // more subtle on larger fonts, makes smaller fonts more substantial.
+  // On short pages, we want any background gradients to fill the entire height
+  // of the browser.
+  min-height: 100%;
+}
+
+body {
+  @include responsive-typo-map($normal-text-no-margins);
+  color: color(text);
+  background-color: #fff;
+  // Remove default margin and padding.
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --default-brand-primary-color: #{$corp-primary};
+  --default-brand-secondary-color: #{$corp-secondary-dark};
+
+  --base-font-size: 1.6rem;
+  --base-rhythm: .8rem;
+  --base-rhythm-frag: .2rem;
+
+  @include breakpoint($lap) {
+    --base-font-size: 1.8rem;
+    --base-rhythm: .9rem;
+    --base-rhythm-frag: .3rem;
+  }
+
+  @include breakpoint($desk-plus) {
+    --base-font-size: 2rem;
+    --base-rhythm: 1rem;
+    --base-rhythm-frag: .5rem;
+  }
+
+  --rhythm-spacing-xs: var(--base-rhythm-frag); // 2, 3, 5
+  --rhythm-spacing-sm: var(--base-rhythm); // 8, 9, 10
+  --rhythm-spacing-md: calc(var(--base-rhythm) + var(--base-rhythm-frag)); // 10, 12, 15
+  --rhythm-spacing: calc(var(--base-rhythm) * 2); // 16, 18, 20
+  --rhythm-spacing-lg: calc(var(--base-rhythm) * 2 + var(--base-rhythm-frag)); // 18, 21, 25
+  --rhythm-spacing-xl: calc(var(--base-rhythm) * 3); // 24, 27, 30
+  --rhythm-spacing-xxl: calc(var(--base-rhythm) * 4); // 32, 36, 40
+  --rhythm-spacing-xxxl: calc(var(--base-rhythm) * 5); // 40, 45, 50
+}
+
+.dept-admin {
+  --brand-primary-color: #{$corp-admin}; // 4:49:1
+  --brand-primary-color-lite: #{lighten($corp-admin, 20%)};
+  --brand-primary-color-high-contrast-white: #{$corp-admin-ui-on-white}; // 4.56:1
+}
+
+.dept-nigov {
+  --brand-primary-color: #{$corp-nigov}; // 4:49:1
+  --brand-primary-color-lite: #{lighten($corp-nigov, 20%)};
+  --brand-primary-color-high-contrast-white: #{$corp-nigov-ui-on-white}; // 4.56:1
+}
+
+.dept-finance {
+  --brand-primary-color: #{$corp-dof};    // 3:1
+  --brand-primary-color-lite: #{lighten($corp-dof, 20%)};
+  --brand-primary-color-high-contrast-white: #{$corp-dof-ui-on-white}; // 4.55:1
+}
+
+.dept-daera  {
+  --brand-primary-color: #{$corp-daera};    // 3.4:1
+  --brand-primary-color-lite: #{lighten($corp-daera, 20%)};
+  --brand-primary-color-high-contrast-white: #{$corp-daera-ui-on-white}; // 4.54:1
+}
+
+.dept-communities  {
+  --brand-primary-color: #{$corp-dfc};     // 5.25:1
+  --brand-primary-color-lite: #{lighten($corp-dfc, 20%)};
+  --brand-primary-color-high-contrast-white: #{$corp-dfc-ui-on-white}; // 5.25:1
+}
+
+.dept-economy  {
+  --brand-primary-color: #{$corp-dfe};      // 4.88:1
+  --brand-primary-color-lite: #{lighten($corp-dfe, 20%)};
+  --brand-primary-color-high-contrast-white: #{$corp-dfe-ui-on-white}; // 4.88:1
+}
+
+.dept-education  {
+  --brand-primary-color: #{$corp-de};      // 4.89:1
+  --brand-primary-color-lite: #{lighten($corp-de, 20%)};
+  --brand-primary-color-high-contrast-white: #{$corp-de-ui-on-white}; // 4.89:1
+}
+
+.dept-executiveoffice  {
+  --brand-primary-color: #{$corp-teo};     // 4.29:1
+  --brand-primary-color-lite: #{lighten($corp-teo, 20%)};
+  --brand-primary-color-high-contrast-white: #{$corp-teo-ui-on-white}; // 4.6:1
+}
+
+.dept-health  {
+  --brand-primary-color: #{$corp-doh};      // 3.66:1
+  --brand-primary-color-lite: #{lighten($corp-doh, 20%)};
+  --brand-primary-color-high-contrast-white: #{$corp-doh-ui-on-white}; // 4.54:1
+}
+
+.dept-infrastructure  {
+  --brand-primary-color: #{$corp-dfi};     // 1.73:1
+  --brand-primary-color-lite: #{lighten($corp-dfi, 20%)};
+  --brand-primary-color-high-contrast-white: #{$corp-dfi-ui-on-white}; // 5.43:1 (complementary)
+}
+
+.dept-justice  {
+  --brand-primary-color: #{$corp-doj};
+  --brand-primary-color-lite: #{lighten($corp-doj, 20%)};
+  --brand-primary-color-high-contrast-white: #{$corp-doj-ui-on-white}; // 7.27:1
+}

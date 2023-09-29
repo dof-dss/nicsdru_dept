@@ -1,0 +1,210 @@
+/*
+ * @file
+ * Provides very specific styling for landing pages.
+ */
+@import '../init';
+
+.page-node-type-landing-page,
+.page-node-type-subtopic,
+.page-node-type-topic {
+
+  h1:has(~ .layout .banner) {
+    @include visually-hidden();
+
+    ~ .site-topics {
+      margin-top: var(--rhythm-spacing-xxl);
+    }
+  }
+
+  .banner,
+  .info-notice,
+  .card-deck,
+  .accordion,
+  .video-and-caption,
+  .text-block,
+  .layout__region > .card--contact,
+  .layout__region > .subtopics {
+    margin: 0 0 var(--rhythm-spacing-xxxl);
+  }
+
+  .card-deck:not(.card-deck--plain):not(.card-deck--topics) .card {
+    border-top: var(--base-rhythm) solid var(--brand-primary-color);
+    outline-width: 0;
+
+    .card__image:empty ~ .card__body {
+
+      > p,
+      > li {
+        @include responsive-typo-map($normal-text-no-margins);
+      }
+
+      .card__title {
+        @include responsive-typo-map($card-title);
+      }
+    }
+  }
+
+  .card-deck + .card-deck:not(.card-deck--plain, .card-deck--topics) {
+    margin-top: calc(var(--rhythm-spacing) * -1);
+  }
+
+  .card-deck--plain {
+
+    .card {
+      height: auto;
+      align-self: start;
+      // sass-lint:disable shorthand-values
+      padding: var(--rhythm-spacing-xs) var(--rhythm-spacing-lg);
+      // sass-lint:enable shorthand-values
+      border-left: 5px solid var(--brand-primary-color-lite);
+      box-shadow: none;
+
+      &__title {
+        @include responsive-typo-map($card-title);
+        padding: 0;
+        margin: 0;
+        // Need to use !important to ensure following styles are overridden for all link states.
+        color: $brand-secondary !important;
+        text-decoration: none !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+
+        &::after {
+          content: none;
+        }
+      }
+
+      &__content {
+        max-width: 720px;
+        padding: 0;
+        margin: .5em 0 0;
+
+        p {
+          @include responsive-typo-map($smallish-text);
+          margin: 0;
+        }
+
+        .more {
+          white-space: nowrap;
+          color: $link;
+          text-decoration: underline;
+        }
+      }
+    }
+
+    a.card:focus,
+    a.card:hover {
+      border-left-color: var(--brand-primary-color);
+      background-color: $brand-primary-lightest;
+    }
+  }
+
+  // Theming of accordions for landing pages. Generic accordion component defined in 3_components/content/accordions
+  .accordion {
+
+    box-shadow: 0 1px 0 0 var(--brand-primary-color);
+
+    .accordion-section {
+
+      .no-js & {
+        margin: 0 1em 1em;
+        padding: 0;
+      }
+
+      .js & {
+
+        &.expanded {
+          padding: .5em 1em;
+          margin: 0;
+        }
+      }
+    }
+
+    .accordion-section-title {
+      box-shadow: 0 -1px 0 0 var(--brand-primary-color);
+    }
+  }
+
+  // Theming of contact cards for landing pages.
+  .card-deck--x2 .card--contact {
+    margin: 0;
+
+    @include breakpoint($phab) {
+      .tel .title {
+        @include responsive-typo-map($normal-text-no-margins);
+      }
+
+      .tel .value {
+        @include responsive-typo-map($xxl-text);
+      }
+
+      .tel .supplementary {
+        @include responsive-typo-map($small-text);
+      }
+    }
+
+    @include breakpoint($phab) {
+      padding-left: 27.5%;
+
+      &::before {
+        width: 15%;
+        margin: 1em 6.25%;
+      }
+    }
+  }
+
+  .card-deck--x3 .card--contact {
+
+    @include breakpoint($tab) {
+      .tel .title {
+        @include adjust-font-size-to(17px, 4);
+      }
+
+      .tel .value {
+        @include responsive-typo-map($xl-text);
+      }
+
+      .tel .supplementary {
+        @include adjust-font-size-to(15px, 4)
+      }
+    }
+
+    @include breakpoint($desk-plus) {
+      .tel .title {
+        @include adjust-font-size-to(18px, 5);
+      }
+
+      .tel .supplementary {
+        @include adjust-font-size-to(16px, 5)
+      }
+    }
+
+    @include breakpoint($tab) {
+      padding-left: 27.5%;
+
+      &::before {
+        width: 15%;
+        margin: 1em 6.25%;
+      }
+    }
+  }
+
+  // Hide related section if there is no related content.
+  .section-related:has(#block-related-departmental-details-access-info:only-of-type) {
+    display: none;
+  }
+
+  .subtopics {
+
+    &:last-child {
+      margin-bottom: 1.5em;
+    }
+
+    .card-deck {
+      margin: 0;
+    }
+  }
+}
+
+
+

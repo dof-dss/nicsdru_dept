@@ -1,0 +1,183 @@
+/*
+ * @file
+ * Provides the layout styles for common nics 2 column layouts.
+ */
+
+@import '../init';
+
+// Two Column layouts
+//
+// Commonly used 2 column page layouts. Two column layouts should, as a rule, have two child elements under the parent
+// grid wrapper. The grid items are set out using the `grid-template-columns` attribute, therefore when more child
+// elements sit under the grid parent wrapping element each additional element will be placed in the next available slot
+// in the grid-template-columns pattern.
+//
+// Grid structures are described with a `.layout--*` modifier class applied on the parent grid item. The available
+// two column modifiers are outlined in the examples below. Child items can have additional classes added to them to
+// assist with defining grid areas and these in turn also help with providing appropriate fall backs. For two column
+// grids, area identifier classes are `.ga-main` and `ga-side` and are used to describe whether the child element should
+// be positioned in the larger area of available grid space (`.ga-main`) or the smaller area of available grid space
+// (`.ga-side`).
+//
+// .layout--main-n-side - A two column layout for article style pages, with a right sidebar for useful links.
+// .layout--side-n-main - A two column layout for search style pages, with a left sidebar for widgets to scope results.
+// .layout--diptych - A two column layout where each column is an equal width.
+//
+// Markup: ../kss-templates/layouts-nics-2-col.twig
+//
+// Weight: -6
+//
+// Style guide: layouts.two-column
+.layout {
+  &--main-n-side,
+  &--side-n-main {
+
+    @include breakpoint($tab) {
+      grid-gap: 2.4rem;
+
+      .ga-main {
+        /* no grid support? */
+        float: left;
+        width: 62%;
+      }
+
+      .ga-aside {
+        /* no grid support? */
+        float: right;
+        width: 34%;
+      }
+    }
+
+    @include breakpoint($lap) {
+
+      grid-gap: 27px;
+
+      .ga-main {
+        /* no grid support? */
+        width: $article-float-max-width;
+      }
+
+      .ga-aside {
+        /* no grid support? */
+        width: $aside-float-max-width;
+      }
+    }
+
+    @include breakpoint($desk) {
+      grid-gap: 30px;
+    }
+  }
+
+  &--main-n-side {
+
+    // By default, main on top of side. On larger screens they go side by side.
+    grid-template-areas:
+      'main'
+      'side';
+
+    .ga-main {
+      grid-area: main;
+    }
+
+    .ga-aside {
+      grid-area: side;
+
+      @include breakpoint($tab) {
+        padding-top: 5em;
+      }
+    }
+
+    @include breakpoint($tab) {
+      // columns, grid-gap and container padding = 980
+      grid-template-columns: 590fr 310fr;
+      grid-gap: 3.2rem;
+      grid-template-rows: auto;
+      grid-template-areas: 'main side';
+    }
+
+    @include breakpoint($lap) {
+      // columns, grid-gap and container padding = 980
+      grid-template-columns: 590fr 300fr;
+      grid-gap: 3.6rem;
+      grid-template-rows: auto;
+      grid-template-areas: 'main side';
+    }
+
+    @include breakpoint($desk) {
+      // columns, grid-gap and container padding = 1140
+      grid-template-columns: 620fr 340fr;
+      grid-gap: 12rem;
+    }
+
+    @include breakpoint($desk-plus) {
+      // columns, grid-gap and container padding = 1140
+      grid-template-columns: 640fr 340fr;
+      grid-gap: 10rem;
+    }
+  }
+
+  &--side-n-main {
+
+    // By default, main on top of side. On larger screens they go side by side.
+    grid-template-areas:
+      'side'
+      'main';
+
+    .ga-main {
+      grid-area: main;
+    }
+
+    .ga-aside {
+      grid-area: side;
+    }
+
+    @include breakpoint($tab) {
+      grid-template-columns: 298fr 590fr;
+      grid-gap: 4.4rem;
+      grid-template-rows: auto;
+      grid-template-areas: 'side main';
+
+      .ga-main {
+        /* no grid support? */
+        float: right;
+      }
+
+      .ga-aside {
+        /* no grid support? */
+        float: left;
+      }
+    }
+
+    @include breakpoint($lap) {
+      grid-template-columns: 290fr 590fr;
+      grid-gap: 5.4rem;
+      grid-template-rows: auto;
+    }
+
+    @include breakpoint($desk) {
+      grid-template-columns: 290fr 670fr;
+      grid-gap: 6rem;
+      padding-right: 90px;
+    }
+
+    @include breakpoint($desk-plus) {
+      grid-template-columns: 290fr 730fr;
+      grid-gap: 6rem;
+      padding-right: 30px;
+    }
+  }
+
+  &--diptych {
+    @include breakpoint($tab) {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+      grid-gap: $grid-gap;
+
+      > * {
+        /* no grid support? */
+        float: left;
+        width: 50%;
+      }
+    }
+  }
+}
