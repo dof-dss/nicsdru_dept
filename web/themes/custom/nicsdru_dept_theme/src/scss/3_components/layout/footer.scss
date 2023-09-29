@@ -1,0 +1,28 @@
+/*
+ * @file
+ * Provides the layout styles for the footer area.
+ */
+@import '../../init';
+
+.footer {
+  width: 100%;
+  background-color: color(grey-light);
+  // Trick to make footer background-color extend to very bottom
+  // of viewport on short pages.
+  box-shadow: 0 50vh 0 50vh color(grey-light);
+  padding: 0 0 4.5em;
+  margin-top: 3em;
+  border-top: 5px solid var(--brand-primary-color);
+
+  .nav {
+    &-menu {
+      @include breakpoint($lap) {
+        margin-bottom: 0;
+      }
+    }
+
+    &-social {
+      grid-area: social;
+    }
+  }
+}

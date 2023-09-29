@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Theme implementation for the field_featured_content entity reference field.
+ * This is normally intended to act as a transparent container for the feature
+ * nodes rendering inside it.
+ *
+ * @see template_preprocess_field()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set link = department.id == 'nigov' ? '/press-releases' : '/news' %}
+
+{% set classes = ['card-deck', 'card-deck--list'] %}
+<div{{ attributes.addClass(classes) }}>
+{% for item in items|slice(0, 3) %}
+  {{ item.content }}
+{% endfor %}
+  <footer>
+    <a href="{{ link }}">More news...</a>
+  </footer>
+</div>

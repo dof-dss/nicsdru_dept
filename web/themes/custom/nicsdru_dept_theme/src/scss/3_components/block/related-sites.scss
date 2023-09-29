@@ -1,0 +1,18 @@
+@import '../../init';
+
+.related-websites-list {
+  list-style: none;
+  padding: 0;
+}
+
+.department-sites-first, .related-sites-first {
+  @include responsive-typo-map($large-text);
+  font-weight: bold;
+}
+
+.related-sites-first {
+  max-width: fit-content;
+  box-shadow: 0 -2px 0 0 var(--brand-primary-color);
+  margin-top: var(--rhythm-spacing-xxxl);
+  padding-top: var(--rhythm-spacing-xxl);
+}

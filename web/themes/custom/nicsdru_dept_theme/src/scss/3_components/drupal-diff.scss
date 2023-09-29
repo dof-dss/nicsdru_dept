@@ -1,0 +1,41 @@
+/*
+ * @file
+ * Provides the styling for content revision comparisons.
+ */
+
+@import '../init';
+
+.layout {
+  &--main-n-side {
+    .diff-responsive-table-wrapper {
+      ~ .ga-aside {
+        grid-area: unset;
+
+        @include breakpoint($tab) {
+          grid-row: 2;
+        }
+      }
+    }
+  }
+
+  &--main-limited {
+    .diff-responsive-table-wrapper {
+      grid-column: 1/3;
+      max-width: $max-content-width;
+    }
+  }
+}
+
+.call-to-action {
+  .diffins {
+    color: $text;
+  }
+}
+
+.diff-responsive-table-wrapper {
+  .field--name-field-notes-to-editors {
+    margin: 0;
+    padding: 0;
+    background-color: unset;
+  }
+}

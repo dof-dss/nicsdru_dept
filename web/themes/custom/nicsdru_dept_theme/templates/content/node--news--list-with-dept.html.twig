@@ -1,0 +1,11 @@
+{#
+/**
+ * @file
+ * Theme override to display a news node in a listing with dept subtitle.
+#}
+<a class="no-ext-icon" href="{{ url }}">
+  <span class="title">{{ label }}</span>
+  {% if department.id == 'nigov' %}
+  <span class="meta">{{ content.field_domain_source.0['#plain_text'] }}</span>
+  {% endif %}
+</a>

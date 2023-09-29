@@ -1,0 +1,239 @@
+/*
+ * @file
+ * Sets out the base behaviour of grouping elements.
+ */
+@import '../init';
+
+// Grouping content
+//
+// Weight: -5
+//
+// Style guide: base.grouping
+
+
+// Block quotes
+//
+// The `<blockquote>` element is for quoting blocks of content from another
+// source within your document. Wrap the `<blockquote>` around any <abbr
+// title="HyperText Markup Language">HTML</abbr> as the quote. For straight
+// quotes, we recommend a `<p>`.
+//
+// Optionally, add a `<footer>` to identify the source of the quote, wrapping
+// the name of the source work in `<cite>`.
+//
+// Markup: kss-templates/grouping-blockquote.twig
+//
+// Style guide: base.grouping.blockquote
+
+/*
+Add box-shadow to blockquote.
+*/
+blockquote {
+  border: 0;
+  box-shadow: 0 -1.5px 0 0 #e8e7e7, 0 1.5px 0 0 #e8e7e7;
+  padding: .5em 1.5em;
+  margin: 2em 0;
+
+  /*
+  If first in chain, only top box-shadow
+   */
+  &:has(+ blockquote) {
+    padding: .5em 1.5em 0;
+    margin: 2em 0 0;
+    box-shadow: 0 -1.5px 0 0 #e8e7e7;
+  }
+
+  /*
+  Remove box-shadow from subsequent blockquotes in a chain.
+  */
+  & + blockquote {
+    box-shadow: none;
+    padding: 0 1.5em;
+    margin: 0;
+
+    /*
+    Add bottom box-shadow to blockquote if it
+    is the last one or it is not followed by
+    another blockquote and it is not the first in the chain.
+    */
+    &:not(:first-of-type) {
+      &:last-of-type,
+      &:has(+ *:not(blockquote)) {
+        box-shadow: 0 1.5px 0 0 #e8e7e7;
+        padding: 0 1.5em .5em;
+        margin-bottom: 2em;
+      }
+    }
+  }
+
+
+
+  cite {
+    display: block;
+    font-style: italic;
+    text-align: right;
+  }
+}
+
+// Lists
+//
+// Weight: -1
+//
+// Style guide: base.grouping.lists
+
+// Unordered list
+//
+// The `<ul>` element is a list of items in which the order does <em>not</em>
+// explicitly matter.
+//
+// Markup: kss-templates/grouping-ul.twig
+//
+// Style guide: base.grouping.lists.ul
+
+// Ordered list
+//
+// The `<ol>` element is a list of items in which the order <em>does</em>
+// explicitly matter.
+//
+// Markup: kss-templates/grouping-ol.twig
+//
+// Style guide: base.grouping.lists.ol
+
+// Description list
+//
+// The `<dl>` element is a list of terms with their associated descriptions.
+//
+// Markup: kss-templates/grouping-dl.twig
+//
+// Weight: 1
+//
+// Style guide: base.grouping.lists.dl
+
+dl,
+menu,
+ol,
+ul {
+  // Address margins set differently in IE 6/7.
+  margin: 1em 0 1.5em;
+}
+
+// Turn off margins on nested lists.
+ol,
+ul {
+  ol,
+  ul {
+    margin: 0;
+  }
+}
+
+ol {
+  list-style-type: decimal;
+
+  ol {
+    list-style: upper-alpha;
+
+    ol {
+      list-style: lower-roman;
+
+      ol {
+        list-style: lower-alpha;
+      }
+    }
+  }
+}
+
+
+//dt {
+//   Add your styles.
+//}
+
+dd {
+  margin: 0 0 0 $indent-amount;
+}
+
+// Address padding's set differently in IE 6/7.
+menu,
+ol,
+ul {
+  padding: 0 0 0 $indent-amount;
+}
+
+li {
+  color: color(text);
+  margin-bottom: .5em;
+
+  // last list item - no margin bottom
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  // Generic styling for block elements nested in list items.
+  & > p {
+    margin: .5em 0;
+    vertical-align: top;
+  }
+
+  & > :first-child {
+    margin-top: 0;
+  }
+
+  & > :last-child {
+    margin-bottom: 0;
+  }
+
+  & > p:only-child,
+  & > p:first-of-type:last-of-type {
+    margin: 0;
+  }
+}
+
+// Figures
+//
+// The `<figure>` element can be used to annotate illustrations, diagrams,
+// photos, code listings, etc.
+//
+// Optionally, a `<figcaption>` element inside the `<figure>` represents the
+// caption of the figure.
+//
+// Markup: kss-templates/grouping-figure.twig
+//
+// Style guide: base.grouping.figure
+
+figure {
+  // Add the correct margin in IE 8.
+  margin: 0;
+}
+
+//figcaption {
+//  // Add your styles.
+//}
+
+// Horizontal rule
+//
+// The `<hr>` element represents a paragraph-level thematic break, e.g. a scene
+// change in a story, or a transition to another topic within a section of a
+// reference book.
+//
+// Markup: kss-templates/grouping-hr.twig
+//
+// Style guide: base.grouping.hr
+
+hr {
+  border: 0;
+  border-top: 1px solid color(border);
+  padding-bottom: -1px;
+  margin: 6px 0;
+}
+
+// Pre-formatted text
+//
+// The `<pre>` element represents a block of pre-formatted text, such as
+// fragments of computer code, ASCII art, etc.
+//
+// Markup: kss-templates/grouping-pre.twig
+//
+// Style guide: base.grouping.pre
+
+pre {
+  white-space: pre-wrap;
+}

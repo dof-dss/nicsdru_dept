@@ -1,0 +1,14 @@
+<div>
+  {% block content %}
+    {% if content['link'] %}
+      <a href="{{ content['link'] }}">
+    {% endif %}
+      {{ content['banner'] }}
+      {% if content['banner_overlay'] %}
+        {{ content['banner_overlay'] }}
+      {% endif %}
+    {% if content['link'] %}
+      </a>
+    {% endif %}
+  {% endblock %}
+</div>

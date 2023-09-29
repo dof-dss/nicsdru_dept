@@ -1,0 +1,138 @@
+/*
+ * @file
+ * Contact cards for telephone helplines.
+ */
+
+@import '../../init';
+
+.card--contact {
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+  height: 100%;
+  min-height: 8em;
+  padding: 1.5em;
+  margin: 1em 0 1.5em;
+  background-color: var(--brand-primary-color-high-contrast-white);
+  color: #fff;
+
+  .card-deck & {
+    margin: 0;
+    min-height: fit-content;
+  }
+
+  .card-deck &  {
+    @include breakpoint($tab) {
+      flex-flow: column nowrap;
+    }
+  }
+
+  &-black {
+    background-color: $charcoal;
+  }
+
+  &-green {
+    background-color: $hc-green;
+  }
+
+  &-orange {
+    background-color: $hc-orange;
+  }
+
+  &-red {
+    background-color: $hc-red;
+  }
+
+  &::before {
+    content: '';
+    flex: 7rem 0 0;
+    margin: .5em 1em .5em 0;
+    background: transparent resolve('phone.svg') top center no-repeat;
+    background-size: contain;
+
+    @include breakpoint($tab) {
+      flex: 10rem 0 0;
+
+      .card-deck & {
+        flex: 8rem 0 0;
+      }
+
+      .card-deck & {
+        flex: 100% 1 1;
+        min-height: 80px;
+        max-height: 140px;
+        margin: 0 0 1em;
+      }
+
+      .card-deck--list-to-x3 & {
+        max-height: 150px;
+      }
+    }
+
+    @include breakpoint($desk) {
+      flex: 12rem 0 0;
+
+      .card-deck--list-to-x3 & {
+        flex: 100% 1 1;
+      }
+    }
+  }
+
+  > * {
+    color: #fff;
+  }
+
+  .card__heading {
+    @include responsive-typo-map($large-text);
+    margin: 0;
+    color: #fff;
+  }
+
+  .card__content {
+    max-width: $max-content-width;
+    padding: 0;
+
+    > * {
+      color: #fff;
+      margin: 0 0 var(--rhythm-spacing-sm);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .tel {
+      display: flex;
+      flex-flow: column;
+
+      .title {
+        @include responsive-typo-map($large-text);
+        order: 0;
+      }
+
+      .value {
+        font-size: 2em;
+        line-height: 1.5;
+        order: 1;
+      }
+
+      a.value {
+        @include link-state-style($link-card--contact);
+      }
+
+      .supplementary {
+        @include responsive-typo-map($smallish-text);
+        order: 2;
+      }
+    }
+
+    p,
+    .tel > * {
+      .card-deck & {
+        @include breakpoint($tab) {
+          text-align: center;
+        }
+      }
+    }
+  }
+}
