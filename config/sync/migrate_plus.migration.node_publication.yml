@@ -37,12 +37,10 @@ process:
             source: target_id
   field_site_topics:
     -
-      plugin: get
+      plugin: merge
       source:
         - '@site_topics'
         - '@site_subtopics'
-    -
-      plugin: flatten
   langcode:
     -
       plugin: default_value
