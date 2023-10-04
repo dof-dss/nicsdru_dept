@@ -1,16 +1,17 @@
-uuid: a88f0773-d634-496c-a5ec-f1553fd95e49
+uuid: 7784ec66-5408-4038-abd8-c39790a90a44
 langcode: en
 status: true
 dependencies:
   module:
-    - block_visibility_groups
     - system
   theme:
     - claro
+_core:
+  default_config_hash: NjcxOBrPOiK5-38t56DwFBDVY4yer7YSlbRWXFuHe7A
 id: claro_breadcrumbs
 theme: claro
 region: breadcrumb
-weight: -3
+weight: 0
 provider: null
 plugin: system_breadcrumb_block
 settings:
@@ -18,8 +19,4 @@ settings:
   label: Breadcrumbs
   label_display: '0'
   provider: system
-visibility:
-  condition_group:
-    id: condition_group
-    negate: false
-    block_visibility_group: ''
+visibility: {  }

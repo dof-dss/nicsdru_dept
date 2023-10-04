@@ -1,12 +1,13 @@
-uuid: a9bde4ce-2f4d-4c2f-a7ee-080b1f2a0bca
+uuid: 8fe0c606-4fb5-4231-91cb-b8809fe8658d
 langcode: en
 status: true
 dependencies:
   module:
-    - block_visibility_groups
     - system
   theme:
     - claro
+_core:
+  default_config_hash: '-Ac3ISpIT0PQ-whzD7_dw0SdKi6dAbRFNWdSjOiVDqg'
 id: claro_messages
 theme: claro
 region: highlighted
@@ -15,11 +16,7 @@ provider: null
 plugin: system_messages_block
 settings:
   id: system_messages_block
-  label: Messages
+  label: 'Status messages'
   label_display: '0'
   provider: system
-visibility:
-  condition_group:
-    id: condition_group
-    negate: false
-    block_visibility_group: ''
+visibility: {  }

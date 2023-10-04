@@ -1,0 +1,179 @@
+/*
+ * @file
+ * Provides very specific styling for entities / content types.
+ */
+@import '../init';
+
+/*
+ * Application content type
+ * the wrapper around the application link field 'button' needs to inherit some spacing around the element to keep the
+ * pages vertical rhythm.
+ */
+.launch-service {
+  margin: 1.2rem 0;
+}
+
+/*
+ * Publication content type
+ */
+
+.page-node-type-publication,
+.page-node-type-news,
+.page-node-type-consultation {
+  .published-date {
+    @include responsive-typo-map($small-text);
+    margin: 1.8rem 0 .7rem; // Tightens up to the h1.
+    @include breakpoint($tab) {
+      margin: 2.1rem 0 .7rem;
+    };
+    @include breakpoint($desk-plus) {
+      margin: 2.5rem 0 1rem;
+    };
+  }
+
+  .file-link {
+    margin-bottom: 1.5em;
+  }
+}
+
+.page-node-type-publication .last-updated {
+  @include responsive-typo-map($small-text);
+  margin: .7rem 0;
+}
+
+.path-taxonomy {
+  .social-sharing {
+    margin: 3em 0;
+  }
+}
+
+.page-node-type-publication,
+.page-node-type-embargoed-publication,
+.page-node-type-consultation,
+.page-node-type-subtopic {
+  .narrow-title {
+    @include breakpoint($phab) {
+      width: 83.33%;
+    }
+
+    @include breakpoint($lap) {
+      width: 75%;
+    }
+  }
+}
+
+.path-publications h1,
+.path-consultations h1,
+.path-news h1 {
+  @include breakpoint($phab) {
+    width: 83.33%;
+  }
+
+  @include breakpoint($lap) {
+    width: 75%;
+  }
+}
+
+.page-node-type-topic {
+
+  .field-photo .media-image {
+
+    margin: 0 0 1.5em;
+
+    @include breakpoint($tab) {
+      width: 40%;
+      max-width: 350px;
+      float: right;
+      margin: 0 0 0 10vw;
+    }
+
+    img {
+      max-height: 200px;
+      object-fit: cover;
+      margin: 0;
+    }
+
+    figcaption {
+      display: none;
+    }
+  }
+
+  .page-summary {
+
+    // Clear floats.
+    &::after {
+      content: '';
+      display: block;
+      width: 100%;
+      clear: both;
+    }
+
+    p {
+
+      @include breakpoint($tab) {
+        margin-top: var(--rhythm-spacing-sm);
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .field-photo ~ .page-summary p {
+    @include responsive-typo-map($xl-text);
+  }
+
+  .page-summary ~ .article-content {
+    padding-top: .5em;
+    box-shadow: 0 -1.5px 0 0 var(--brand-primary-color);
+
+    > *:first-child {
+      margin-top: var(--rhythm-spacing-xxl);
+    }
+  }
+
+  .article-content {
+
+    * {
+      max-width: $max-content-width;
+    }
+
+    .field-photo .media-image {
+
+      @include breakpoint($tab) {
+        float: right;
+        max-width: 300px;
+        margin: 0 0 1.5em 1.5em;
+      }
+    }
+
+    // Clear floats.
+    &::after {
+      display: table-cell;
+      width: 100%;
+      clear: both;
+      height: 1em;
+      content: '';
+    }
+  }
+
+  .subtopics {
+    box-shadow: 0 -1.5px 0 0 var(--brand-primary-color);
+    margin-top: 2em;
+    padding-top: 2em;
+  }
+
+  .article-content + .subtopics {
+    margin-top: .5em;
+    padding-top: 2em;
+  }
+}
+
+.site-book {
+  margin-top: 0;
+}
+
+.site-topics:has(+ .site-book) {
+  margin-bottom: 0;
+}

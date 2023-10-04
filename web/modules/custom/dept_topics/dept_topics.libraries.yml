@@ -35,3 +35,21 @@ topic_tree_widget:
   dependencies:
     - core/jquery
     - core/drupalSettings
+child_order:
+  version: 1.x
+  css:
+    theme:
+      css/child-order.css: { }
+  js:
+    js/child_order_modal.js: { }
+  dependencies:
+    - core/jquery
+    - core/jquery.form
+    - core/drupal.dialog.ajax
+    - core/drupal.tabledrag
+moderation_sidebar:
+  version: 1.x
+  css:
+    theme:
+      css/moderation-sidebar.css: { }
+

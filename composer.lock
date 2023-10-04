@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "01f31dcccaf3d9111e04f939b8cf5fe1",
+    "content-hash": "a1e56c4cdb71b6c6773276da292aaf78",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1689,85 +1689,6 @@
             "time": "2023-05-17T18:32:04+00:00"
         },
         {
-            "name": "dof-dss/nicsdru_dept_theme",
-            "version": "0.0.25",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dof-dss/nicsdru_dept_theme.git",
-                "reference": "eca2caf73f7ef32d1d707a79e6fd463ff8a569ed"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_dept_theme/zipball/eca2caf73f7ef32d1d707a79e6fd463ff8a569ed",
-                "reference": "eca2caf73f7ef32d1d707a79e6fd463ff8a569ed",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.0"
-            },
-            "type": "drupal-custom-theme",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "David Corbett",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "Drupal 9 base theme",
-            "homepage": "https://github.com/dof-dss/nicsdru_dept_theme",
-            "keywords": [
-                "drupal",
-                "theme"
-            ],
-            "support": {
-                "issues": "https://github.com/dof-dss/nicsdru_dept_theme/issues",
-                "source": "https://github.com/dof-dss/nicsdru_dept_theme/tree/0.0.25"
-            },
-            "time": "2023-08-30T15:03:39+00:00"
-        },
-        {
-            "name": "dof-dss/nicsdru_nidirect_theme",
-            "version": "2.1.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dof-dss/nicsdru_nidirect_theme.git",
-                "reference": "cee13000245186376993b229186e5c45d7531227"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_nidirect_theme/zipball/cee13000245186376993b229186e5c45d7531227",
-                "reference": "cee13000245186376993b229186e5c45d7531227",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.0"
-            },
-            "type": "drupal-custom-theme",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "David Corbett",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "Drupal 8 theme for nidirect website",
-            "homepage": "https://github.com/dof-dss/nicsdru_nidirect_theme",
-            "keywords": [
-                "drupal",
-                "theme"
-            ],
-            "support": {
-                "source": "https://github.com/dof-dss/nicsdru_nidirect_theme/tree/2.1.7"
-            },
-            "time": "2023-03-06T14:11:09+00:00"
-        },
-        {
             "name": "dof-dss/nicsdru_origins_modules",
             "version": "10.1.1",
             "source": {
@@ -2089,58 +2010,6 @@
             "homepage": "https://www.drupal.org/project/antibot",
             "support": {
                 "source": "https://git.drupalcode.org/project/antibot"
-            }
-        },
-        {
-            "name": "drupal/bartik",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/bartik.git",
-                "reference": "1.0.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/bartik-1.0.2.zip",
-                "reference": "1.0.2",
-                "shasum": "3b1acc601c21fae5584ebc4a3b8c9d7b8a48a431"
-            },
-            "require": {
-                "drupal/core": "^9 || ^10"
-            },
-            "type": "drupal-theme",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.2",
-                    "datestamp": "1660912287",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "bnjmnm",
-                    "homepage": "https://www.drupal.org/user/2369194"
-                },
-                {
-                    "name": "jensimmons",
-                    "homepage": "https://www.drupal.org/user/140882"
-                },
-                {
-                    "name": "lauriii",
-                    "homepage": "https://www.drupal.org/user/1078742"
-                }
-            ],
-            "description": "The Bartik theme from Drupal 8/9 moved to contrib.",
-            "homepage": "https://www.drupal.org/project/bartik",
-            "support": {
-                "source": "https://git.drupalcode.org/project/bartik"
             }
         },
         {

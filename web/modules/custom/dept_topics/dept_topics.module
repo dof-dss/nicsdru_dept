@@ -6,6 +6,7 @@
  * of topics, subtopics and related content.
  */
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -44,9 +45,43 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
         '#title' => 'Add ' . $label,
         '#type' => 'link',
         '#url' => Url::fromRoute('node.add', ['node_type' => $bundle], ['query' => ['topic' => $context->id()]]),
-        '#attributes' => ['class' => ['moderation-sidebar-link', 'button']],
+        '#attributes' => [
+          'class' => [
+            'moderation-sidebar-link',
+            'button',
+            'button--secondary'
+          ],
+        ],
       ];
     }
+
+    $build['#attached']['library'][] = 'dept_topics/moderation_sidebar';
+
+  }
+
+  if ($context->bundle() === 'subtopic') {
+    $build['actions']['secondary']['order_child_topics'] = [
+      '#title' => t('Reorder child content'),
+      '#type' => 'link',
+      '#url' => Url::fromRoute('dept_topics.topic_child_order.form', ['node' => $context->id()], ['query' => ['topic' => $context->id()]]),
+      '#attributes' => [
+        'class' => [
+          'moderation-sidebar-link',
+          'button',
+          'button--tertiary',
+          'use-ajax'
+        ],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => Json::encode([
+          'title' => t('Topic contents'),
+          'width' => 800,
+          'minHeight' => 500,
+          'position' => ['my' => 'center top', 'at' => 'center top'],
+          'draggable' => TRUE,
+          'autoResize' => FALSE,
+        ]),
+      ],
+    ];
   }
 }
 
@@ -324,4 +359,13 @@ function dept_topics_clear_child_caches($node) {
 
     Cache::invalidateTags($child_cache_tags);
   }
+}
+
+/**
+ * Implements hook_entity_type_build().
+ */
+function dept_topics_entity_type_build(array &$entity_types) {
+  // Set the default Core node form for our custom Form mode as
+  // we don't need a custom class to override anything.
+  $entity_types['node']->setFormClass('child_order', 'Drupal\node\NodeForm');
 }

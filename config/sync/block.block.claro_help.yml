@@ -1,12 +1,13 @@
-uuid: eefd6dc7-5bc2-4c4d-9573-6199f064077f
+uuid: cc1f3fed-e18a-45f8-a750-60ce94260737
 langcode: en
 status: true
 dependencies:
   module:
-    - block_visibility_groups
     - help
   theme:
     - claro
+_core:
+  default_config_hash: jccFSSVqV0WCDb6NtML1VWAWTtDbZ-zn5YgTRMgMrIM
 id: claro_help
 theme: claro
 region: help
@@ -18,8 +19,4 @@ settings:
   label: Help
   label_display: '0'
   provider: help
-visibility:
-  condition_group:
-    id: condition_group
-    negate: false
-    block_visibility_group: ''
+visibility: {  }

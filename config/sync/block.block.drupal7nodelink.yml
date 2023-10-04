@@ -1,14 +1,14 @@
 uuid: 7c296ba6-7d49-4bc7-9bba-e6007da03876
 langcode: en
-status: true
+status: false
 dependencies:
   module:
     - dept_dev
     - system
   theme:
-    - bartik
+    - claro
 id: drupal7nodelink
-theme: bartik
+theme: claro
 region: content
 weight: -7
 provider: null

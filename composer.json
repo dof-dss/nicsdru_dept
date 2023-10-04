@@ -60,15 +60,12 @@
         "composer/installers": "^2.0",
         "cweagans/composer-patches": "^1.7",
         "deaemth/easychart": "^3.1",
-        "dof-dss/nicsdru_dept_theme": "^0.0.25",
-        "dof-dss/nicsdru_nidirect_theme": "*",
         "dof-dss/nicsdru_origins_modules": "^10.1",
         "dof-dss/nicsdru_origins_theme": "^10.1",
         "drupal/address": "^1.11",
         "drupal/admin_toolbar": "^3.3",
         "drupal/adminimal_theme": "^1.7",
         "drupal/antibot": "^2.0",
-        "drupal/bartik": "^1.0",
         "drupal/block_field": "^1.0@RC",
         "drupal/block_visibility_groups": "^2.0",
         "drupal/chosen": "^3.0",
@@ -253,6 +250,9 @@
         "patches": {
             "drupal/address": {
                 "Allow to set a list of preferred countries": "https://www.drupal.org/files/issues/2023-01-06/2626982-45.preferred_countries.patch"
+            },
+            "drupal/admin_toolbar": {
+              "Add multi column menu dropdown": "https://www.drupal.org/files/issues/2023-10-02/admin_toolbar-added_multi_column_menu_dropdown-2917168-53_0.patch"
             },
             "drupal/core": {
                 "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch",

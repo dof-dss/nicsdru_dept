@@ -1,0 +1,23 @@
+/*
+ * @file
+ * There are many horizontal rules on the departmental sites, that need to be
+ * styled differently to standard horizontal rules
+ */
+
+@import '../init';
+
+.section-hr {
+  width: 100%;
+  margin: 0 10px;
+  border: 0;
+  height: 5px;
+  background: $brand-secondary;
+}
+
+.nav-main {
+  .section-hr {
+    @media screen and (max-width: $tab) {
+      height: 0;
+    }
+  }
+}

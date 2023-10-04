@@ -1,0 +1,411 @@
+/*
+ * @file
+ * Provides very specific styling for home page.
+ */
+@import '../init';
+
+.section-front {
+  padding: 0 0 1.5em;
+  margin: 0 0 1em;
+  box-shadow: 0 -5px 0 0 var(--brand-primary-color);
+
+  &:first-child {
+    box-shadow: none;
+  }
+
+  &__sub-section:not(:last-child) {
+    margin-bottom: 2.5em;
+
+    @include breakpoint($tab) {
+      margin-bottom: 0;
+    }
+  }
+
+  h2 {
+    @include responsive-typo-map($section-home-h2);
+  }
+
+  p {
+    max-width: $max-content-width;
+  }
+
+  p,
+  ul,
+  li {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .meta {
+    @include responsive-typo-map($small-text);
+    display: block;
+    margin-top: var(--rhythm-spacing-xs);
+    color: $ash-grey;
+
+    > * {
+      display: inline-block;
+      margin-right: 1.5em;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .more-link a,
+  a.more {
+    font-weight: bold;
+  }
+
+  &--minor {
+    h2 {
+      @include responsive-typo-map($h2-text);
+    }
+  }
+
+  &--quick-links,
+  &--latest-news,
+  &--corporate-links {
+
+    @include breakpoint($tab) {
+      padding: 0 .5em 1.5em;
+      box-shadow: none;
+    }
+
+    li {
+      margin-bottom: .5em;
+    }
+
+    a {
+      @include responsive-typo-map($smallish-text);
+      display: block;
+
+      &:has(.title) {
+        text-decoration: none;
+      }
+
+      .title {
+        text-decoration: underline;
+        // sass-lint:disable no-misspelled-properties
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+        // sass-lint:enable no-misspelled-properties
+      }
+
+      &:hover .title {
+        // sass-lint:disable no-misspelled-properties
+        text-decoration-thickness: 2px;
+        // sass-lint:enable no-misspelled-properties
+      }
+    }
+  }
+
+  &--latest-news {
+    a:focus {
+      .meta {
+        color: $grey-light;
+      }
+    }
+
+    a:hover {
+      .meta {
+        color: $ash-grey;
+      }
+    }
+  }
+
+  &--social-links {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: flex-start;
+    box-shadow: none;
+    padding: 0 .5em 1.5em;
+
+    h2 {
+      @include responsive-typo-map($sub-section-home-h2);
+      min-width: fit-content;
+      margin: 0 7px 0 0;
+      font-weight: bold;
+      color: #4d4d4d;
+    }
+
+    .social-links,
+    li.list-item {
+      display: flex;
+      flex-flow: row wrap;
+      margin: 0;
+      padding: 0;
+    }
+
+    .social-links {
+      li.list-item {
+        margin: .25em;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        @include breakpoint($tab $desk-plus) {
+          margin: .1667em;
+        }
+      }
+
+      a {
+        display: inline-block;
+        width: 2.5em;
+        height: 2.5em;
+        min-width: 44px;
+        min-height: 44px;
+        margin: 0;
+        background: #4d4d4d center center / 1.75em auto no-repeat;
+        transition: background-color .2s ease-in-out, transform .2s ease-in-out;
+
+        &:focus,
+        &:hover {
+          background-color: var(--brand-primary-color-high-contrast-white);
+        }
+
+        &:focus {
+          @include high-vis-focus(white);
+          transform: scale(1.1);
+        }
+
+        &[href*='twitter.com/'] {
+          background-image: url('/themes/custom/nicsdru_dept_theme/images/twitter.svg');
+          background-size: 1.2em auto;
+        }
+
+        &[href*='facebook.com/'] {
+          background-image: url('/themes/custom/nicsdru_dept_theme/images/facebook.svg');
+          background-size: 1.6667em auto;
+        }
+
+        &[href*='flickr.com/'] {
+          background-image: url('/themes/custom/nicsdru_dept_theme/images/flickr.svg');
+          background-size: 2em auto;
+        }
+
+        &[href*='youtube.com/'] {
+          background-image: url('/themes/custom/nicsdru_dept_theme/images/youtube.svg');
+          background-size: 2em auto;
+        }
+
+        &[href*='instagram.com/'] {
+          background-image: url('/themes/custom/nicsdru_dept_theme/images/instagram.svg');
+          background-size: 1.3em auto;
+        }
+
+        &[href*='linkedin.com/'] {
+          background-image: url('/themes/custom/nicsdru_dept_theme/images/linkedin.svg');
+        }
+      }
+    }
+  }
+
+  &.section--featured {
+
+    .card-deck {
+      margin-bottom: 0;
+    }
+
+    article {
+      box-shadow: 0 1px 0 0 $grey-medium;
+      padding-bottom: var(--rhythm-spacing);
+
+      .card {
+        display: flex;
+        flex-flow: row nowrap;
+      }
+
+      .card__image {
+        flex: 0 0 13rem;
+        margin-bottom: var(--rhythm-spacing-sm);
+        padding-right: var(--rhythm-spacing);
+        max-width: 50%;
+
+        @include breakpoint($phab) {
+          flex-basis: 16.5rem;
+        }
+      }
+
+      .card__body {
+        padding: 0;
+
+        .card__title {
+          @include responsive-typo-map($featured-news-h3-small);
+          margin: 0 0 var(--rhythm-spacing-sm);
+        }
+
+        p {
+          margin: var(--rhythm-spacing-xs) 0 0;
+        }
+
+        .card__meta {
+          margin: var(--rhythm-spacing-xs) 0;
+
+          > * {
+            margin: 0 var(--rhythm-spacing) var(--rhythm-spacing-xs) 0;
+
+            &:last-child {
+              margin: var(--rhythm-spacing-xs) 0 0;
+            }
+          }
+        }
+      }
+
+      &:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+
+        a {
+          flex-wrap: wrap;
+
+          @include breakpoint($phab) {
+            flex-wrap: nowrap;
+          }
+        }
+
+        .card__image {
+          flex-basis: 100%;
+          padding-right: 0;
+          max-width: 100%;
+
+          @include breakpoint($phab) {
+            flex-basis: 41%;
+            min-width: 16.5rem;
+          }
+        }
+
+        .card__body {
+          align-self: auto;
+          padding-left: 0;
+
+          @include breakpoint($phab) {
+            padding-left: var(--rhythm-spacing-lg);
+          }
+
+          .card__title {
+            @include responsive-typo-map($h3-text-no-margin);
+            margin: 0 0 var(--rhythm-spacing-sm);
+          }
+        }
+      }
+
+      &:last-of-type {
+        box-shadow: none;
+      }
+    }
+
+    footer {
+      line-height: 3em;
+
+      a {
+        @include responsive-typo-map($h3-text);
+        @include link-state-style($link-body-no-visited);
+        font-weight: bold;
+        margin: 0;
+      }
+    }
+  }
+
+  &--topics {
+    .card-deck--topics {
+      margin-bottom: 0;
+    }
+  }
+
+  .niexec-budget,
+  .niexec-pfg {
+    .card {
+      box-shadow: none;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      grid-column-gap: 1em;
+
+      &__title {
+        grid-column: 1 / span 2;
+      }
+
+      &__image {
+        grid-column: 1;
+      }
+
+      &__body {
+        grid-column: 2;
+
+        > *:first-child {
+          margin-top: 0;
+        }
+
+        > * {
+          @include responsive-typo-map($smallish-text);
+        }
+      }
+    }
+  }
+
+  &--agency-links {
+    ul {
+      @include breakpoint($tab) {
+        columns: 2;
+        column-gap: 3em;
+        margin: 0;
+      }
+    }
+  }
+
+  &--our-documents {
+
+    h3 {
+      margin-top: 0;
+    }
+
+    li {
+      padding: 0;
+      margin: 0;
+    }
+
+    .card {
+      box-shadow: 0 1px 0 0 $grey-medium;
+      padding: 0 0 1em;
+      margin: 0 0 1em;
+    }
+
+    .card__title:not(h3) {
+      @include responsive-typo-map($normal-text-no-margins);
+    }
+  }
+
+  &--access-to-information {
+    box-shadow: 0 5px 0 0 var(--brand-primary-color);
+
+    h2 {
+      margin-top: 0;
+    }
+  }
+
+  &--about-us,
+  &--corporate-links {
+
+    box-shadow: none;
+
+    @at-root .dept-nigov & {
+      margin-top: 1.5em;
+      box-shadow: 0 -5px 0 0 var(--brand-primary-color);
+    }
+  }
+
+  &--contact-us {
+    box-shadow: 0 -1px 0 0 $grey-medium;
+
+    a.more {
+      @include responsive-typo-map($large-text);
+    }
+  }
+}

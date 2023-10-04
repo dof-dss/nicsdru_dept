@@ -1,0 +1,67 @@
+@import '../../init';
+
+.section-related {
+  display: grid;
+  grid-gap: 1.5em 3em;
+  margin-top: 1.5em;
+  box-shadow: 0 -3.5px 0 0 var(--brand-primary-color);
+
+  @include breakpoint($tab) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  h2:first-child {
+    @include breakpoint($tab) {
+      grid-column: 1 / span 2;
+    }
+    margin-bottom: 0;
+  }
+
+  &__sub-section {
+    grid-column: auto;
+    padding-bottom: 1em;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+
+  ul,
+  li {
+    padding: 0;
+    margin: 0;
+  }
+
+  .card {
+    box-shadow: 0 1px 0 0 $grey-medium;
+    padding: 0 0 1em;
+    margin: 0 0 1em;
+  }
+
+  .card__title {
+    @include responsive-typo-map($normal-text-no-margins);
+    margin-bottom: 0;
+  }
+
+  .card__meta {
+    margin: .5em 0 0;
+
+    > * {
+      margin: 0 1.5em 0 0;
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+  }
+
+  .more-link a,
+  a.more {
+    font-weight: bold;
+  }
+
+  #block-related-departmental-details-access-info p {
+    @include responsive-typo-map($smallish-text);
+    margin: var(--rhythm-spacing-sm) 0 var(--rhythm-spacing);
+  }
+}

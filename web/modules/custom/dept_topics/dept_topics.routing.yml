@@ -14,3 +14,17 @@ dept_topics.topic_tree.form:
     selected: ''
   requirements:
     _permission: 'use topic tree widget'
+
+dept_topics.topic_child_order.form:
+  path: '/admin/topics/order/{node}'
+  defaults:
+    _title: 'Topic child order'
+    _controller: '\Drupal\dept_topics\Controller\ChildOrderFormController::build'
+    selected: ''
+  options:
+    parameters:
+      node:
+        type: entity:node
+  requirements:
+    _role: 'topic_supervisor+administrator'
+
