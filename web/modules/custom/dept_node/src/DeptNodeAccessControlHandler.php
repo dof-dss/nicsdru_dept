@@ -7,7 +7,6 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\dept_core\DepartmentManager;
-use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeAccessControlHandler;
 use Drupal\node\NodeGrantDatabaseStorageInterface;
 
@@ -16,6 +15,11 @@ use Drupal\node\NodeGrantDatabaseStorageInterface;
  */
 class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
 
+  /**
+   *  The Department Manager service.
+   *
+   * @var \Drupal\dept_core\DepartmentManager
+   */
   protected DepartmentManager $departmentManager;
 
   /**
@@ -39,12 +43,12 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
    */
   public function createAccess($entity_bundle = NULL, AccountInterface $account = NULL, array $context = [], $return_as_object = FALSE) {
 
-    $node_type = NodeType::load($entity_bundle);
+    $node_type = $this->entityTypeManager->getStorage('node_type')->load($entity_bundle);
     $department_restrictions = $node_type->getThirdPartySetting('departmental_entity_restrictions', 'departments', NULL);
 
     if (!empty($department_restrictions)) {
+      // Filter as storage uses 0 to denote an unchecked department.
       $departments = array_filter($department_restrictions, 'is_string');
-
       $current_dept = $this->departmentManager->getCurrentDepartment();
 
       if (!in_array($current_dept, $departments)) {
@@ -52,7 +56,7 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
       }
     }
 
-    return parent::createAccess($entity_bundle, $account, $context, TRUE)->cachePerPermissions();
+    return parent::createAccess($entity_bundle, $account, $context, TRUE);
   }
 
 }

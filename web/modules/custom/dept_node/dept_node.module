@@ -5,18 +5,14 @@
  * Departmental Node module for Departmental sites.
  */
 
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\dept_node\Entity\Node;
 use Drupal\dept_node\Form\DeptNodeForm;
 use Drupal\dept_node\FormatHelper;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
-use Drupal\node\NodeTypeInterface;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -109,11 +105,6 @@ function dept_node_theme($existing, $type, $theme, $path) {
  * Implements hook_preprocess_node().
  */
 function dept_node_preprocess_node(array &$variables) {
-
-  $path = \Drupal::service('extension.list.module')->getPath('dept_node');
-  $config = \Drupal::service('config.factory')->getEditable('node.type.*.third_party.dept_node');
-  ksm($path, $config);
-
   /** @var \Drupal\node\NodeInterface $node */
   $node = &$variables['node'];
   $view_mode = $variables['view_mode'];
@@ -249,7 +240,6 @@ function dept_node_entity_type_build(array &$entity_types) {
   $entity_types['node']->setHandlerClass('access', '\Drupal\dept_node\DeptNodeAccessControlHandler');
 }
 
-
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
@@ -291,5 +281,5 @@ function dept_node_form_node_type_form_alter(&$form, FormStateInterface $form_st
  * Entity builder for the dept_node_form_node_type_form_alter().
  */
 function dept_node_form_node_type_form_builder($entity_type, $type, &$form, $form_state) {
-  $type->setThirdPartySetting('departmental_entity_restrictions', 'departments', $form_state->getValue('departments'));;
+  $type->setThirdPartySetting('departmental_entity_restrictions', 'departments', $form_state->getValue('departments'));
 }
