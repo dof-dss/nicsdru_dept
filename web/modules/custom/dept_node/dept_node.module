@@ -5,9 +5,11 @@
  * Departmental Node module for Departmental sites.
  */
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\dept_node\Entity\Node;
 use Drupal\dept_node\Form\DeptNodeForm;
@@ -231,4 +233,11 @@ function dept_node_pathauto_alias_alter(&$alias, array &$context) {
       \Drupal::messenger()->addMessage("A url alias for this content is already in use so additional text has been appended to the end. You can $update_link", MessengerInterface::TYPE_WARNING);
     }
   }
+}
+
+/**
+ * Implements hook_entity_type_build().
+ */
+function dept_node_entity_type_build(array &$entity_types) {
+  $entity_types['node']->setHandlerClass('access', '\Drupal\dept_node\DeptNodeAccessControlHandler');
 }
