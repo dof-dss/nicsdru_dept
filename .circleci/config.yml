@@ -184,10 +184,10 @@ commands:
     description: "Switch dof-dss packages to HEAD on development branch"
     steps:
       - run:
-          name: Switch dof-dss packages to HEAD on develelopment branch
+          name: Switch dof-dss packages to HEAD on dev branches
           command: |
-            composer require dof-dss/nicsdru_origins_theme:dev-9.x-dev \
-              dof-dss/nicsdru_origins_modules:dev-9.x-dev
+            composer require dof-dss/nicsdru_origins_theme:dev-10.x-dev \
+              dof-dss/nicsdru_origins_modules:dev-10.x-dev
   hosts_keyscan:
     description: "Keyscan for hosts that require SSH access"
     steps:
