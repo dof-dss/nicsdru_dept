@@ -27,12 +27,14 @@ dependencies:
     - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
+    - dept_topics
     - domain_access
     - filter
     - media
     - node
     - scheduled_transitions
     - scheduler
+    - view_unpublished
 _core:
   default_config_hash: 3Ozx7iL-HRO465AnGS4QvafYPacfOKCsg_3eLgClUAg
 id: author
@@ -40,11 +42,8 @@ label: Author
 weight: 2
 is_admin: null
 permissions:
-  - 'access ckeditor link'
   - 'access content overview'
   - 'access media overview'
-  - 'access workbench'
-  - 'add media from remote sources'
   - 'add scheduled transitions node application'
   - 'add scheduled transitions node article'
   - 'add scheduled transitions node consultation'
@@ -68,13 +67,11 @@ permissions:
   - 'create contact content'
   - 'create contact content on assigned domains'
   - 'create document media'
-  - 'create files'
   - 'create gallery content'
   - 'create gallery content on assigned domains'
   - 'create heritage_site content'
   - 'create heritage_site content on assigned domains'
   - 'create image media'
-  - 'create irish_news content on assigned domains'
   - 'create media'
   - 'create news content'
   - 'create news content on assigned domains'
@@ -92,21 +89,12 @@ permissions:
   - 'create ual content on assigned domains'
   - 'create video media'
   - 'delete media'
-  - 'download any audio files'
-  - 'download any document files'
-  - 'download any image files'
-  - 'download any video files'
-  - 'download own audio files'
-  - 'download own document files'
-  - 'download own image files'
-  - 'download own video files'
   - 'edit any actions content'
   - 'edit any application content'
   - 'edit any article content'
   - 'edit any audio media'
   - 'edit any consultation content'
   - 'edit any contact content'
-  - 'edit any document files'
   - 'edit any document media'
   - 'edit any gallery content'
   - 'edit any heritage_site content'
@@ -120,12 +108,6 @@ permissions:
   - 'edit any secure_file media'
   - 'edit any ual content'
   - 'edit any video media'
-  - 'edit own audio files'
-  - 'edit own document files'
-  - 'edit own image files'
-  - 'edit own video files'
-  - 'moderate content from draft to needs_review'
-  - 'moderate content from needs_review to draft'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
   - 'reschedule scheduled transitions node consultation'
@@ -158,7 +140,6 @@ permissions:
   - 'update contact content on assigned domains'
   - 'update gallery content on assigned domains'
   - 'update heritage_site content on assigned domains'
-  - 'update irish_news content on assigned domains'
   - 'update media'
   - 'update news content on assigned domains'
   - 'update profile content on assigned domains'
@@ -173,8 +154,6 @@ permissions:
   - 'use text format filtered_html'
   - 'use text format filtered_html_with_no_images'
   - 'use topic tree widget'
-  - 'use workbench_moderation my drafts tab'
-  - 'use workbench_moderation needs review tab'
   - 'view actions revisions'
   - 'view all media revisions'
   - 'view all revisions'
@@ -185,7 +164,6 @@ permissions:
   - 'view any unpublished content'
   - 'view any unpublished gallery content'
   - 'view any unpublished heritage_site content'
-  - 'view any unpublished irish_news content'
   - 'view any unpublished news content'
   - 'view any unpublished profile content'
   - 'view any unpublished project content'
@@ -198,10 +176,7 @@ permissions:
   - 'view contact revisions'
   - 'view gallery revisions'
   - 'view heritage_site revisions'
-  - 'view moderation history'
-  - 'view moderation messages'
   - 'view news revisions'
-  - 'view own files'
   - 'view profile revisions'
   - 'view project revisions'
   - 'view protected_area revisions'

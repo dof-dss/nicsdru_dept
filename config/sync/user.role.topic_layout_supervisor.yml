@@ -11,12 +11,14 @@ dependencies:
     - node.type.topic
   module:
     - content_moderation
+    - dept_topics
     - domain_access
     - filter
     - layout_builder
     - media
     - node
     - scheduled_transitions
+    - view_unpublished
 id: topic_layout_supervisor
 label: 'Topic layout supervisor'
 weight: 10

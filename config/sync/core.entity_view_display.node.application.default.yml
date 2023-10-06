@@ -15,7 +15,6 @@ dependencies:
     - field.field.node.application.field_summary
     - node.type.application
   module:
-    - dept_topics
     - link
     - metatag
     - smart_trim
@@ -60,11 +59,12 @@ content:
     weight: 5
     region: content
   field_site_topics:
-    type: dept_topics_topic_tags
-    label: inline
-    settings: {  }
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
     third_party_settings: {  }
-    weight: 0
+    weight: 6
     region: content
   field_summary:
     type: smart_trim

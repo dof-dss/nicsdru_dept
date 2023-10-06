@@ -5,7 +5,6 @@ dependencies:
   config:
     - facets.facet.publication_topics
   module:
-    - block_visibility_groups
     - facets
     - system
   theme:
@@ -13,7 +12,7 @@ dependencies:
 id: publication_topics
 theme: nicsdru_dept_theme
 region: sidebar_first
-weight: -17
+weight: -13
 provider: null
 plugin: 'facet_block:publication_topics'
 settings:
@@ -27,8 +26,4 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: "/publications\r\n/publications/topic/*\r\n/publications/type/*\r\n/publications/date/*\r\n/publications/dept/*"
-  condition_group:
-    id: condition_group
-    negate: false
-    block_visibility_group: ''
+    pages: "/publications\r\n/publications/*"

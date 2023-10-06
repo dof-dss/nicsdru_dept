@@ -232,6 +232,7 @@ function dept_core_department_links(): array {
   $department_ids = $dept_storage->getQuery()
     ->condition('status', TRUE)
     ->sort('weight')
+    ->accessCheck(FALSE)
     ->execute();
 
   $departments = $dept_storage->loadMultiple($department_ids);

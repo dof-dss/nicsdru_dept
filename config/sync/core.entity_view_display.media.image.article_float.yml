@@ -28,12 +28,16 @@ content:
     settings:
       responsive_image_style: inline
       image_link: ''
+      image_loading:
+        attribute: eager
     third_party_settings: {  }
     weight: 0
     region: content
 hidden:
   created: true
   field_caption: true
+  field_domain_access: true
+  field_domain_source: true
   langcode: true
   name: true
   search_api_excerpt: true

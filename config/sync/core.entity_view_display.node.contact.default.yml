@@ -14,7 +14,6 @@ dependencies:
     - filter.format.plain_text
     - node.type.contact
   module:
-    - dept_topics
     - geolocation
     - metatag
     - user
@@ -112,11 +111,12 @@ content:
     weight: 1
     region: content
   field_site_topics:
-    type: dept_topics_topic_tags
-    label: inline
-    settings: {  }
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
     third_party_settings: {  }
-    weight: 0
+    weight: 3
     region: content
 hidden:
   body: true
