@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - node.type.actions
     - node.type.application
     - node.type.article
     - node.type.book
@@ -115,7 +114,6 @@ type_settings:
       weight: -2
   entity_types:
     node:
-      - actions
       - application
       - article
       - book
