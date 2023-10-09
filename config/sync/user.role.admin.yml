@@ -15,7 +15,6 @@ dependencies:
     - node.type.application
     - node.type.article
     - node.type.book
-    - node.type.case_study
     - node.type.consultation
     - node.type.contact
     - node.type.easychart
@@ -133,7 +132,6 @@ permissions:
   - 'create audio media'
   - 'create book content'
   - 'create book content on assigned domains'
-  - 'create case_study content'
   - 'create consultation content'
   - 'create consultation content on assigned domains'
   - 'create contact content'
@@ -186,7 +184,6 @@ permissions:
   - 'delete any article content'
   - 'delete any audio media'
   - 'delete any book content'
-  - 'delete any case_study content'
   - 'delete any consultation content'
   - 'delete any contact content'
   - 'delete any document media'
@@ -247,7 +244,6 @@ permissions:
   - 'edit any article content'
   - 'edit any audio media'
   - 'edit any book content'
-  - 'edit any case_study content'
   - 'edit any consultation content'
   - 'edit any contact content'
   - 'edit any document media'
@@ -390,7 +386,6 @@ permissions:
   - 'view application revisions'
   - 'view article revisions'
   - 'view book revisions'
-  - 'view case_study revisions'
   - 'view consultation revisions'
   - 'view contact revisions'
   - 'view easychart revisions'
