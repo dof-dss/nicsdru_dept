@@ -21,7 +21,6 @@ dependencies:
     - node.type.gallery
     - node.type.global_page
     - node.type.heritage_site
-    - node.type.infogram
     - node.type.landing_page
     - node.type.link
     - node.type.news
@@ -145,7 +144,6 @@ permissions:
   - 'create heritage_site content'
   - 'create heritage_site content on assigned domains'
   - 'create image media'
-  - 'create infogram content'
   - 'create landing_page content'
   - 'create landing_page content on assigned domains'
   - 'create link content'
@@ -189,7 +187,6 @@ permissions:
   - 'delete any global_page content'
   - 'delete any heritage_site content'
   - 'delete any image media'
-  - 'delete any infogram content'
   - 'delete any landing_page content'
   - 'delete any link content'
   - 'delete any media'
@@ -247,7 +244,6 @@ permissions:
   - 'edit any global_page content'
   - 'edit any heritage_site content'
   - 'edit any image media'
-  - 'edit any infogram content'
   - 'edit any landing_page content'
   - 'edit any link content'
   - 'edit any news content'
@@ -295,7 +291,6 @@ permissions:
   - 'revert gallery revisions'
   - 'revert global_page revisions'
   - 'revert heritage_site revisions'
-  - 'revert infogram revisions'
   - 'revert landing_page revisions'
   - 'revert link revisions'
   - 'revert news revisions'
@@ -382,7 +377,6 @@ permissions:
   - 'view gallery revisions'
   - 'view global_page revisions'
   - 'view heritage_site revisions'
-  - 'view infogram revisions'
   - 'view landing_page revisions'
   - 'view latest version'
   - 'view link revisions'
