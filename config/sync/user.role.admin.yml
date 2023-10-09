@@ -17,7 +17,6 @@ dependencies:
     - node.type.book
     - node.type.consultation
     - node.type.contact
-    - node.type.easychart
     - node.type.featured_content_list
     - node.type.gallery
     - node.type.global_page
@@ -137,7 +136,6 @@ permissions:
   - 'create contact content'
   - 'create contact content on assigned domains'
   - 'create document media'
-  - 'create easychart content'
   - 'create featured_content_list content'
   - 'create featured_content_list content on assigned domains'
   - 'create gallery content'
@@ -187,7 +185,6 @@ permissions:
   - 'delete any consultation content'
   - 'delete any contact content'
   - 'delete any document media'
-  - 'delete any easychart content'
   - 'delete any featured_content_list content'
   - 'delete any gallery content'
   - 'delete any global_page content'
@@ -247,7 +244,6 @@ permissions:
   - 'edit any consultation content'
   - 'edit any contact content'
   - 'edit any document media'
-  - 'edit any easychart content'
   - 'edit any featured_content_list content'
   - 'edit any gallery content'
   - 'edit any global_page content'
@@ -297,7 +293,6 @@ permissions:
   - 'revert book revisions'
   - 'revert consultation revisions'
   - 'revert contact revisions'
-  - 'revert easychart revisions'
   - 'revert featured_content_list revisions'
   - 'revert gallery revisions'
   - 'revert global_page revisions'
@@ -320,7 +315,6 @@ permissions:
   - 'update article content on assigned domains'
   - 'update audio media content on assigned domains'
   - 'update book content on assigned domains'
-  - 'update case_study content on assigned domains'
   - 'update consultation content on assigned domains'
   - 'update contact content on assigned domains'
   - 'update document media content on assigned domains'
@@ -388,7 +382,6 @@ permissions:
   - 'view book revisions'
   - 'view consultation revisions'
   - 'view contact revisions'
-  - 'view easychart revisions'
   - 'view featured_content_list revisions'
   - 'view gallery revisions'
   - 'view global_page revisions'
