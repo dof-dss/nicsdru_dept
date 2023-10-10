@@ -97,15 +97,12 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
   public function build() {
 
     $bundles = [
-      'actions',
       'application',
       'article',
       'consultation',
       'contact',
-      'easychart',
       'gallery',
       'heritage_site',
-      'infogram',
       'landing_page',
       'link',
       'news',
