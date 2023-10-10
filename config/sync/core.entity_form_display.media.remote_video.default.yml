@@ -8,6 +8,7 @@ dependencies:
     - field.field.media.remote_video.field_media_oembed_video
     - media.type.remote_video
   module:
+    - field_group
     - media
     - path
 third_party_settings:
@@ -43,24 +44,16 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_domain_access:
-    type: entity_reference_autocomplete
+    type: options_buttons
     weight: 26
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_domain_source:
-    type: entity_reference_autocomplete
+    type: options_select
     weight: 27
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_media_oembed_video:
     type: oembed_textfield
