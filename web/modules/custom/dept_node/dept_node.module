@@ -11,6 +11,7 @@ use Drupal\Core\Url;
 use Drupal\dept_node\Entity\Node;
 use Drupal\dept_node\Form\DeptNodeForm;
 use Drupal\dept_node\FormatHelper;
+use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\views\ViewExecutable;
 
@@ -230,4 +231,55 @@ function dept_node_pathauto_alias_alter(&$alias, array &$context) {
       \Drupal::messenger()->addMessage("A url alias for this content is already in use so additional text has been appended to the end. You can $update_link", MessengerInterface::TYPE_WARNING);
     }
   }
+}
+
+/**
+ * Implements hook_entity_type_build().
+ */
+function dept_node_entity_type_build(array &$entity_types) {
+  $entity_types['node']->setHandlerClass('access', '\Drupal\dept_node\DeptNodeAccessControlHandler');
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function dept_node_form_node_type_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\Core\Entity\EntityFormInterface $form_object */
+  $form_object = $form_state->getFormObject();
+
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $form_object->getEntity();
+  if (empty($node->id())) {
+    return;
+  }
+
+  $node_type = NodeType::load($node->id());
+  $departments = \Drupal::service('department.manager')->getAllDepartments();
+  $department_options = [];
+
+  foreach ($departments as $department) {
+    $department_options[$department->id()] = $department->label();
+  }
+
+  $form['departmental_entity_restrictions'] = [
+    '#type' => 'details',
+    '#title' => t('Departmental Entity Restrictions'),
+    '#group' => 'additional_settings',
+  ];
+
+  $form['departmental_entity_restrictions']['departments'] = [
+    '#type' => 'checkboxes',
+    '#options' => $department_options,
+    '#default_value' => $node_type->getThirdPartySetting('departmental_entity_restrictions', 'departments', array_keys($department_options)),
+    '#title' => t('Departments that can use this entity'),
+  ];
+
+  $form['#entity_builders'][] = 'dept_node_form_node_type_form_builder';
+}
+
+/**
+ * Entity builder for the dept_node_form_node_type_form_alter().
+ */
+function dept_node_form_node_type_form_builder($entity_type, $type, &$form, $form_state) {
+  $type->setThirdPartySetting('departmental_entity_restrictions', 'departments', $form_state->getValue('departments'));
 }
