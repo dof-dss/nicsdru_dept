@@ -6,8 +6,10 @@ dependencies:
     - filter.format.basic_html
     - filter.format.filtered_html
     - filter.format.filtered_html_with_no_images
+    - taxonomy.vocabulary.global_topics
   module:
     - domain_access
+    - domain_entity
     - filter
     - media
     - moderation_sidebar
@@ -15,6 +17,7 @@ dependencies:
     - path
     - search_api_autocomplete
     - system
+    - taxonomy_access_fix
     - toolbar
     - whatlinkshere
 _core:
@@ -27,9 +30,16 @@ permissions:
   - 'access administration pages'
   - 'access content'
   - 'access toolbar'
+  - 'create audio media content on assigned domains'
+  - 'create document media content on assigned domains'
+  - 'create image media content on assigned domains'
+  - 'create remote_video media content on assigned domains'
+  - 'create secure_file media content on assigned domains'
   - 'create url aliases'
+  - 'create video media content on assigned domains'
   - 'edit domain content'
   - 'publish to any domain'
+  - 'select terms in global_topics'
   - 'use moderation sidebar'
   - 'use search_api_autocomplete for search'
   - 'use text format basic_html'
@@ -38,4 +48,6 @@ permissions:
   - 'view content references'
   - 'view media'
   - 'view own unpublished content'
+  - 'view term names in global_topics'
+  - 'view terms in global_topics'
   - 'view the administration theme'

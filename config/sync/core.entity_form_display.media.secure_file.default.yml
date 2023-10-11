@@ -8,6 +8,7 @@ dependencies:
     - field.field.media.secure_file.field_media_file_1
     - media.type.secure_file
   module:
+    - field_group
     - file
     - path
 third_party_settings:
@@ -41,24 +42,16 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_domain_access:
-    type: entity_reference_autocomplete
+    type: options_buttons
     weight: 101
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_domain_source:
-    type: entity_reference_autocomplete
+    type: options_select
     weight: 102
     region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_media_file_1:
     type: file_generic
