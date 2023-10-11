@@ -118,7 +118,7 @@ class MediaWysiwygFilter extends ProcessPluginBase implements ContainerFactoryPl
     $nid = $lookup['nid'] ?? 0;
 
     $value['value'] = preg_replace_callback($pattern, function ($matches) use ($messenger, $nid) {
-      $decoder = new JsonDecode(TRUE);
+      $decoder = new JsonDecode();
 
       try {
         // Extract the D7 embedded media data.
