@@ -291,6 +291,55 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        field_domain_access_target_id:
+          id: field_domain_access_target_id
+          table: media__field_domain_access
+          field: field_domain_access_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: string
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_domain_access_target_id_op
+            label: Department
+            description: ''
+            use_operator: false
+            operator: field_domain_access_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: dept
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              author: '0'
+              stats_author: '0'
+              supervisor: '0'
+              stats_supervisor: '0'
+              topic_layout_supervisor: '0'
+              homepage_supervisor: '0'
+              topic_supervisor: '0'
+              admin: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
         status:
           id: status
           table: media_field_data
@@ -412,55 +461,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        field_domain_access_target_id:
-          id: field_domain_access_target_id
-          table: media__field_domain_access
-          field: field_domain_access_target_id
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: string
-          operator: '='
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: field_domain_access_target_id_op
-            label: Department
-            description: ''
-            use_operator: false
-            operator: field_domain_access_target_id_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: dept
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              author: '0'
-              stats_author: '0'
-              supervisor: '0'
-              stats_supervisor: '0'
-              topic_layout_supervisor: '0'
-              homepage_supervisor: '0'
-              topic_supervisor: '0'
-              admin: '0'
-            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
