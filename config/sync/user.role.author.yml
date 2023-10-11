@@ -11,7 +11,6 @@ dependencies:
     - media.type.remote_video
     - media.type.secure_file
     - media.type.video
-    - node.type.actions
     - node.type.application
     - node.type.article
     - node.type.consultation
@@ -55,8 +54,6 @@ permissions:
   - 'add scheduled transitions node protected_area'
   - 'add scheduled transitions node publication'
   - 'add scheduled transitions node ual'
-  - 'create actions content'
-  - 'create actions content on assigned domains'
   - 'create application content'
   - 'create application content on assigned domains'
   - 'create article content'
@@ -89,7 +86,6 @@ permissions:
   - 'create ual content on assigned domains'
   - 'create video media'
   - 'delete media'
-  - 'edit any actions content'
   - 'edit any application content'
   - 'edit any article content'
   - 'edit any audio media'
@@ -119,7 +115,6 @@ permissions:
   - 'reschedule scheduled transitions node protected_area'
   - 'reschedule scheduled transitions node publication'
   - 'reschedule scheduled transitions node ual'
-  - 'revert actions revisions'
   - 'revert application revisions'
   - 'revert article revisions'
   - 'revert consultation revisions'
@@ -133,7 +128,6 @@ permissions:
   - 'revert publication revisions'
   - 'revert ual revisions'
   - 'schedule publishing of nodes'
-  - 'update actions content on assigned domains'
   - 'update application content on assigned domains'
   - 'update article content on assigned domains'
   - 'update consultation content on assigned domains'
@@ -154,7 +148,6 @@ permissions:
   - 'use text format filtered_html'
   - 'use text format filtered_html_with_no_images'
   - 'use topic tree widget'
-  - 'view actions revisions'
   - 'view all media revisions'
   - 'view all revisions'
   - 'view any unpublished application content'

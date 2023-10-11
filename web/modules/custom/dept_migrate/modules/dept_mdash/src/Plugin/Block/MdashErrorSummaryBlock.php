@@ -65,15 +65,12 @@ class MdashErrorSummaryBlock extends BlockBase implements ContainerFactoryPlugin
 
     // Migrate message tables.
     $msg_tables = [
-      'node_actions',
       'node_application',
       'node_article',
       'node_consultation',
       'node_contact',
-      'node_easychart',
       'node_gallery',
       'node_heritage_site',
-      'node_infogram',
       'node_landing_page',
       'node_link',
       'node_news',

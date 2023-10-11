@@ -11,7 +11,6 @@ dependencies:
     - media.type.remote_video
     - media.type.secure_file
     - media.type.video
-    - node.type.actions
     - node.type.application
     - node.type.article
     - node.type.book
@@ -55,7 +54,6 @@ permissions:
   - 'add scheduled transitions node article'
   - 'add scheduled transitions node consultation'
   - 'add scheduled transitions node contact'
-  - 'add scheduled transitions node easychart'
   - 'add scheduled transitions node heritage_site'
   - 'add scheduled transitions node news'
   - 'add scheduled transitions node profile'
@@ -67,8 +65,6 @@ permissions:
   - 'add scheduled transitions node ual'
   - 'administer book outlines'
   - 'administer redirects'
-  - 'create actions content'
-  - 'create actions content on assigned domains'
   - 'create application content'
   - 'create application content on assigned domains'
   - 'create article content'
@@ -103,7 +99,6 @@ permissions:
   - 'create ual content'
   - 'create ual content on assigned domains'
   - 'create video media'
-  - 'delete actions content on assigned domains'
   - 'delete all revisions'
   - 'delete any application content'
   - 'delete any article content'
@@ -159,7 +154,6 @@ permissions:
   - 'reschedule scheduled transitions node article'
   - 'reschedule scheduled transitions node consultation'
   - 'reschedule scheduled transitions node contact'
-  - 'reschedule scheduled transitions node easychart'
   - 'reschedule scheduled transitions node heritage_site'
   - 'reschedule scheduled transitions node news'
   - 'reschedule scheduled transitions node profile'
@@ -185,7 +179,6 @@ permissions:
   - 'revert topic revisions'
   - 'revert ual revisions'
   - 'schedule publishing of nodes'
-  - 'update actions content on assigned domains'
   - 'update application content on assigned domains'
   - 'update article content on assigned domains'
   - 'update book content on assigned domains'
@@ -249,7 +242,6 @@ permissions:
   - 'view scheduled transitions node article'
   - 'view scheduled transitions node consultation'
   - 'view scheduled transitions node contact'
-  - 'view scheduled transitions node easychart'
   - 'view scheduled transitions node heritage_site'
   - 'view scheduled transitions node news'
   - 'view scheduled transitions node profile'

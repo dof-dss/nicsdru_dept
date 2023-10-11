@@ -4,6 +4,7 @@ module:
   webform_clientside_validation: -1
   address: 0
   admin_toolbar: 0
+  admin_toolbar_links_access_filter: 0
   admin_toolbar_tools: 0
   antibot: 0
   block: 0
@@ -40,7 +41,6 @@ module:
   dblog: 0
   dept_content_processors: 0
   dept_core: 0
-  dept_dev: 0
   dept_homepage: 0
   dept_landing_pages: 0
   dept_lang: 0
@@ -85,6 +85,7 @@ module:
   field_ui: 0
   file: 0
   filter: 0
+  filter_perms: 0
   flag: 0
   geolocation: 0
   geolocation_address: 0
