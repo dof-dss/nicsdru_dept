@@ -2,7 +2,10 @@ uuid: fcb042a2-f800-4001-af88-8e44d4700450
 langcode: en
 status: true
 dependencies:
+  config:
+    - field.storage.user.field_domain_access
   module:
+    - domain_access
     - user
 _core:
   default_config_hash: GbPVHdpSCucZ1MunS3Lai6FtyVVfmP9rJHk1GZ73JY0
@@ -180,6 +183,69 @@ display:
             format: custom
             format_custom_false: Blocked
             format_custom_true: Active
+        field_domain_access:
+          id: field_domain_access
+          table: user__field_domain_access
+          field: field_domain_access
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: domain_access_field
+          label: Department
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: false
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
         roles_target_id:
           id: roles_target_id
           table: user__roles
@@ -618,6 +684,55 @@ display:
                 title: Blocked
                 operator: '='
                 value: '0'
+        field_domain_access_target_id:
+          id: field_domain_access_target_id
+          table: user__field_domain_access
+          field: field_domain_access_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: domain_access_filter
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_domain_access_target_id_op
+            label: Department
+            description: ''
+            use_operator: false
+            operator: field_domain_access_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: dept
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              author: '0'
+              stats_author: '0'
+              supervisor: '0'
+              stats_supervisor: '0'
+              topic_layout_supervisor: '0'
+              homepage_supervisor: '0'
+              topic_supervisor: '0'
+              admin: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
         roles_target_id:
           id: roles_target_id
           table: user__roles
@@ -891,7 +1006,8 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.user.field_domain_access'
   page_1:
     id: page_1
     display_title: Page
@@ -924,4 +1040,5 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags:
+        - 'config:field.storage.user.field_domain_access'
