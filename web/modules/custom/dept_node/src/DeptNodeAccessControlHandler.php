@@ -44,7 +44,7 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
   public function createAccess($entity_bundle = NULL, AccountInterface $account = NULL, array $context = [], $return_as_object = FALSE) {
 
     $node_type = $this->entityTypeManager->getStorage('node_type')->load($entity_bundle);
-    $department_restrictions = $node_type->getThirdPartySetting('departmental_entity_restrictions', 'departments', NULL);
+    $department_restrictions = $node_type->getThirdPartySetting('dept_node', 'department_restrictions', NULL);
 
     if (!empty($department_restrictions)) {
       // Filter as storage uses 0 to denote an unchecked department.

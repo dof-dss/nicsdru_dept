@@ -299,7 +299,7 @@ function dept_node_form_node_type_form_alter(&$form, FormStateInterface $form_st
   $form['departmental_entity_restrictions']['departments'] = [
     '#type' => 'checkboxes',
     '#options' => $department_options,
-    '#default_value' => $node_type->getThirdPartySetting('departmental_entity_restrictions', 'departments', array_keys($department_options)),
+    '#default_value' => $node_type->getThirdPartySetting('dept_node', 'department_restrictions', array_keys($department_options)),
     '#title' => t('Departments that can use this entity'),
   ];
 
@@ -310,5 +310,5 @@ function dept_node_form_node_type_form_alter(&$form, FormStateInterface $form_st
  * Entity builder for the dept_node_form_node_type_form_alter().
  */
 function dept_node_form_node_type_form_builder($entity_type, $type, &$form, $form_state) {
-  $type->setThirdPartySetting('departmental_entity_restrictions', 'departments', $form_state->getValue('departments'));
+  $type->setThirdPartySetting('dept_node', 'department_restrictions', $form_state->getValue('departments'));
 }
