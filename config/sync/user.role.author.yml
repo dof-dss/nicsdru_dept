@@ -5,12 +5,6 @@ dependencies:
   config:
     - filter.format.filtered_html
     - filter.format.filtered_html_with_no_images
-    - media.type.audio
-    - media.type.document
-    - media.type.image
-    - media.type.remote_video
-    - media.type.secure_file
-    - media.type.video
     - node.type.application
     - node.type.article
     - node.type.consultation
@@ -28,6 +22,7 @@ dependencies:
     - content_moderation
     - dept_topics
     - domain_access
+    - domain_entity
     - filter
     - media
     - node
@@ -54,56 +49,25 @@ permissions:
   - 'add scheduled transitions node protected_area'
   - 'add scheduled transitions node publication'
   - 'add scheduled transitions node ual'
-  - 'create application content'
   - 'create application content on assigned domains'
-  - 'create article content'
   - 'create article content on assigned domains'
-  - 'create audio media'
-  - 'create consultation content'
+  - 'create audio media content on assigned domains'
   - 'create consultation content on assigned domains'
-  - 'create contact content'
   - 'create contact content on assigned domains'
-  - 'create document media'
-  - 'create gallery content'
+  - 'create document media content on assigned domains'
   - 'create gallery content on assigned domains'
-  - 'create heritage_site content'
   - 'create heritage_site content on assigned domains'
-  - 'create image media'
-  - 'create media'
-  - 'create news content'
+  - 'create image media content on assigned domains'
   - 'create news content on assigned domains'
-  - 'create profile content'
   - 'create profile content on assigned domains'
-  - 'create project content'
   - 'create project content on assigned domains'
-  - 'create protected_area content'
   - 'create protected_area content on assigned domains'
-  - 'create publication content'
   - 'create publication content on assigned domains'
-  - 'create remote_video media'
-  - 'create secure_file media'
-  - 'create ual content'
+  - 'create remote_video media content on assigned domains'
+  - 'create secure_file media content on assigned domains'
   - 'create ual content on assigned domains'
-  - 'create video media'
+  - 'create video media content on assigned domains'
   - 'delete media'
-  - 'edit any application content'
-  - 'edit any article content'
-  - 'edit any audio media'
-  - 'edit any consultation content'
-  - 'edit any contact content'
-  - 'edit any document media'
-  - 'edit any gallery content'
-  - 'edit any heritage_site content'
-  - 'edit any image media'
-  - 'edit any news content'
-  - 'edit any profile content'
-  - 'edit any project content'
-  - 'edit any protected_area content'
-  - 'edit any publication content'
-  - 'edit any remote_video media'
-  - 'edit any secure_file media'
-  - 'edit any ual content'
-  - 'edit any video media'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
   - 'reschedule scheduled transitions node consultation'
@@ -130,17 +94,22 @@ permissions:
   - 'schedule publishing of nodes'
   - 'update application content on assigned domains'
   - 'update article content on assigned domains'
+  - 'update audio media content on assigned domains'
   - 'update consultation content on assigned domains'
   - 'update contact content on assigned domains'
+  - 'update document media content on assigned domains'
   - 'update gallery content on assigned domains'
   - 'update heritage_site content on assigned domains'
+  - 'update image media content on assigned domains'
   - 'update media'
   - 'update news content on assigned domains'
   - 'update profile content on assigned domains'
   - 'update project content on assigned domains'
   - 'update protected_area content on assigned domains'
   - 'update publication content on assigned domains'
+  - 'update secure_file media content on assigned domains'
   - 'update ual content on assigned domains'
+  - 'update video media content on assigned domains'
   - 'use nics_editorial_workflow transition create_new_draft'
   - 'use nics_editorial_workflow transition draft_of_published'
   - 'use nics_editorial_workflow transition reject'
