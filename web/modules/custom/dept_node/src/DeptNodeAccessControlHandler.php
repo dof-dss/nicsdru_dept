@@ -51,7 +51,7 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
       $departments = array_filter($department_restrictions, 'is_string');
       $current_dept = $this->departmentManager->getCurrentDepartment();
 
-      if (!in_array($current_dept, $departments)) {
+      if (!in_array($current_dept->id(), $departments)) {
         return AccessResult::forbidden("Access to '" . $node_type->label() . "' is not allowed for this Department.")->cachePerPermissions();
       }
     }
