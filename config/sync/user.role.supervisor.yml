@@ -5,12 +5,6 @@ dependencies:
   config:
     - filter.format.filtered_html
     - filter.format.filtered_html_with_no_images
-    - media.type.audio
-    - media.type.document
-    - media.type.image
-    - media.type.remote_video
-    - media.type.secure_file
-    - media.type.video
     - node.type.application
     - node.type.article
     - node.type.book
@@ -32,6 +26,7 @@ dependencies:
     - content_moderation
     - dept_topics
     - domain_access
+    - domain_entity
     - filter
     - media
     - node
@@ -66,13 +61,13 @@ permissions:
   - 'administer redirects'
   - 'create application content on assigned domains'
   - 'create article content on assigned domains'
-  - 'create audio media'
+  - 'create audio media content on assigned domains'
   - 'create consultation content on assigned domains'
   - 'create contact content on assigned domains'
-  - 'create document media'
+  - 'create document media content on assigned domains'
   - 'create gallery content on assigned domains'
   - 'create heritage_site content on assigned domains'
-  - 'create image media'
+  - 'create image media content on assigned domains'
   - 'create link content on assigned domains'
   - 'create media'
   - 'create new books'
@@ -81,24 +76,20 @@ permissions:
   - 'create project content on assigned domains'
   - 'create protected_area content on assigned domains'
   - 'create publication content on assigned domains'
-  - 'create remote_video media'
-  - 'create secure_file media'
+  - 'create remote_video media content on assigned domains'
+  - 'create secure_file media content on assigned domains'
   - 'create ual content on assigned domains'
-  - 'create video media'
   - 'delete all revisions'
-  - 'delete any audio media'
-  - 'delete any document media'
-  - 'delete any image media'
   - 'delete any media'
-  - 'delete any remote_video media'
-  - 'delete any secure_file media'
-  - 'delete any video media'
   - 'delete application content on assigned domains'
   - 'delete article content on assigned domains'
+  - 'delete audio media content on assigned domains'
   - 'delete consultation content on assigned domains'
   - 'delete contact content on assigned domains'
+  - 'delete document media content on assigned domains'
   - 'delete gallery content on assigned domains'
   - 'delete heritage_site content on assigned domains'
+  - 'delete image media content on assigned domains'
   - 'delete link content on assigned domains'
   - 'delete media'
   - 'delete news content on assigned domains'
@@ -106,6 +97,7 @@ permissions:
   - 'delete project content on assigned domains'
   - 'delete protected_area content on assigned domains'
   - 'delete publication content on assigned domains'
+  - 'delete remote_video media content on assigned domains'
   - 'delete ual content on assigned domains'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
