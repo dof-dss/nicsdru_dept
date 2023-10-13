@@ -62,16 +62,20 @@ process:
       method: row
       source: uid
       value:
-        - 1
-    - plugin: skip_on_empty
-      method: row
-      source: domain_access_user/0/target_id
-    - plugin: static_map
-      bypass: true
-      source: domain_access_user/0/target_id
-      map:
-        'newnigov': 'nigov'
-        'execoffice': 'executiveoffice'
-        'dfp': 'finance'
+      - 1
+    - plugin: sub_process
+      source: domain_access_user
+      process:
+        target_id:
+          - plugin: skip_on_empty
+            method: row
+            source: target_id
+          - plugin: static_map
+            bypass: true
+            source: target_id
+            map:
+              'newnigov': 'nigov'
+              'execoffice': 'executiveoffice'
+              'dfp': 'finance'
 destination:
   plugin: entity:user
