@@ -8,8 +8,6 @@ dependencies:
     - filter.format.filtered_html_with_no_images
     - taxonomy.vocabulary.global_topics
   module:
-    - domain_access
-    - domain_entity
     - filter
     - media
     - moderation_sidebar
@@ -31,9 +29,6 @@ permissions:
   - 'access content'
   - 'access toolbar'
   - 'create url aliases'
-  - 'create video media content on assigned domains'
-  - 'edit domain content'
-  - 'publish to any domain'
   - 'select terms in global_topics'
   - 'use moderation sidebar'
   - 'use search_api_autocomplete for search'
