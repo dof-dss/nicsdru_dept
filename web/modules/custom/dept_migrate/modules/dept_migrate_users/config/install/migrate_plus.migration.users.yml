@@ -57,5 +57,21 @@ process:
         16: null
         17: null
         default_value: null
+  field_domain_access:
+    - plugin: skip_on_value
+      method: row
+      source: uid
+      value:
+        - 1
+    - plugin: skip_on_empty
+      method: row
+      source: domain_access_user/0/target_id
+    - plugin: static_map
+      bypass: true
+      source: domain_access_user/0/target_id
+      map:
+        'newnigov': 'nigov'
+        'execoffice': 'executiveoffice'
+        'dfp': 'finance'
 destination:
   plugin: entity:user
