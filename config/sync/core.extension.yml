@@ -4,6 +4,7 @@ module:
   webform_clientside_validation: -1
   address: 0
   admin_toolbar: 0
+  admin_toolbar_links_access_filter: 0
   admin_toolbar_tools: 0
   antibot: 0
   block: 0
@@ -27,6 +28,8 @@ module:
   config_override_warn: 0
   config_readonly: 0
   config_split: 0
+  content_lock: 0
+  content_lock_timeout: 0
   content_moderation: 0
   contextual: 0
   cookie_content_blocker: 0
@@ -66,7 +69,6 @@ module:
   draggableviews: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
-  easychart: 0
   editor: 0
   embed: 0
   entity: 0
