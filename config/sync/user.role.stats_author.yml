@@ -13,8 +13,10 @@ dependencies:
     - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
+    - dept_publications
     - dept_topics
     - domain_access
+    - domain_entity
     - filter
     - media
     - moderation_sidebar
@@ -26,20 +28,17 @@ is_admin: null
 permissions:
   - 'access content overview'
   - 'access media overview'
-  - 'create document media'
-  - 'create image media'
-  - 'create media'
-  - 'create publication content'
+  - 'create document media content on assigned domains'
+  - 'create image media content on assigned domains'
   - 'create publication content on assigned domains'
-  - 'create secure_file media'
+  - 'create publication node content on assigned domains'
+  - 'create secure_file media content on assigned domains'
   - 'delete media'
   - 'delete own document media'
   - 'delete own image media'
-  - 'delete own publication content'
   - 'delete own secure_file media'
   - 'edit own document media'
   - 'edit own image media'
-  - 'edit own publication content'
   - 'edit own secure_file media'
   - 'publish to any assigned domain'
   - 'update media'
@@ -55,5 +54,6 @@ permissions:
   - 'view any unpublished content'
   - 'view latest version'
   - 'view own unpublished media'
+  - 'view own unpublished secure publication'
   - 'view publication revisions'
   - 'view unpublished domain content'

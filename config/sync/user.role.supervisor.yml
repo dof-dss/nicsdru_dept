@@ -5,13 +5,6 @@ dependencies:
   config:
     - filter.format.filtered_html
     - filter.format.filtered_html_with_no_images
-    - media.type.audio
-    - media.type.document
-    - media.type.image
-    - media.type.remote_video
-    - media.type.secure_file
-    - media.type.video
-    - node.type.actions
     - node.type.application
     - node.type.article
     - node.type.book
@@ -20,7 +13,6 @@ dependencies:
     - node.type.gallery
     - node.type.heritage_site
     - node.type.link
-    - node.type.news
     - node.type.profile
     - node.type.project
     - node.type.protected_area
@@ -34,6 +26,7 @@ dependencies:
     - content_moderation
     - dept_topics
     - domain_access
+    - domain_entity
     - filter
     - media
     - node
@@ -55,7 +48,6 @@ permissions:
   - 'add scheduled transitions node article'
   - 'add scheduled transitions node consultation'
   - 'add scheduled transitions node contact'
-  - 'add scheduled transitions node easychart'
   - 'add scheduled transitions node heritage_site'
   - 'add scheduled transitions node news'
   - 'add scheduled transitions node profile'
@@ -67,70 +59,36 @@ permissions:
   - 'add scheduled transitions node ual'
   - 'administer book outlines'
   - 'administer redirects'
-  - 'create actions content'
-  - 'create actions content on assigned domains'
-  - 'create application content'
   - 'create application content on assigned domains'
-  - 'create article content'
   - 'create article content on assigned domains'
-  - 'create audio media'
-  - 'create consultation content'
+  - 'create audio media content on assigned domains'
   - 'create consultation content on assigned domains'
-  - 'create contact content'
   - 'create contact content on assigned domains'
-  - 'create document media'
-  - 'create gallery content'
+  - 'create document media content on assigned domains'
   - 'create gallery content on assigned domains'
-  - 'create heritage_site content'
   - 'create heritage_site content on assigned domains'
-  - 'create image media'
-  - 'create link content'
+  - 'create image media content on assigned domains'
   - 'create link content on assigned domains'
-  - 'create media'
   - 'create new books'
-  - 'create news content'
   - 'create news content on assigned domains'
-  - 'create profile content'
   - 'create profile content on assigned domains'
-  - 'create project content'
   - 'create project content on assigned domains'
-  - 'create protected_area content'
   - 'create protected_area content on assigned domains'
-  - 'create publication content'
   - 'create publication content on assigned domains'
-  - 'create remote_video media'
-  - 'create secure_file media'
-  - 'create ual content'
+  - 'create remote_video media content on assigned domains'
+  - 'create secure_file media content on assigned domains'
   - 'create ual content on assigned domains'
-  - 'create video media'
-  - 'delete actions content on assigned domains'
+  - 'create video media content on assigned domains'
   - 'delete all revisions'
-  - 'delete any application content'
-  - 'delete any article content'
-  - 'delete any audio media'
-  - 'delete any consultation content'
-  - 'delete any contact content'
-  - 'delete any document media'
-  - 'delete any gallery content'
-  - 'delete any heritage_site content'
-  - 'delete any image media'
-  - 'delete any link content'
-  - 'delete any media'
-  - 'delete any news content'
-  - 'delete any profile content'
-  - 'delete any project content'
-  - 'delete any protected_area content'
-  - 'delete any publication content'
-  - 'delete any remote_video media'
-  - 'delete any secure_file media'
-  - 'delete any ual content'
-  - 'delete any video media'
   - 'delete application content on assigned domains'
   - 'delete article content on assigned domains'
+  - 'delete audio media content on assigned domains'
   - 'delete consultation content on assigned domains'
   - 'delete contact content on assigned domains'
+  - 'delete document media content on assigned domains'
   - 'delete gallery content on assigned domains'
   - 'delete heritage_site content on assigned domains'
+  - 'delete image media content on assigned domains'
   - 'delete link content on assigned domains'
   - 'delete media'
   - 'delete news content on assigned domains'
@@ -138,28 +96,12 @@ permissions:
   - 'delete project content on assigned domains'
   - 'delete protected_area content on assigned domains'
   - 'delete publication content on assigned domains'
+  - 'delete remote_video media content on assigned domains'
   - 'delete ual content on assigned domains'
-  - 'edit any application content'
-  - 'edit any article content'
-  - 'edit any book content'
-  - 'edit any consultation content'
-  - 'edit any contact content'
-  - 'edit any gallery content'
-  - 'edit any heritage_site content'
-  - 'edit any link content'
-  - 'edit any news content'
-  - 'edit any profile content'
-  - 'edit any project content'
-  - 'edit any protected_area content'
-  - 'edit any publication content'
-  - 'edit any subtopic content'
-  - 'edit any topic content'
-  - 'edit any ual content'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
   - 'reschedule scheduled transitions node consultation'
   - 'reschedule scheduled transitions node contact'
-  - 'reschedule scheduled transitions node easychart'
   - 'reschedule scheduled transitions node heritage_site'
   - 'reschedule scheduled transitions node news'
   - 'reschedule scheduled transitions node profile'
@@ -185,7 +127,6 @@ permissions:
   - 'revert topic revisions'
   - 'revert ual revisions'
   - 'schedule publishing of nodes'
-  - 'update actions content on assigned domains'
   - 'update application content on assigned domains'
   - 'update article content on assigned domains'
   - 'update book content on assigned domains'
@@ -249,7 +190,6 @@ permissions:
   - 'view scheduled transitions node article'
   - 'view scheduled transitions node consultation'
   - 'view scheduled transitions node contact'
-  - 'view scheduled transitions node easychart'
   - 'view scheduled transitions node heritage_site'
   - 'view scheduled transitions node news'
   - 'view scheduled transitions node profile'

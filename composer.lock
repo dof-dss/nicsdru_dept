@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f01cc7aa152fa3ea8a10fac1f399b36",
+    "content-hash": "75e24a0d3bc47c1fd372a268d9caade9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1690,16 +1690,16 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "10.1.1",
+            "version": "10.1.2",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "1b41d7a66500f73e3af97c958bb9cc66a23e904f"
+                "reference": "735606e05722998c8071ce758f249c56d80aba5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/1b41d7a66500f73e3af97c958bb9cc66a23e904f",
-                "reference": "1b41d7a66500f73e3af97c958bb9cc66a23e904f",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/735606e05722998c8071ce758f249c56d80aba5a",
+                "reference": "735606e05722998c8071ce758f249c56d80aba5a",
                 "shasum": ""
             },
             "require": {
@@ -1711,7 +1711,7 @@
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2023-09-22T14:19:20+00:00"
+            "time": "2023-10-11T10:39:08+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
@@ -2868,6 +2868,74 @@
                 "source": "https://git.drupalcode.org/project/config_split",
                 "issues": "https://www.drupal.org/project/issues/config_split",
                 "slack": "https://drupal.slack.com/archives/C45342CDD"
+            }
+        },
+        {
+            "name": "drupal/content_lock",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/content_lock.git",
+                "reference": "8.x-2.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/content_lock-8.x-2.3.zip",
+                "reference": "8.x-2.3",
+                "shasum": "0e8343f82330899baef65aa85d9994154e29506f"
+            },
+            "require": {
+                "drupal/core": "^9.0 || ^10.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.3",
+                    "datestamp": "1668427342",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "alexpott",
+                    "homepage": "https://www.drupal.org/user/157725"
+                },
+                {
+                    "name": "chr.fritsch",
+                    "homepage": "https://www.drupal.org/user/2103716"
+                },
+                {
+                    "name": "daniel.bosen",
+                    "homepage": "https://www.drupal.org/user/404865"
+                },
+                {
+                    "name": "ergonlogic",
+                    "homepage": "https://www.drupal.org/user/368613"
+                },
+                {
+                    "name": "mfb",
+                    "homepage": "https://www.drupal.org/user/12302"
+                },
+                {
+                    "name": "pandaski",
+                    "homepage": "https://www.drupal.org/user/1987218"
+                },
+                {
+                    "name": "volkerk",
+                    "homepage": "https://www.drupal.org/user/57527"
+                }
+            ],
+            "description": "Prevents multiple users from trying to edit a content entity simultaneously to prevent edit conflicts.",
+            "homepage": "https://www.drupal.org/project/content_lock",
+            "support": {
+                "source": "https://git.drupalcode.org/project/content_lock"
             }
         },
         {
@@ -4958,6 +5026,10 @@
             ],
             "authors": [
                 {
+                    "name": "Anybody",
+                    "homepage": "https://www.drupal.org/user/291091"
+                },
+                {
                     "name": "Hydra",
                     "homepage": "https://www.drupal.org/user/647364"
                 },
@@ -4983,6 +5055,71 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/field_group",
                 "issues": "https://www.drupal.org/project/issues/field_group"
+            }
+        },
+        {
+            "name": "drupal/filter_perms",
+            "version": "1.0.0-alpha2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/filter_perms.git",
+                "reference": "8.x-1.0-alpha2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/filter_perms-8.x-1.0-alpha2.zip",
+                "reference": "8.x-1.0-alpha2",
+                "shasum": "07e2047ea46cd76839522f04cab59a91b90abdb3"
+            },
+            "require": {
+                "drupal/core": "^9.0 || ^10.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-alpha2",
+                    "datestamp": "1686873472",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "cYu",
+                    "homepage": "https://www.drupal.org/user/202205"
+                },
+                {
+                    "name": "deekayen",
+                    "homepage": "https://www.drupal.org/user/972"
+                },
+                {
+                    "name": "ivavictoria",
+                    "homepage": "https://www.drupal.org/user/3061533"
+                },
+                {
+                    "name": "justcaldwell",
+                    "homepage": "https://www.drupal.org/user/290069"
+                },
+                {
+                    "name": "mgbellaire",
+                    "homepage": "https://www.drupal.org/user/1831932"
+                },
+                {
+                    "name": "willzyx",
+                    "homepage": "https://www.drupal.org/user/1043862"
+                }
+            ],
+            "description": "Provides role and module filters to simplify the user permissions page.",
+            "homepage": "https://www.drupal.org/project/filter_perms",
+            "support": {
+                "source": "http://cgit.drupalcode.org/filter_perms",
+                "issues": "https://www.drupal.org/project/issues/filter_perms?categories=All"
             }
         },
         {
@@ -7079,7 +7216,7 @@
             "extra": {
                 "drupal": {
                     "version": "4.3.0",
-                    "datestamp": "1695108471",
+                    "datestamp": "1696589367",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8438,16 +8575,16 @@
                 "drupal/captcha": "^1 || ^2",
                 "drupal/chosen": "3.0.x-dev",
                 "drupal/ckeditor": "1.0.x-dev",
-                "drupal/clientside_validation": "*",
+                "drupal/clientside_validation": "^3 || ^4",
                 "drupal/clientside_validation_jquery": "*",
-                "drupal/devel": "*",
+                "drupal/devel": "5.x-dev",
                 "drupal/entity": "1.x-dev",
-                "drupal/entity_print": "*",
+                "drupal/entity_print": "2.x-dev",
                 "drupal/group": "1.x-dev",
                 "drupal/hal": "1 - 2",
                 "drupal/jquery_ui": "1.x-dev",
-                "drupal/jquery_ui_checkboxradio": "*",
-                "drupal/jquery_ui_datepicker": "*",
+                "drupal/jquery_ui_checkboxradio": "2.x-dev",
+                "drupal/jquery_ui_datepicker": "1.x-dev",
                 "drupal/mailsystem": "4.x-dev",
                 "drupal/metatag": "1.x-dev",
                 "drupal/paragraphs": "1.x-dev",
@@ -8455,7 +8592,7 @@
                 "drupal/smtp": "1.x-dev",
                 "drupal/styleguide": "^1 || ^2",
                 "drupal/telephone_validation": "2.x-dev",
-                "drupal/token": "*",
+                "drupal/token": "1.x-dev",
                 "drupal/variationcache": "1.x-dev",
                 "drupal/webform_access": "*",
                 "drupal/webform_attachment": "*",
@@ -18803,6 +18940,7 @@
         "drupal/domain": 10,
         "drupal/domain_entity": 5,
         "drupal/domain_path": 10,
+        "drupal/filter_perms": 15,
         "drupal/flag": 10,
         "drupal/migrate_conditions": 10,
         "drupal/purge_users": 10,

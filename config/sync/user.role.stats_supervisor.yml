@@ -14,8 +14,10 @@ dependencies:
   module:
     - book
     - content_moderation
+    - dept_publications
     - dept_topics
     - domain_access
+    - domain_entity
     - file
     - filter
     - media
@@ -34,35 +36,31 @@ permissions:
   - 'access media overview'
   - 'add content to books'
   - 'add scheduled transitions node publication'
-  - 'create document media'
-  - 'create image media'
-  - 'create media'
-  - 'create publication content'
+  - 'create document media content on assigned domains'
+  - 'create image media content on assigned domains'
   - 'create publication content on assigned domains'
-  - 'create secure_file media'
-  - 'delete any image media'
-  - 'delete any publication content'
-  - 'delete any secure_file media'
+  - 'create publication node content on assigned domains'
+  - 'create secure_file media content on assigned domains'
+  - 'delete document media content on assigned domains'
+  - 'delete image media content on assigned domains'
   - 'delete media'
   - 'delete own document media'
   - 'delete own image media'
-  - 'delete own publication content'
   - 'delete own secure_file media'
   - 'delete publication content on assigned domains'
-  - 'edit any document media'
-  - 'edit any publication content'
-  - 'edit any secure_file media'
   - 'edit basic meta tags'
   - 'edit own document media'
   - 'edit own image media'
-  - 'edit own publication content'
   - 'edit own secure_file media'
+  - 'publish secure publication'
   - 'publish to any assigned domain'
   - 'reschedule scheduled transitions node publication'
   - 'revert publication revisions'
   - 'schedule publishing of nodes'
+  - 'update document media content on assigned domains'
   - 'update media'
   - 'update publication content on assigned domains'
+  - 'update secure_file media content on assigned domains'
   - 'use moderation sidebar'
   - 'use nics_editorial_workflow transition archive'
   - 'use nics_editorial_workflow transition create_new_draft'
@@ -80,8 +78,10 @@ permissions:
   - 'view all revisions'
   - 'view all scheduled transitions'
   - 'view any unpublished content'
+  - 'view any unpublished secure publication'
   - 'view latest version'
   - 'view own unpublished media'
+  - 'view own unpublished secure publication'
   - 'view publication revisions'
   - 'view scheduled content'
   - 'view scheduled transitions node publication'
