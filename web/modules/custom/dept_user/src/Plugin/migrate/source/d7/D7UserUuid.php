@@ -92,6 +92,12 @@ class D7UserUuid extends FieldableEntity {
       $row->setSourceProperty($field_name, $this->getFieldValues('user', $field_name, $uid, NULL, $field_language));
     }
 
+    $access = $row->getSourceProperty('access');
+    // Block account if last accessed was 9 months or more.
+    if (floor((time() - $access) / 2592000) >= 9) {
+      $row->setSourceProperty('status', 0);
+    }
+
     // Fetch domain assignments.
     $row->setSourceProperty('domain_access_user', $this->getDomainTargetIds($uid));
 
