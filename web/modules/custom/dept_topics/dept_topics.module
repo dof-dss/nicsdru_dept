@@ -374,8 +374,6 @@ function dept_topics_entity_type_build(array &$entity_types) {
  * Implements hook_preprocess_facets_item_list__links__publication_topics().
  */
 function dept_topics_preprocess_facets_item_list__links__publication_topics(&$variables) {
-  $dept = \Drupal::service('department.manager')->getCurrentDepartment();
-
   $node_storage = \Drupal::entityTypeManager()->getStorage('node');
   /* @var \Drupal\dept_topics\TopicManager $topic_manager */
   $topic_manager = \Drupal::service('topic.manager');
@@ -385,6 +383,12 @@ function dept_topics_preprocess_facets_item_list__links__publication_topics(&$va
 
   foreach ($variables['items'] as $id => $facet_item) {
     $item_nid = $facet_item['value']['#title']['#raw_value'];
+    $is_active = $facet_item['value']['#title']['#is_active'] ?? FALSE;
+
+    if ($is_active) {
+      continue;
+    }
+
     /* @var \Drupal\node\NodeInterface $topic_node */
     $topic_node = $node_storage->load($item_nid);
 
