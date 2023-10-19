@@ -374,6 +374,21 @@ function dept_topics_entity_type_build(array &$entity_types) {
  * Implements hook_preprocess_facets_item_list__links__publication_topics().
  */
 function dept_topics_preprocess_facets_item_list__links__publication_topics(&$variables) {
+  dept_topics_build_facet_topic_hierarchy($variables);
+}
+
+/**
+ * Implements hook_preprocess_facets_item_list__links__consultation_topic().
+ */
+function dept_topics_preprocess_facets_item_list__links__consultation_topic(&$variables) {
+  dept_topics_build_facet_topic_hierarchy($variables);
+}
+
+/**
+ * Take a flat topics hierarchy and show/hide the required
+ * topic facet link items based on the active facets.
+ */
+function dept_topics_build_facet_topic_hierarchy(&$variables) {
   $node_storage = \Drupal::entityTypeManager()->getStorage('node');
   /* @var \Drupal\dept_topics\TopicManager $topic_manager */
   $topic_manager = \Drupal::service('topic.manager');
@@ -415,5 +430,4 @@ function dept_topics_preprocess_facets_item_list__links__publication_topics(&$va
       }
     }
   }
-
 }
