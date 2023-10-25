@@ -111,7 +111,7 @@ class D7MediaDomain extends ProcessPluginBase implements ContainerFactoryPluginI
       $depts[] = MigrateUtils::d7DomianToD9Domain($row->machine_name) ?? 'nigov';
     }
 
-    return $depts;
+    return (is_array($depts)) ? array_unique($depts) : [];
   }
 
 }
