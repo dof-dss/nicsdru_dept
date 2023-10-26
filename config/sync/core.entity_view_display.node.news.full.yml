@@ -1,28 +1,28 @@
-uuid: aba245b3-7ff2-4ef3-8ffd-4e766a3ba233
+uuid: 6c444413-3ed9-47fc-aa4f-f13206e1378f
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_view_mode.node.full
-    - field.field.node.publication.body
-    - field.field.node.publication.field_domain_access
-    - field.field.node.publication.field_domain_all_affiliates
-    - field.field.node.publication.field_domain_source
-    - field.field.node.publication.field_external_publication
-    - field.field.node.publication.field_global_topics
-    - field.field.node.publication.field_last_updated
-    - field.field.node.publication.field_metatags
-    - field.field.node.publication.field_publication_files
-    - field.field.node.publication.field_publication_secure_files
-    - field.field.node.publication.field_publication_type
-    - field.field.node.publication.field_published_date
-    - field.field.node.publication.field_site_topics
-    - field.field.node.publication.field_summary
-    - node.type.publication
+    - field.field.node.news.body
+    - field.field.node.news.field_domain_access
+    - field.field.node.news.field_domain_all_affiliates
+    - field.field.node.news.field_domain_source
+    - field.field.node.news.field_global_topics
+    - field.field.node.news.field_metatags
+    - field.field.node.news.field_news_type
+    - field.field.node.news.field_notes_to_editors
+    - field.field.node.news.field_photo
+    - field.field.node.news.field_published_date
+    - field.field.node.news.field_site_topics
+    - field.field.node.news.field_summary
+    - field.field.node.news.field_teaser
+    - field.field.node.news.field_video
+    - node.type.news
   module:
     - datetime
     - layout_builder
-    - link
+    - metatag
     - smart_trim
     - text
     - user
@@ -30,9 +30,9 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: node.publication.full
+id: node.news.full
 targetEntityType: node
-bundle: publication
+bundle: news
 mode: full
 content:
   body:
@@ -40,46 +40,30 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 4
-    region: content
-  field_external_publication:
-    type: link
-    label: above
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
     weight: 5
     region: content
-  field_last_updated:
-    type: datetime_default
-    label: inline
-    settings:
-      timezone_override: ''
-      format_type: medium_date
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  field_publication_files:
-    type: entity_reference_entity_view
+  field_metatags:
+    type: metatag_empty_formatter
     label: above
-    settings:
-      view_mode: embed
-      link: false
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_notes_to_editors:
+    type: text_default
+    label: above
+    settings: {  }
     third_party_settings: {  }
     weight: 6
     region: content
-  field_publication_secure_files:
+  field_photo:
     type: entity_reference_entity_view
-    label: above
+    label: hidden
     settings:
-      view_mode: embed
+      view_mode: article_float
       link: false
     third_party_settings: {  }
-    weight: 7
+    weight: 4
     region: content
   field_published_date:
     type: datetime_default
@@ -117,18 +101,28 @@ content:
       summary_handler: full
       trim_options: {  }
     third_party_settings: {  }
+    weight: 2
+    region: content
+  field_video:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: embed
+      link: false
+    third_party_settings: {  }
     weight: 3
     region: content
 hidden:
   content_moderation_control: true
-  field_attachment: true
+  entitygroupfield: true
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
   field_global_topics: true
-  field_metatags: true
-  field_publication_type: true
+  field_news_type: true
+  field_teaser: true
   groups: true
+  groups_type_department_site: true
   langcode: true
   links: true
   search_api_excerpt: true
