@@ -270,12 +270,6 @@
       overflow: visible;
       visibility: visible;
       opacity: 1;
-
-      @include breakpoint($phone) {
-        width:  calc(100% - 96px);
-        max-width: 504px;
-        left: 48px;
-      }
     }
   }
 }
