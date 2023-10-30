@@ -12,10 +12,9 @@
 
       // Make expandable responsive image styles thwoopable.
       var thwoopImageSelector = '[data-picture-mapping*="_expandable"] > img, [data-picture-mapping*="_expandable"] > figure';
-      var $thwoopImages = $(thwoopImageSelector, context);
 
       // Add a clickable/focusable wrapper and icon to indicate image is thwoopable.
-      $thwoopImages.once('thwoop-toggle').each(function () {
+      $(once('thwoop-toggle', thwoopImageSelector, context)).each(function () {
 
         var $thwooper = $('<a class="thwooper" aria-label="expand image" href="#"></a>');
 
