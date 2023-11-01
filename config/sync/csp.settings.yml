@@ -15,7 +15,7 @@ report-only:
       base: self
       sources:
         - 'https://themes.googleusercontent.com'
-        - 'https://fonts.gstatic.com'
+        - fonts.gstatic.com
         - 'https://cdn.jsdelivr.net'
         - 'data:'
     frame-src:
@@ -61,6 +61,8 @@ report-only:
         - unsafe-inline
     style-src-elem:
       base: self
+      flags:
+        - unsafe-inline
     block-all-mixed-content: true
   reporting:
     plugin: none
