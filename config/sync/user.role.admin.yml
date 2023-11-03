@@ -20,7 +20,6 @@ dependencies:
     - node.type.news
     - node.type.page
     - node.type.profile
-    - node.type.project
     - node.type.protected_area
     - node.type.publication
     - node.type.subtopic
@@ -82,7 +81,6 @@ permissions:
   - 'add scheduled transitions node news'
   - 'add scheduled transitions node page'
   - 'add scheduled transitions node profile'
-  - 'add scheduled transitions node project'
   - 'add scheduled transitions node protected_area'
   - 'add scheduled transitions node publication'
   - 'add scheduled transitions node subtopic'
@@ -134,7 +132,6 @@ permissions:
   - 'create news content on assigned domains'
   - 'create page content on assigned domains'
   - 'create profile content on assigned domains'
-  - 'create project content on assigned domains'
   - 'create protected_area content on assigned domains'
   - 'create publication content on assigned domains'
   - 'create remote_video media content on assigned domains'
@@ -166,7 +163,6 @@ permissions:
   - 'delete news content on assigned domains'
   - 'delete page content on assigned domains'
   - 'delete profile content on assigned domains'
-  - 'delete project content on assigned domains'
   - 'delete protected_area content on assigned domains'
   - 'delete publication content on assigned domains'
   - 'delete remote_video media content on assigned domains'
@@ -190,7 +186,6 @@ permissions:
   - 'reschedule scheduled transitions node news'
   - 'reschedule scheduled transitions node page'
   - 'reschedule scheduled transitions node profile'
-  - 'reschedule scheduled transitions node project'
   - 'reschedule scheduled transitions node protected_area'
   - 'reschedule scheduled transitions node publication'
   - 'reschedule scheduled transitions node subtopic'
@@ -211,7 +206,6 @@ permissions:
   - 'revert news revisions'
   - 'revert page revisions'
   - 'revert profile revisions'
-  - 'revert project revisions'
   - 'revert protected_area revisions'
   - 'revert publication revisions'
   - 'revert subtopic revisions'
@@ -237,7 +231,6 @@ permissions:
   - 'update news content on assigned domains'
   - 'update page content on assigned domains'
   - 'update profile content on assigned domains'
-  - 'update project content on assigned domains'
   - 'update protected_area content on assigned domains'
   - 'update publication content on assigned domains'
   - 'update remote_video media content on assigned domains'
@@ -276,7 +269,6 @@ permissions:
   - 'view any unpublished news content'
   - 'view any unpublished page content'
   - 'view any unpublished profile content'
-  - 'view any unpublished project content'
   - 'view any unpublished protected_area content'
   - 'view any unpublished publication content'
   - 'view any unpublished subtopic content'
@@ -301,7 +293,6 @@ permissions:
   - 'view own unpublished media'
   - 'view page revisions'
   - 'view profile revisions'
-  - 'view project revisions'
   - 'view protected_area revisions'
   - 'view publication revisions'
   - 'view scheduled transitions node application'
@@ -313,7 +304,6 @@ permissions:
   - 'view scheduled transitions node news'
   - 'view scheduled transitions node page'
   - 'view scheduled transitions node profile'
-  - 'view scheduled transitions node project'
   - 'view scheduled transitions node protected_area'
   - 'view scheduled transitions node publication'
   - 'view scheduled transitions node subtopic'
