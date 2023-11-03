@@ -87,6 +87,11 @@
 
   .view--rss-link {
     @include responsive-typo-map($small-text);
+
+    .feed-icon {
+      display: flex;
+      column-gap: .5rem;
+    }
   }
 
   &-list {
