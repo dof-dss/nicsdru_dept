@@ -7,7 +7,7 @@ db:
   # the CLI will return an error.
   type: mariadb:10.4
   # The disk attribute is the size of the persistent disk (in MB) allocated to the service.
-  disk: 10000
+  disk: 5000
   configuration:
     schemas:
       - main
@@ -19,7 +19,7 @@ db:
 
 drupal7db:
   type: mariadb:10.4
-  disk: 10000
+  disk: 8000
   configuration:
     schemas:
       - main
