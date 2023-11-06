@@ -33,25 +33,6 @@ third_party_settings:
         layout_settings:
           label: ''
         components:
-          9d17b76f-3b64-4962-b55a-de209bcbb389:
-            uuid: 9d17b76f-3b64-4962-b55a-de209bcbb389
-            region: content
-            configuration:
-              id: 'field_block:node:subtopic:field_banner_image'
-              label: 'Banner image'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: entity_reference_entity_view
-                label: hidden
-                settings:
-                  view_mode: banner_deep
-                third_party_settings: {  }
-            weight: 0
-            additional: {  }
           89d83f97-2ad5-4a67-a66a-70aab6c30e3f:
             uuid: 89d83f97-2ad5-4a67-a66a-70aab6c30e3f
             region: content
@@ -104,6 +85,7 @@ third_party_settings:
       - 'Content fields'
       - 'Custom block types'
       - 'Custom blocks'
+      - Departmental
       - 'Departmental sites'
       - 'Departmental sites: search'
       - Devel
@@ -134,10 +116,10 @@ third_party_settings:
       denylisted_blocks: {  }
       allowlisted_blocks:
         'Content fields':
+          - 'field_block:node:subtopic:field_banner_image'
           - 'field_block:node:subtopic:body'
           - 'field_block:node:subtopic:field_topic_content'
           - 'field_block:node:subtopic:field_summary'
-          - 'field_block:node:subtopic:field_banner_image'
         'Custom block types':
           - accordion_menu
           - banner_deep
@@ -160,6 +142,7 @@ third_party_settings:
           - 'inline_block:video_and_caption'
       restricted_categories:
         - 'Custom blocks'
+        - Departmental
         - 'Departmental sites'
         - 'Departmental sites: search'
         - Devel
