@@ -1,58 +1,65 @@
-uuid: 8947c2e3-5635-4478-acde-43213c6afc1e
+uuid: 4d19ba1f-b16d-4322-aa33-1c7d99c9b28e
 langcode: en
 status: true
 dependencies:
   config:
     - filter.format.layout_builder_html
   module:
-    - ckeditor
+    - ckeditor5
 format: layout_builder_html
-editor: ckeditor
+editor: ckeditor5
 settings:
   toolbar:
-    rows:
-      -
-        -
-          name: Formatting
-          items:
-            - Bold
-            - Blockquote
-            - RemoveFormat
-        -
-          name: 'Block Formatting'
-          items:
-            - Format
-            - Styles
-        -
-          name: Linking
-          items:
-            - DrupalLink
-            - DrupalUnlink
-        -
-          name: Lists
-          items:
-            - BulletedList
-            - NumberedList
-        -
-          name: Tasks
-          items:
-            - Undo
-            - Redo
-        -
-          name: Tools
-          items:
-            - Cut
-            - Copy
-            - PasteText
-            - PasteFromWord
-            - SpecialChar
-            - Maximize
+    items:
+      - bold
+      - italic
+      - blockQuote
+      - removeFormat
+      - superscript
+      - '|'
+      - heading
+      - style
+      - '|'
+      - link
+      - '|'
+      - bulletedList
+      - numberedList
+      - '|'
+      - undo
+      - redo
+      - '|'
+      - importWord
+      - specialCharacters
+      - fullScreen
   plugins:
-    drupallink:
+    ckeditor5_heading:
+      enabled_headings:
+        - heading2
+        - heading3
+        - heading4
+    ckeditor5_list:
+      reversed: false
+      startIndex: true
+    ckeditor5_style:
+      styles:
+        -
+          label: 'Info notice'
+          element: '<div class="info-notice">'
+        -
+          label: 'Large text'
+          element: '<div class="large-text">'
+        -
+          label: 'XL text'
+          element: '<div class="xl-text">'
+        -
+          label: 'XXL text'
+          element: '<div class="xxl-text">'
+        -
+          label: 'Big green button'
+          element: '<a class="btn--call-to-action">'
+    linkit_extension:
       linkit_enabled: true
       linkit_profile: default
-    stylescombo:
-      styles: "div.info-notice|Info notice\r\ndiv.large-text|Large text\r\ndiv.xl-text|XL text\r\ndiv.xxl-text|XXL text\r\na.btn--call-to-action|Big green button\r\n"
 image_upload:
   status: false
   scheme: public
