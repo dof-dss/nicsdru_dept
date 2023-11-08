@@ -134,3 +134,11 @@ nidirect-ui:
     - core/drupal
     - core/jquery
     - core/once
+
+node-banner:
+  version: 1.x
+  css:
+    component:
+      css/3_components/block/node-banner.css: { minified: true }
+
+
