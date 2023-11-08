@@ -23,6 +23,7 @@ dependencies:
     - core.entity_view_mode.media.portrait_float_xp
     - core.entity_view_mode.media.portrait_full
   module:
+    - ckeditor5_allowed_html
     - cookie_content_blocker
     - dept_content_processors
     - editor
@@ -99,7 +100,7 @@ filters:
     status: false
     weight: -35
     settings:
-      allowed_html: '<em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <p> <h1> <pre> <drupal-entity data-entity-type data-entity-uuid data-entity-embed-display data-entity-embed-display-settings data-align data-caption data-embed-button> <sup> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <a href hreflang !href accesskey id rel target title data-entity-substitution data-entity-type data-entity-uuid>'
+      allowed_html: '<p class="info-notice info-notice--success info-notice--warning info-notice--error"> <ul class="split-list"> <ol class="split-list"> <table class="table-fixed-width"> <a class="btn--call-to-action">'
       filter_html_help: true
       filter_html_nofollow: false
   noreferrer:
@@ -150,7 +151,7 @@ filters:
   cookie_content_blocker_filter:
     id: cookie_content_blocker_filter
     provider: cookie_content_blocker
-    status: true
+    status: false
     weight: -43
     settings:
       disable_xss: '1'
@@ -164,14 +165,14 @@ filters:
   origins_media_cookie_content_blocker_embed_filter:
     id: origins_media_cookie_content_blocker_embed_filter
     provider: origins_common
-    status: true
+    status: false
     weight: -46
     settings:
       replacement_text: 'Click here to view the video content'
   rel_to_abs_url:
     id: rel_to_abs_url
     provider: dept_content_processors
-    status: true
+    status: false
     weight: -41
     settings:
       process_domains:
@@ -191,3 +192,12 @@ filters:
     status: true
     weight: -42
     settings: {  }
+  filter_allowed:
+    id: filter_allowed
+    provider: ckeditor5_allowed_html
+    status: false
+    weight: 0
+    settings:
+      allowed_html: '<br> <p> <h2> <h3> <h4> <h5> <h6> <strong> <em> <sup> <blockquote> <a href> <ul> <ol start> <li> <table> <tr> <td rowspan colspan> <th rowspan colspan> <thead> <tbody> <tfoot> <caption> <drupal-media data-entity-type data-entity-uuid alt>'
+      filter_html_help: '0'
+      filter_html_nofollow: '0'

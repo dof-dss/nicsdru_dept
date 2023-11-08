@@ -1,68 +1,70 @@
-uuid: 908bfc82-e2fb-410a-a921-d62a654c811e
+uuid: ac85f6a8-00f5-43dd-949e-b84ec8ac0661
 langcode: en
 status: true
 dependencies:
   config:
     - filter.format.basic_html
   module:
-    - ckeditor
-_core:
-  default_config_hash: AqlPmO16LvJI4D0Ih6u4GFQIzqr5OnLgAUSjcUGWk2g
+    - ckeditor5
 format: basic_html
-editor: ckeditor
+editor: ckeditor5
 settings:
   toolbar:
-    rows:
-      -
-        -
-          name: Formatting
-          items:
-            - Bold
-            - Blockquote
-            - Superscript
-            - RemoveFormat
-        -
-          name: 'Block Formatting'
-          items:
-            - Format
-            - Styles
-            - Table
-        -
-          name: Linking
-          items:
-            - DrupalLink
-            - DrupalUnlink
-        -
-          name: Lists
-          items:
-            - BulletedList
-            - NumberedList
-        -
-          name: Media
-          items:
-            - DrupalMediaLibrary
-            - location
-        -
-          name: Tasks
-          items:
-            - Undo
-            - Redo
-        -
-          name: Tools
-          items:
-            - Cut
-            - Copy
-            - PasteText
-            - PasteFromWord
-            - SpecialChar
-            - Maximize
-            - CookieContentBlocker
+    items:
+      - bold
+      - italic
+      - blockQuote
+      - superscript
+      - removeFormat
+      - '|'
+      - heading
+      - style
+      - insertTable
+      - '|'
+      - link
+      - '|'
+      - bulletedList
+      - numberedList
+      - '|'
+      - drupalMedia
+      - '|'
+      - undo
+      - redo
+      - '|'
+      - importWord
+      - specialCharacters
+      - fullScreen
   plugins:
-    drupallink:
+    ckeditor5_heading:
+      enabled_headings:
+        - heading2
+        - heading3
+        - heading4
+    ckeditor5_list:
+      reversed: true
+      startIndex: true
+    ckeditor5_style:
+      styles:
+        -
+          label: 'Information notice'
+          element: '<p class="info-notice">'
+        -
+          label: 'Split bulleted list'
+          element: '<ul class="split-list">'
+        -
+          label: 'Split numbered list'
+          element: '<ol class="split-list">'
+        -
+          label: 'Equal table columns'
+          element: '<table class="table-fixed-width">'
+        -
+          label: 'Big green button'
+          element: '<a class="btn--call-to-action">'
+    linkit_extension:
       linkit_enabled: true
       linkit_profile: default
-    stylescombo:
-      styles: "p.info-notice|Information notice\r\nul.split-list|Split bulleted list\r\nol.split-list|Split numbered list\r\ntable.table-fixed-width|Equal table columns\r\na.btn--call-to-action|Big green button\r\n"
+    media_media:
+      allow_view_mode_override: true
 image_upload:
   status: true
   scheme: public
