@@ -131,8 +131,8 @@
         "drupal/scheduled_transitions": "^2.4@beta",
         "drupal/scheduler": "^1.4",
         "drupal/schema_metatag": "^3.0",
-        "drupal/search_api": "^1.20",
-        "drupal/search_api_autocomplete": "^1.7",
+        "drupal/search_api": "^1.30",
+        "drupal/search_api_autocomplete": "^1.8",
         "drupal/search_api_block": "^1.0",
         "drupal/search_api_solr": "^4.2",
         "drupal/search_api_spellcheck": "^4",
@@ -305,9 +305,6 @@
             "drupal/moderation_sidebar": {
                 "Can't preview a new node #3264639": "https://www.drupal.org/files/issues/2022-02-16/preview-new-node-3264639-2.patch",
                 "'Draft available' text still appears after deleting a forward revision": "https://www.drupal.org/files/issues/2020-02-24/3115474-3.patch"
-            },
-            "drupal/search_api_autocomplete": {
-                "Undefined constant Drupal\\\\search_api_solr\\\\SolrBackendInterface::SEARCH_API_SOLR_SCHEMA_VERSION": "https://www.drupal.org/files/issues/2023-10-01/3382226-22--solr_version_check_bug.patch"
             },
             "drupal/scheduled_transitions": {
                 "No scheduled revisions appear for migrated nodes": "https://www.drupal.org/files/issues/2021-11-01/scheduled_transitions_base_language_3091006_2x.patch"

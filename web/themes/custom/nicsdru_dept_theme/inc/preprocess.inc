@@ -142,7 +142,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
     // Site theme term pages.
     case 'entity.taxonomy_term.canonical':
       // Set the section css classes for theme taxonomy terms.
-      if ($variables['term']->bundle() === 'site_themes') {
+      if (array_key_exists('term', $variables) && $variables['term']->bundle() === 'site_themes') {
         $variables['main_content_attr']->addClass([
           'grid',
           'layout--theme-term',
