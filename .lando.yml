@@ -55,11 +55,11 @@ services:
       password: drupal7
       database: drupal7
   solr:
-    type: solr:7
+    type: solr:8.11
     portforward: true
     core: default
     config:
-      dir: .lando/config/solr/7.x/default
+      dir: .lando/config/solr/
   mailhog:
     type: mailhog
     portforward: true
