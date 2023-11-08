@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f470179b2f6ba3fd3d9a5f412197995",
+    "content-hash": "9abacbd645ba10758273b1001e9d2bbc",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2384,11 +2384,11 @@
         },
         {
             "name": "drupal/ckeditor5_allowed_html",
-            "version": "dev-1.0.x",
+            "version": "dev-1.1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ckeditor5_allowed_html.git",
-                "reference": "79aa55696df2cd48d60d2ac4074061a561525b6e"
+                "reference": "14e109f617ce140df722582f233dfd548657a7ee"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9 || ^10"
@@ -2396,11 +2396,11 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-1.0.x": "1.0.x-dev"
+                    "dev-1.1.x": "1.1.x-dev"
                 },
                 "drupal": {
-                    "version": "1.0.x-dev",
-                    "datestamp": "1691506962",
+                    "version": "1.1.x-dev",
+                    "datestamp": "1699376300",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -2993,7 +2993,7 @@
                     "homepage": "https://www.drupal.org/user/3301055"
                 },
                 {
-                    "name": "Dannyjanse",
+                    "name": "djanse97",
                     "homepage": "https://www.drupal.org/user/3774093"
                 }
             ],
@@ -8316,10 +8316,6 @@
                 {
                     "name": "MChittenden",
                     "homepage": "https://www.drupal.org/user/2288348"
-                },
-                {
-                    "name": "ofry",
-                    "homepage": "https://www.drupal.org/user/2740599"
                 },
                 {
                     "name": "shelane",
