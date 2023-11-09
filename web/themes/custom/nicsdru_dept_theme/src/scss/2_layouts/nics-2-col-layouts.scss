@@ -79,6 +79,11 @@
       grid-area: main;
     }
 
+    // Span the 2 grid columns if there is only the main content and no sidebars.
+    .ga-main:only-child {
+      grid-column: span 2;
+    }
+
     .ga-aside {
       grid-area: side;
 
