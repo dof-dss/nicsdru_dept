@@ -59,32 +59,3 @@ if [ ! -f "${DRUPAL_ROOT}/core/phpunit.xml" ]; then
   # Set the base URL for kernel tests.
   sed -i -e "s|name=\"SIMPLETEST_BASE_URL\" value=\"\"|name=\"SIMPLETEST_BASE_URL\" value=\"http:\/\/${LANDO_APP_NAME}.${LANDO_DOMAIN}\"|g" $DRUPAL_ROOT/core/phpunit.xml
 fi
-
-# Add yarn/nodejs packages to allow functional testing on this service.
-if [ ! -f "${NODE_INSTALLED}" ]; then
-  apt update
-  # Add and fetch node 14 plus related OS packages to support it.
-  curl -sL https://deb.nodesource.com/setup_14.x | bash -
-  apt install -y nodejs gcc g++ make
-
-  # Fetch and install node packages if they're not already present.
-  if [ ! -d "${DRUPAL_ROOT}/core/node_modules" ]; then
-    cd $DRUPAL_ROOT/core
-    npm install
-  fi
-
-  # Install any known extra npm packges.
-#  if [ ! -d "${DRUPAL_CUSTOM_CODE}/node_modules" ]; then
-#    cd $DRUPAL_CUSTOM_CODE
-#    npm install
-#  fi
-
-  # Install any known extra npm packges.
-  if [ ! -d "${DRUPAL_CUSTOM_THEME}/node_modules" ]; then
-    cd $DRUPAL_CUSTOM_THEME
-    npm install
-  fi
-
-  touch $NODE_INSTALLED
-
-fi
