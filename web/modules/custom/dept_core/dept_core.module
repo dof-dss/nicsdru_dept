@@ -314,3 +314,40 @@ function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) 
     }
   }
 }
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function dept_core_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (\Drupal::currentUser()->hasPermission('view departments on entity forms') === FALSE) {
+    dept_core_set_entity_domain_defaults($form);
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function dept_core_form_media_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (\Drupal::currentUser()->hasPermission('view departments on entity forms') === FALSE) {
+    dept_core_set_entity_domain_defaults($form);
+  }
+}
+
+/**
+ * Function to hide domain access/source form elements
+ * and set a default value for both of the current department.
+ */
+function dept_core_set_entity_domain_defaults(&$form) {
+  $dept = \Drupal::service('department.manager')->getCurrentDepartment();
+
+  foreach (['field_domain_access', 'field_domain_source'] as $element_id) {
+    if (!empty($form[$element_id])) {
+      // #default_value does not pass later validation. Odd but
+      // shouldn't matter as the user won't be able to see the form options.
+      $form[$element_id]['widget']['#value'] = $dept->id();
+      // hide() doesn't hide the wrapping container element.
+      // Changing the element type does.
+      $form[$element_id]['#type'] = 'hidden';
+    }
+  }
+}
