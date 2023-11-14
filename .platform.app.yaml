@@ -80,6 +80,8 @@ hooks:
     rm -rf ckeditor4-fix-widget-dnd
     echo ">>> Install Platform CLI tool"
     curl -fsSL https://raw.githubusercontent.com/platformsh/cli/main/installer.sh | bash
+    echo "Update robots.txt with customisations"
+    cp -f robots_custom.txt web/robots.txt
   # The deploy hook runs after your application has been deployed and started.
   deploy: |
     set -e
