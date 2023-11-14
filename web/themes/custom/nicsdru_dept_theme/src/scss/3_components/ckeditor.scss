@@ -7,25 +7,56 @@
 body {
   font-family: $base-font-family;
 }
+//
+//.ck.ck-editor__main {
+//  border-color: var(--ck-color-base-border);
+//  border-radius: var(--ck-border-radius);
+//  border-top-left-radius: 0;
+//  border-top-right-radius: 0;
+//  border: 1px solid;
+//}
 
-.cke_editable {
+.ck-content {
+  //// applied to body in ckeditor
+  //max-width: $article-max-width;
+  //margin: 18px;
+  //border: 0;
+  position: relative;
+  overflow: hidden;
 
-  // applied to body in ckeditor
-  max-width: $article-max-width;
-  margin: 18px;
+  * {
+    max-width: $article-max-width;
+  }
+
+  //&::after {
+  //  content: 'Content crossing into this area will not be visible.';
+  //  display: block;
+  //  width: 150px;
+  //  height: 100%;
+  //  padding: 0 10px;
+  //  border-left: 18px solid rgba(255, 255, 255, .5);
+  //  text-align: center;
+  //  position: absolute;
+  //  top: 0;
+  //  left: $article-max-width;
+  //  z-index: 10000;
+  //  background-color: rgba(#000, .5);
+  //  opacity: .25;
+  //  font-size: 16px;
+  //  color: black;
+  //}
 
   // Create a semi-transparent out-of-bounds area.
   &::before {
     content: '';
     display: block;
     box-sizing: content-box;
-    width: 120px;
+    width: 150px;
     height: 100%;
-    padding: 15px 100% 15px 15px;
     text-align: center;
-    position: fixed;
+    position: absolute;
     top: 0;
-    left: $article-max-width + 36px;
+    left: $article-max-width + 9px;
     z-index: 1;
     background-color: rgba(#000, .5);
     background-clip: padding-box;
@@ -45,11 +76,11 @@ body {
     box-sizing: content-box;
     width: 120px;
     height: 100%;
-    padding: 0 100% 0 15px;
+    padding: 0 15px;
     text-align: center;
-    position: fixed;
+    position: absolute;
     top: 0;
-    left: $article-max-width + 54px;
+    left: $article-max-width + 25px;
     z-index: 2;
     font-size: 14px;
     font-weight: normal;
@@ -61,18 +92,20 @@ body {
   span[data-cke-magic-line] {
     max-width: $article-max-width + 36px;
   }
-}
 
-.cke_show_borders > table.cke_show_border,
-.cke_show_borders > table.cke_show_border > tr > td,
-.cke_show_borders > table.cke_show_border > tr > th,
-.cke_show_borders > table.cke_show_border > tbody > tr > td,
-.cke_show_borders > table.cke_show_border > tbody > tr > th,
-.cke_show_borders > table.cke_show_border > thead > tr > td,
-.cke_show_borders > table.cke_show_border > thead > tr > th,
-.cke_show_borders > table.cke_show_border > tfoot > tr > td,
-.cke_show_borders > table.cke_show_border > tfoot > tr > th {
-  border: 1px solid $table-border-color !important; // Overrides inline style sheet ckeditor adds.
+  table table {
+    &,
+    & > tr > td,
+    & > tr > th,
+    & > tbody > tr > td,
+    & > tbody > tr > th,
+    & > thead > tr > td,
+    & > thead > tr > th,
+    & > tfoot > tr > td,
+    & > tfoot > tr > th {
+      border: 1px solid $table-border-color !important; // Makes table visible in the editor interface.
+    }
+  }
 }
 
 .media-image,
