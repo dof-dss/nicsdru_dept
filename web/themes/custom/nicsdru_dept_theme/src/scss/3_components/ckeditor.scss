@@ -7,44 +7,15 @@
 body {
   font-family: $base-font-family;
 }
-//
-//.ck.ck-editor__main {
-//  border-color: var(--ck-color-base-border);
-//  border-radius: var(--ck-border-radius);
-//  border-top-left-radius: 0;
-//  border-top-right-radius: 0;
-//  border: 1px solid;
-//}
 
 .ck-content {
-  //// applied to body in ckeditor
-  //max-width: $article-max-width;
-  //margin: 18px;
-  //border: 0;
+  // applied to body in ckeditor
   position: relative;
   overflow: hidden;
 
   * {
     max-width: $article-max-width;
   }
-
-  //&::after {
-  //  content: 'Content crossing into this area will not be visible.';
-  //  display: block;
-  //  width: 150px;
-  //  height: 100%;
-  //  padding: 0 10px;
-  //  border-left: 18px solid rgba(255, 255, 255, .5);
-  //  text-align: center;
-  //  position: absolute;
-  //  top: 0;
-  //  left: $article-max-width;
-  //  z-index: 10000;
-  //  background-color: rgba(#000, .5);
-  //  opacity: .25;
-  //  font-size: 16px;
-  //  color: black;
-  //}
 
   // Create a semi-transparent out-of-bounds area.
   &::before {
