@@ -84,6 +84,11 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
   if (empty($form['field_domain_source']['widget']['#default_value'])) {
     $domain_access_ids = $form['field_domain_access']['widget']['#default_value'];
 
+    // If we don't have any ids, use the value added by dept_core_set_entity_domain_defaults().
+    if (empty($domain_access_ids)) {
+      $domain_access_ids[] = $form['field_domain_access']['widget']['#value'];
+    }
+
     if (!empty($domain_access_ids) && count($domain_access_ids) > 1) {
       // Exclude NIGov as a domain entry as that site should not be publishing
       // content.
@@ -94,7 +99,12 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
       }, $domain_access_ids)));
     }
 
-    $form['field_domain_source']['widget']['#default_value'][] = $domain_access_ids[0];
+    if (!empty($domain_access_ids[0])) {
+      $form['field_domain_source']['widget']['#default_value'][] = $domain_access_ids[0];
+    }
+    else {
+      \Drupal::logger('dept_node')->error("Domain access ID's not found for entity: @entity", ['@entity' => $form_state->getFormObject()->getEntity()->getEntityTypeId()]);
+    }
   }
 }
 
