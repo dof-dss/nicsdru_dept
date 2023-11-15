@@ -12,12 +12,15 @@ dependencies:
     - domain_access
     - filter
     - node
+    - redirect
     - view_unpublished
 id: homepage_supervisor
 label: 'Homepage supervisor'
 weight: 11
 is_admin: null
 permissions:
+  - 'access content overview'
+  - 'administer redirects'
   - 'create featured_content_list content on assigned domains'
   - 'create link content on assigned domains'
   - 'delete featured_content_list content on assigned domains'
