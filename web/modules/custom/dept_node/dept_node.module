@@ -89,7 +89,7 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
       $domain_access_ids[] = $form['field_domain_access']['widget']['#value'];
     }
 
-    if (!empty($domain_access_ids) && count($domain_access_ids) > 1) {
+    if (count($domain_access_ids) > 1) {
       // Exclude NIGov as a domain entry as that site should not be publishing
       // content.
       $domain_access_ids = array_values(array_filter(array_map(function ($val) {
