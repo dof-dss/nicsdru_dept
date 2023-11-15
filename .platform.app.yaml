@@ -55,6 +55,9 @@ mounts:
   '/imports':
     source: local
     source_path: 'imports'
+  '/log':
+    source: local
+    source_path: 'log'
   '/.drush':
     source: local
     source_path: 'drush'
