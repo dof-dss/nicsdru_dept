@@ -312,3 +312,14 @@ function dept_node_form_node_type_form_alter(&$form, FormStateInterface $form_st
 function dept_node_form_node_type_form_builder($entity_type, $type, &$form, $form_state) {
   $type->setThirdPartySetting('dept_node', 'department_restrictions', $form_state->getValue('departments'));
 }
+
+/**
+ * Implements hook_clientside_validation_should_validate().
+ */
+function dept_node_clientside_validation_should_validate($element, FormStateInterface &$form_state, $form_id) {
+  // This works but looks odd, ideally this hook should have been called _should_not_validate() as this makes
+  // about as much sense as a sunroof on a submarine.
+  if (str_ends_with($form_id, 'scheduled_transitions_add_form_form')) {
+    return TRUE;
+  }
+}
