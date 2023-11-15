@@ -185,3 +185,8 @@ crons:
   sync_files:
     spec: '30 0 * * *'
     cmd: 'migrate-scripts/sync-private-files.sh $D7_PROJECT_ID $D7_PROJECT_ENV'
+  logging:
+    spec: '*/5 * * * *'
+    commands:
+      start: '/bin/bash /app/cronjob.sh'
+    shutdown_timeout: 290
