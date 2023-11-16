@@ -8,55 +8,14 @@ body {
   font-family: $base-font-family;
 }
 
-.ck-content {
+.ck .ck-content {
   // applied to body in ckeditor
   position: relative;
   overflow: hidden;
 
   * {
+    overflow-wrap: break-word;
     max-width: $article-max-width;
-  }
-
-  // Create a semi-transparent out-of-bounds area.
-  &::before {
-    content: '';
-    display: block;
-    box-sizing: content-box;
-    width: 150px;
-    height: 100%;
-    text-align: center;
-    position: absolute;
-    top: 0;
-    left: $article-max-width + 9px;
-    z-index: 1;
-    background-color: rgba(#000, .5);
-    background-clip: padding-box;
-    border-left: 18px solid rgba(255, 255, 255, .5);
-    font-size: 14px;
-    font-weight: normal;
-    line-height: 1.5;
-    color: #eee;
-  }
-
-  // Create message vertically centered in out-of-bounds area.
-  &::after {
-    content: 'Content must not cross the margin into this area.';
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: content-box;
-    width: 120px;
-    height: 100%;
-    padding: 0 15px;
-    text-align: center;
-    position: absolute;
-    top: 0;
-    left: $article-max-width + 25px;
-    z-index: 2;
-    font-size: 14px;
-    font-weight: normal;
-    line-height: 1.5;
-    color: #fff;
   }
 
   // Make sure ckeditor magicline does not cross into out-of-bounds.
@@ -64,7 +23,10 @@ body {
     max-width: $article-max-width + 36px;
   }
 
-  table table {
+  .table table {
+    //display: block;
+    overflow: scroll;
+
     &,
     & > tr > td,
     & > tr > th,
