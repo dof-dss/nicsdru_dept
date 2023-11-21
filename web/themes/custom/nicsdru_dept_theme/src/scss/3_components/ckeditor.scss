@@ -16,6 +16,7 @@ body {
   * {
     overflow-wrap: break-word;
     max-width: $article-max-width;
+    word-break: break-word;
   }
 
   // Make sure ckeditor magicline does not cross into out-of-bounds.
