@@ -45,7 +45,7 @@ third_party_settings:
       label: Contact
       parent_name: ''
       region: content
-      weight: 7
+      weight: 2
       format_type: html_element
       format_settings:
         classes: ''
@@ -68,7 +68,7 @@ third_party_settings:
       label: 'Additional Information'
       parent_name: ''
       region: content
-      weight: 8
+      weight: 3
       format_type: html_element
       format_settings:
         classes: additional-info
@@ -104,6 +104,25 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
+    group_heritage_site_body:
+      children:
+        - body
+      label: About
+      parent_name: ''
+      region: content
+      weight: 4
+      format_type: html_element
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: true
+        label_element: h2
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
   layout_builder:
     enabled: false
     allow_custom: false
@@ -117,7 +136,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 9
+    weight: 5
     region: content
   field_address_line_1:
     type: string
@@ -143,7 +162,7 @@ content:
     weight: 6
     region: content
   field_email:
-    type: basic_string
+    type: email_mailto
     label: inline
     settings: {  }
     third_party_settings: {  }
@@ -180,7 +199,7 @@ content:
       map_width: '600'
       map_height: '400'
     third_party_settings: {  }
-    weight: 11
+    weight: 6
     region: content
   field_nismr_link:
     type: link
