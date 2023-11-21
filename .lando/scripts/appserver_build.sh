@@ -7,10 +7,6 @@ DRUPAL_SERVICES_FILE=$DRUPAL_ROOT/sites/default/services.yml
 DRUPAL_CUSTOM_CODE=$DRUPAL_ROOT/modules/custom
 DRUPAL_CUSTOM_THEME=$DRUPAL_ROOT/themes/custom/nicsdru_dept_theme
 
-# Semaphore files to control whether we need to trigger an install
-# of supporting software or config files.
-NODE_INSTALLED=/etc/NODE_INSTALLED
-
 # Create export directories for config and data.
 if [ ! -d "/app/.lando/exports" ]; then
   echo "Creating export directories"
