@@ -80,6 +80,7 @@ Landing pages have a boolean field to enable title visibility.
   {{- title_prefix -}}
   {% if title_visible %}
     <h1{{ title_attributes.addClass('page-title') }}>{{- label -}}</h1>
+    {{ content.field_site_topics }}
   {% else %}
     <h1{{ title_attributes.addClass(['page-title', 'visually-hidden']) }}>{{- label -}}</h1>
   {% endif %}
@@ -87,7 +88,7 @@ Landing pages have a boolean field to enable title visibility.
   {% if  content_attributes is not empty %}
   <div{{ content_attributes }}>
   {% endif %}
-  {{- content -}}
+  {{- content|without('field_site_topics') -}}
   {% if  content_attributes is not empty %}
   </div>
   {% endif %}

@@ -76,16 +76,14 @@
 <article{{ attributes.setAttribute('id', 'main-article').removeAttribute('role') }}>
   {% if show_title %}
     {{ drupal_block('page_title_block', wrapper=false) }}
-  {% endif %}
-  {% if show_topics and topics_subtopics_list is not empty %}
-    {{ topics_subtopics_list }}
+    {{ content.field_site_topics }}
   {% endif %}
   <div class="layout--main-n-side">
     <div class="ga-main">
       {% if content_attributes is not empty %}
       <div{{ content_attributes }}>
         {% endif %}
-        {{ content|without('field_photo') }}
+        {{ content|without('field_photo', 'field_site_topics') }}
         {% if content_attributes is not empty %}
       </div>
       {% endif %}
