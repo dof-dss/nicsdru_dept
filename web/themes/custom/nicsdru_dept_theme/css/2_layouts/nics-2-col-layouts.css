@@ -59,18 +59,13 @@
   grid-area: main;
 }
 
-/* line 83, src/scss/2_layouts/nics-2-col-layouts.scss */
-.layout--main-n-side .ga-main:only-child {
-  grid-column: span 2;
-}
-
-/* line 87, src/scss/2_layouts/nics-2-col-layouts.scss */
+/* line 82, src/scss/2_layouts/nics-2-col-layouts.scss */
 .layout--main-n-side .ga-aside {
   grid-area: side;
 }
 
 @media (min-width: 768px) {
-  /* line 87, src/scss/2_layouts/nics-2-col-layouts.scss */
+  /* line 82, src/scss/2_layouts/nics-2-col-layouts.scss */
   .layout--main-n-side .ga-aside {
     padding-top: 5em;
   }
@@ -112,35 +107,35 @@
   }
 }
 
-/* line 124, src/scss/2_layouts/nics-2-col-layouts.scss */
+/* line 119, src/scss/2_layouts/nics-2-col-layouts.scss */
 .layout--side-n-main {
   grid-template-areas: 'side' 'main';
 }
 
-/* line 131, src/scss/2_layouts/nics-2-col-layouts.scss */
+/* line 126, src/scss/2_layouts/nics-2-col-layouts.scss */
 .layout--side-n-main .ga-main {
   grid-area: main;
 }
 
-/* line 135, src/scss/2_layouts/nics-2-col-layouts.scss */
+/* line 130, src/scss/2_layouts/nics-2-col-layouts.scss */
 .layout--side-n-main .ga-aside {
   grid-area: side;
 }
 
 @media (min-width: 768px) {
-  /* line 124, src/scss/2_layouts/nics-2-col-layouts.scss */
+  /* line 119, src/scss/2_layouts/nics-2-col-layouts.scss */
   .layout--side-n-main {
     grid-template-columns: 298fr 590fr;
     grid-gap: 4.4rem;
     grid-template-rows: auto;
     grid-template-areas: 'side main';
   }
-  /* line 145, src/scss/2_layouts/nics-2-col-layouts.scss */
+  /* line 140, src/scss/2_layouts/nics-2-col-layouts.scss */
   .layout--side-n-main .ga-main {
     /* no grid support? */
     float: right;
   }
-  /* line 150, src/scss/2_layouts/nics-2-col-layouts.scss */
+  /* line 145, src/scss/2_layouts/nics-2-col-layouts.scss */
   .layout--side-n-main .ga-aside {
     /* no grid support? */
     float: left;
@@ -148,7 +143,7 @@
 }
 
 @media (min-width: 992px) {
-  /* line 124, src/scss/2_layouts/nics-2-col-layouts.scss */
+  /* line 119, src/scss/2_layouts/nics-2-col-layouts.scss */
   .layout--side-n-main {
     grid-template-columns: 290fr 590fr;
     grid-gap: 5.4rem;
@@ -157,7 +152,7 @@
 }
 
 @media (min-width: 1200px) {
-  /* line 124, src/scss/2_layouts/nics-2-col-layouts.scss */
+  /* line 119, src/scss/2_layouts/nics-2-col-layouts.scss */
   .layout--side-n-main {
     grid-template-columns: 290fr 670fr;
     grid-gap: 6rem;
@@ -166,7 +161,7 @@
 }
 
 @media (min-width: 1679px) {
-  /* line 124, src/scss/2_layouts/nics-2-col-layouts.scss */
+  /* line 119, src/scss/2_layouts/nics-2-col-layouts.scss */
   .layout--side-n-main {
     grid-template-columns: 290fr 730fr;
     grid-gap: 6rem;
@@ -175,13 +170,13 @@
 }
 
 @media (min-width: 768px) {
-  /* line 175, src/scss/2_layouts/nics-2-col-layouts.scss */
+  /* line 170, src/scss/2_layouts/nics-2-col-layouts.scss */
   .layout--diptych {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
     grid-gap: 24px;
   }
-  /* line 181, src/scss/2_layouts/nics-2-col-layouts.scss */
+  /* line 176, src/scss/2_layouts/nics-2-col-layouts.scss */
   .layout--diptych > * {
     /* no grid support? */
     float: left;
