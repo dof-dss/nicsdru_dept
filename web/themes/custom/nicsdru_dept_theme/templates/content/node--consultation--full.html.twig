@@ -88,13 +88,10 @@
         <span class="page-title__suffix subtitle">{{ title_subtitle }}</span>
       {%- endif -%}
     </h1>
+    {{ content.field_site_topics }}
   {% endif %}
 
   {{ content.field_published_date }}
-
-  {% if show_topics and topics_subtopics_list is not empty -%}
-    {{ topics_subtopics_list }}
-  {% endif %}
 
   <div{{ content_attributes.addClass('content') }}>
     <div class="consultation-dates">
