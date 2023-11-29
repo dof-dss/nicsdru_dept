@@ -32,7 +32,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
   field_map_location:
     type: gmaps_lazy_load_formatter
@@ -45,7 +45,15 @@ content:
       map_width: '400'
       map_height: '400'
     third_party_settings: {  }
-    weight: 1
+    weight: 2
+    region: content
+  field_site_topics:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   content_moderation_control: true
@@ -55,7 +63,6 @@ hidden:
   field_domain_source: true
   field_metatags: true
   field_next_audit_due: true
-  field_site_topics: true
   groups: true
   groups_type_department_site: true
   langcode: true
