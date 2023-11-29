@@ -5,14 +5,10 @@
  * Primary module hooks for Dept postprocess module.
  */
 
-/**
- * Implements hook_form_BASE_FORM_ID_alter().
- */
-
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Implements hook_0().
+ * Implements hook_form_node_form_alter().
  */
 function dept_postprocess_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Create a new 'hide topic' checkbox on the main node form that mirrors the functionality
@@ -28,7 +24,8 @@ function dept_postprocess_form_node_form_alter(&$form, FormStateInterface $form_
         '#type' => 'checkbox',
         '#title' => $form["flag"]['hide_listing']['#title'],
         '#description' => $form["flag"]['hide_listing']['#description'],
-        '#default_value' => $form["flag"]['hide_listing']['#default_value']
+        '#default_value' => $form["flag"]['hide_listing']['#default_value'],
+        '#weight' => 1,
       ];
 
       $form["flag"]['hide_listing']['#states'] = [
