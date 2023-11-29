@@ -15,13 +15,13 @@ use Drupal\Core\Form\FormStateInterface;
  * Implements hook_0().
  */
 function dept_postprocess_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-
-  if ($form_id === 'node-topic-form' || $form_id === 'node_topic_edit_form') {
+  if (in_array($form_id, ['node_topic_form', 'node_topic_edit_form', 'node_subtopic_form', 'node_subtopic_edit_form'])) {
     if (array_key_exists('flag', $form) && array_key_exists('hide_listing', $form["flag"])) {
       $form['hide_listing'] = [
         '#type' => 'checkbox',
         '#title' => $form["flag"]['hide_listing']['#title'],
         '#description' => $form["flag"]['hide_listing']['#description'],
+        '#default_value' => $form["flag"]['hide_listing']['#default_value']
       ];
 
       $form["flag"]['hide_listing']['#states'] = [
