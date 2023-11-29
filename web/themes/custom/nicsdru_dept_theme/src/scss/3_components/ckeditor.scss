@@ -3,9 +3,14 @@
  * =====================================================*/
 
 @import '../init';
+@import 'form/button/button-defs';
+
+
+$base-font-size: 16px;
 
 body {
   font-family: $base-font-family;
+  box-sizing: border-box;
 }
 
 .ck .ck-content {
@@ -22,14 +27,106 @@ body {
     }
   }
 
+  // Headings
+  //
+  // All HTML headings, `<h1>` through `<h6>`, are available. `%h1` through `%h6`
+  // classes are also available, for when you want to match the font styling of a
+  // heading but still want your text to be displayed inline.
+  h2,
+  %h2 {
+    //@include adjust-font-size-to(24px);
+    //@include adjust-size-to(32px, line-height);
+    //@include adjust-size-to(32px 0 16px, margin)
+    //line-height: 2rem;
+    //margin: 2rem 0 1rem;
+    @include responsive-typo-map($h2-text);
+  }
+
+  h3,
+  %h3 {
+    @include responsive-typo-map($h3-text);
+  }
+
+  h4,
+  %h4 {
+    @include responsive-typo-map($h4-text);
+  }
+
+  h5,
+  %h5 {
+    @include responsive-typo-map($h5-text);
+  }
+
+  h6,
+  %h6 {
+    @include responsive-typo-map($h6-text);
+  }
+
+
+  // Body copy
+  //
+  // The default `font-size` and `line-height` properties are applied to the `<body>` element and all paragraphs.
+  // In addition, `<p>` (paragraphs) receive a top and bottom margin.
+  //
+  // Markup: kss-templates/grouping-p.twig
+  //
+  // Style guide: base.text.p
+
+  p,
+  pre,
+  blockquote,
+  address,
+  li {
+    @include responsive-typo-map($normal-text);
+  }
+
+  // Tighten lists up closer to the preceding paragraph.
+  p + ul,
+  p + ol {
+    @include adjust-size-to(-12px, margin-top);
+    //margin-top: -1.2rem;
+  }
+
+  // Code
+  //
+  // The `<code>` element represents a fragment of computer code. The `<var>`
+  // element represents a variable. The `<samp>` element represents (sample)
+  // output from a program or computing system. The `<kbd>` element represents
+  // user input (typically keyboard input.)
+
+  %monospace,
+  code,
+  kbd,
+  samp,
+  var {
+    // Correct the inheritance and scaling of font size in all browsers.
+    // The font-family value ends with ", serif".
+    @include adjust-font-size-to($base-font-size);
+  }
+
+  // Superscript / Subscript
+  //
+  // The `<sup>` element represents a superscript and the `<sub>` element
+  // represents a subscript.
+
+  sub,
+  sup {
+    // Prevent `sub` and `sup` elements from affecting the line height in
+    // all browsers.
+    @include adjust-font-size-to(14px);
+  }
+
   // Make sure ckeditor magicline does not cross into out-of-bounds.
   span[data-cke-magic-line] {
     max-width: $article-max-width + 36px;
   }
 
   .table table {
-    //display: block;
     overflow: scroll;
+
+    &.table-fixed-width {
+      table-layout: fixed;
+    }
 
     &,
     & > tr > td,
@@ -41,6 +138,42 @@ body {
     & > tfoot > tr > td,
     & > tfoot > tr > th {
       border: 1px solid $table-border-color !important; // Makes table visible in the editor interface.
+    }
+
+    td,
+    th {
+      @include adjust-font-size-to(14px, 4);
+      @include adjust-size-to(4px 4px 3px, padding);
+
+      @include breakpoint($phab, $no-query: true) {
+        @include adjust-font-size-to(16px, 4);
+        @include adjust-size-to(8px 8px 7px, padding);
+        //padding: .8rem .8rem .7rem; // -1px on bottom border to maintain vertical rhythm.
+      }
+
+      @include breakpoint($tab, $no-query: true) {
+        @include adjust-font-size-to(16px, 4.5); // need 27px line height for vertical rhythm now.
+        @include adjust-size-to(9px 9px 8px, padding);
+        //padding: .9rem .9rem .8rem; // -1px on bottom border to maintain vertical rhythm.
+      }
+
+      & * {
+        font-size: inherit;
+        line-height: inherit;
+      }
+    }
+
+    p {
+      @include adjust-size-to(9px 0, margin);
+      //margin: .9rem 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 
@@ -97,6 +230,52 @@ body {
       text-align: right;
     }
   }
+
+  %notice-builder {
+    @include adjust-size-to(12px 1em 1em 50px, padding);
+    @include adjust-size-to(11px 11px, background-position);
+    border: 2px solid;
+    margin: 1.5em 0;
+    //padding: 1.2rem 1em 1em 5rem;
+    background: #fff resolve('i.svg') no-repeat 1.1rem 1.1rem / 28px 28px;
+
+    @include breakpoint($phab, $no-query: true) {
+      @include adjust-size-to(14px 1em 1em 60px, padding);
+      //padding: 1.4rem 1em 1em 6rem;
+      @include adjust-size-to(14px 14px, background-position);
+      //background-position: 1.4rem 1.4rem;
+      background-size: 30px 30px;
+    }
+
+    & > *:first-child {
+      margin-top: 0;
+    }
+
+    & > *:last-child {
+      margin-bottom: 0;
+    }
+
+    & > h2:first-child,
+    & > h3:first-child {
+      @include adjust-font-size-to(21px, 4.5);
+
+      @include breakpoint($phab) {
+        @include adjust-font-size-to(24px, 5);
+      }
+    }
+
+    // Replacement for .call-to-action suitable for use in CKEditor.
+    .btn--call-to-action {
+      @include btn(large, right);
+      @include btn-color($btn-action);
+      @include responsive-typo-map($btn-large);
+    }
+  }
+
+  .info-notice {
+    @extend %notice-builder;
+    border-color: $brand-primary-light;
+  }
 }
 
 .media-image,
@@ -123,40 +302,7 @@ body {
   }
 }
 
-.split-list {
-  columns: 2;
-  column-gap: 3.6rem;
-}
-
-address {
-  @include responsive-typo-map($normal-text);
-  margin: 1em 0 1.5em;
-  font-weight: normal;
-  font-style: normal;
-  color: $charcoal;
-
-  &:not(.vcard) {
-    padding: .5em 1em;
-    border-left: .3334em solid $grey-light;
-  }
-
-  & > *:first-child {
-    margin-top: 0;
-  }
-}
-
-ol {
-  list-style-type: decimal;
-
-  ol {
-    list-style: upper-alpha;
-
-    ol {
-      list-style: lower-roman;
-
-      ol {
-        list-style: lower-alpha;
-      }
-    }
-  }
-}
+//.split-list {
+//  columns: 2;
+//  column-gap: 3.6rem;
+//}

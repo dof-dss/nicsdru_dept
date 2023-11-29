@@ -92,12 +92,12 @@
   }
   @else if $size == 'large' {
     @include responsive-typo-map($btn-large);
-    @include _btn(8rem, 5.2rem, (.7rem 1.6rem), $arrow-direction);
+    @include _btn(80px, 52px, (7px 16px), $arrow-direction);
     @include breakpoint($tab) {
-      @include _btn(15rem, 5.4rem, (.8rem 1.9rem), $arrow-direction);
+      @include _btn(150px, 54px, (8px 19px), $arrow-direction);
     }
     @include breakpoint($desk-plus) {
-      @include _btn(17rem, 6rem, (.9rem 2rem), $arrow-direction);
+      @include _btn(170px, 60px, (9px 20px), $arrow-direction);
     }
   }
   @else {
@@ -154,9 +154,12 @@
 }
 
 @mixin _btn($min-width, $min-height, $padding, $arrow-direction) {
-  min-width: $min-width;
-  min-height: $min-height;
-  padding: $padding;
+  @include adjust-size-to($min-width, min-width);
+  @include adjust-size-to($min-height, min-height);
+  @include adjust-size-to($padding, padding);
+  //min-width: $min-width;
+  //min-height: $min-height;
+  //padding: $padding;
 
   @if $arrow-direction {
 
@@ -183,12 +186,14 @@
 
     // Set the padding and background-position depending on arrow direction.
     @if $arrow-direction == left {
-      padding-left: $padding-side;
+      @include adjust-size-to($padding-side, padding-left);
+      //padding-left: $padding-side;
       background-position: left $background-position-x-offset top 50%;
     }
 
     @if $arrow-direction == right {
-      padding-right: $padding-side;
+      @include adjust-size-to($padding-side, padding-right);
+      //padding-right: $padding-side;
       background-position: right $background-position-x-offset top 50%;
     }
   }
