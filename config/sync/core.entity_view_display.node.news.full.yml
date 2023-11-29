@@ -72,15 +72,15 @@ content:
       timezone_override: ''
       format_type: medium_date
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
   field_site_topics:
     type: entity_reference_label
-    label: above
+    label: inline
     settings:
       link: true
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
   field_summary:
     type: smart_trim

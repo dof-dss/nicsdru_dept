@@ -45,7 +45,7 @@ third_party_settings:
       label: Contact
       parent_name: ''
       region: content
-      weight: 2
+      weight: 3
       format_type: html_element
       format_settings:
         classes: ''
@@ -68,7 +68,7 @@ third_party_settings:
       label: 'Additional Information'
       parent_name: ''
       region: content
-      weight: 3
+      weight: 4
       format_type: html_element
       format_settings:
         classes: additional-info
@@ -91,7 +91,7 @@ third_party_settings:
       label: Address
       parent_name: ''
       region: content
-      weight: 1
+      weight: 2
       format_type: html_element
       format_settings:
         classes: ''
@@ -110,7 +110,7 @@ third_party_settings:
       label: About
       parent_name: ''
       region: content
-      weight: 4
+      weight: 5
       format_type: html_element
       format_settings:
         classes: ''
@@ -235,7 +235,7 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
   field_postcode:
     type: string
@@ -244,6 +244,14 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 5
+    region: content
+  field_site_topics:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
     region: content
   field_sm_number:
     type: string
@@ -281,7 +289,6 @@ hidden:
   field_domain_all_affiliates: true
   field_domain_source: true
   field_metatags: true
-  field_site_topics: true
   groups: true
   groups_type_department_site: true
   langcode: true
