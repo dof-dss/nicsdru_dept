@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Dept postprocess module.
+ */
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_0().
+ */
+function dept_postprocess_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  if ($form_id === 'node-topic-form' || $form_id === 'node_topic_edit_form') {
+    if (array_key_exists('flag', $form) && array_key_exists('hide_listing', $form["flag"])) {
+      $form['hide_listing'] = [
+        '#type' => 'checkbox',
+        '#title' => $form["flag"]['hide_listing']['#title'],
+        '#description' => $form["flag"]['hide_listing']['#description'],
+      ];
+
+      $form["flag"]['hide_listing']['#states'] = [
+        'checked' => [
+          ':input[name="hide_listing"]' => ['checked' => TRUE],
+        ],
+      ];
+    }
+  }
+}
