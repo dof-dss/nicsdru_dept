@@ -19,7 +19,7 @@
   {% block content -%}
     {%- if site_logo -%}
       {%- if not is_front -%}
-        <a href="{{ path('<front>') }}" rel="home">
+        <a href="{{ department_url }}" rel="home">
       {%- endif -%}
       {% include active_theme_path() ~ '/images/' ~ department_logo %}
       {%- if not is_front -%}

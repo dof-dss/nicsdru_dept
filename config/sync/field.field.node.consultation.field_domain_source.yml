@@ -5,6 +5,12 @@ dependencies:
   config:
     - field.storage.node.field_domain_source
     - node.type.consultation
+  module:
+    - domain_entity
+third_party_settings:
+  domain_entity:
+    exclude_routes:
+      canonical: canonical
 id: node.consultation.field_domain_source
 field_name: field_domain_source
 entity_type: node
