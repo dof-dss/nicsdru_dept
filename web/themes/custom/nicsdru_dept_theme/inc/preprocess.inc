@@ -370,6 +370,11 @@ function nicsdru_dept_theme_preprocess_block(array &$variables) {
       $variables["department_logo"] = 'logo-' . $dept->id() . '.svg';
       if (method_exists($dept, 'name')) {
         $variables['site_name'] = $dept->name();
+        // Introduce a custom preprocess variable
+        // as <front> is often hijacked to always show
+        // the domain_source homepage and that doesn't
+        // work for viewing this element on other sites.
+        $variables['department_url'] = $dept->url();
       }
     }
     else {
