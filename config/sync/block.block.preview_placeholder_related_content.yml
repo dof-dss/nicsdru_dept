@@ -1,0 +1,35 @@
+uuid: 1cf721d1-0d7f-409e-8a30-7a18c29b7c05
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:text:327c60ee-6b8f-4840-8192-876ed71556e6'
+  module:
+    - block_content
+    - block_visibility_groups
+    - system
+  theme:
+    - nicsdru_dept_theme
+id: preview_placeholder_related_content
+theme: nicsdru_dept_theme
+region: sidebar_second
+weight: 0
+provider: null
+plugin: 'block_content:327c60ee-6b8f-4840-8192-876ed71556e6'
+settings:
+  id: 'block_content:327c60ee-6b8f-4840-8192-876ed71556e6'
+  label: 'Preview: Related content'
+  label_display: visible
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/node/preview/*'

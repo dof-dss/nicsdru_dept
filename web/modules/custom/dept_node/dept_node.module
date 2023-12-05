@@ -84,7 +84,12 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
   if (empty($form['field_domain_source']['widget']['#default_value'])) {
     $domain_access_ids = $form['field_domain_access']['widget']['#default_value'];
 
-    if (!empty($domain_access_ids) && count($domain_access_ids) > 1) {
+    // If we don't have any ids, use the value added by dept_core_set_entity_domain_defaults().
+    if (empty($domain_access_ids)) {
+      $domain_access_ids[] = $form['field_domain_access']['widget']['#value'];
+    }
+
+    if (count($domain_access_ids) > 1) {
       // Exclude NIGov as a domain entry as that site should not be publishing
       // content.
       $domain_access_ids = array_values(array_filter(array_map(function ($val) {
@@ -94,7 +99,12 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
       }, $domain_access_ids)));
     }
 
-    $form['field_domain_source']['widget']['#default_value'][] = $domain_access_ids[0];
+    if (!empty($domain_access_ids[0])) {
+      $form['field_domain_source']['widget']['#default_value'][] = $domain_access_ids[0];
+    }
+    else {
+      \Drupal::logger('dept_node')->error("Domain access ID's not found for entity: @entity", ['@entity' => $form_state->getFormObject()->getEntity()->getEntityTypeId()]);
+    }
   }
 }
 
@@ -311,4 +321,15 @@ function dept_node_form_node_type_form_alter(&$form, FormStateInterface $form_st
  */
 function dept_node_form_node_type_form_builder($entity_type, $type, &$form, $form_state) {
   $type->setThirdPartySetting('dept_node', 'department_restrictions', $form_state->getValue('departments'));
+}
+
+/**
+ * Implements hook_clientside_validation_should_validate().
+ */
+function dept_node_clientside_validation_should_validate($element, FormStateInterface &$form_state, $form_id) {
+  // This works but looks odd, ideally this hook should have been called _should_not_validate() as this makes
+  // about as much sense as a sunroof on a submarine.
+  if (str_ends_with($form_id, 'scheduled_transitions_add_form_form')) {
+    return TRUE;
+  }
 }

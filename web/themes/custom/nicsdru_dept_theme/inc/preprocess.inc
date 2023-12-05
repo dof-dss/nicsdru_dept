@@ -5,19 +5,15 @@
  * Theme hook_preprocess functions.
  */
 
-use Drupal\block\Entity\Block;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\Core\Entity\EntityBase;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Template\Attribute;
-use Drupal\Core\Url;
 use Drupal\dept_core\Department;
 use Drupal\media\MediaInterface;
 use Drupal\nicsdru_dept_theme\Helpers;
 use Drupal\nicsdru_dept_theme\LayoutClasses;
 use Drupal\node\Entity\Node;
-use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_html().
@@ -311,6 +307,14 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
       // node templates for these types.
       $variables['show_title'] = FALSE;
       break;
+
+    case "heritage_site":
+      if (!empty($variables['elements']['#fieldgroups']['group_heritage_site_body'])) {
+        $body_group_label = &$variables['elements']['#fieldgroups']['group_heritage_site_body']->label;
+        $body_group_label = t('About') . ' ' . $variables['node']->label();
+      }
+      break;
+
   }
 
   // Only use this code for consultations content type.
@@ -366,6 +370,11 @@ function nicsdru_dept_theme_preprocess_block(array &$variables) {
       $variables["department_logo"] = 'logo-' . $dept->id() . '.svg';
       if (method_exists($dept, 'name')) {
         $variables['site_name'] = $dept->name();
+        // Introduce a custom preprocess variable
+        // as <front> is often hijacked to always show
+        // the domain_source homepage and that doesn't
+        // work for viewing this element on other sites.
+        $variables['department_url'] = $dept->url();
       }
     }
     else {

@@ -7,17 +7,21 @@ dependencies:
     - filter.format.filtered_html_with_no_images
     - node.type.featured_content_list
     - node.type.link
+    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - domain_access
     - filter
     - node
+    - redirect
     - view_unpublished
 id: homepage_supervisor
 label: 'Homepage supervisor'
 weight: 11
 is_admin: null
 permissions:
+  - 'access content overview'
+  - 'administer redirects'
   - 'create featured_content_list content on assigned domains'
   - 'create link content on assigned domains'
   - 'delete featured_content_list content on assigned domains'
@@ -26,6 +30,15 @@ permissions:
   - 'revert link revisions'
   - 'update featured_content_list content on assigned domains'
   - 'update link content on assigned domains'
+  - 'use nics_editorial_workflow transition archive'
+  - 'use nics_editorial_workflow transition create_new_draft'
+  - 'use nics_editorial_workflow transition draft_of_published'
+  - 'use nics_editorial_workflow transition publish'
+  - 'use nics_editorial_workflow transition quick_publish'
+  - 'use nics_editorial_workflow transition reject'
+  - 'use nics_editorial_workflow transition restore'
+  - 'use nics_editorial_workflow transition restore_to_draft'
+  - 'use nics_editorial_workflow transition submit_for_review'
   - 'use text format filtered_html'
   - 'use text format filtered_html_with_no_images'
   - 'view any unpublished application content'
@@ -43,4 +56,5 @@ permissions:
   - 'view any unpublished publication content'
   - 'view any unpublished ual content'
   - 'view featured_content_list revisions'
+  - 'view latest version'
   - 'view link revisions'

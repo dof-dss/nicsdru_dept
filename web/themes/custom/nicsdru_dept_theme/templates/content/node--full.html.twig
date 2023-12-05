@@ -75,15 +75,13 @@
     {{ banner_image }}
   {% endif %}
   {% if show_title %}
-  {{ drupal_block('page_title_block', wrapper=false) }}
-  {% endif %}
-  {% if show_topics and topics_subtopics_list is not empty %}
-    {{ topics_subtopics_list }}
+    {{ drupal_block('page_title_block', wrapper=false) }}
+    {{ content.field_site_topics }}
   {% endif %}
   {% if content_attributes is not empty %}
   <div{{ content_attributes }}>
   {% endif %}
-  {{ content }}
+  {{ content|without('field_site_topics') }}
   {% if content_attributes is not empty %}
   </div>
   {% endif %}

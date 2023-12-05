@@ -75,16 +75,14 @@
     {{ banner_image }}
   {% endif %}
   {% if show_title %}
-  {{ drupal_block('page_title_block', wrapper=false) }}
+    {{ drupal_block('page_title_block', wrapper=false) }}
   {% endif %}
   {{ content.field_published_date }}
-  {% if show_topics and topics_subtopics_list is not empty %}
-    {{ topics_subtopics_list }}
-  {% endif %}
+  {{ content.field_site_topics }}
   {% if content_attributes is not empty %}
   <div{{ content_attributes }}>
   {% endif %}
-  {{- content|without('field_published_date') -}}
+  {{- content|without('field_published_date', 'field_site_topics') -}}
   {% if content_attributes is not empty %}
   </div>
   {% endif %}

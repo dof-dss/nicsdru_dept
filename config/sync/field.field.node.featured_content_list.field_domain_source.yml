@@ -5,6 +5,11 @@ dependencies:
   config:
     - field.storage.node.field_domain_source
     - node.type.featured_content_list
+  module:
+    - domain_entity
+third_party_settings:
+  domain_entity:
+    exclude_routes: {  }
 id: node.featured_content_list.field_domain_source
 field_name: field_domain_source
 entity_type: node

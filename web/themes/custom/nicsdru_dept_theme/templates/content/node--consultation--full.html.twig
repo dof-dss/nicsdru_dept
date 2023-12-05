@@ -91,10 +91,7 @@
   {% endif %}
 
   {{ content.field_published_date }}
-
-  {% if show_topics and topics_subtopics_list is not empty -%}
-    {{ topics_subtopics_list }}
-  {% endif %}
+  {{ content.field_site_topics }}
 
   <div{{ content_attributes.addClass('content') }}>
     <div class="consultation-dates">
