@@ -10,7 +10,6 @@ $base-font-size: 16px;
 
 body {
   font-family: $base-font-family;
-  box-sizing: border-box;
 }
 
 .ck .ck-content {
@@ -21,6 +20,9 @@ body {
   * {
     overflow-wrap: break-word;
     max-width: $article-max-width;
+    box-sizing: border-box;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased; // more subtle on larger fonts, makes smaller fonts more substantial.
 
     @include breakpoint($tab) {
       word-break: break-word;
@@ -32,6 +34,16 @@ body {
   // All HTML headings, `<h1>` through `<h6>`, are available. `%h1` through `%h6`
   // classes are also available, for when you want to match the font styling of a
   // heading but still want your text to be displayed inline.
+  #{headings()} {
+    font-weight: normal;
+    color: $text;
+
+    strong,
+    b {
+      font-weight: normal;
+    }
+  }
+
   h2,
   %h2 {
     //@include adjust-font-size-to(24px);
@@ -83,8 +95,23 @@ body {
   // Tighten lists up closer to the preceding paragraph.
   p + ul,
   p + ol {
-    @include adjust-size-to(-12px, margin-top);
+    @include adjust-property-size-to(-12px, margin-top);
     //margin-top: -1.2rem;
+  }
+
+  ol,
+  ul {
+    padding: 0 0 0 1em;
+    margin: 1em 0 1.5em;
+
+    ul,
+    ol {
+      margin: 0;
+    }
+  }
+
+  li {
+    margin: 0 0 .5em;
   }
 
   // Code
@@ -121,58 +148,63 @@ body {
     max-width: $article-max-width + 36px;
   }
 
-  .table table {
-    overflow: scroll;
+  .table {
+    width: 100%;
+    margin-left: 0;
 
-    &.table-fixed-width {
-      table-layout: fixed;
-    }
+    table {
+      overflow: scroll;
 
-    &,
-    & > tr > td,
-    & > tr > th,
-    & > tbody > tr > td,
-    & > tbody > tr > th,
-    & > thead > tr > td,
-    & > thead > tr > th,
-    & > tfoot > tr > td,
-    & > tfoot > tr > th {
-      border: 1px solid $table-border-color !important; // Makes table visible in the editor interface.
-    }
-
-    td,
-    th {
-      @include adjust-font-size-to(14px, 4);
-      @include adjust-size-to(4px 4px 3px, padding);
-
-      @include breakpoint($phab, $no-query: true) {
-        @include adjust-font-size-to(16px, 4);
-        @include adjust-size-to(8px 8px 7px, padding);
-        //padding: .8rem .8rem .7rem; // -1px on bottom border to maintain vertical rhythm.
+      &.table-fixed-width {
+        table-layout: fixed;
       }
 
-      @include breakpoint($tab, $no-query: true) {
-        @include adjust-font-size-to(16px, 4.5); // need 27px line height for vertical rhythm now.
-        @include adjust-size-to(9px 9px 8px, padding);
-        //padding: .9rem .9rem .8rem; // -1px on bottom border to maintain vertical rhythm.
+      &,
+      & > tr > td,
+      & > tr > th,
+      & > tbody > tr > td,
+      & > tbody > tr > th,
+      & > thead > tr > td,
+      & > thead > tr > th,
+      & > tfoot > tr > td,
+      & > tfoot > tr > th {
+        border: 1px solid $table-border-color !important; // Makes table visible in the editor interface.
       }
 
-      & * {
-        font-size: inherit;
-        line-height: inherit;
+      td,
+      th {
+        @include adjust-font-size-to(14px, 4);
+        @include adjust-property-size-to(4px 4px 3px, padding);
+
+        @include breakpoint($phab, $no-query: true) {
+          @include adjust-font-size-to(16px, 4);
+          @include adjust-property-size-to(8px 8px 7px, padding);
+          //padding: .8rem .8rem .7rem; // -1px on bottom border to maintain vertical rhythm.
+        }
+
+        @include breakpoint($tab, $no-query: true) {
+          @include adjust-font-size-to(16px, 4.5); // need 27px line height for vertical rhythm now.
+          @include adjust-property-size-to(9px 9px 8px, padding);
+          //padding: .9rem .9rem .8rem; // -1px on bottom border to maintain vertical rhythm.
+        }
+
+        & * {
+          font-size: inherit;
+          line-height: inherit;
+        }
       }
-    }
 
-    p {
-      @include adjust-size-to(9px 0, margin);
-      //margin: .9rem 0;
+      p {
+        @include adjust-property-size-to(9px 0, margin);
+        //margin: .9rem 0;
 
-      &:first-child {
-        margin-top: 0;
-      }
+        &:first-child {
+          margin-top: 0;
+        }
 
-      &:last-child {
-        margin-bottom: 0;
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
     }
   }
@@ -232,17 +264,17 @@ body {
   }
 
   %notice-builder {
-    @include adjust-size-to(12px 1em 1em 50px, padding);
-    @include adjust-size-to(11px 11px, background-position);
+    @include adjust-property-size-to(12px 1em 1em 50px, padding);
+    @include adjust-property-size-to(11px 11px, background-position);
     border: 2px solid;
     margin: 1.5em 0;
     //padding: 1.2rem 1em 1em 5rem;
     background: #fff resolve('i.svg') no-repeat 1.1rem 1.1rem / 28px 28px;
 
     @include breakpoint($phab, $no-query: true) {
-      @include adjust-size-to(14px 1em 1em 60px, padding);
+      @include adjust-property-size-to(14px 1em 1em 60px, padding);
       //padding: 1.4rem 1em 1em 6rem;
-      @include adjust-size-to(14px 14px, background-position);
+      @include adjust-property-size-to(14px 14px, background-position);
       //background-position: 1.4rem 1.4rem;
       background-size: 30px 30px;
     }
@@ -275,6 +307,14 @@ body {
   .info-notice {
     @extend %notice-builder;
     border-color: $brand-primary-light;
+  }
+
+  .drupal-media {
+    display: block;
+
+    figcaption {
+      @include responsive-typo-map($smallish-text);
+    }
   }
 }
 
