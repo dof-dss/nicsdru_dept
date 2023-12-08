@@ -12,14 +12,21 @@ id: media.secure_file.media_library
 targetEntityType: media
 bundle: secure_file
 mode: media_library
-content: {  }
+content:
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
 hidden:
   created: true
   field_domain_access: true
   field_domain_source: true
   field_media_file_1: true
   langcode: true
-  name: true
   path: true
   status: true
   uid: true
