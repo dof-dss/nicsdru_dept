@@ -68,24 +68,24 @@ $font-monospace:   'Courier New', 'DejaVu Sans Mono', monospace, sans-serif;;
 // ```
 //
 // And that will compile to css as:
-// (note px is converted to rem automatically)
+// (note px is converted to px automatically)
 //
 // ```css
 // p {
-//   font-size: 1.6rem;
+//   font-size: 1.6px;
 //   line-height: 1.5;
 //   margin: 1em 0 2em
 // }
 //
 // @media screen and (min-width: 992px) {
 //   p {
-//     font-size: 1.8rem
+//     font-size: 1.8px
 //   }
 // }
 //
 // @media screen and (min-width: 1679px) {
 //   p {
-//     font-size: 2rem
+//     font-size: 2px
 //   }
 // }
 // ```
@@ -107,29 +107,29 @@ $normal-text-no-margins: (
 
 // Small, medium, large, extra large text (no margins).
 $small-text: (
-  null: (1.5rem, 2.2rem),
-  xl: (1.6rem, 2.4rem),
-  xxxl: (1.7rem, 2.5rem),
+  null: (15px, 22px),
+  xl: (16px, 24px),
+  xxxl: (17px, 25px),
 );
 
 $smallish-text: (
-  null: (1.5rem, 2.4rem),
-  xl: (1.7rem, 2.7rem),
-  xxxl: (1.8rem, 3rem),
+  null: (15px, 24px),
+  xl: (17px, 27px),
+  xxxl: (18px, 30px),
 );
 
 $medium-text: (
-  null: (18px, 2.8rem),
-  xl: (19px, 3rem),
-  xxl: (20px, 3.3rem),
-  xxxl: (21px, 3.5rem)
+  null: (18px, 28px),
+  xl: (19px, 30px),
+  xxl: (20px, 33px),
+  xxxl: (21px, 35px)
 );
 
 $large-text: (
-  null: (20px, 2.8rem),
-  xl: (21px, 3rem),
-  xxl: (22px, 3.3rem),
-  xxxl: (22px, 3.5rem)
+  null: (20px, 28px),
+  xl: (21px, 30px),
+  xxl: (22px, 33px),
+  xxxl: (22px, 35px)
 );
 
 $xl-text: (
@@ -147,92 +147,92 @@ $xxl-text: (
 
 // Headings (with margins).
 $h1-text: (
-  null: (26px, 3.2rem, 3.2rem 0 1.6rem),
-  lg: (28px, 3.6rem, 4rem 0 1.6rem),
-  xl: (30px, 3.9rem, 4.5rem 0 1.8rem),
-  xxxl: (30px, 4rem, 5rem 0 2rem)
+  null: (26px, 32px, 32px 0 16px),
+  lg: (28px, 36px, 40px 0 16px),
+  xl: (30px, 39px, 45px 0 18px),
+  xxxl: (30px, 40px, 50px 0 20px)
 );
 
 $h2-text: (
-  null: (24px, 3.2rem, 3.2rem 0 1.6rem),
-  xl: (25px, 3.3rem, 3.3rem 0 1.8rem),
-  xxxl: (26px, 3.5rem, 3.5rem 0 2rem)
+  null: (24px, 32px, 32px 0 16px),
+  xl: (25px, 33px, 33px 0 18px),
+  xxxl: (26px, 35px, 35px 0 20px)
 );
 
 $h3-text: (
-  null: (21px, 3rem, 3.2rem 0 1.2rem),
-  xl: (22px, 3.3rem, 3.6rem 0 1.8rem),
-  xxxl: (24px, 3.5rem, 4rem 0 2rem)
+  null: (21px, 30px, 32px 0 12px),
+  xl: (22px, 33px, 36px 0 18px),
+  xxxl: (24px, 35px, 40px 0 20px)
 );
 
 $h3-text-no-margin: (
-  null: (21px, 3rem),
-  xl: (22px, 3.3rem),
-  xxxl: (24px, 3.5rem)
+  null: (21px, 30px),
+  xl: (22px, 33px),
+  xxxl: (24px, 35px)
 );
 
 $h4-text: (
-  null: (18px, 2.4rem, 3.2rem 0 1.2rem),
-  xl: (20px, 2.7rem, 3.6rem 0 1.8rem),
-  xxxl: (22px, 3rem, 4rem 0 2rem)
+  null: (18px, 24px, 32px 0 12px),
+  xl: (20px, 27px, 36px 0 18px),
+  xxxl: (22px, 30px, 40px 0 20px)
 );
 
 $h5-text: (
-  null: (16px, 2.4rem, 3.2rem 0 1.2rem),
-  xl: (18px, 2.7rem, 3.6rem 0 1.8rem),
-  xxxl: (20px, 3rem, 4rem 0 2rem)
+  null: (16px, 24px, 32px 0 12px),
+  xl: (18px, 27px, 36px 0 18px),
+  xxxl: (20px, 30px, 40px 0 20px)
 );
 
 $h6-text: (
-  null: (16px, 2.4rem, 3.2rem 0 1.2rem),
-  xl: (18px, 2.7rem, 3.6rem 0 1.8rem),
-  xxxl: (20px, 3rem, 4rem 0 2rem)
+  null: (16px, 24px, 32px 0 12px),
+  xl: (18px, 27px, 36px 0 18px),
+  xxxl: (20px, 30px, 40px 0 20px)
 );
 
 // Buttons.
 $btn-small: (
-  null: (1.4rem, 2.2rem),
-  xl: (1.6rem, 2.4rem),
-  xxxl: (1.7rem, 2.5rem)
+  null: (14px, 22px),
+  xl: (16px, 24px),
+  xxxl: (17px, 25px)
 );
 
 $btn-default: (
-  null: (1.6rem, 2.4rem),
-  xl: (1.8rem, 2.7rem),
-  xxxl: (2rem, 3rem)
+  null: (16px, 24pxm),
+  xl: (18px, 27px),
+  xxxl: (20px, 30px)
 );
 
 $btn-medium: (
-  null: (1.8rem, 2.4rem),
-  xl: (2.1rem, 3rem),
-  xxxl: (2.2rem, 3.5rem)
+  null: (18px, 24px),
+  xl: (21px, 30px),
+  xxxl: (22px, 35px)
 );
 
 $btn-large: (
-  null: (2.1rem, 3.2rem),
-  xl: (2.4rem, 3.6rem),
-  xxxl: (2.5rem, 4rem)
+  null: (21px, 32px),
+  xl: (24px, 36px),
+  xxxl: (25px, 40px)
 );
 
 // Forms.
 $form-legend: (
-  null: (21px, 2.8rem, 0),
-  xl: (24px, 3.3rem, 0),
-  xxxl: (26px, 3.5rem, 0)
+  null: (21px, 28px, 0),
+  xl: (24px, 33px, 0),
+  xxxl: (26px, 35px, 0)
 );
 
 $form-legend-plain: (
-  null: (1.6rem, 1.5, 0),
-  xl: (1.8rem, 1.5, 0),
-  xxxl: (2rem, 1.5, 0),
+  null: (16px, 1.5, 0),
+  xl: (18px, 1.5, 0),
+  xxxl: (20px, 1.5, 0),
 );
 
 // Landing pages.
 $landing-page-summary: (
-  null: (2rem, 2.8rem, 2.4rem 0 3.2rem),
-  lg: (2.2rem, 3.2rem),
-  xl: (2.6rem, 3.6rem, 3rem 0 3.6rem),
-  xxxl: (3rem, 4rem, 4.5rem 0 4.5rem)
+  null: (20px, 28px, 24px 0 32px),
+  lg: (22px, 32px),
+  xl: (26px, 36px, 30px 0 36px),
+  xxxl: (30px, 40px, 45px 0 45px)
 );
 
 // Cards.
@@ -242,28 +242,28 @@ $card-title: (
 
 // Page summary.
 $page-summary: (
-  null: (18px, 2.8rem, 0 0 2.4rem),
-  lg: (19px, 2.8rem, 0 0 2.4rem),
-  xl: (21px, 3rem, 0 0 2.7rem),
-  xxxl: (22px, 3.5rem, 0 0 3rem)
+  null: (18px, 28px, 0 0 24px),
+  lg: (19px, 28px, 0 0 24px),
+  xl: (21px, 30px, 0 0 27px),
+  xxxl: (22px, 35px, 0 0 30px)
 );
 
 // Home page headings.
 $section-home-h2: (
-  null: (24px, 3.2rem, 3.2rem 0 1.6rem),
-  lg: (26px, 3.6rem, 3.2rem 0 1.6rem),
-  xl: (28px, 3.9rem, 3.6rem 0 1.8rem),
-  xxxl: (28px, 4rem, 3.5rem 0 2rem)
+  null: (24px, 32px, 32px 0 16px),
+  lg: (26px, 36px, 32px 0 16px),
+  xl: (28px, 39px, 36px 0 18px),
+  xxxl: (28px, 40px, 35px 0 20px)
 );
 
 $sub-section-home-h2: (
-  null: (22px, 3.2rem, 0),
-  xl: (24px, 3.3rem),
-  xxxl: (26px, 3.5rem)
+  null: (22px, 32px, 0),
+  xl: (24px, 33px),
+  xxxl: (26px, 35px)
 );
 
 $featured-news-h3-small: (
-  null: (18px, 2.4rem),
-  xl: (20px, 2.7rem),
-  xxxl: (22px, 3rem)
+  null: (18px, 24px),
+  xl: (20px, 27px),
+  xxxl: (22px, 30px)
 );

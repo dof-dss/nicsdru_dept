@@ -3,76 +3,319 @@
  * =====================================================*/
 
 @import '../init';
+@import 'form/button/button-defs';
+
+
+$base-font-size: 16px;
 
 body {
   font-family: $base-font-family;
 }
 
-.cke_editable {
-
+.ck .ck-content {
   // applied to body in ckeditor
-  max-width: $article-max-width;
-  margin: 18px;
+  position: relative;
+  overflow: hidden;
 
-  // Create a semi-transparent out-of-bounds area.
-  &::before {
-    content: '';
-    display: block;
-    box-sizing: content-box;
-    width: 120px;
-    height: 100%;
-    padding: 15px 100% 15px 15px;
-    text-align: center;
-    position: fixed;
-    top: 0;
-    left: $article-max-width + 36px;
-    z-index: 1;
-    background-color: rgba(#000, .5);
-    background-clip: padding-box;
-    border-left: 18px solid rgba(255, 255, 255, .5);
-    font-size: 14px;
-    font-weight: normal;
-    line-height: 1.5;
-    color: #eee;
+  * {
+    overflow-wrap: break-word;
+    max-width: $article-max-width;
+    box-sizing: border-box;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased; // more subtle on larger fonts, makes smaller fonts more substantial.
+
+    @include breakpoint($tab) {
+      word-break: break-word;
+    }
   }
 
-  // Create message vertically centered in out-of-bounds area.
-  &::after {
-    content: 'Content must not cross the margin into this area.';
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: content-box;
-    width: 120px;
-    height: 100%;
-    padding: 0 100% 0 15px;
-    text-align: center;
-    position: fixed;
-    top: 0;
-    left: $article-max-width + 54px;
-    z-index: 2;
-    font-size: 14px;
+  // Headings
+  //
+  // All HTML headings, `<h1>` through `<h6>`, are available. `%h1` through `%h6`
+  // classes are also available, for when you want to match the font styling of a
+  // heading but still want your text to be displayed inline.
+  #{headings()} {
     font-weight: normal;
-    line-height: 1.5;
-    color: #fff;
+    color: $text;
+
+    strong,
+    b {
+      font-weight: normal;
+    }
+  }
+
+  h2,
+  %h2 {
+    //@include adjust-font-size-to(24px);
+    //@include adjust-size-to(32px, line-height);
+    //@include adjust-size-to(32px 0 16px, margin)
+    //line-height: 2rem;
+    //margin: 2rem 0 1rem;
+    @include responsive-typo-map($h2-text);
+  }
+
+  h3,
+  %h3 {
+    @include responsive-typo-map($h3-text);
+  }
+
+  h4,
+  %h4 {
+    @include responsive-typo-map($h4-text);
+  }
+
+  h5,
+  %h5 {
+    @include responsive-typo-map($h5-text);
+  }
+
+  h6,
+  %h6 {
+    @include responsive-typo-map($h6-text);
+  }
+
+
+  // Body copy
+  //
+  // The default `font-size` and `line-height` properties are applied to the `<body>` element and all paragraphs.
+  // In addition, `<p>` (paragraphs) receive a top and bottom margin.
+  //
+  // Markup: kss-templates/grouping-p.twig
+  //
+  // Style guide: base.text.p
+
+  p,
+  pre,
+  blockquote,
+  address,
+  li {
+    @include responsive-typo-map($normal-text);
+  }
+
+  // Tighten lists up closer to the preceding paragraph.
+  p + ul,
+  p + ol {
+    @include adjust-property-size-to(-12px, margin-top);
+    //margin-top: -1.2rem;
+  }
+
+  ol,
+  ul {
+    padding: 0 0 0 1em;
+    margin: 1em 0 1.5em;
+
+    ul,
+    ol {
+      margin: 0;
+    }
+  }
+
+  li {
+    margin: 0 0 .5em;
+  }
+
+  // Code
+  //
+  // The `<code>` element represents a fragment of computer code. The `<var>`
+  // element represents a variable. The `<samp>` element represents (sample)
+  // output from a program or computing system. The `<kbd>` element represents
+  // user input (typically keyboard input.)
+
+  %monospace,
+  code,
+  kbd,
+  samp,
+  var {
+    // Correct the inheritance and scaling of font size in all browsers.
+    // The font-family value ends with ", serif".
+    @include adjust-font-size-to($base-font-size);
+  }
+
+  // Superscript / Subscript
+  //
+  // The `<sup>` element represents a superscript and the `<sub>` element
+  // represents a subscript.
+
+  sub,
+  sup {
+    // Prevent `sub` and `sup` elements from affecting the line height in
+    // all browsers.
+    @include adjust-font-size-to(14px);
   }
 
   // Make sure ckeditor magicline does not cross into out-of-bounds.
   span[data-cke-magic-line] {
     max-width: $article-max-width + 36px;
   }
-}
 
-.cke_show_borders > table.cke_show_border,
-.cke_show_borders > table.cke_show_border > tr > td,
-.cke_show_borders > table.cke_show_border > tr > th,
-.cke_show_borders > table.cke_show_border > tbody > tr > td,
-.cke_show_borders > table.cke_show_border > tbody > tr > th,
-.cke_show_borders > table.cke_show_border > thead > tr > td,
-.cke_show_borders > table.cke_show_border > thead > tr > th,
-.cke_show_borders > table.cke_show_border > tfoot > tr > td,
-.cke_show_borders > table.cke_show_border > tfoot > tr > th {
-  border: 1px solid $table-border-color !important; // Overrides inline style sheet ckeditor adds.
+  .table {
+    width: 100%;
+    margin-left: 0;
+
+    table {
+      overflow: scroll;
+
+      &.table-fixed-width {
+        table-layout: fixed;
+      }
+
+      &,
+      & > tr > td,
+      & > tr > th,
+      & > tbody > tr > td,
+      & > tbody > tr > th,
+      & > thead > tr > td,
+      & > thead > tr > th,
+      & > tfoot > tr > td,
+      & > tfoot > tr > th {
+        border: 1px solid $table-border-color !important; // Makes table visible in the editor interface.
+      }
+
+      td,
+      th {
+        @include adjust-font-size-to(14px, 4);
+        @include adjust-property-size-to(4px 4px 3px, padding);
+
+        @include breakpoint($phab, $no-query: true) {
+          @include adjust-font-size-to(16px, 4);
+          @include adjust-property-size-to(8px 8px 7px, padding);
+          //padding: .8rem .8rem .7rem; // -1px on bottom border to maintain vertical rhythm.
+        }
+
+        @include breakpoint($tab, $no-query: true) {
+          @include adjust-font-size-to(16px, 4.5); // need 27px line height for vertical rhythm now.
+          @include adjust-property-size-to(9px 9px 8px, padding);
+          //padding: .9rem .9rem .8rem; // -1px on bottom border to maintain vertical rhythm.
+        }
+
+        & * {
+          font-size: inherit;
+          line-height: inherit;
+        }
+      }
+
+      p {
+        @include adjust-property-size-to(9px 0, margin);
+        //margin: .9rem 0;
+
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  /*
+  Add box-shadow to blockquote.
+  */
+  blockquote {
+    border: 0;
+    box-shadow: 0 -1.5px 0 0 #e8e7e7, 0 1.5px 0 0 #e8e7e7;
+    padding: .5em 1.5em;
+    margin: 2em 0;
+    font-style: normal;
+
+    /*
+    If first in chain, only top box-shadow
+     */
+    &:has(+ blockquote) {
+      padding: .5em 1.5em 0;
+      margin: 2em 0 0;
+      box-shadow: 0 -1.5px 0 0 #e8e7e7;
+    }
+
+    /*
+    Remove box-shadow from subsequent blockquotes in a chain.
+    */
+    & + blockquote {
+      box-shadow: none;
+      padding: 0 1.5em;
+      margin: 0;
+
+      /*
+      Add bottom box-shadow to blockquote if it
+      is the last one or it is not followed by
+      another blockquote and it is not the first in the chain.
+      */
+      &:not(:first-of-type) {
+        &:last-of-type,
+        &:has(+ *:not(blockquote)) {
+          box-shadow: 0 1.5px 0 0 #e8e7e7;
+          padding: 0 1.5em .5em;
+          margin-bottom: 2em;
+        }
+      }
+    }
+
+    &::before,
+    &::after {
+      content: none;
+    }
+
+    cite {
+      display: block;
+      font-style: italic;
+      text-align: right;
+    }
+  }
+
+  %notice-builder {
+    @include adjust-property-size-to(12px 1em 1em 50px, padding);
+    @include adjust-property-size-to(11px 11px, background-position);
+    border: 2px solid;
+    margin: 1.5em 0;
+    //padding: 1.2rem 1em 1em 5rem;
+    background: #fff resolve('i.svg') no-repeat 1.1rem 1.1rem / 28px 28px;
+
+    @include breakpoint($phab, $no-query: true) {
+      @include adjust-property-size-to(14px 1em 1em 60px, padding);
+      //padding: 1.4rem 1em 1em 6rem;
+      @include adjust-property-size-to(14px 14px, background-position);
+      //background-position: 1.4rem 1.4rem;
+      background-size: 30px 30px;
+    }
+
+    & > *:first-child {
+      margin-top: 0;
+    }
+
+    & > *:last-child {
+      margin-bottom: 0;
+    }
+
+    & > h2:first-child,
+    & > h3:first-child {
+      @include adjust-font-size-to(21px, 4.5);
+
+      @include breakpoint($phab) {
+        @include adjust-font-size-to(24px, 5);
+      }
+    }
+
+    // Replacement for .call-to-action suitable for use in CKEditor.
+    .btn--call-to-action {
+      @include btn(large, right);
+      @include btn-color($btn-action);
+      @include responsive-typo-map($btn-large);
+    }
+  }
+
+  .info-notice {
+    @extend %notice-builder;
+    border-color: $brand-primary-light;
+  }
+
+  .drupal-media {
+    display: block;
+
+    figcaption {
+      @include responsive-typo-map($smallish-text);
+    }
+  }
 }
 
 .media-image,
@@ -99,88 +342,7 @@ body {
   }
 }
 
-.split-list {
-  columns: 2;
-  column-gap: 3.6rem;
-}
-
-address {
-  @include responsive-typo-map($normal-text);
-  margin: 1em 0 1.5em;
-  font-weight: normal;
-  font-style: normal;
-  color: $charcoal;
-
-  &:not(.vcard) {
-    padding: .5em 1em;
-    border-left: .3334em solid $grey-light;
-  }
-
-  & > *:first-child {
-    margin-top: 0;
-  }
-}
-
-/*
-Add box-shadow to blockquote.
-*/
-blockquote {
-  border: 0;
-  box-shadow: 0 -1.5px 0 0 #e8e7e7, 0 1.5px 0 0 #e8e7e7;
-  padding: .5em 1.5em;
-  margin: 2em 0;
-
-  /*
-  If first in chain, only top box-shadow
-   */
-  &:has(+ blockquote) {
-    padding: .5em 1.5em 0;
-    margin: 2em 0 0;
-    box-shadow: 0 -1.5px 0 0 #e8e7e7;
-  }
-
-  /*
-  Remove box-shadow from subsequent blockquotes in a chain.
-  */
-  & + blockquote {
-    box-shadow: none;
-    padding: 0 1.5em;
-    margin: 0;
-
-    /*
-    Add bottom box-shadow to blockquote if it
-    is the last one or it is not followed by
-    another blockquote and it is not the first in the chain.
-    */
-    &:not(:first-of-type) {
-      &:last-of-type,
-      &:has(+ *:not(blockquote)) {
-        box-shadow: 0 1.5px 0 0 #e8e7e7;
-        padding: 0 1.5em .5em;
-        margin-bottom: 2em;
-      }
-    }
-  }
-
-  cite {
-    display: block;
-    font-style: italic;
-    text-align: right;
-  }
-}
-
-ol {
-  list-style-type: decimal;
-
-  ol {
-    list-style: upper-alpha;
-
-    ol {
-      list-style: lower-roman;
-
-      ol {
-        list-style: lower-alpha;
-      }
-    }
-  }
-}
+//.split-list {
+//  columns: 2;
+//  column-gap: 3.6rem;
+//}
