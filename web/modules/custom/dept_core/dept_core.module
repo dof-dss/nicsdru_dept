@@ -60,6 +60,26 @@ function dept_core_preprocess_field(&$variables) {
  * Implements hook_preprocess_menu().
  */
 function dept_core_preprocess_menu(&$variables) {
+  // domain_source module does a variety of conversions for routed paths
+  // changing, for example, <front> from a relative path to the source/canonical
+  // domain's absolute URI. This causes some interesting disruption around what link
+  // is rendered for some things. It's extremely opaque as to precisely what
+  // causes this and how best to intercept/adjust, but nothing in domain_source.api.php
+  // triggers. DomainRouteProvider.php and DomainSourcePathProcess.php also don't seem
+  // to have a visible role in the rewriting of the route path.
+  if ($variables['menu_name'] === 'main' && !empty($variables['items'])) {
+    foreach ($variables['items'] as $id => &$item) {
+      $url = $item['url'];
+      /* @var \Drupal\Core\Url $item */
+      if ($url->getRouteName() === '<front>') {
+        /* @var \Drupal\dept_core\DepartmentManager $dept_manager */
+        $dept_manager = \Drupal::service('department.manager');
+        $current_dept = $dept_manager->getCurrentDepartment();
+        $item['url'] = Url::fromUri($current_dept->url());
+      }
+    }
+  }
+
   if ($variables['menu_name'] === 'footer' && !empty($variables['items'])) {
     // Add a menu link to the end of the menu with a link to the
     // accessibility statement defined in the group field value.
