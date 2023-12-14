@@ -10,6 +10,8 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -139,5 +141,36 @@ function dept_publications_file_download($uri) {
   // Return -1 which is then later converted to AccessDeniedHttpException response.
   if (\Drupal::service('secure_publications_file_access')->canAccessSecureFileAttachment($uri) === FALSE) {
     return -1;
+  }
+}
+
+/**
+ * Implements hook_views_pre_execute().
+ */
+function dept_publications_views_pre_execute(ViewExecutable $view) {
+
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  if ($view->id() === 'content' && $view->current_display == 'page_1') {
+    $current_user = \Drupal::currentUser();
+
+    foreach ($query->where[1]['conditions'] as $index => $condition) {
+      if ($condition['field'] === 'node__field_publication_secure_files.field_publication_secure_files_target_id') {
+        // Unset this condition if stats supervisor/related permissions.
+        if ($current_user->hasPermission('view any unpublished secure publication')) {
+          unset($query->where[1]['conditions'][$index]);
+
+          // Set a notice message for top-level admins.
+          if ($current_user->hasPermission('bypass node access')) {
+            \Drupal::messenger()
+              ->addWarning('Secure publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
+          }
+        }
+      }
+    }
   }
 }
