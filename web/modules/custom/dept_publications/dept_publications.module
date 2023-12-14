@@ -24,30 +24,34 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
   // attachment type.
   if ($node->bundle() === 'publication') {
     $form['publication_attachment_type'] = [
-      '#type' => 'radios',
-      '#title' => t('Attachment(s) type'),
-      '#options' => ['Public', 'Secure'],
-      '#default_value' => '0',
-      '#weight' => 0,
+      '#type' => 'hidden',
+      '#value' => '0',
     ];
 
-    $form['field_publication_files']['#states'] = [
-      'invisible' => [
-        ':input[name="publication_attachment_type"]' => ['value' => 1],
-      ],
-    ];
+    // If permission to create secure publication, make this field selectable.
+    if (\Drupal::currentUser()->hasPermission('create secure publication')) {
 
-    $form['field_external_publication']['#states'] = [
-      'invisible' => [
-        ':input[name="publication_attachment_type"]' => ['value' => 1],
-      ],
-    ];
+      \Drupal::messenger()->addMessage('This content will be created as a secure publication meaning it and related media assets cannot be seen by other users or site visitors until it is published');
+      $form['publication_attachment_type']['#value'] = 1;
 
-    $form['field_publication_secure_files']['#states'] = [
-      'invisible' => [
-        ':input[name="publication_attachment_type"]' => ['value' => 0],
-      ],
-    ];
+      $form['field_publication_files']['#states'] = [
+        'invisible' => [
+          ':input[name="publication_attachment_type"]' => ['value' => 1],
+        ],
+      ];
+
+      $form['field_external_publication']['#states'] = [
+        'invisible' => [
+          ':input[name="publication_attachment_type"]' => ['value' => 1],
+        ],
+      ];
+
+      $form['field_publication_secure_files']['#states'] = [
+        'invisible' => [
+          ':input[name="publication_attachment_type"]' => ['value' => 0],
+        ],
+      ];
+    }
 
     if (!empty($node->get('field_publication_secure_files')->getValue())) {
       $form['publication_attachment_type']['#default_value'] = 1;
@@ -125,5 +129,15 @@ function dept_publications_entity_operation_alter(array &$operations, EntityInte
         return $operations;
       }
     }
+  }
+}
+
+/**
+ * Implements hook_file_download().
+ */
+function dept_publications_file_download($uri) {
+  // Return -1 which is then later converted to AccessDeniedHttpException response.
+  if (\Drupal::service('secure_publications_file_access')->canAccessSecureFileAttachment($uri) === FALSE) {
+    return -1;
   }
 }
