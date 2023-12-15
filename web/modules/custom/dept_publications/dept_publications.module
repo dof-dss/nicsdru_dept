@@ -155,9 +155,9 @@ function dept_publications_views_pre_execute(ViewExecutable $view) {
  * Implements hook_views_query_alter().
  */
 function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
-  if ($view->id() === 'content' && $view->current_display == 'page_1') {
-    $current_user = \Drupal::currentUser();
+  $current_user = \Drupal::currentUser();
 
+  if ($view->id() === 'content' && $view->current_display == 'page_1') {
     foreach ($query->where[1]['conditions'] as $index => $condition) {
       if ($condition['field'] === 'node__field_publication_secure_files.field_publication_secure_files_target_id') {
         // Unset this condition if stats supervisor/related permissions.
@@ -168,6 +168,23 @@ function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBa
           if ($current_user->hasPermission('bypass node access')) {
             \Drupal::messenger()
               ->addWarning('Secure publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
+          }
+        }
+      }
+    }
+  }
+
+  if ($view->id() === 'media_library') {
+    foreach ($query->where[1]['conditions'] as $index => $condition) {
+      if ($condition['field'] === 'file_managed_media__field_media_file.uri') {
+        // Unset this condition if stats supervisor/related permissions.
+        if ($current_user->hasPermission('view any unpublished secure publication')) {
+          unset($query->where[1]['conditions'][$index]);
+
+          // Set a notice message for top-level admins.
+          if ($current_user->hasPermission('administer media')) {
+            \Drupal::messenger()
+              ->addWarning('Files for secure publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
           }
         }
       }
