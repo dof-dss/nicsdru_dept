@@ -75,7 +75,6 @@
 }
 
 .page-node-type-topic {
-
   .field-photo .media-image {
 
     margin: 0 0 1.5em;
@@ -167,6 +166,12 @@
   .article-content + .subtopics {
     margin-top: .5em;
     padding-top: 2em;
+  }
+}
+
+.page-node-type-subtopic {
+  .toc-menu {
+    max-width: 64rem;
   }
 }
 

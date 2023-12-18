@@ -21,6 +21,11 @@
   max-width: $max-content-width;
 }
 
+.topic-content-width {
+  width: 100%;
+  max-width: 64rem;
+}
+
 .more-link a,
 a.more {
   @include link-state-style($link-body-no-visited);
