@@ -542,38 +542,36 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
    * @command dept:update-audit-date
    * @aliases auddate
    */
-  public function createAuditDueDate($domain_id) {
+  public function createAuditDueDate(string $domain_id) {
     if (empty($domain_id)) {
-      return;
+      $this->logger->warning("You must provide a domain id");
     }
 
+    // First we query all nodes for the given domain that have an audit flag set.
+    // From this we take the node changed timestamp, add 6 months to it and format for the audit_field.
     $results = $this->d7conn->query("SELECT n.nid AS d7_nid, DATE_FORMAT(DATE_ADD(from_unixtime(n.changed), INTERVAL 6 MONTH), '%Y-%m-%d') AS audit_due FROM flag_counts fc LEFT JOIN node n ON fc.entity_id = n.nid LEFT JOIN domain_access da ON da.nid = fc.entity_id WHERE fc.fid = 3 AND n.status = 1 AND da.gid = " . $domain_id)
       ->fetchAllAssoc('d7_nid', \PDO::FETCH_ASSOC);
 
     foreach ($results as $d7nid => $audit) {
-      $local_nid = $this->lookupManager->lookupBySourceNodeId([$d7nid]);
-      $results[$d7nid]['d9_nid'] = $local_nid[$d7nid]['nid'];
-      $update_values = [];
+      $update_fields = [];
+      // Fetch the D9 nid and the published revision id for each node.
+      $node_data = $this->lookupManager->lookupBySourceNodeId([$d7nid]);
+      $revision_id = $this->dbConn->query("SELECT n.vid AS revision_id FROM node n LEFT JOIN node_field_data nfd ON n.nid = nfd.nid WHERE nfd.status = 1 AND n.nid = " . $node_data[$d7nid]['nid'])->fetchField();
 
-      $result = $this->dbConn->query("SELECT n.vid AS revision_id, nfd.type AS bundle FROM node n LEFT JOIN node_field_data nfd ON n.nid = nfd.nid WHERE nfd.status = 1 AND n.nid = " . $results[$d7nid]['d9_nid'])->fetchAssoc();
-
-      if (empty($result)) {
-        unset($results[$d7nid]);
+      if (empty($revision_id)) {
         continue;
       }
 
-      $results[$d7nid]['revision_id'] = $result['revision_id'];
-      $results[$d7nid]['bundle'] = $result['bundle'];
-
       $update_fields = [
-        'bundle' => $results[$d7nid]['bundle'],
-        'entity_id' => $local_nid[$d7nid]['nid'],
-        'revision_id' => $result['revision_id'],
+        'bundle' => $node_data[$d7nid]['type'],
+        'entity_id' => $node_data[$d7nid]['nid'],
+        'revision_id' => $revision_id,
         'langcode' => 'en',
         'delta' => 0,
-        'field_next_audit_due_value' => $results[$d7nid]['audit_due'],
+        'field_next_audit_due_value' => $audit['audit_due'],
       ];
 
+      // Insert a new audit due date in the node and node revision tables.
       $this->dbConn->insert('node__field_next_audit_due')->fields($update_fields)->execute();
       $this->dbConn->insert('node_revision__field_next_audit_due')->fields($update_fields)->execute();
     }
