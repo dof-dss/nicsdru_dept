@@ -16,7 +16,7 @@ class MigrateUtils {
    * @return string|null
    *   The Drupal 9 domain ID or Null if not matched.
    */
-  public static function d7DomianToD9Domain(string $domain_id) {
+  public static function d7DomainToD9Domain(string $domain_id) {
     return match ($domain_id) {
       'newnigov' => 'nigov',
       'daera' => 'daera',
