@@ -534,6 +534,52 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
   }
 
   /**
+   * Insert content field entries for Topic (top level) nodes.
+   *
+   *    * @param string $domain_id
+   *   The domain id to update.
+   *
+   * @command dept:update-audit-date
+   * @aliases auddate
+   */
+  public function createAuditDueDate($domain_id) {
+    if (empty($domain_id)) {
+      return;
+    }
+
+    $results = $this->d7conn->query("SELECT n.nid AS d7_nid, DATE_FORMAT(DATE_ADD(from_unixtime(n.changed), INTERVAL 6 MONTH), '%Y-%m-%d') AS audit_due FROM flag_counts fc LEFT JOIN node n ON fc.entity_id = n.nid LEFT JOIN domain_access da ON da.nid = fc.entity_id WHERE fc.fid = 3 AND n.status = 1 AND da.gid = " . $domain_id)
+      ->fetchAllAssoc('d7_nid', \PDO::FETCH_ASSOC);
+
+    foreach ($results as $d7nid => $audit) {
+      $local_nid = $this->lookupManager->lookupBySourceNodeId([$d7nid]);
+      $results[$d7nid]['d9_nid'] = $local_nid[$d7nid]['nid'];
+      $update_values = [];
+
+      $result = $this->dbConn->query("SELECT n.vid AS revision_id, nfd.type AS bundle FROM node n LEFT JOIN node_field_data nfd ON n.nid = nfd.nid WHERE nfd.status = 1 AND n.nid = " . $results[$d7nid]['d9_nid'])->fetchAssoc();
+
+      if (empty($result)) {
+        unset($results[$d7nid]);
+        continue;
+      }
+
+      $results[$d7nid]['revision_id'] = $result['revision_id'];
+      $results[$d7nid]['bundle'] = $result['bundle'];
+
+      $update_fields = [
+        'bundle' => $results[$d7nid]['bundle'],
+        'entity_id' => $local_nid[$d7nid]['nid'],
+        'revision_id' => $result['revision_id'],
+        'langcode' => 'en',
+        'delta' => 0,
+        'field_next_audit_due_value' => $results[$d7nid]['audit_due'],
+      ];
+
+      $this->dbConn->insert('node__field_next_audit_due')->fields($update_fields)->execute();
+      $this->dbConn->insert('node_revision__field_next_audit_due')->fields($update_fields)->execute();
+    }
+  }
+
+  /**
    * Fetch the child nodes of the given Drupal 7 subtopic.
    *
    * @param int $nid
