@@ -44,7 +44,8 @@ table {
 
 td,
 th {
-  @include adjust-font-size-to(14px, 4);
+  //@include adjust-font-size-to(14px, 4);
+  @include responsive-typo-map($normal-text);
   box-sizing: border-box;
   border: 1px solid $table-border-color;
   padding: .4rem .4rem .3rem; // -1px on bottom border to maintain vertical rhythm.
@@ -52,12 +53,12 @@ th {
   vertical-align: top;
 
   @include breakpoint($phab, $no-query: true) {
-    @include adjust-font-size-to(16px, 4);
+    //@include adjust-font-size-to(16px, 4);
     padding: .8rem .8rem .7rem; // -1px on bottom border to maintain vertical rhythm.
   }
 
   @include breakpoint($tab, $no-query: true) {
-    @include adjust-font-size-to(16px, 4.5); // need 27px line height for vertical rhythm now.
+    //@include adjust-font-size-to(16px, 4.5); // need 27px line height for vertical rhythm now.
     padding: .9rem .9rem .8rem; // -1px on bottom border to maintain vertical rhythm.
   }
 

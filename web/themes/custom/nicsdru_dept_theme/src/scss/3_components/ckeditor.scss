@@ -241,19 +241,15 @@ body {
 
       td,
       th {
-        @include adjust-font-size-to(14px, 4);
+        @include responsive-typo-map($normal-text);
         @include adjust-property-size-to(4px 4px 3px, padding);
 
         @include breakpoint($phab, $no-query: true) {
-          @include adjust-font-size-to(16px, 4);
           @include adjust-property-size-to(8px 8px 7px, padding);
-          //padding: .8rem .8rem .7rem; // -1px on bottom border to maintain vertical rhythm.
         }
 
         @include breakpoint($tab, $no-query: true) {
-          @include adjust-font-size-to(16px, 4.5); // need 27px line height for vertical rhythm now.
           @include adjust-property-size-to(9px 9px 8px, padding);
-          //padding: .9rem .9rem .8rem; // -1px on bottom border to maintain vertical rhythm.
         }
 
         & * {
