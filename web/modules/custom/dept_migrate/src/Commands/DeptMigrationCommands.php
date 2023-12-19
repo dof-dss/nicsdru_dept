@@ -7,6 +7,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_core\DepartmentManager;
+use Drupal\dept_migrate\MigrateUtils;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
@@ -536,16 +537,21 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
   /**
    * Insert content field entries for Topic (top level) nodes.
    *
-   *    * @param string $domain_id
-   *   The domain id to update.
+   *    * @param string $domain
+   *   The D9 domain (machine name) to update.
    *
    * @command dept:update-audit-date
    * @aliases auddate
    */
-  public function createAuditDueDate(string $domain_id) {
-    if (empty($domain_id)) {
+  public function createAuditDueDate(string $domain) {
+    if (empty($domain)) {
       $this->logger->warning("You must provide a domain id");
+      return;
     }
+
+    // Transform dept name to d7 domain id.
+    $d7_domain = MigrateUtils::d9DomainToD7Domain($domain);
+    $domain_id = $this->d7conn->query("SELECT domain_id FROM domain WHERE machine_name = :domain", [':domain' => $d7_domain])->fetchField();
 
     // First we query all nodes for the given domain that have an audit flag set.
     // From this we take the node changed timestamp, add 6 months to it and format for the audit_field.
@@ -556,6 +562,12 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       $update_fields = [];
       // Fetch the D9 nid and the published revision id for each node.
       $node_data = $this->lookupManager->lookupBySourceNodeId([$d7nid]);
+
+      if (empty($node_data[$d7nid]['nid'])) {
+        $this->logger->warning($this->t("No local node was found for nid: @nid", ['@nid' => $d7nid]));
+        continue;
+      }
+
       $revision_id = $this->dbConn->query("SELECT n.vid AS revision_id FROM node n LEFT JOIN node_field_data nfd ON n.nid = nfd.nid WHERE nfd.status = 1 AND n.nid = " . $node_data[$d7nid]['nid'])->fetchField();
 
       if (empty($revision_id)) {
