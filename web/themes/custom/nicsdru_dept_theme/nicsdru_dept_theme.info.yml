@@ -11,8 +11,12 @@ libraries:
   - nicsdru_dept_theme/nidirect-accordions
 
 ckeditor5-stylesheets:
+  - css/1_base/links.css
+  - css/1_base/headings.css
+  - css/1_base/text.css
   - css/1_base/tables.css
   - css/3_components/ckeditor.css
+  - css/1_base/grouping.css
   - css/3_components/content/lists.css
   - css/3_components/content/responsive-images-ckeditor.css
   - css/3_components/content/video.css

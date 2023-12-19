@@ -1,4 +1,7 @@
 services:
+  secure_publications_file_access:
+    class: Drupal\dept_publications\SecurePublicationsFileAccess
+    arguments: ['file_uri', '@current_user', '@database', '@entity_type.manager']
   secure_publications.route_subscriber:
     class: Drupal\dept_publications\Routing\SecurePublicationsRouteSubscriber
     tags:
