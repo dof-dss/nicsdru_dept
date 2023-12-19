@@ -535,13 +535,13 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
   }
 
   /**
-   * Insert content field entries for Topic (top level) nodes.
+   * Creates next audit due dates for content flagged in D7 for auditing.
    *
    *    * @param string $domain
    *   The D9 domain (machine name) to update.
    *
    * @command dept:update-audit-date
-   * @aliases auddate
+   * @aliases audit
    */
   public function createAuditDueDate(string $domain) {
     if (empty($domain)) {

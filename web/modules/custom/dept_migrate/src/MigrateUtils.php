@@ -3,14 +3,14 @@
 namespace Drupal\dept_migrate;
 
 /**
- * Provies static utility methods for migrations.
+ * Provides static utility methods for migrations.
  */
 class MigrateUtils {
 
   /**
    * Converts a D7 Domain to the D9 counterpart.
    *
-   * @param string $domain_id
+   * @param string $domain
    *   The Drupal 7 domain (machine name).
    *
    * @return string|null
@@ -35,7 +35,7 @@ class MigrateUtils {
   /**
    * Converts a D9 Domain to the D7 counterpart.
    *
-   * @param string $domain_id
+   * @param string $domain
    *   The Drupal 9 domain (machine name).
    *
    * @return string|null
@@ -56,6 +56,5 @@ class MigrateUtils {
       default => NULL,
     };
   }
-
 
 }
