@@ -9,13 +9,14 @@ dependencies:
     - field.field.node.article.field_domain_source
     - field.field.node.article.field_global_topics
     - field.field.node.article.field_metatags
+    - field.field.node.article.field_next_audit_due
     - field.field.node.article.field_site_topics
     - field.field.node.article.field_summary
     - node.type.article
-    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
+    - datetime
     - dept_topics
     - metatag
     - path
@@ -76,6 +77,12 @@ content:
     settings:
       sidebar: true
       use_details: true
+    third_party_settings: {  }
+  field_next_audit_due:
+    type: datetime_default
+    weight: 1000
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_site_topics:
     type: dept_topic_tree_widget

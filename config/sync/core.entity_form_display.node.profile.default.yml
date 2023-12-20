@@ -9,11 +9,14 @@ dependencies:
     - field.field.node.profile.field_domain_all_affiliates
     - field.field.node.profile.field_domain_source
     - field.field.node.profile.field_metatags
+    - field.field.node.profile.field_next_audit_due
     - field.field.node.profile.field_photo
     - field.field.node.profile.field_summary
     - node.type.profile
+    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
+    - datetime
     - media_library
     - media_library_edit
     - metatag
@@ -75,6 +78,12 @@ content:
     settings:
       sidebar: true
       use_details: true
+    third_party_settings: {  }
+  field_next_audit_due:
+    type: datetime_default
+    weight: 1000
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_photo:
     type: media_library_widget

@@ -1,16 +1,16 @@
-uuid: 81960eb3-f5f0-4c5d-9a7c-4abd4ef51136
+uuid: cb3d245b-6987-4512-84ae-3258156cb3a8
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_next_audit_due
-    - node.type.contact
+    - node.type.profile
   module:
     - datetime
-id: node.contact.field_next_audit_due
+id: node.profile.field_next_audit_due
 field_name: field_next_audit_due
 entity_type: node
-bundle: contact
+bundle: profile
 label: 'Next audit due'
 description: 'The date when this item is due for audit'
 required: false
