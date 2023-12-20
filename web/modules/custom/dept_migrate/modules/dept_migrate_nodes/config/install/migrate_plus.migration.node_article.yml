@@ -98,6 +98,15 @@ process:
   promote: promote
   sticky: sticky
   field_domain_access:
+    - plugin: extract
+      source: domain_access_node
+      index:
+        - 0
+        - target_id
+    - plugin: skip_on_value
+      method: row
+      value:
+        - finance
     - plugin: sub_process
       source: domain_access_node
       process:
