@@ -406,7 +406,37 @@ body {
   }
 }
 
-//.split-list {
-//  columns: 2;
-//  column-gap: 3.6rem;
-//}
+.block-system-main-block {
+  .layout-node-form {
+    .layout-region__content {
+      p {
+        @include responsive-typo-map($normal-text);
+      }
+
+      .field--name-field-external-publication {
+        table {
+          th,
+          td {
+            background-color: $grey-lightest;
+            border-color: $grey-medium;
+          }
+
+          td:first-child ~ td,
+          th:first-child ~ th {
+            padding-left: var(--space-m);
+          }
+
+          th,
+          h4 {
+            @include responsive-typo-map($h4-text);
+            margin: 0;
+
+            @include breakpoint($lap) {
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
