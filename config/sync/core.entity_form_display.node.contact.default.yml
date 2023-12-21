@@ -12,7 +12,6 @@ dependencies:
     - field.field.node.contact.field_next_audit_due
     - field.field.node.contact.field_site_topics
     - node.type.contact
-    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - datetime
@@ -376,7 +375,7 @@ content:
     third_party_settings: {  }
   field_next_audit_due:
     type: datetime_default
-    weight: 19
+    weight: 1000
     region: content
     settings: {  }
     third_party_settings: {  }
