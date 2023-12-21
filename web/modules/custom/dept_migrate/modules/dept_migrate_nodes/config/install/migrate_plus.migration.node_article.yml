@@ -98,15 +98,6 @@ process:
   promote: promote
   sticky: sticky
   field_domain_access:
-    - plugin: extract
-      source: domain_access_node
-      index:
-        - 0
-        - target_id
-    - plugin: skip_on_value
-      method: row
-      value:
-        - finance
     - plugin: sub_process
       source: domain_access_node
       process:
@@ -119,6 +110,17 @@ process:
   field_domain_all_affiliates:
     - plugin: get
       source: domain_all_affiliates
+  ignore_live_depts:
+    - plugin: flatten
+      source: domain_source_node
+    - plugin: skip_on_condition
+      condition:
+        plugin: in_array
+        value:
+          - finance
+        strict: true
+      method: row
+      message: 'Skipping due to domain source value referencing a live department site'
 destination:
   plugin: 'entity:node'
   default_bundle: article
