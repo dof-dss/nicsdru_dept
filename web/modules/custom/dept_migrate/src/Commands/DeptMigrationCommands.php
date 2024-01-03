@@ -7,6 +7,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_core\DepartmentManager;
+use Drupal\dept_migrate\MigrateUtils;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
@@ -530,6 +531,61 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       if ($child_node->type === 'subtopic') {
         $this->processSubtopicChildContent($child_node->nid);
       }
+    }
+  }
+
+  /**
+   * Creates next audit due dates for content flagged in D7 for auditing.
+   *
+   *    * @param string $domain
+   *   The D9 domain (machine name) to update.
+   *
+   * @command dept:update-audit-date
+   * @aliases audit
+   */
+  public function createAuditDueDate(string $domain) {
+    if (empty($domain)) {
+      $this->logger->warning("You must provide a domain id");
+      return;
+    }
+
+    // Transform dept name to d7 domain id.
+    $d7_domain = MigrateUtils::d9DomainToD7Domain($domain);
+    $domain_id = $this->d7conn->query("SELECT domain_id FROM domain WHERE machine_name = :domain", [':domain' => $d7_domain])->fetchField();
+
+    // First we query all nodes for the given domain that have an audit flag set.
+    // From this we take the node changed timestamp, add 6 months to it and format for the audit_field.
+    $results = $this->d7conn->query("SELECT n.nid AS d7_nid, DATE_FORMAT(DATE_ADD(from_unixtime(n.changed), INTERVAL 6 MONTH), '%Y-%m-%d') AS audit_due FROM flag_counts fc LEFT JOIN node n ON fc.entity_id = n.nid LEFT JOIN domain_access da ON da.nid = fc.entity_id WHERE fc.fid = 3 AND n.status = 1 AND da.gid = " . $domain_id)
+      ->fetchAllAssoc('d7_nid', \PDO::FETCH_ASSOC);
+
+    foreach ($results as $d7nid => $audit) {
+      $update_fields = [];
+      // Fetch the D9 nid and the published revision id for each node.
+      $node_data = $this->lookupManager->lookupBySourceNodeId([$d7nid]);
+
+      if (empty($node_data[$d7nid]['nid'])) {
+        $this->logger->warning($this->t("No local node was found for nid: @nid", ['@nid' => $d7nid]));
+        continue;
+      }
+
+      $revision_id = $this->dbConn->query("SELECT n.vid AS revision_id FROM node n LEFT JOIN node_field_data nfd ON n.nid = nfd.nid WHERE nfd.status = 1 AND n.nid = " . $node_data[$d7nid]['nid'])->fetchField();
+
+      if (empty($revision_id)) {
+        continue;
+      }
+
+      $update_fields = [
+        'bundle' => $node_data[$d7nid]['type'],
+        'entity_id' => $node_data[$d7nid]['nid'],
+        'revision_id' => $revision_id,
+        'langcode' => 'en',
+        'delta' => 0,
+        'field_next_audit_due_value' => $audit['audit_due'],
+      ];
+
+      // Insert a new audit due date in the node and node revision tables.
+      $this->dbConn->insert('node__field_next_audit_due')->fields($update_fields)->execute();
+      $this->dbConn->insert('node_revision__field_next_audit_due')->fields($update_fields)->execute();
     }
   }
 

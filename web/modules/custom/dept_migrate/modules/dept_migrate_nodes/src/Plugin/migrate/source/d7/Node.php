@@ -323,7 +323,7 @@ class Node extends FieldableEntity {
         ->condition('da.domain_id', $domain)
         ->execute()
         ->fetchCol();
-      $row_source_properties[] = ['target_id' => MigrateUtils::d7DomianToD9Domain($domain_target_ids[0])];
+      $row_source_properties[] = ['target_id' => MigrateUtils::d7DomainToD9Domain($domain_target_ids[0])];
     }
     return $row_source_properties;
   }
@@ -360,7 +360,7 @@ class Node extends FieldableEntity {
         ->fetchCol();
     }
 
-    $row_source_properties[] = ['target_id' => MigrateUtils::d7DomianToD9Domain($domain_source_id[0])];
+    $row_source_properties[] = ['target_id' => MigrateUtils::d7DomainToD9Domain($domain_source_id[0])];
 
     return $row_source_properties;
   }
