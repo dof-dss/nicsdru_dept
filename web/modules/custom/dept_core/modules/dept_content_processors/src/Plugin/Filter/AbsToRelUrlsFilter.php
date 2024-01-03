@@ -93,7 +93,12 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
           continue;
         }
 
-        $result = new FilterProcessResult($dom->saveHTML());
+        $output = $dom->saveHTML();
+
+        // Remove the HTML markup created when the text is loaded into HTML DOM.
+        $output = preg_replace('/(<!DOCTYPE.+>\n*<html.+><body>)(.+)(<\/body><\/html>)/m', "$2", $output);
+
+        $result = new FilterProcessResult($output);
       }
     }
 
