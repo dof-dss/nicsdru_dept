@@ -13,7 +13,7 @@ else
 fi
 
 export DRUSH=/app/vendor/bin/drush
-# shellcheck disable=SC2089
+shellcheck disable=SC2089
 export MIGRATIONS="\
   d7_taxonomy_term_chart_type \
   d7_taxonomy_term_global_topics
@@ -77,8 +77,8 @@ then
     $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_$type/config/install -y
   done
 
-#  echo "Migrating D7 taxonomy data"
-#  $DRUSH migrate:import --group=migrate_drupal_7_taxo --force
+  echo "Migrating D7 taxonomy data"
+  $DRUSH migrate:import --group=migrate_drupal_7_taxo --force
 
   echo "Migrating D7 user and roles"
   $DRUSH migrate:import users --force
@@ -155,6 +155,12 @@ then
       echo "Creating Topic/Subtopic content entries for ${dept}"
       $DRUSH dept:topic-child-content $dept
       $DRUSH dept:subtopic-child-content $dept
+
+      echo "Removing Audit Due entries for ${dept}"
+      $DRUSH dept:remove-audit-date $dept
+
+      echo "Creating Audit Due entries for ${dept}"
+      $DRUSH dept:update-audit-date $dept
     done
 
   echo ".... DONE"
