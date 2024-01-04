@@ -99,7 +99,10 @@ class D7UserUuid extends FieldableEntity {
     }
 
     // Fetch domain assignments.
-    $row->setSourceProperty('domain_access_user', $this->getDomainTargetIds($uid));
+    $user_domains = $this->getDomainTargetIds($uid);
+    $row->setSourceProperty('domain_access_user', $user_domains);
+    // Assign canonical domain (use first result if multiple).
+    $row->setSourceProperty('domain_source_user', reset($user_domains));
 
     return parent::prepareRow($row);
   }

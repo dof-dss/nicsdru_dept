@@ -1,13 +1,20 @@
+uuid: e21bda49-fd61-4414-8199-52b0971ea100
+langcode: en
+status: true
+dependencies: {  }
 id: users
-label: Users
-migration_group: migrate_users
-migration_tags:
-  - dept_sites
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
+cck_plugin_method: null
+migration_tags:
+  - dept_sites
+migration_group: migrate_users
+label: Users
 source:
   plugin: d7_user_uuid
   track_changes: true
+  constants:
+    migrate_ignore_sites: MIGRATE_IGNORE_SITES
 process:
   uid:
     -
@@ -39,43 +46,70 @@ process:
     fallback_to_site_default: true
   init: init
   roles:
-    - plugin: static_map
+    -
+      plugin: static_map
       source: roles
       map:
-        3: 'author'
-        4: 'supervisor'
-        5: 'admin'
-        6: 'homepage_supervisor'
-        8: 'topic_supervisor'
+        3: author
+        4: supervisor
+        5: admin
+        6: homepage_supervisor
+        8: topic_supervisor
         9: null
-        10: 'homepage_supervisor'
-        11: 'stats_author'
-        12: 'stats_supervisor'
+        10: homepage_supervisor
+        11: stats_author
+        12: stats_supervisor
         13: null
         14: null
-        15: 'topic_layout_supervisor'
+        15: topic_layout_supervisor
         16: null
         17: null
         default_value: null
   field_domain_access:
-    - plugin: skip_on_value
+    -
+      plugin: skip_on_value
       method: row
       source: uid
       value:
         - 1
-    - plugin: sub_process
+    -
+      plugin: sub_process
       source: domain_access_user
       process:
         target_id:
-          - plugin: skip_on_empty
+          -
+            plugin: skip_on_empty
             method: row
             source: target_id
-          - plugin: static_map
+          -
+            plugin: static_map
             bypass: true
             source: target_id
             map:
-              'newnigov': 'nigov'
-              'execoffice': 'executiveoffice'
-              'dfp': 'finance'
+              newnigov: nigov
+              execoffice: executiveoffice
+              dfp: finance
+  field_domain_source: domain_source_user
+  list_of_depts_to_ignore:
+    -
+      plugin: callback
+      callable: getenv
+      source:
+        - constants/migrate_ignore_sites
+      unpack_source: true
+    -
+      plugin: explode
+      delimiter: ','
+  ignore_live_depts:
+    -
+      plugin: flatten
+      source: domain_source_user
+    -
+      plugin: skip_on_condition
+      condition:
+        plugin: in_array
+        property: '@list_of_depts_to_ignore'
+      method: row
 destination:
-  plugin: entity:user
+  plugin: 'entity:user'
+migration_dependencies: null
