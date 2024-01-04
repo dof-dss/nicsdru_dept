@@ -5,7 +5,6 @@ namespace Drupal\dept_migrate;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
-
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

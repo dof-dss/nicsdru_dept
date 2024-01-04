@@ -108,7 +108,7 @@ class D7MediaDomain extends ProcessPluginBase implements ContainerFactoryPluginI
     $depts = [];
 
     foreach ($d7_file_query as $row) {
-      $depts[] = MigrateUtils::d7DomianToD9Domain($row->machine_name) ?? 'nigov';
+      $depts[] = MigrateUtils::d7DomainToD9Domain($row->machine_name) ?? 'nigov';
     }
 
     return (is_array($depts)) ? array_unique($depts) : $depts;
