@@ -135,6 +135,9 @@ process:
         - constants/migrate_ignore_sites
       unpack_source: true
     -
+      plugin: default_value
+      default_value: ''
+    -
       plugin: explode
       delimiter: ','
   ignore_live_depts:
