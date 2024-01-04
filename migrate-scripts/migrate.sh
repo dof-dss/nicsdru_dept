@@ -13,7 +13,7 @@ else
 fi
 
 export DRUSH=/app/vendor/bin/drush
-shellcheck disable=SC2089
+# shellcheck disable=SC2089
 export MIGRATIONS="\
   d7_taxonomy_term_chart_type \
   d7_taxonomy_term_global_topics
