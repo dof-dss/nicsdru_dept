@@ -4,7 +4,7 @@ echo ">>> Started at: $(date -u +"%Y-%m-%d %H:%M:%S")"
 departments=(daera communities economy education finance health infrastructure justice executiveoffice)
 
 # Check that the $MIGRATE_IGNORE_SITES environment variable is present.
-if [ -z "$MIGRATE_IGNORE_SITESS" ]
+if [ -z "$MIGRATE_IGNORE_SITES" ]
 then
   echo "MIGRATE_IGNORE_SITES environment variable is not set"
 else
