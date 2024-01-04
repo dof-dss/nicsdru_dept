@@ -590,10 +590,10 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
   }
 
   /**
-   * Removes Audit dur dates.
+   * Removes Audit Due dates.
    *
    *    * @param string $domain
-   *   The D9 domain (machine name) to remote audit dates.
+   *   The D9 domain (machine name) to remove audit dates.
    *
    * @command dept:remove-audit-date
    * @aliases audit-remove
