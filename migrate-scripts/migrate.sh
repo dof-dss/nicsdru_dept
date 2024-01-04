@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 echo ">>> Started at: $(date -u +"%Y-%m-%d %H:%M:%S")"
 
+departments=(daera communities economy education finance health infrastructure justice executiveoffice)
+# Create array of excluded departments from env variable.
+IFS=', ' read -r -a excluded_departments <<< "$MIGRATE_IGNORE_SITES"
+
 export DRUSH=/app/vendor/bin/drush
 # shellcheck disable=SC2089
 export MIGRATIONS="\
@@ -123,23 +127,20 @@ then
   echo "Restoring config from config/sync"
   $DRUSH cim -y
 
-  if [[ -z "$MIGRATION_DEPARTMENTS" ]]; then
-    echo "Warning: Migration Departments environment variable is empty"
-  else
-    for dept in $(echo $MIGRATION_DEPARTMENTS | sed "s/,/ /g")
-      do
+  # Remove the departments on in the excluded array from the departments array.
+  for i in "${excluded_departments[@]}"; do
+    departments=(${departments[@]//*$i*})
+  done
 
-        echo "Creating Topic/Subtopic content entries for ${dept}"
-        $DRUSH dept:topic-child-content $dept
-        $DRUSH dept:subtopic-child-content $dept
-      done
-  fi
+  for dept in "${departments[@]}"
+    do
+      echo "Creating Topic/Subtopic content entries for ${dept}"
+      $DRUSH dept:topic-child-content $dept
+      $DRUSH dept:subtopic-child-content $dept
+    done
+
 
   echo ".... DONE"
 fi
 
-
-
-
-
-#echo ">>> Finished at: $(date -u +"%Y-%m-%d %H:%M:%S")"
+echo ">>> Finished at: $(date -u +"%Y-%m-%d %H:%M:%S")"
