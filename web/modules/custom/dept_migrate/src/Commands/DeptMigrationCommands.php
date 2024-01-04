@@ -590,6 +590,35 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
   }
 
   /**
+   * Removes Audit dur dates.
+   *
+   *    * @param string $domain
+   *   The D9 domain (machine name) to remote audit dates.
+   *
+   * @command dept:remove-audit-date
+   * @aliases audit-remove
+   */
+  public function removeAuditDueDate(string $domain) {
+    if (empty($domain)) {
+      $this->logger->warning("You must provide a domain id");
+      return;
+    }
+
+    // Remove audit due dates for given domain.
+    $this->dbConn->query("DELETE ad FROM node__field_next_audit_due ad
+      LEFT JOIN node__field_domain_access ds
+      ON ad.entity_id = ds.entity_id
+      WHERE ds.field_domain_access_target_id ='" . $domain . "'");
+
+    // Remove revision audit due dates for given domain.
+    $this->dbConn->query("DELETE ad FROM node_revision__field_next_audit_due ad
+      LEFT JOIN node__field_domain_access ds
+      ON ad.entity_id = ds.entity_id
+      WHERE ds.field_domain_access_target_id ='" . $domain . "'");
+
+  }
+
+  /**
    * Fetch the child nodes of the given Drupal 7 subtopic.
    *
    * @param int $nid
