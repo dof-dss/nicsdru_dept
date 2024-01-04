@@ -39,6 +39,7 @@ export MIGRATIONS="\
   flagging_hide_listing \
   flagging_hide_on_topic_subtopic_pages "
 
+
 if [ -z ${PLATFORM_BRANCH} ] && [ -z ${LANDO} ];
 then
   # Not running on a platform environment, or Lando, so exit.
@@ -122,14 +123,23 @@ then
   echo "Restoring config from config/sync"
   $DRUSH cim -y
 
-   for domain in daera communities economy education finance health infrastructure justice executiveoffice
-    do
-      echo "Creating Topic/Subtopic content entries for ${domain}"
-      $DRUSH dept:topic-child-content $domain
-      $DRUSH dept:subtopic-child-content $domain
-    done
+  if [[ -z "$MIGRATION_DEPARTMENTS" ]]; then
+    echo "Warning: Migration Departments environment variable is empty"
+  else
+    for dept in $(echo $MIGRATION_DEPARTMENTS | sed "s/,/ /g")
+      do
+
+        echo "Creating Topic/Subtopic content entries for ${dept}"
+        $DRUSH dept:topic-child-content $dept
+        $DRUSH dept:subtopic-child-content $dept
+      done
+  fi
 
   echo ".... DONE"
 fi
 
-echo ">>> Finished at: $(date -u +"%Y-%m-%d %H:%M:%S")"
+
+
+
+
+#echo ">>> Finished at: $(date -u +"%Y-%m-%d %H:%M:%S")"
