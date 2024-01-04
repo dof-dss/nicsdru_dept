@@ -2,7 +2,7 @@
 echo ">>> Started at: $(date -u +"%Y-%m-%d %H:%M:%S")"
 
 departments=(daera communities economy education finance health infrastructure justice executiveoffice)
-# Create array of excluded departments from env variable.
+# Create array of excluded departments from environment variable.
 IFS=', ' read -r -a excluded_departments <<< "$MIGRATE_IGNORE_SITES"
 
 export DRUSH=/app/vendor/bin/drush
@@ -127,18 +127,28 @@ then
   echo "Restoring config from config/sync"
   $DRUSH cim -y
 
-  # Remove the departments on in the excluded array from the departments array.
+  # ******************************************
+  # Execute any non-live department commands *
+  #                                          *
+  # From this point on the departments array *
+  # will only contain those departments not  *
+  # present in the $MIGRATE_IGNORE_SITES     *
+  # environment variable                     *
+  # ******************************************
+
+  # Remove the departments in the $MIGRATE_IGNORE_SITES
+  # excluded_departments array from the departments array.
   for i in "${excluded_departments[@]}"; do
     departments=(${departments[@]//*$i*})
   done
 
+  # Loop through the list of non-live departments.
   for dept in "${departments[@]}"
     do
       echo "Creating Topic/Subtopic content entries for ${dept}"
       $DRUSH dept:topic-child-content $dept
       $DRUSH dept:subtopic-child-content $dept
     done
-
 
   echo ".... DONE"
 fi
