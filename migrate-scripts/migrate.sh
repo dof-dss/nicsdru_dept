@@ -2,8 +2,15 @@
 echo ">>> Started at: $(date -u +"%Y-%m-%d %H:%M:%S")"
 
 departments=(daera communities economy education finance health infrastructure justice executiveoffice)
-# Create array of excluded departments from environment variable.
-IFS=', ' read -r -a excluded_departments <<< "$MIGRATE_IGNORE_SITES"
+
+# Check that the $MIGRATE_IGNORE_SITES environment variable is present.
+if [ -z "$MIGRATE_IGNORE_SITESS" ]
+then
+  echo "MIGRATE_IGNORE_SITES environment variable is not set"
+else
+  # Create array of excluded departments from environment variable.
+  IFS=', ' read -r -a excluded_departments <<< "$MIGRATE_IGNORE_SITES"
+fi
 
 export DRUSH=/app/vendor/bin/drush
 # shellcheck disable=SC2089
