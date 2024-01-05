@@ -7,6 +7,7 @@ departments=(daera communities economy education finance health infrastructure j
 if [ -z "$MIGRATE_IGNORE_SITES" ]
 then
   echo "MIGRATE_IGNORE_SITES environment variable is not set"
+  exit 1
 else
   # Create array of excluded departments from environment variable.
   IFS=', ' read -r -a excluded_departments <<< "$MIGRATE_IGNORE_SITES"
