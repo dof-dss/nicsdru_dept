@@ -79,7 +79,14 @@ process:
               'newnigov': 'nigov'
               'execoffice': 'executiveoffice'
               'dfp': 'finance'
-  field_domain_source: domain_source_user
+  field_domain_source:
+    - plugin: static_map
+      source: domain_source_user
+      bypass: true
+      map:
+        'newnigov': 'nigov'
+        'execoffice': 'executiveoffice'
+        'dfp': 'finance'
   list_of_depts_to_ignore:
     - plugin: callback
       callable: getenv
