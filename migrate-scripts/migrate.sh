@@ -79,7 +79,7 @@ then
   done
 
   echo "Migrating D7 taxonomy data"
-  $DRUSH migrate:import --group=migrate_drupal_7_taxo --force
+  $DRUSH migrate:import --group=migrate_drupal_7_taxo
 
   echo "Migrating D7 user and roles"
   $DRUSH migrate:import users --force

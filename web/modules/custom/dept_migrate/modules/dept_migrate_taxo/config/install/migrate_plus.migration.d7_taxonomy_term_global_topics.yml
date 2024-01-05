@@ -16,10 +16,7 @@ source:
   batch_size: 1000
 process:
   tid: tid
-  vid:
-    - plugin: migration_lookup
-      migration: upgrade_d7_taxonomy_vocabulary
-      source: vid
+  vid: 'global_topics'
   name: name
   description/value:
     -
