@@ -100,6 +100,10 @@ then
     $DRUSH migrate:import d7_file_media_document --force --limit=10000
   done
 
+  # Turn off content_lock modules as they interfere with node and redirect entity creation here.
+  $DRUSH pmu content_lock,content_lock_timeout
+  # NB: module will be re-enabled by config import at end of this script.
+
   for type in topic subtopic actions application article collection consultation contact easychart gallery heritage_site infogram landing_page link page profile protected_area ual
   do
     echo "Migrate D7 ${type} nodes"
