@@ -11,6 +11,8 @@ source:
   plugin: d7_dept_node
   node_type: article
   track_changes: true
+  constants:
+    migrate_ignore_sites: 'MIGRATE_IGNORE_SITES'
 process:
   site_topics:
     - plugin: sub_process
@@ -114,6 +116,24 @@ process:
   field_domain_all_affiliates:
     - plugin: get
       source: domain_all_affiliates
+  list_of_depts_to_ignore:
+    - plugin: callback
+      callable: getenv
+      source:
+        - 'constants/migrate_ignore_sites'
+      unpack_source: true
+    - plugin: default_value
+      default_value: ''
+    - plugin: explode
+      delimiter: ','
+  ignore_live_depts:
+    - plugin: flatten
+      source: domain_source_node
+    - plugin: skip_on_condition
+      condition:
+        plugin: in_array
+        property: '@list_of_depts_to_ignore'
+      method: row
 destination:
   plugin: 'entity:node'
   default_bundle: article

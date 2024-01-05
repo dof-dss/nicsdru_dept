@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 echo ">>> Started at: $(date -u +"%Y-%m-%d %H:%M:%S")"
 
+departments=(daera communities economy education finance health infrastructure justice executiveoffice)
+
+# Check that the $MIGRATE_IGNORE_SITES environment variable is present.
+if [ -z "$MIGRATE_IGNORE_SITES" ]
+then
+  echo "MIGRATE_IGNORE_SITES environment variable is not set"
+else
+  # Create array of excluded departments from environment variable.
+  IFS=', ' read -r -a excluded_departments <<< "$MIGRATE_IGNORE_SITES"
+fi
+
 export DRUSH=/app/vendor/bin/drush
 # shellcheck disable=SC2089
 export MIGRATIONS="\
@@ -39,6 +50,7 @@ export MIGRATIONS="\
   flagging_hide_listing \
   flagging_hide_on_topic_subtopic_pages "
 
+
 if [ -z ${PLATFORM_BRANCH} ] && [ -z ${LANDO} ];
 then
   # Not running on a platform environment, or Lando, so exit.
@@ -65,8 +77,8 @@ then
     $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_$type/config/install -y
   done
 
-#  echo "Migrating D7 taxonomy data"
-#  $DRUSH migrate:import --group=migrate_drupal_7_taxo --force
+  echo "Migrating D7 taxonomy data"
+  $DRUSH migrate:import --group=migrate_drupal_7_taxo --force
 
   echo "Migrating D7 user and roles"
   $DRUSH migrate:import users --force
@@ -122,11 +134,33 @@ then
   echo "Restoring config from config/sync"
   $DRUSH cim -y
 
-   for domain in daera communities economy education finance health infrastructure justice executiveoffice
+  # ******************************************
+  # Execute any non-live department commands *
+  #                                          *
+  # From this point on the departments array *
+  # will only contain those departments not  *
+  # present in the $MIGRATE_IGNORE_SITES     *
+  # environment variable                     *
+  # ******************************************
+
+  # Remove the departments in the $MIGRATE_IGNORE_SITES
+  # excluded_departments array from the departments array.
+  for i in "${excluded_departments[@]}"; do
+    departments=(${departments[@]//*$i*})
+  done
+
+  # Loop through the list of non-live departments.
+  for dept in "${departments[@]}"
     do
-      echo "Creating Topic/Subtopic content entries for ${domain}"
-      $DRUSH dept:topic-child-content $domain
-      $DRUSH dept:subtopic-child-content $domain
+      echo "Creating Topic/Subtopic content entries for ${dept}"
+      $DRUSH dept:topic-child-content $dept
+      $DRUSH dept:subtopic-child-content $dept
+
+      echo "Removing Audit Due entries for ${dept}"
+      $DRUSH dept:remove-audit-date $dept
+
+      echo "Creating Audit Due entries for ${dept}"
+      $DRUSH dept:update-audit-date $dept
     done
 
   echo ".... DONE"

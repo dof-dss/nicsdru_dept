@@ -1,0 +1,20 @@
+uuid: 5ea8a26c-a003-481b-89f9-c0910deb7858
+langcode: en
+status: true
+dependencies:
+  module:
+    - domain
+    - user
+id: user.field_domain_source
+field_name: field_domain_source
+entity_type: user
+type: entity_reference
+settings:
+  target_type: domain
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: true
+custom_storage: false
