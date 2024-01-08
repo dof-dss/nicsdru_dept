@@ -179,6 +179,24 @@ function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBa
     }
   }
 
+  if ($view->id() === 'workflow_moderation') {
+    // @phpstan-ignore-next-line
+    foreach ($query->where[1]['conditions'] as $index => $condition) {
+      if ($condition['field'] === 'node_field_data_node_field_revision__node__field_publication_secure_files.field_publication_secure_files_target_id') {
+        // Unset this condition if stats supervisor/related permissions.
+        if ($current_user->hasPermission('view any unpublished secure publication')) {
+          unset($query->where[1]['conditions'][$index]);
+
+          // Set a notice message for top-level admins.
+          if ($current_user->hasPermission('bypass node access')) {
+            \Drupal::messenger()
+              ->addWarning('Secure publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
+          }
+        }
+      }
+    }
+  }
+
   if ($view->id() === 'media_library') {
     // @phpstan-ignore-next-line
     foreach ($query->where[1]['conditions'] as $index => $condition) {
