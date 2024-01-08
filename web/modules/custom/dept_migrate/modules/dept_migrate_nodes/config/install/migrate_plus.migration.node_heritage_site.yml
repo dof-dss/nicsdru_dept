@@ -75,6 +75,10 @@ process:
     - plugin: str_replace
       search: '&nbsp;'
       replace: ' '
+    - plugin: str_replace
+      regex: true
+      search: /<a>(.+)<\/a>/iU
+      replace: '$1'
     - plugin: media_wysiwyg_filter
   body/0/format:
     - plugin: static_map
