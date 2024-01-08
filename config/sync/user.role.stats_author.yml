@@ -4,8 +4,6 @@ status: true
 dependencies:
   config:
     - filter.format.basic_html
-    - filter.format.filtered_html
-    - filter.format.filtered_html_with_no_images
     - media.type.document
     - media.type.image
     - media.type.secure_file
@@ -49,8 +47,6 @@ permissions:
   - 'use nics_editorial_workflow transition draft_of_published'
   - 'use nics_editorial_workflow transition submit_for_review'
   - 'use text format basic_html'
-  - 'use text format filtered_html'
-  - 'use text format filtered_html_with_no_images'
   - 'use topic tree widget'
   - 'view all revisions'
   - 'view any unpublished content'
