@@ -3,10 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - filter.format.filtered_html
-    - filter.format.filtered_html_with_no_images
-    - filter.format.filtered_html_with_templates
-    - filter.format.filtered_html_with_tokens
     - node.type.subtopic
     - node.type.topic
     - workflows.workflow.nics_editorial_workflow
@@ -15,7 +11,6 @@ dependencies:
     - content_moderation
     - dept_topics
     - domain_access
-    - filter
     - flag
     - node
     - redirect
@@ -56,10 +51,6 @@ permissions:
   - 'use nics_editorial_workflow transition restore'
   - 'use nics_editorial_workflow transition restore_to_draft'
   - 'use nics_editorial_workflow transition submit_for_review'
-  - 'use text format filtered_html'
-  - 'use text format filtered_html_with_no_images'
-  - 'use text format filtered_html_with_templates'
-  - 'use text format filtered_html_with_tokens'
   - 'use topic tree widget'
   - 'view all revisions'
   - 'view any unpublished application content'
