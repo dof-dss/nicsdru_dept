@@ -29,9 +29,10 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
       '#type' => 'radios',
       '#title' => t('Attachment(s) type'),
       '#options' => ['Public', 'Secure'],
-      '#default_value' => '0',
+      '#default_value' => !empty($node->get('field_publication_secure_files')->getValue()) ? '1' : '0',
       '#weight' => 0,
     ];
+
     $form['field_publication_files']['#states'] = [
       'invisible' => [
         ':input[name="publication_attachment_type"]' => ['value' => 1],
@@ -49,18 +50,27 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
     ];
 
     // If permission to create secure publication, make this field selectable.
-    if (\Drupal::currentUser()->hasPermission('create secure publication') &&
-      in_array('administrator', \Drupal::currentUser()->getRoles()) === FALSE) {
+    if (\Drupal::currentUser()->hasPermission('create secure publication')) {
+      if (in_array('administrator', \Drupal::currentUser()->getRoles()) === FALSE) {
+        \Drupal::messenger()
+          ->addMessage('This content will be created as a secure publication meaning it and related media assets cannot be seen by other users or site visitors until it is published');
 
-      \Drupal::messenger()->addMessage('This content will be created as a secure publication meaning it and related media assets cannot be seen by other users or site visitors until it is published');
+        $form['publication_attachment_type'] = [
+          '#type' => 'hidden',
+          '#default_value' => '1',
+          '#value' => '1',
+        ];
+
+        $form['field_publication_secure_files']['widget']['#required'] = TRUE;
+      }
+    }
+    else {
+      // Default to public publication for unprivileged users.
       $form['publication_attachment_type'] = [
         '#type' => 'hidden',
-        '#value' => 1,
+        '#default_value' => '0',
+        '#value' => '0',
       ];
-    }
-
-    if (!empty($node->get('field_publication_secure_files')->getValue())) {
-      $form['publication_attachment_type']['#default_value'] = 1;
     }
 
     $form['#validate'][] = 'dept_publications_validate_publication';
@@ -81,7 +91,7 @@ function dept_publications_validate_publication(&$form, FormStateInterface $form
     }
   }
   else {
-    if (empty($values['field_publication_secure_files'])) {
+    if (empty($values['field_publication_secure_files']['selection'])) {
       $form_state->setErrorByName('field_publication_secure_files', t('You must provide a secure attachment'));
     }
   }
