@@ -3,9 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - filter.format.filtered_html
-    - filter.format.filtered_html_with_no_images
-    - filter.format.filtered_html_with_tokens
     - node.type.application
     - node.type.article
     - node.type.book
@@ -249,9 +246,6 @@ permissions:
   - 'use nics_editorial_workflow transition restore'
   - 'use nics_editorial_workflow transition restore_to_draft'
   - 'use nics_editorial_workflow transition submit_for_review'
-  - 'use text format filtered_html'
-  - 'use text format filtered_html_with_no_images'
-  - 'use text format filtered_html_with_tokens'
   - 'use topic tree widget'
   - 'view all media revisions'
   - 'view all revisions'

@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - ckeditor5_allowed_html
     - cookie_content_blocker
     - dept_content_processors
     - origins_common
@@ -32,15 +33,15 @@ filters:
     settings:
       process_domains:
         nigov: nigov
-        daera: '0'
         communities: '0'
+        daera: '0'
         economy: '0'
         education: '0'
+        executiveoffice: '0'
         finance: '0'
         health: '0'
         infrastructure: '0'
         justice: '0'
-        executiveoffice: '0'
   origins_media_cookie_content_blocker_embed_filter:
     id: origins_media_cookie_content_blocker_embed_filter
     provider: origins_common
@@ -55,3 +56,12 @@ filters:
     weight: 0
     settings:
       replace_empty: '0'
+  filter_allowed:
+    id: filter_allowed
+    provider: ckeditor5_allowed_html
+    status: false
+    weight: 0
+    settings:
+      allowed_html: '<br> <p> <h2> <h3> <h4> <h5> <h6> <strong> <em> <sup> <blockquote> <a href> <ul> <ol start> <li> <table> <tr> <td rowspan colspan> <th rowspan colspan> <thead> <tbody> <tfoot> <caption> <drupal-media data-entity-type data-entity-uuid alt>'
+      filter_html_help: '0'
+      filter_html_nofollow: '0'
