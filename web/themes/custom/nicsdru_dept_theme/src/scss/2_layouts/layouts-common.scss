@@ -133,3 +133,13 @@
     width: 100% !important;
   }
 }
+
+.layout {
+  &--main,
+  &--main-limited,
+  &--main-n-side,
+  &--side-n-main,
+  &--triptych {
+    word-wrap: break-word;
+  }
+}
