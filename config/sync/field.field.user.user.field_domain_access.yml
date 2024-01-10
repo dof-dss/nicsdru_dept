@@ -5,7 +5,12 @@ dependencies:
   config:
     - field.storage.user.field_domain_access
   module:
+    - domain_entity
     - user
+third_party_settings:
+  domain_entity:
+    domains: {  }
+    behavior: auto
 id: user.user.field_domain_access
 field_name: field_domain_access
 entity_type: user

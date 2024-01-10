@@ -5,15 +5,12 @@ dependencies:
   config:
     - core.entity_view_display.node.subtopic.full
     - core.entity_view_display.node.topic.full
-    - filter.format.filtered_html_with_templates
-    - filter.format.layout_builder_html
     - node.type.subtopic
     - node.type.topic
   module:
     - content_moderation
     - dept_topics
     - domain_access
-    - filter
     - layout_builder
     - media
     - node
@@ -43,8 +40,6 @@ permissions:
   - 'update media'
   - 'update subtopic content on assigned domains'
   - 'update topic content on assigned domains'
-  - 'use text format filtered_html_with_templates'
-  - 'use text format layout_builder_html'
   - 'use topic tree widget'
   - 'view all revisions'
   - 'view any unpublished content'

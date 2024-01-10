@@ -189,32 +189,6 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
             $variables['page']['sidebar_second'][] = Helpers::blockContent('views_block__news_latest_news_block');
           }
 
-          // Render the Related Content block.
-          // We can't use Helpers::blockContent() here as we are loading a
-          // plugin block instead of a content block.
-          $block_manager = \Drupal::service('plugin.manager.block');
-          $plugin_block = $block_manager->createInstance('dept_related_content_block', []);
-          $block_label = t('Related content');
-
-          // Applying title as hook_block_view_alter() which applies the title
-          // for canonical routes doesn't get called here.
-          if ($node->hasField('field_subtheme') && !$node->get('field_subtheme')->isEmpty()) {
-            $block_label = $node->get('field_subtheme')->entity->getName();
-          }
-
-          // We have to create a block render array as $plugin_block->build()
-          // will only create the inner block content.
-          $variables['page']['sidebar_second'][] = [
-            '#theme' => 'block',
-            '#weight' => 0,
-            '#configuration' => [
-              'label' => $block_label,
-              'label_display' => '1',
-            ],
-            '#plugin_id' => $plugin_block->getPluginId(),
-            '#derivative_plugin_id' => NULL,
-            'content' => $plugin_block->build(),
-          ];
           break;
 
         default:

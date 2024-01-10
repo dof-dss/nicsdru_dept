@@ -26,37 +26,51 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
   // attachment type.
   if ($node->bundle() === 'publication') {
     $form['publication_attachment_type'] = [
-      '#type' => 'hidden',
-      '#value' => '0',
+      '#type' => 'radios',
+      '#title' => t('Attachment(s) type'),
+      '#options' => ['Public', 'Secure'],
+      '#default_value' => !empty($node->get('field_publication_secure_files')->getValue()) ? '1' : '0',
+      '#weight' => 0,
+    ];
+
+    $form['field_publication_files']['#states'] = [
+      'invisible' => [
+        ':input[name="publication_attachment_type"]' => ['value' => 1],
+      ],
+    ];
+    $form['field_external_publication']['#states'] = [
+      'invisible' => [
+        ':input[name="publication_attachment_type"]' => ['value' => 1],
+      ],
+    ];
+    $form['field_publication_secure_files']['#states'] = [
+      'invisible' => [
+        ':input[name="publication_attachment_type"]' => ['value' => 0],
+      ],
     ];
 
     // If permission to create secure publication, make this field selectable.
     if (\Drupal::currentUser()->hasPermission('create secure publication')) {
+      if (in_array('administrator', \Drupal::currentUser()->getRoles()) === FALSE) {
+        \Drupal::messenger()
+          ->addMessage('This content will be created as a secure publication meaning it and related media assets cannot be seen by other users or site visitors until it is published');
 
-      \Drupal::messenger()->addMessage('This content will be created as a secure publication meaning it and related media assets cannot be seen by other users or site visitors until it is published');
-      $form['publication_attachment_type']['#value'] = 1;
+        $form['publication_attachment_type'] = [
+          '#type' => 'hidden',
+          '#default_value' => '1',
+          '#value' => '1',
+        ];
 
-      $form['field_publication_files']['#states'] = [
-        'invisible' => [
-          ':input[name="publication_attachment_type"]' => ['value' => 1],
-        ],
-      ];
-
-      $form['field_external_publication']['#states'] = [
-        'invisible' => [
-          ':input[name="publication_attachment_type"]' => ['value' => 1],
-        ],
-      ];
-
-      $form['field_publication_secure_files']['#states'] = [
-        'invisible' => [
-          ':input[name="publication_attachment_type"]' => ['value' => 0],
-        ],
-      ];
+        $form['field_publication_secure_files']['widget']['#required'] = TRUE;
+      }
     }
-
-    if (!empty($node->get('field_publication_secure_files')->getValue())) {
-      $form['publication_attachment_type']['#default_value'] = 1;
+    else {
+      // Default to public publication for unprivileged users.
+      $form['publication_attachment_type'] = [
+        '#type' => 'hidden',
+        '#default_value' => '0',
+        '#value' => '0',
+      ];
     }
 
     $form['#validate'][] = 'dept_publications_validate_publication';
@@ -77,7 +91,7 @@ function dept_publications_validate_publication(&$form, FormStateInterface $form
     }
   }
   else {
-    if (empty($values['field_publication_secure_files'])) {
+    if (empty($values['field_publication_secure_files']['selection'])) {
       $form_state->setErrorByName('field_publication_secure_files', t('You must provide a secure attachment'));
     }
   }
@@ -161,6 +175,24 @@ function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBa
     // @phpstan-ignore-next-line
     foreach ($query->where[1]['conditions'] as $index => $condition) {
       if ($condition['field'] === 'node__field_publication_secure_files.field_publication_secure_files_target_id') {
+        // Unset this condition if stats supervisor/related permissions.
+        if ($current_user->hasPermission('view any unpublished secure publication')) {
+          unset($query->where[1]['conditions'][$index]);
+
+          // Set a notice message for top-level admins.
+          if ($current_user->hasPermission('bypass node access')) {
+            \Drupal::messenger()
+              ->addWarning('Secure publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
+          }
+        }
+      }
+    }
+  }
+
+  if ($view->id() === 'workflow_moderation') {
+    // @phpstan-ignore-next-line
+    foreach ($query->where[1]['conditions'] as $index => $condition) {
+      if ($condition['field'] === 'node_field_data_node_field_revision__node__field_publication_secure_files.field_publication_secure_files_target_id') {
         // Unset this condition if stats supervisor/related permissions.
         if ($current_user->hasPermission('view any unpublished secure publication')) {
           unset($query->where[1]['conditions'][$index]);

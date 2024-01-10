@@ -3,8 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - filter.format.filtered_html
-    - filter.format.filtered_html_with_no_images
     - node.type.application
     - node.type.article
     - node.type.consultation
@@ -22,7 +20,6 @@ dependencies:
     - dept_topics
     - domain_access
     - domain_entity
-    - filter
     - media
     - node
     - scheduled_transitions
@@ -111,8 +108,6 @@ permissions:
   - 'use nics_editorial_workflow transition draft_of_published'
   - 'use nics_editorial_workflow transition reject'
   - 'use nics_editorial_workflow transition submit_for_review'
-  - 'use text format filtered_html'
-  - 'use text format filtered_html_with_no_images'
   - 'use topic tree widget'
   - 'view all media revisions'
   - 'view all revisions'
