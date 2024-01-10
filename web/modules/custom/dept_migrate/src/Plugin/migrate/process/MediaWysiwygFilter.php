@@ -141,7 +141,7 @@ class MediaWysiwygFilter extends ProcessPluginBase implements ContainerFactoryPl
 
         $replacement_template = '';
 
-        if ($media['filemime'] === 'video/oembed' && !empty($midd9)) {
+        if (is_array($media) && $media['filemime'] === 'video/oembed' && !empty($midd9)) {
           // Search for oembed/remote media which doesn't have a
           // managed file entry.
           $query = $this->connDb->select('media', 'm');
