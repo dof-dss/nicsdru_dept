@@ -157,7 +157,18 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     // For each dept, find the FCL for it.
     $depts = $this->departmentManager->getAllDepartments();
 
+    $exclusions = getenv('MIGRATE_IGNORE_SITES') ?? '';
+
+    if (!empty($exclusions)) {
+      $exclusions = explode(',', $exclusions);
+    }
+
     foreach ($depts as $dept) {
+      if (in_array($dept->id(), $exclusions)) {
+        $this->io()->writeln('Skipping ' . $dept->label() . ' as it was found in MIGRATE_IGNORE_SITES');
+        continue;
+      }
+
       $this->io()->writeln('Processing ' . $dept->label());
 
       // NB: accessCheck = FALSE because otherwise we can't load the node object.
