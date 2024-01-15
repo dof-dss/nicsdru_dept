@@ -10,6 +10,10 @@ $base-font-size: 16px;
 
 body {
   font-family: $base-font-family;
+
+  p {
+    @include responsive-typo-map($normal-text);
+  }
 }
 
 .ck .ck-editor__main {
@@ -406,34 +410,33 @@ body {
   }
 }
 
-.block-system-main-block {
-  .layout-node-form {
-    .layout-region__content {
-      p {
-        @include responsive-typo-map($normal-text);
-      }
+.block-system-main-block .layout-node-form .layout-region__content {
+  p {
+    @include responsive-typo-map($normal-text);
+  }
 
-      .field--name-field-external-publication {
-        table {
-          th,
-          td {
-            background-color: $grey-lightest;
-            border-color: $grey-medium;
-          }
+  .field--type {
+    &-entity-reference,
+    &-link {
+      table {
+        th,
+        td {
+          background-color: $grey-lightest;
+          border-color: $grey-medium;
+        }
 
-          td:first-child ~ td,
-          th:first-child ~ th {
-            padding-left: var(--space-m);
-          }
+        td:first-child ~ td,
+        th:first-child ~ th {
+          padding-left: var(--space-m);
+        }
 
-          th,
-          h4 {
-            @include responsive-typo-map($h4-text);
+        th,
+        h4 {
+          @include responsive-typo-map($h4-text);
+          margin: 0;
+
+          @include breakpoint($lap) {
             margin: 0;
-
-            @include breakpoint($lap) {
-              margin: 0;
-            }
           }
         }
       }
