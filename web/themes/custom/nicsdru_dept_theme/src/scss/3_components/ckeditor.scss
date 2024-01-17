@@ -12,7 +12,7 @@ body {
   font-family: $base-font-family;
 
   p {
-    @include responsive-typo-map($normal-text);
+    font-size: var(--font-size-base);
   }
 }
 
@@ -410,11 +410,8 @@ body {
   }
 }
 
-.block-system-main-block .layout-node-form .layout-region__content {
-  p {
-    @include responsive-typo-map($normal-text);
-  }
-
+.block-system-main-block .layout-node-form .layout-region__content,
+.block-system-main-block .department-form {
   .field--type {
     &-entity-reference,
     &-link {
@@ -423,6 +420,7 @@ body {
         td {
           background-color: $grey-lightest;
           border-color: $grey-medium;
+          height: unset;
         }
 
         td:first-child ~ td,
@@ -432,12 +430,12 @@ body {
 
         th,
         h4 {
-          @include responsive-typo-map($h4-text);
-          margin: 0;
+          font-size: var(--font-size-base);
+          //margin: 0;
 
-          @include breakpoint($lap) {
-            margin: 0;
-          }
+          //@include breakpoint($lap) {
+          //  margin: 0;
+          //}
         }
       }
     }
