@@ -257,6 +257,9 @@
             "drupal/admin_toolbar": {
               "Add multi column menu dropdown": "https://www.drupal.org/files/issues/2023-10-02/admin_toolbar-added_multi_column_menu_dropdown-2917168-53_0.patch"
             },
+            "drupal/content_lock": {
+                "Fix PHP 8.2+ deprecation notices": "https://www.drupal.org/files/issues/2023-05-22/3343964-5.patch"
+            },
             "drupal/core": {
                 "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch",
                 "Illegal mix of collations leads to error 500 #3188740": "https://www.drupal.org/files/issues/2020-12-21/3188740-3.patch",
