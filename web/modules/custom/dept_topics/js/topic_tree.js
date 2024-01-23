@@ -15,6 +15,8 @@
           .on('changed.jstree', function (e, data) {
             // Update the hidden form field values when tree changes.
             $('input[name="selected_topics"]').val(data.instance.get_selected());
+            // Also keep the label in sync with the number of selections.
+            $('#topic-tree-count span').text(data.instance.get_selected().length);
           })
           .on("ready.jstree", function(e, data) {
             // Check all tree elements matching the selected options.
@@ -38,8 +40,6 @@
               data.instance.deselect_node(data.node);
               alert('Topic selection limit reached.')
             }
-
-            $('#topic-tree-count span').text(data.instance.get_selected().length);
           })
           .jstree({
             core: {
