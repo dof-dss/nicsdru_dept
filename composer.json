@@ -265,7 +265,8 @@
                 "Views RSS row plugin incorrectly assumes links are relative #2918784": "https://www.drupal.org/files/issues/2021-07-01/2918784_42.patch",
                 "Cannot save unpublished versions of published content for users without manage book privileges": "https://www.drupal.org/files/issues/2022-12-14/2918537-92.patch",
                 "Length of menu_tree.url and menu_tree.route_param_key are too short (255 characters)": "https://www.drupal.org/files/issues/2023-05-24/3106205-length-menu-tree-too-short.patch",
-                "Avoid error when $options is NULL in buildUrl()": "https://www.drupal.org/files/issues/2022-10-03/2871217-68_0.patch"
+                "Avoid error when $options is NULL in buildUrl()": "https://www.drupal.org/files/issues/2022-10-03/2871217-68_0.patch",
+                "Increase claro xs font size": "patches/claro-font-size.patch"
             },
             "drupal/redirect": {
                 "Add URL Redirects tab to taxonomy term edit form": "https://www.drupal.org/files/issues/2021-03-26/redirect_provide_redirect_tab_on_taxonomy_terms_3205896.patch",
