@@ -168,7 +168,6 @@ body {
   p + ul,
   p + ol {
     @include adjust-property-size-to(-12px, margin-top);
-    //margin-top: -1.2rem;
   }
 
   ol,
@@ -264,7 +263,6 @@ body {
 
       p {
         @include adjust-property-size-to(9px 0, margin);
-        //margin: .9rem 0;
 
         &:first-child {
           margin-top: 0;
@@ -341,9 +339,7 @@ body {
 
     @include breakpoint($phab, $no-query: true) {
       @include adjust-property-size-to(14px 1em 1em 60px, padding);
-      //padding: 1.4rem 1em 1em 6rem;
       @include adjust-property-size-to(14px 14px, background-position);
-      //background-position: 1.4rem 1.4rem;
       background-size: 30px 30px;
     }
 
@@ -431,11 +427,6 @@ body {
         th,
         h4 {
           font-size: var(--font-size-base);
-          //margin: 0;
-
-          //@include breakpoint($lap) {
-          //  margin: 0;
-          //}
         }
       }
     }
