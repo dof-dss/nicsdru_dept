@@ -98,10 +98,31 @@ final class TopicTreeForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $topic_values = [];
+
+    // Normalise the composite ids used to make JSTree items unique.
+    $selected_topic_values = $form_state->getValue('selected_topics');
+    if (!empty($selected_topic_values)) {
+      $selected_topic_values = explode(',', $selected_topic_values);
+
+      foreach ($selected_topic_values as $selection) {
+        if (str_contains($selection, '--')) {
+          $topic_values[] = explode('--', $selection)[0];
+        }
+      }
+    }
+
+    if (empty($topic_values)) {
+      $topic_values = $selected_topic_values;
+    }
+
+    // Convert back to a string for use by the JS function callback.
+    $topic_values = implode(',', $topic_values);
+
     $response = new AjaxResponse();
     $response->addCommand(new InvokeCommand(NULL, 'topicTreeAjaxCallback', [
       $form_state->getValue('field'),
-      $form_state->getValue('selected_topics')
+      $topic_values
     ]));
     $response->addCommand(new CloseDialogCommand());
 
