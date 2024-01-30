@@ -1,0 +1,46 @@
+uuid: 20c24552-f341-4020-8b41-9b397338f38a
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:3b75ffff-d7c1-4e5d-becc-5a6580627b83'
+  module:
+    - block_content
+    - block_visibility_groups
+    - domain
+    - node
+  theme:
+    - nicsdru_dept_theme
+id: nicsdru_dept_theme_ualcrimestoppers
+theme: nicsdru_dept_theme
+region: content
+weight: 0
+provider: null
+plugin: 'block_content:3b75ffff-d7c1-4e5d-becc-5a6580627b83'
+settings:
+  id: 'block_content:3b75ffff-d7c1-4e5d-becc-5a6580627b83'
+  label: 'UAL CRIMESTOPPERS'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  domain:
+    id: domain
+    negate: false
+    context_mapping:
+      domain: '@domain.current_domain_context:domain'
+    domains:
+      justice: justice
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      ual: ual

@@ -182,3 +182,32 @@
 .site-topics:has(+ .site-book) {
   margin-bottom: 0;
 }
+
+.page-node-type-ual {
+  .field--label-inline {
+    @include responsive-typo-map($normal-text);
+
+    .field__label,
+    .field__item {
+      display: inline;
+    }
+
+    &:not(.field--name-field-ual-from) {
+      .field__label {
+        font-weight: bold;
+
+        &::after {
+          content: ':';
+        }
+      }
+    }
+  }
+
+  .ga-aside {
+    padding-top: 0;
+  }
+
+  .field--name-field-ual-from {
+    margin-top: 0;
+  }
+}
