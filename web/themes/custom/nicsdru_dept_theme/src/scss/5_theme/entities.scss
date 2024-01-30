@@ -210,4 +210,13 @@
   .field--name-field-ual-from {
     margin-top: 0;
   }
+
+  .media-image {
+    margin-top: 0;
+
+    img {
+      max-width: 100%;
+      width: unset;
+    }
+  }
 }
