@@ -57,6 +57,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
           break;
 
         // Specific node types have a main only.
+        case "ual":
         case "landing_page":
         case "subtopic":
           $variables['main_content_attr']->addClass(LayoutClasses::MAIN);
@@ -205,6 +206,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
           $variables['sidebar_second_attr']->addClass('ga-aside');
           break;
 
+        case "ual":
         case "consultation":
           $variables['main_content_attr']->addClass(LayoutClasses::MAIN);
           break;
@@ -270,6 +272,7 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
 
       break;
 
+    case "ual":
     case "webform":
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('ga-main');
       break;
