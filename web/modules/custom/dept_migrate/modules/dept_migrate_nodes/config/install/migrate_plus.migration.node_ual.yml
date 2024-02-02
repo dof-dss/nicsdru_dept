@@ -56,6 +56,7 @@ process:
         target_id:
           - plugin: d7_file_lookup
             source: fid
+            entity_type: media
   field_prison: field_prison
   field_release_type: field_release_type
   field_ual_from:
