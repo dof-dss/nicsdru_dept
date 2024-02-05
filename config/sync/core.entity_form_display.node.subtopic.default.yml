@@ -16,7 +16,6 @@ dependencies:
     - field.field.node.subtopic.field_topic_content
     - field.field.node.subtopic.layout_builder__layout
     - node.type.subtopic
-    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - dept_topics
@@ -25,7 +24,6 @@ dependencies:
     - media_library_edit
     - metatag
     - path
-    - scheduler
     - text
 third_party_settings:
   field_group:
@@ -178,12 +176,6 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-  publish_on:
-    type: datetime_timestamp_no_default
-    weight: 14
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   publish_state:
     type: options_select
     weight: 26
@@ -227,12 +219,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  unpublish_on:
-    type: datetime_timestamp_no_default
-    weight: 13
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   unpublish_state:
     type: options_select
     weight: 27
@@ -249,3 +235,5 @@ hidden:
   groups: true
   groups_type_department_site: true
   layout_builder__layout: true
+  publish_on: true
+  unpublish_on: true
