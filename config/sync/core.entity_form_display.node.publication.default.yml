@@ -18,7 +18,6 @@ dependencies:
     - field.field.node.publication.field_site_topics
     - field.field.node.publication.field_summary
     - node.type.publication
-    - workflows.workflow.nics_editorial_workflow
   module:
     - chosen_field
     - content_moderation
@@ -29,7 +28,6 @@ dependencies:
     - media_library_edit
     - metatag
     - path
-    - scheduler
     - text
 id: node.publication.default
 targetEntityType: node
@@ -176,12 +174,6 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-  publish_on:
-    type: datetime_timestamp_no_default
-    weight: 19
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   publish_state:
     type: options_select
     weight: 26
@@ -225,12 +217,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  unpublish_on:
-    type: datetime_timestamp_no_default
-    weight: 18
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   unpublish_state:
     type: options_select
     weight: 27
@@ -247,3 +233,5 @@ hidden:
   field_attachment: true
   groups: true
   groups_type_department_site: true
+  publish_on: true
+  unpublish_on: true

@@ -84,7 +84,7 @@
         "drupal/core-composer-scaffold": "^10",
         "drupal/core-project-message": "^10",
         "drupal/core-recommended": "^10",
-        "drupal/csp": "^1.15",
+        "drupal/csp": "^1.30",
         "drupal/date_facet_drilldown": "^5.0",
         "drupal/datetime_flatpickr": "^2.0",
         "drupal/devel_entity_updates": "^4.0",
@@ -109,7 +109,7 @@
         "drupal/fpa": "^4.0",
         "drupal/geolocation": "^3.7",
         "drupal/google_map_field": "^1.14",
-        "drupal/google_tag": "^1.6",
+        "drupal/google_tag": "^2.0",
         "drupal/handy_cache_tags": "^1.4",
         "drupal/http_cache_control": "^2.0",
         "drupal/interval": "^1.9",
@@ -124,13 +124,13 @@
         "drupal/moderation_sidebar": "^1.4",
         "drupal/noreferrer": "^1.10",
         "drupal/paragraphs": "^1.15",
-        "drupal/pathauto": "^1.11",
+        "drupal/pathauto": "^1.12",
         "drupal/permissions_filter": "^1.5",
         "drupal/purge_users": "^4.0@beta",
         "drupal/redirect": "^1.6",
         "drupal/redis": "^1.5",
-        "drupal/scheduled_transitions": "^2.4@beta",
-        "drupal/scheduler": "^1.4",
+        "drupal/scheduled_transitions": "^2.4",
+        "drupal/scheduler": "^2.0",
         "drupal/schema_metatag": "^3.0",
         "drupal/search_api": "^1.30",
         "drupal/search_api_autocomplete": "^1.8",
@@ -141,7 +141,6 @@
         "drupal/simplei": "^1.2",
         "drupal/smart_trim": "^2.0",
         "drupal/stable": "^2.0",
-        "drupal/structure_sync": "^2.0",
         "drupal/taxonomy_access_fix": "^4.0",
         "drupal/taxonomy_manager": "^2.0",
         "drupal/telephone_plus": "^9.1",
@@ -174,6 +173,7 @@
         "drupal/masquerade": "^2.0@beta",
         "drupal/migrate_devel": "2.x",
         "drupal/stage_file_proxy": "^2.1",
+        "drupal/structure_sync": "^2.0",
         "kint-php/kint": "^4.2",
         "mglaman/drupal-check": "^1.4",
         "phpspec/prophecy-phpunit": "^2",
@@ -297,9 +297,6 @@
             "drupal/flag": {
                 "[regression] Flag form element also appearing on non-edit forms #3169627": "https://www.drupal.org/files/issues/2020-09-08/flag-form_element_on_non_edit-forms-3169627-2.patch"
             },
-            "drupal/google_tag": {
-                "Google Tag doesn’t work with multi-domain site": "https://www.drupal.org/files/issues/2020-12-09/3183426-7.patch"
-            },
             "drupal/linkit": {
                 "Show URL alias after autocomplete selection instead of internal route (e.g., /node/123)": "https://www.drupal.org/files/issues/2023-10-03/linkit-2877535-62.patch"
             },
@@ -309,9 +306,6 @@
             "drupal/moderation_sidebar": {
                 "Can't preview a new node #3264639": "https://www.drupal.org/files/issues/2022-02-16/preview-new-node-3264639-2.patch",
                 "'Draft available' text still appears after deleting a forward revision": "https://www.drupal.org/files/issues/2020-02-24/3115474-3.patch"
-            },
-            "drupal/scheduled_transitions": {
-                "No scheduled revisions appear for migrated nodes": "https://www.drupal.org/files/issues/2021-11-01/scheduled_transitions_base_language_3091006_2x.patch"
             }
         }
     }
