@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d059378b760236c728a4a3d6e1091aa",
+    "content-hash": "8ebce219a57da9a70b4665068841f682",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8199,7 +8199,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-2.0-alpha7",
-                    "datestamp": "1707038671",
+                    "datestamp": "1707160107",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -18763,6 +18763,72 @@
             "time": "2023-10-08T07:28:08+00:00"
         },
         {
+            "name": "spaze/phpstan-disallowed-calls",
+            "version": "v3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spaze/phpstan-disallowed-calls.git",
+                "reference": "fe566326b015674429e1a67a5343183942f493b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spaze/phpstan-disallowed-calls/zipball/fe566326b015674429e1a67a5343183942f493b9",
+                "reference": "fe566326b015674429e1a67a5343183942f493b9",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0",
+                "phpstan/phpstan": "^1.10.52"
+            },
+            "require-dev": {
+                "nette/neon": "^3.2",
+                "nikic/php-parser": "^4.13",
+                "php-parallel-lint/php-console-highlighter": "^1.0",
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpunit/phpunit": "^8.5 || ^10.1",
+                "spaze/coding-standard": "^1.7"
+            },
+            "type": "phpstan-extension",
+            "extra": {
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spaze\\PHPStan\\Rules\\Disallowed\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michal Špaček",
+                    "email": "mail@michalspacek.cz",
+                    "homepage": "https://www.michalspacek.cz"
+                }
+            ],
+            "description": "PHPStan rules to detect disallowed method & function calls, constant, namespace & superglobal usages",
+            "keywords": [
+                "static analysis"
+            ],
+            "support": {
+                "issues": "https://github.com/spaze/phpstan-disallowed-calls/issues",
+                "source": "https://github.com/spaze/phpstan-disallowed-calls/tree/v3.1.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spaze",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-01-22T22:10:47+00:00"
+        },
+        {
             "name": "squizlabs/php_codesniffer",
             "version": "3.8.1",
             "source": {
@@ -19402,6 +19468,7 @@
         "drupal/flag": 10,
         "drupal/migrate_conditions": 10,
         "drupal/purge_users": 10,
+        "drupal/ultimate_cron": 15,
         "drupal/views_tree": 15,
         "drupal/webform": 10,
         "drupal/easy_install_d10": 20,
