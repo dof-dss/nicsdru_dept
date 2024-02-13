@@ -24,3 +24,24 @@
     margin-bottom: 0;
   }
 }
+
+.path-unlawfully-at-large {
+  .ual.card-deck {
+    header {
+      grid-column: 1 / -1;
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+    }
+
+    .media-image {
+      margin: .5em 0;
+
+      img {
+        max-width: 180px;
+        width: unset;
+      }
+    }
+  }
+}
