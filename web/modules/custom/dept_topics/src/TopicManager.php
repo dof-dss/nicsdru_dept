@@ -286,7 +286,7 @@ class TopicManager {
    *   The topic/subtopic node to extract child subtopics from.
    */
   private function getChildTopics(NodeInterface $topic) {
-    $child_content = $topic->field_topic_content->referencedEntities();
+    $child_content = $topic->get('field_topic_content')->referencedEntities();
 
     foreach ($child_content as $child) {
       if ($child->bundle() === 'subtopic') {

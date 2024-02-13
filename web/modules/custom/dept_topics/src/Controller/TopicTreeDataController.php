@@ -59,7 +59,7 @@ class TopicTreeDataController {
    *   Parent topic to extract child content from.
    */
   public function subtopics(NodeInterface $parent) {
-    $child_content = $parent->field_topic_content->referencedEntities();
+    $child_content = $parent->get('field_topic_content')->referencedEntities();
 
     foreach ($child_content as $child) {
       if ($child->bundle() === 'subtopic') {
