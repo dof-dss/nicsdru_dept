@@ -21,6 +21,9 @@ workflows:
       - deprecated_code:
           requires:
             - build
+      - disallowed_functions:
+          requires:
+            - build
   build-edge:
     triggers:
       - schedule:
@@ -85,6 +88,16 @@ jobs:
             CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/modules/origins"
             CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/themes/custom"
             vendor/bin/drupal-check $CHECK_DIRS
+
+  disallowed_functions:
+    <<: *docker_image
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Check for disallowed function calls
+          command: |
+            vendor/bin/phpstan analyse web/modules/custom -c .circleci/phpstan.neon
 
   # Task to build the edge site.
   build_edge:
