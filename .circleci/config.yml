@@ -97,7 +97,9 @@ jobs:
       - run:
           name: Check for disallowed function calls
           command: |
-            vendor/bin/phpstan analyse web/modules/custom -c .circleci/phpstan.neon
+            CHECK_DIRS="${PROJECT_ROOT}/web/modules/custom"
+            CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/modules/origins"
+            vendor/bin/phpstan analyse $CHECK_DIRS -c .circleci/phpstan.neon
 
   # Task to build the edge site.
   build_edge:
