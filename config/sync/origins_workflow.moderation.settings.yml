@@ -1,20 +1,20 @@
 view_overrides:
   all_drafts:
     filtered_node_types:
-      application: application
-      article: article
-      contact: contact
-      featured_content_list: featured_content_list
-      gallery: gallery
-      global_page: global_page
-      profile: profile
+      application: 0
+      article: 0
       book: 0
       consultation: 0
+      contact: 0
+      featured_content_list: 0
+      gallery: 0
+      global_page: 0
       heritage_site: 0
       landing_page: 0
       link: 0
       news: 0
       page: 0
+      profile: 0
       protected_area: 0
       publication: 0
       subtopic: 0
@@ -47,16 +47,16 @@ view_overrides:
     disable: 0
   my_drafts:
     filtered_node_types:
-      application: application
-      article: article
-      book: book
-      consultation: consultation
-      contact: contact
-      heritage_site: heritage_site
-      landing_page: landing_page
+      application: 0
+      article: 0
+      book: 0
+      consultation: 0
+      contact: 0
       featured_content_list: 0
       gallery: 0
       global_page: 0
+      heritage_site: 0
+      landing_page: 0
       link: 0
       news: 0
       page: 0
@@ -67,7 +67,7 @@ view_overrides:
       topic: 0
       ual: 0
       webform: 0
-    disable: 1
+    disable: 0
   needs_audit:
     filtered_node_types:
       application: 0
@@ -114,3 +114,6 @@ view_overrides:
       ual: 0
       webform: 0
     disable: 0
+admin_content_links:
+  moderated_content_disable: 1
+  scheduled_content_disable: 1
