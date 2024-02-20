@@ -530,7 +530,7 @@ function nicsdru_dept_theme_preprocess_responsive_image_formatter(array &$variab
   // well as safe Twig rendering in responsive-image.html.twig to cover
   // any content that is migrated in from the legacy db and could
   // potentially contain dodgy html.
-  $caption = $media_image->field_caption->value;
+  $caption = $media_image->get('field_caption')->value;
 
   if (!empty($caption)) {
     if ($variables['responsive_image_style_id'] != 'featured_news_thumbnail') {
