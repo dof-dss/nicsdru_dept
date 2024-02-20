@@ -3,7 +3,7 @@ version: 2.1
 # Default docker image. (excludes functional_tests)
 default_docker_image: &docker_image
   docker:
-    - image: thecodingmachine/php:8.1-v4-apache
+    - image: thecodingmachine/php:8.2-v4-apache
       environment:
         PLATFORM_REGION: "uk-1.platform.sh"
         PROJECT_ROOT: "/home/docker/project"
@@ -19,6 +19,9 @@ workflows:
           requires:
             - build
       - deprecated_code:
+          requires:
+            - build
+      - disallowed_functions:
           requires:
             - build
   build-edge:
@@ -85,6 +88,18 @@ jobs:
             CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/modules/origins"
             CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/themes/custom"
             vendor/bin/drupal-check $CHECK_DIRS
+
+  disallowed_functions:
+    <<: *docker_image
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Check for disallowed function calls
+          command: |
+            CHECK_DIRS="${PROJECT_ROOT}/web/modules/custom"
+            CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/modules/origins"
+            vendor/bin/phpstan analyse $CHECK_DIRS -c .circleci/phpstan.neon
 
   # Task to build the edge site.
   build_edge:
