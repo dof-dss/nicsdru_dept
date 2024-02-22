@@ -1,8 +1,9 @@
-uuid: 5ae9bfaf-6ba3-4b2f-b278-cf496ed66693
+uuid: 0d2c60a8-df5e-4547-9e89-e5e23e18aabf
 langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.diff
     - field.field.node.ual.field_age
     - field.field.node.ual.field_description
     - field.field.node.ual.field_distinguishing_marks
@@ -19,12 +20,17 @@ dependencies:
     - node.type.ual
   module:
     - datetime
+    - layout_builder
     - options
     - user
-id: node.ual.default
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.ual.diff
 targetEntityType: node
 bundle: ual
-mode: default
+mode: diff
 content:
   field_age:
     type: number_integer

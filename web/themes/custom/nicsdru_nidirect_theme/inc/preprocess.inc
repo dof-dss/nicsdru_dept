@@ -654,31 +654,6 @@ function nicsdru_nidirect_theme_preprocess_form(array &$variables) {
 }
 
 /**
- * Implements hook_preprocess_responsive_image_formatter().
- */
-function nicsdru_nidirect_theme_preprocess_responsive_image_formatter(array &$variables) {
-  // Load the parent media entity that the responsive image is
-  // or might be associated to.
-  $media_image = $variables['item']->getEntity();
-
-  if ($media_image instanceof MediaInterface === FALSE) {
-    return;
-  }
-
-  // If we've got a parent media entity and caption field value
-  // then inject the value into the responsive image attributes collection.
-  // We're relying on Drupal input sanitising from the media form as
-  // well as safe Twig rendering in responsive-image.html.twig to cover
-  // any content that is migrated in from the legacy db and could
-  // potentially contain dodgy html.
-  $caption = $media_image->field_caption->value;
-
-  if (!empty($caption)) {
-    $variables['responsive_image']['#attributes']['caption'] = $caption;
-  }
-}
-
-/**
  * Implements template_preprocess_container().
  */
 function nicsdru_nidirect_theme_preprocess_container(&$variables) {

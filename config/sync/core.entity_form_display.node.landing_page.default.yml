@@ -17,13 +17,11 @@ dependencies:
     - field.field.node.landing_page.field_tweet_count
     - field.field.node.landing_page.field_twitter_user
     - node.type.landing_page
-    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - field_group
     - metatag
     - path
-    - scheduler
     - text
 third_party_settings:
   field_group:
@@ -231,12 +229,6 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-  publish_on:
-    type: datetime_timestamp_no_default
-    weight: 20
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   publish_state:
     type: options_select
     weight: 29
@@ -280,12 +272,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  unpublish_on:
-    type: datetime_timestamp_no_default
-    weight: 19
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   unpublish_state:
     type: options_select
     weight: 30
@@ -301,3 +287,5 @@ hidden:
   entitygroupfield: true
   groups: true
   groups_type_department_site: true
+  publish_on: true
+  unpublish_on: true

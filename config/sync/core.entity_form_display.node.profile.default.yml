@@ -13,7 +13,6 @@ dependencies:
     - field.field.node.profile.field_photo
     - field.field.node.profile.field_summary
     - node.type.profile
-    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - datetime
@@ -21,7 +20,6 @@ dependencies:
     - media_library_edit
     - metatag
     - path
-    - scheduler
     - text
 id: node.profile.default
 targetEntityType: node
@@ -133,12 +131,6 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-  publish_on:
-    type: datetime_timestamp_no_default
-    weight: 12
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   publish_state:
     type: options_select
     weight: 26
@@ -182,12 +174,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  unpublish_on:
-    type: datetime_timestamp_no_default
-    weight: 13
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   unpublish_state:
     type: options_select
     weight: 27
@@ -203,3 +189,5 @@ hidden:
   entitygroupfield: true
   groups: true
   groups_type_department_site: true
+  publish_on: true
+  unpublish_on: true
