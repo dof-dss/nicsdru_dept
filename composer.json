@@ -113,6 +113,8 @@
         "drupal/handy_cache_tags": "^1.4",
         "drupal/http_cache_control": "^2.0",
         "drupal/interval": "^1.9",
+        "drupal/jquery_ui_autocomplete": "^2.0",
+        "drupal/jquery_ui_menu": "^2.0",
         "drupal/layout_builder_modal": "^1.1",
         "drupal/layout_builder_restrictions": "^2.9",
         "drupal/linkit": "^6.1",
@@ -260,6 +262,9 @@
             "drupal/content_lock": {
                 "Fix PHP 8.2+ deprecation notices": "https://www.drupal.org/files/issues/2023-05-22/3343964-5.patch"
             },
+            "drupal/cookie_content_blocker": {
+                "Disable XSS for tag settings to allow HTML output": "https://gist.githubusercontent.com/omahm/eb99bc8278b57798a7d82bf06c27b8d1/raw/d9d75e06300a102b072dd8166f82ec381f211b9d/cookie_content_blocker_disable_xss"
+            },
             "drupal/core": {
                 "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch",
                 "Illegal mix of collations leads to error 500 #3188740": "https://www.drupal.org/files/issues/2020-12-21/3188740-3.patch",
@@ -271,13 +276,8 @@
                 "Avoid error when $options is NULL in buildUrl()": "https://www.drupal.org/files/issues/2022-10-03/2871217-68_0.patch",
                 "Increase claro xs font size": "patches/claro-font-size.patch"
             },
-            "drupal/redirect": {
-                "Add URL Redirects tab to taxonomy term edit form": "https://www.drupal.org/files/issues/2021-03-26/redirect_provide_redirect_tab_on_taxonomy_terms_3205896.patch",
-                "URL redirects listing only displays operations": "https://www.drupal.org/files/issues/2019-04-05/redirects_list_builder-3031125-9-d8.patch",
-                "Fix ajax error when creating redirects": "https://www.drupal.org/files/issues/2020-12-14/validation-issue-3057250-29.patch"
-            },
-            "drupal/cookie_content_blocker": {
-                "Disable XSS for tag settings to allow HTML output": "https://gist.githubusercontent.com/omahm/eb99bc8278b57798a7d82bf06c27b8d1/raw/d9d75e06300a102b072dd8166f82ec381f211b9d/cookie_content_blocker_disable_xss"
+            "drupal/devel": {
+                "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://raw.githubusercontent.com/politsin/snipets/master/patch/kint.patch"
             },
             "drupal/domain": {
                 "Migration path for domain": "https://www.drupal.org/files/issues/2020-02-27/domain-migration-path-for-domain-2882837-13.patch",
@@ -285,10 +285,8 @@
                 "Cached routes are not deleted when the cache is cleared": "https://www.drupal.org/files/issues/2023-09-18/3266520-9.patch"
             },
             "drupal/domain_entity": {
-                "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch"
-            },
-            "drupal/devel": {
-                "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://raw.githubusercontent.com/politsin/snipets/master/patch/kint.patch"
+                "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch",
+                "Make module compatible with PHP 8.2 #3405907": "https://www.drupal.org/files/issues/2023-12-04/3405907-1.patch"
             },
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
@@ -308,6 +306,11 @@
             "drupal/moderation_sidebar": {
                 "Can't preview a new node #3264639": "https://www.drupal.org/files/issues/2022-02-16/preview-new-node-3264639-2.patch",
                 "'Draft available' text still appears after deleting a forward revision": "https://www.drupal.org/files/issues/2020-02-24/3115474-3.patch"
+            },
+            "drupal/redirect": {
+                "Add URL Redirects tab to taxonomy term edit form": "https://www.drupal.org/files/issues/2021-03-26/redirect_provide_redirect_tab_on_taxonomy_terms_3205896.patch",
+                "URL redirects listing only displays operations": "https://www.drupal.org/files/issues/2019-04-05/redirects_list_builder-3031125-9-d8.patch",
+                "Fix ajax error when creating redirects": "https://www.drupal.org/files/issues/2020-12-14/validation-issue-3057250-29.patch"
             }
         }
     }

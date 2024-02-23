@@ -434,15 +434,18 @@ body {
 }
 
 .node-form .layout-node-form {
-  @include breakpoint(1350px) {
-    grid-template-columns: 55rem minmax(22.5rem, 1fr);
+  display: block;
 
-    .layout-region--node-main {
-      margin-inline: unset;
-    }
+  @include breakpoint($desk) {
+    display: grid;
+    grid-template-columns: minmax(45rem, 55rem) minmax(22.5rem, 1fr);
 
     .layout-region--node-secondary {
       max-width: 30rem;
     }
+  }
+
+  .layout-region--node-main {
+    margin-inline: unset;
   }
 }
