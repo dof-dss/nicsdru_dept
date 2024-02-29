@@ -11,11 +11,10 @@ dependencies:
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
     - field.field.node.contact.field_site_topics
-    - filter.format.plain_text
     - node.type.contact
   module:
-    - geolocation
     - metatag
+    - simple_gmap
     - user
 id: node.contact.default
 targetEntityType: node
@@ -23,83 +22,22 @@ bundle: contact
 mode: default
 content:
   field_map_location:
-    type: geolocation_map
-    label: above
+    type: simple_gmap
+    label: hidden
     settings:
-      set_marker: true
-      show_label: false
-      common_map: true
-      show_delta_label: false
-      use_overridden_map_settings: false
-      title: ''
-      info_text:
-        value: ''
-        format: plain_text
-      centre:
-        fit_bounds:
-          enable: true
-          weight: -101
-          settings:
-            reset_zoom: true
-            min_zoom: null
-          map_center_id: fit_bounds
-        fixed_boundaries:
-          enable: false
-          weight: 0
-          settings:
-            south: ''
-            west: ''
-            north: ''
-            east: ''
-          map_center_id: fixed_boundaries
-        client_location:
-          enable: false
-          weight: 0
-          map_center_id: client_location
-        fixed_value:
-          enable: false
-          weight: 0
-          settings:
-            location_option_id: fixed_value
-            latitude: null
-            longitude: null
-          map_center_id: location_plugins
-        ipstack:
-          enable: false
-          weight: 0
-          settings:
-            location_option_id: ipstack
-            access_key: ''
-          map_center_id: location_plugins
-      map_provider_id: google_static_maps
-      map_provider_settings:
-        map_features:
-          geolocation_shapes:
-            weight: 0
-            settings:
-              remove_markers: false
-              polyline: true
-              polyline_title: ''
-              strokeColor: '#FF0000'
-              strokeOpacity: 0.8
-              strokeWidth: '2'
-              polygon: false
-              polygon_title: ''
-              fillColor: '#FF0000'
-              fillOpacity: 0.35
-            enabled: false
-          geolocation_marker_scroll_to_id:
-            weight: 0
-            settings:
-              scroll_target_id: ''
-            enabled: false
-        type: ROADMAP
-        zoom: 10
-        height: null
-        width: null
-        format: png
-        scale: 1
-      data_provider_settings: {  }
+      include_map: true
+      include_static_map: false
+      include_link: false
+      include_text: false
+      iframe_height: '400'
+      iframe_width: '400'
+      iframe_title: ''
+      static_scale: 1
+      zoom_level: 15
+      link_text: 'View larger map'
+      map_type: m
+      langcode: en
+      apikey: ''
     third_party_settings: {  }
     weight: 2
     region: content
@@ -108,7 +46,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
   field_site_topics:
     type: entity_reference_label
@@ -116,7 +54,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 3
+    weight: 1
     region: content
 hidden:
   body: true

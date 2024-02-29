@@ -139,6 +139,7 @@
         "drupal/search_api_block": "^1.0",
         "drupal/search_api_solr": "^4.2",
         "drupal/search_api_spellcheck": "^4",
+        "drupal/simple_gmap": "^3.1",
         "drupal/simple_sitemap": "^4.1",
         "drupal/simplei": "^1.2",
         "drupal/smart_trim": "^2.0",
@@ -312,6 +313,9 @@
                 "Add URL Redirects tab to taxonomy term edit form": "https://www.drupal.org/files/issues/2021-03-26/redirect_provide_redirect_tab_on_taxonomy_terms_3205896.patch",
                 "URL redirects listing only displays operations": "https://www.drupal.org/files/issues/2019-04-05/redirects_list_builder-3031125-9-d8.patch",
                 "Fix ajax error when creating redirects": "https://www.drupal.org/files/issues/2020-12-14/validation-issue-3057250-29.patch"
+            },
+            "drupal/simple_gmap": {
+                "Add support for address module": "https://www.drupal.org/files/issues/2023-09-21/drupal.org_files_issues_2022-09-29_simple_gmap-address-formatter-2863979-54.patch"
             }
         }
     }

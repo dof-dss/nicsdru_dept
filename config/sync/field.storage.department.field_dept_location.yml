@@ -1,16 +1,18 @@
-uuid: 0eeaf137-26f4-40be-b96b-3eadcf0d1ed8
+uuid: 9fa4ff4a-a590-4cd9-a1d4-7aef11f2d151
 langcode: en
 status: true
 dependencies:
   module:
     - dept_core
-    - geolocation
 id: department.field_dept_location
 field_name: field_dept_location
 entity_type: department
-type: geolocation
-settings: {  }
-module: geolocation
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
 locked: false
 cardinality: 1
 translatable: true

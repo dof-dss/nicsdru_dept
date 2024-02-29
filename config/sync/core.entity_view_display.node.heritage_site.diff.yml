@@ -32,7 +32,7 @@ dependencies:
     - layout_builder
     - link
     - options
-    - origins_common
+    - simple_gmap
     - text
     - user
 third_party_settings:
@@ -98,7 +98,6 @@ third_party_settings:
     group_additional_content_details:
       children:
         - field_site_topics
-        - field_site_subtopics
       label: 'Additional content details'
       parent_name: ''
       region: content
@@ -181,15 +180,22 @@ content:
     weight: 4
     region: content
   field_map_location:
-    type: gmaps_lazy_load_formatter
+    type: simple_gmap
     label: hidden
     settings:
-      zoom: '10'
-      map_type: roadmap
-      placeholder: empty
-      link_text: ''
-      map_width: '300'
-      map_height: '300'
+      include_map: true
+      include_static_map: false
+      include_link: false
+      include_text: false
+      iframe_height: '400'
+      iframe_width: '600'
+      iframe_title: ''
+      static_scale: 1
+      zoom_level: 15
+      link_text: 'View larger map'
+      map_type: m
+      langcode: en
+      apikey: ''
     third_party_settings: {  }
     weight: 5
     region: content
