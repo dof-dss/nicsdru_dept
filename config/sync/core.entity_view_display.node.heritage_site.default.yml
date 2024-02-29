@@ -25,15 +25,14 @@ dependencies:
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
     - field.field.node.heritage_site.field_website
-    - filter.format.plain_text
     - node.type.heritage_site
   module:
     - address
     - field_group
-    - geolocation
     - link
     - metatag
     - options
+    - simple_gmap
     - text
     - user
 third_party_settings:
@@ -142,28 +141,22 @@ content:
     weight: 9
     region: content
   field_map_location:
-    type: geolocation_map
+    type: simple_gmap
     label: hidden
     settings:
-      set_marker: true
-      show_label: false
-      common_map: true
-      show_delta_label: false
-      use_overridden_map_settings: false
-      title: ''
-      info_text:
-        value: ''
-        format: plain_text
-      centre:
-        fit_bounds:
-          enable: true
-          weight: -101
-          settings:
-            reset_zoom: true
-          map_center_id: fit_bounds
-      map_provider_id: google_maps
-      map_provider_settings: {  }
-      data_provider_settings: {  }
+      include_map: true
+      include_static_map: false
+      include_link: false
+      include_text: false
+      iframe_height: '400'
+      iframe_width: '600'
+      iframe_title: ''
+      static_scale: 1
+      zoom_level: 15
+      link_text: 'View larger map'
+      map_type: m
+      langcode: en
+      apikey: ''
     third_party_settings: {  }
     weight: 11
     region: content
