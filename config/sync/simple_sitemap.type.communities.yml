@@ -1,0 +1,19 @@
+uuid: 8282b6f0-2b80-4cc6-9602-784b33ddd3eb
+langcode: en
+status: true
+dependencies:
+  module:
+    - domain_simple_sitemap
+third_party_settings:
+  domain_simple_sitemap:
+    sitemap_domain: communities
+id: communities
+label: 'Department for Communities sitemap'
+description: 'Sitemap type for domain: Department for Communities'
+sitemap_generator: default
+url_generators:
+  - domain_entity
+  - custom
+  - entity
+  - entity_menu_link_content
+  - arbitrary

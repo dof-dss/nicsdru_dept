@@ -1,0 +1,19 @@
+uuid: e0c35305-9919-4395-850b-bee0711ed02c
+langcode: en
+status: true
+dependencies:
+  module:
+    - domain_simple_sitemap
+third_party_settings:
+  domain_simple_sitemap:
+    sitemap_domain: infrastructure
+id: infrastructure
+label: 'Department for Infrastructure sitemap'
+description: 'Sitemap type for domain: Department for Infrastructure'
+sitemap_generator: default
+url_generators:
+  - domain_entity
+  - custom
+  - entity
+  - entity_menu_link_content
+  - arbitrary
