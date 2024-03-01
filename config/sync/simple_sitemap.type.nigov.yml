@@ -1,0 +1,19 @@
+uuid: 1f095c7f-7705-4813-aba9-0915e449b4a7
+langcode: en
+status: true
+dependencies:
+  module:
+    - domain_simple_sitemap
+third_party_settings:
+  domain_simple_sitemap:
+    sitemap_domain: nigov
+id: nigov
+label: 'The Northern Ireland Executive sitemap'
+description: 'Sitemap type for domain: The Northern Ireland Executive'
+sitemap_generator: default
+url_generators:
+  - domain_entity
+  - custom
+  - entity
+  - entity_menu_link_content
+  - arbitrary

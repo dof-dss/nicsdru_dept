@@ -1,0 +1,19 @@
+uuid: 94d5786e-e40d-49b3-b88d-36cceb762a5d
+langcode: en
+status: true
+dependencies:
+  module:
+    - domain_simple_sitemap
+third_party_settings:
+  domain_simple_sitemap:
+    sitemap_domain: education
+id: education
+label: 'Department for Education sitemap'
+description: 'Sitemap type for domain: Department for Education'
+sitemap_generator: default
+url_generators:
+  - domain_entity
+  - custom
+  - entity
+  - entity_menu_link_content
+  - arbitrary
