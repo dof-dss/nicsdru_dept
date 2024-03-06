@@ -3,14 +3,27 @@ langcode: en
 status: true
 dependencies:
   config:
+    - block_content.type.accordion_menu
+    - block_content.type.banner_deep
+    - block_content.type.basic
+    - block_content.type.block_group
+    - block_content.type.card_contact
+    - block_content.type.card_standard
+    - block_content.type.card_wide
+    - block_content.type.plain_cards
+    - block_content.type.text
+    - block_content.type.video
+    - block_content.type.video_and_caption
     - core.entity_view_display.node.subtopic.full
     - core.entity_view_display.node.topic.full
     - node.type.subtopic
     - node.type.topic
   module:
+    - block_content
     - content_moderation
     - dept_topics
     - domain_access
+    - domain_entity
     - layout_builder
     - media
     - node
@@ -21,25 +34,76 @@ label: 'Topic layout supervisor'
 weight: 10
 is_admin: null
 permissions:
+  - 'access block library'
   - 'access media overview'
   - 'add scheduled transitions node subtopic'
   - 'add scheduled transitions node topic'
   - 'configure editable subtopic node layout overrides'
   - 'configure editable topic node layout overrides'
+  - 'create accordion_menu block content'
   - 'create and edit custom blocks'
+  - 'create banner_deep block content'
+  - 'create basic block content'
+  - 'create block_group block content'
+  - 'create card_contact block content'
+  - 'create card_standard block content'
+  - 'create card_wide block content'
+  - 'create plain_cards block content'
   - 'create subtopic content on assigned domains'
+  - 'create subtopic node content on assigned domains'
+  - 'create text block content'
   - 'create topic content on assigned domains'
+  - 'create topic node content on assigned domains'
+  - 'create video block content'
+  - 'create video_and_caption block content'
+  - 'delete any accordion_menu block content'
+  - 'delete any banner_deep block content'
+  - 'delete any basic block content'
+  - 'delete any block_group block content'
+  - 'delete any card_contact block content'
+  - 'delete any card_standard block content'
+  - 'delete any card_wide block content'
+  - 'delete any plain_cards block content'
+  - 'delete any text block content'
+  - 'delete any video block content'
+  - 'delete any video_and_caption block content'
   - 'delete media'
   - 'delete subtopic content on assigned domains'
+  - 'delete subtopic node content on assigned domains'
   - 'delete topic content on assigned domains'
+  - 'delete topic node content on assigned domains'
+  - 'edit any accordion_menu block content'
+  - 'edit any banner_deep block content'
+  - 'edit any basic block content'
+  - 'edit any block_group block content'
+  - 'edit any card_contact block content'
+  - 'edit any card_standard block content'
+  - 'edit any card_wide block content'
+  - 'edit any plain_cards block content'
+  - 'edit any text block content'
+  - 'edit any video block content'
+  - 'edit any video_and_caption block content'
   - 'reschedule scheduled transitions node subtopic'
   - 'reschedule scheduled transitions node topic'
+  - 'revert any accordion_menu block content revisions'
+  - 'revert any banner_deep block content revisions'
+  - 'revert any basic block content revisions'
+  - 'revert any block_group block content revisions'
+  - 'revert any card_contact block content revisions'
+  - 'revert any card_standard block content revisions'
+  - 'revert any card_wide block content revisions'
+  - 'revert any plain_cards block content revisions'
+  - 'revert any text block content revisions'
+  - 'revert any video block content revisions'
+  - 'revert any video_and_caption block content revisions'
   - 'revert subtopic revisions'
   - 'revert topic revisions'
   - 'update landing_page content on assigned domains'
   - 'update media'
   - 'update subtopic content on assigned domains'
+  - 'update subtopic node content on assigned domains'
   - 'update topic content on assigned domains'
+  - 'update topic node content on assigned domains'
   - 'use topic tree widget'
   - 'view all revisions'
   - 'view any unpublished content'
