@@ -11,6 +11,7 @@ dependencies:
     - content_moderation
     - dept_topics
     - domain_access
+    - domain_entity
     - layout_builder
     - media
     - node
@@ -28,10 +29,14 @@ permissions:
   - 'configure editable topic node layout overrides'
   - 'create and edit custom blocks'
   - 'create subtopic content on assigned domains'
+  - 'create subtopic node content on assigned domains'
   - 'create topic content on assigned domains'
+  - 'create topic node content on assigned domains'
   - 'delete media'
   - 'delete subtopic content on assigned domains'
+  - 'delete subtopic node content on assigned domains'
   - 'delete topic content on assigned domains'
+  - 'delete topic node content on assigned domains'
   - 'reschedule scheduled transitions node subtopic'
   - 'reschedule scheduled transitions node topic'
   - 'revert subtopic revisions'
@@ -39,7 +44,9 @@ permissions:
   - 'update landing_page content on assigned domains'
   - 'update media'
   - 'update subtopic content on assigned domains'
+  - 'update subtopic node content on assigned domains'
   - 'update topic content on assigned domains'
+  - 'update topic node content on assigned domains'
   - 'use topic tree widget'
   - 'view all revisions'
   - 'view any unpublished content'
