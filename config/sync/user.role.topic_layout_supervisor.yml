@@ -21,6 +21,7 @@ dependencies:
   module:
     - block_content
     - content_moderation
+    - contextual
     - dept_topics
     - domain_access
     - domain_entity
@@ -35,6 +36,7 @@ weight: 10
 is_admin: null
 permissions:
   - 'access block library'
+  - 'access contextual links'
   - 'access media overview'
   - 'add scheduled transitions node subtopic'
   - 'add scheduled transitions node topic'
