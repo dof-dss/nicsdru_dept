@@ -3,9 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
-    - simple_sitemap.type.default_hreflang
+    - simple_sitemap.type.infrastructure
 id: infrastructure
 label: Infrastructure
-description: null
-type: default_hreflang
+description: ''
+type: infrastructure
 weight: 0
