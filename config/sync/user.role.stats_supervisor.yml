@@ -25,8 +25,8 @@ dependencies:
     - scheduled_transitions
     - scheduler
 id: stats_supervisor
-label: 'Stats supervisor'
-weight: 9
+label: 'Stats supervisor (Add-on role)'
+weight: 10
 is_admin: null
 permissions:
   - 'access content overview'

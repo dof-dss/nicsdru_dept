@@ -13,8 +13,8 @@ dependencies:
     - redirect
     - view_unpublished
 id: homepage_supervisor
-label: 'Homepage supervisor'
-weight: 11
+label: 'Homepage supervisor (Add-on role)'
+weight: 10
 is_admin: null
 permissions:
   - 'access content overview'
