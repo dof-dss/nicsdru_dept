@@ -3,6 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
+    - filter.format.basic_html
+    - filter.format.filtered_html
+    - filter.format.layout_builder_html
     - node.type.subtopic
     - node.type.topic
     - workflows.workflow.nics_editorial_workflow
@@ -11,24 +14,21 @@ dependencies:
     - content_moderation
     - dept_topics
     - domain_access
+    - domain_entity
+    - filter
     - flag
     - node
     - redirect
     - scheduled_transitions
     - view_unpublished
 id: topic_supervisor
-label: 'Topic supervisor'
-weight: 13
+label: 'Topic supervisor (Add-on role)'
+weight: 10
 is_admin: null
 permissions:
-  - 'access content overview'
-  - 'add content to books'
   - 'add scheduled transitions node subtopic'
   - 'add scheduled transitions node topic'
-  - 'administer book outlines'
   - 'administer nodes'
-  - 'administer redirects'
-  - 'create new books'
   - 'create subtopic content on assigned domains'
   - 'create topic content on assigned domains'
   - 'delete subtopic content on assigned domains'
@@ -42,36 +42,9 @@ permissions:
   - 'unflag hide_listing'
   - 'update subtopic content on assigned domains'
   - 'update topic content on assigned domains'
-  - 'use nics_editorial_workflow transition archive'
-  - 'use nics_editorial_workflow transition create_new_draft'
-  - 'use nics_editorial_workflow transition draft_of_published'
-  - 'use nics_editorial_workflow transition publish'
   - 'use nics_editorial_workflow transition quick_publish'
-  - 'use nics_editorial_workflow transition reject'
-  - 'use nics_editorial_workflow transition restore'
-  - 'use nics_editorial_workflow transition restore_to_draft'
-  - 'use nics_editorial_workflow transition submit_for_review'
-  - 'use topic tree widget'
-  - 'view all revisions'
-  - 'view any unpublished application content'
-  - 'view any unpublished article content'
-  - 'view any unpublished book content'
-  - 'view any unpublished consultation content'
-  - 'view any unpublished contact content'
-  - 'view any unpublished content'
-  - 'view any unpublished gallery content'
-  - 'view any unpublished global_page content'
-  - 'view any unpublished heritage_site content'
-  - 'view any unpublished link content'
-  - 'view any unpublished news content'
-  - 'view any unpublished page content'
-  - 'view any unpublished profile content'
-  - 'view any unpublished protected_area content'
-  - 'view any unpublished publication content'
   - 'view any unpublished subtopic content'
   - 'view any unpublished topic content'
-  - 'view any unpublished ual content'
-  - 'view latest version'
   - 'view scheduled transitions node subtopic'
   - 'view scheduled transitions node topic'
   - 'view subtopic revisions'
