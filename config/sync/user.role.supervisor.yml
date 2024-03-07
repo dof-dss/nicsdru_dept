@@ -35,7 +35,7 @@ _core:
   default_config_hash: CtfC5LDjVNnbLPFruCI4NqxrtR8ml1OZSXRF58iAYdo
 id: supervisor
 label: Supervisor
-weight: 5
+weight: 0
 is_admin: null
 permissions:
   - 'access content overview'
@@ -50,8 +50,6 @@ permissions:
   - 'add scheduled transitions node profile'
   - 'add scheduled transitions node protected_area'
   - 'add scheduled transitions node publication'
-  - 'add scheduled transitions node subtopic'
-  - 'add scheduled transitions node topic'
   - 'add scheduled transitions node ual'
   - 'administer book outlines'
   - 'administer redirects'
@@ -107,8 +105,6 @@ permissions:
   - 'reschedule scheduled transitions node profile'
   - 'reschedule scheduled transitions node protected_area'
   - 'reschedule scheduled transitions node publication'
-  - 'reschedule scheduled transitions node subtopic'
-  - 'reschedule scheduled transitions node topic'
   - 'reschedule scheduled transitions node ual'
   - 'revert application revisions'
   - 'revert article revisions'
@@ -121,8 +117,6 @@ permissions:
   - 'revert profile revisions'
   - 'revert protected_area revisions'
   - 'revert publication revisions'
-  - 'revert subtopic revisions'
-  - 'revert topic revisions'
   - 'revert ual revisions'
   - 'schedule publishing of nodes'
   - 'update application content on assigned domains'
@@ -139,8 +133,6 @@ permissions:
   - 'update protected_area content on assigned domains'
   - 'update publication content on assigned domains'
   - 'update publication node content on assigned domains'
-  - 'update subtopic content on assigned domains'
-  - 'update topic content on assigned domains'
   - 'update ual content on assigned domains'
   - 'use nics_editorial_workflow transition archive'
   - 'use nics_editorial_workflow transition create_new_draft'
@@ -190,9 +182,5 @@ permissions:
   - 'view scheduled transitions node profile'
   - 'view scheduled transitions node protected_area'
   - 'view scheduled transitions node publication'
-  - 'view scheduled transitions node subtopic'
-  - 'view scheduled transitions node topic'
   - 'view scheduled transitions node ual'
-  - 'view subtopic revisions'
-  - 'view topic revisions'
   - 'view ual revisions'
