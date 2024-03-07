@@ -1,0 +1,13 @@
+uuid: e0901634-170a-4731-a59a-0bccc4bd7430
+langcode: en
+status: true
+dependencies:
+  module:
+    - domain_path_redirect
+_core:
+  default_config_hash: _6cFzTo-JX_sNwTKky64MBRYmx6Qul3TVb2uE-R4HQk
+id: domain_path_redirect.redirect
+target_entity_type_id: domain_path_redirect
+target_bundle: redirect
+default_langcode: und
+language_alterable: true

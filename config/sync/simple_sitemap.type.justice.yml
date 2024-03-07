@@ -1,0 +1,19 @@
+uuid: 959b3c8e-c9c4-4b81-be3b-057e0c819ece
+langcode: en
+status: true
+dependencies:
+  module:
+    - domain_simple_sitemap
+third_party_settings:
+  domain_simple_sitemap:
+    sitemap_domain: justice
+id: justice
+label: 'Department of Justice sitemap'
+description: 'Sitemap type for domain: Department of Justice'
+sitemap_generator: default
+url_generators:
+  - domain_entity
+  - custom
+  - entity
+  - entity_menu_link_content
+  - arbitrary

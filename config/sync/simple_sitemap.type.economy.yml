@@ -1,0 +1,19 @@
+uuid: 5449b33c-ab22-47e7-905f-4146c204c994
+langcode: en
+status: true
+dependencies:
+  module:
+    - domain_simple_sitemap
+third_party_settings:
+  domain_simple_sitemap:
+    sitemap_domain: economy
+id: economy
+label: 'Department for the Economy sitemap'
+description: 'Sitemap type for domain: Department for the Economy'
+sitemap_generator: default
+url_generators:
+  - domain_entity
+  - custom
+  - entity
+  - entity_menu_link_content
+  - arbitrary

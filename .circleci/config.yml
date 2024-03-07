@@ -37,17 +37,17 @@ workflows:
       - build_edge
 
   # A separate scheduled workflow to sync the data after the edge build completes.
-#  build-edge-finalise:
-#    triggers:
-#      - schedule:
-#          # At 02:30 on every day-of-week from Monday through Friday
-#          cron: "30 2 * * 1-5"
-#          filters:
-#            branches:
-#              only:
-#                - DEPT-edge
-#    jobs:
-#      - sync_data
+  build-edge-finalise:
+    triggers:
+      - schedule:
+          # At 02:30 on every day-of-week from Monday through Friday
+          cron: "30 2 * * 1-5"
+          filters:
+            branches:
+              only:
+                - DEPT-edge
+    jobs:
+      - sync_data
 
 jobs:
   # Tests the integrity of the build, stores the results in a workspace for re-use in later jobs.

@@ -1,0 +1,19 @@
+uuid: 82c0f916-8c70-4aa5-bd11-9722bc60175e
+langcode: en
+status: true
+dependencies:
+  module:
+    - domain_simple_sitemap
+third_party_settings:
+  domain_simple_sitemap:
+    sitemap_domain: health
+id: health
+label: 'Department for Health sitemap'
+description: 'Sitemap type for domain: Department for Health'
+sitemap_generator: default
+url_generators:
+  - domain_entity
+  - custom
+  - entity
+  - entity_menu_link_content
+  - arbitrary

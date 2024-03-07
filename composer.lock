@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d42f1e95a77a0bb0a79e30d526f17ea8",
+    "content-hash": "07cff8cdf2025fd1f74b19b38b96da07",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4114,6 +4114,145 @@
             "homepage": "https://www.drupal.org/project/domain_path",
             "support": {
                 "source": "https://git.drupalcode.org/project/domain_path"
+            }
+        },
+        {
+            "name": "drupal/domain_path_redirect",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/domain_path_redirect.git",
+                "reference": "8.x-1.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/domain_path_redirect-8.x-1.5.zip",
+                "reference": "8.x-1.5",
+                "shasum": "f0f333d7e98b5965d41d56abbaabd0cf17bfcf86"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10",
+                "drupal/domain": "^1.0 || ^2.0",
+                "drupal/redirect": "^1.6"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.5",
+                    "datestamp": "1709208177",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "itsekhmistro",
+                    "homepage": "https://www.drupal.org/user/928152"
+                },
+                {
+                    "name": "vladbo",
+                    "homepage": "https://www.drupal.org/user/2696261"
+                },
+                {
+                    "name": "Vlad_Bo",
+                    "homepage": "https://www.drupal.org/user/3197385"
+                },
+                {
+                    "name": "webflo",
+                    "homepage": "https://www.drupal.org/user/254778"
+                },
+                {
+                    "name": "yarik.lutsiuk",
+                    "homepage": "https://www.drupal.org/user/3212333"
+                }
+            ],
+            "description": "This small module allows creating alternative redirects per domains. It extends the Redirect module.",
+            "homepage": "https://drupal.org/project/domain_path_redirect",
+            "support": {
+                "source": "https://git.drupalcode.org/project/domain_path_redirect",
+                "issues": "https://drupal.org/project/issues/domain_path_redirect"
+            }
+        },
+        {
+            "name": "drupal/domain_simple_sitemap",
+            "version": "3.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/domain_simple_sitemap.git",
+                "reference": "3.0.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/domain_simple_sitemap-3.0.0-beta1.zip",
+                "reference": "3.0.0-beta1",
+                "shasum": "d08fd5d964540a0a6b7dc23a95f2c084039863f1"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10",
+                "drupal/domain_access": "*",
+                "drupal/simple_sitemap": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "3.0.0-beta1",
+                    "datestamp": "1702927641",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Mladen Stankovic a.k.a euphoric_mv",
+                    "homepage": "https://www.drupal.org/user/172527",
+                    "email": "mstankovic@adyax.com"
+                },
+                {
+                    "name": "Ruben Egiguren a.k.a keopx",
+                    "homepage": "https://www.drupal.org/user/1571216",
+                    "email": "keopx@keopx.net"
+                },
+                {
+                    "name": "Bram Goffings a.k.a aspilicious",
+                    "homepage": "https://www.drupal.org/user/3204205",
+                    "email": ""
+                },
+                {
+                    "name": "Ambroise Nicolas a.k.a nambroise",
+                    "homepage": "https://www.drupal.org/user/3546872",
+                    "email": "info@nicolasambroise.com"
+                },
+                {
+                    "name": "keopx",
+                    "homepage": "https://www.drupal.org/user/377362"
+                },
+                {
+                    "name": "nambroise",
+                    "homepage": "https://www.drupal.org/user/3441721"
+                }
+            ],
+            "description": "Domain Access Sitemap module generates sitemaps for active domains. It requires Domain Access and Simple Sitemap modules.",
+            "homepage": "https://www.drupal.org/project/domain_simple_sitemap",
+            "keywords": [
+                "Drupal",
+                "SEO",
+                "Utility"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/domain_simple_sitemap",
+                "issues": "https://www.drupal.org/project/issues/domain_simple_sitemap"
             }
         },
         {
@@ -19499,6 +19638,7 @@
         "drupal/domain": 10,
         "drupal/domain_entity": 5,
         "drupal/domain_path": 10,
+        "drupal/domain_simple_sitemap": 10,
         "drupal/flag": 10,
         "drupal/migrate_conditions": 10,
         "drupal/purge_users": 10,

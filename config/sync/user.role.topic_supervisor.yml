@@ -3,6 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
+    - filter.format.basic_html
+    - filter.format.filtered_html
+    - filter.format.layout_builder_html
     - node.type.subtopic
     - node.type.topic
     - workflows.workflow.nics_editorial_workflow
@@ -11,6 +14,8 @@ dependencies:
     - content_moderation
     - dept_topics
     - domain_access
+    - domain_entity
+    - filter
     - flag
     - node
     - redirect
@@ -28,9 +33,29 @@ permissions:
   - 'administer book outlines'
   - 'administer nodes'
   - 'administer redirects'
+  - 'create application content on assigned domains'
+  - 'create article content on assigned domains'
+  - 'create article node content on assigned domains'
+  - 'create audio media content on assigned domains'
+  - 'create contact content on assigned domains'
+  - 'create contact node content on assigned domains'
+  - 'create document media content on assigned domains'
+  - 'create image media content on assigned domains'
   - 'create new books'
+  - 'create publication content on assigned domains'
+  - 'create publication node content on assigned domains'
   - 'create subtopic content on assigned domains'
   - 'create topic content on assigned domains'
+  - 'delete application content on assigned domains'
+  - 'delete application node content on assigned domains'
+  - 'delete article content on assigned domains'
+  - 'delete article node content on assigned domains'
+  - 'delete audio media content on assigned domains'
+  - 'delete contact content on assigned domains'
+  - 'delete contact node content on assigned domains'
+  - 'delete document media content on assigned domains'
+  - 'delete image media content on assigned domains'
+  - 'delete publication node content on assigned domains'
   - 'delete subtopic content on assigned domains'
   - 'delete topic content on assigned domains'
   - 'flag hide_listing'
@@ -40,6 +65,17 @@ permissions:
   - 'revert subtopic revisions'
   - 'revert topic revisions'
   - 'unflag hide_listing'
+  - 'update application content on assigned domains'
+  - 'update application node content on assigned domains'
+  - 'update article content on assigned domains'
+  - 'update article node content on assigned domains'
+  - 'update audio media content on assigned domains'
+  - 'update contact content on assigned domains'
+  - 'update contact node content on assigned domains'
+  - 'update document media content on assigned domains'
+  - 'update image media content on assigned domains'
+  - 'update publication content on assigned domains'
+  - 'update publication node content on assigned domains'
   - 'update subtopic content on assigned domains'
   - 'update topic content on assigned domains'
   - 'use nics_editorial_workflow transition archive'
@@ -51,6 +87,9 @@ permissions:
   - 'use nics_editorial_workflow transition restore'
   - 'use nics_editorial_workflow transition restore_to_draft'
   - 'use nics_editorial_workflow transition submit_for_review'
+  - 'use text format basic_html'
+  - 'use text format filtered_html'
+  - 'use text format layout_builder_html'
   - 'use topic tree widget'
   - 'view all revisions'
   - 'view any unpublished application content'
