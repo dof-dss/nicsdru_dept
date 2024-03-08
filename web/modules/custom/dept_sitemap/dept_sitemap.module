@@ -11,10 +11,6 @@ use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
  * Implements hook_simple_sitemap_links_alter().
  */
 function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInterface $sitemap) {
-  dump($links);
-  die();
-  return;
-
   /** @var \Drupal\domain\Entity\Domain $domain */
   $domain = \Drupal::entityTypeManager()->getStorage('domain')->load($sitemap->id());
 
@@ -26,6 +22,5 @@ function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInt
     if (!str_starts_with($link['url'], $dept_path)) {
       unset($links[$key]);
     }
-
   }
 }
