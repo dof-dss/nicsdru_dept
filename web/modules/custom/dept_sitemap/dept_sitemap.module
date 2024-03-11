@@ -18,7 +18,14 @@ function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInt
 
   // Remove any links for the current sitemap variant that don't belong to this
   // variants' domain.
-  foreach ($links as $key => $link) {
+  foreach ($links as $key => &$link) {
+    if (str_contains($link['url'], '.*.uk-1.platformsh.site')) {
+      $url_parts = parse_url($link['url']);
+      $dept = \Drupal::service('department.manager')->getCurrentDepartment();
+
+      $link['url'] = $dept->url() . $url_parts['path'];
+    }
+
     if (!str_starts_with($link['url'], $dept_path)) {
       unset($links[$key]);
     }
