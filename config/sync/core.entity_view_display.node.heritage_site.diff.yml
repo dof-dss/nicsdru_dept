@@ -32,7 +32,6 @@ dependencies:
     - layout_builder
     - link
     - options
-    - simple_gmap
     - text
     - user
 third_party_settings:
@@ -179,26 +178,6 @@ content:
     third_party_settings: {  }
     weight: 4
     region: content
-  field_map_location:
-    type: simple_gmap
-    label: hidden
-    settings:
-      include_map: true
-      include_static_map: false
-      include_link: false
-      include_text: false
-      iframe_height: '400'
-      iframe_width: '600'
-      iframe_title: ''
-      static_scale: 1
-      zoom_level: 15
-      link_text: 'View larger map'
-      map_type: m
-      langcode: en
-      apikey: ''
-    third_party_settings: {  }
-    weight: 5
-    region: content
   field_nismr_link:
     type: link
     label: hidden
@@ -286,6 +265,7 @@ hidden:
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
+  field_map_location: true
   field_metatags: true
   groups: true
   groups_type_department_site: true

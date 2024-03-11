@@ -17,9 +17,9 @@ dependencies:
     - content_moderation
     - datetime
     - dept_topics
+    - google_map_field
     - metatag
     - path
-    - scheduler
     - text
 id: node.contact.default
 targetEntityType: node
@@ -62,16 +62,14 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_map_location:
-    type: string_textfield
-    weight: 12
+    type: google_map_field_default
+    weight: 1001
     region: content
-    settings:
-      size: 180
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_metatags:
     type: metatag_firehose
-    weight: 19
+    weight: 20
     region: content
     settings:
       sidebar: true
@@ -79,7 +77,7 @@ content:
     third_party_settings: {  }
   field_next_audit_due:
     type: datetime_default
-    weight: 20
+    weight: 1000
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -121,12 +119,6 @@ content:
     region: content
     settings:
       display_label: true
-    third_party_settings: {  }
-  publish_on:
-    type: datetime_timestamp_no_default
-    weight: 10
-    region: content
-    settings: {  }
     third_party_settings: {  }
   publish_state:
     type: options_select
@@ -171,12 +163,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  unpublish_on:
-    type: datetime_timestamp_no_default
-    weight: 11
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   unpublish_state:
     type: options_select
     weight: 28
@@ -192,3 +178,5 @@ hidden:
   entitygroupfield: true
   groups: true
   groups_type_department_site: true
+  publish_on: true
+  unpublish_on: true
