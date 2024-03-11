@@ -1,4 +1,4 @@
-uuid: 08ebe658-529c-4e94-a590-6af668e0178a
+uuid: bc3173b5-b96d-4a38-b498-d5cc934f7914
 langcode: en
 status: true
 dependencies:
@@ -6,8 +6,8 @@ dependencies:
     - block_visibility_groups
     - domain
     - system
-id: finance_ni
-label: 'Department of Finance'
+id: infrastructure_ni
+label: 'Department for Infrastructure'
 weight: 0
 tag_container_ids:
   - GTM-PT94H44
@@ -42,7 +42,7 @@ conditions:
     context_mapping:
       domain: '@domain.current_domain_context:domain'
     domains:
-      finance: finance
+      infrastructure: infrastructure
 events:
   search: {  }
   custom: {  }
