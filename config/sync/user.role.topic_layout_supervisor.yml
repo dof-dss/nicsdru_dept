@@ -16,19 +16,14 @@ dependencies:
     - block_content.type.video_and_caption
     - core.entity_view_display.node.subtopic.full
     - core.entity_view_display.node.topic.full
-    - node.type.subtopic
-    - node.type.topic
+    - filter.format.layout_builder_html
   module:
     - block_content
-    - content_moderation
     - contextual
-    - dept_topics
     - domain_access
     - domain_entity
+    - filter
     - layout_builder
-    - media
-    - node
-    - scheduled_transitions
     - view_unpublished
 id: topic_layout_supervisor
 label: 'Topic layout supervisor (Add-on role)'
@@ -87,4 +82,5 @@ permissions:
   - 'revert any video block content revisions'
   - 'revert any video_and_caption block content revisions'
   - 'update landing_page content on assigned domains'
+  - 'use text format layout_builder_html'
   - 'view any unpublished landing_page content'
