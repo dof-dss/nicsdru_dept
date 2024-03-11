@@ -1,19 +1,21 @@
-uuid: 9224a999-d97c-4958-9967-c1fe5d7851ad
+uuid: 226061d8-e093-46b6-b15f-55f782805ffc
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_map_location
     - node.type.heritage_site
+  module:
+    - google_map_field
 id: node.heritage_site.field_map_location
 field_name: field_map_location
 entity_type: node
 bundle: heritage_site
 label: 'Map location'
-description: 'Full address or lat/long coordinates.'
+description: ''
 required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: string
+field_type: google_map_field

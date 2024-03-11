@@ -1,13 +1,13 @@
-uuid: 8c29e77d-0f39-4d93-a706-0883638db8af
+uuid: 28b19d8d-785e-49fd-bb41-1190cb1aad33
 langcode: en
 status: true
 dependencies:
   module:
+    - dept_core
     - google_map_field
-    - node
-id: node.field_map_location
-field_name: field_map_location
-entity_type: node
+id: department.field_location
+field_name: field_location
+entity_type: department
 type: google_map_field
 settings: {  }
 module: google_map_field

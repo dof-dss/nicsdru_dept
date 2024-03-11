@@ -7,13 +7,13 @@ dependencies:
     - field.field.department.department.field_dept_accessibility
     - field.field.department.department.field_dept_contact_info
     - field.field.department.department.field_dept_footer_links
-    - field.field.department.department.field_dept_location
     - field.field.department.department.field_dept_management_structure
     - field.field.department.department.field_dept_social_media_links
+    - field.field.department.department.field_location
   module:
     - dept_core
+    - google_map_field
     - link
-    - simple_gmap
     - text
     - user
 id: department.department.default
@@ -38,7 +38,7 @@ content:
         granularity: 2
         refresh: 60
     third_party_settings: {  }
-    weight: 4
+    weight: 5
     region: content
   description:
     type: text_default
@@ -52,7 +52,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 6
+    weight: 7
     region: content
   field_dept_accessibility:
     type: entity_reference_label
@@ -60,14 +60,14 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 5
+    weight: 6
     region: content
   field_dept_contact_info:
     type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 7
+    weight: 8
     region: content
   field_dept_footer_links:
     type: link
@@ -80,26 +80,6 @@ content:
       target: ''
     third_party_settings: {  }
     weight: 11
-    region: content
-  field_dept_location:
-    type: simple_gmap
-    label: above
-    settings:
-      include_map: true
-      include_static_map: false
-      include_link: false
-      include_text: false
-      iframe_height: '300'
-      iframe_width: '300'
-      iframe_title: ''
-      static_scale: 1
-      zoom_level: 15
-      link_text: 'View larger map'
-      map_type: m
-      langcode: en
-      apikey: ''
-    third_party_settings: {  }
-    weight: 8
     region: content
   field_dept_management_structure:
     type: text_default
@@ -119,6 +99,13 @@ content:
       target: ''
     third_party_settings: {  }
     weight: 10
+    region: content
+  field_location:
+    type: google_map_field_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
     region: content
   label:
     type: string
@@ -143,7 +130,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
 hidden:
   search_api_excerpt: true
