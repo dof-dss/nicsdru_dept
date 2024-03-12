@@ -7,22 +7,17 @@ dependencies:
     - media.type.document
     - media.type.image
     - media.type.secure_file
-    - node.type.publication
     - workflows.workflow.nics_editorial_workflow
   module:
-    - book
     - content_moderation
     - dept_publications
-    - dept_topics
     - domain_access
     - domain_entity
     - file
     - filter
     - media
     - moderation_sidebar
-    - node
     - origins_metatag
-    - scheduled_transitions
     - scheduler
 id: stats_supervisor
 label: 'Stats supervisor (Add-on role)'
@@ -31,9 +26,12 @@ is_admin: null
 permissions:
   - 'access files overview'
   - 'create secure publication'
+  - 'create secure_file media content on assigned domains'
   - 'delete own document media'
   - 'delete own image media'
   - 'delete own secure_file media'
+  - 'delete secure_file media content on assigned domains'
+  - 'edit any secure_file media'
   - 'edit basic meta tags'
   - 'edit own document media'
   - 'edit own image media'
