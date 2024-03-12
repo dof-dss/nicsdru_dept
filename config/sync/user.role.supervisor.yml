@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - media.type.image
     - node.type.application
     - node.type.article
     - node.type.book
@@ -11,11 +12,10 @@ dependencies:
     - node.type.gallery
     - node.type.heritage_site
     - node.type.link
+    - node.type.news
     - node.type.profile
     - node.type.protected_area
     - node.type.publication
-    - node.type.subtopic
-    - node.type.topic
     - node.type.ual
     - workflows.workflow.nics_editorial_workflow
   module:
@@ -60,7 +60,6 @@ permissions:
   - 'create consultation content on assigned domains'
   - 'create contact content on assigned domains'
   - 'create document media content on assigned domains'
-  - 'create gallery content on assigned domains'
   - 'create heritage_site content on assigned domains'
   - 'create image media content on assigned domains'
   - 'create link content on assigned domains'
@@ -68,7 +67,6 @@ permissions:
   - 'create news content on assigned domains'
   - 'create profile content on assigned domains'
   - 'create protected_area content on assigned domains'
-  - 'create publication content'
   - 'create publication content on assigned domains'
   - 'create publication node content on assigned domains'
   - 'create remote_video media content on assigned domains'
@@ -76,26 +74,33 @@ permissions:
   - 'create ual content on assigned domains'
   - 'delete all revisions'
   - 'delete application content on assigned domains'
+  - 'delete application revisions'
   - 'delete article content on assigned domains'
+  - 'delete article revisions'
   - 'delete audio media content on assigned domains'
   - 'delete consultation content on assigned domains'
+  - 'delete consultation revisions'
   - 'delete contact content on assigned domains'
+  - 'delete contact revisions'
   - 'delete document media content on assigned domains'
-  - 'delete gallery content on assigned domains'
   - 'delete heritage_site content on assigned domains'
+  - 'delete heritage_site revisions'
   - 'delete image media content on assigned domains'
   - 'delete link content on assigned domains'
   - 'delete media'
   - 'delete news content on assigned domains'
+  - 'delete news revisions'
   - 'delete profile content on assigned domains'
+  - 'delete profile revisions'
   - 'delete protected_area content on assigned domains'
+  - 'delete protected_area revisions'
   - 'delete publication content on assigned domains'
   - 'delete publication node content on assigned domains'
   - 'delete publication revisions'
   - 'delete remote_video media content on assigned domains'
   - 'delete ual content on assigned domains'
-  - 'edit any publication content'
-  - 'edit own publication content'
+  - 'delete ual revisions'
+  - 'edit any image media'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
   - 'reschedule scheduled transitions node consultation'
@@ -124,8 +129,8 @@ permissions:
   - 'update book content on assigned domains'
   - 'update consultation content on assigned domains'
   - 'update contact content on assigned domains'
-  - 'update gallery content on assigned domains'
   - 'update heritage_site content on assigned domains'
+  - 'update image media content on assigned domains'
   - 'update link content on assigned domains'
   - 'update media'
   - 'update news content on assigned domains'
@@ -133,6 +138,7 @@ permissions:
   - 'update protected_area content on assigned domains'
   - 'update publication content on assigned domains'
   - 'update publication node content on assigned domains'
+  - 'update remote_video media content on assigned domains'
   - 'update ual content on assigned domains'
   - 'use nics_editorial_workflow transition archive'
   - 'use nics_editorial_workflow transition create_new_draft'
@@ -170,6 +176,7 @@ permissions:
   - 'view heritage_site revisions'
   - 'view latest version'
   - 'view link revisions'
+  - 'view own unpublished media'
   - 'view profile revisions'
   - 'view protected_area revisions'
   - 'view publication revisions'
