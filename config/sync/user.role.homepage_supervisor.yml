@@ -8,6 +8,7 @@ dependencies:
   module:
     - content_moderation
     - domain_access
+    - draggableviews
     - node
 id: homepage_supervisor
 label: 'Homepage supervisor (Add-on role)'
@@ -15,6 +16,7 @@ weight: 10
 is_admin: null
 permissions:
   - 'access content overview'
+  - 'access draggableviews'
   - 'revert featured_content_list revisions'
   - 'update featured_content_list content on assigned domains'
   - 'use nics_editorial_workflow transition quick_publish'
