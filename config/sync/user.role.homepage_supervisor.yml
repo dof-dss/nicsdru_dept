@@ -4,22 +4,19 @@ status: true
 dependencies:
   config:
     - node.type.featured_content_list
-    - node.type.link
     - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - domain_access
+    - draggableviews
     - node
-    - redirect
-    - view_unpublished
 id: homepage_supervisor
 label: 'Homepage supervisor (Add-on role)'
 weight: 10
 is_admin: null
 permissions:
   - 'access content overview'
-  - 'create featured_content_list content on assigned domains'
-  - 'delete featured_content_list content on assigned domains'
+  - 'access draggableviews'
   - 'revert featured_content_list revisions'
   - 'update featured_content_list content on assigned domains'
   - 'use nics_editorial_workflow transition quick_publish'
