@@ -210,7 +210,7 @@ function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBa
   if ($view->id() === 'media_library') {
     // @phpstan-ignore-next-line
     foreach ($query->where[1]['conditions'] as $index => $condition) {
-      if ($condition['field'] === 'file_managed_media__field_media_file.uri') {
+      if ($condition['field'] === 'media_field_data.bundle' && $condition['value'][0] === 'secure_file') {
         // Unset this condition if stats supervisor/related permissions.
         if ($current_user->hasPermission('view any unpublished secure publication')) {
           unset($query->where[1]['conditions'][$index]);
@@ -223,5 +223,19 @@ function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBa
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dept_publications_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (str_starts_with($form['#id'], 'views-exposed-form-media-library') &&
+    \Drupal::currentUser()->hasPermission('view any unpublished secure publication')) {
+
+    // Permit secure files in exposed filter. Dovetails with
+    // dept_publications_views_query_alter above.
+    $form['type']['#options']['secure_file'] = t('Secure file');
+    ksort($form['type']['#options']);
   }
 }
