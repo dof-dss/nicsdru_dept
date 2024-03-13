@@ -225,3 +225,17 @@ function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBa
     }
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dept_publications_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (str_starts_with($form['#id'], 'views-exposed-form-media-library') &&
+    \Drupal::currentUser()->hasPermission('view any unpublished secure publication')) {
+
+    // Permit secure files in exposed filter. Dovetails with
+    // dept_publications_views_query_alter above.
+    $form['type']['#options']['secure_file'] = t('Secure file');
+    ksort($form['type']['#options']);
+  }
+}
