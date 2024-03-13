@@ -210,7 +210,7 @@ function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBa
   if ($view->id() === 'media_library') {
     // @phpstan-ignore-next-line
     foreach ($query->where[1]['conditions'] as $index => $condition) {
-      if ($condition['field'] === 'file_managed_media__field_media_file.uri') {
+      if ($condition['field'] === 'media_field_data.bundle' && $condition['value'][0] === 'secure_file') {
         // Unset this condition if stats supervisor/related permissions.
         if ($current_user->hasPermission('view any unpublished secure publication')) {
           unset($query->where[1]['conditions'][$index]);
