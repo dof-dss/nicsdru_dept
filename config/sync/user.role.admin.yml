@@ -12,7 +12,6 @@ dependencies:
     - node.type.gallery
     - node.type.global_page
     - node.type.heritage_site
-    - node.type.landing_page
     - node.type.link
     - node.type.news
     - node.type.page
@@ -198,7 +197,6 @@ permissions:
   - 'revert gallery revisions'
   - 'revert global_page revisions'
   - 'revert heritage_site revisions'
-  - 'revert landing_page revisions'
   - 'revert link revisions'
   - 'revert news revisions'
   - 'revert page revisions'
@@ -278,7 +276,6 @@ permissions:
   - 'view gallery revisions'
   - 'view global_page revisions'
   - 'view heritage_site revisions'
-  - 'view landing_page revisions'
   - 'view latest version'
   - 'view link revisions'
   - 'view media'
