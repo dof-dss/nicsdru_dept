@@ -552,7 +552,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
   /**
    * Determines if a node is a page within a book content type.
    *
-   * @param $nid
+   * @param int $nid
    *   The node ID to check.
    * @return bool
    *   True if the node is a book page, otherwise false.
@@ -563,7 +563,8 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     if (empty($book_nids)) {
       $book_nids = \Drupal::database()->query("SELECT book.nid FROM book WHERE book.depth > 1")->fetchAllAssoc('nid');
       \Drupal::cache()->set('book_page_nids', $book_nids, strtotime('+1 hour', time()));
-    } else {
+    }
+    else {
       $book_nids = $book_nids->data;
     }
 
