@@ -1,10 +1,13 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace Drupal\dept_migrate_users\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigrateImportEvent;
+use Drupal\user\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -13,16 +16,30 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class PostMigrationCreateQaUsers implements EventSubscriberInterface {
 
   /**
+   * Entity Type Manager.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
+  /**
+   * Drupal\Core\Logger\LoggerChannel definition.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannel
+   */
+  protected $logger;
 
   /**
    * Constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Database connection.
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
+   *   Drupal logger.
    */
-  public function __construct(private readonly EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(private readonly EntityTypeManagerInterface $entity_type_manager, $logger) {
     $this->entityTypeManager = $entity_type_manager;
+    $this->logger = $logger->get('dept_migrate');
   }
 
   /**
@@ -46,15 +63,18 @@ class PostMigrationCreateQaUsers implements EventSubscriberInterface {
       $pass = getenv('QA_PASSWORD');
 
       if (empty($pass)) {
+        $this->logger->warning('QA_PASSWORD not set or blank.');
         return;
       }
 
       $path = \Drupal::service('extension.list.module')->getPath('dept_migrate_users');
       if (!file_exists($path . '/qa_accounts.json')) {
+        $this->logger->warning('QA Accounts file not found.');
         return;
       }
       $accounts = json_decode(file_get_contents($path . '/qa_accounts.json'), TRUE);
 
+      // Create and assign roles to QA accounts if not present on the site.
       foreach ($accounts as $account => $roles) {
         $account = 'nw_test_' . $account;
         $user_query = $this->entityTypeManager->getStorage('user')->getQuery();
@@ -72,6 +92,7 @@ class PostMigrationCreateQaUsers implements EventSubscriberInterface {
             $user->addRole($role);
           }
           $user->save();
+          $this->logger->notice('QA account ' . $account . ' created.');
         }
       }
     }
