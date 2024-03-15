@@ -12,7 +12,6 @@ dependencies:
     - node.type.gallery
     - node.type.global_page
     - node.type.heritage_site
-    - node.type.landing_page
     - node.type.link
     - node.type.news
     - node.type.page
@@ -74,7 +73,6 @@ permissions:
   - 'add scheduled transitions node consultation'
   - 'add scheduled transitions node contact'
   - 'add scheduled transitions node heritage_site'
-  - 'add scheduled transitions node landing_page'
   - 'add scheduled transitions node news'
   - 'add scheduled transitions node page'
   - 'add scheduled transitions node profile'
@@ -122,7 +120,6 @@ permissions:
   - 'create global_page content on assigned domains'
   - 'create heritage_site content on assigned domains'
   - 'create image media content on assigned domains'
-  - 'create landing_page content on assigned domains'
   - 'create link content on assigned domains'
   - 'create media'
   - 'create new books'
@@ -154,7 +151,6 @@ permissions:
   - 'delete global_page content on assigned domains'
   - 'delete heritage_site content on assigned domains'
   - 'delete image media content on assigned domains'
-  - 'delete landing_page content on assigned domains'
   - 'delete link content on assigned domains'
   - 'delete media'
   - 'delete news content on assigned domains'
@@ -179,7 +175,6 @@ permissions:
   - 'reschedule scheduled transitions node consultation'
   - 'reschedule scheduled transitions node contact'
   - 'reschedule scheduled transitions node heritage_site'
-  - 'reschedule scheduled transitions node landing_page'
   - 'reschedule scheduled transitions node news'
   - 'reschedule scheduled transitions node page'
   - 'reschedule scheduled transitions node profile'
@@ -198,7 +193,6 @@ permissions:
   - 'revert gallery revisions'
   - 'revert global_page revisions'
   - 'revert heritage_site revisions'
-  - 'revert landing_page revisions'
   - 'revert link revisions'
   - 'revert news revisions'
   - 'revert page revisions'
@@ -222,7 +216,6 @@ permissions:
   - 'update global_page content on assigned domains'
   - 'update heritage_site content on assigned domains'
   - 'update image media content on assigned domains'
-  - 'update landing_page content on assigned domains'
   - 'update link content on assigned domains'
   - 'update media'
   - 'update news content on assigned domains'
@@ -278,7 +271,6 @@ permissions:
   - 'view gallery revisions'
   - 'view global_page revisions'
   - 'view heritage_site revisions'
-  - 'view landing_page revisions'
   - 'view latest version'
   - 'view link revisions'
   - 'view media'
@@ -294,7 +286,6 @@ permissions:
   - 'view scheduled transitions node consultation'
   - 'view scheduled transitions node contact'
   - 'view scheduled transitions node heritage_site'
-  - 'view scheduled transitions node landing_page'
   - 'view scheduled transitions node news'
   - 'view scheduled transitions node page'
   - 'view scheduled transitions node profile'
