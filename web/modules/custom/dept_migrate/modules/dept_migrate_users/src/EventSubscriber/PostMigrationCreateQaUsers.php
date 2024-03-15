@@ -5,15 +5,15 @@ declare(strict_types = 1);
 namespace Drupal\dept_migrate_users\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\domain_access\DomainAccessManagerInterface;
-use Drupal\domain_source\DomainSourceElementManagerInterface;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigrateImportEvent;
 use Drupal\user\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Creates QA User accounts after user migration
+ * Creates QA User accounts after user migration.
  */
 class PostMigrationCreateQaUsers implements EventSubscriberInterface {
 
@@ -35,11 +35,11 @@ class PostMigrationCreateQaUsers implements EventSubscriberInterface {
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Database connection.
+   *   Entity type manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
    *   Drupal logger.
    */
-  public function __construct(private readonly EntityTypeManagerInterface $entity_type_manager, $logger) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactory $logger) {
     $this->entityTypeManager = $entity_type_manager;
     $this->logger = $logger->get('dept_migrate');
   }
@@ -60,8 +60,6 @@ class PostMigrationCreateQaUsers implements EventSubscriberInterface {
    */
   public function onMigratePostImport(MigrateImportEvent $event) {
     $event_id = $event->getMigration()->getBaseId();
-
-    var_dump($event_id);
 
     if ($event_id === 'users') {
       $pass = getenv('QA_PASSWORD');
@@ -102,8 +100,10 @@ class PostMigrationCreateQaUsers implements EventSubscriberInterface {
           $user->set(DomainSourceElementManagerInterface::DOMAIN_SOURCE_FIELD, $values);
            */
 
-          $user->save();
-          $this->logger->notice('QA account ' . $account . ' created.');
+          $result = $user->save();
+          if ($result > 0) {
+            $this->logger->notice('QA account ' . $account . ' created.');
+          }
         }
       }
     }
