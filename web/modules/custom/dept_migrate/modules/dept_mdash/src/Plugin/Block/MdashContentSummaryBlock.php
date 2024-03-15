@@ -103,7 +103,6 @@ class MdashContentSummaryBlock extends BlockBase implements ContainerFactoryPlug
       'contact',
       'gallery',
       'heritage_site',
-      'landing_page',
       'link',
       'news',
       'page',
