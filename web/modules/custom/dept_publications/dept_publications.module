@@ -47,11 +47,16 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
           ':input[name="publication_attachment_type"]' => ['value' => 1],
         ],
       ];
+
       $form['field_publication_secure_files']['#states'] = [
         'invisible' => [
           ':input[name="publication_attachment_type"]' => ['value' => 0],
         ],
+        'required' => [
+          ':input[name="publication_attachment_type"]' => ['value' => 1],
+        ],
       ];
+
     }
     else {
       // Set the publication type to 'public' and prevent access to the secure publication widget.
