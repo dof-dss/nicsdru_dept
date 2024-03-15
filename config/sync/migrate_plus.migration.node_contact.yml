@@ -94,11 +94,24 @@ process:
         paste_format: plain_text
         plain_text: plain_text
   field_map_location:
-    plugin: concat
-    source:
-      - field_map/0/lat
-      - field_map/0/lon
-    delimiter: ' '
+    plugin: get
+    source: field_map
+  field_map_location/0/type:
+    plugin: default_value
+    default_value: 'roadmap'
+    strict: TRUE
+  field_map_location/0/width:
+    plugin: default_value
+    default_value: '100%'
+    strict: TRUE
+  field_map_location/0/height:
+    plugin: default_value
+    default_value: '400px'
+    strict: TRUE
+  field_map_location/0/marker:
+    plugin: default_value
+    default_value: 1
+    strict: TRUE
   field_domain_access:
     - plugin: sub_process
       source: domain_access_node

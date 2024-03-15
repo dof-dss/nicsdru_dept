@@ -14,8 +14,8 @@ dependencies:
     - field.field.node.contact.field_site_topics
     - node.type.contact
   module:
+    - google_map_field
     - layout_builder
-    - simple_gmap
     - text
     - user
 third_party_settings:
@@ -35,24 +35,11 @@ content:
     weight: 1
     region: content
   field_map_location:
-    type: simple_gmap
+    type: google_map_field_default
     label: hidden
-    settings:
-      include_map: true
-      include_static_map: false
-      include_link: false
-      include_text: false
-      iframe_height: '400'
-      iframe_width: '600'
-      iframe_title: ''
-      static_scale: 1
-      zoom_level: 15
-      link_text: 'View larger map'
-      map_type: m
-      langcode: en
-      apikey: ''
+    settings: {  }
     third_party_settings: {  }
-    weight: 6
+    weight: 2
     region: content
   field_site_topics:
     type: entity_reference_label

@@ -3,6 +3,7 @@
 namespace Drupal\dept_migrate\Commands;
 
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -535,7 +536,10 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
         $this->missingTopicsContentCount[] = $child_node->nid;
       }
       else {
-        $this->createSubtopicContentRefLink($parent_node, $child_data[$child_node->nid]['nid']);
+        // Don't add child pages of books to the topic contents, only the book entry.
+        if (!$this->isBookPage($child_data[$child_node->nid]['nid'])) {
+          $this->createSubtopicContentRefLink($parent_node, $child_data[$child_node->nid]['nid']);
+        }
       }
 
       // If the child node is a subtopic then process it for child content.
@@ -543,6 +547,28 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
         $this->processSubtopicChildContent($child_node->nid);
       }
     }
+  }
+
+  /**
+   * Determines if a node is a page within a book content type.
+   *
+   * @param int $nid
+   *   The node ID to check.
+   * @return bool
+   *   True if the node is a book page, otherwise false.
+   */
+  protected function isBookPage($nid) {
+    $book_nids = \Drupal::cache()->get('book_page_nids');
+
+    if (empty($book_nids)) {
+      $book_nids = \Drupal::database()->query("SELECT book.nid FROM book WHERE book.depth > 1")->fetchAllAssoc('nid');
+      \Drupal::cache()->set('book_page_nids', $book_nids, strtotime('+1 hour', time()));
+    }
+    else {
+      $book_nids = $book_nids->data;
+    }
+
+    return array_key_exists($nid, $book_nids);
   }
 
   /**

@@ -16,7 +16,6 @@ dependencies:
   module:
     - field_group
     - layout_builder
-    - simple_gmap
     - text
     - user
 third_party_settings:
@@ -55,26 +54,6 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  field_map_location:
-    type: simple_gmap
-    label: above
-    settings:
-      include_map: true
-      include_static_map: false
-      include_link: false
-      include_text: false
-      iframe_height: '400'
-      iframe_width: '400'
-      iframe_title: ''
-      static_scale: 1
-      zoom_level: 15
-      link_text: 'View larger map'
-      map_type: m
-      langcode: en
-      apikey: ''
-    third_party_settings: {  }
-    weight: 1
-    region: content
 hidden:
   content_moderation_control: true
   entitygroupfield: true
@@ -82,6 +61,7 @@ hidden:
   field_domain_all_affiliates: true
   field_domain_source: true
   field_map: true
+  field_map_location: true
   field_metatags: true
   field_next_audit_due: true
   field_site_topics: true

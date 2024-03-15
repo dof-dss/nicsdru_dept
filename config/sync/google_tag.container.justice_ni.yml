@@ -1,4 +1,4 @@
-uuid: 08ebe658-529c-4e94-a590-6af668e0178a
+uuid: 8d9aca57-1213-4765-848e-5ac4f64dee47
 langcode: en
 status: true
 dependencies:
@@ -6,8 +6,8 @@ dependencies:
     - block_visibility_groups
     - domain
     - system
-id: finance_ni
-label: 'Department of Finance'
+id: justice_ni
+label: 'Department of Justice'
 weight: 0
 tag_container_ids:
   - GTM-PT94H44
@@ -42,7 +42,7 @@ conditions:
     context_mapping:
       domain: '@domain.current_domain_context:domain'
     domains:
-      finance: finance
+      justice: justice
 events:
   search: {  }
   custom: {  }

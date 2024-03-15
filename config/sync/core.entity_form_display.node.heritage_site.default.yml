@@ -26,18 +26,17 @@ dependencies:
     - field.field.node.heritage_site.field_town
     - field.field.node.heritage_site.field_website
     - node.type.heritage_site
-    - workflows.workflow.nics_editorial_workflow
   module:
     - address
     - content_moderation
     - dept_topics
     - field_group
+    - google_map_field
     - link
     - media_library
     - media_library_edit
     - metatag
     - path
-    - scheduler
     - text
 third_party_settings:
   field_group:
@@ -104,7 +103,7 @@ third_party_settings:
       region: content
       parent_name: ''
       weight: 2
-      format_type: details
+      format_type: details_sidebar
       format_settings:
         classes: ''
         show_empty_fields: false
@@ -112,6 +111,7 @@ third_party_settings:
         open: true
         description: ''
         required_fields: true
+        weight: 0
 id: node.heritage_site.default
 targetEntityType: node
 bundle: heritage_site
@@ -138,7 +138,7 @@ content:
     weight: 4
     region: content
     settings:
-      wrapper_type: fieldset
+      wrapper_type: details
     third_party_settings: {  }
   field_domain_access:
     type: options_buttons
@@ -184,12 +184,10 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
   field_map_location:
-    type: string_textfield
-    weight: 28
+    type: google_map_field_default
+    weight: 1001
     region: content
-    settings:
-      size: 120
-      placeholder: ''
+    settings: {  }
     third_party_settings: {  }
   field_metatags:
     type: metatag_firehose
@@ -285,12 +283,6 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-  publish_on:
-    type: datetime_timestamp_no_default
-    weight: 14
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   publish_state:
     type: options_select
     weight: 26
@@ -334,12 +326,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  unpublish_on:
-    type: datetime_timestamp_no_default
-    weight: 15
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   unpublish_state:
     type: options_select
     weight: 27
@@ -360,3 +346,5 @@ hidden:
   field_postcode: true
   field_town: true
   groups: true
+  publish_on: true
+  unpublish_on: true

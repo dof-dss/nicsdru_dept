@@ -3,22 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
-    - filter.format.basic_html
-    - filter.format.filtered_html
-    - filter.format.layout_builder_html
     - node.type.subtopic
     - node.type.topic
     - workflows.workflow.nics_editorial_workflow
   module:
-    - book
     - content_moderation
-    - dept_topics
     - domain_access
-    - domain_entity
-    - filter
     - flag
     - node
-    - redirect
     - scheduled_transitions
     - view_unpublished
 id: topic_supervisor

@@ -1,0 +1,21 @@
+uuid: ae4ce1ea-2857-42d8-982c-23708930011e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.department.field_location
+  module:
+    - dept_core
+    - google_map_field
+id: department.department.field_location
+field_name: field_location
+entity_type: department
+bundle: department
+label: Location
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: google_map_field
