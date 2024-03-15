@@ -11,18 +11,22 @@ use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
  * Implements hook_simple_sitemap_links_alter().
  */
 function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInterface $sitemap) {
-
-  /** @var \Drupal\domain\Entity\Domain $domain */
-  $domain = \Drupal::entityTypeManager()->getStorage('domain')->load($sitemap->id());
-
-  $dept_path = $domain->getPath();
+  /** @var \Drupal\dept_core\DepartmentManager $dept_manager */
+  $dept_manager = \Drupal::service('department.manager');
+  $dept = $dept_manager->getDepartment($sitemap->id());
+  $dept_path = $dept->url();
 
   // Remove any links for the current sitemap variant that don't belong to this
   // variants' domain.
   foreach ($links as $key => $link) {
+    // Rewrite PSH domain pattern to full proper path.
+    if (str_contains($link['url'], '.platformsh.site')) {
+      $url_parts = parse_url($link['url']);
+      $links[$key]['url'] = $dept->url() . $url_parts['path'];
+    }
+
     if (!str_starts_with($link['url'], $dept_path)) {
       unset($links[$key]);
     }
-
   }
 }
