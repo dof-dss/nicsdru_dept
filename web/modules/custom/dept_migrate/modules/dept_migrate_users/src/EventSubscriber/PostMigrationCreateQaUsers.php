@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace Drupal\dept_migrate_users\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\domain_access\DomainAccessManagerInterface;
+use Drupal\domain_source\DomainSourceElementManagerInterface;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigrateImportEvent;
 use Drupal\user\Entity\User;
@@ -59,6 +61,8 @@ class PostMigrationCreateQaUsers implements EventSubscriberInterface {
   public function onMigratePostImport(MigrateImportEvent $event) {
     $event_id = $event->getMigration()->getBaseId();
 
+    var_dump($event_id);
+
     if ($event_id === 'users') {
       $pass = getenv('QA_PASSWORD');
 
@@ -91,6 +95,13 @@ class PostMigrationCreateQaUsers implements EventSubscriberInterface {
           foreach ($roles as $role) {
             $user->addRole($role);
           }
+          $values['target_id'] = 'finance';
+
+          $user->set(DomainAccessManagerInterface::DOMAIN_ACCESS_FIELD, $values);
+          /* Don't set Domain Source as it'll cause a SQL error regarding a duplicate entry.
+          $user->set(DomainSourceElementManagerInterface::DOMAIN_SOURCE_FIELD, $values);
+           */
+
           $user->save();
           $this->logger->notice('QA account ' . $account . ' created.');
         }
