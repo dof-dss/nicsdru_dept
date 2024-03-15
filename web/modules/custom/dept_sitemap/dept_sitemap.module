@@ -25,7 +25,7 @@ function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInt
       $links[$key]['url'] = $dept->url() . $url_parts['path'];
     }
 
-    if (!str_starts_with($link['url'], $dept_path)) {
+    if (!str_contains($link['url'], $dept_path)) {
       unset($links[$key]);
     }
   }
