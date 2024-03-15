@@ -25,52 +25,49 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
   // Toggle the display of the media fields depending on the required
   // attachment type.
   if ($node->bundle() === 'publication') {
-    $form['publication_attachment_type'] = [
-      '#type' => 'radios',
-      '#title' => t('Attachment(s) type'),
-      '#options' => ['Public', 'Secure'],
-      '#default_value' => !empty($node->get('field_publication_secure_files')->getValue()) ? '1' : '0',
-      '#weight' => 0,
-    ];
 
-    $form['field_publication_files']['#states'] = [
-      'invisible' => [
-        ':input[name="publication_attachment_type"]' => ['value' => 1],
-      ],
-    ];
-    $form['field_external_publication']['#states'] = [
-      'invisible' => [
-        ':input[name="publication_attachment_type"]' => ['value' => 1],
-      ],
-    ];
-    $form['field_publication_secure_files']['#states'] = [
-      'invisible' => [
-        ':input[name="publication_attachment_type"]' => ['value' => 0],
-      ],
-    ];
+    $current_user = \Drupal::currentUser();
+    // Allow the selection of 'Public' or 'Secure' publications.
+    if ($current_user->hasPermission('create secure publication') || in_array('administrator', $current_user->getRoles())) {
+      $form['publication_attachment_type'] = [
+        '#type' => 'radios',
+        '#title' => t('Attachment(s) type'),
+        '#options' => ['Public', 'Secure'],
+        '#default_value' => !empty($node->get('field_publication_secure_files')->getValue()) ? '1' : '0',
+        '#weight' => 0,
+      ];
 
-    // If permission to create secure publication, make this field selectable.
-    if (\Drupal::currentUser()->hasPermission('create secure publication')) {
-      if (in_array('administrator', \Drupal::currentUser()->getRoles()) === FALSE) {
-        \Drupal::messenger()
-          ->addMessage('This content will be created as a secure publication meaning it and related media assets cannot be seen by other users or site visitors until it is published');
+      $form['field_publication_files']['#states'] = [
+        'invisible' => [
+          ':input[name="publication_attachment_type"]' => ['value' => 1],
+        ],
+      ];
+      $form['field_external_publication']['#states'] = [
+        'invisible' => [
+          ':input[name="publication_attachment_type"]' => ['value' => 1],
+        ],
+      ];
 
-        $form['publication_attachment_type'] = [
-          '#type' => 'hidden',
-          '#default_value' => '1',
-          '#value' => '1',
-        ];
+      $form['field_publication_secure_files']['#states'] = [
+        'invisible' => [
+          ':input[name="publication_attachment_type"]' => ['value' => 0],
+        ],
+        'required' => [
+          ':input[name="publication_attachment_type"]' => ['value' => 1],
+        ],
+      ];
 
-        $form['field_publication_secure_files']['widget']['#required'] = TRUE;
-      }
     }
     else {
-      // Default to public publication for unprivileged users.
+      // Set the publication type to 'public' and prevent access to the secure publication widget.
+      // If the user does not have the 'secure' permission or is non-admin.
       $form['publication_attachment_type'] = [
         '#type' => 'hidden',
         '#default_value' => '0',
         '#value' => '0',
       ];
+
+      $form['field_publication_secure_files']['#access'] = FALSE;
     }
 
     $form['#validate'][] = 'dept_publications_validate_publication';
