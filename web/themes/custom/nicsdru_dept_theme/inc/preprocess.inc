@@ -58,7 +58,6 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
 
         // Specific node types have a main only.
         case "ual":
-        case "landing_page":
         case "subtopic":
           $variables['main_content_attr']->addClass(LayoutClasses::MAIN);
           break;
@@ -181,7 +180,6 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
       switch ($node_type) {
         case 'application':
         case 'article':
-        case 'landing_page':
         case 'news':
         case 'page':
           if ($node_type === 'news') {
@@ -246,7 +244,6 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
     'embargoed_publication',
     'news',
     'application',
-    'landing_page',
     'page',
     'publication',
   ];
@@ -277,7 +274,6 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('ga-main');
       break;
 
-    case "landing_page":
     case "page":
       // Omit the title on these content types; causes trouble with search
       // indexing. Resolvable with either suitable block config or specific

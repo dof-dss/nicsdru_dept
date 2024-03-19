@@ -104,7 +104,7 @@ then
   $DRUSH pmu content_lock,content_lock_timeout
   # NB: module will be re-enabled by config import at end of this script.
 
-  for type in topic subtopic actions application article collection consultation contact easychart gallery heritage_site infogram landing_page link page profile protected_area ual
+  for type in topic subtopic actions application article collection consultation contact easychart gallery heritage_site infogram link page profile protected_area ual
   do
     echo "Migrate D7 ${type} nodes"
     $DRUSH migrate:import node_$type --force

@@ -140,7 +140,6 @@ class MdashContentController extends ControllerBase {
       'node_contact',
       'node_gallery',
       'node_heritage_site',
-      'node_landing_page',
       'node_link',
       'node_news',
       'node_page',

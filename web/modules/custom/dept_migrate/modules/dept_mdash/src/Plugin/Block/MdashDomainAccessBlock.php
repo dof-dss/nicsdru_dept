@@ -81,7 +81,6 @@ class MdashDomainAccessBlock extends BlockBase implements ContainerFactoryPlugin
       'contact',
       'gallery',
       'heritage_site',
-      'landing_page',
       'link',
       'news',
       'page',

@@ -63,7 +63,6 @@ function nicsdru_nidirect_theme_preprocess_page(array &$variables) {
         // Specific node types have a main only.
         case "publication":
         case "embargoed_publication":
-        case "landing_page":
           $variables['main_content_attr']->addClass(LayoutClasses::MAIN);
           break;
 
@@ -208,7 +207,6 @@ function nicsdru_nidirect_theme_preprocess_page(array &$variables) {
         case 'article':
         case 'news':
         case 'application':
-        case 'landing_page':
         case 'page':
 
           // Render the Related Content block.
@@ -268,7 +266,6 @@ function nicsdru_nidirect_theme_preprocess_page(array &$variables) {
         // Specific node types have a main only.
         case "publication":
         case "embargoed_publication":
-        case "landing_page":
           $variables['main_content_attr']->addClass(LayoutClasses::MAIN);
           break;
 
@@ -321,7 +318,6 @@ function nicsdru_nidirect_theme_preprocess_node(array &$variables) {
     'health_condition',
     'news',
     'application',
-    'landing_page',
     'page',
     'publication',
     'gp_practice',
@@ -377,7 +373,6 @@ function nicsdru_nidirect_theme_preprocess_node(array &$variables) {
       $variables['content']['field_attachment']['#title'] = t('Documents');
       break;
 
-    case "landing_page":
     case "page":
       // Omit the title on these content types; causes trouble with search
       // indexing. Resolvable with either suitable block config or specific
