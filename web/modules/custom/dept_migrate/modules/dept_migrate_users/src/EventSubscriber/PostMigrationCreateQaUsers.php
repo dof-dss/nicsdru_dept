@@ -5,13 +5,15 @@ declare(strict_types = 1);
 namespace Drupal\dept_migrate_users\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\domain_access\DomainAccessManagerInterface;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigrateImportEvent;
 use Drupal\user\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Creates QA User accounts after user migration
+ * Creates QA User accounts after user migration.
  */
 class PostMigrationCreateQaUsers implements EventSubscriberInterface {
 
@@ -33,11 +35,11 @@ class PostMigrationCreateQaUsers implements EventSubscriberInterface {
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Database connection.
+   *   Entity type manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
    *   Drupal logger.
    */
-  public function __construct(private readonly EntityTypeManagerInterface $entity_type_manager, $logger) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactory $logger) {
     $this->entityTypeManager = $entity_type_manager;
     $this->logger = $logger->get('dept_migrate');
   }
@@ -91,8 +93,17 @@ class PostMigrationCreateQaUsers implements EventSubscriberInterface {
           foreach ($roles as $role) {
             $user->addRole($role);
           }
-          $user->save();
-          $this->logger->notice('QA account ' . $account . ' created.');
+          $values['target_id'] = 'finance';
+
+          $user->set(DomainAccessManagerInterface::DOMAIN_ACCESS_FIELD, $values);
+          /* Don't set Domain Source as it'll cause a SQL error regarding a duplicate entry.
+          $user->set(DomainSourceElementManagerInterface::DOMAIN_SOURCE_FIELD, $values);
+           */
+
+          $result = $user->save();
+          if ($result > 0) {
+            $this->logger->notice('QA account ' . $account . ' created.');
+          }
         }
       }
     }
