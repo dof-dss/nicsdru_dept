@@ -7,6 +7,8 @@ namespace Drupal\dept_topics\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\dept_topics\TopicManager;
+use Drupal\node\Entity\Node;
+use Drupal\path_alias\AliasManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,13 +24,23 @@ final class AddExistingContentForm extends FormBase {
   protected $topicManager;
 
   /**
+   * The alias manager that caches alias lookups based on the request.
+   *
+   * @var \Drupal\path_alias\AliasManagerInterface
+   */
+  protected $aliasManager;
+
+  /**
    * Constructs a ModerationStateChangeSubscriber object.
    *
    * @param \Drupal\dept_topics\TopicManager $topic_manager
    *   The Topic Manager service.
+   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
+   *   The alias manager.
    */
-  public function __construct(TopicManager $topic_manager) {
+  public function __construct(TopicManager $topic_manager, AliasManagerInterface $alias_manager) {
     $this->topicManager = $topic_manager;
+    $this->aliasManager = $alias_manager;
   }
 
   /**
@@ -36,7 +48,8 @@ final class AddExistingContentForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('topic.manager')
+      $container->get('topic.manager'),
+      $container->get('path_alias.manager')
     );
   }
 
@@ -85,7 +98,22 @@ final class AddExistingContentForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
+
    $values = $form_state->getValues();
+
+   $host = \Drupal::request()->getSchemeAndHttpHost();
+   $alias = substr($values['content'], strlen($host));
+
+   $path = $this->aliasManager->getPathByAlias($alias);
+
+   $parent_node = Node::load($values['topic_nid']);
+
+   $topic_content = $parent_node->get('field_topic_content')->getValue();
+
+   array_push($topic_content, ['target_id' => substr($path, 6)]);
+
+   $parent_node->set('field_topic_content', $topic_content);
+   $parent_node->save();
   }
 
 }
