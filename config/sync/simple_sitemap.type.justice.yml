@@ -12,8 +12,4 @@ label: 'Department of Justice sitemap'
 description: 'Sitemap type for domain: Department of Justice'
 sitemap_generator: default
 url_generators:
-  - domain_entity
-  - custom
-  - entity
-  - entity_menu_link_content
-  - arbitrary
+  entity: entity

@@ -12,8 +12,4 @@ label: 'The Executive Office sitemap'
 description: 'Sitemap type for domain: The Executive Office'
 sitemap_generator: default
 url_generators:
-  - domain_entity
-  - custom
-  - entity
-  - entity_menu_link_content
-  - arbitrary
+  entity: entity

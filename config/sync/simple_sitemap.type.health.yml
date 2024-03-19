@@ -12,8 +12,4 @@ label: 'Department for Health sitemap'
 description: 'Sitemap type for domain: Department for Health'
 sitemap_generator: default
 url_generators:
-  - domain_entity
-  - custom
-  - entity
-  - entity_menu_link_content
-  - arbitrary
+  entity: entity
