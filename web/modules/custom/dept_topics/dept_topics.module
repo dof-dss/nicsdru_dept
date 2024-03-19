@@ -36,9 +36,33 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
 
+    $build['actions']['secondary']['add_existing'] = [
+      '#title' => t('Add existing content'),
+      '#type' => 'link',
+      '#url' => Url::fromRoute('dept_topics.add_existing_content.form', ['nid' => $context->id()]),
+      '#attributes' => [
+        'class' => [
+          'moderation-sidebar-link',
+          'button',
+          'button--tertiary',
+          'use-ajax'
+        ],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => Json::encode([
+          'title' => t('Add existing content'),
+          'width' => '1000',
+          'minHeight' => 500,
+          'position' => ['my' => 'center top', 'at' => 'center top'],
+          'draggable' => TRUE,
+          'autoResize' => TRUE,
+        ]),
+      ],
+    ];
+
     $bundle_fields = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions('node', 'topic');
     $field_definition = $bundle_fields['field_topic_content'];
     $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
+
 
     foreach ($target_bundles as $bundle => $label) {
       $build['actions']['secondary']['add_' . $bundle] = [

@@ -28,3 +28,10 @@ dept_topics.topic_child_order.form:
   requirements:
     _role: 'topic_supervisor+administrator'
 
+dept_topics.add_existing_content.form:
+  path: '/admin/topics/add-existing'
+  defaults:
+    _title: 'Add Existing Content'
+    _form: 'Drupal\dept_topics\Form\AddExistingContentForm'
+  requirements:
+    _role: 'topic_supervisor+administrator'
