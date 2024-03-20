@@ -91,6 +91,13 @@ final class AddExistingContentForm extends FormBase {
       ],
     ];
 
+    $form['actions']['cancel'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('cancel'),
+      '#weight' => 10,
+      '#attributes' => ['class' => ['child-order-cancel']],
+    ];
+
     return $form;
   }
 
@@ -113,6 +120,7 @@ final class AddExistingContentForm extends FormBase {
    array_push($topic_content, ['target_id' => substr($path, 6)]);
 
    $parent_node->set('field_topic_content', $topic_content);
+   $parent_node->setNewRevision();
    $parent_node->save();
   }
 

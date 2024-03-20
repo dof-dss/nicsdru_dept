@@ -7,6 +7,7 @@
  */
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -454,4 +455,35 @@ function dept_topics_build_facet_topic_hierarchy(&$variables) {
       }
     }
   }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id){
+  if ($form_id === 'field_config_edit_form' && !empty($form['#entity'])) {
+    if ($form['#entity']->bundle() === 'subtopic') {
+      $form['actions']['submit']['#submit'][] = 'dept_topics_update_linkit_targets';
+    }
+  }
+}
+
+function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+  $field_bundles = NestedArray::getValue($values, ['settings','handler_settings','target_bundles'], $key_exists);
+
+  if ($key_exists) {
+    $file_storage = \Drupal::service('config.storage.sync');
+    $active_storage = \Drupal::service('config.storage');
+
+    $linkit_data = $active_storage->read('linkit.linkit_profile.topic_child_content');
+
+    $linkit_data['matchers'][array_key_first($linkit_data['matchers'])]['settings']['bundles'] = $field_bundles;
+
+    $active_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
+    $file_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
+
+    \Drupal::messenger()->addMessage('Linkit profile (topic_child_content) updated, please ensure you export this configuration. ');
+  }
+
 }
