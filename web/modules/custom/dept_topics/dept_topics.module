@@ -64,7 +64,6 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
     $field_definition = $bundle_fields['field_topic_content'];
     $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
 
-
     foreach ($target_bundles as $bundle => $label) {
       $build['actions']['secondary']['add_' . $bundle] = [
         '#title' => 'Add ' . $label,
@@ -460,7 +459,7 @@ function dept_topics_build_facet_topic_hierarchy(&$variables) {
 /**
  * Implements hook_form_alter().
  */
-function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id){
+function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id === 'field_config_edit_form' && !empty($form['#entity'])) {
     if ($form['#entity']->bundle() === 'subtopic') {
       $form['actions']['submit']['#submit'][] = 'dept_topics_update_linkit_targets';
@@ -468,18 +467,22 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
   }
 }
 
+/**
+ * Update the Linkit profile for topic content.
+ */
 function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_state) {
   $values = $form_state->getValues();
-  $field_bundles = NestedArray::getValue($values, ['settings','handler_settings','target_bundles'], $key_exists);
+  $field_bundles = NestedArray::getValue($values, ['settings', 'handler_settings', 'target_bundles'], $key_exists);
 
   if ($key_exists) {
     $file_storage = \Drupal::service('config.storage.sync');
     $active_storage = \Drupal::service('config.storage');
 
     $linkit_data = $active_storage->read('linkit.linkit_profile.topic_child_content');
-
+    // Update the Linkit profile matcher bundles to that of the topic content field target bundles.
     $linkit_data['matchers'][array_key_first($linkit_data['matchers'])]['settings']['bundles'] = $field_bundles;
 
+    // Save to both active and file config stores.
     $active_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
     $file_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
 
