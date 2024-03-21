@@ -37,8 +37,14 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
 
-    $build['actions']['secondary']['add_existing'] = [
-      '#title' => t('Add existing content'),
+    $build['actions']['secondary']['info_topic_content'] = [
+      '#theme' => 'moderation_sidebar_info_section',
+      '#text' => 'Manage topic content',
+      '#tag' => 'h2'
+    ];
+
+    $build['actions']['secondary']['manage_existing'] = [
+      '#title' => t('Manage existing content'),
       '#type' => 'link',
       '#url' => Url::fromRoute('dept_topics.add_existing_content.form', ['nid' => $context->id()]),
       '#attributes' => [
@@ -64,9 +70,15 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
     $field_definition = $bundle_fields['field_topic_content'];
     $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
 
+    $build['actions']['secondary']['info_add_new'] = [
+      '#theme' => 'moderation_sidebar_info_section',
+      '#text' => 'Quickly add new...',
+      '#tag' => 'p'
+    ];
+
     foreach ($target_bundles as $bundle => $label) {
       $build['actions']['secondary']['add_' . $bundle] = [
-        '#title' => 'Add ' . $label,
+        '#title' => ucfirst($label),
         '#type' => 'link',
         '#url' => Url::fromRoute('node.add', ['node_type' => $bundle], ['query' => ['topic' => $context->id()]]),
         '#attributes' => [
@@ -488,5 +500,15 @@ function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_stat
 
     \Drupal::messenger()->addMessage('Linkit profile (topic_child_content) updated, please ensure you export this configuration. ');
   }
+}
 
+function dept_topics_theme() {
+  return [
+    'moderation_sidebar_info_section' => [
+      'variables' => [
+        'text' => '',
+        'tag' => 'p',
+      ],
+    ],
+  ];
 }
