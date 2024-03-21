@@ -5,6 +5,7 @@
  * Departmental Node module for Departmental sites.
  */
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
@@ -331,5 +332,12 @@ function dept_node_clientside_validation_should_validate($element, FormStateInte
   // about as much sense as a sunroof on a submarine.
   if (str_ends_with($form_id, 'scheduled_transitions_add_form_form')) {
     return TRUE;
+  }
+
+  $classes = NestedArray::getValue($element, ['#attributes', 'class'], $key_exists);
+  if ($key_exists) {
+    if (in_array("node-form", $classes)) {
+      return TRUE;
+    }
   }
 }
