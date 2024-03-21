@@ -14,15 +14,25 @@ function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInt
   /** @var \Drupal\dept_core\DepartmentManager $dept_manager */
   $dept_manager = \Drupal::service('department.manager');
   $dept = $dept_manager->getDepartment($sitemap->id());
+
+  if (empty($dept)) {
+    return;
+  }
+
   $dept_path = $dept->url();
 
   // Remove any links for the current sitemap variant that don't belong to this
   // variants' domain.
-  foreach ($links as $key => $link) {
+  foreach ($links as $key => &$link) {
+    if (str_contains($link['url'], 'http://')) {
+      // Normalise to https://.
+      $link['url'] = str_replace('http://', 'https://', $link['url']);
+    }
+
     // Rewrite PSH domain pattern to full proper path.
-    if (str_contains($link['url'], '.platformsh.site')) {
+    if (str_contains($link['url'], '.platformsh.site') || str_contains($link['url'], '://default/')) {
       $url_parts = parse_url($link['url']);
-      $links[$key]['url'] = $dept->url() . $url_parts['path'];
+      $link['url'] = $dept->url() . $url_parts['path'];
     }
 
     if (!str_contains($link['url'], $dept_path)) {
