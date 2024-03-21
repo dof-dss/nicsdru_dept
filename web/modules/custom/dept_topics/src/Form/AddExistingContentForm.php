@@ -167,7 +167,6 @@ final class AddExistingContentForm extends FormBase {
    * {@inheritdoc}
    */
   public function ajaxSubmit(array &$form, FormStateInterface $form_state) {
-    $child_content = $form_state->getValue('child_content');
     $parents = $form_state->getTriggeringElement()['#parents'];
     $removed_children = $form_state->getValue('removed_children');
 
@@ -189,6 +188,24 @@ final class AddExistingContentForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $child_content = $form_state->getValue('child_content');
+    $topic_nid = $form_state->getValue('topic_nid');
+
+    $topic = $this->entityTypeManager->getStorage('node')->load($topic_nid);
+
+    $vals = $topic->get('field_topic_content')->getValue();
+    $iterator = $topic->get('field_topic_content')->getIterator();
+
+    $new_vals = [];
+
+    foreach (array_keys($child_content) as $nid) {
+      $new_vals[] = ['target_id' => $nid];
+    }
+
+    $topic->get('field_topic_content')->setValue($new_vals);
+    $topic->save();
+
+    $form_state->setRedirect('entity.node.canonical', ['node' => $topic_nid]);
 
   }
 
