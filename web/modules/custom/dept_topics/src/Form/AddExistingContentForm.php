@@ -73,65 +73,123 @@ final class AddExistingContentForm extends FormBase {
     return 'dept_topics_add_existing_content';
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function buildForm(array $form, FormStateInterface $form_state): array {
+  public function buildForm(array $form, FormStateInterface $form_state) {
     $nid = $this->getRequest()->query->get('nid');
-    $types = $this->topicManager->getTopicChildNodeTypes();
+    $node = $this->entityTypeManager->getStorage('node')->load($nid);
 
-    $form['content'] = [
-      '#type' => 'linkit',
-      '#title' => $this->t('Content'),
-      '#description' => $this->t('Begin typing the title of the content.'),
-      '#autocomplete_route_name' => 'linkit.autocomplete',
-      '#autocomplete_route_parameters' => [
-        'linkit_profile_id' => 'topic_child_content',
-      ],
-    ];
+    $form['#attached']['library'][] = 'dept_topics/child_order';
 
     $form['topic_nid'] = [
       '#type' => 'hidden',
-      '#value' => $nid
+      '#value' => $form_state->getValue('topic_nid') ?? $nid,
     ];
 
-    $form['actions'] = [
-      '#type' => 'actions',
-      'submit' => [
+    $form['removed_children'] = [
+      '#type' => 'hidden',
+      '#value' => $form_state->getValue('removed_children') ?? '',
+    ];
+
+    $form['child_content'] = [
+      '#type' => 'table',
+      '#tree' => TRUE,
+      '#prefix' => '<div id="child-content-wrapper">',
+      '#suffix' => '</div>',
+      '#empty' => $this->t('This topic has no child content'),
+      '#tabledrag' => [[
+          'action' => 'order',
+          'relationship' => 'sibling',
+          'group' => 'table-sort-weight',
+      ]]
+    ];
+
+    $child_contents = $node->get('field_topic_content')->referencedEntities();
+
+    foreach ($child_contents as $weight => $child) {
+
+      if (!empty($form['removed_children']['#value'])) {
+        if (in_array($child->id(), explode(',', $form['removed_children']['#value']))) {
+          continue;
+        }
+      }
+
+      $cnid = $child->id();
+      $form['child_content'][$cnid]['#attributes']['class'][] = 'draggable';
+      $form['child_content'][$cnid]['#weight'] = $weight;
+      $form['child_content'][$cnid]['title'] = [
+        '#markup' => $child->label(),
+      ];
+      $form['child_content'][$cnid]['weight'] = [
+        '#type' => 'weight',
+        '#title' => $this->t('Weight for @title', ['@title' => $child->label()]),
+        '#title_display' => 'invisible',
+        '#default_value' => $weight,
+        '#attributes' => [
+          'class' => [
+            'table-sort-weight',
+          ],
+        ],
+      ];
+      $form['child_content'][$cnid]['delete'] = [
         '#type' => 'submit',
-        '#value' => $this->t('Add'),
-      ],
+        '#title' => t('Remove'),
+        '#name' => 'delete_' . $weight,
+        '#value' => 'Remove',
+        '#submit' => ['::ajaxSubmit'],
+        '#ajax' => [
+          'callback' => '::addMoreSet',
+          'wrapper' => 'child-content-wrapper',
+        ]
+      ];
+    }
+
+    $form['actions'] = ['#type' => 'actions',];
+
+    $form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Save'),
     ];
 
     $form['actions']['cancel'] = [
       '#type' => 'submit',
-      '#value' => $this->t('cancel'),
-      '#weight' => 10,
-      '#attributes' => ['class' => ['child-order-cancel']],
+      '#value' => $this->t('Cancel'),
+      '#submit' => ['::cancel'],
+      '#limit_validation_errors' => [],
     ];
 
     return $form;
   }
 
+  public function addMoreSet(array &$form, FormStateInterface $form_state) {
+    return $form['child_content'];
+  }
+
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $values = $form_state->getValues();
+  public function ajaxSubmit(array &$form, FormStateInterface $form_state) {
+    $child_content = $form_state->getValue('child_content');
+    $parents = $form_state->getTriggeringElement()['#parents'];
+    $removed_children = $form_state->getValue('removed_children');
 
-    // Strip the url to the retrieve only the path.
-    $host = $this->getRequest()->getSchemeAndHttpHost();
-    $alias = substr($values['content'], strlen($host));
-    $path = $this->aliasManager->getPathByAlias($alias);
+    if (!empty($removed_children)) {
+      $removed_children = explode(',', $removed_children);
+      $removed_children[] = $parents[1];
+    } else {
+      $removed_children = [$parents[1]];
+    }
 
-    $parent_node = $this->entityTypeManager->getStorage('node')->load($values['topic_nid']);
-    $topic_content = $parent_node->get('field_topic_content')->getValue();
+    if (!empty($removed_children)) {
+      $form_state->setValue('removed_children', implode(',', $removed_children));
+    }
 
-    array_push($topic_content, ['target_id' => substr($path, 6)]);
+    $form_state->setRebuild(TRUE);
+  }
 
-    $parent_node->set('field_topic_content', $topic_content);
-    $parent_node->setNewRevision();
-    $parent_node->save();
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+
   }
 
 }
