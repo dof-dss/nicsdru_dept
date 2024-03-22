@@ -12,7 +12,7 @@ use Drupal\path_alias\AliasManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a form to allow sorting, addition and removal of topic child content.
+ * Provides a form to allow addition, removal and sorting of topic child content.
  */
 final class ManageTopicContentForm extends FormBase {
 
@@ -24,21 +24,21 @@ final class ManageTopicContentForm extends FormBase {
   protected $topicManager;
 
   /**
-   * The alias manager that caches alias lookups based on the request.
+   * The Alias manager service.
    *
    * @var \Drupal\path_alias\AliasManagerInterface
    */
   protected $aliasManager;
 
   /**
-   * The entity type manager.
+   * The Entity Type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
 
   /**
-   * Constructs a ModerationStateChangeSubscriber object.
+   * Constructor.
    *
    * @param \Drupal\dept_topics\TopicManager $topic_manager
    *   The Topic Manager service.
@@ -87,6 +87,7 @@ final class ManageTopicContentForm extends FormBase {
       ]
     ];
 
+    // Use the Linkit profile to restrict which content can be added.
     $form['add_existing']['add_path'] = [
       '#type' => 'linkit',
       '#title' => $this->t('Content URL'),
@@ -120,6 +121,7 @@ final class ManageTopicContentForm extends FormBase {
       '#value' => $form_state->getValue('topic_nid') ?? $nid,
     ];
 
+    // Stores the list of nids that are to be removed when the content table is recreated.
     $form['removed_children'] = [
       '#type' => 'hidden',
       '#value' => $form_state->getValue('removed_children') ?? '',
@@ -157,17 +159,17 @@ final class ManageTopicContentForm extends FormBase {
         }
       }
 
-      $cnid = $child->id();
-      $form['child_content'][$cnid]['#attributes']['class'][] = 'draggable';
-      $form['child_content'][$cnid]['#weight'] = $weight;
+      $child_nid = $child->id();
+      $form['child_content'][$child_nid]['#attributes']['class'][] = 'draggable';
+      $form['child_content'][$child_nid]['#weight'] = $weight;
 
-      $form['child_content'][$cnid]['title'] = [
+      $form['child_content'][$child_nid]['title'] = [
         '#type' => 'html_tag',
         '#tag' => 'p',
         '#value' => $child->label(),
       ];
 
-      $form['child_content'][$cnid]['weight'] = [
+      $form['child_content'][$child_nid]['weight'] = [
         '#type' => 'weight',
         '#title' => $this->t('Weight for @title', ['@title' => $child->label()]),
         '#title_display' => 'invisible',
@@ -179,10 +181,10 @@ final class ManageTopicContentForm extends FormBase {
         ],
       ];
 
-      $form['child_content'][$cnid]['delete'] = [
+      $form['child_content'][$child_nid]['delete'] = [
         '#type' => 'submit',
         '#title' => t('Remove'),
-        '#name' => 'delete_' . $cnid,
+        '#name' => 'delete_' . $child_nid,
         '#value' => 'Remove',
         '#submit' => ['::ajaxSubmit'],
         '#ajax' => [
@@ -256,15 +258,17 @@ final class ManageTopicContentForm extends FormBase {
         return;
       }
 
+      $child_content = $form_state->getValue('child_content');
+
+      // Strip the host and match the alias to a node id.
       $host = $this->getRequest()->getSchemeAndHttpHost();
       $alias = substr($add_path, strlen($host));
       $path = $this->aliasManager->getPathByAlias($alias);
 
-      $child_content = $form_state->getValue('child_content');
-      $nid = substr($path, 6);
+      $new_content_nid = substr($path, 6);
 
       // Check if there is already an entry for this node.
-      if (array_key_exists($nid, $child_content)) {
+      if (array_key_exists($new_content_nid, $child_content)) {
         // TODO: Inform user of error.
         return;
       }
@@ -272,7 +276,7 @@ final class ManageTopicContentForm extends FormBase {
       $weight = $child_content[array_key_last($child_content)]['weight'];
       $weight++;
 
-      $child_content[$nid] = [
+      $child_content[$new_content_nid] = [
         'weight' => $weight,
         'delete' => 'Remove',
       ];
@@ -310,15 +314,14 @@ final class ManageTopicContentForm extends FormBase {
     // TODO: Do a diff on the arrays and only update the field if different.
     $field_topic_content_updated = [];
 
+    // Build our entity reference array and overwrite the existing value.
     foreach (array_keys($child_content) as $nid) {
       $field_topic_content_updated[] = ['target_id' => $nid];
     }
-
     $topic->get('field_topic_content')->setValue($field_topic_content_updated);
+
     $topic->save();
-
     $form_state->setRedirect('entity.node.canonical', ['node' => $topic_nid]);
-
   }
 
 }

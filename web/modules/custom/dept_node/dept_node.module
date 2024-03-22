@@ -50,9 +50,6 @@ function dept_node_form_views_exposed_form_alter(&$form, FormStateInterface $for
  */
 function dept_node_form_node_form_alter(&$form, $form_state) {
 
-
-
-
   // Add handler to process nodes that should have 'nigov' entries.
   if (in_array($form_state->getFormObject()->getEntity()->bundle(), [
     'consultation',
@@ -337,4 +334,3 @@ function dept_node_clientside_validation_should_validate($element, FormStateInte
     return TRUE;
   }
 }
-
