@@ -8,10 +8,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\dept_topics\TopicManager;
-use Drupal\node\Entity\Node;
 use Drupal\path_alias\AliasManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides a Departmental sites: topics form.
@@ -77,7 +75,38 @@ final class AddExistingContentForm extends FormBase {
     $nid = $this->getRequest()->query->get('nid');
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
 
+    // TODO: Rename this library and update css
     $form['#attached']['library'][] = 'dept_topics/child_order';
+
+    $form['add_existing'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => ['container-inline'],
+      ]
+    ];
+
+    $form['add_existing']['add_path'] = [
+      '#type' => 'linkit',
+      '#title' => $this->t('Add existing content'),
+      '#description_display' => 'after',
+      '#autocomplete_route_name' => 'linkit.autocomplete',
+      '#autocomplete_route_parameters' => [
+        'linkit_profile_id' => 'topic_child_content',
+      ],
+    ];
+
+    $form['add_existing']['add'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Add'),
+      '#name' => 'add',
+      '#value' => 'Add',
+      '#submit' => ['::ajaxSubmit'],
+      '#ajax' => [
+        'callback' => '::addMoreSet',
+        'wrapper' => 'child-content-wrapper',
+      ]
+    ];
+
 
     $form['topic_nid'] = [
       '#type' => 'hidden',
@@ -102,7 +131,14 @@ final class AddExistingContentForm extends FormBase {
       ]]
     ];
 
-    $child_contents = $node->get('field_topic_content')->referencedEntities();
+    // If this is the first instantiation of the form, load the child contents from the field.
+    if (empty($form_state->getValue('child_content'))) {
+      $child_contents = $node->get('field_topic_content')->referencedEntities();
+    } else {
+      // Form state only holds the nids, load the nodes so we can access the title.
+      $child_contents = $form_state->getValue('child_content');
+      $child_contents = $this->entityTypeManager->getStorage('node')->loadMultiple(array_keys($child_contents));
+    }
 
     foreach ($child_contents as $weight => $child) {
 
@@ -132,7 +168,7 @@ final class AddExistingContentForm extends FormBase {
       $form['child_content'][$cnid]['delete'] = [
         '#type' => 'submit',
         '#title' => t('Remove'),
-        '#name' => 'delete_' . $weight,
+        '#name' => 'delete_' . $cnid,
         '#value' => 'Remove',
         '#submit' => ['::ajaxSubmit'],
         '#ajax' => [
@@ -170,15 +206,40 @@ final class AddExistingContentForm extends FormBase {
     $parents = $form_state->getTriggeringElement()['#parents'];
     $removed_children = $form_state->getValue('removed_children');
 
-    if (!empty($removed_children)) {
-      $removed_children = explode(',', $removed_children);
-      $removed_children[] = $parents[1];
-    } else {
-      $removed_children = [$parents[1]];
+    // Append call.
+    if ($parents[0] === 'add') {
+      $add_path = $form_state->getValue('add_path');
+
+      $host = $this->getRequest()->getSchemeAndHttpHost();
+      $alias = substr($add_path, strlen($host));
+      $path = $this->aliasManager->getPathByAlias($alias);
+
+      $child_content = $form_state->getValue('child_content');
+      $nid = substr($path, 6);
+
+      $weight = $child_content[array_key_last($child_content)]['weight'];
+      $weight++;
+
+      $child_content[$nid] = [
+        'weight' => $weight,
+        'delete' => 'Remove',
+      ];
+
+      $form_state->setValue('child_content', $child_content);
     }
 
-    if (!empty($removed_children)) {
-      $form_state->setValue('removed_children', implode(',', $removed_children));
+    // Deleted call.
+    if (!empty($parents[2]) && $parents[2] === 'delete') {
+      if (!empty($removed_children)) {
+        $removed_children = explode(',', $removed_children);
+        $removed_children[] = $parents[1];
+      } else {
+        $removed_children = [$parents[1]];
+      }
+
+      if (!empty($removed_children)) {
+        $form_state->setValue('removed_children', implode(',', $removed_children));
+      }
     }
 
     $form_state->setRebuild(TRUE);
@@ -194,7 +255,7 @@ final class AddExistingContentForm extends FormBase {
     $topic = $this->entityTypeManager->getStorage('node')->load($topic_nid);
 
     $vals = $topic->get('field_topic_content')->getValue();
-    $iterator = $topic->get('field_topic_content')->getIterator();
+    // TODO: Do a diff on the arrays and only update the field if different.
 
     $new_vals = [];
 
