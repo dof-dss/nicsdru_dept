@@ -56,7 +56,7 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
         ],
         'data-dialog-type' => 'modal',
         'data-dialog-options' => Json::encode([
-          'title' => t('Add existing content'),
+          'title' => t('Manage topic content'),
           'width' => '1000',
           'minHeight' => 500,
           'position' => ['my' => 'center top', 'at' => 'center top'],

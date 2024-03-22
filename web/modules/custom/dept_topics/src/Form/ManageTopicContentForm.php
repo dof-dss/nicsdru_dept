@@ -68,7 +68,7 @@ final class ManageTopicContentForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId(): string {
-    return 'dept_topics_add_existing_content';
+    return 'dept_topics_manage_topic_content';
   }
 
   public function buildForm(array $form, FormStateInterface $form_state) {
@@ -104,7 +104,12 @@ final class ManageTopicContentForm extends FormBase {
       '#ajax' => [
         'callback' => '::addMoreSet',
         'wrapper' => 'child-content-wrapper',
-      ]
+      ],
+      '#attributes' => [
+        'class' => [
+          'button--primary',
+        ],
+      ],
     ];
 
 
@@ -152,7 +157,9 @@ final class ManageTopicContentForm extends FormBase {
       $form['child_content'][$cnid]['#attributes']['class'][] = 'draggable';
       $form['child_content'][$cnid]['#weight'] = $weight;
       $form['child_content'][$cnid]['title'] = [
-        '#markup' => $child->label(),
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $child->label(),
       ];
       $form['child_content'][$cnid]['weight'] = [
         '#type' => 'weight',
@@ -174,7 +181,18 @@ final class ManageTopicContentForm extends FormBase {
         '#ajax' => [
           'callback' => '::addMoreSet',
           'wrapper' => 'child-content-wrapper',
-        ]
+        ],
+        '#attributes' => [
+          'class' => [
+            'button--danger',
+            'link',
+          ]
+        ],
+        '#wrapper_attributes' => [
+          'class' => [
+            'manage-topic-content-remove-cell'
+          ]
+      ],
       ];
     }
 
@@ -183,6 +201,11 @@ final class ManageTopicContentForm extends FormBase {
     $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Save'),
+      '#attributes' => [
+        'class' => [
+          'button--primary',
+        ],
+      ],
     ];
 
     $form['actions']['cancel'] = [
@@ -193,6 +216,7 @@ final class ManageTopicContentForm extends FormBase {
       '#attributes' => [
         'class' => [
           'manage-topic-content-cancel',
+          'button--danger'
         ]
       ]
     ];
