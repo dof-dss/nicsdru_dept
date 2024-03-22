@@ -477,6 +477,9 @@ function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_stat
   }
 }
 
+/**
+ * Implements hook_theme().
+ */
 function dept_topics_theme() {
   return [
     'moderation_sidebar_info_section' => [

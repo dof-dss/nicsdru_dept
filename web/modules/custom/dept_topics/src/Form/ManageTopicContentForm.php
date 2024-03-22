@@ -12,7 +12,7 @@ use Drupal\path_alias\AliasManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a Departmental sites: topics form.
+ * Provides a form to allow sorting, addition and removal of topic child content.
  */
 final class ManageTopicContentForm extends FormBase {
 
@@ -71,6 +71,9 @@ final class ManageTopicContentForm extends FormBase {
     return 'dept_topics_manage_topic_content';
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $nid = $this->getRequest()->query->get('nid');
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
@@ -100,7 +103,6 @@ final class ManageTopicContentForm extends FormBase {
       '#type' => 'submit',
       '#value' => $this->t('Add'),
       '#name' => 'add',
-      '#value' => 'Add',
       '#submit' => ['::ajaxSubmit'],
       '#ajax' => [
         'callback' => '::childContentCallback',
@@ -129,24 +131,26 @@ final class ManageTopicContentForm extends FormBase {
       '#prefix' => '<div id="child-content-wrapper">',
       '#suffix' => '</div>',
       '#empty' => $this->t('This topic has no child content'),
-      '#tabledrag' => [[
+      '#tabledrag' => [
+        [
           'action' => 'order',
           'relationship' => 'sibling',
           'group' => 'table-sort-weight',
-      ]]
+        ]
+      ]
     ];
 
     // If this is the first instantiation of the form, load the child contents from the field.
     if (empty($form_state->getValue('child_content'))) {
       $child_contents = $node->get('field_topic_content')->referencedEntities();
-    } else {
+    }
+    else {
       // Form state only holds the nids, so we load the nodes to get access the title.
       $child_contents = $form_state->getValue('child_content');
       $child_contents = $this->entityTypeManager->getStorage('node')->loadMultiple(array_keys($child_contents));
     }
 
     foreach ($child_contents as $weight => $child) {
-
       if (!empty($form['removed_children']['#value'])) {
         if (in_array($child->id(), explode(',', $form['removed_children']['#value']))) {
           continue;
@@ -194,12 +198,13 @@ final class ManageTopicContentForm extends FormBase {
         '#wrapper_attributes' => [
           'class' => [
             'manage-topic-content-remove-cell'
-          ]
+          ],
+          'title' => $this->t('Remove this content from the topic.')
       ],
       ];
     }
 
-    $form['actions'] = ['#type' => 'actions',];
+    $form['actions'] = ['#type' => 'actions'];
 
     $form['actions']['submit'] = [
       '#type' => 'submit',
@@ -227,7 +232,10 @@ final class ManageTopicContentForm extends FormBase {
     return $form;
   }
 
-  public function childContentCallback (array &$form, FormStateInterface $form_state) {
+  /**
+   * Callback to return the child content render array.
+   */
+  public function childContentCallback(array &$form, FormStateInterface $form_state) {
     return $form['child_content'];
   }
 
@@ -277,11 +285,12 @@ final class ManageTopicContentForm extends FormBase {
       if (!empty($removed_children)) {
         $removed_children = explode(',', $removed_children);
         $removed_children[] = $parents[1];
-      } else {
+      }
+      else {
         $removed_children = [$parents[1]];
       }
 
-      if (!empty($removed_children)) {
+      if (count($removed_children) > 0) {
         $form_state->setValue('removed_children', implode(',', $removed_children));
       }
     }
