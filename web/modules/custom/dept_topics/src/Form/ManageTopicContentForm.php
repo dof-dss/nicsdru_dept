@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a Departmental sites: topics form.
  */
-final class AddExistingContentForm extends FormBase {
+final class ManageTopicContentForm extends FormBase {
 
   /**
    * The Topic Manager service.
@@ -76,7 +76,7 @@ final class AddExistingContentForm extends FormBase {
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
 
     // TODO: Rename this library and update css
-    $form['#attached']['library'][] = 'dept_topics/child_order';
+    $form['#attached']['library'][] = 'dept_topics/manage_topic_content';
 
     $form['add_existing'] = [
       '#type' => 'container',
@@ -190,6 +190,11 @@ final class AddExistingContentForm extends FormBase {
       '#value' => $this->t('Cancel'),
       '#submit' => ['::cancel'],
       '#limit_validation_errors' => [],
+      '#attributes' => [
+        'class' => [
+          'manage-topic-content-cancel',
+        ]
+      ]
     ];
 
     return $form;

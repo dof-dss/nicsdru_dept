@@ -46,7 +46,7 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
     $build['actions']['secondary']['manage_existing'] = [
       '#title' => t('Manage existing content'),
       '#type' => 'link',
-      '#url' => Url::fromRoute('dept_topics.add_existing_content.form', ['nid' => $context->id()]),
+      '#url' => Url::fromRoute('dept_topics.manage_topic_content.form', ['nid' => $context->id()]),
       '#attributes' => [
         'class' => [
           'moderation-sidebar-link',
@@ -93,31 +93,6 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
 
     $build['#attached']['library'][] = 'dept_topics/moderation_sidebar';
 
-  }
-
-  if ($context->bundle() === 'subtopic') {
-    $build['actions']['secondary']['order_child_topics'] = [
-      '#title' => t('Reorder child content'),
-      '#type' => 'link',
-      '#url' => Url::fromRoute('dept_topics.topic_child_order.form', ['node' => $context->id()], ['query' => ['topic' => $context->id()]]),
-      '#attributes' => [
-        'class' => [
-          'moderation-sidebar-link',
-          'button',
-          'button--tertiary',
-          'use-ajax'
-        ],
-        'data-dialog-type' => 'modal',
-        'data-dialog-options' => Json::encode([
-          'title' => t('Topic contents'),
-          'width' => 800,
-          'minHeight' => 500,
-          'position' => ['my' => 'center top', 'at' => 'center top'],
-          'draggable' => TRUE,
-          'autoResize' => FALSE,
-        ]),
-      ],
-    ];
   }
 }
 
