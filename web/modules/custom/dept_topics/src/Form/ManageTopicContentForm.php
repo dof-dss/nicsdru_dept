@@ -74,12 +74,11 @@ final class ManageTopicContentForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $nid = $this->getRequest()->query->get('nid');
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
-
-    // TODO: Rename this library and update css
     $form['#attached']['library'][] = 'dept_topics/manage_topic_content';
 
     $form['add_existing'] = [
-      '#type' => 'container',
+      '#type' => 'fieldset',
+      '#title' => $this->t('Add existing content'),
       '#attributes' => [
         'class' => ['container-inline'],
       ]
@@ -87,7 +86,9 @@ final class ManageTopicContentForm extends FormBase {
 
     $form['add_existing']['add_path'] = [
       '#type' => 'linkit',
-      '#title' => $this->t('Add existing content'),
+      '#title' => $this->t('Content URL'),
+      '#title_display' => 'invisible',
+      '#placeholder' => $this->t('Start typing a title to search...'),
       '#description_display' => 'after',
       '#autocomplete_route_name' => 'linkit.autocomplete',
       '#autocomplete_route_parameters' => [
@@ -102,7 +103,7 @@ final class ManageTopicContentForm extends FormBase {
       '#value' => 'Add',
       '#submit' => ['::ajaxSubmit'],
       '#ajax' => [
-        'callback' => '::addMoreSet',
+        'callback' => '::childContentCallback',
         'wrapper' => 'child-content-wrapper',
       ],
       '#attributes' => [
@@ -111,7 +112,6 @@ final class ManageTopicContentForm extends FormBase {
         ],
       ],
     ];
-
 
     $form['topic_nid'] = [
       '#type' => 'hidden',
@@ -140,7 +140,7 @@ final class ManageTopicContentForm extends FormBase {
     if (empty($form_state->getValue('child_content'))) {
       $child_contents = $node->get('field_topic_content')->referencedEntities();
     } else {
-      // Form state only holds the nids, load the nodes so we can access the title.
+      // Form state only holds the nids, so we load the nodes to get access the title.
       $child_contents = $form_state->getValue('child_content');
       $child_contents = $this->entityTypeManager->getStorage('node')->loadMultiple(array_keys($child_contents));
     }
@@ -156,11 +156,13 @@ final class ManageTopicContentForm extends FormBase {
       $cnid = $child->id();
       $form['child_content'][$cnid]['#attributes']['class'][] = 'draggable';
       $form['child_content'][$cnid]['#weight'] = $weight;
+
       $form['child_content'][$cnid]['title'] = [
         '#type' => 'html_tag',
         '#tag' => 'p',
         '#value' => $child->label(),
       ];
+
       $form['child_content'][$cnid]['weight'] = [
         '#type' => 'weight',
         '#title' => $this->t('Weight for @title', ['@title' => $child->label()]),
@@ -172,6 +174,7 @@ final class ManageTopicContentForm extends FormBase {
           ],
         ],
       ];
+
       $form['child_content'][$cnid]['delete'] = [
         '#type' => 'submit',
         '#title' => t('Remove'),
@@ -179,7 +182,7 @@ final class ManageTopicContentForm extends FormBase {
         '#value' => 'Remove',
         '#submit' => ['::ajaxSubmit'],
         '#ajax' => [
-          'callback' => '::addMoreSet',
+          'callback' => '::childContentCallback',
           'wrapper' => 'child-content-wrapper',
         ],
         '#attributes' => [
@@ -224,7 +227,7 @@ final class ManageTopicContentForm extends FormBase {
     return $form;
   }
 
-  public function addMoreSet(array &$form, FormStateInterface $form_state) {
+  public function childContentCallback (array &$form, FormStateInterface $form_state) {
     return $form['child_content'];
   }
 
@@ -239,12 +242,24 @@ final class ManageTopicContentForm extends FormBase {
     if ($parents[0] === 'add') {
       $add_path = $form_state->getValue('add_path');
 
+      // We only want valid paths.
+      if (!str_starts_with($add_path, 'http')) {
+        // TODO: Inform user of error.
+        return;
+      }
+
       $host = $this->getRequest()->getSchemeAndHttpHost();
       $alias = substr($add_path, strlen($host));
       $path = $this->aliasManager->getPathByAlias($alias);
 
       $child_content = $form_state->getValue('child_content');
       $nid = substr($path, 6);
+
+      // Check if there is already an entry for this node.
+      if (array_key_exists($nid, $child_content)) {
+        // TODO: Inform user of error.
+        return;
+      }
 
       $weight = $child_content[array_key_last($child_content)]['weight'];
       $weight++;
@@ -283,16 +298,14 @@ final class ManageTopicContentForm extends FormBase {
 
     $topic = $this->entityTypeManager->getStorage('node')->load($topic_nid);
 
-    $vals = $topic->get('field_topic_content')->getValue();
     // TODO: Do a diff on the arrays and only update the field if different.
-
-    $new_vals = [];
+    $field_topic_content_updated = [];
 
     foreach (array_keys($child_content) as $nid) {
-      $new_vals[] = ['target_id' => $nid];
+      $field_topic_content_updated[] = ['target_id' => $nid];
     }
 
-    $topic->get('field_topic_content')->setValue($new_vals);
+    $topic->get('field_topic_content')->setValue($field_topic_content_updated);
     $topic->save();
 
     $form_state->setRedirect('entity.node.canonical', ['node' => $topic_nid]);
