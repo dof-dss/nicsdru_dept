@@ -23,20 +23,37 @@ function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInt
 
   // Remove any links for the current sitemap variant that don't belong to this
   // variants' domain.
-  foreach ($links as $key => &$link) {
-    if (str_contains($link['url'], 'http://')) {
-      // Normalise to https://.
-      $link['url'] = str_replace('http://', 'https://', $link['url']);
-    }
-
-    // Rewrite PSH domain pattern to full proper path.
-    if (str_contains($link['url'], '.platformsh.site') || str_contains($link['url'], '://default/')) {
-      $url_parts = parse_url($link['url']);
-      $link['url'] = $dept->url() . $url_parts['path'];
-    }
+  foreach ($links as $key => &$link) {;
+    dept_sitemap_handle_domain_link($link, $dept_path);
 
     if (!str_contains($link['url'], $dept_path)) {
       unset($links[$key]);
     }
   }
+}
+
+function dept_sitemap_handle_domain_link(&$link, $dept_path) {
+  $link['url'] = dept_sitemap_handle_main_content_url($link['url'], $dept_path);
+
+  // Handle any translation sets.
+  if (!empty($link['alternate_urls'])) {
+    foreach ($link['alternate_urls'] as $langcode => $url) {
+      $link['alternate_urls'][$langcode] = dept_sitemap_handle_main_content_url($url, $dept_path);
+    }
+  }
+}
+
+function dept_sitemap_handle_main_content_url(string $url, string $dept_path): string {
+  // Normalise to https://.
+  if (str_contains($url, 'http://')) {
+    $url = str_replace('http://', 'https://', $url);
+  }
+
+  // Rewrite PSH domain pattern to full proper path.
+  if (str_contains($url, '.platformsh.site') || str_contains($url, '://default/')) {
+    $url_parts = parse_url($url);
+    $url = $dept_path . $url_parts['path'];
+  }
+
+  return $url;
 }
