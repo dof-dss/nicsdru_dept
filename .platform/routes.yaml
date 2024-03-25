@@ -61,6 +61,10 @@
     enabled: false
 #---------------------------------
 "https://www.{default}/":
+  type: redirect
+  to: "https://nigov.{default}/"
+
+"https://{default}/":
   type: upstream
   upstream: "dept:http"
   cache:
@@ -71,7 +75,3 @@
         to: https://{default}/$2
         regexp: true
         code: 301
-
-"https://{default}/":
-  type: redirect
-  to: "https://www.{default}/"
