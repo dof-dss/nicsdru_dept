@@ -97,6 +97,7 @@ body.drag {
 
 .tabledrag-handle {
   position: relative;
+  left: 7px;
   z-index: 1;
   overflow: visible;
   cursor: move;
@@ -318,9 +319,18 @@ body.drag {
   float: right;
 }
 
-
-
-
 abbr.warning.tabledrag-changed {
   text-decoration: none;
+}
+
+.touchevents a.tabledrag-handle .handle {
+  height: auto;
+}
+
+.manage-topic-content-remove-cell {
+  text-align: center;
+}
+
+.tabledrag-changed {
+  color: #b91c1c;
 }

@@ -1,0 +1,26 @@
+uuid: 6d7b6416-bdc0-4c6e-94fa-a96ff4ba6ba3
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+label: 'Topic child content'
+id: topic_child_content
+description: 'Linkit profile to provide a list of child content for topics. '
+matchers:
+  a34fbebc-330f-4e60-bd95-717519a97361:
+    id: 'entity:node'
+    uuid: a34fbebc-330f-4e60-bd95-717519a97361
+    settings:
+      metadata: ''
+      bundles:
+        application: application
+        article: article
+        contact: contact
+        publication: publication
+        subtopic: subtopic
+      group_by_bundle: true
+      substitution_type: canonical
+      limit: 100
+      include_unpublished: true
+    weight: 0
