@@ -37,7 +37,7 @@ function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInt
  * collection.
  */
 function dept_sitemap_handle_domain_link(&$link, $dept_path) {
-  $link['url'] = dept_sitemap_handle_main_content_url($link['url'], $dept_path);
+  $link['url'] = dept_sitemap_handle_content_url($link['url'], $dept_path);
 
   // Handle any translation sets.
   if (!empty($link['alternate_urls'])) {
