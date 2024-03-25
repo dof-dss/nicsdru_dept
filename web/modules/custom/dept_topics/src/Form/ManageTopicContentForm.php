@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace Drupal\dept_topics\Form;
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -17,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class ManageTopicContentForm extends FormBase {
 
   /**
-   * The Topic Manager service.
+   * The Topic manager service.
    *
    * @var \Drupal\dept_topics\TopicManager
    */
@@ -41,11 +44,11 @@ final class ManageTopicContentForm extends FormBase {
    * Constructor.
    *
    * @param \Drupal\dept_topics\TopicManager $topic_manager
-   *   The Topic Manager service.
+   *   The Topic manager service.
    * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
-   *   The alias manager.
+   *   The Alias manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
+   *   The Entity Type manager.
    */
   public function __construct(TopicManager $topic_manager, AliasManagerInterface $alias_manager, EntityTypeManagerInterface $entity_type_manager) {
     $this->topicManager = $topic_manager;
@@ -121,10 +124,19 @@ final class ManageTopicContentForm extends FormBase {
       '#value' => $form_state->getValue('topic_nid') ?? $nid,
     ];
 
-    // Stores the list of nids that are to be removed when the content table is recreated.
+    // Stores the list of nids that are to be removed when the child content table is recreated.
     $form['removed_children'] = [
       '#type' => 'hidden',
       '#value' => $form_state->getValue('removed_children') ?? '',
+    ];
+
+    $form['form_messages'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => '',
+      '#attributes' => [
+        'id' => 'manage-topic-content-form-messages',
+      ],
     ];
 
     $form['child_content'] = [
@@ -147,12 +159,14 @@ final class ManageTopicContentForm extends FormBase {
       $child_contents = $node->get('field_topic_content')->referencedEntities();
     }
     else {
-      // Form state only holds the nids, so we load the nodes to get access the title.
+      // Form state only holds the nids, so we load the nodes to access the title.
       $child_contents = $form_state->getValue('child_content');
       $child_contents = $this->entityTypeManager->getStorage('node')->loadMultiple(array_keys($child_contents));
     }
 
     foreach ($child_contents as $weight => $child) {
+
+      // Don't add removed child content from the table.
       if (!empty($form['removed_children']['#value'])) {
         if (in_array($child->id(), explode(',', $form['removed_children']['#value']))) {
           continue;
@@ -202,7 +216,7 @@ final class ManageTopicContentForm extends FormBase {
             'manage-topic-content-remove-cell'
           ],
           'title' => $this->t('Remove this content from the topic.')
-      ],
+        ],
       ];
     }
 
@@ -227,8 +241,8 @@ final class ManageTopicContentForm extends FormBase {
         'class' => [
           'manage-topic-content-cancel',
           'button--danger'
-        ]
-      ]
+        ],
+      ],
     ];
 
     return $form;
@@ -238,7 +252,56 @@ final class ManageTopicContentForm extends FormBase {
    * Callback to return the child content render array.
    */
   public function childContentCallback(array &$form, FormStateInterface $form_state) {
+    if ($form_state->getErrors()) {
+      $response = new AjaxResponse();
+      $messages = '';
+
+      foreach ($form_state->getErrors() as $error) {
+        $messages = $error . '<br>';
+      }
+
+      $response->addCommand(new HtmlCommand('#manage-topic-content-form-messages', $messages));
+      $response->addCommand(new InvokeCommand('#manage-topic-content-form-messages', 'addClass', ['messages messages--error']));
+      return $response;
+    }
+
     return $form['child_content'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $parents = $form_state->getTriggeringElement()['#parents'];
+
+    // Append call.
+    if ($parents[0] === 'add') {
+      $add_path = $form_state->getValue('add_path');
+
+      if (empty($add_path)) {
+        $form_state->setErrorByName('add_path', 'You must provide a URL.');
+        return;
+      }
+
+      // We only want valid url paths and not the typed text.
+      if (!str_starts_with($add_path, 'http')) {
+        $form_state->setErrorByName('add_path', 'Path must be a valid URL');
+        return;
+      }
+
+      $child_content = $form_state->getValue('child_content');
+      $new_content_nid = $this->extractNodeIdFromUrl($add_path);
+
+      if (is_array($child_content)) {
+        // Check if there is already an entry for this node.
+        if (array_key_exists($new_content_nid, $child_content)) {
+          $form_state->setErrorByName('add_path', 'Child content entry already exists for this URL.');
+          return;
+        }
+      }
+    }
+
+    parent::validateForm($form, $form_state);
   }
 
   /**
@@ -252,29 +315,15 @@ final class ManageTopicContentForm extends FormBase {
     if ($parents[0] === 'add') {
       $add_path = $form_state->getValue('add_path');
 
-      // We only want valid paths.
-      if (!str_starts_with($add_path, 'http')) {
-        // TODO: Inform user of error.
-        return;
-      }
-
       $child_content = $form_state->getValue('child_content');
+      $new_content_nid = $this->extractNodeIdFromUrl($add_path);
 
-      // Strip the host and match the alias to a node id.
-      $host = $this->getRequest()->getSchemeAndHttpHost();
-      $alias = substr($add_path, strlen($host));
-      $path = $this->aliasManager->getPathByAlias($alias);
+      $weight = 0;
 
-      $new_content_nid = substr($path, 6);
-
-      // Check if there is already an entry for this node.
-      if (array_key_exists($new_content_nid, $child_content)) {
-        // TODO: Inform user of error.
-        return;
+      if (is_array($child_content)) {
+        $weight = $child_content[array_key_last($child_content)]['weight'];
+        $weight++;
       }
-
-      $weight = $child_content[array_key_last($child_content)]['weight'];
-      $weight++;
 
       $child_content[$new_content_nid] = [
         'weight' => $weight,
@@ -322,6 +371,20 @@ final class ManageTopicContentForm extends FormBase {
 
     $topic->save();
     $form_state->setRedirect('entity.node.canonical', ['node' => $topic_nid]);
+  }
+
+  /**
+   * Return the node ID for the given path.
+   */
+  protected function extractNodeIdFromUrl(string $url):int {
+    // Strip the host and match the alias to a node id.
+    $host = $this->getRequest()->getSchemeAndHttpHost();
+    $alias = substr($url, strlen($host));
+    $path = $this->aliasManager->getPathByAlias($alias);
+
+    $nid = (int) substr($path, 6);
+
+    return $nid;
   }
 
 }
