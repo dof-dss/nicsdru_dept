@@ -5,6 +5,7 @@
  * Primary module hooks for Departmental sites: Sitemaps module.
  */
 
+use Drupal\dept_core\Entity\Department;
 use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
 
 /**
@@ -15,7 +16,7 @@ function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInt
   $dept_manager = \Drupal::service('department.manager');
   $dept = $dept_manager->getDepartment($sitemap->id());
 
-  if (empty($dept)) {
+  if ($dept instanceof Department === FALSE) {
     return;
   }
 
