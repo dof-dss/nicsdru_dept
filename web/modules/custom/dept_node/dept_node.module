@@ -334,10 +334,8 @@ function dept_node_clientside_validation_should_validate($element, FormStateInte
     return TRUE;
   }
 
-  $classes = NestedArray::getValue($element, ['#attributes', 'class'], $key_exists);
-  if ($key_exists) {
-    if (in_array("node-form", $classes)) {
-      return TRUE;
-    }
+  if (str_starts_with($form_id, 'node_')
+    || str_starts_with($form_id, 'media_')) {
+    return TRUE;
   }
 }
