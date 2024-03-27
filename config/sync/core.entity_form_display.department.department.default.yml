@@ -7,9 +7,9 @@ dependencies:
     - field.field.department.department.field_dept_accessibility
     - field.field.department.department.field_dept_contact_info
     - field.field.department.department.field_dept_footer_links
+    - field.field.department.department.field_dept_location
     - field.field.department.department.field_dept_management_structure
     - field.field.department.department.field_dept_social_media_links
-    - field.field.department.department.field_location
   module:
     - dept_core
     - google_map_field
@@ -68,6 +68,12 @@ content:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
+  field_dept_location:
+    type: google_map_field_default
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_dept_management_structure:
     type: text_textarea_with_summary
     weight: 9
@@ -85,12 +91,6 @@ content:
     settings:
       placeholder_url: ''
       placeholder_title: ''
-    third_party_settings: {  }
-  field_location:
-    type: google_map_field_default
-    weight: 8
-    region: content
-    settings: {  }
     third_party_settings: {  }
   label:
     type: string_textfield
