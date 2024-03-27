@@ -5,7 +5,6 @@
  * Departmental Node module for Departmental sites.
  */
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
@@ -331,11 +330,6 @@ function dept_node_clientside_validation_should_validate($element, FormStateInte
   // This works but looks odd, ideally this hook should have been called _should_not_validate() as this makes
   // about as much sense as a sunroof on a submarine.
   if (str_ends_with($form_id, 'scheduled_transitions_add_form_form')) {
-    return TRUE;
-  }
-
-  if (str_starts_with($form_id, 'node_')
-    || str_starts_with($form_id, 'media_')) {
     return TRUE;
   }
 }
