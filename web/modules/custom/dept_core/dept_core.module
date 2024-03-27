@@ -391,7 +391,7 @@ function dept_core_set_entity_domain_defaults(&$form) {
  * Implements hook_clientside_validation_should_validate().
  */
 function dept_core_clientside_validation_should_validate($element, FormStateInterface &$form_state, $form_id) {
-  // If node or media form, clientside validation won't valida
+  // If node or media form, clientside validation won't validate.
   if (str_starts_with($form_id, 'node_')
     || str_starts_with($form_id, 'media_')) {
     return TRUE;
