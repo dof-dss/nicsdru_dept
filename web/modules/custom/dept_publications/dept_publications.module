@@ -173,7 +173,7 @@ function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBa
     foreach ($query->where[1]['conditions'] as $index => $condition) {
       if ($condition['field'] === 'node__field_publication_secure_files.field_publication_secure_files_target_id') {
         // Unset this condition if stats supervisor/related permissions.
-        if ($current_user->hasPermission('view any unpublished secure publication')) {
+        if ($current_user->hasPermission('view any unpublished secure publication') || $current_user->hasPermission('view own unpublished secure publication')) {
           unset($query->where[1]['conditions'][$index]);
 
           // Set a notice message for top-level admins.
@@ -191,7 +191,7 @@ function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBa
     foreach ($query->where[1]['conditions'] as $index => $condition) {
       if ($condition['field'] === 'node_field_data_node_field_revision__node__field_publication_secure_files.field_publication_secure_files_target_id') {
         // Unset this condition if stats supervisor/related permissions.
-        if ($current_user->hasPermission('view any unpublished secure publication')) {
+        if ($current_user->hasPermission('view any unpublished secure publication') || $current_user->hasPermission('view own unpublished secure publication')) {
           unset($query->where[1]['conditions'][$index]);
 
           // Set a notice message for top-level admins.
@@ -209,7 +209,7 @@ function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBa
     foreach ($query->where[1]['conditions'] as $index => $condition) {
       if ($condition['field'] === 'media_field_data.bundle' && $condition['value'][0] === 'secure_file') {
         // Unset this condition if stats supervisor/related permissions.
-        if ($current_user->hasPermission('view any unpublished secure publication')) {
+        if ($current_user->hasPermission('view any unpublished secure publication') || $current_user->hasPermission('view own unpublished secure publication')) {
           unset($query->where[1]['conditions'][$index]);
 
           // Set a notice message for top-level admins.
