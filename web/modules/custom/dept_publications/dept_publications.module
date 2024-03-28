@@ -236,3 +236,21 @@ function dept_publications_form_views_exposed_form_alter(&$form, FormStateInterf
     ksort($form['type']['#options']);
   }
 }
+
+
+/**
+ * Implements hook_preprocess_views_view_field().)
+ */
+function dept_publications_preprocess_views_view_field(&$variables) {
+  $view = $variables['view'];
+
+  if ($view->storage->id() === 'workflow_moderation') {
+    if ($variables['field']->field === 'type' && $variables['output'] == 'Publication') {
+      $entity = $variables["row"]->_entity;
+      if ($entity->hasField('field_publication_secure_files') && !$entity->get('field_publication_secure_files')->isEmpty()) {
+          $variables['output'] = 'Publication (secure)';
+      }
+    }
+  }
+}
+
