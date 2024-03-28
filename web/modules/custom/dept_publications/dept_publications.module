@@ -243,12 +243,14 @@ function dept_publications_form_views_exposed_form_alter(&$form, FormStateInterf
 function dept_publications_preprocess_views_view_field(&$variables) {
   $view = $variables['view'];
 
-  // If the content type is publication with secure attachments, update the 'type' text to indicate this.
+  // If the content type is publication with secure attachments, update the 'type' text if it is unpublished.
   if ($view->storage->id() === 'workflow_moderation' || $view->storage->id() === 'content') {
     if ($variables['field']->field === 'type' && $variables['output'] == 'Publication') {
       $entity = $variables["row"]->_entity;
       if ($entity->hasField('field_publication_secure_files') && !$entity->get('field_publication_secure_files')->isEmpty()) {
-        $variables['output'] = t('Publication (secure)');
+        if ($entity->get('moderation_state')->getString() !== 'published') {
+          $variables['output'] = t('Publication (secure)');
+        }
       }
     }
   }
