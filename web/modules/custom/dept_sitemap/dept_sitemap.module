@@ -74,3 +74,33 @@ function dept_sitemap_handle_content_url(string $url, string $dept_path): string
 
   return $url;
 }
+
+/**
+ * Implements hook_cron().
+ */
+function dept_sitemap_cron() {
+  // Update sitemap index urls to remove wildcard hostname patterns.
+  // NB: workaround for lack of a hook or event to use when a sitemap
+  // index is published or saved.
+  /* @var \Drupal\dept_core\DepartmentManager $dept_manager */
+  $dept_manager = \Drupal::service('department.manager');
+  $dept = $dept_manager->getCurrentDepartment();
+
+  if ($dept instanceof Department === FALSE) {
+    \Drupal::logger('dept_sitemap')->error(t('No dept found when running cron hook'));
+    return;
+  }
+
+  $url_parts = parse_url($dept->url());
+  $hostname_bits = explode('.', $url_parts['host']);
+  array_shift($hostname_bits);
+  $hostname_suffix = implode('.', $hostname_bits);
+
+  \Drupal::database()->update('simple_sitemap')
+    ->condition('delta', 0)
+    ->expression('sitemap_string', "REPLACE(sitemap_string, :old_value, :new_value)", [
+      ':old_value' => '*.uk-1.platformsh.site',
+      ':new_value' => $hostname_suffix,
+    ])
+    ->execute();
+}
