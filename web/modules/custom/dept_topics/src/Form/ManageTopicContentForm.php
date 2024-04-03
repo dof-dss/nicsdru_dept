@@ -161,7 +161,9 @@ final class ManageTopicContentForm extends FormBase {
     else {
       // Form state only holds the nids, so we load the nodes to access the title.
       $child_contents = $form_state->getValue('child_content');
-      $child_contents = $this->entityTypeManager->getStorage('node')->loadMultiple(array_keys($child_contents));
+      if (is_array($child_contents)) {
+        $child_contents = $this->entityTypeManager->getStorage('node')->loadMultiple(array_keys($child_contents));
+      }
     }
 
     foreach ($child_contents as $weight => $child) {
@@ -315,12 +317,12 @@ final class ManageTopicContentForm extends FormBase {
     if ($parents[0] === 'add') {
       $add_path = $form_state->getValue('add_path');
 
-      $child_content = $form_state->getValue('child_content');
+      $child_content = empty($form_state->getValue('child_content')) ? [] : $form_state->getValue('child_content');
       $new_content_nid = $this->extractNodeIdFromUrl($add_path);
 
       $weight = 0;
 
-      if (is_array($child_content)) {
+      if (is_array($child_content) && !empty($child_content)) {
         $weight = $child_content[array_key_last($child_content)]['weight'];
         $weight++;
       }
