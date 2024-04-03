@@ -82,17 +82,40 @@ function dept_sitemap_cron() {
   // Update sitemap index urls to remove wildcard hostname patterns.
   // NB: workaround for lack of a hook or event to use when a sitemap
   // index is published or saved.
-  $host = \Drupal::request()->getHost();
-  $url_parts = parse_url($host);
-  $hostname_bits = explode('.', $url_parts['path']);
-  array_shift($hostname_bits);
-  $hostname_suffix = implode('.', $hostname_bits);
-
-  \Drupal::database()->update('simple_sitemap')
-    ->condition('delta', 0)
-    ->expression('sitemap_string', "REPLACE(sitemap_string, :old_value, :new_value)", [
-      ':old_value' => '*.uk-1.platformsh.site',
-      ':new_value' => $hostname_suffix,
+  // ANOTHER NB: Not possible ask for the site's full hostname
+  // with drush as the active URL is not passed, so you end up with
+  // http://default. In that case, we'll get the context of each dept
+  // by loading the object using the sitemap id and asking it for its
+  // URL for the current environment. From there we can use it to update
+  // the XML string using a MySQL regex function where we know there might
+  // be a need... eg: where the hostname is the wildcard pattern, spotted by
+  // a '*' in the URL hostname.
+  $results = \Drupal::database()
+    ->query("SELECT * FROM {simple_sitemap} WHERE delta = :delta", [
+      ':delta' => 0,
     ])
-    ->execute();
+    ->fetchAll();
+
+  if (empty($results)) {
+    return;
+  }
+
+  foreach ($results as $row) {
+    $dept = \Drupal::service('department.manager')->getDepartment($row->type);
+    $dept_url_parts = parse_url($dept->url());
+    $dept_hostname = $dept_url_parts['host'];
+    $hostname_bits = explode('.', $dept_hostname);
+    array_shift($hostname_bits);
+    $hostname_suffix = implode('.', $hostname_bits);
+
+    $query = \Drupal::database()->update('simple_sitemap')
+      ->condition('delta', 0)
+      ->condition('type', $row->type)
+      ->condition('sitemap_string', '%.' . $hostname_suffix . '.%', 'LIKE')
+      ->expression('sitemap_string', "REGEXP_REPLACE(sitemap_string, :pattern, :replacement)", [
+        ':pattern' => '.\\*.',
+        ':replacement' => '.' . $hostname_suffix . '.',
+      ])
+      ->execute();
+  }
 }
