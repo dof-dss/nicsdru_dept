@@ -1,0 +1,27 @@
+/* Vertical rhythm presets =========================================== */
+/* Set the base images folder */
+/* Breakpoints ======================================================== */
+/* Layout max widths for larger breakpoints =========================== */
+/* line 3, src/scss/admin/forms.scss */
+.node-form .layout-node-form {
+  display: block;
+}
+
+@media (min-width: 1200px) {
+  /* line 3, src/scss/admin/forms.scss */
+  .node-form .layout-node-form {
+    display: grid;
+    grid-template-columns: minmax(45rem, 55rem) minmax(22.5rem, 1fr);
+  }
+  /* line 10, src/scss/admin/forms.scss */
+  .node-form .layout-node-form .layout-region--node-secondary {
+    max-width: 30rem;
+  }
+}
+
+/* line 15, src/scss/admin/forms.scss */
+.node-form .layout-node-form .layout-region--node-main {
+  margin-inline: unset;
+}
+
+/*# sourceMappingURL=forms.css.map */

@@ -1,0 +1,18 @@
+@import '../init';
+
+.node-form .layout-node-form {
+  display: block;
+
+  @include breakpoint($desk) {
+    display: grid;
+    grid-template-columns: minmax(45rem, 55rem) minmax(22.5rem, 1fr);
+
+    .layout-region--node-secondary {
+      max-width: 30rem;
+    }
+  }
+
+  .layout-region--node-main {
+    margin-inline: unset;
+  }
+}
