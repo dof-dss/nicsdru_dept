@@ -449,3 +449,9 @@ body {
     margin-inline: unset;
   }
 }
+
+.messages-list {
+  .messages__title {
+    color: $white;
+  }
+}
