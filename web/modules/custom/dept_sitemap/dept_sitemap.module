@@ -5,24 +5,94 @@
  * Primary module hooks for Departmental sites: Sitemaps module.
  */
 
+use Drupal\dept_core\Entity\Department;
 use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
 
 /**
  * Implements hook_simple_sitemap_links_alter().
  */
 function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInterface $sitemap) {
+  /** @var \Drupal\dept_core\DepartmentManager $dept_manager */
+  $dept_manager = \Drupal::service('department.manager');
+  $dept = $dept_manager->getDepartment($sitemap->id());
 
-  /** @var \Drupal\domain\Entity\Domain $domain */
-  $domain = \Drupal::entityTypeManager()->getStorage('domain')->load($sitemap->id());
+  if ($dept instanceof Department === FALSE) {
+    return;
+  }
 
-  $dept_path = $domain->getPath();
+  $dept_path = $dept->url();
 
   // Remove any links for the current sitemap variant that don't belong to this
   // variants' domain.
-  foreach ($links as $key => $link) {
-    if (!str_starts_with($link['url'], $dept_path)) {
+  foreach ($links as $key => &$link) {
+    dept_sitemap_handle_domain_link($link, $dept_path);
+
+    if (!str_contains($link['url'], $dept_path)) {
       unset($links[$key]);
     }
-
   }
+}
+
+/**
+ * Processes a single link array from the sitemap $links
+ * collection.
+ */
+function dept_sitemap_handle_domain_link(&$link, $dept_path) {
+  $link['url'] = dept_sitemap_handle_content_url($link['url'], $dept_path);
+
+  // Handle any translation sets.
+  if (!empty($link['alternate_urls'])) {
+    foreach ($link['alternate_urls'] as $langcode => $url) {
+      $link['alternate_urls'][$langcode] = dept_sitemap_handle_content_url($url, $dept_path);
+    }
+  }
+}
+
+/**
+ * Does the preprocessing of a given content URL
+ * with the department hostname as context.
+ *
+ * @param string $url
+ *   The full URL to process.
+ * @param string $dept_path
+ *   The hostname of the department that this applies to.
+ *
+ * @return string
+ *   A tidied up and valid department URL.
+ */
+function dept_sitemap_handle_content_url(string $url, string $dept_path): string {
+  // Normalise to https://.
+  if (str_contains($url, 'http://')) {
+    $url = str_replace('http://', 'https://', $url);
+  }
+
+  // Rewrite PSH domain pattern to full proper path.
+  if (str_contains($url, '.platformsh.site') || str_contains($url, '://default/')) {
+    $url_parts = parse_url($url);
+    $url = $dept_path . $url_parts['path'];
+  }
+
+  return $url;
+}
+
+/**
+ * Implements hook_cron().
+ */
+function dept_sitemap_cron() {
+  // Update sitemap index urls to remove wildcard hostname patterns.
+  // NB: workaround for lack of a hook or event to use when a sitemap
+  // index is published or saved.
+  $host = \Drupal::request()->getHost();
+  $url_parts = parse_url($host);
+  $hostname_bits = explode('.', $url_parts['path']);
+  array_shift($hostname_bits);
+  $hostname_suffix = implode('.', $hostname_bits);
+
+  \Drupal::database()->update('simple_sitemap')
+    ->condition('delta', 0)
+    ->expression('sitemap_string', "REPLACE(sitemap_string, :old_value, :new_value)", [
+      ':old_value' => '*.uk-1.platformsh.site',
+      ':new_value' => $hostname_suffix,
+    ])
+    ->execute();
 }
