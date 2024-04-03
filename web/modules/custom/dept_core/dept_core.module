@@ -354,6 +354,9 @@ function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) 
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function dept_core_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Attach admin theme fixes.
+  $form['#attached']['library'][] = 'nicsdru_dept_theme/admin-forms';
+
   if (\Drupal::currentUser()->hasPermission('view departments on entity forms') === FALSE) {
     dept_core_set_entity_domain_defaults($form);
   }
