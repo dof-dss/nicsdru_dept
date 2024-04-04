@@ -2,6 +2,7 @@
 echo ">>> Started at: $(date -u +"%Y-%m-%d %H:%M:%S")"
 
 departments=(daera communities economy education finance health infrastructure justice executiveoffice)
+# Note: This is not the full list of content types, review the other imports in this script.
 content_types=(topic subtopic actions application article collection consultation contact easychart gallery heritage_site infogram link page profile protected_area ual)
 
 # Check that the $MIGRATE_IGNORE_SITES environment variable is present.
