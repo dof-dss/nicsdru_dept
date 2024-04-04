@@ -252,6 +252,9 @@ final class ManageTopicContentForm extends FormBase {
    * Callback to return the child content render array.
    */
   public function childContentCallback(array &$form, FormStateInterface $form_state) {
+    // Remove Linkit entry after adding new content.
+    $form['add_existing']['add_path']['#value'] = $form_state->getValue('add_path');
+
     return $form;
   }
 
@@ -318,6 +321,8 @@ final class ManageTopicContentForm extends FormBase {
       ];
 
       $form_state->setValue('child_content', $child_content);
+      // Clear the path value to remove the link in the Linkit field.
+      $form_state->setValue('add_path', '');
     }
 
     // Deleted call.
