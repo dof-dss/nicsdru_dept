@@ -4,9 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\dept_topics\Form;
 
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -82,6 +79,9 @@ final class ManageTopicContentForm extends FormBase {
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
     $form['#attached']['library'][] = 'dept_topics/manage_topic_content';
 
+    $form['#prefix'] = '<div id="form-wrapper">';
+    $form['#suffix'] = '</div>';
+
     $form['add_existing'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Add existing content'),
@@ -110,7 +110,7 @@ final class ManageTopicContentForm extends FormBase {
       '#submit' => ['::ajaxSubmit'],
       '#ajax' => [
         'callback' => '::childContentCallback',
-        'wrapper' => 'child-content-wrapper',
+        'wrapper' => 'form-wrapper',
       ],
       '#attributes' => [
         'class' => [
@@ -142,9 +142,7 @@ final class ManageTopicContentForm extends FormBase {
     $form['child_content'] = [
       '#type' => 'table',
       '#tree' => TRUE,
-      '#prefix' => '<div id="child-content-wrapper">',
-      '#suffix' => '</div>',
-      '#empty' => $this->t('This topic has no child content'),
+      '#empty' => $this->t('This topic has no child content.'),
       '#tabledrag' => [
         [
           'action' => 'order',
@@ -161,7 +159,9 @@ final class ManageTopicContentForm extends FormBase {
     else {
       // Form state only holds the nids, so we load the nodes to access the title.
       $child_contents = $form_state->getValue('child_content');
-      $child_contents = $this->entityTypeManager->getStorage('node')->loadMultiple(array_keys($child_contents));
+      if (is_array($child_contents)) {
+        $child_contents = $this->entityTypeManager->getStorage('node')->loadMultiple(array_keys($child_contents));
+      }
     }
 
     foreach ($child_contents as $weight => $child) {
@@ -203,7 +203,7 @@ final class ManageTopicContentForm extends FormBase {
         '#submit' => ['::ajaxSubmit'],
         '#ajax' => [
           'callback' => '::childContentCallback',
-          'wrapper' => 'child-content-wrapper',
+          'wrapper' => 'form-wrapper',
         ],
         '#attributes' => [
           'class' => [
@@ -252,20 +252,10 @@ final class ManageTopicContentForm extends FormBase {
    * Callback to return the child content render array.
    */
   public function childContentCallback(array &$form, FormStateInterface $form_state) {
-    if ($form_state->getErrors()) {
-      $response = new AjaxResponse();
-      $messages = '';
+    // Remove Linkit entry after adding new content.
+    $form['add_existing']['add_path']['#value'] = $form_state->getValue('add_path');
 
-      foreach ($form_state->getErrors() as $error) {
-        $messages = $error . '<br>';
-      }
-
-      $response->addCommand(new HtmlCommand('#manage-topic-content-form-messages', $messages));
-      $response->addCommand(new InvokeCommand('#manage-topic-content-form-messages', 'addClass', ['messages messages--error']));
-      return $response;
-    }
-
-    return $form['child_content'];
+    return $form;
   }
 
   /**
@@ -315,12 +305,12 @@ final class ManageTopicContentForm extends FormBase {
     if ($parents[0] === 'add') {
       $add_path = $form_state->getValue('add_path');
 
-      $child_content = $form_state->getValue('child_content');
+      $child_content = empty($form_state->getValue('child_content')) ? [] : $form_state->getValue('child_content');
       $new_content_nid = $this->extractNodeIdFromUrl($add_path);
 
       $weight = 0;
 
-      if (is_array($child_content)) {
+      if (is_array($child_content) && !empty($child_content)) {
         $weight = $child_content[array_key_last($child_content)]['weight'];
         $weight++;
       }
@@ -331,6 +321,8 @@ final class ManageTopicContentForm extends FormBase {
       ];
 
       $form_state->setValue('child_content', $child_content);
+      // Clear the path value to remove the link in the Linkit field.
+      $form_state->setValue('add_path', '');
     }
 
     // Deleted call.
@@ -364,9 +356,12 @@ final class ManageTopicContentForm extends FormBase {
     $field_topic_content_updated = [];
 
     // Build our entity reference array and overwrite the existing value.
-    foreach (array_keys($child_content) as $nid) {
-      $field_topic_content_updated[] = ['target_id' => $nid];
+    if (is_array($child_content)) {
+      foreach (array_keys($child_content) as $nid) {
+        $field_topic_content_updated[] = ['target_id' => $nid];
+      }
     }
+
     $topic->get('field_topic_content')->setValue($field_topic_content_updated);
 
     $topic->save();
