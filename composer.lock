@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6778811d90ffcad266e8612a0e098273",
+    "content-hash": "a8e65b3ebba1d4a5e9162124f39962fc",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5576,68 +5576,6 @@
             "homepage": "https://www.drupal.org/project/fpa",
             "support": {
                 "source": "https://git.drupalcode.org/project/fpa"
-            }
-        },
-        {
-            "name": "drupal/geolocation",
-            "version": "4.0.0-alpha5",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/geolocation.git",
-                "reference": "4.0.0-alpha5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/geolocation-4.0.0-alpha5.zip",
-                "reference": "4.0.0-alpha5",
-                "shasum": "747dcd3ca66c7dee05893fda8a404f631a4c2691"
-            },
-            "require": {
-                "drupal/core": "^10.0",
-                "php": "^8.1"
-            },
-            "require-dev": {
-                "drupal/address": "*",
-                "drupal/feeds": "*",
-                "drupal/geofield": "*",
-                "drupal/geolocation_demo": "*",
-                "drupal/geolocation_geometry": "*",
-                "drupal/geolocation_google_maps": "*",
-                "drupal/geolocation_google_maps_demo": "*",
-                "drupal/geolocation_google_static_maps": "*",
-                "drupal/geolocation_leaflet": "*",
-                "drupal/search_api": "*"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "4.0.0-alpha5",
-                    "datestamp": "1707541909",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "derjochenmeyer",
-                    "homepage": "https://www.drupal.org/u/derjochenmeyer"
-                },
-                {
-                    "name": "cadamski",
-                    "homepage": "https://www.drupal.org/u/cadamski"
-                }
-            ],
-            "description": "Provides a simple geolocation Drupal field type to store and display location data (lat, lng).",
-            "homepage": "https://www.drupal.org/project/geolocation",
-            "support": {
-                "source": "https://git.drupal.org/project/geolocation.git",
-                "issues": "https://www.drupal.org/project/issues/geolocation"
             }
         },
         {
