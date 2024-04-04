@@ -351,9 +351,12 @@ final class ManageTopicContentForm extends FormBase {
     $field_topic_content_updated = [];
 
     // Build our entity reference array and overwrite the existing value.
-    foreach (array_keys($child_content) as $nid) {
-      $field_topic_content_updated[] = ['target_id' => $nid];
+    if (is_array($child_content)) {
+      foreach (array_keys($child_content) as $nid) {
+        $field_topic_content_updated[] = ['target_id' => $nid];
+      }
     }
+
     $topic->get('field_topic_content')->setValue($field_topic_content_updated);
 
     $topic->save();
