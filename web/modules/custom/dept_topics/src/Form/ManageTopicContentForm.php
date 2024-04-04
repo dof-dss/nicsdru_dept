@@ -4,9 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\dept_topics\Form;
 
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -82,6 +79,9 @@ final class ManageTopicContentForm extends FormBase {
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
     $form['#attached']['library'][] = 'dept_topics/manage_topic_content';
 
+    $form['#prefix'] = '<div id="form-wrapper">';
+    $form['#suffix'] = '</div>';
+
     $form['add_existing'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Add existing content'),
@@ -110,7 +110,7 @@ final class ManageTopicContentForm extends FormBase {
       '#submit' => ['::ajaxSubmit'],
       '#ajax' => [
         'callback' => '::childContentCallback',
-        'wrapper' => 'child-content-wrapper',
+        'wrapper' => 'form-wrapper',
       ],
       '#attributes' => [
         'class' => [
@@ -142,9 +142,7 @@ final class ManageTopicContentForm extends FormBase {
     $form['child_content'] = [
       '#type' => 'table',
       '#tree' => TRUE,
-      '#prefix' => '<div id="child-content-wrapper">',
-      '#suffix' => '</div>',
-      '#empty' => $this->t('This topic has no child content'),
+      '#empty' => $this->t('This topic has no child content.'),
       '#tabledrag' => [
         [
           'action' => 'order',
@@ -205,7 +203,7 @@ final class ManageTopicContentForm extends FormBase {
         '#submit' => ['::ajaxSubmit'],
         '#ajax' => [
           'callback' => '::childContentCallback',
-          'wrapper' => 'child-content-wrapper',
+          'wrapper' => 'form-wrapper',
         ],
         '#attributes' => [
           'class' => [
@@ -254,20 +252,7 @@ final class ManageTopicContentForm extends FormBase {
    * Callback to return the child content render array.
    */
   public function childContentCallback(array &$form, FormStateInterface $form_state) {
-    if ($form_state->getErrors()) {
-      $response = new AjaxResponse();
-      $messages = '';
-
-      foreach ($form_state->getErrors() as $error) {
-        $messages = $error . '<br>';
-      }
-
-      $response->addCommand(new HtmlCommand('#manage-topic-content-form-messages', $messages));
-      $response->addCommand(new InvokeCommand('#manage-topic-content-form-messages', 'addClass', ['messages messages--error']));
-      return $response;
-    }
-
-    return $form['child_content'];
+    return $form;
   }
 
   /**
