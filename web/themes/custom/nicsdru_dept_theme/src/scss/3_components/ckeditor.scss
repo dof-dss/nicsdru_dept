@@ -5,16 +5,7 @@
 @import '../init';
 @import 'form/button/button-defs';
 
-
 $base-font-size: 16px;
-
-body {
-  font-family: $base-font-family;
-
-  p {
-    font-size: var(--font-size-base);
-  }
-}
 
 .ck .ck-editor__main {
   border: 1px solid transparent;
@@ -118,11 +109,6 @@ body {
 
   h2,
   %h2 {
-    //@include adjust-font-size-to(24px);
-    //@include adjust-size-to(32px, line-height);
-    //@include adjust-size-to(32px 0 16px, margin)
-    //line-height: 2rem;
-    //margin: 2rem 0 1rem;
     @include responsive-typo-map($h2-text);
   }
 
@@ -403,38 +389,5 @@ body {
     background-color: $btn-primary;
     color: #fff;
     font-size: 14px;
-  }
-}
-
-.block-system-main-block .layout-node-form .layout-region__content,
-.block-system-main-block .department-form {
-  .field--type {
-    &-entity-reference,
-    &-link {
-      table {
-        th,
-        td {
-          background-color: $grey-lightest;
-          border-color: $grey-medium;
-          height: unset;
-        }
-
-        td:first-child ~ td,
-        th:first-child ~ th {
-          padding-left: var(--space-m);
-        }
-
-        th,
-        h4 {
-          font-size: var(--font-size-base);
-        }
-      }
-    }
-  }
-}
-
-.messages-list {
-  .messages__title {
-    color: $white;
   }
 }

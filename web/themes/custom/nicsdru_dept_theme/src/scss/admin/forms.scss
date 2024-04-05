@@ -1,5 +1,15 @@
 @import '../init';
 
+$base-font-size: 16px;
+
+body {
+  font-family: $base-font-family;
+
+  p {
+    font-size: var(--font-size-base);
+  }
+}
+
 .node-form .layout-node-form {
   display: block;
 
@@ -14,5 +24,38 @@
 
   .layout-region--node-main {
     margin-inline: unset;
+  }
+}
+
+.block-system-main-block .layout-node-form .layout-region__content,
+.block-system-main-block .department-form {
+  .field--type {
+    &-entity-reference,
+    &-link {
+      table {
+        th,
+        td {
+          background-color: $grey-lightest;
+          border-color: $grey-medium;
+          height: unset;
+        }
+
+        td:first-child ~ td,
+        th:first-child ~ th {
+          padding-left: var(--space-m);
+        }
+
+        th,
+        h4 {
+          font-size: var(--font-size-base);
+        }
+      }
+    }
+  }
+}
+
+.messages-list {
+  .messages__title {
+    color: $white;
   }
 }
