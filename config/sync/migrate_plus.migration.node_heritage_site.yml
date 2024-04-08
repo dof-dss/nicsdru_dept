@@ -1,7 +1,7 @@
 id: node_heritage_site
 label: 'Heritage site nodes'
 status: true
-dependencies: { }
+dependencies: {  }
 migration_group: migrate_nodes
 migration_tags:
   - dept_sites
@@ -12,38 +12,47 @@ source:
   node_type: heritage_site
   track_changes: true
   constants:
-    migrate_ignore_sites: 'MIGRATE_IGNORE_SITES'
+    migrate_ignore_sites: MIGRATE_IGNORE_SITES
 process:
   site_topics:
-    - plugin: sub_process
+    -
+      plugin: sub_process
       source: field_site_topics
       process:
         target_id:
-          - plugin: d7_node_lookup
+          -
+            plugin: d7_node_lookup
             source: target_id
   site_subtopics:
-    - plugin: sub_process
+    -
+      plugin: sub_process
       source: field_site_subtopics
       process:
         target_id:
-          - plugin: d7_node_lookup
+          -
+            plugin: d7_node_lookup
             source: target_id
   field_site_topics:
-    - plugin: merge
+    -
+      plugin: merge
       source:
         - '@site_topics'
         - '@site_subtopics'
   langcode:
-    - plugin: default_value
+    -
+      plugin: default_value
       source: langcode
       default_value: en
   title:
-    - plugin: get
+    -
+      plugin: get
       source: title
-    - plugin: callback
+    -
+      plugin: callback
       callable: trim
   uid:
-    - plugin: d7_user_lookup
+    -
+      plugin: d7_user_lookup
       source: node_uid
   status: status
   moderation_state:
@@ -51,37 +60,47 @@ process:
     source: status
     default_value: draft
     map:
-      - 0: draft
-      - 1: published
+      -
+        - draft
+      -
+        1: published
   created: created
   changed: changed
   promote: promote
   sticky: sticky
   revision_uid:
-    - plugin: d7_user_lookup
+    -
+      plugin: d7_user_lookup
       source: revision_uid
   revision_log: log
   revision_timestamp: timestamp
   body:
-    - plugin: get
+    -
+      plugin: get
       source: body
-    - plugin: str_replace
+    -
+      plugin: str_replace
       regex: true
-      search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
+      search: '/(<p>[<br>|\s]*&nbsp;<\/p>)/im'
       replace: ''
-    - plugin: str_replace
+    -
+      plugin: str_replace
       search: '&nbsp;</p>'
       replace: '</p>'
-    - plugin: str_replace
+    -
+      plugin: str_replace
       search: '&nbsp;'
       replace: ' '
-    - plugin: str_replace
+    -
+      plugin: str_replace
       regex: true
       search: /<a>(.+)<\/a>/iU
-      replace: '$1'
-    - plugin: media_wysiwyg_filter
+      replace: $1
+    -
+      plugin: media_wysiwyg_filter
   body/0/format:
-    - plugin: static_map
+    -
+      plugin: static_map
       source: body/0/format
       default_value: basic_html
       map:
@@ -93,9 +112,10 @@ process:
         paste_format: plain_text
         plain_text: plain_text
   field_address:
-    - plugin: callback
+    -
+      plugin: callback
       callable:
-        - '\Drupal\dept_migrate\AddressFieldMerge'
+        - \Drupal\dept_migrate\AddressFieldMerge
         - convertToAddressFieldFormat
       source:
         - field_address_line_1
@@ -106,7 +126,8 @@ process:
         - field_county
         - field_town
         - field_postcode
-    - plugin: addressfield
+    -
+      plugin: addressfield
   field_address_line_1: field_address_line_1
   field_address_line_2: field_address_line_2
   field_town: field_town
@@ -114,7 +135,8 @@ process:
   field_postcode: field_postcode
   field_sm_number: field_sm_number
   field_website:
-    - plugin: sub_process
+    -
+      plugin: sub_process
       source: field_website
       process:
         uri: value
@@ -122,20 +144,23 @@ process:
         options: attributes
   field_phone: field_phone
   field_email:
-    - plugin: sub_process
+    -
+      plugin: sub_process
       source: field_email
       process:
         value: email
   field_grid_reference: field_grid_reference
   field_historic_map_viewer_link:
-    - plugin: sub_process
+    -
+      plugin: sub_process
       source: field_historic_map_viewer_link
       process:
         uri: value
         title: title
         options: attributes
   field_nismr_link:
-    - plugin: sub_process
+    -
+      plugin: sub_process
       source: field_nismr_link
       process:
         uri: value
@@ -143,7 +168,8 @@ process:
         options: attributes
   field_open_to_the_public: field_open_to_the_public
   field_photo:
-    - plugin: sub_process
+    -
+      plugin: sub_process
       source: field_photo
       process:
         target_id:
@@ -156,47 +182,55 @@ process:
     source: field_map
   field_map_location/0/type:
     plugin: default_value
-    default_value: 'roadmap'
-    strict: TRUE
+    default_value: roadmap
+    strict: true
   field_map_location/0/width:
     plugin: default_value
-    default_value: '100%'
-    strict: TRUE
+    default_value: 100%
+    strict: true
   field_map_location/0/height:
     plugin: default_value
-    default_value: '400px'
-    strict: TRUE
+    default_value: 400px
+    strict: true
   field_map_location/0/marker:
     plugin: default_value
     default_value: 1
-    strict: TRUE
+    strict: true
   field_domain_access:
-    - plugin: sub_process
+    -
+      plugin: sub_process
       source: domain_access_node
       process:
         target_id: target_id
   field_domain_source:
-    - plugin: sub_process
+    -
+      plugin: sub_process
       source: domain_source_node
       process:
         target_id: target_id
   field_domain_all_affiliates:
-    - plugin: get
+    -
+      plugin: get
       source: domain_all_affiliates
   list_of_depts_to_ignore:
-    - plugin: callback
+    -
+      plugin: callback
       callable: getenv
       source:
-        - 'constants/migrate_ignore_sites'
+        - constants/migrate_ignore_sites
       unpack_source: true
-    - plugin: default_value
+    -
+      plugin: default_value
       default_value: ''
-    - plugin: explode
+    -
+      plugin: explode
       delimiter: ','
   ignore_live_depts:
-    - plugin: flatten
+    -
+      plugin: flatten
       source: domain_source_node
-    - plugin: skip_on_condition
+    -
+      plugin: skip_on_condition
       condition:
         plugin: in_array
         property: '@list_of_depts_to_ignore'
@@ -210,5 +244,3 @@ migration_dependencies:
     - d7_file_media_image
     - node_subtopic
     - node_topic
-
-

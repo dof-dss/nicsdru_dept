@@ -13,13 +13,9 @@ tag_container_ids:
   - GTM-PT94H44
 advanced_settings:
   gtm:
-    data_layer: dataLayer
-    include_classes: false
-    allowlist_classes: ''
-    blocklist_classes: ''
-    include_environment: false
-    environment_id: ''
-    environment_token: ''
+    GTM-PT94H44:
+      data_layer: dataLayer
+      include_environment: false
 dimensions_metrics: {  }
 conditions:
   condition_group:

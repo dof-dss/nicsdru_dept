@@ -2,6 +2,8 @@
 echo ">>> Started at: $(date -u +"%Y-%m-%d %H:%M:%S")"
 
 departments=(daera communities economy education finance health infrastructure justice executiveoffice)
+# Note: This is not the full list of content types, review the other imports in this script.
+content_types=(topic subtopic actions application article collection consultation contact easychart gallery heritage_site infogram link page profile protected_area ual)
 
 # Check that the $MIGRATE_IGNORE_SITES environment variable is present.
 if [ -z "$MIGRATE_IGNORE_SITES" ]
@@ -11,6 +13,20 @@ then
 else
   # Create array of excluded departments from environment variable.
   IFS=', ' read -r -a excluded_departments <<< "$MIGRATE_IGNORE_SITES"
+fi
+
+# *****************************************************
+# Array of content types that should not be migrated. *
+# *****************************************************
+if [ -n "$MIGRATE_IGNORE_TYPES" ]
+then
+  echo "Ignoring the following content types: $MIGRATE_IGNORE_TYPES"
+  # Create array of excluded types from environment variable.
+  IFS=', ' read -r -a excluded_content_types <<< "$MIGRATE_IGNORE_TYPES"
+
+  for i in "${excluded_content_types[@]}"; do
+    content_types=(${content_types[@]//*$i*})
+  done
 fi
 
 export DRUSH=/app/vendor/bin/drush
@@ -50,7 +66,6 @@ export MIGRATIONS="\
   flagging_display_on_rss_feeds \
   flagging_hide_listing \
   flagging_hide_on_topic_subtopic_pages "
-
 
 if [ -z ${PLATFORM_BRANCH} ] && [ -z ${LANDO} ];
 then
@@ -104,7 +119,7 @@ then
   $DRUSH pmu content_lock,content_lock_timeout
   # NB: module will be re-enabled by config import at end of this script.
 
-  for type in topic subtopic actions application article collection consultation contact easychart gallery heritage_site infogram link page profile protected_area ual
+  for type in "${content_types[@]}"
   do
     echo "Migrate D7 ${type} nodes"
     $DRUSH migrate:import node_$type --force
