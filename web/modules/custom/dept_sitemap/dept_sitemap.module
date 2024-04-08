@@ -111,7 +111,7 @@ function dept_sitemap_cron() {
     $query = \Drupal::database()->update('simple_sitemap')
       ->condition('delta', 0)
       ->condition('type', $row->type)
-      ->condition('sitemap_string', '%.' . $hostname_suffix . '.%', 'LIKE')
+      ->condition('sitemap_string', '%' . $hostname_suffix . '%', 'LIKE')
       ->expression('sitemap_string', "REGEXP_REPLACE(sitemap_string, :pattern, :replacement)", [
         ':pattern' => '.\\*.',
         ':replacement' => '.' . $hostname_suffix . '.',
