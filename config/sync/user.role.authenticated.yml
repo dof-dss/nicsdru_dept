@@ -7,6 +7,7 @@ dependencies:
     - taxonomy.vocabulary.global_topics
   module:
     - filter
+    - help
     - media
     - moderation_sidebar
     - node
@@ -25,6 +26,7 @@ is_admin: false
 permissions:
   - 'access administration pages'
   - 'access content'
+  - 'access help pages'
   - 'access toolbar'
   - 'create url aliases'
   - 'select terms in global_topics'
