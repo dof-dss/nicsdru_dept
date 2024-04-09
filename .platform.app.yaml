@@ -12,7 +12,7 @@ type: 'php:8.2'
 variables:
   php:
     memory_limit: "256M"
-    xdebug.mode: "debug"
+#    xdebug.mode: "debug"
     date.timezone: "Europe/Dublin"
 
 dependencies:
@@ -24,8 +24,8 @@ runtime:
   extensions:
     - apcu
     - redis
-  xdebug:
-    idekey: PHPSTORM
+#  xdebug:
+#    idekey: PHPSTORM
 
 # The relationships of the application with services or other applications.
 #
