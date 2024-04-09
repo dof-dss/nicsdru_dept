@@ -70,8 +70,7 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
           // dom element.
           $url_portions = parse_url($href);
 
-          if ($this->hostnameMatchesKnownDepartment($url_portions['host'], $dept->id())
-            && $this->shouldRewriteUrl($url_portions)) {
+          if ($this->shouldRewriteUrl($url_portions) && $this->hostnameMatchesKnownDepartment($href , $dept->id())) {
 
             $new_href = '';
 
@@ -130,18 +129,17 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
   /**
    * Function to perform hostname matching.
    *
-   * @param string $host
-   *   The hostname found in an absolute link.
+   * @param string $url
+   *   The URL to match.
    * @param string $dept_id
    *   The machine id of a department entity.
    *
    * @return bool
    *   Whether there's a match between the two.
    */
-  protected function hostnameMatchesKnownDepartment(string $host, string $dept_id): bool {
-    // Simplistic matching process - if the dept id is in the hostname
-    // then assume it's a match and exit the loop.
-    return (bool) preg_match('/' . $dept_id . '/', $host);
+  protected function hostnameMatchesKnownDepartment(string $url, string $dept_id): bool {
+    // Match the first part of the domain to the department.
+    return (bool) preg_match('/https?:\/\/(www.)?' . $dept_id . '/', $url);
   }
 
 }
