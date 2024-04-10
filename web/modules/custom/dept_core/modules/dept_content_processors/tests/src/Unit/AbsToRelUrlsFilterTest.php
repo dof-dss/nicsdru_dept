@@ -87,6 +87,10 @@ class AbsToRelUrlsFilterTest extends UnitTestCase {
         '<a href="http://www.finance-ni.gov.uk/Property/Search?town=belfast" target="_blank">Property Search</a>',
         '<a href="/Property/Search?town=belfast" target="_blank">Property Search</a>'
       ],
+      [
+        '<a href="http://www.finance-ni.gov.uk" target="_blank">Department of Finance</a>',
+        '<a href="http://www.finance-ni.gov.uk" target="_blank">Department of Finance</a>'
+      ],
     ];
   }
 
