@@ -9,6 +9,7 @@ use Drupal\Tests\UnitTestCase;
 
 /**
  * @coversDefaultClass \Drupal\dept_content_processors\Plugin\Filter\AbsToRelUrlsFilter
+ * @group dept_content_processors
  * @group dept
  */
 class AbsToRelUrlsFilterTest extends UnitTestCase {
