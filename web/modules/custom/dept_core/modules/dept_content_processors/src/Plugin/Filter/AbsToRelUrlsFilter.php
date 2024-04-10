@@ -88,10 +88,7 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
       return $result;
     }
 
-    // Check we are on a Departmental site we recognise.
-    $dept = $this->departmentManager->getCurrentDepartment();
-
-    if ($dept instanceof Department) {
+    if (!empty($this->getDepartmentId())) {
       $dom = Html::load($text);
       $link_elements = $dom->getElementsByTagName('a');
 
@@ -104,7 +101,7 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
           // dom element.
           $url_portions = parse_url($href);
 
-          if ($this->shouldRewriteUrl($url_portions) && $this->hostnameMatchesKnownDepartment($href , $dept->id())) {
+          if ($this->shouldRewriteUrl($url_portions) && $this->hostnameMatchesKnownDepartment($href)) {
 
             $new_href = '';
 
@@ -121,18 +118,14 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
             $link->setAttribute('href', $new_href);
           }
         }
-        else {
-          // Skip over non-absolute links.
-          continue;
-        }
-
-        $output = $dom->saveHTML();
-
-        // Remove the HTML markup created when the text is loaded into HTML DOM.
-        $output = preg_replace('/(<!DOCTYPE.+>\n*<html.+><body>)(.+)(<\/body><\/html>)/m', "$2", $output);
-
-        $result = new FilterProcessResult($output);
       }
+
+      $output = $dom->saveHTML();
+
+      // Remove the HTML markup created when the text is loaded into HTML DOM.
+      $output = preg_replace('/(<!DOCTYPE.+>)?\n*(<html>)?(<body>)?(.+)(<\/body><\/html>)/m', "$4", $output);
+
+      $result = new FilterProcessResult($output);
     }
 
     return $result;
@@ -165,15 +158,13 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
    *
    * @param string $url
    *   The URL to match.
-   * @param string $dept_id
-   *   The machine id of a department entity.
    *
    * @return bool
    *   Whether there's a match between the two.
    */
-  protected function hostnameMatchesKnownDepartment(string $url, string $dept_id): bool {
+  protected function hostnameMatchesKnownDepartment(string $url): bool {
     // Match the first part of the domain to the department.
-    return (bool) preg_match('/https?:\/\/(www.)?' . $dept_id . '/', $url);
+    return (bool) preg_match('/https?:\/\/(www.)?' . $this->getDepartmentId() . '/', $url);
   }
 
 }
