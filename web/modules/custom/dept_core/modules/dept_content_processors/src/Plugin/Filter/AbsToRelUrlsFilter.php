@@ -31,6 +31,13 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
   protected $departmentManager;
 
   /**
+   * The Department ID.
+   *
+   * @var string
+   */
+  protected string $departmentId;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -39,9 +46,36 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
       $plugin_id,
       $plugin_definition
     );
+
     $instance->departmentManager = $container->get('department.manager');
 
+    // Check we are on a Departmental site we recognise.
+    $department = $instance->departmentManager->getCurrentDepartment();
+    if ($department instanceof Department) {
+      $instance->departmentId = $department->id();
+    }
+
     return $instance;
+  }
+
+  /**
+   * Department ID getter.
+   *
+   * @return string
+   *   The machine ID of the Department.
+   */
+  public function getDepartmentId(): string {
+    return $this->departmentId;
+  }
+
+  /**
+   * Department ID setter.
+   *
+   * @param string $departmentId
+   *   The machine ID of the Department.
+   */
+  public function setDepartmentId(string $departmentId): void {
+    $this->departmentId = trim($departmentId);
   }
 
   /**
