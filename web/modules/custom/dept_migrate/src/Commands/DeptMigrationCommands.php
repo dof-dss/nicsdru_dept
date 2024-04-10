@@ -519,6 +519,12 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     $child_nodes = $this->fetchSubtopicChildContent($nid);
     // Fetch the D9/D7 data for the parent node.
     $parent_data = $this->lookupManager->lookupbySourceNodeId([$nid]);
+
+    // Some topic nodes (new content) won't have a D7 counterpart.
+    if (empty($parent_data[$nid]['nid'])) {
+      return;
+    }
+
     $parent_node = $this->entityTypeManager->getStorage('node')->load($parent_data[$nid]['nid']);
 
     foreach ($child_nodes as $child_node) {
