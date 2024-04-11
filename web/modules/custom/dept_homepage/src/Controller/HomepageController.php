@@ -31,16 +31,16 @@ class HomepageController extends ControllerBase {
   /**
    * @var \Drupal\dept_core\DepartmentManager
    */
-  protected $deptManager;
+  protected $departmentManager;
 
   /**
    * Constructor for controller class.
    *
-   * @param \Drupal\dept_core\DepartmentManager $dept_manager
+   * @param \Drupal\dept_core\DepartmentManager $department_manager
    *   Department manager service object.
    */
-  public function __construct(DepartmentManager $dept_manager) {
-    $this->deptManager = $dept_manager;
+  public function __construct(DepartmentManager $department_manager) {
+    $this->departmentManager = $department_manager;
   }
 
   /**
@@ -61,21 +61,24 @@ class HomepageController extends ControllerBase {
   public function default() {
     $build = [];
     $node_storage = $this->entityTypeManager()->getStorage('node');
+    $active_department = $this->departmentManager->getCurrentDepartment();
 
-    // Render a FCL node for the active domain.
-    $active_dept = $this->deptManager->getCurrentDepartment();
-
-    if (is_null($active_dept)) {
+    if (is_null($active_department)) {
       return $build;
     }
 
+    // Render a FCL (Featured Content List) node for the active domain.
     $fcl_query = $node_storage->getQuery()
       ->condition('type', 'featured_content_list')
       ->condition('status', 1)
-      ->condition('field_domain_source', $active_dept->id())
+      ->condition('field_domain_source', $active_department->id())
       ->range(0, 1)
       ->accessCheck(TRUE)
       ->execute();
+
+    if (empty($fcl_query)) {
+      return $build;
+    }
 
     $fcl_node = $node_storage->loadMultiple($fcl_query);
 
@@ -120,7 +123,7 @@ class HomepageController extends ControllerBase {
    *   Return a redirect or render array.
    */
   public function featuredContentEdit() {
-    $current_department = $this->deptManager->getCurrentDepartment();
+    $current_department = $this->departmentManager->getCurrentDepartment();
 
     $query = \Drupal::entityQuery('node')
       ->condition('type', 'featured_content_list')
