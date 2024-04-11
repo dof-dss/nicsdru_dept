@@ -40,13 +40,6 @@ manage_topic_content:
   css:
     theme:
       css/manage_topic_content.css: { }
-  js:
-    js/manage_topic_content.js: { }
-  dependencies:
-    - core/jquery
-    - core/jquery.form
-    - core/drupal.dialog.ajax
-    - core/drupal.tabledrag
 moderation_sidebar:
   version: 1.x
   css:
