@@ -9,6 +9,7 @@ use Drupal\Core\Entity\RevisionableContentEntityBase;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\dept_core\Annotations\DepartmentField;
 use Drupal\dept_core\DepartmentInterface;
+use Drupal\domain\Entity\Domain;
 use Drupal\user\EntityOwnerTrait;
 
 /**
@@ -72,9 +73,9 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   /**
    * Domain for the department.
    *
-   * @var array
+   * @var Domain
    */
-  protected array $domain;
+  protected Domain $domain;
 
   /**
    * Hostnames for the department.
