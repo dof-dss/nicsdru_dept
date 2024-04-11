@@ -114,7 +114,7 @@ class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterfa
       return $build;
     }
 
-    // Fetch parents, if parents have banner use it.
+    // Fetch parents and if they have banner, use it.
     $parent_nids = array_keys($this->topicManager->getParentNodes($node->id()));
     $banner_link = '';
 

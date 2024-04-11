@@ -8,7 +8,6 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
-use Drupal\dept_core\Entity\Department;
 use Drupal\dept_node\Entity\Node;
 use Drupal\dept_node\Form\DeptNodeForm;
 use Drupal\dept_node\FormatHelper;
@@ -149,7 +148,7 @@ function dept_node_preprocess_node(array &$variables) {
   $routename = \Drupal::routeMatch()->getRouteName();
   $host = \Drupal::request()->getSchemeAndHttpHost();
 
-  // Transform node URL's from absolute to relative..
+  // Transform node URL's from absolute to relative.
   if ($node instanceof NodeInterface) {
     $variables['url'] = str_starts_with($variables['url'], $host) ? substr($variables['url'], strlen($host)) : $variables['url'];
   }
@@ -216,7 +215,6 @@ function dept_node_preprocess_node(array &$variables) {
  * conditions are met.
  */
 function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_state) {
-
   $domain_access = $form_state->getValue('field_domain_access');
 
   // @phpstan-ignore-next-line
@@ -254,9 +252,9 @@ function dept_node_preprocess_page(&$variables) {
  * Implements hook_pathauto_alias_alter().
  */
 function dept_node_pathauto_alias_alter(&$alias, array &$context) {
-  $dbConn = \Drupal::database();
-
-  $results = $dbConn->query("SELECT pa.path, pa.alias FROM {path_alias} pa WHERE pa.alias = :alias", [':alias' => $alias])->fetchCol();
+  // Common aliases (e.g. /privacy) cannot be shared across departments,
+  // instead if an alias exists we append the department name, i.e. '/privacy-finance'.
+  $results = \Drupal::database()->query("SELECT pa.path, pa.alias FROM {path_alias} pa WHERE pa.alias = :alias", [':alias' => $alias])->fetchCol();
 
   // If we have an existing alias, append the department id and notify the user.
   if ($results && $results[0] !== $context['source']) {
@@ -319,6 +317,7 @@ function dept_node_form_node_type_form_alter(&$form, FormStateInterface $form_st
  * Entity builder for the dept_node_form_node_type_form_alter().
  */
 function dept_node_form_node_type_form_builder($entity_type, $type, &$form, $form_state) {
+  // Provides a setting on the node content type form to restrict which departments can use that type.
   $type->setThirdPartySetting('dept_node', 'department_restrictions', $form_state->getValue('departments'));
 }
 

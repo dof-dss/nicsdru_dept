@@ -42,7 +42,7 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
    * {@inheritdoc}
    */
   public function createAccess($entity_bundle = NULL, AccountInterface $account = NULL, array $context = [], $return_as_object = FALSE) {
-
+    // Checks if the node type is allowed for the current Department.
     $node_type = $this->entityTypeManager->getStorage('node_type')->load($entity_bundle);
     $department_restrictions = $node_type->getThirdPartySetting('dept_node', 'department_restrictions', NULL);
 

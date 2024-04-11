@@ -33,11 +33,8 @@ class UpdatePathAliasForm extends FormBase {
    *   The node id of the path alias.
    */
   public function buildForm(array $form, FormStateInterface $form_state, $nid = '') {
-
-    $dbConn = \Drupal::database();
     $source = '/node/' . $nid;
-
-    $results = $dbConn->query("SELECT pa.path, pa.alias FROM path_alias pa WHERE pa.path = :source", [':source' => $source])->fetchCol(1);
+    $results = \Drupal::database()->query("SELECT pa.path, pa.alias FROM path_alias pa WHERE pa.path = :source", [':source' => $source])->fetchCol(1);
 
     $form['#prefix'] = '<div id="update-path-alias-form">';
     $form['#suffix'] = '</div>';
@@ -112,10 +109,9 @@ class UpdatePathAliasForm extends FormBase {
       $response->addCommand(new ReplaceCommand('#update-path-alias-form', $form));
     }
     else {
-      $dbConn = \Drupal::database();
       $node_path = '/node/' . $form_state->getValue('nid');
 
-      $dbConn->update('path_alias')
+      \Drupal::database()->update('path_alias')
         ->fields(['alias' => $form_state->getValue('new_alias')])
         ->condition('path', $node_path, '=')
         ->execute();
@@ -141,10 +137,9 @@ class UpdatePathAliasForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    $dbConn = \Drupal::database();
     $values = $form_state->getValues();
 
-    $results = $dbConn->query("SELECT pa.path, pa.alias FROM path_alias pa WHERE pa.alias = :alias AND pa.path <> :path ", [
+    $results = \Drupal::database()->query("SELECT pa.path, pa.alias FROM path_alias pa WHERE pa.alias = :alias AND pa.path <> :path ", [
       ':alias' => $values['new_alias'],
       ':path' => '/node/' . $values['nid'],
     ])->fetchCol(1);
@@ -158,6 +153,7 @@ class UpdatePathAliasForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+
   }
 
 }
