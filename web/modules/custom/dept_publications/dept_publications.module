@@ -134,7 +134,7 @@ function dept_publications_entity_operation_alter(array &$operations, EntityInte
 
     // This check is intended to override any broad/generic permissions
     // as well as the general NICS editorial workflow options. Eg:
-    // prevents an non-admin and non-stats-* role from publishing
+    // prevents a non-admin and non-stats-* role from publishing
     // embargoed/secure publication content as this must be done
     // by a stats supervisor author or Administrator.
     if ($entity->isPublished() === FALSE) {
@@ -153,13 +153,6 @@ function dept_publications_file_download($uri) {
   if (\Drupal::service('secure_publications_file_access')->canAccessSecureFileAttachment($uri) === FALSE) {
     return -1;
   }
-}
-
-/**
- * Implements hook_views_pre_execute().
- */
-function dept_publications_views_pre_execute(ViewExecutable $view) {
-
 }
 
 /**

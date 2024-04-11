@@ -136,6 +136,7 @@ class LandingPagesChooseBlockController implements ContainerInjectionInterface {
           'region' => $region,
         ]);
       }
+
       if (isset($url)) {
         $build['add_block'] = [
           '#type' => 'link',
@@ -172,7 +173,9 @@ class LandingPagesChooseBlockController implements ContainerInjectionInterface {
       'delta' => $delta,
       'region' => $region,
     ]);
+
     $grouped_definitions = $this->blockManager->getGroupedDefinitions($definitions);
+
     foreach ($grouped_definitions as $category => $blocks) {
       $block_categories[$category]['#type'] = 'details';
       $block_categories[$category]['#attributes']['class'][] = 'js-layout-builder-category';
@@ -180,7 +183,9 @@ class LandingPagesChooseBlockController implements ContainerInjectionInterface {
       $block_categories[$category]['#title'] = $category;
       $block_categories[$category]['links'] = $this->getBlockLinks($section_storage, $delta, $region, $blocks);
     }
+
     $build['block_categories'] = $block_categories;
+
     return $build;
   }
 
@@ -206,9 +211,11 @@ class LandingPagesChooseBlockController implements ContainerInjectionInterface {
       'region' => $region,
       'list' => 'inline_blocks',
     ]);
+
     $blocks = $this->blockManager->getGroupedDefinitions($definitions);
     $build = [];
     $inline_blocks_category = (string) $this->t('Inline blocks');
+
     if (isset($blocks[$inline_blocks_category])) {
       $build['links'] = $this->getBlockLinks($section_storage, $delta, $region, $blocks[$inline_blocks_category]);
       $build['links']['#attributes']['class'][] = 'inline-block-list';
@@ -229,6 +236,7 @@ class LandingPagesChooseBlockController implements ContainerInjectionInterface {
         '#attributes' => $this->getAjaxAttributes(),
       ];
     }
+
     $build['links']['#attributes']['data-layout-builder-target-highlight-id'] = $this->blockAddHighlightId($delta, $region);
 
     $module_path_rel = $this->moduleHandler->getModule('dept_landing_pages')->getPath();
@@ -253,20 +261,20 @@ class LandingPagesChooseBlockController implements ContainerInjectionInterface {
 
     foreach ($build['links']['#links'] as &$link) {
       $id = $link['url']->getRouteParameters()['plugin_id'];
-      $img_name = substr($id, (strpos($id, ':') + 1));
+      $image_name = substr($id, (strpos($id, ':') + 1));
       $title = $link['title'];
 
       // Check for an image matching this block otherwise use the default.
-      if (file_exists($module_path_abs . '/img/block-icons/' . $img_name . '.png')) {
-        $img_path = $module_path_rel . '/img/block-icons/' . $img_name . '.png';
+      if (file_exists($module_path_abs . '/img/block-icons/' . $image_name . '.png')) {
+        $image_path = $module_path_rel . '/img/block-icons/' . $image_name . '.png';
       }
       else {
-        $img_path = $module_path_rel . '/img/block-icons/default.png';
+        $image_path = $module_path_rel . '/img/block-icons/default.png';
       }
 
       $icon = [
         '#theme' => 'image',
-        '#uri' => $img_path,
+        '#uri' => $image_path,
         '#width' => 150,
         '#height' => 150,
         '#alt' => $title,

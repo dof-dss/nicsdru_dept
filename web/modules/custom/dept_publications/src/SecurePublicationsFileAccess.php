@@ -9,14 +9,10 @@ use Drupal\Core\Session\AccountInterface;
 class SecurePublicationsFileAccess {
 
   /**
+   * The File Uri the check.
    * @var string
    */
   protected $fileUri;
-
-  /**
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $user;
 
   /**
    * The database connection.
@@ -33,26 +29,25 @@ class SecurePublicationsFileAccess {
   /**
    * @param string $file_uri
    *   The URI of a file.
-   * @param \Drupal\Core\Session\AccountInterface $user
-   *   The current user service object.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager service object.
    */
-  public function __construct(string $file_uri, AccountInterface $user, Connection $connection, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(string $file_uri, Connection $connection, EntityTypeManagerInterface $entity_type_manager) {
     $this->fileUri = $file_uri;
-    $this->user = $user;
     $this->connection = $connection;
     $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
+   * Determines if a secure file can be accessed/downloaded.
+   *
    * @param string $file_uri
    *   File uri, eg: private://directory/file.pdf.
    *
    * @return bool
-   *   TRUE if can access, FALSE if not.
+   *   TRUE if you can access, FALSE if not.
    */
   public function canAccessSecureFileAttachment(string $file_uri) {
     $sql = "SELECT DISTINCT
