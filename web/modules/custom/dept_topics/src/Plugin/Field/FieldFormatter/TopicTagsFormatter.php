@@ -2,12 +2,8 @@
 
 namespace Drupal\dept_topics\Plugin\Field\FieldFormatter;
 
-use Drupal\Core\Entity\ContentEntityTypeInterface;
-use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 
@@ -28,7 +24,6 @@ class TopicTagsFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
-
     $element = [];
     $nodes = [];
     $topic_manager = \Drupal::service('topic.manager');

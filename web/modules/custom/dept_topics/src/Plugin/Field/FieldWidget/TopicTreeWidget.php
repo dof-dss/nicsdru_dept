@@ -13,7 +13,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
 use Drupal\dept_topics\TopicManager;
 use Drupal\domain\DomainNegotiatorInterface;
-use Drupal\node\NodeForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -133,9 +132,6 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $field = $this->fieldDefinition->getName();
     $field_id = Html::getUniqueId($field);
     $default_values = $this->getSelectedOptions($items);
-    // @phpstan-ignore-next-line
-    $entity = $form_state->getFormObject()->getEntity();
-    $settings = $this->getSettings();
     $current_dept = '';
     $options = [];
 

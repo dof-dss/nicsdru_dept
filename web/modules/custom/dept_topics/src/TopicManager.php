@@ -19,7 +19,7 @@ class TopicManager {
    *
    * @var array
    */
-  protected $deptTopics = [];
+  protected $departmentTopics = [];
 
   /**
    * Array of target bundes.
@@ -102,7 +102,6 @@ class TopicManager {
    *   Node ID indexed array comprising id, title and type.
    */
   public function getParentNodes($node, &$parents = []) {
-
     if ($node instanceof NodeInterface) {
       $nid = $node->id();
     }
@@ -178,11 +177,11 @@ class TopicManager {
     ]);
 
     foreach ($parent_topics as $nid => $parent) {
-      $this->deptTopics[$parent->id()] = $parent;
+      $this->departmentTopics[$parent->id()] = $parent;
       $this->getChildTopics($parent);
     }
 
-    return $this->deptTopics;
+    return $this->departmentTopics;
   }
 
   /**
@@ -290,7 +289,7 @@ class TopicManager {
 
     foreach ($child_content as $child) {
       if ($child->bundle() === 'subtopic') {
-        $this->deptTopics[$child->id()] = $child;
+        $this->departmentTopics[$child->id()] = $child;
         $this->getChildTopics($child);
       }
     }

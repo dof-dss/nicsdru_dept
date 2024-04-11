@@ -21,7 +21,6 @@ use Drupal\node\NodeInterface;
  */
 function dept_topics_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
-    // Main module help for the antibot module.
     case 'help.page.dept_topics':
       $output = '';
       $output .= '<h3>' . t('Help') . '</h3>';
@@ -146,12 +145,12 @@ function dept_topics_cron() {
  * Implements hook_metatags_attachments_alter().
  */
 function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
-  $topicManager = \Drupal::service('topic.manager');
+  $topic_manager = \Drupal::service('topic.manager');
   $node = \Drupal::routeMatch()->getParameter('node');
 
-  if ($node instanceof NodeInterface && in_array($node->bundle(), $topicManager->getTopicChildNodeTypes())) {
-    $topicManager = \Drupal::service('topic.manager');
-    $parents = $topicManager->getParentNodes($node->id());
+  if ($node instanceof NodeInterface && in_array($node->bundle(), $topic_manager->getTopicChildNodeTypes())) {
+    $topic_manager = \Drupal::service('topic.manager');
+    $parents = $topic_manager->getParentNodes($node->id());
     $tag_index = -1;
 
     if ($parents) {
@@ -208,7 +207,6 @@ function dept_topics_form_node_form_alter(&$form, $form_state) {
  * Implements hook_entity_delete().
  */
 function dept_topics_entity_delete(EntityInterface $entity) {
-
   if ($entity instanceof NodeInterface) {
     /** @var \Drupal\dept_topics\TopicManager $topic_manager */
     $topic_manager = \Drupal::service('topic.manager');

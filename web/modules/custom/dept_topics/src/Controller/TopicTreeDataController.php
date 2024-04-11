@@ -13,14 +13,14 @@ class TopicTreeDataController {
   /**
    * Return all topics and subtopics for a department.
    *
-   * @param string $department
+   * @param string $department_id
    *   The department machine name.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   JSON dataset adhering to the format outlined in https://www.jstree.com/docs/json/.
    */
-  public function allDepartmentTopics($department) {
-    return new JsonResponse($this->parentTopics($department));
+  public function allDepartmentTopics($department_id) {
+    return new JsonResponse($this->parentTopics($department_id));
   }
 
   /**
@@ -32,10 +32,10 @@ class TopicTreeDataController {
   /**
    * A helper function returning results.
    */
-  public function parentTopics($department) {
+  public function parentTopics($department_id) {
     $root_topics = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
       'type' => 'topic',
-      'field_domain_access' => $department
+      'field_domain_access' => $department_id
     ]);
 
     foreach ($root_topics as $topic) {
