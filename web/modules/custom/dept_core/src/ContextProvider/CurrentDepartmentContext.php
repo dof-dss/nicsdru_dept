@@ -8,6 +8,9 @@ use Drupal\Core\Plugin\Context\EntityContext;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_core\DepartmentManager;
 
+/**
+ * Sets the current Department as a context.
+ */
 class CurrentDepartmentContext implements ContextProviderInterface {
 
   use StringTranslationTrait;
@@ -17,10 +20,10 @@ class CurrentDepartmentContext implements ContextProviderInterface {
    *
    * @var \Drupal\dept_core\DepartmentManager
    */
-  protected $departmentManager;
+  protected DepartmentManager $departmentManager;
 
   /**
-   * Constructor.
+   * Context cqonstructor.
    *
    * @param \Drupal\dept_core\DepartmentManager $department_manager
    *   The Department Manager.

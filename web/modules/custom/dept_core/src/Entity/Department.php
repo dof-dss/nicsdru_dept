@@ -71,7 +71,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   use EntityOwnerTrait;
 
   /**
-   * Domain for the department.
+   * Domain (module) object for the department.
    *
    * @var Domain
    */
@@ -100,7 +100,6 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    */
   public function postSave(EntityStorageInterface $storage, $update = TRUE) {
     parent::postSave($storage, $update);
-
     // Maybe a bit heavy-handed, but I can't see Departments getting updated
     // much and this reduces the need for adding lots of 'dept:xyz' type cache
     // tags to render arrays.

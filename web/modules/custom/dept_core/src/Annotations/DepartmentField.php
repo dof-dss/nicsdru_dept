@@ -18,7 +18,7 @@ class DepartmentField {
   private string $label;
 
   /**
-   * Annotation contructor.
+   * Annotation constructor.
    *
    * @param array $values
    *   Annotation values.

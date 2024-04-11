@@ -12,7 +12,7 @@ use Drupal\domain\DomainNegotiatorInterface;
 class DepartmentManager {
 
   /**
-   * The domain.negotiator service.
+   * The Domain negotiator service.
    *
    * @var \Drupal\domain\DomainNegotiatorInterface
    */

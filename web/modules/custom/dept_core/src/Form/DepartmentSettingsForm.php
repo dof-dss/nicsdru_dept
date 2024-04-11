@@ -21,7 +21,6 @@ class DepartmentSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-
     $form['settings'] = [
       '#markup' => $this->t('Settings form for a department entity type.'),
     ];

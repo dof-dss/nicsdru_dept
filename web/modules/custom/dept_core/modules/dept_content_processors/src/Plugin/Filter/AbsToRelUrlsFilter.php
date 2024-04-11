@@ -28,7 +28,7 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
    *
    * @var \Drupal\dept_core\DepartmentManager
    */
-  protected $departmentManager;
+  protected DepartmentManager $departmentManager;
 
   /**
    * The Department ID.
@@ -81,7 +81,7 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
   /**
    * {@inheritdoc}
    */
-  public function process($text, $langcode) {
+  public function process($text, $langcode): FilterProcessResult {
     $result = new FilterProcessResult($text);
 
     if (str_contains($text, 'http') === FALSE) {
