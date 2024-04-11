@@ -103,7 +103,13 @@ function dept_sitemap_cron() {
     $replace = '.lndo.site';
   }
 
-  \Drupal::database()->query("UPDATE {simple_sitemap}
-    SET sitemap_string = REPLACE(sitemap_string, '.*.uk-1.platformsh.site', $replace)
-    WHERE delta = :delta", [':delta' => 0])->execute();
+  // Use dynamic query for update - see advice on d.o for complex expression queries.
+  // https://www.drupal.org/docs/8/api/database-api/dynamic-queries/introduction-to-dynamic-queries.
+  $query = \Drupal::database()->update('simple_sitemap')
+    ->expression('sitemap_string', "REPLACE(sitemap_string, :find, :replace)", [
+      ':find' => '.*.uk-1.platformsh.site',
+      ':replace' => $replace,
+    ])
+    ->condition('delta', 0)
+    ->execute();
 }
