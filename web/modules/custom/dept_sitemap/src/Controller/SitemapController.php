@@ -36,7 +36,6 @@ class SitemapController extends ControllerBase {
    * Builds the response.
    */
   public function build() {
-
     // Redirect the /sitemap.xml request to the variant url for the
     // current domain.
     $domain_id = $this->domainNegotiator->getActiveDomain()->id();

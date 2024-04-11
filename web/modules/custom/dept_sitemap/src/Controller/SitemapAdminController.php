@@ -44,16 +44,16 @@ class SitemapAdminController extends ControllerBase implements ContainerInjectio
    * Builds the response.
    */
   public function build() {
-    $dept_domains = $this->entityTypeManager()->getStorage('domain')->loadByProperties(['status' => 'true']);
+    $domains = $this->entityTypeManager()->getStorage('domain')->loadByProperties(['status' => 'true']);
     $rows = [];
 
-    if (array_key_exists('dept_admin', $dept_domains)) {
-      unset($dept_domains['dept_admin']);
+    if (array_key_exists('dept_admin', $domains)) {
+      unset($domains['dept_admin']);
     }
 
     $active_sitemaps = $this->entityTypeManager()->getStorage('simple_sitemap')->loadByProperties(['status' => 'true']);
 
-    foreach ($dept_domains as $id => $domain) {
+    foreach ($domains as $id => $domain) {
       $row = [
         'department' => $domain->label(),
         'sitemap' => $this->t(''),
@@ -139,17 +139,16 @@ class SitemapAdminController extends ControllerBase implements ContainerInjectio
   /**
    * Create a sitemap for a given Department.
    *
-   * @param string $department
+   * @param string $department_id
    *   The department id.
    * @return array
    *   The response render array.
    */
-  public function add(string $department) {
-
+  public function add(string $department_id) {
     /** @var \Drupal\simple_sitemap\Entity\SimpleSitemapInterface $simple_sitemap */
     $simple_sitemap = $this->entityTypeManager()->getStorage('simple_sitemap')->create();
-    $simple_sitemap->set('id', $department);
-    $simple_sitemap->set('label', ucfirst($department));
+    $simple_sitemap->set('id', $department_id);
+    $simple_sitemap->set('label', ucfirst($department_id));
     $simple_sitemap->set('type', 'default_hreflang');
     $result = $simple_sitemap->save();
 
@@ -159,7 +158,7 @@ class SitemapAdminController extends ControllerBase implements ContainerInjectio
       $build['intro'] = [
         '#type' => 'html_tag',
         '#tag' => 'h3',
-        '#value' => $this->t('Sitemap sucessfully created for @department.', ['@department' => $department])
+        '#value' => $this->t('Sitemap sucessfully created for @department.', ['@department' => $department_id])
       ];
 
       $build['inclusions_text'] = [
@@ -185,7 +184,7 @@ class SitemapAdminController extends ControllerBase implements ContainerInjectio
     }
     else {
       return [
-        '#markup' => $this->t('There was an issue creating a sitemap for @department', ['@department' => $department])
+        '#markup' => $this->t('There was an issue creating a sitemap for @department', ['@department' => $department_id])
       ];
     }
   }
