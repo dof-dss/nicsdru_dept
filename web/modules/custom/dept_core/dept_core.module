@@ -15,7 +15,6 @@ use Drupal\Core\Url;
 use Drupal\dept_core\Entity\Department;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
-use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
@@ -122,11 +121,11 @@ function dept_core_preprocess_menu(&$variables) {
  * preprocess variables for use in templates.
  */
 function dept_core_append_dept_info_for_templates(array &$variables) {
-  $dept_manager = \Drupal::service('department.manager');
+  $department_manager = \Drupal::service('department.manager');
   /** @var \Drupal\dept_core\Entity\Department $dept */
-  $dept = $dept_manager->getCurrentDepartment();
+  $department = $department_manager->getCurrentDepartment();
 
-  if (is_null($dept)) {
+  if (is_null($department)) {
     return;
   }
   // Object properties/method values set as preprocess variables
@@ -135,15 +134,14 @@ function dept_core_append_dept_info_for_templates(array &$variables) {
   // except for those on a pre-defined method allow-list.
   // See https://chromatichq.com/insights/custom-entity-methods-twig-templates/
   // and https://www.drupal.org/forum/support/theme-development/2018-09-05/twig-sandbox-security-error-when-calling-object-method
-  $variables['department']['id'] = $dept->id();
-  $variables['department']['name'] = $dept->name();
+  $variables['department']['id'] = $department->id();
+  $variables['department']['name'] = $department->name();
 }
 
 /**
  * Implements hook_entity_update().
  */
 function dept_core_entity_update(EntityInterface $entity) {
-
   // Update the corresponding Department label when a Domain label is updated.
   if ($entity->getEntityType()->id() == 'domain' && !$entity->isNew()) {
     $department = \Drupal::entityTypeManager()->getStorage('department')->load($entity->id());
@@ -160,7 +158,6 @@ function dept_core_entity_update(EntityInterface $entity) {
  * Implements hook_token_info().
  */
 function dept_core_token_info() {
-
   $types['departmental'] = [
     'name' => t("Departmental"),
     'description' => t("Departmental site tokens"),
@@ -188,7 +185,6 @@ function dept_core_token_info() {
  * Implements hook_tokens().
  */
 function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleable_metadata) {
-
   $replacements = [];
 
   if ($type === 'departmental') {
@@ -219,6 +215,7 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
           $classes = [];
           $index = 0;
 
+          // Apply utility CSS classes.
           foreach ($menu as $item) {
             if ($item->link->isEnabled()) {
               $index++;
@@ -306,10 +303,10 @@ function dept_core_department_links(): array {
 function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if ($form_id === 'views_exposed_form') {
     if (!empty($form['dept'])) {
-      /** @var \Drupal\dept_core\DepartmentManager $dept_manager */
-      $dept_manager = \Drupal::service('department.manager');
-      /** @var \Drupal\dept_core\Entity\Department $current_dept */
-      $current_dept = $dept_manager->getCurrentDepartment();
+      /** @var \Drupal\dept_core\DepartmentManager $department_manager */
+      $department_manager = \Drupal::service('department.manager');
+      /** @var \Drupal\dept_core\Entity\Department $current_department */
+      $current_department = $department_manager->getCurrentDepartment();
 
       // Fetch current user's assigned domains.
       $current_user = \Drupal::entityTypeManager()->getStorage('user')->load(\Drupal::currentUser()->id());
@@ -317,13 +314,13 @@ function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) 
 
       // If the user doesn't have top level domain permissions or no assigned domains, hide this filter option.
       if (!\Drupal::currentUser()->hasPermission('administer domains') || empty($user_domains)) {
-        $form['dept']['#value'] = $current_dept->id();
+        $form['dept']['#value'] = $current_department->id();
         hide($form['dept']);
         return;
       }
 
-      // Change to select list of known depts.
-      $depts = $dept_manager->getAllDepartments();
+      // Change to select list of known departments.
+      $departments = $department_manager->getAllDepartments();
 
       $form['dept'] = [
         '#type' => 'select',
@@ -333,8 +330,8 @@ function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) 
       ];
 
       foreach ($user_domains as $domain) {
-        $dept = $depts[$domain->id()];
-        $form['dept']['#options'][$dept->id()] = $dept->label();
+        $department = $departments[$domain->id()];
+        $form['dept']['#options'][$department->id()] = $department->label();
       }
 
       // #default_value doesn't work for select elements
@@ -342,9 +339,9 @@ function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) 
       // So instead, here we bodge the pre-selected value with either
       // the current dept id (if no selection) or let the user
       // pick their own which then takes precedent.
-      $dept_selection = \Drupal::request()->query->get('dept');
-      if (empty($dept_selection)) {
-        $form['dept']['#value'] = $current_dept->id();
+      $selected_department = \Drupal::request()->query->get('dept');
+      if (empty($selected_department)) {
+        $form['dept']['#value'] = $current_department->id();
       }
     }
   }
@@ -376,13 +373,13 @@ function dept_core_form_media_form_alter(&$form, FormStateInterface $form_state,
  * and set a default value for both of the current department.
  */
 function dept_core_set_entity_domain_defaults(&$form) {
-  $dept = \Drupal::service('department.manager')->getCurrentDepartment();
+  $department = \Drupal::service('department.manager')->getCurrentDepartment();
 
   foreach (['field_domain_access', 'field_domain_source'] as $element_id) {
     if (!empty($form[$element_id])) {
       // #default_value does not pass later validation. Odd but
       // shouldn't matter as the user won't be able to see the form options.
-      $form[$element_id]['widget']['#value'] = $dept->id();
+      $form[$element_id]['widget']['#value'] = $department->id();
       // hide() doesn't hide the wrapping container element.
       // Changing the element type does.
       $form[$element_id]['#type'] = 'hidden';

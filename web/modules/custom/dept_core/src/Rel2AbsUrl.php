@@ -10,7 +10,7 @@ use Drupal\path_alias\AliasManagerInterface;
 
 /**
  * Class to inspect url and return the absolute path
- * based on the group(s) the content is assigned to.
+ * based on the Domain the content is assigned to.
  */
 class Rel2AbsUrl {
 

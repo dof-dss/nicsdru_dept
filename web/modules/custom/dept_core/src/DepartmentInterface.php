@@ -25,7 +25,7 @@ interface DepartmentInterface extends ContentEntityInterface, EntityOwnerInterfa
    * @return \Drupal\domain\Entity\Domain
    *   The Domain object.
    */
-  public function domain(): \Drupal\domain\Entity\Domain;
+  public function domain();
 
   /**
    * Returns the weight among shortcuts with the same depth.
@@ -33,7 +33,7 @@ interface DepartmentInterface extends ContentEntityInterface, EntityOwnerInterfa
    * @return int
    *   The shortcut weight.
    */
-  public function getWeight(): int;
+  public function getWeight();
 
   /**
    * Sets the weight among shortcuts with the same depth.
@@ -44,6 +44,6 @@ interface DepartmentInterface extends ContentEntityInterface, EntityOwnerInterfa
    * @return $this
    *   The called shortcut entity.
    */
-  public function setWeight($weight): static;
+  public function setWeight($weight);
 
 }
