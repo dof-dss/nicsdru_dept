@@ -297,11 +297,11 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
     $current_time = \Drupal::time()->getCurrentTime();
 
     // Convert consultation start date to a timestamp.
-    $consultation_start_date = new DrupalDateTime($variables['node']->get('field_consultation_dates')->value);
+    $consultation_start_date = new DrupalDateTime($variables['node']->get('field_consultation_dates')->start_date);
     $variables['consultation_start_date'] = $consultation_start_date;
 
     // Convert consultation end date to a timestamp.
-    $consultation_end_date = new DrupalDateTime($variables['node']->get('field_consultation_dates')->end_value);
+    $consultation_end_date = new DrupalDateTime($variables['node']->get('field_consultation_dates')->end_date);
     $variables['consultation_end_date'] = $consultation_end_date;
 
     // Set a variable to be used in the twig template for the ways to respond fieldgroup, initially set to 0.

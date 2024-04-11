@@ -90,32 +90,20 @@ function dept_sitemap_cron() {
   // the XML string using a MySQL regex function where we know there might
   // be a need... eg: where the hostname is the wildcard pattern, spotted by
   // a '*' in the URL hostname.
-  $results = \Drupal::database()
-    ->query("SELECT * FROM {simple_sitemap} WHERE delta = :delta", [
-      ':delta' => 0,
-    ])
-    ->fetchAll();
+  // TLDR: from this
+  // https://finance-ni.*.uk-1.platformsh.site
+  // to this
+  // https://finance-ni.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site
+  $replace = sprintf(".%s-%s.uk-1.platformsh.site",
+    getenv('PLATFORM_ENVIRONMENT') ?? '',
+    getenv('PLATFORM_PROJECT') ?? '');
 
-  if (empty($results)) {
-    return;
+  // Local dev override.
+  if (!empty(getenv('LANDO'))) {
+    $replace = '.lndo.site';
   }
 
-  foreach ($results as $row) {
-    $dept = \Drupal::service('department.manager')->getDepartment($row->type);
-    $dept_url_parts = parse_url($dept->url());
-    $dept_hostname = $dept_url_parts['host'];
-    $hostname_bits = explode('.', $dept_hostname);
-    array_shift($hostname_bits);
-    $hostname_suffix = implode('.', $hostname_bits);
-
-    $query = \Drupal::database()->update('simple_sitemap')
-      ->condition('delta', 0)
-      ->condition('type', $row->type)
-      ->condition('sitemap_string', '%' . $hostname_suffix . '%', 'LIKE')
-      ->expression('sitemap_string', "REGEXP_REPLACE(sitemap_string, :pattern, :replacement)", [
-        ':pattern' => '.\\*.',
-        ':replacement' => '.' . $hostname_suffix . '.',
-      ])
-      ->execute();
-  }
+  \Drupal::database()->query("UPDATE {simple_sitemap}
+    SET sitemap_string = REPLACE(sitemap_string, '.*.uk-1.platformsh.site', $replace)
+    WHERE delta = :delta", [':delta' => 0])->execute();
 }

@@ -8,6 +8,10 @@
 .page-node-type-subtopic,
 .page-node-type-topic {
 
+  &:has(.layout .banner) article {
+    margin-top: 2em;
+  }
+
   h1:has(~ .layout .banner) {
     @include visually-hidden();
 
