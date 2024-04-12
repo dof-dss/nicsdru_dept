@@ -1,5 +1,5 @@
 dept_topics.topic_tree.json:
-  path: '/admin/topics/topic_tree/json/{department}'
+  path: '/admin/topics/topic_tree/json/{department_id}'
   defaults:
     _title: 'Topic tree field widget dataset'
     _controller: '\Drupal\dept_topics\Controller\TopicTreeDataController::allDepartmentTopics'
@@ -7,7 +7,7 @@ dept_topics.topic_tree.json:
     _permission: 'use topic tree widget'
 
 dept_topics.topic_tree.form:
-  path: '/admin/topics/topic_tree/{department}/{field}/{limit}/{selected}'
+  path: '/admin/topics/topic_tree/{department_id}/{field}/{limit}/{selected}'
   defaults:
     _title: 'Topic tree widget form'
     _form: 'Drupal\dept_topics\Form\TopicTreeForm'

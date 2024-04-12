@@ -23,7 +23,7 @@ final class TopicTreeForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL, $limit = NULL, $selected = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, $department_id = NULL, $field = NULL, $limit = NULL, $selected = NULL): array {
 
     $form['#title'] = $this->t('Select topic');
 
@@ -85,7 +85,7 @@ final class TopicTreeForm extends FormBase {
 
     // Data to pass to the JsTree instance.
     $form['#attached']['drupalSettings'] = [
-      'topic_tree.department' => $department,
+      'topic_tree.department' => $department_id,
       'topic_tree.field' => $field,
       'topic_tree.selected' => $selected,
       'topic_tree.limit' => $limit,

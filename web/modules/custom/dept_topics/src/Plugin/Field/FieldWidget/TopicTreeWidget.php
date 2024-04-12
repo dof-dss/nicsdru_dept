@@ -132,22 +132,22 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $field = $this->fieldDefinition->getName();
     $field_id = Html::getUniqueId($field);
     $default_values = $this->getSelectedOptions($items);
-    $current_dept = '';
+    $current_department_id = '';
     $options = [];
 
     // Get current department from the domain_access field.
     if (!empty($form['field_domain_access']['widget']['#default_value'])) {
-      $current_dept = current($form['field_domain_access']['widget']['#default_value']);
+      $current_department_id = current($form['field_domain_access']['widget']['#default_value']);
     }
 
     // If we cannot determine the department via domain_access, use the current domain department.
-    if (empty($current_dept)) {
+    if (empty($current_department_id)) {
       $domain = $this->domainNegotiator->getActiveDomain();
-      $current_dept = $domain->id();
+      $current_department_id = $domain->id();
     }
 
     // Only list topics/subtopics assigned to the department.
-    $topics = $this->topicManager->getTopicsForDepartment($current_dept);
+    $topics = $this->topicManager->getTopicsForDepartment($current_department_id);
 
     foreach ($topics as $nid => $topic) {
       $options[$nid] = $topic->label();
@@ -180,7 +180,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       '#title' => $this->t('Select @label', ['@label' => $this->fieldDefinition->getLabel()]),
       '#type' => 'link',
       '#url' => Url::fromRoute('dept_topics.topic_tree.form', [
-        'department' => $current_dept,
+        'department_id' => $current_department_id,
         'field' => $field_id,
         'limit' => $this->getSetting('limit'),
         'selected' => is_array($default_values) ? implode('+', $default_values) : '',
