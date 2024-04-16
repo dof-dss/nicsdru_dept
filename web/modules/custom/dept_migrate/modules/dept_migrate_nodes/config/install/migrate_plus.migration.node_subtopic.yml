@@ -14,6 +14,13 @@ source:
   constants:
     migrate_ignore_sites: 'MIGRATE_IGNORE_SITES'
 process:
+  field_site_topics:
+    - plugin: sub_process
+      source: field_parent_topic
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
   langcode:
     - plugin: default_value
       source: langcode
