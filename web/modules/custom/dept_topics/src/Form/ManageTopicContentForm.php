@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\dept_topics\Form;
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -240,8 +242,13 @@ final class ManageTopicContentForm extends FormBase {
       '#attributes' => [
         'class' => [
           'manage-topic-content-cancel',
-          'button--danger'
+          'button--danger',
+          'use-ajax'
         ],
+      ],
+      '#ajax' => [
+        'callback' => [$this, 'closeModalAjax'],
+        'event' => 'click',
       ],
     ];
 
@@ -256,6 +263,17 @@ final class ManageTopicContentForm extends FormBase {
     $form['add_existing']['add_path']['#value'] = $form_state->getValue('add_path');
 
     return $form;
+  }
+
+  /**
+   * Ajax callback to close the modal.
+   */
+  public function closeModalAjax() {
+    $command = new CloseModalDialogCommand();
+    $response = new AjaxResponse();
+    $response->addCommand($command);
+
+    return $response;
   }
 
   /**
@@ -366,6 +384,13 @@ final class ManageTopicContentForm extends FormBase {
 
     $topic->save();
     $form_state->setRedirect('entity.node.canonical', ['node' => $topic_nid]);
+  }
+
+  /**
+   * Form cancel handler.
+   */
+  public function cancel(array $form, FormStateInterface $form_state) {
+    $form_state->setRedirect('entity.node.canonical', ['node' => $form_state->getValue('topic_nid')]);
   }
 
   /**
