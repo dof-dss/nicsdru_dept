@@ -441,7 +441,7 @@ class MigrateUuidLookupManager {
         continue;
       }
 
-      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
+      $migrate_map = $this->dbconn->query("SELECT * from {$table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
 
       foreach ($migrate_map as $row) {
         if (empty($row->destid1)) {
@@ -471,6 +471,11 @@ class MigrateUuidLookupManager {
           ]);
 
           $media_entity = is_array($media_entities) ? array_pop($media_entities) : NULL;
+        }
+
+        // Final juggle of remote_video types, try by media id alone.
+        if (empty($media_entity)) {
+          $media_entity = $this->entityTypeManager->getStorage('media')->load($row->destid1);
         }
 
         if ($media_entity instanceof EntityInterface) {
