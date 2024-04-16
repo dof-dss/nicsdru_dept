@@ -391,6 +391,13 @@ final class ManageTopicContentForm extends FormBase {
   }
 
   /**
+   * Form cancel handler.
+   */
+  public function cancel(array $form, FormStateInterface $form_state) {
+    $form_state->setRedirect('entity.node.canonical', ['node' => $form_state->getValue('topic_nid')]);
+  }
+
+  /**
    * Return the node ID for the given path.
    */
   protected function extractNodeIdFromUrl(string $url):int {

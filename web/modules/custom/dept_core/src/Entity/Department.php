@@ -73,7 +73,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   /**
    * Domain for the department.
    *
-   * @var Domain
+   * @var \Drupal\domain\Entity\Domain
    */
   protected Domain $domain;
 
