@@ -13,7 +13,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
 use Drupal\dept_topics\TopicManager;
 use Drupal\domain\DomainNegotiatorInterface;
-use Drupal\node\NodeForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -157,11 +156,15 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       $options[$nid] = $topic->label();
     }
 
+    // Limit subtopics to 1 topic selection to avoid the issue with navigating parent hierarchies.
+    $selection_limit = ($entity->bundle() === 'subtopic') ? 1 : $this->getSetting('limit');
+
     $element = [
       '#type' => 'checkboxes',
       '#title' => $this->fieldDefinition->getLabel(),
       '#description' => $this->fieldDefinition->getDescription(),
       '#options' => $options,
+      '#multiple' => $selection_limit > 1,
       '#default_value' => $default_values,
       '#required' => $this->fieldDefinition->isRequired(),
       '#attached' => [
@@ -186,7 +189,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       '#url' => Url::fromRoute('dept_topics.topic_tree.form', [
         'department' => $current_dept,
         'field' => $field_id,
-        'limit' => $this->getSetting('limit'),
+        'limit' => $selection_limit,
         'selected' => is_array($default_values) ? implode('+', $default_values) : '',
       ]),
       '#disabled' => TRUE,
