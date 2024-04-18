@@ -31,6 +31,13 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
   protected $departmentManager;
 
   /**
+   * The Department ID.
+   *
+   * @var string
+   */
+  protected string $departmentId;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -39,9 +46,36 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
       $plugin_id,
       $plugin_definition
     );
+
     $instance->departmentManager = $container->get('department.manager');
 
+    // Check we are on a Departmental site we recognise.
+    $department = $instance->departmentManager->getCurrentDepartment();
+    if ($department instanceof Department) {
+      $instance->departmentId = $department->id();
+    }
+
     return $instance;
+  }
+
+  /**
+   * Department ID getter.
+   *
+   * @return string
+   *   The machine ID of the Department.
+   */
+  public function getDepartmentId(): string {
+    return $this->departmentId;
+  }
+
+  /**
+   * Department ID setter.
+   *
+   * @param string $departmentId
+   *   The machine ID of the Department.
+   */
+  public function setDepartmentId(string $departmentId): void {
+    $this->departmentId = trim($departmentId);
   }
 
   /**
@@ -54,10 +88,7 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
       return $result;
     }
 
-    // Check we are on a Departmental site we recognise.
-    $dept = $this->departmentManager->getCurrentDepartment();
-
-    if ($dept instanceof Department) {
+    if (!empty($this->getDepartmentId())) {
       $dom = Html::load($text);
       $link_elements = $dom->getElementsByTagName('a');
 
@@ -70,8 +101,7 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
           // dom element.
           $url_portions = parse_url($href);
 
-          if ($this->hostnameMatchesKnownDepartment($url_portions['host'], $dept->id())
-            && $this->shouldRewriteUrl($url_portions)) {
+          if ($this->shouldRewriteUrl($url_portions) && $this->hostnameMatchesKnownDepartment($href)) {
 
             $new_href = '';
 
@@ -88,18 +118,14 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
             $link->setAttribute('href', $new_href);
           }
         }
-        else {
-          // Skip over non-absolute links.
-          continue;
-        }
-
-        $output = $dom->saveHTML();
-
-        // Remove the HTML markup created when the text is loaded into HTML DOM.
-        $output = preg_replace('/(<!DOCTYPE.+>\n*<html.+><body>)(.+)(<\/body><\/html>)/m', "$2", $output);
-
-        $result = new FilterProcessResult($output);
       }
+
+      $output = $dom->saveHTML();
+
+      // Remove the HTML markup created when the text is loaded into HTML DOM.
+      $output = preg_replace('/(<!DOCTYPE.+>)?\n*(<html>)?(<body>)?(.+)(<\/body><\/html>)/m', "$4", $output);
+
+      $result = new FilterProcessResult($output);
     }
 
     return $result;
@@ -130,18 +156,15 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
   /**
    * Function to perform hostname matching.
    *
-   * @param string $host
-   *   The hostname found in an absolute link.
-   * @param string $dept_id
-   *   The machine id of a department entity.
+   * @param string $url
+   *   The URL to match.
    *
    * @return bool
    *   Whether there's a match between the two.
    */
-  protected function hostnameMatchesKnownDepartment(string $host, string $dept_id): bool {
-    // Simplistic matching process - if the dept id is in the hostname
-    // then assume it's a match and exit the loop.
-    return (bool) preg_match('/' . $dept_id . '/', $host);
+  protected function hostnameMatchesKnownDepartment(string $url): bool {
+    // Match the first part of the domain to the department.
+    return (bool) preg_match('/https?:\/\/(www.)?' . $this->getDepartmentId() . '/', $url);
   }
 
 }
