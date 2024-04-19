@@ -1,0 +1,10 @@
+@import '../init';
+@import 'ckeditor-base';
+
+$base-font-size: 16px;
+@include ckeditor-base(16px);
+
+/* File to selectively override visual elements in the layout builder form(s) */
+#layout-builder-modal {
+  font-size: 10px;
+}
