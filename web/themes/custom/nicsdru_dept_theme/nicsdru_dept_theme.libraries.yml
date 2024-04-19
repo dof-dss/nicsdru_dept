@@ -127,6 +127,11 @@ authenticated-styles:
       css/3_components/form/layout-builder-form.css: { minified: true, weight: -6 }
       css/3_components/layout/layout-builder.css: { minified: true, weight: -5 }
 
+dept-ckeditor-overrides:
+  css:
+    base:
+      css/3_components/ckeditor-overrides.css: { minified: true }
+
 nidirect-ui:
   js:
     js/ui.js: { minified: false }

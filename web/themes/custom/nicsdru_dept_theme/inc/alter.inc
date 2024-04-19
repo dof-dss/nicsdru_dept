@@ -26,6 +26,20 @@ function nicsdru_dept_theme_page_attachments_alter(array &$page) {
 }
 
 /**
+ * Implements hook_form_alter().
+ */
+function nicsdru_dept_theme_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $lb_applicable_forms = [
+    'layout_builder_add_block',
+    'layout_builder_update_block',
+  ];
+
+  if (in_array($form_id, $lb_applicable_forms)) {
+    $form['#attached']['library'][] = 'nicsdru_dept_theme/dept-ckeditor-overrides';
+  }
+}
+
+/**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function nicsdru_dept_theme_form_node_preview_form_select_alter(&$form, FormStateInterface $form_state, $form_id) {
