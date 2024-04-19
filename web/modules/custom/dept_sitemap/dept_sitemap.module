@@ -27,22 +27,22 @@ function dept_sitemap_cron() {
   // https://finance-ni.*.uk-1.platformsh.site
   // to this
   // https://finance-ni.main-bvxea6i-dnvkwx4xjhiza.uk-1.platformsh.site
-  $replace = sprintf(".%s-%s.uk-1.platformsh.site",
+
+  if (empty(getenv('PLATFORM_ENVIRONMENT'))) {
+    // Don't update if not on PSH cluster.
+    return;
+  }
+
+  $replace = sprintf("https://.%s-%s.uk-1.platformsh.site",
     getenv('PLATFORM_ENVIRONMENT') ?? '',
     getenv('PLATFORM_PROJECT') ?? '');
-
-  // Local dev override.
-  if (!empty(getenv('LANDO'))) {
-    $replace = '.lndo.site';
-  }
 
   // Use dynamic query for update - see advice on d.o for complex expression queries.
   // https://www.drupal.org/docs/8/api/database-api/dynamic-queries/introduction-to-dynamic-queries.
   $query = \Drupal::database()->update('simple_sitemap')
-    ->expression('sitemap_string', "REPLACE(sitemap_string, :find, :replace)", [
-      ':find' => '.*.uk-1.platformsh.site',
-      ':replace' => $replace,
+    ->expression('sitemap_string', "REGEXP_REPLACE(sitemap_string, :find_expression, :replace)", [
+      ':find_expression' => 'http(?:s?):\/\/.*?([^\.\/]+?\.[^\.]+?)(?:\/|$)',
+      ':replace' => $replace . '/',
     ])
-    ->condition('delta', 0)
     ->execute();
 }
