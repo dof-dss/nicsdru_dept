@@ -13,8 +13,9 @@ variables:
   php:
     memory_limit: "256M"
 #    xdebug.mode: "debug"
+    display_startup_errors: "off"
     date.timezone: "Europe/Dublin"
-
+    realpath_cache_ttl: 3600
 dependencies:
   php:
     composer/composer: '^2'
