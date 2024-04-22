@@ -1,0 +1,18 @@
+recommendations:
+  # Drupal Core uses assert()
+  php.quality.disable_assert_active:
+    enabled: false
+  # See https://www.drupal.org/project/drupal/issues/3033791
+  php.quality.disable_garbage_collector:
+    enabled: false
+  # We need longer running requests for Drupal
+  php.security.max_execution_time_too_long:
+    enabled: false
+  # See https://www.drupal.org/project/drupal/issues/2631220
+  php.security.enable_sessions_strict_mode:
+    enabled: false
+  # Needs further investigation to work on PSH. See https://www.drupal.org/project/preloader/issues/3274758
+  php.php_preloading:
+    enabled: false
+
+
