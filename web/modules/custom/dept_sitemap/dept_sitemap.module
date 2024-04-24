@@ -58,6 +58,10 @@ function dept_sitemap_cron() {
       $replace = "https://{$dept_prefix}.lndo.site";
     }
 
+    if (empty($replace)) {
+      continue;
+    }
+
     // Use dynamic query for update - see advice on d.o for complex expression queries.
     // https://www.drupal.org/docs/8/api/database-api/dynamic-queries/introduction-to-dynamic-queries.
     $query = \Drupal::database()->update('simple_sitemap')
