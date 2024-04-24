@@ -134,7 +134,7 @@ settings:
           enabled: true
           weight: 18
           search: '<\/?h1\b[^>]*>'
-          replace: <h2>
+          replace: '<h2>'
     ckeditor5_premium_features_import_word__import_word:
       upload_media:
         enabled: false
@@ -145,16 +145,16 @@ settings:
       styles:
         -
           label: 'Info notice'
-          element: '<div class="info-notice">'
+          element: '<p class="info-notice">'
         -
           label: 'Large text'
-          element: '<div class="large-text">'
+          element: '<p class="large-text">'
         -
           label: 'XL text'
-          element: '<div class="xl-text">'
+          element: '<p class="xl-text">'
         -
           label: 'XXL text'
-          element: '<div class="xxl-text">'
+          element: '<p class="xxl-text">'
         -
           label: 'Big green button'
           element: '<a class="btn--call-to-action">'
