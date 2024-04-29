@@ -63,6 +63,11 @@ class PostMigrationUpdateNodeAliasesSubscriber implements EventSubscriberInterfa
     if (strpos($event_id, 'node_') === 0) {
       $this->logger->notice("Update amended path aliases to the correct department");
 
+      // Define extracted variables or Drupal Check will moan.
+      $database = '';
+      $host = '';
+      $password = '';
+      $username = '';
       extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
       $pdo = new \PDO("mysql:host=$host;dbname=$database", $username, $password);
 
@@ -70,15 +75,15 @@ class PostMigrationUpdateNodeAliasesSubscriber implements EventSubscriberInterfa
       $query = $pdo->query('call UPDATE_PATH_ALIAS_DEPARTMENT_SUFFIX()');
 
       // Handle duplicate path aliases.
-      $aliases = $dbconn->query("SELECT alias AS distinct_values_count FROM path_alias GROUP BY alias HAVING COUNT(alias) > 1 AND COUNT(DISTINCT path) > 1;")
+      $aliases = $this->dbconn->query("SELECT alias AS distinct_values_count FROM path_alias GROUP BY alias HAVING COUNT(alias) > 1 AND COUNT(DISTINCT path) > 1;")
         ->fetchCol();
 
       foreach ($aliases as $alias) {
-        $query = $dbconn->select('path_alias', 'pa')
+        $query = $this->dbconn->select('path_alias', 'pa')
           ->fields('pa', ['id', 'path', 'alias'])
           ->fields('fd', ['status'])
           ->condition('pa.alias', $alias);
-
+        // Join by extracting the nid from the path.
         $query->join('node_field_data', 'fd', 'SUBSTRING(pa.path, 7, 100) = fd.nid');
         // Order by status, so we can give any published content alias priority.
         $query->orderBy('fd.status', 'DESC');
@@ -88,15 +93,42 @@ class PostMigrationUpdateNodeAliasesSubscriber implements EventSubscriberInterfa
 
         // Update each alias, incrementing the end for each.
         foreach ($results as $result) {
-          $new_alias = ($index > 0) ? $result->alias . '-' . $index : $result->alias;
-          $dbconn->update('path_alias')
+          $new_alias = $this->createAlias($result->alias, $index);
+          $this->dbconn->update('path_alias')
             ->fields(['alias' => $new_alias])
             ->condition('id', $result->id, '=')
             ->execute();
-          $index++;
         }
       }
     }
+  }
+
+  /**
+   * Create a unique path alias for a node.
+   *
+   * @param string $alias
+   *   The alias to make unique.
+   * @param int $index
+   *   The numeric index to append to the end of the alias.
+   *
+   * @return string
+   *   The unique alias.
+   */
+  private function createAlias($alias, &$index) {
+    $new_alias = ($index === 0) ? $alias : $alias . '-' . $index;
+
+    $exists = $this->dbconn->select('path_alias', 'pa')
+      ->condition('alias', $new_alias)
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    if ($exists > 0) {
+      $index++;
+      $this->createAlias($alias, $index);
+    }
+
+    return $new_alias;
   }
 
 }

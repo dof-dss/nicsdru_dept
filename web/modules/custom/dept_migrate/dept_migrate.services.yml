@@ -38,7 +38,7 @@ services:
       - { name: event_subscriber }
   dept_migrate.eventsubscriber.migrate.UpdateNodeAliases:
     class: Drupal\dept_migrate\EventSubscriber\PostMigrationUpdateNodeAliasesSubscriber
-    arguments: [ '@logger.factory', '@dept_migrate.database_d7']
+    arguments: [ '@logger.factory', '@database']
     tags:
       - { name: event_subscriber }
   dept_migrate.migrate_support:
