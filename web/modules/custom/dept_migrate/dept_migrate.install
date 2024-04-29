@@ -6,6 +6,10 @@ use Drupal\Core\Database\Database;
  * Remove stored procedures on uninstallation.
  */
 function dept_migrate_uninstall() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
   extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
 
   $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
