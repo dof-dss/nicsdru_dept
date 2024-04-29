@@ -9,7 +9,8 @@ dependencies:
     - domain_entity
 third_party_settings:
   domain_entity:
-    exclude_routes: {  }
+    exclude_routes:
+      canonical: canonical
 id: node.contact.field_domain_source
 field_name: field_domain_source
 entity_type: node

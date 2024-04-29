@@ -1,9 +1,9 @@
-uuid: 703fa04f-0a92-4cdf-86b1-f1e4cb6bc8f6
+uuid: 5d1f9721-7468-4fb9-9517-e620a89325d8
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.full
+    - core.entity_view_mode.node.teaser_with_image
     - field.field.node.profile.body
     - field.field.node.profile.field_department
     - field.field.node.profile.field_domain_access
@@ -18,36 +18,28 @@ dependencies:
     - layout_builder
     - metatag
     - smart_trim
-    - text
     - user
 third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: node.profile.full
+id: node.profile.teaser_with_image
 targetEntityType: node
 bundle: profile
-mode: full
+mode: teaser_with_image
 content:
-  body:
-    type: text_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 2
-    region: content
   field_metatags:
     type: metatag_empty_formatter
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 2
     region: content
   field_photo:
     type: entity_reference_entity_view
     label: hidden
     settings:
-      view_mode: article_float
+      view_mode: featured_news_thumbnail
       link: false
     third_party_settings: {  }
     weight: 0
@@ -69,11 +61,15 @@ content:
         text: More
         aria_label: 'Read more about [node:title]'
       summary_handler: full
-      trim_options: {  }
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
     third_party_settings: {  }
     weight: 1
     region: content
 hidden:
+  body: true
   content_moderation_control: true
   entitygroupfield: true
   field_department: true
