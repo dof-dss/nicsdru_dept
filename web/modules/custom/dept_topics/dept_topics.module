@@ -501,7 +501,7 @@ function dept_topics_theme() {
  * Implements hook_views_query_alter().
  */
 function dept_topics_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
-  if ($view->id() === 'content_by_site_subtopic' && $view->current_display === 'subtopic_related_publications') {
+  if ($view->id() === 'content_by_site_subtopic') {
     // @phpstan-ignore-next-line
     foreach ($query->where[0]['conditions'] as $index => $condition) {
       if (str_starts_with($condition['field'], 'node__field_site_topics')) {
