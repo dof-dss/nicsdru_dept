@@ -25,7 +25,7 @@
  * @see template_preprocess_block()
  */
 #}
-<div{{ attributes.addClass('subtopic-child-links') }}>
+<div{{ attributes.addClass('field-topic-content') }}>
   {{ title_prefix }}
   {%- if not configuration.label_display -%}
     {%- set title_attributes = title_attributes.addClass('visually-hidden') -%}
