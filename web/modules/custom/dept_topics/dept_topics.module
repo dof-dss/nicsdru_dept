@@ -267,16 +267,7 @@ function dept_topics_process_topic_child_contents($form, FormStateInterface $for
   }
 
   // Update topic entries from Node form or Moderation sidebar.
-  if (is_string($op) && in_array(strtolower($op), ['publish', 'quick publish'])) {
-    \Drupal::service('topic.manager')->updateChildDisplayOnTopics($entity);
-  }
-  elseif (!empty($mod_state[0]['value']) && in_array($mod_state[0]['value'], ['published', 'restore'])) {
-    \Drupal::service('topic.manager')->updateChildDisplayOnTopics($entity);
-  }
-  elseif ($op === 'Archive' || $mod_state[0]['value'] === 'archived') {
-    \Drupal::service('topic.manager')->removeChildDisplayFromTopics($entity);
-  }
-
+  \Drupal::service('topic.manager')->updateChildDisplayOnTopics($entity);
 }
 
 /**
