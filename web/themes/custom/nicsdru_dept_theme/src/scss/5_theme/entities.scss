@@ -173,6 +173,28 @@
   .toc-menu {
     max-width: 64rem;
   }
+
+  // The field-topic-content is a list of links to content
+  // tagged with the subtopic. By default, do not display
+  // the field-topic-content heading. Only display it when
+  // there is body content.
+  .field-topic-content > h2 {
+    display: none;
+  }
+
+  .page-body + .field-topic-content > h2 {
+    display: block;
+  }
+
+  // Visually adjustments for section-related when field-topic-content
+  // is present.
+  &:has(.field-topic-content) .section-related {
+    padding-top: 2em;
+
+    > h2 {
+      @include visually-hidden;
+    }
+  }
 }
 
 .site-book {
