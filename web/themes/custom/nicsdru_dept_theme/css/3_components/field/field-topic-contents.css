@@ -1,0 +1,36 @@
+/**
+ * @file
+ * Provides the moderation state indicators.
+ */
+/* Vertical rhythm presets =========================================== */
+/* Set the base images folder */
+/* Breakpoints ======================================================== */
+/* Layout max widths for larger breakpoints =========================== */
+/* line 8, src/scss/3_components/field/field-topic-contents.scss */
+.moderation-state, .moderation-state--draft, .moderation-state--needs-review, .moderation-state--archived {
+  font-size: 1.3rem;
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 15px;
+  letter-spacing: 0.1rem;
+}
+
+/* line 16, src/scss/3_components/field/field-topic-contents.scss */
+.moderation-state--draft {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+/* line 22, src/scss/3_components/field/field-topic-contents.scss */
+.moderation-state--needs-review {
+  background-color: #fee2c3;
+  color: #854d2c;
+}
+
+/* line 28, src/scss/3_components/field/field-topic-contents.scss */
+.moderation-state--archived {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+/*# sourceMappingURL=field-topic-contents.css.map */
