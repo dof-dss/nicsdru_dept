@@ -481,6 +481,24 @@ function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_stat
 }
 
 /**
+ * Implements hook_preprocess_field().
+ */
+function dept_topics_preprocess_field(&$variables, $hook) {
+  $element = $variables['element'];
+
+  if ($element['#field_name'] === 'field_topic_content') {
+    foreach ($variables['items'] as $index => ['content' => $item]) {
+      if (!$item['#entity']->isPublished()) {
+        $state = $item['#entity']->get('moderation_state')->getString();
+        $variables['items'][$index]['content']['#suffix'] = ' <span>' . ucfirst(str_replace('_', ' ', $state)) . '</span>';
+        $variables['items'][$index]['content']['#attributes']['class'] = 'moderation-state-' . str_replace('_', '-', $state);
+      }
+    }
+
+  }
+}
+
+/**
  * Implements hook_theme().
  */
 function dept_topics_theme() {
