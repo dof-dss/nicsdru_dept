@@ -46,7 +46,7 @@ function dept_sitemap_cron() {
       continue;
     }
 
-    if (empty(getenv('PLATFORM_ENVIRONMENT'))) {
+    if (!empty(getenv('PLATFORM_ENVIRONMENT'))) {
       $replace = sprintf("https://%s.%s-%s.uk-1.platformsh.site",
         $dept_prefix,
         getenv('PLATFORM_ENVIRONMENT') ?? '',
