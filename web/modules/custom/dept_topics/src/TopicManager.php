@@ -296,4 +296,23 @@ class TopicManager {
     }
   }
 
+  /**
+   * Public service function to return an array of topic ids
+   * from a parent topic node.
+   *
+   * More or less a convenience wrapper around the private
+   * function getChildTopics().
+   *
+   * @param \Drupal\node\NodeInterface $topic
+   *   The topic node.
+   *
+   * @return array
+   *   Structured array with the hierarchy of topic ids below
+   *   the parent topic passed in as an input parameter.
+   */
+  public function getTopicChildren(NodeInterface $topic) {
+    $this->getChildTopics($topic);
+    return $this->deptTopics;
+  }
+
 }

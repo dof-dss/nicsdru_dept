@@ -173,6 +173,30 @@
   .toc-menu {
     max-width: 64rem;
   }
+
+  // The field-topic-content is a list of links to child content.
+  // By default, do not display the field-topic-content heading.
+  .field-topic-content > h2 {
+    display: none;
+  }
+
+  // Only display it when there is body content whose last child is
+  // not a heading (sometimes authors add a heading like at the end
+  // of the body to give their own heading to the following
+  // field-topic-content child links)
+  .page-body:not(:has(h2:last-child, h3:last-child)) + .field-topic-content > h2 {
+    display: block;
+  }
+
+  // Visual adjustments for section-related when field-topic-content
+  // is present.
+  &:has(.field-topic-content) .section-related {
+    padding-top: var(--rhythm-spacing-xxl);
+
+    > h2 {
+      @include visually-hidden;
+    }
+  }
 }
 
 .site-book {
