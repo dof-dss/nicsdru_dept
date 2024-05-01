@@ -2,6 +2,21 @@
 
 use Drupal\Core\Database\Database;
 
+/*
+ * Remove stored procedures on uninstallation.
+ */
+function dept_migrate_uninstall() {
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+
+  $pdo->exec('DROP PROCEDURE IF EXISTS UPDATE_PATH_ALIAS_DEPARTMENT_SUFFIX');
+}
+
 /**
 * Ad-hoc removal of problematic data properties from source db
 */
@@ -60,4 +75,24 @@ function dept_migrate_update_8002() {
       ->condition('roles_target_id', $role, '=')
       ->execute();
   }
+}
+
+/**
+ * Install UPDATE_PATH_ALIAS_DEPARTMENT_SUFFIX Sproc.
+ */
+function dept_migrate_update_8003() {
+  // Define extracted variables or Drupal Check will moan.
+  $database = '';
+  $host = '';
+  $password = '';
+  $username = '';
+  extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+
+  $module_handler = \Drupal::service('module_handler');
+  $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_migrate')->getPath());
+
+  $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+
+  $pdo->exec('DROP PROCEDURE IF EXISTS UPDATE_PATH_ALIAS_DEPARTMENT_SUFFIX');
+  $pdo->exec(file_get_contents($module_path . '/inc/update_path_alias_department_suffix.sproc'));
 }
