@@ -497,6 +497,25 @@ function dept_topics_preprocess_field(&$variables, $hook) {
 }
 
 /**
+ * Implements hook_preprocess_field_multiple_value_form().
+ */
+function dept_topics_preprocess_field_multiple_value_form(&$variables) {
+  if ($variables["element"]["#field_name"] === 'field_topic_content') {
+    // Add a moderation state label to each node in the entity reference form list.
+    foreach ($variables["table"]["#rows"] as $delta => $row) {
+      if (!empty($variables["element"][$delta]["target_id"]["#default_value"])) {
+        $node = $variables["element"][$delta]["target_id"]["#default_value"][0];
+        $state = $node->get('moderation_state')->getString();
+
+        if (!$node->isPublished()) {
+          $variables["table"]["#rows"][$delta]['data'][1]['data']['#suffix'] = ' <span title="Moderation status" class="moderation-state moderation-state--' . str_replace('_', '-', $state) . '">' . ucfirst(str_replace('_', ' ', $state)) . '</span>';
+        }
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_theme().
  */
 function dept_topics_theme() {
