@@ -10,26 +10,31 @@
   font-size: 1.3rem;
   display: inline-block;
   padding: 1px 8px;
+  border: 1px solid;
   border-radius: 15px;
   letter-spacing: 0.1rem;
   cursor: default;
+  margin-bottom: 2px;
 
   &--draft  {
     @extend .moderation-state;
     background-color: rgb(254, 226, 226);
     color: rgb(185, 28, 28);
+    border-color: rgba(185, 28, 28, 0.2);
   }
 
   &--needs-review  {
     @extend .moderation-state;
     background-color: rgb(254, 226, 195);
     color: rgb(133, 77, 44);
+    border-color: rgba(133, 77, 44, 0.2);
   }
 
   &--archived {
     @extend .moderation-state;
     background-color: rgb(243, 244, 246);
     color: rgb(75, 85, 99);
+    border-color: rgba(75, 85, 99, 0.2);
   }
 
 }
