@@ -490,10 +490,9 @@ function dept_topics_preprocess_field(&$variables, $hook) {
     foreach ($variables['items'] as $index => ['content' => $item]) {
       if (!empty($item['#entity']) && !$item['#entity']->isPublished()) {
         $state = $item['#entity']->get('moderation_state')->getString();
-        $variables['items'][$index]['content']['#suffix'] = ' <span class="moderation-state--' . str_replace('_', '-', $state) . '">' . ucfirst(str_replace('_', ' ', $state)) . '</span>';
+        $variables['items'][$index]['content']['#suffix'] = ' <span title="Moderation status" class="moderation-state--' . str_replace('_', '-', $state) . '">' . ucfirst(str_replace('_', ' ', $state)) . '</span>';
       }
     }
-
   }
 }
 

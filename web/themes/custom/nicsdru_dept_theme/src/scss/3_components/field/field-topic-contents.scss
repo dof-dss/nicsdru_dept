@@ -12,6 +12,7 @@
   padding: 1px 8px;
   border-radius: 15px;
   letter-spacing: 0.1rem;
+  cursor: default;
 
   &--draft  {
     @extend .moderation-state;
