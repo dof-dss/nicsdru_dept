@@ -99,21 +99,21 @@ then
   echo "Migrating D7 user and roles"
   $DRUSH migrate:import users --force
 
-#  echo "Migrating D7 files and media entities"
-#  $DRUSH migrate:import d7_file_private --force
-#  $DRUSH migrate:import d7_file --force
-#
-#  for type in image video secure_file
-#  do
-#    echo "Migrating D7 ${type} to corresponding media entities"
-#    $DRUSH migrate:import d7_file_media_$type --force
-#  done
-#
-#  echo "Migrating D7 file documents to corresponding media entities"
-#  for i in {1..10}
-#  do
-#    $DRUSH migrate:import d7_file_media_document --force --limit=10000
-#  done
+  echo "Migrating D7 files and media entities"
+  $DRUSH migrate:import d7_file_private --force
+  $DRUSH migrate:import d7_file --force
+
+  for type in image video secure_file
+  do
+    echo "Migrating D7 ${type} to corresponding media entities"
+    $DRUSH migrate:import d7_file_media_$type --force
+  done
+
+  echo "Migrating D7 file documents to corresponding media entities"
+  for i in {1..10}
+  do
+    $DRUSH migrate:import d7_file_media_document --force --limit=10000
+  done
 
   # Turn off content_lock modules as they interfere with node and redirect entity creation here.
   $DRUSH pmu content_lock,content_lock_timeout
