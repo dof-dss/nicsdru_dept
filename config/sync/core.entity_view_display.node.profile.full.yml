@@ -34,23 +34,23 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 1
     region: content
   field_metatags:
     type: metatag_empty_formatter
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 2
     region: content
   field_photo:
     type: entity_reference_entity_view
     label: hidden
     settings:
-      view_mode: article_float
+      view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 0
+    weight: 3
     region: content
   field_summary:
     type: smart_trim
@@ -71,7 +71,7 @@ content:
       summary_handler: full
       trim_options: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   content_moderation_control: true
