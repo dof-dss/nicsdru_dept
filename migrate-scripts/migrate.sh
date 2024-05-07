@@ -84,14 +84,14 @@ then
     $DRUSH migrate:reset $m
   done
 
-  echo "Make sure active config matches that from migrate modules"
-  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_flags/config/install -y
-  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_taxo/config/install -y
-
-  for type in users files nodes
-  do
-    $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_$type/config/install -y
-  done
+#  echo "Make sure active config matches that from migrate modules"
+#  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_flags/config/install -y
+#  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_taxo/config/install -y
+#
+#  for type in users files nodes
+#  do
+#    $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_$type/config/install -y
+#  done
 
   echo "Migrating D7 taxonomy data"
   $DRUSH migrate:import --group=migrate_drupal_7_taxo

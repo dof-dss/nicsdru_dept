@@ -181,9 +181,14 @@ final class ManageTopicContentForm extends FormBase {
 
       $form['child_content'][$child_nid]['title'] = [
         '#type' => 'html_tag',
-        '#tag' => 'p',
+        '#tag' => 'span',
         '#value' => $child->label(),
       ];
+
+      if (!$child->isPublished()) {
+        $state = $child->get('moderation_state')->getString();
+        $form['child_content'][$child_nid]['title']['#suffix'] = ' <span title="Moderation status" class="moderation-state--' . str_replace('_', '-', $state) . '">' . ucfirst(str_replace('_', ' ', $state)) . '</span>';
+      }
 
       $form['child_content'][$child_nid]['weight'] = [
         '#type' => 'weight',
