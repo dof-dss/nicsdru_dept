@@ -286,7 +286,6 @@ final class ManageTopicContentForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    return;
     $parents = $form_state->getTriggeringElement()['#parents'];
 
     // Append call.
@@ -299,7 +298,7 @@ final class ManageTopicContentForm extends FormBase {
       }
 
       // We only want valid url paths and not the typed text.
-      if (!str_starts_with($add_path, 'http')) {
+      if (!UrlHelper::isExternal($add_path) && UrlHelper::isValid($add_path, TRUE)) {
         $form_state->setErrorByName('add_path', 'Path must be a valid URL');
         return;
       }
