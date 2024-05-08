@@ -298,7 +298,7 @@ final class ManageTopicContentForm extends FormBase {
       }
 
       // We only want valid url paths and not the typed text.
-      if (!UrlHelper::isExternal($add_path) && UrlHelper::isValid($add_path, TRUE)) {
+      if (!str_starts_with($add_path, '/node/')) {
         $form_state->setErrorByName('add_path', 'Path must be a valid URL');
         return;
       }
