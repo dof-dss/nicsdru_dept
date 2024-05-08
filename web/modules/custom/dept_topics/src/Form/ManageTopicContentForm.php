@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\dept_topics\Form;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -285,6 +286,7 @@ final class ManageTopicContentForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
+    return;
     $parents = $form_state->getTriggeringElement()['#parents'];
 
     // Append call.
@@ -403,11 +405,16 @@ final class ManageTopicContentForm extends FormBase {
    */
   protected function extractNodeIdFromUrl(string $url):int {
     // Strip the host and match the alias to a node id.
-    $host = $this->getRequest()->getSchemeAndHttpHost();
-    $alias = substr($url, strlen($host));
-    $path = $this->aliasManager->getPathByAlias($alias);
-
-    $nid = (int) substr($path, 6);
+    if (UrlHelper::isExternal($url)) {
+      $host = $this->getRequest()->getSchemeAndHttpHost();
+      $alias = substr($url, strlen($host));
+      $path = $this->aliasManager->getPathByAlias($alias);
+      $nid = (int) substr($path, 6);
+    }
+    else {
+      // Canonical URL. Trim to extract the node id parameter.
+      $nid = (int) substr($url, 6);
+    }
 
     return $nid;
   }
