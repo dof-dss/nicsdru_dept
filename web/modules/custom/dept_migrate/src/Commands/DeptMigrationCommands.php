@@ -3,7 +3,6 @@
 namespace Drupal\dept_migrate\Commands;
 
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -307,6 +306,14 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       return;
     }
 
+    // Remove existing content reference links for the given department.
+    $this->dbConn->query("DELETE tc FROM node__field_topic_content tc
+      LEFT JOIN node__field_domain_source ds
+      ON tc.entity_id = ds.entity_id
+      WHERE ds.field_domain_source_target_id = '" . $domain_id . "'
+      AND tc.bundle = 'topic'"
+    )->execute();
+
     $topic_content_sql = "
       WITH content_stack_cte (nid, type, title, weight) AS (
         SELECT
@@ -426,6 +433,19 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
    * @aliases scc
    */
   public function createSubtopicContentReferences($domain_id) {
+
+    if (empty($domain_id)) {
+      return;
+    }
+
+    // Remove existing content reference links for the given department.
+    $this->dbConn->query("DELETE tc FROM node__field_topic_content tc
+      LEFT JOIN node__field_domain_source ds
+      ON tc.entity_id = ds.entity_id
+      WHERE ds.field_domain_source_target_id = '" . $domain_id . "'
+      AND tc.bundle = 'subtopic'"
+    )->execute();
+
     $domain_topics_d9 = $this->dbConn->query("
     SELECT ds.entity_id FROM node__field_domain_source ds
     INNER JOIN node_field_data nfd

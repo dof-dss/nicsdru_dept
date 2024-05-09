@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\dept_topics\Form;
 
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -181,9 +182,14 @@ final class ManageTopicContentForm extends FormBase {
 
       $form['child_content'][$child_nid]['title'] = [
         '#type' => 'html_tag',
-        '#tag' => 'p',
+        '#tag' => 'span',
         '#value' => $child->label(),
       ];
+
+      if (!$child->isPublished()) {
+        $state = $child->get('moderation_state')->getString();
+        $form['child_content'][$child_nid]['title']['#suffix'] = ' <span title="Moderation status" class="moderation-state--' . str_replace('_', '-', $state) . '">' . ucfirst(str_replace('_', ' ', $state)) . '</span>';
+      }
 
       $form['child_content'][$child_nid]['weight'] = [
         '#type' => 'weight',
@@ -292,7 +298,7 @@ final class ManageTopicContentForm extends FormBase {
       }
 
       // We only want valid url paths and not the typed text.
-      if (!str_starts_with($add_path, 'http')) {
+      if (!str_starts_with($add_path, '/node/')) {
         $form_state->setErrorByName('add_path', 'Path must be a valid URL');
         return;
       }
@@ -398,11 +404,16 @@ final class ManageTopicContentForm extends FormBase {
    */
   protected function extractNodeIdFromUrl(string $url):int {
     // Strip the host and match the alias to a node id.
-    $host = $this->getRequest()->getSchemeAndHttpHost();
-    $alias = substr($url, strlen($host));
-    $path = $this->aliasManager->getPathByAlias($alias);
-
-    $nid = (int) substr($path, 6);
+    if (UrlHelper::isExternal($url)) {
+      $host = $this->getRequest()->getSchemeAndHttpHost();
+      $alias = substr($url, strlen($host));
+      $path = $this->aliasManager->getPathByAlias($alias);
+      $nid = (int) substr($path, 6);
+    }
+    else {
+      // Canonical URL. Trim to extract the node id parameter.
+      $nid = (int) substr($url, 6);
+    }
 
     return $nid;
   }

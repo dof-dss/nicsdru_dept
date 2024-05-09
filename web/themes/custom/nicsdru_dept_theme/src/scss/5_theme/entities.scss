@@ -170,32 +170,48 @@
 }
 
 .page-node-type-subtopic {
+
   .toc-menu {
     max-width: 64rem;
   }
 
-  // The field-topic-content is a list of links to child content.
+  .field-topic-content {
+    margin: 0 0 var(--rhythm-spacing-xl);
+
+    > *:first-child {
+      margin-top: 0;
+    }
+
+    > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // field-topic-content is a list of links to a subtopic's
+  // child content.
+
+  // If the subtopic has a summary or page body, add extra styling to
+  // field-topic-content link list to help it stand out.
+  .page-summary + .field-topic-content .field-topic-content__list,
+  .page-body + .field-topic-content .field-topic-content__list {
+    border-left: var(--rhythm-spacing-sm) solid var(--brand-primary-color);
+    padding-left: var(--rhythm-spacing-lg);
+  }
+
   // By default, do not display the field-topic-content heading.
   .field-topic-content > h2 {
     display: none;
+
+    + ul {
+      margin-top: 0;
+    }
   }
 
-  // Only display it when there is body content whose last child is
-  // not a heading (sometimes authors add a heading like at the end
-  // of the body to give their own heading to the following
-  // field-topic-content child links)
+  // Display the field-topic-content heading when subtopic has a page
+  // body and the page body's last element is not a heading.
   .page-body:not(:has(h2:last-child, h3:last-child)) + .field-topic-content > h2 {
     display: block;
-  }
-
-  // Visual adjustments for section-related when field-topic-content
-  // is present.
-  &:has(.field-topic-content) .section-related {
-    padding-top: var(--rhythm-spacing-xxl);
-
-    > h2 {
-      @include visually-hidden;
-    }
+    margin-top: var(--rhythm-spacing-xxl);
   }
 }
 
