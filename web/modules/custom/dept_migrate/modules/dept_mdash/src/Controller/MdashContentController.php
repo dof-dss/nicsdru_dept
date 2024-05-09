@@ -115,8 +115,10 @@ class MdashContentController extends ControllerBase {
     ];
   }
 
+  /**
+   * Builds the page for recent revisions.
+   */
   public function pageRecentRevisions() {
-
     $domains = $this->d7conn->select('domain', 'd')
       ->fields('d', ['sitename'])
       ->execute()
@@ -135,7 +137,7 @@ class MdashContentController extends ControllerBase {
         WHERE nh.stamp > n.changed
         AND nh.stamp > UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 4 WEEK))
         AND (nh.state = 'draft' OR nh.state = 'needs_review')
-        AND d.sitename = '". $domain ."'")
+        AND d.sitename = '" . $domain . "'")
         ->fetchAll();
 
       if (count($results) < 1) {
@@ -159,8 +161,8 @@ class MdashContentController extends ControllerBase {
         '#tag' => 'h2',
         '#value' => $domain,
       ];
-      
-      $build[$domain]['table'] =[
+
+      $build[$domain]['table'] = [
         '#type' => 'table',
         '#header' => [
           'nid',
@@ -174,7 +176,6 @@ class MdashContentController extends ControllerBase {
         '#rows' => $rows,
       ];
     }
-
 
     return $build;
   }

@@ -59,7 +59,8 @@ class MdashLogViewerBlock extends BlockBase implements ContainerFactoryPluginInt
           '#value' => $log_contents,
         ];
       }
-    } else {
+    }
+    else {
       $build['content'] = [
         '#type' => 'html_tag',
         '#tag' => 'pre',
