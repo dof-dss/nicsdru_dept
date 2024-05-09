@@ -74,9 +74,9 @@ class MdashContentController extends ControllerBase {
   }
 
   /**
-   * Builds the response.
+   * Builds the page for overview.
    */
-  public function build() {
+  public function pageOverview() {
     $plugin_block = $this->blockManager->createInstance('dept_mdash_content_summary', []);
     $content_summary_block = $plugin_block->build();
 
@@ -103,6 +103,14 @@ class MdashContentController extends ControllerBase {
         ],
       ],
     ];
+  }
+
+  public function pageRecentRevisions() {
+    $build = [
+      '#markup' => '<p>Test</p>'
+    ];
+
+    return $build;
   }
 
   /**
