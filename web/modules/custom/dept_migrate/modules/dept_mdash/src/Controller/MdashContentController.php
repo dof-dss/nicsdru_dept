@@ -119,6 +119,8 @@ class MdashContentController extends ControllerBase {
    * Builds the page for recent revisions.
    */
   public function pageRecentRevisions() {
+    $build = [];
+
     $domains = $this->d7conn->select('domain', 'd')
       ->fields('d', ['sitename'])
       ->execute()
@@ -156,13 +158,12 @@ class MdashContentController extends ControllerBase {
         ];
       }
 
-      $build[$domain]['title'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'h2',
-        '#value' => $domain,
+      $build[$domain]['data'] = [
+        '#type' => 'details',
+        '#title' => $domain,
       ];
 
-      $build[$domain]['table'] = [
+      $build[$domain]['data']['table'] = [
         '#type' => 'table',
         '#header' => [
           'nid',
