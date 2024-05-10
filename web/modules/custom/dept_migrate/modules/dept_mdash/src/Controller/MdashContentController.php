@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Database\Database;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -27,6 +28,13 @@ class MdashContentController extends ControllerBase {
    * @var \Drupal\Core\Database\Connection
    */
   protected $dbConn;
+
+  /**
+   * Drupal 7 database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $d7conn;
 
   /**
    * The date formatter service.
@@ -59,6 +67,8 @@ class MdashContentController extends ControllerBase {
     $this->dbConn = $connection;
     $this->dateFormatter = $date_formatter;
     $this->configFactory = $config_factory;
+
+    $this->d7conn = Database::getConnection('default', 'migrate');
   }
 
   /**
@@ -74,9 +84,9 @@ class MdashContentController extends ControllerBase {
   }
 
   /**
-   * Builds the response.
+   * Builds the page for overview.
    */
-  public function build() {
+  public function pageOverview() {
     $plugin_block = $this->blockManager->createInstance('dept_mdash_content_summary', []);
     $content_summary_block = $plugin_block->build();
 
@@ -103,6 +113,72 @@ class MdashContentController extends ControllerBase {
         ],
       ],
     ];
+  }
+
+  /**
+   * Builds the page for recent revisions.
+   */
+  public function pageRecentRevisions() {
+    $build = [];
+
+    $domains = $this->d7conn->select('domain', 'd')
+      ->fields('d', ['sitename'])
+      ->execute()
+      ->fetchAllAssoc('sitename');
+
+    foreach ($domains as $domain => $val) {
+      $rows = [];
+
+      $results = $this->d7conn->query("SELECT n.nid, nh.vid, n.type, nh.from_state, nh.state, FROM_UNIXTIME(nh.stamp) as datetime, n.title FROM workbench_moderation_node_history nh
+        LEFT JOIN node n
+        ON nh.nid = n.nid
+        LEFT JOIN domain_access da
+        ON n.nid = da.nid
+        LEFT JOIN domain d
+        ON da.gid = d.domain_id
+        WHERE nh.stamp > n.changed
+        AND nh.stamp > UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 4 WEEK))
+        AND (nh.state = 'draft' OR nh.state = 'needs_review')
+        AND d.sitename = '" . $domain . "'")
+        ->fetchAll();
+
+      if (count($results) < 1) {
+        continue;
+      }
+
+      foreach ($results as $result) {
+        $rows[] = [
+          $result->nid,
+          $result->vid,
+          $result->type,
+          $result->from_state,
+          $result->state,
+          $result->datetime,
+          $result->title,
+        ];
+      }
+
+      $build[$domain]['data'] = [
+        '#type' => 'details',
+        '#title' => $domain,
+      ];
+
+      $build[$domain]['data']['table'] = [
+        '#type' => 'table',
+        '#header' => [
+          'nid',
+          'revision id',
+          'bundle',
+          'from state',
+          'to state',
+          'datetime',
+          'title'
+        ],
+        '#rows' => $rows,
+      ];
+    }
+
+    return $build;
   }
 
   /**

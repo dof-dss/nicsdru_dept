@@ -2666,17 +2666,17 @@
         },
         {
             "name": "drupal/ckeditor5_premium_features",
-            "version": "1.2.6",
+            "version": "1.2.8",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ckeditor5_premium_features.git",
-                "reference": "1.2.6"
+                "reference": "1.2.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ckeditor5_premium_features-1.2.6.zip",
-                "reference": "1.2.6",
-                "shasum": "a3670605d9388d778c221cca5c3523a15f9497d0"
+                "url": "https://ftp.drupal.org/files/projects/ckeditor5_premium_features-1.2.8.zip",
+                "reference": "1.2.8",
+                "shasum": "775c7ccdc2b553565b1abce7e2e380ae4c18e857"
             },
             "require": {
                 "aws/aws-sdk-php": "^3.296",
@@ -2685,7 +2685,7 @@
                 "ext-dom": "*",
                 "ext-libxml": "*",
                 "firebase/php-jwt": "^6.0",
-                "openai-php/client": "^0.8.0",
+                "openai-php/client": "^0.4.0 || ^0.8.0",
                 "php": "^8.0"
             },
             "require-dev": {
@@ -2695,8 +2695,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.2.6",
-                    "datestamp": "1709550478",
+                    "version": "1.2.8",
+                    "datestamp": "1713960338",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -20742,5 +20742,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
