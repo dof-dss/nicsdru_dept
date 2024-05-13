@@ -31,6 +31,7 @@ settings:
       - undo
       - redo
       - '|'
+      - textPartLanguage
       - importWord
       - specialCharacters
       - fullScreen
@@ -41,6 +42,8 @@ settings:
         - heading2
         - heading3
         - heading4
+    ckeditor5_language:
+      language_list: site_configured
     ckeditor5_list:
       properties:
         reversed: true
@@ -138,7 +141,7 @@ settings:
           enabled: true
           weight: 18
           search: '<\/?h1\b[^>]*>'
-          replace: <h2>
+          replace: '<h2>'
     ckeditor5_premium_features_import_word__import_word:
       upload_media:
         enabled: false
