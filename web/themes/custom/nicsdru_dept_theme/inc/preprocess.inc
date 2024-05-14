@@ -118,6 +118,13 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
             ->setAttribute('role', 'presentation');
         }
         break;
+      case "contacts":
+        $variables['main_content_attr']->addClass(LayoutClasses::MAIN_LIMITED);
+        if ($variables['content_wrapper_attr'] instanceof Attribute) {
+          $variables['content_wrapper_attr']
+            ->addClass(['ga-main', 'contacts-content'])
+            ->setAttribute('role', 'presentation');
+        }
     }
   }
 
