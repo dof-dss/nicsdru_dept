@@ -28,6 +28,7 @@ settings:
       - undo
       - redo
       - '|'
+      - textPartLanguage
       - importWord
       - specialCharacters
       - fullScreen
@@ -37,6 +38,8 @@ settings:
         - heading2
         - heading3
         - heading4
+    ckeditor5_language:
+      language_list: site_configured
     ckeditor5_list:
       properties:
         reversed: false
