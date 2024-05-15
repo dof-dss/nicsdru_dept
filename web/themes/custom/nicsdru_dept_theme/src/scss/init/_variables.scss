@@ -50,7 +50,8 @@ $grid-breakpoints: (
 
 /* Layout max widths for larger breakpoints =========================== */
 $max-grid-width: 1140px;
-$max-content-width: 76rem; // Apply to content in a single column.
+$max-content-width: 76rem; // Apply to content in single column page layouts.
+$max-body-text-width: 64rem; // Apply to content containers containing normal sized text.
 
 $grid-gap: 24px;
 $tab-grid-gap: 27px;
