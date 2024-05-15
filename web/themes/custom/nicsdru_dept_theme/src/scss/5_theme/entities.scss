@@ -261,3 +261,15 @@
     }
   }
 }
+
+.path-contact,
+.page-node-type-contact {
+
+  .google-map-field .map-container {
+    min-height: 300px;
+
+    @include breakpoint($tab) {
+      min-height: 400px;
+    }
+  }
+}

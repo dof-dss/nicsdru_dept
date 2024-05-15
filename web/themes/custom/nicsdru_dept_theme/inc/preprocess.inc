@@ -42,7 +42,6 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
         // Specific node types have a main and aside.
         case "application":
         case "article":
-        case "contact":
         case "news":
         case "page":
           // If page is not in a book, it has a main and aside.
@@ -120,7 +119,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
         }
         break;
       case "contacts":
-        $variables['main_content_attr']->addClass(LayoutClasses::MAIN_SIDE);
+        $variables['main_content_attr']->addClass(LayoutClasses::MAIN_LIMITED);
         if ($variables['content_wrapper_attr'] instanceof Attribute) {
           $variables['content_wrapper_attr']
             ->addClass(['ga-main', 'contacts-content'])
