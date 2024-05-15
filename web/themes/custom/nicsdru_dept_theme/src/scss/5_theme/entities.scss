@@ -51,6 +51,7 @@
 .page-node-type-embargoed-publication,
 .page-node-type-consultation,
 .page-node-type-subtopic {
+
   .narrow-title {
     @include breakpoint($phab) {
       width: 83.33%;
@@ -135,7 +136,7 @@
   .article-content {
 
     * {
-      max-width: $max-content-width;
+      max-width: $max-body-text-width;
     }
 
     .field-photo .media-image {
@@ -193,7 +194,7 @@
   // If the subtopic has a summary or page body, add extra styling to
   // field-topic-content link list to help it stand out.
   .page-summary + .field-topic-content .field-topic-content__list,
-  .page-body + .field-topic-content .field-topic-content__list {
+  .article-content + .field-topic-content .field-topic-content__list {
     border-left: var(--rhythm-spacing-sm) solid var(--brand-primary-color);
     padding-left: var(--rhythm-spacing-lg);
   }
@@ -209,7 +210,7 @@
 
   // Display the field-topic-content heading when subtopic has a page
   // body and the page body's last element is not a heading.
-  .page-body:not(:has(h2:last-child, h3:last-child)) + .field-topic-content > h2 {
+  .article-content:not(:has(h2:last-child, h3:last-child)) + .field-topic-content > h2 {
     display: block;
     margin-top: var(--rhythm-spacing-xxl);
   }
