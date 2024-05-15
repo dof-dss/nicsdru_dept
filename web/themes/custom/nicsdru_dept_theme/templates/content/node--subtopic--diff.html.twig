@@ -71,18 +71,26 @@
  */
 #}
 <article{{ attributes.setAttribute('id', 'main-article').removeAttribute('role') }}>
+
+  {% if banner_image %}
+    {{ banner_image }}
+  {% endif %}
+
   {% if show_title %}
     <h1 class="page-title">{{ label }}</h1>
     {{ content.field_site_topics }}
   {% endif %}
+
   {% if content_attributes is not empty %}
   <div{{ content_attributes }}>
   {% endif %}
-    {{- content|without('field_site_topics') -}}
+    {{- content -}}
   {% if content_attributes is not empty %}
   </div>
   {% endif %}
+
   {% if display_social_links %}
     {{ drupal_entity('block', 'originssocialsharing', check_access=false) }}
   {% endif %}
+
 </article>
