@@ -4,6 +4,15 @@
  */
 @import '../../init';
 
+.text-block p,
+.small-text,
+.smallish-text,
+.large-text,
+.xl-text,
+.xxl-text {
+  max-width: 65ch;
+}
+
 .small-text,
 .small-text * {
   @include responsive-typo-map($small-text);
