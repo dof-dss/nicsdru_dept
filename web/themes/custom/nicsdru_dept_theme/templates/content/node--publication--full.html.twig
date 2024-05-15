@@ -83,8 +83,11 @@
   {{ content.field_published_date }}
   {{ content.field_last_updated }}
   {{ content.field_site_topics }}
+  {{ content.field_summary }}
 
-  {{- content|without('field_published_date', 'field_last_updated', 'field_site_topics') -}}
+  <div{{ content_attributes.addClass(['article-content', 'max-body-text-width']) }}>
+    {{- content|without('field_published_date', 'field_last_updated', 'field_site_topics', 'field_summary') -}}
+  </div>
 
   {% if display_social_links %}
     {{ drupal_entity('block', 'originssocialsharing', check_access=false) }}

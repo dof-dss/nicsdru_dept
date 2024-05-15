@@ -71,21 +71,26 @@
  */
 #}
 <article{{ attributes.setAttribute('id', 'main-article').removeAttribute('role') }}>
+
   {% if banner_image %}
     {{ banner_image }}
   {% endif %}
+
   {% if show_title %}
     {{ drupal_block('page_title_block', wrapper=false) }}
     {{ content.field_site_topics }}
   {% endif %}
-  {% if content_attributes is not empty %}
-  <div{{ content_attributes }}>
-  {% endif %}
-  {{- content|without('field_site_topics') -}}
-  {% if content_attributes is not empty %}
+
+  {{ content.field_summary }}
+
+  <div{{ content_attributes.addClass('article-content', 'max-body-text-width') }}>
+      {{- content|without('field_site_topics', 'field_summary', 'field_map_location') -}}
   </div>
-  {% endif %}
+
+  {{ content.field_map_location }}
+
   {% if display_social_links %}
     {{ drupal_entity('block', 'originssocialsharing', check_access=false) }}
   {% endif %}
+
 </article>

@@ -118,6 +118,13 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
             ->setAttribute('role', 'presentation');
         }
         break;
+      case "contacts":
+        $variables['main_content_attr']->addClass(LayoutClasses::MAIN_LIMITED);
+        if ($variables['content_wrapper_attr'] instanceof Attribute) {
+          $variables['content_wrapper_attr']
+            ->addClass(['ga-main', 'contacts-content'])
+            ->setAttribute('role', 'presentation');
+        }
     }
   }
 
@@ -234,6 +241,14 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
 function nicsdru_dept_theme_preprocess_node(array &$variables) {
   /** @var \Drupal\node\NodeInterface $node */
   $node = &$variables['node'];
+
+  // Check if the node has a custom layout.
+  if ($node->hasField('layout_builder__layout') && !$node->get('layout_builder__layout')->isEmpty()) {
+    $variables['has_custom_layout'] = TRUE;
+  }
+  else {
+    $variables['has_custom_layout'] = FALSE;
+  }
 
   // Array of bundles for which the social sharing block should be displayed.
   $social_bundles = [
