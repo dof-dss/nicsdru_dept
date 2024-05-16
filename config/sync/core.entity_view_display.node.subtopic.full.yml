@@ -94,10 +94,9 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: entity_reference_label
+                type: dept_topics_topic_tags
                 label: inline
-                settings:
-                  link: true
+                settings: {  }
                 third_party_settings: {  }
             weight: 1
             additional: {  }
