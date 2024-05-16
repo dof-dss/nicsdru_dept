@@ -21,6 +21,11 @@
   max-width: $max-content-width;
 }
 
+.max-body-text-width {
+  width: 100%;
+  max-width: $max-body-text-width;
+}
+
 .topic-content-width {
   width: 100%;
   max-width: 64rem;
