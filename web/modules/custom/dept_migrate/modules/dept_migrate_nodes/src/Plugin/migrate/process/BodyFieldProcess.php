@@ -1,0 +1,97 @@
+<?php
+
+namespace Drupal\dept_migrate_nodes\Plugin\migrate\process;
+
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\migrate\MigrateExecutableInterface;
+use Drupal\migrate\ProcessPluginBase;
+use Drupal\migrate\Row;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+/**
+ * @MigrateProcessPlugin(
+ *   id = "body_field_process"
+ * )
+ */
+
+class BodyFieldProcess extends ProcessPluginBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * Constructor.
+   *
+   * @param array $configuration
+   *   The plugin configuration.
+   * @param string $plugin_id
+   *   The plugin ID.
+   * @param array $plugin_definition
+   *   The plugin definition.
+   */
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function transform($value, MigrateExecutableInterface $migrate_executable, Row $row, $destination_property) {
+    /*
+     * $value is an array such as:
+     * $value = [
+     *   'value' => '<p>Some content</p>,
+     *   'summary' => 'Details of something here',
+     *   'format' => 'filtered_html,
+     * ];
+     */
+    $value['value'] = $this->handleMalformedLinks($value['value']);
+    $value['value'] = $this->handleUnwantedSpaces($value['value']);
+
+    return $value;
+  }
+
+  /**
+   * Internal function to process broken or malformed links
+   * in an HTML string.
+   *
+   * @param string $content
+   *   The content string to process.
+   * @return string
+   *   The processed content string.
+   */
+  private function handleUnwantedSpaces(string $content) {
+    // Progressive removal of unwanted spaces/line breaks.
+    $content = preg_replace('/(<p>[<br>|\s]*&nbsp;<\/p>)/im', '', $content);
+    $content = str_replace('&nbsp;</p>', '', $content);
+    $content = str_replace('&nbsp;', ' ', $content);
+
+    return $content;
+  }
+
+  /**
+   * Internal function to process unwanted spaces
+   * and line breaks in an HTML string.
+   *
+   * @param string $content
+   *   The content string to process.
+   * @return string
+   *   The processed content string.
+   */
+  private function handleMalformedLinks(string $content) {
+    // Strip out empty <a> tags: see DEPT-618.
+    // Example: /articles/removal-industrial-derating-draft-equality-impact-screening.
+    $content = preg_replace('/<a>(.+)<\/a>/iU', '$1', $content);
+
+    return $content;
+  }
+
+}
