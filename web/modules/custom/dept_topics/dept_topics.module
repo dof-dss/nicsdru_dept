@@ -502,7 +502,7 @@ function dept_topics_preprocess_field(&$variables, $hook) {
  * Implements hook_preprocess_field_multiple_value_form().
  */
 function dept_topics_preprocess_field_multiple_value_form(&$variables) {
-  if (!array_key_exists('ajax_form', $_REQUEST)) {
+  if (!\Drupal::request()->isXmlHttpRequest()) {
     if ($variables["element"]["#field_name"] === 'field_topic_content') {
       // Add a moderation state label to each node in the entity reference form list.
       foreach ($variables["table"]["#rows"] as $delta => $row) {
