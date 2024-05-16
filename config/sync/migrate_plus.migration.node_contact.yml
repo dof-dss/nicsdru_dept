@@ -1,12 +1,15 @@
-id: node_contact
-label: 'Contact content type nodes'
+uuid: 425ddfe4-e952-4d1c-adbf-dff56288da0c
+langcode: en
 status: true
 dependencies: {  }
-migration_group: migrate_nodes
-migration_tags:
-  - dept_sites
+id: node_contact
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
+cck_plugin_method: null
+migration_tags:
+  - dept_sites
+migration_group: migrate_nodes
+label: 'Contact content type nodes'
 source:
   plugin: d7_dept_node
   node_type: contact
@@ -76,26 +79,8 @@ process:
   revision_timestamp: timestamp
   body:
     -
-      plugin: get
+      plugin: body_field_process
       source: body
-    -
-      plugin: str_replace
-      regex: true
-      search: '/(<p>[<br>|\s]*&nbsp;<\/p>)/im'
-      replace: ''
-    -
-      plugin: str_replace
-      search: '&nbsp;</p>'
-      replace: '</p>'
-    -
-      plugin: str_replace
-      search: '&nbsp;'
-      replace: ' '
-    -
-      plugin: str_replace
-      regex: true
-      search: /<a>(.+)<\/a>/iU
-      replace: $1
     -
       plugin: media_wysiwyg_filter
   body/0/format:
