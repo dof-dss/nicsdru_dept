@@ -13,3 +13,11 @@ dept_mdash.dashboard.d7_revisions:
     _controller: '\Drupal\dept_mdash\Controller\MdashContentController::pageRecentRevisions'
   requirements:
     _permission: 'access migration dashboard'
+
+dept_mdash.dashboard.bad_links:
+  path: '/admin/dept/mdash/dashboard/bad_links'
+  defaults:
+    _title: 'Bad links in content'
+    _controller: '\Drupal\dept_mdash\Controller\MdashContentController::pageBadLinks'
+  requirements:
+    _permission: 'access migration dashboard'
