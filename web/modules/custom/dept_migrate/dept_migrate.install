@@ -125,6 +125,12 @@ function dept_migrate_update_8004() {
           'length' => 128,
           'not null' => TRUE,
         ],
+        'field' => [
+          'description' => 'The field the link appears in',
+          'type' => 'varchar',
+          'length' => 32,
+          'not null' => TRUE,
+        ],
       ],
       'primary key' => ['id'],
     ]);

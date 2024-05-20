@@ -114,7 +114,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
         // Update all node links.
         $updated_value = preg_replace_callback(
           '/(<a href="\/node\/)(\d+)/m',
-          function ($matches) use ($result) {
+          function ($matches) use ($result, $field) {
             // Fetch the new D9 nid for the D7 nid.
             $d9_lookup = $this->lookupManager->lookupBySourceNodeId([$matches[2]]);
 
@@ -131,9 +131,11 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
                 $this->dbConn->insert('dept_migrate_invalid_links')
                   ->fields([
                     'entity_id' => $result->nid,
-                    'bad_link' => $matches[2]
+                    'bad_link' => $matches[0] . '">',
+                    'field' => $field
                   ])
                   ->execute();
+                return $matches[0];
               }
             }
           },

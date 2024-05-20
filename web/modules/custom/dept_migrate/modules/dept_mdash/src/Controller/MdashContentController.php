@@ -8,6 +8,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Link;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -187,21 +188,25 @@ class MdashContentController extends ControllerBase {
   public function pageBadLinks() {
     $build = [];
 
+    if (!$this->dbConn->schema()->tableExists('dept_migrate_invalid_links'))  {
+      return $build;
+    }
+
     $query = $this->dbConn->select('dept_migrate_invalid_links', 'il')
-      ->fields('il', ['entity_id', 'bad_link']);
+      ->fields('il', ['entity_id', 'bad_link', 'field']);
 
     $query->join('node__field_domain_source', 'ds', 'il.entity_id = ds.entity_id');
     $query->addField('ds', 'field_domain_source_target_id', 'department');
     $query->orderBy('department');
 
     $results = $query->execute()->fetchAll();
-    
     $department_links =[];
 
     foreach ($results as $result) {
       $department_links[$result->department][] = [
-        'nid' =>  $result->entity_id,
+        'nid' => $result->entity_id,
         'bad_link' => $result->bad_link,
+        'field' => $result->field,
       ];
     }
 
@@ -210,8 +215,9 @@ class MdashContentController extends ControllerBase {
 
       foreach ($links as $link) {
         $rows[] = [
-          'nid' => $link['nid'],
+          'nid' => Link::createFromRoute($link['nid'],'entity.node.canonical', ['node' => $link['nid']], ['absolute' => TRUE]),
           'bad_link' => $link['bad_link'],
+          'field' => $link['field'],
         ];
       }
 
@@ -225,6 +231,7 @@ class MdashContentController extends ControllerBase {
         '#header' => [
           'nid',
           'Bad link',
+          'Field',
         ],
         '#rows' => $rows,
       ];
