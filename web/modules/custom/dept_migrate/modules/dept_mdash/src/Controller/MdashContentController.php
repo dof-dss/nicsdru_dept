@@ -182,6 +182,59 @@ class MdashContentController extends ControllerBase {
   }
 
   /**
+   * Builds the page for recent revisions.
+   */
+  public function pageBadLinks() {
+    $build = [];
+
+    $query = $this->dbConn->select('dept_migrate_invalid_links', 'il')
+      ->fields('il', ['entity_id', 'bad_link']);
+
+    $query->join('node__field_domain_source', 'ds', 'il.entity_id = ds.entity_id');
+    $query->addField('ds', 'field_domain_source_target_id', 'department');
+    $query->orderBy('department');
+
+    $results = $query->execute()->fetchAll();
+    
+    $department_links =[];
+
+    foreach ($results as $result) {
+      $department_links[$result->department][] = [
+        'nid' =>  $result->entity_id,
+        'bad_link' => $result->bad_link,
+      ];
+    }
+
+    foreach ($department_links as $department => $links) {
+      $rows = [];
+
+      foreach ($links as $link) {
+        $rows[] = [
+          'nid' => $link['nid'],
+          'bad_link' => $link['bad_link'],
+        ];
+      }
+
+      $build[$department] = [
+        '#type' => 'details',
+        '#title' => $department . ' (' . count($links) . ')',
+      ];
+
+      $build[$department]['table'] = [
+        '#type' => 'table',
+        '#header' => [
+          'nid',
+          'Bad link',
+        ],
+        '#rows' => $rows,
+      ];
+    }
+
+    return $build;
+  }
+
+
+  /**
    * Returns the date for when migration was last run.
    *
    * @return string
