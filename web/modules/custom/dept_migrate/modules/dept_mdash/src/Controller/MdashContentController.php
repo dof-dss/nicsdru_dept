@@ -183,12 +183,12 @@ class MdashContentController extends ControllerBase {
   }
 
   /**
-   * Builds the page for recent revisions.
+   * Builds the page for bad content links.
    */
   public function pageBadLinks() {
     $build = [];
 
-    if (!$this->dbConn->schema()->tableExists('dept_migrate_invalid_links'))  {
+    if (!$this->dbConn->schema()->tableExists('dept_migrate_invalid_links')) {
       return $build;
     }
 
@@ -200,7 +200,7 @@ class MdashContentController extends ControllerBase {
     $query->orderBy('department');
 
     $results = $query->execute()->fetchAll();
-    $department_links =[];
+    $department_links = [];
 
     foreach ($results as $result) {
       $department_links[$result->department][] = [
@@ -215,7 +215,7 @@ class MdashContentController extends ControllerBase {
 
       foreach ($links as $link) {
         $rows[] = [
-          'nid' => Link::createFromRoute($link['nid'],'entity.node.canonical', ['node' => $link['nid']], ['absolute' => TRUE]),
+          'nid' => Link::createFromRoute($link['nid'], 'entity.node.canonical', ['node' => $link['nid']], ['absolute' => TRUE]),
           'bad_link' => $link['bad_link'],
           'field' => $link['field'],
         ];
@@ -239,7 +239,6 @@ class MdashContentController extends ControllerBase {
 
     return $build;
   }
-
 
   /**
    * Returns the date for when migration was last run.

@@ -128,6 +128,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
                 return '<a data-entity-substitution="canonical" data-entity-type="node" data-entity-uuid="' . $d9_uuid . '" href="/node/' . $node_data['nid'];
               }
               else {
+                // Log the broken link to the DB and leave it untouched in the field.
                 $this->dbConn->insert('dept_migrate_invalid_links')
                   ->fields([
                     'entity_id' => $result->nid,
