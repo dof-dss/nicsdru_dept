@@ -70,6 +70,8 @@ class MdashContentController extends ControllerBase {
    *   Date formatter service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Configuration factory service.
+   * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookup_manager
+   *   Migration Lookup Manager service.
    */
   public function __construct(BlockManagerInterface $block_manager, Connection $connection, DateFormatterInterface $date_formatter, ConfigFactoryInterface $config_factory, MigrateUuidLookupManager $lookup_manager) {
     $this->blockManager = $block_manager;
@@ -232,11 +234,19 @@ class MdashContentController extends ControllerBase {
 
       foreach ($links as $link) {
         $rows[] = [
-          'node' => Link::fromTextAndUrl($link['node']->label(), $link['node']->toUrl()),
-          'status' => $link['node']->isPublished() ? 'published' : 'unpublished',
-          'd7_nid' => $link['d7_nid'],
-          'bad_link' => $link['bad_link'],
-          'field' => $link['field'],
+          'data' => [
+            'node' => Link::fromTextAndUrl($link['node']->label(), $link['node']->toUrl()),
+            'type' => $link['node']->bundle(),
+            [
+              'data' => $link['node']->isPublished() ? 'Published' : 'Unpublished',
+              'style' => $link['node']->isPublished() ? 'color: green' : 'color: red',
+            ],
+            'd7_nid' => $link['d7_nid'],
+            'bad_link' => $link['bad_link'],
+            'field' => $link['field'],
+            'edit' => Link::fromTextAndUrl($this->t('Edit'), $link['node']->toUrl('edit-form')),
+            'delete' => Link::fromTextAndUrl($this->t('Delete'), $link['node']->toUrl('delete-form')),
+          ]
         ];
       }
 
@@ -248,11 +258,16 @@ class MdashContentController extends ControllerBase {
       $build[$department]['table'] = [
         '#type' => 'table',
         '#header' => [
-          'Content',
-          'Status',
-          'D7 nid',
-          'Bad link',
-          'Field',
+          $this->t('Content'),
+          $this->t('Type'),
+          $this->t('Status'),
+          $this->t('D7 nid'),
+          $this->t('Bad link'),
+          $this->t('Field'),
+          [
+            'data' => $this->t('Options'),
+            'colspan' => 2,
+          ],
         ],
         '#rows' => $rows,
       ];
