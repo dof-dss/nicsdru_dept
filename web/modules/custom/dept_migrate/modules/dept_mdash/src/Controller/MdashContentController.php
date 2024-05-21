@@ -212,12 +212,19 @@ class MdashContentController extends ControllerBase {
 
       $source_map = $this->lookupManager->lookupBySourceNodeId([$result->entity_id]);
 
-      $department_links[$result->department][] = [
-        'nid' => $source_map[$result->entity_id]['nid'] ?? '',
-        'd7_nid' => $result->entity_id,
-        'bad_link' => $result->bad_link,
-        'field' => $result->field,
-      ];
+      if (isset($source_map[$result->entity_id]['nid'])) {
+        // I know this sucks to load each individually but we're not dealing with tens of thousands of rows.
+        $node = $this->entityTypeManager()->getStorage('node')->load($source_map[$result->entity_id]['nid']);
+
+        if ($node) {
+          $department_links[$node->get('field_domain_source')->getString()][] = [
+            'node' => $node,
+            'd7_nid' => $result->entity_id,
+            'bad_link' => $result->bad_link,
+            'field' => $result->field,
+          ];
+        }
+      }
     }
 
     foreach ($department_links as $department => $links) {
@@ -225,7 +232,8 @@ class MdashContentController extends ControllerBase {
 
       foreach ($links as $link) {
         $rows[] = [
-          'nid' => !empty($link['nid']) ? Link::createFromRoute($link['nid'], 'entity.node.canonical', ['node' => $link['nid']], ['absolute' => TRUE]) : '',
+          'node' => Link::fromTextAndUrl($link['node']->label(), $link['node']->toUrl()),
+          'status' => $link['node']->isPublished() ? 'published' : 'unpublished',
           'd7_nid' => $link['d7_nid'],
           'bad_link' => $link['bad_link'],
           'field' => $link['field'],
@@ -240,7 +248,8 @@ class MdashContentController extends ControllerBase {
       $build[$department]['table'] = [
         '#type' => 'table',
         '#header' => [
-          'nid',
+          'Content',
+          'Status',
           'D7 nid',
           'Bad link',
           'Field',
