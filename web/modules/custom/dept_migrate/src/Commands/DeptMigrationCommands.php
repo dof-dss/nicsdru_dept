@@ -129,9 +129,12 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
               }
               else {
                 // Log the broken link to the DB and leave it untouched in the field.
+
+                $d7_source_nid = $this->lookupManager->lookupByDestinationNodeIds([$result->nid]);
+
                 $this->dbConn->insert('dept_migrate_invalid_links')
                   ->fields([
-                    'entity_id' => $result->nid,
+                    'entity_id' => $d7_source_nid[$result->nid]['d7nid'],
                     'bad_link' => $matches[0] . '">',
                     'field' => $field
                   ])

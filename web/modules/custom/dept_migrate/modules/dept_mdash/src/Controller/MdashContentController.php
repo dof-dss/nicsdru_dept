@@ -9,6 +9,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Link;
+use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -52,6 +53,13 @@ class MdashContentController extends ControllerBase {
   protected $configFactory;
 
   /**
+   * Migration Lookup Manager.
+   *
+   * @var \Drupal\dept_migrate\MigrateUuidLookupManager
+   */
+  protected $lookupManager;
+
+  /**
    * The controller constructor.
    *
    * @param \Drupal\Core\Block\BlockManagerInterface $block_manager
@@ -62,12 +70,15 @@ class MdashContentController extends ControllerBase {
    *   Date formatter service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Configuration factory service.
+   * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookup_manager
+   *   Migration Lookup Manager service.
    */
-  public function __construct(BlockManagerInterface $block_manager, Connection $connection, DateFormatterInterface $date_formatter, ConfigFactoryInterface $config_factory) {
+  public function __construct(BlockManagerInterface $block_manager, Connection $connection, DateFormatterInterface $date_formatter, ConfigFactoryInterface $config_factory, MigrateUuidLookupManager $lookup_manager) {
     $this->blockManager = $block_manager;
     $this->dbConn = $connection;
     $this->dateFormatter = $date_formatter;
     $this->configFactory = $config_factory;
+    $this->lookupManager = $lookup_manager;
 
     $this->d7conn = Database::getConnection('default', 'migrate');
   }
@@ -81,6 +92,7 @@ class MdashContentController extends ControllerBase {
       $container->get('database'),
       $container->get('date.formatter'),
       $container->get('config.factory'),
+      $container->get('dept_migrate.migrate_uuid_lookup_manager'),
     );
   }
 
@@ -195,19 +207,26 @@ class MdashContentController extends ControllerBase {
     $query = $this->dbConn->select('dept_migrate_invalid_links', 'il')
       ->fields('il', ['entity_id', 'bad_link', 'field']);
 
-    $query->join('node__field_domain_source', 'ds', 'il.entity_id = ds.entity_id');
-    $query->addField('ds', 'field_domain_source_target_id', 'department');
-    $query->orderBy('department');
-
     $results = $query->execute()->fetchAll();
     $department_links = [];
 
     foreach ($results as $result) {
-      $department_links[$result->department][] = [
-        'nid' => $result->entity_id,
-        'bad_link' => $result->bad_link,
-        'field' => $result->field,
-      ];
+
+      $source_map = $this->lookupManager->lookupBySourceNodeId([$result->entity_id]);
+
+      if (isset($source_map[$result->entity_id]['nid'])) {
+        // I know this sucks to load each individually but we're not dealing with tens of thousands of rows.
+        $node = $this->entityTypeManager()->getStorage('node')->load($source_map[$result->entity_id]['nid']);
+
+        if ($node) {
+          $department_links[$node->get('field_domain_source')->getString()][] = [
+            'node' => $node,
+            'd7_nid' => $result->entity_id,
+            'bad_link' => $result->bad_link,
+            'field' => $result->field,
+          ];
+        }
+      }
     }
 
     foreach ($department_links as $department => $links) {
@@ -215,9 +234,19 @@ class MdashContentController extends ControllerBase {
 
       foreach ($links as $link) {
         $rows[] = [
-          'nid' => Link::createFromRoute($link['nid'], 'entity.node.canonical', ['node' => $link['nid']], ['absolute' => TRUE]),
-          'bad_link' => $link['bad_link'],
-          'field' => $link['field'],
+          'data' => [
+            'node' => Link::fromTextAndUrl($link['node']->label(), $link['node']->toUrl()),
+            'type' => $link['node']->bundle(),
+            [
+              'data' => $link['node']->isPublished() ? 'Published' : 'Unpublished',
+              'style' => $link['node']->isPublished() ? 'color: green' : 'color: red',
+            ],
+            'd7_nid' => $link['d7_nid'],
+            'bad_link' => $link['bad_link'],
+            'field' => $link['field'],
+            'edit' => Link::fromTextAndUrl($this->t('Edit'), $link['node']->toUrl('edit-form')),
+            'delete' => Link::fromTextAndUrl($this->t('Delete'), $link['node']->toUrl('delete-form')),
+          ]
         ];
       }
 
@@ -229,9 +258,16 @@ class MdashContentController extends ControllerBase {
       $build[$department]['table'] = [
         '#type' => 'table',
         '#header' => [
-          'nid',
-          'Bad link',
-          'Field',
+          $this->t('Content'),
+          $this->t('Type'),
+          $this->t('Status'),
+          $this->t('D7 nid'),
+          $this->t('Bad link'),
+          $this->t('Field'),
+          [
+            'data' => $this->t('Options'),
+            'colspan' => 2,
+          ],
         ],
         '#rows' => $rows,
       ];
