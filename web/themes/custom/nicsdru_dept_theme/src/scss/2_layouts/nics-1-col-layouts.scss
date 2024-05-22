@@ -29,6 +29,10 @@
 
     .ga-main {
       max-width: $max-content-width;
+
+      @at-root .page-node-type-article & {
+        max-width: $max-body-text-width;
+      }
     }
   }
 }
