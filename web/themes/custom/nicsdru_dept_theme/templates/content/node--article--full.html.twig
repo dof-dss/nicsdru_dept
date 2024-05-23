@@ -89,8 +89,10 @@
   {% if content_attributes is not empty %}
   <div{{ content_attributes }}>
   {% endif %}
-  {{ content|without('field_site_topics') }}
-  {% if content_attributes is not empty %}
+    <div class="article-content">
+    {{ content|without('field_site_topics') }}
+    </div>
+    {% if content_attributes is not empty %}
   </div>
   {% endif %}
   {% if display_social_links %}
