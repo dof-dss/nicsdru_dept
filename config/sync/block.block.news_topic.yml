@@ -5,6 +5,8 @@ dependencies:
   config:
     - facets.facet.news_topic
   module:
+    - block_visibility_groups
+    - domain
     - facets
     - system
   theme:
@@ -27,3 +29,14 @@ visibility:
     id: request_path
     negate: false
     pages: "/news\r\n/news*"
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  domain:
+    id: domain
+    negate: true
+    context_mapping:
+      domain: '@domain.current_domain_context:domain'
+    domains:
+      nigov: nigov
