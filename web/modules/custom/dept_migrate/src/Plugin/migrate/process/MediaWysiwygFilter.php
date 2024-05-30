@@ -276,14 +276,16 @@ TEMPLATE;
     // value if found in the tag.
     $style_map = [
       'landscape' => [
-        'inline' => 'landscape_float',
-        'inline_expandable' => 'landscape_float_xp',
-        'inline_xl' => 'landscape_full_xp',
+        'inline' => 'article_float',
+        'inline_expandable' => 'article_float_expandable',
+        'inline_xl' => 'article_full',
+        'inline_xl_expandable' => 'article_full_expandable',
       ],
       'portrait' => [
-        'inline' => 'portrait_float',
-        'inline_expandable' => 'portrait_float_xp',
-        'inline_xl' => 'portrait_full',
+        'inline' => 'article_float',
+        'inline_expandable' => 'article_float_expandable',
+        'inline_xl' => 'article_full',
+        'inline_xl_expandable' => 'article_full_expandable',
       ],
     ];
 
