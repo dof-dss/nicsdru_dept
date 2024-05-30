@@ -13,6 +13,7 @@ dependencies:
     - node.type.heritage_site
     - node.type.link
     - node.type.news
+    - node.type.page
     - node.type.profile
     - node.type.protected_area
     - node.type.publication
@@ -119,6 +120,7 @@ permissions:
   - 'revert gallery revisions'
   - 'revert heritage_site revisions'
   - 'revert link revisions'
+  - 'revert news revisions'
   - 'revert profile revisions'
   - 'revert protected_area revisions'
   - 'revert publication revisions'
@@ -176,6 +178,7 @@ permissions:
   - 'view heritage_site revisions'
   - 'view latest version'
   - 'view link revisions'
+  - 'view news revisions'
   - 'view own unpublished media'
   - 'view profile revisions'
   - 'view protected_area revisions'
