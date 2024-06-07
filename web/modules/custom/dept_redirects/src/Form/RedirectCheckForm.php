@@ -5,6 +5,7 @@ namespace Drupal\dept_redirects\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\redirect\Entity\Redirect;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Batch\BatchBuilder;
@@ -37,7 +38,7 @@ class RedirectCheckForm extends FormBase {
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
    *   The URL generator service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, $url_generator) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, UrlGeneratorInterface $url_generator) {
     $this->entityTypeManager = $entity_type_manager;
     $this->urlGenerator = $url_generator;
   }
@@ -142,18 +143,8 @@ class RedirectCheckForm extends FormBase {
       ->setErrorMessage($this->t('Redirect check has encountered an error.'))
       ->setFinishCallback([$this, 'finishBatch']);
 
-    // Load redirects to process.
-    $redirect_ids = $this->loadRedirectsToProcess($batch_size);
-
-    if (empty($redirect_ids)) {
-      \Drupal::messenger()->addStatus($this->t('No redirects to process.'));
-      return;
-    }
-
-    // Create batch operations for each redirect.
-    foreach ($redirect_ids as $redirect_id) {
-      $batch_builder->addOperation([$this, 'processRedirect'], [$redirect_id]);
-    }
+    // Add the first batch operation to start processing redirects.
+    $batch_builder->addOperation([$this, 'processRedirects'], [0, $batch_size]);
 
     // Set the batch.
     batch_set($batch_builder->toArray());
@@ -163,42 +154,60 @@ class RedirectCheckForm extends FormBase {
   }
 
   /**
-   * Load redirects to process based on the batch size and last processed ID.
+   * Process a chunk of redirects.
    *
+   * @param int $offset
+   *   The offset to start processing.
    * @param int $batch_size
-   *   The batch size.
-   *
-   * @return array
-   *   An array of redirect IDs to process.
-   */
-  protected function loadRedirectsToProcess($batch_size) {
-    // Get the last processed redirect ID from state.
-    $last_processed_id = \Drupal::state()->get('dept_redirects_last_processed_id', 0);
-
-    // Query to load the next batch of redirects.
-    $query = \Drupal::entityQuery('redirect')
-      ->condition('rid', $last_processed_id, '>')
-      ->sort('rid', 'ASC')
-      ->accessCheck(TRUE)
-      ->range(0, $batch_size);
-
-    return $query->execute();
-  }
-
-  /**
-   * Process a single redirect.
-   *
-   * @param int $redirect_id
-   *   The ID of the redirect entity.
+   *   The number of redirects to process in each batch.
    * @param array $context
    *   The batch context array.
    */
-  public function processRedirect($redirect_id, array &$context) {
-    /** @var \Drupal\redirect\Entity\Redirect $redirect */
-    $redirect = Redirect::load($redirect_id);
-    $destination_path = $redirect->getRedirectUrl()->toString();
+  public function processRedirects($offset, $batch_size, array &$context) {
+    // Initialize sandbox properties if not set.
+    if (empty($context['sandbox']['progress'])) {
+      $context['sandbox']['progress'] = 0;
+    }
+    if (empty($context['sandbox']['current'])) {
+      $context['sandbox']['current'] = 0;
+    }
+    if (empty($context['sandbox']['total'])) {
+      $context['sandbox']['total'] = $this->entityTypeManager->getStorage('redirect')
+        ->getQuery()
+        ->count()
+        ->accessCheck(TRUE)
+        ->execute();
+    }
+    if (empty($context['sandbox']['offset'])) {
+      $context['sandbox']['offset'] = 0;
+    }
+    if (empty($context['sandbox']['batch_size'])) {
+      $context['sandbox']['batch_size'] = $batch_size;
+    }
+
+    $query = \Drupal::entityQuery('redirect')
+      ->accessCheck(TRUE)
+      ->sort('rid', 'ASC')
+      ->range($offset, $batch_size);
+
+    $redirect_ids = $query->execute();
+
+    if (empty($redirect_ids)) {
+      // No more redirects to process.
+      return;
+    }
+
+    /** @var \Drupal\redirect\Entity\Redirect[] $redirects */
+    $redirects = Redirect::loadMultiple($redirect_ids);
+
+    foreach ($redirects as $redirect) {
+      $destination_path = $redirect->getRedirectUrl()->toString();
 
     // Determine if the destination is an absolute or external URL.
+    if (str_starts_with($destination_path, 'www')) {
+      $destination_path = 'https://' . $destination_path;
+    }
+
     if (str_starts_with($destination_path, 'http')) {
       $destination = $destination_path;
     }
@@ -209,51 +218,64 @@ class RedirectCheckForm extends FormBase {
       $destination = Url::fromUri($base_url . $destination_path)->toString();
     }
 
-    try {
-      $response = \Drupal::httpClient()->head($destination, ['http_errors' => FALSE]);
-      $status_code = $response->getStatusCode();
-      $current_time = \Drupal::time()->getRequestTime();
+      try {
+        $response = \Drupal::httpClient()->head($destination, ['http_errors' => FALSE]);
+        $status_code = $response->getStatusCode();
+        $current_time = \Drupal::time()->getRequestTime();
 
-      // Check if the status code is not in the 200 or 300 range.
-      if ($status_code < 200 || $status_code >= 400) {
+        // Check if the status code is not in the 200 or 300 range.
+        if ($status_code < 200 || $status_code >= 400) {
+          $context['results'][] = [
+            'rid' => $redirect->id(),
+            'source' => $redirect->getSourceUrl(),
+            'destination' => $destination,
+            'status' => $status_code,
+            'checked' => $current_time,
+          ];
+        }
+      }
+      catch (\Exception $e) {
         $context['results'][] = [
           'rid' => $redirect->id(),
           'source' => $redirect->getSourceUrl(),
-          'destination' => $destination_path,
-          'status' => $status_code,
-          'checked' => $current_time,
+          'destination' => $destination,
+          'status' => 'Error: ' . $e->getMessage(),
+          'checked' => \Drupal::time()->getRequestTime(),
         ];
       }
-    } catch (RequestException $e) {
-      $context['results'][] = [
-        'rid' => $redirect->id(),
-        'source' => $redirect->getSourceUrl(),
-        'destination' => $destination_path,
-        'status' => 'Error: ' . $e->getMessage(),
-        'checked' => \Drupal::time()->getRequestTime(),
-      ];
-    }
 
-    // Store results in the custom database table.
-    if (!empty($context['results'])) {
-      $connection = \Drupal::database();
-      foreach ($context['results'] as $result) {
-        $connection->insert('dept_redirects_results')
-          ->fields([
-            'rid' => $result['rid'],
-            'source' => $result['source'],
-            'destination' => $result['destination'],
-            'status' => $result['status'],
-            'checked' => $result['checked'],
-          ])
-          ->execute();
+      // Store results in the  database table.
+      if (!empty($context['results'])) {
+        $connection = \Drupal::database();
+        foreach ($context['results'] as $result) {
+          $connection->insert('dept_redirects_results')
+            ->fields([
+              'rid' => $result['rid'],
+              'source' => $result['source'],
+              'destination' => $result['destination'],
+              'status' => $result['status'],
+              'checked' => $result['checked'],
+            ])
+            ->execute();
+        }
+        // Clear results after inserting into the database.
+        $context['results'] = [];
       }
-      // Clear results after inserting into the database.
-      $context['results'] = [];
     }
 
-    // Update the last processed ID in state.
-    \Drupal::state()->set('dept_redirects_last_processed_id', $redirect_id);
+    // Update the sandbox progress.
+    $context['sandbox']['progress'] += count($redirect_ids);
+    $context['sandbox']['offset'] += $batch_size;
+    $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['total'];
+    $context['message'] = $this->t('Processed @current out of @total redirects.', [
+      '@current' => $context['sandbox']['progress'],
+      '@total' => $context['sandbox']['total'],
+    ]);
+
+    // Schedule the next batch operation if there are more redirects to process.
+    if (count($redirect_ids) === $batch_size) {
+      $context['batch']['operations'][] = [[$this, 'processRedirects'], [$context['sandbox']['offset'], $context['sandbox']['batch_size']]];
+    }
   }
 
   /**
@@ -347,5 +369,4 @@ class RedirectCheckForm extends FormBase {
       \Drupal::messenger()->addError($this->t('Redirect check encountered an error.'));
     }
   }
-
 }
