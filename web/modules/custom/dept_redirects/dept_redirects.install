@@ -34,7 +34,7 @@ function dept_redirects_schema() {
       'status' => [
         'description' => 'The HTTP status code, or error, returned by the destination URL.',
         'type' => 'varchar',
-        'length' => 128,
+        'length' => 256,
         'not null' => TRUE,
       ],
       'checked' => [
