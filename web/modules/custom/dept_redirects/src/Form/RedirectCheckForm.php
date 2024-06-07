@@ -4,8 +4,9 @@ namespace Drupal\dept_redirects\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Routing\UrlGeneratorInterface;
+use Drupal\Core\Link;
 use Drupal\redirect\Entity\Redirect;
+use Drupal\Core\Database\Database;
 use Drupal\Core\Batch\BatchBuilder;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -36,7 +37,7 @@ class RedirectCheckForm extends FormBase {
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
    *   The URL generator service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, UrlGeneratorInterface $url_generator) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, $url_generator) {
     $this->entityTypeManager = $entity_type_manager;
     $this->urlGenerator = $url_generator;
   }
@@ -65,6 +66,26 @@ class RedirectCheckForm extends FormBase {
     $config = $this->config('dept_redirects.settings');
     $batch_size = $config->get('batch_size') ?? 50;
 
+    // Get the total number of redirects and the number of processed redirects.
+    $total_redirects = $this->entityTypeManager->getStorage('redirect')
+      ->getQuery()
+      ->count()
+      ->accessCheck(TRUE)
+      ->execute();
+    $processed_redirects = Database::getConnection()->select('dept_redirects_results', 'd')
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+
+    // Display the number of redirects processed and the total so far.
+    $form['status'] = [
+      '#markup' => $this->t('Processed @processed out of @total redirects.', [
+        '@processed' => $processed_redirects,
+        '@total' => $total_redirects,
+      ]),
+    ];
+
+    // Add the start batch process button.
     $form['batch_size'] = [
       '#type' => 'hidden',
       '#value' => $batch_size,
@@ -79,6 +100,30 @@ class RedirectCheckForm extends FormBase {
       '#value' => $this->t('Start Redirect Check'),
       '#button_type' => 'primary',
     ];
+
+    // Add the exposed filter form.
+    $form['filter'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Filter Results'),
+      'source' => [
+        '#type' => 'textfield',
+        '#title' => $this->t('Source URL'),
+        '#default_value' => $form_state->getValue('source', ''),
+      ],
+      'destination' => [
+        '#type' => 'textfield',
+        '#title' => $this->t('Destination URL'),
+        '#default_value' => $form_state->getValue('destination', ''),
+      ],
+      'filter' => [
+        '#type' => 'submit',
+        '#value' => $this->t('Filter'),
+        '#submit' => ['::filterResults'],
+      ],
+    ];
+
+    // Add the results table with pager.
+    $form['results'] = $this->buildResultsTable($form_state);
 
     return $form;
   }
@@ -152,16 +197,14 @@ class RedirectCheckForm extends FormBase {
     /** @var \Drupal\redirect\Entity\Redirect $redirect */
     $redirect = Redirect::load($redirect_id);
     $destination_path = $redirect->getRedirectUrl()->toString();
-    $destination_path = substr($destination_path, 1);
 
-    // Get the base URL.
-    $base_url = $this->urlGenerator->generateFromRoute('<front>', [], ['absolute' => TRUE]);
-
-    if (preg_match('/^http/', $destination_path)) {
-      // External link, keep it.
+    // Determine if the destination is an absolute or external URL.
+    if (str_starts_with($destination_path, 'http')) {
       $destination = $destination_path;
     }
     else {
+      // Get the base URL.
+      $base_url = $this->urlGenerator->generateFromRoute('<front>', [], ['absolute' => TRUE]);
       // Construct the full URL.
       $destination = Url::fromUri($base_url . $destination_path)->toString();
     }
@@ -174,16 +217,18 @@ class RedirectCheckForm extends FormBase {
       // Check if the status code is not in the 200 or 300 range.
       if ($status_code < 200 || $status_code >= 400) {
         $context['results'][] = [
+          'rid' => $redirect->id(),
           'source' => $redirect->getSourceUrl(),
-          'destination' => $destination,
+          'destination' => $destination_path,
           'status' => $status_code,
           'checked' => $current_time,
         ];
       }
     } catch (RequestException $e) {
       $context['results'][] = [
+        'rid' => $redirect->id(),
         'source' => $redirect->getSourceUrl(),
-        'destination' => $destination,
+        'destination' => $destination_path,
         'status' => 'Error: ' . $e->getMessage(),
         'checked' => \Drupal::time()->getRequestTime(),
       ];
@@ -195,6 +240,7 @@ class RedirectCheckForm extends FormBase {
       foreach ($context['results'] as $result) {
         $connection->insert('dept_redirects_results')
           ->fields([
+            'rid' => $result['rid'],
             'source' => $result['source'],
             'destination' => $result['destination'],
             'status' => $result['status'],
@@ -208,6 +254,79 @@ class RedirectCheckForm extends FormBase {
 
     // Update the last processed ID in state.
     \Drupal::state()->set('dept_redirects_last_processed_id', $redirect_id);
+  }
+
+  /**
+   * Build the results table.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   *
+   * @return array
+   *   The render array for the results table.
+   */
+  protected function buildResultsTable(FormStateInterface $form_state) {
+    $header = [
+      ['data' => $this->t('Redirect ID')],
+      ['data' => $this->t('Source')],
+      ['data' => $this->t('Destination')],
+      ['data' => $this->t('HTTP Status')],
+      ['data' => $this->t('Last Checked')],
+      ['data' => $this->t('Operations')],
+    ];
+
+    $query = Database::getConnection()->select('dept_redirects_results', 'd')
+      ->fields('d', ['rid', 'source', 'destination', 'status', 'checked']);
+
+    // Apply filters if provided.
+    if ($source_filter = $form_state->getValue('source', '')) {
+      $query->condition('d.source', '%' . Database::getConnection()->escapeLike($source_filter) . '%', 'LIKE');
+    }
+    if ($destination_filter = $form_state->getValue('destination', '')) {
+      $query->condition('d.destination', '%' . Database::getConnection()->escapeLike($destination_filter) . '%', 'LIKE');
+    }
+
+    $results = $query
+      ->extend('Drupal\Core\Database\Query\PagerSelectExtender')
+      ->limit(25)
+      ->execute();
+
+    $rows = [];
+    foreach ($results as $result) {
+      $edit_link = Url::fromRoute('entity.redirect.edit_form', ['redirect' => $result->rid])->toString();
+      $rows[] = [
+        'data' => [
+          $result->rid,
+          $result->source,
+          $result->destination,
+          $result->status,
+          \Drupal::service('date.formatter')->format($result->checked, 'custom', 'd M Y H:i'),
+          Link::createFromRoute($this->t('Edit'), 'entity.redirect.edit_form', ['redirect' => $result->rid]),
+        ],
+      ];
+    }
+
+    return [
+      '#type' => 'table',
+      '#header' => $header,
+      '#rows' => $rows,
+      '#empty' => $this->t('No redirects found.'),
+      '#attached' => ['library' => ['core/drupal.dialog.ajax']],
+      'pager' => ['#type' => 'pager'],
+    ];
+  }
+
+  /**
+   * Filter results submission handler.
+   *
+   * @param array $form
+   *   The form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  public function filterResults(array &$form, FormStateInterface $form_state) {
+    // Rebuild the form to apply filters.
+    $form_state->setRebuild(TRUE);
   }
 
   /**

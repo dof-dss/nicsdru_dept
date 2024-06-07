@@ -13,6 +13,12 @@ function dept_redirects_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ],
+      'rid' => [
+        'description' => 'The redirect entity ID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
       'source' => [
         'description' => 'The source URL of the redirect.',
         'type' => 'varchar',
@@ -22,13 +28,13 @@ function dept_redirects_schema() {
       'destination' => [
         'description' => 'The destination URL of the redirect.',
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 512,
         'not null' => TRUE,
       ],
       'status' => [
-        'description' => 'The HTTP status code returned by the destination URL.',
+        'description' => 'The HTTP status code, or error, returned by the destination URL.',
         'type' => 'varchar',
-        'length' => 64,
+        'length' => 128,
         'not null' => TRUE,
       ],
       'checked' => [
