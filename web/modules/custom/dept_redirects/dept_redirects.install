@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function dept_redirects_schema() {
+  $schema['dept_redirects_results'] = [
+    'description' => 'Stores the results of the redirect checks.',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary Key: Unique redirect result ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'source' => [
+        'description' => 'The source URL of the redirect.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'destination' => [
+        'description' => 'The destination URL of the redirect.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'status' => [
+        'description' => 'The HTTP status code returned by the destination URL.',
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+      ],
+      'checked' => [
+        'description' => 'The timestamp when the redirect was last checked.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  return $schema;
+}
