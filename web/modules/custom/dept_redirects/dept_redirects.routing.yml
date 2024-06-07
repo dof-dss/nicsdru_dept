@@ -1,0 +1,16 @@
+dept_redirects.settings:
+  path: '/admin/config/development/redirect-check-settings'
+  defaults:
+    _form: '\Drupal\dept_redirects\Form\RedirectCheckSettingsForm'
+    _title: 'Redirect Check Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+dept_redirects.check_redirects:
+  path: '/admin/reports/check-redirects'
+  defaults:
+    _controller: '\Drupal\dept_redirects\Controller\RedirectCheckerController::checkRedirects'
+    _title: 'Check Redirects'
+  requirements:
+    _permission: 'access check redirects'
+
