@@ -53,6 +53,7 @@ class BodyFieldProcess extends ProcessPluginBase implements ContainerFactoryPlug
      *   'format' => 'filtered_html,
      * ];
      */
+    $value['value'] = $this->tidyupEmbeddedMediaInParagraphs($value['value']);
     $value['value'] = $this->handleMalformedLinks($value['value']);
     $value['value'] = $this->handleUnwantedSpaces($value['value']);
 
@@ -90,6 +91,28 @@ class BodyFieldProcess extends ProcessPluginBase implements ContainerFactoryPlug
     // Strip out empty <a> tags: see DEPT-618.
     // Example: /articles/removal-industrial-derating-draft-equality-impact-screening.
     $content = preg_replace('/<a>(.+)<\/a>/iU', '$1', $content);
+
+    return $content;
+  }
+
+  /**
+   * Function to re-arrange some incorrectly positioned D7 media embed tokens.
+   * This regex turns <p>[[fid:123...]]Text that follows</p>
+   * into [[fid:123...]]<p>Text that follows</p>.
+   *
+   * NGL this really hurt my brain with a lot of trial and error.
+   *
+   * @param string $content
+   *   The content string to process.
+   *
+   * @return string
+   *   The processed content string.
+   */
+  private function tidyupEmbeddedMediaInParagraphs(string $content) {
+    $pattern = '/<(\w+)>(\[\[.*?\]\])(.*?)<\/\1>/s';
+    $replacement = '$2<$1>$3</$1>';
+
+    $content = preg_replace($pattern, $replacement, $content);
 
     return $content;
   }
