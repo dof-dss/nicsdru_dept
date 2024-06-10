@@ -5,9 +5,11 @@ namespace Drupal\dept_redirects\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Pager\PagerManagerInterface;
+use Drupal\Core\Pager\PagerParametersInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\redirect\Entity\Redirect;
-use Drupal\Core\Database\Database;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Batch\BatchBuilder;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -31,6 +33,27 @@ class RedirectCheckForm extends FormBase {
   protected $urlGenerator;
 
   /**
+   * Drupal\Core\Pager\PagerManagerInterface definition.
+   *
+   * @var \Drupal\Core\Pager\PagerManagerInterface
+   */
+  protected $pagerManager;
+
+  /**
+   * Drupal\Core\Pager\PagerParametersInterface definition.
+   *
+   * @var \Drupal\Core\Pager\PagerParametersInterface
+   */
+  protected $pagerParameters;
+
+  /**
+   * The database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $dbConn;
+
+  /**
    * Constructs a new RedirectCheckForm object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -38,9 +61,12 @@ class RedirectCheckForm extends FormBase {
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
    *   The URL generator service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, UrlGeneratorInterface $url_generator) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, UrlGeneratorInterface $url_generator, PagerManagerInterface $pager_manager, PagerParametersInterface $pager_params, Connection $connection) {
     $this->entityTypeManager = $entity_type_manager;
     $this->urlGenerator = $url_generator;
+    $this->pagerManager = $pager_manager;
+    $this->pagerParameters = $pager_params;
+    $this->dbConn = $connection;
   }
 
   /**
@@ -49,7 +75,10 @@ class RedirectCheckForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('url_generator')
+      $container->get('url_generator'),
+      $container->get('pager.manager'),
+      $container->get('pager.parameters'),
+      $container->get('database')
     );
   }
 
@@ -73,7 +102,7 @@ class RedirectCheckForm extends FormBase {
       ->count()
       ->accessCheck(TRUE)
       ->execute();
-    $processed_redirects = Database::getConnection()->select('dept_redirects_results', 'd')
+    $processed_redirects = $this->dbConn->select('dept_redirects_results', 'd')
       ->countQuery()
       ->execute()
       ->fetchField();
@@ -228,7 +257,7 @@ class RedirectCheckForm extends FormBase {
           $context['results'][] = [
             'rid' => $redirect->id(),
             'source' => $redirect->getSourceUrl(),
-            'destination' => $destination,
+            'destination' => $destination_path,
             'status' => $status_code,
             'checked' => $current_time,
           ];
@@ -238,7 +267,7 @@ class RedirectCheckForm extends FormBase {
         $context['results'][] = [
           'rid' => $redirect->id(),
           'source' => $redirect->getSourceUrl(),
-          'destination' => $destination,
+          'destination' => $destination_path,
           'status' => 'Error: ' . $e->getMessage(),
           'checked' => \Drupal::time()->getRequestTime(),
         ];
@@ -297,25 +326,32 @@ class RedirectCheckForm extends FormBase {
       ['data' => $this->t('Operations')],
     ];
 
-    $query = Database::getConnection()->select('dept_redirects_results', 'd')
+    $query = $this->dbConn->select('dept_redirects_results', 'd')
       ->fields('d', ['rid', 'source', 'destination', 'status', 'checked']);
 
     // Apply filters if provided.
     if ($source_filter = $form_state->getValue('source', '')) {
-      $query->condition('d.source', '%' . Database::getConnection()->escapeLike($source_filter) . '%', 'LIKE');
+      $query->condition('d.source', '%' . $this->dbConn->escapeLike($source_filter) . '%', 'LIKE');
     }
     if ($destination_filter = $form_state->getValue('destination', '')) {
-      $query->condition('d.destination', '%' . Database::getConnection()->escapeLike($destination_filter) . '%', 'LIKE');
+      $query->condition('d.destination', '%' . $this->dbConn->escapeLike($destination_filter) . '%', 'LIKE');
     }
+
+    // Pager init.
+    $page = $this->pagerParameters->findPage();
+    $total_items = $query->countQuery()->execute()->fetchField() ?? 0;
+    $num_per_page = 25;
 
     $results = $query
       ->extend('Drupal\Core\Database\Query\PagerSelectExtender')
-      ->limit(25)
+      ->limit($num_per_page)
       ->execute();
+
+    // Now that we have the total number of results, initialize the pager.
+    $this->pagerManager->createPager($total_items, $num_per_page);
 
     $rows = [];
     foreach ($results as $result) {
-      $edit_link = Url::fromRoute('entity.redirect.edit_form', ['redirect' => $result->rid])->toString();
       $rows[] = [
         'data' => [
           $result->rid,
@@ -328,14 +364,18 @@ class RedirectCheckForm extends FormBase {
       ];
     }
 
-    return [
+    $build['table'] = [
       '#type' => 'table',
       '#header' => $header,
       '#rows' => $rows,
       '#empty' => $this->t('No redirects found.'),
-      '#attached' => ['library' => ['core/drupal.dialog.ajax']],
-      'pager' => ['#type' => 'pager'],
+      '#prefix' => '<div id="redirect-results-table">',
+      '#suffix' => '</div>',
     ];
+
+    $build['pager'] = ['#type' => 'pager'];
+
+    return $build;
   }
 
   /**
