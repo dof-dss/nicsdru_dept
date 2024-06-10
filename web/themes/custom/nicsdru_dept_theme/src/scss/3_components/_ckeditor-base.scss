@@ -345,13 +345,14 @@
           @include adjust-font-size-to(24px, 5);
         }
       }
+    }
 
-      // Replacement for .call-to-action suitable for use in CKEditor.
-      .btn--call-to-action {
-        @include btn(large, right);
-        @include btn-color($btn-action);
-        @include responsive-typo-map($btn-large);
-      }
+    // Replacement for .call-to-action suitable for use in CKEditor.
+    .btn--call-to-action {
+      @include btn(large, right);
+      @include btn-color($btn-action);
+      @include responsive-typo-map($btn-large);
+      text-align: left;
     }
 
     .info-notice {
