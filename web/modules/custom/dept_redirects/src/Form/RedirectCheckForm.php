@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_redirects\Form;
 
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -54,6 +55,13 @@ class RedirectCheckForm extends FormBase {
   protected $dbConn;
 
   /**
+   * Date formatter service object.
+   *
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
+   */
+  protected $dateFormatter;
+
+  /**
    * Constructs a new RedirectCheckForm object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -61,12 +69,13 @@ class RedirectCheckForm extends FormBase {
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
    *   The URL generator service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, UrlGeneratorInterface $url_generator, PagerManagerInterface $pager_manager, PagerParametersInterface $pager_params, Connection $connection) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, UrlGeneratorInterface $url_generator, PagerManagerInterface $pager_manager, PagerParametersInterface $pager_params, Connection $connection, DateFormatterInterface $date_formatter) {
     $this->entityTypeManager = $entity_type_manager;
     $this->urlGenerator = $url_generator;
     $this->pagerManager = $pager_manager;
     $this->pagerParameters = $pager_params;
     $this->dbConn = $connection;
+    $this->dateFormatter = $date_formatter;
   }
 
   /**
@@ -78,7 +87,8 @@ class RedirectCheckForm extends FormBase {
       $container->get('url_generator'),
       $container->get('pager.manager'),
       $container->get('pager.parameters'),
-      $container->get('database')
+      $container->get('database'),
+      $container->get('date.formatter')
     );
   }
 
@@ -275,9 +285,8 @@ class RedirectCheckForm extends FormBase {
 
       // Store results in the  database table.
       if (!empty($context['results'])) {
-        $connection = \Drupal::database();
         foreach ($context['results'] as $result) {
-          $connection->insert('dept_redirects_results')
+          $this->dbConn->insert('dept_redirects_results')
             ->fields([
               'rid' => $result['rid'],
               'source' => $result['source'],
@@ -358,7 +367,7 @@ class RedirectCheckForm extends FormBase {
           $result->source,
           $result->destination,
           $result->status,
-          \Drupal::service('date.formatter')->format($result->checked, 'custom', 'd M Y H:i'),
+          $this->dateFormatter->format($result->checked, 'custom', 'd M Y H:i'),
           Link::createFromRoute($this->t('Edit'), 'entity.redirect.edit_form', ['redirect' => $result->rid]),
         ],
       ];
