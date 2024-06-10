@@ -68,6 +68,14 @@ class RedirectCheckForm extends FormBase {
    *   The entity type manager.
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
    *   The URL generator service.
+   * @param \Drupal\Core\Pager\PagerManagerInterface $pager_manager
+   *   The pager manager service.
+   * @param \Drupal\Core\Pager\PagerParametersInterface $pager_params
+   *   The pager parameters service.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   The database connection.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, UrlGeneratorInterface $url_generator, PagerManagerInterface $pager_manager, PagerParametersInterface $pager_params, Connection $connection, DateFormatterInterface $date_formatter) {
     $this->entityTypeManager = $entity_type_manager;
@@ -174,6 +182,9 @@ class RedirectCheckForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $batch_size = $form_state->getValue('batch_size');
 
+    // Clear the results table.
+    $this->clearResultsTable();
+
     // Initialize batch builder.
     $batch_builder = new BatchBuilder();
     $batch_builder->setTitle($this->t('Checking redirects'))
@@ -190,6 +201,13 @@ class RedirectCheckForm extends FormBase {
 
     // Redirect to batch processing page.
     $form_state->setRedirect('dept_redirects.check_redirects');
+  }
+
+  /**
+   * Clears the results table.
+   */
+  protected function clearResultsTable() {
+    $this->dbConn->truncate('dept_redirects_results')->execute();
   }
 
   /**
@@ -242,20 +260,20 @@ class RedirectCheckForm extends FormBase {
     foreach ($redirects as $redirect) {
       $destination_path = $redirect->getRedirectUrl()->toString();
 
-    // Determine if the destination is an absolute or external URL.
-    if (str_starts_with($destination_path, 'www')) {
-      $destination_path = 'https://' . $destination_path;
-    }
+      // Determine if the destination is an absolute or external URL.
+      if (str_starts_with($destination_path, 'www')) {
+        $destination_path = 'https://' . $destination_path;
+      }
 
-    if (str_starts_with($destination_path, 'http')) {
-      $destination = $destination_path;
-    }
-    else {
-      // Get the base URL.
-      $base_url = $this->urlGenerator->generateFromRoute('<front>', [], ['absolute' => TRUE]);
-      // Construct the full URL.
-      $destination = Url::fromUri($base_url . $destination_path)->toString();
-    }
+      if (str_starts_with($destination_path, 'http')) {
+        $destination = $destination_path;
+      }
+      else {
+        // Get the base URL.
+        $base_url = $this->urlGenerator->generateFromRoute('<front>', [], ['absolute' => TRUE]);
+        // Construct the full URL.
+        $destination = Url::fromUri($base_url . $destination_path)->toString();
+      }
 
       try {
         $response = \Drupal::httpClient()->head($destination, ['http_errors' => FALSE]);
@@ -267,7 +285,7 @@ class RedirectCheckForm extends FormBase {
           $context['results'][] = [
             'rid' => $redirect->id(),
             'source' => $redirect->getSourceUrl(),
-            'destination' => $destination_path,
+            'destination' => $destination,
             'status' => $status_code,
             'checked' => $current_time,
           ];
@@ -277,13 +295,13 @@ class RedirectCheckForm extends FormBase {
         $context['results'][] = [
           'rid' => $redirect->id(),
           'source' => $redirect->getSourceUrl(),
-          'destination' => $destination_path,
+          'destination' => $destination,
           'status' => 'Error: ' . $e->getMessage(),
           'checked' => \Drupal::time()->getRequestTime(),
         ];
       }
 
-      // Store results in the  database table.
+      // Store results in the database table.
       if (!empty($context['results'])) {
         foreach ($context['results'] as $result) {
           $this->dbConn->insert('dept_redirects_results')
