@@ -3,8 +3,8 @@
 namespace Drupal\dept_redirects\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class RedirectCheckerController extends ControllerBase {
 
@@ -44,4 +44,5 @@ class RedirectCheckerController extends ControllerBase {
     $form = $this->formBuilder->getForm('Drupal\dept_redirects\Form\RedirectCheckForm');
     return $form;
   }
+
 }
