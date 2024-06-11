@@ -2,20 +2,19 @@
 
 namespace Drupal\dept_redirects\Form;
 
+use Drupal\Core\Batch\BatchBuilder;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Pager\PagerParametersInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
-use Drupal\redirect\Entity\Redirect;
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Batch\BatchBuilder;
-use GuzzleHttp\Exception\RequestException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
+use Drupal\redirect\Entity\Redirect;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class RedirectCheckForm extends FormBase {
 
@@ -122,12 +121,13 @@ class RedirectCheckForm extends FormBase {
       ->execute();
     $processed_redirects = $this->dbConn->select('dept_redirects_results', 'd')
       ->countQuery()
+      ->distinct()
       ->execute()
       ->fetchField();
 
     // Display the number of redirects processed and the total so far.
     $form['status'] = [
-      '#markup' => $this->t('Processed @processed out of @total redirects.', [
+      '#markup' => $this->t('Processed @processed redirects out of @total.', [
         '@processed' => $processed_redirects,
         '@total' => $total_redirects,
       ]),
@@ -163,6 +163,11 @@ class RedirectCheckForm extends FormBase {
         '#title' => $this->t('Destination URL'),
         '#default_value' => $form_state->getValue('destination', ''),
       ],
+      'response_text' => [
+        '#type' => 'textfield',
+        '#title' => $this->t('Response Text'),
+        '#default_value' => $form_state->getValue('response_text', ''),
+      ],
       'filter' => [
         '#type' => 'submit',
         '#value' => $this->t('Filter'),
@@ -180,7 +185,7 @@ class RedirectCheckForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $batch_size = $form_state->getValue('batch_size');
+    $batch_size = $form_state->getValue('batch_size') ?? 50;
 
     // Clear the results table.
     $this->clearResultsTable();
@@ -189,7 +194,7 @@ class RedirectCheckForm extends FormBase {
     $batch_builder = new BatchBuilder();
     $batch_builder->setTitle($this->t('Checking redirects'))
       ->setInitMessage($this->t('Redirect check is starting...'))
-      ->setProgressMessage($this->t('Processed @current out of @total.'))
+      ->setProgressMessage($this->t('@current items out of @total.'))
       ->setErrorMessage($this->t('Redirect check has encountered an error.'))
       ->setFinishCallback([$this, 'finishBatch']);
 
@@ -222,30 +227,27 @@ class RedirectCheckForm extends FormBase {
    */
   public function processRedirects($offset, $batch_size, array &$context) {
     // Initialize sandbox properties if not set.
-    if (empty($context['sandbox']['progress'])) {
+    if (!isset($context['sandbox']['progress'])) {
       $context['sandbox']['progress'] = 0;
     }
-    if (empty($context['sandbox']['current'])) {
-      $context['sandbox']['current'] = 0;
-    }
-    if (empty($context['sandbox']['total'])) {
+    if (!isset($context['sandbox']['total'])) {
       $context['sandbox']['total'] = $this->entityTypeManager->getStorage('redirect')
         ->getQuery()
         ->count()
         ->accessCheck(TRUE)
         ->execute();
     }
-    if (empty($context['sandbox']['offset'])) {
+    if (!isset($context['sandbox']['offset'])) {
       $context['sandbox']['offset'] = 0;
     }
-    if (empty($context['sandbox']['batch_size'])) {
+    if (!isset($context['sandbox']['batch_size'])) {
       $context['sandbox']['batch_size'] = $batch_size;
     }
 
     $query = \Drupal::entityQuery('redirect')
       ->accessCheck(TRUE)
       ->sort('rid', 'ASC')
-      ->range($offset, $batch_size);
+      ->range($context['sandbox']['offset'], $batch_size);
 
     $redirect_ids = $query->execute();
 
@@ -272,7 +274,7 @@ class RedirectCheckForm extends FormBase {
         // Get the base URL.
         $base_url = $this->urlGenerator->generateFromRoute('<front>', [], ['absolute' => TRUE]);
         // Construct the full URL.
-        $destination = Url::fromUri($base_url . $destination_path)->toString();
+        $destination = Url::fromUri($base_url . substr($destination_path, 1))->toString();
       }
 
       try {
@@ -285,7 +287,7 @@ class RedirectCheckForm extends FormBase {
           $context['results'][] = [
             'rid' => $redirect->id(),
             'source' => $redirect->getSourceUrl(),
-            'destination' => $destination,
+            'destination' => $destination_path,
             'status' => $status_code,
             'checked' => $current_time,
           ];
@@ -295,7 +297,7 @@ class RedirectCheckForm extends FormBase {
         $context['results'][] = [
           'rid' => $redirect->id(),
           'source' => $redirect->getSourceUrl(),
-          'destination' => $destination,
+          'destination' => $destination_path,
           'status' => 'Error: ' . $e->getMessage(),
           'checked' => \Drupal::time()->getRequestTime(),
         ];
@@ -319,18 +321,21 @@ class RedirectCheckForm extends FormBase {
       }
     }
 
-    // Update the sandbox progress.
+    // Update the sandbox progress and offset.
     $context['sandbox']['progress'] += count($redirect_ids);
     $context['sandbox']['offset'] += $batch_size;
     $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['total'];
-    $context['message'] = $this->t('Processed @current out of @total redirects.', [
+    $context['message'] = $this->t('Processed @current items out of @total.', [
       '@current' => $context['sandbox']['progress'],
       '@total' => $context['sandbox']['total'],
     ]);
 
     // Schedule the next batch operation if there are more redirects to process.
-    if (count($redirect_ids) === $batch_size) {
-      $context['batch']['operations'][] = [[$this, 'processRedirects'], [$context['sandbox']['offset'], $context['sandbox']['batch_size']]];
+    if ($context['sandbox']['offset'] < $context['sandbox']['total']) {
+      $context['batch']['operations'][] = [
+        [$this, 'processRedirects'],
+        [$context['sandbox']['offset'], $context['sandbox']['batch_size']]
+      ];
     }
   }
 
@@ -363,6 +368,9 @@ class RedirectCheckForm extends FormBase {
     if ($destination_filter = $form_state->getValue('destination', '')) {
       $query->condition('d.destination', '%' . $this->dbConn->escapeLike($destination_filter) . '%', 'LIKE');
     }
+    if ($response_text_filter = $form_state->getValue('response_text', '')) {
+      $query->condition('d.status', '%' . $this->dbConn->escapeLike($response_text_filter) . '%', 'LIKE');
+    }
 
     // Pager init.
     $page = $this->pagerParameters->findPage();
@@ -370,12 +378,16 @@ class RedirectCheckForm extends FormBase {
     $num_per_page = 25;
 
     $results = $query
+      // @phpstan-ignore-next-line
       ->extend('Drupal\Core\Database\Query\PagerSelectExtender')
       ->limit($num_per_page)
       ->execute();
 
     // Now that we have the total number of results, initialize the pager.
     $this->pagerManager->createPager($total_items, $num_per_page);
+
+    // Get the current path including query parameters.
+    $current_path = \Drupal::request()->getRequestUri();
 
     $rows = [];
     foreach ($results as $result) {
@@ -386,7 +398,10 @@ class RedirectCheckForm extends FormBase {
           $result->destination,
           $result->status,
           $this->dateFormatter->format($result->checked, 'custom', 'd M Y H:i'),
-          Link::createFromRoute($this->t('Edit'), 'entity.redirect.edit_form', ['redirect' => $result->rid]),
+          Link::createFromRoute($this->t('Edit'),
+            'entity.redirect.edit_form',
+            ['redirect' => $result->rid, 'destination' => $current_path]
+          ),
         ],
       ];
     }
@@ -436,4 +451,5 @@ class RedirectCheckForm extends FormBase {
       \Drupal::messenger()->addError($this->t('Redirect check encountered an error.'));
     }
   }
+
 }
