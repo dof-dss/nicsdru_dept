@@ -1,13 +1,11 @@
 dept_redirects.admin:
-  title: 'Check Redirects'
+  title: 'Check redirects'
   description: 'Check redirects for non-200 or non-300 response codes.'
-  parent: system.admin_reports
+  parent: redirect.list
   route_name: dept_redirects.check_redirects
-  weight: 100
 
 dept_redirects.config:
-  title: 'Redirect Check Settings'
+  title: 'Redirect check settings'
   description: 'Configure the batch size for redirect checks.'
-  parent: system.admin_config_development
+  parent: system.admin_config_search
   route_name: dept_redirects.settings
-  weight: 101

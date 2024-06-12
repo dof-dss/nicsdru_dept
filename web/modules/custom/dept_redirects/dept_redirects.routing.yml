@@ -10,7 +10,7 @@ dept_redirects.check_redirects:
   path: '/admin/reports/check-redirects'
   defaults:
     _controller: '\Drupal\dept_redirects\Controller\RedirectCheckerController::checkRedirects'
-    _title: 'Check Redirects'
+    _title: 'Check existing redirects'
   requirements:
     _permission: 'access check redirects'
 
