@@ -378,6 +378,7 @@ class RedirectCheckForm extends FormBase {
     $results = $query
       // @phpstan-ignore-next-line
       ->extend('Drupal\Core\Database\Query\PagerSelectExtender')
+      // @phpstan-ignore-next-line
       ->limit($num_per_page)
       ->execute();
 
