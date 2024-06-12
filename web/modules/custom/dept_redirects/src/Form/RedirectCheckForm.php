@@ -375,12 +375,8 @@ class RedirectCheckForm extends FormBase {
     $total_items = $query->countQuery()->execute()->fetchField() ?? 0;
     $num_per_page = 25;
 
-    $results = $query
-      // @phpstan-ignore-next-line
-      ->extend('Drupal\Core\Database\Query\PagerSelectExtender')
-      // @phpstan-ignore-next-line
-      ->limit($num_per_page)
-      ->execute();
+    // @phpstan-ignore-next-line
+    $results = $query->extend('Drupal\Core\Database\Query\PagerSelectExtender')->limit($num_per_page)->execute();
 
     // Now that we have the total number of results, initialize the pager.
     $this->pagerManager->createPager($total_items, $num_per_page);
