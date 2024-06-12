@@ -126,12 +126,10 @@ class RedirectCheckForm extends FormBase {
       ->fetchField();
 
     // Display the number of redirects processed and the total so far.
-    $form['status'] = [
-      '#markup' => $this->t('Processed @processed redirects out of @total.', [
-        '@processed' => $processed_redirects,
-        '@total' => $total_redirects,
-      ]),
-    ];
+    \Drupal::messenger()->addMessage($this->t('Flagged @processed out of @total redirects with a non-valid HTTP response code.', [
+      '@processed' => $processed_redirects,
+      '@total' => $total_redirects,
+    ]));
 
     // Add the start batch process button.
     $form['batch_size'] = [
