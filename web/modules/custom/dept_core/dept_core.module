@@ -301,7 +301,18 @@ function dept_core_department_links(): array {
 }
 
 function dept_core_book_structure_cache_clear(&$form, FormStateInterface $form_state) {
-  $form_state->disableRedirect(TRUE);
+  $book = $form_state->get('book') ?? [];
+  $cache_tags = [];
+
+  if (!empty($book['book'])) {
+    $cache_tags[] = 'bid:' . $book['book']['bid'];
+    $cache_tags[] = 'node:' . $book['book']['nid'];
+  }
+
+  Cache::invalidateTags($cache_tags);
+}
+
+function dept_core_book_post_submit_cache_bust(&$form, FormStateInterface $form_state) {
   $book = $form_state->get('book') ?? [];
   $cache_tags = [];
 
@@ -319,9 +330,9 @@ function dept_core_book_structure_cache_clear(&$form, FormStateInterface $form_s
 function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Interject in the book outline form. Purge cache items
   // from affected book ids and associated node id cache entries.
-  if (str_contains($form_id, 'outline') && !str_contains($form_id, 'ajax')) {
-//    $form['#submit'] = array_merge(['dept_core_book_structure_cache_clear'], $form['#submit']);
-    $form['actions']['submit']['#submit'] = array_merge(['dept_core_book_structure_cache_clear'], $form['actions']['submit']['#submit']);
+  if (preg_match('/book_(outline|remove)/', $form_id) && !str_contains($form_id, 'ajax')) {
+    $form['#submit'] = array_merge(['dept_core_book_structure_cache_clear'], $form['#submit']);
+    $form['#submit'][] = 'dept_core_book_post_submit_cache_bust';
   }
 
   if ($form_id === 'views_exposed_form') {
