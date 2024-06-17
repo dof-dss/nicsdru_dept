@@ -182,7 +182,8 @@
 }
 
 // Replacement for .call-to-action suitable for use in CKEditor.
-.btn--call-to-action {
+.btn--call-to-action,
+.call-to-action {
   @include btn(large, right);
   @include btn-color($btn-action);
 }

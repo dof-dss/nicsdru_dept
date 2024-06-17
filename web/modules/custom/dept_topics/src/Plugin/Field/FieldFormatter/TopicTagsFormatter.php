@@ -59,6 +59,10 @@ class TopicTagsFormatter extends FormatterBase {
       ];
     }
 
+    // Reverse the ordering of the topics to reflect the hierarchy
+    // as seen in the order of Parent Topic > Topic.
+    $element = array_reverse($element, TRUE);
+
     return $element;
   }
 
