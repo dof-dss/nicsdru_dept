@@ -15,7 +15,6 @@ use Drupal\Core\Url;
 use Drupal\dept_core\Entity\Department;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
-use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
