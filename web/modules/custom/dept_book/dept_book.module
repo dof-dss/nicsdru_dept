@@ -5,6 +5,8 @@
  * Book admendments for Departmental sites.
  */
 
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\flag\FlagInterface;
 use Drupal\node\NodeInterface;
 
@@ -59,4 +61,32 @@ function dept_book_node_update(EntityInterface $entity) {
   }
 }
 
+/**
+ * Implements hook_form_alter().
+ */
+function dept_book_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Interject in the book outline form. Purge cache items
+  // from affected book ids and associated node id cache entries.
+  if (preg_match('/book_(outline|remove)/', $form_id) && !str_contains($form_id, 'ajax')) {
+    // Unusual to apply to pre and post-submit but seems to require both
+    // See BookOutlineForm.php and BookRemoveForm.php.
+    $form['#submit'] = array_merge(['dept_book_structure_change_cache_clear'], $form['#submit']);
+    $form['#submit'][] = 'dept_book_structure_change_cache_clear';
+  }
+}
 
+/**
+ * Form submit callback used to purge cache items
+ * for books and the node being affected.
+ */
+function dept_book_structure_change_cache_clear(&$form, FormStateInterface $form_state) {
+  $book = $form_state->get('book') ?? [];
+  $cache_tags = [];
+
+  if (!empty($book['book'])) {
+    $cache_tags[] = 'bid:' . $book['book']['bid'];
+    $cache_tags[] = 'node:' . $book['book']['nid'];
+  }
+
+  Cache::invalidateTags($cache_tags);
+}
