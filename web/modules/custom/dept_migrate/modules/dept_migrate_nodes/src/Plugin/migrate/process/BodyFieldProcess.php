@@ -3,6 +3,7 @@
 namespace Drupal\dept_migrate_nodes\Plugin\migrate\process;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\ProcessPluginBase;
 use Drupal\migrate\Row;
@@ -17,6 +18,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class BodyFieldProcess extends ProcessPluginBase implements ContainerFactoryPluginInterface {
 
   /**
+   * @var \Drupal\dept_migrate\MigrateUuidLookupManager
+   */
+  protected $migrateLookupManager;
+
+  /**
    * Constructor.
    *
    * @param array $configuration
@@ -25,9 +31,12 @@ class BodyFieldProcess extends ProcessPluginBase implements ContainerFactoryPlug
    *   The plugin ID.
    * @param array $plugin_definition
    *   The plugin definition.
+   * @param \Drupal\dept_migrate\MigrateUuidLookupManager $migrate_lookup_manager
+   *   The D7 to D10 migrate lookup manager service.
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition) {
+  public function __construct(array $configuration, $plugin_id, array $plugin_definition, MigrateUuidLookupManager $migrate_lookup_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->migrateLookupManager = $migrate_lookup_manager;
   }
 
   /**
@@ -37,7 +46,8 @@ class BodyFieldProcess extends ProcessPluginBase implements ContainerFactoryPlug
     return new static(
       $configuration,
       $plugin_id,
-      $plugin_definition
+      $plugin_definition,
+      $container->get('dept_migrate.migrate_uuid_lookup_manager')
     );
   }
 
@@ -56,6 +66,7 @@ class BodyFieldProcess extends ProcessPluginBase implements ContainerFactoryPlug
     $value['value'] = $this->tidyupEmbeddedMediaInParagraphs($value['value']);
     $value['value'] = $this->handleMalformedLinks($value['value']);
     $value['value'] = $this->handleUnwantedSpaces($value['value']);
+    $value['value'] = $this->updateD7ToD10CanonicalPaths($value['value']);
 
     return $value;
   }
@@ -113,6 +124,48 @@ class BodyFieldProcess extends ProcessPluginBase implements ContainerFactoryPlug
     $replacement = '$2<$1>$3</$1>';
 
     $content = preg_replace($pattern, $replacement, $content);
+
+    return $content;
+  }
+
+  /**
+   * Function to lookup and replace D7 canonical paths with their
+   * D10 equivalents. These /node/123 paths are preferred over aliased
+   * paths as they aren't expected to change. Text filters are relied on
+   * to convert those canonical paths into aliased paths where they are
+   * available, to whatever their present value is.
+   *
+   * @param string $content
+   *   HTML string to process.
+   *
+   * @return string
+   *   The processed content string.
+   */
+  private function updateD7ToD10CanonicalPaths(string $content) {
+    $pattern = '|\/node\/(\d+)|';
+    $matches = [];
+    preg_match_all($pattern, $content, $matches);
+
+    /*
+     * Structure returned for a match looks like this.
+     * 0 => array:1 [
+     *    0 => "/node/2110"
+     * ]
+     * 1 => array:1 [
+     *    0 => "2110"
+     * ]
+     */
+    if (!empty($matches[1])) {
+      foreach ($matches[1] as $d7_canonical_nid) {
+        $d10_lookup = $this->migrateLookupManager->lookupBySourceNodeId([$d7_canonical_nid]);
+        $d10_lookup = reset($d10_lookup);
+
+        if (!empty($d10_lookup) && !empty($d10_lookup['nid'])) {
+          $d10_canonical_path = '/node/' . $d10_lookup['nid'];
+          $content = str_replace('/node/' . $d7_canonical_nid, $d10_canonical_path, $content);
+        }
+      }
+    }
 
     return $content;
   }
