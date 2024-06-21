@@ -402,14 +402,6 @@ function dept_core_clientside_validation_should_validate($element, FormStateInte
     return TRUE;
   }
 }
-
-/**
- * Implements hook_preprocess_book_navigation().
- */
-function dept_core_preprocess_book_navigation(&$variables) {
-  $variables['#cache']['max-age'] = 0;
-}
-
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
