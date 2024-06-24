@@ -73,7 +73,8 @@ function dept_node_book_processing(array $form, FormStateInterface $form_state) 
 
   // If the entity is not the parent item of the book, remove child content
   // references for that entity's topics.
-  if ($values['book']['pid'] !== $values['book']['bid']) {
+  if ($values['book']['nid'] !== $values['book']['bid']) {
+    // @phpstan-ignore-next-line
     $entity = $form_state->getFormObject()->getEntity();
     if ($entity->hasField('field_site_topics')) {
       $topic_manager = \Drupal::service('topic.manager');
