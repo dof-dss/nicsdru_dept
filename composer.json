@@ -279,7 +279,9 @@
                 "Cannot save unpublished versions of published content for users without manage book privileges": "https://www.drupal.org/files/issues/2022-12-14/2918537-92.patch",
                 "Length of menu_tree.url and menu_tree.route_param_key are too short (255 characters)": "https://www.drupal.org/files/issues/2024-03-06/3106205-55-10-2.patch",
                 "Avoid error when $options is NULL in buildUrl()": "https://www.drupal.org/files/issues/2022-10-03/2871217-68_0.patch",
-                "Increase claro xs font size": "patches/claro-font-size.patch"
+                "Increase claro xs font size": "patches/claro-font-size.patch",
+                "TypeError when adding book page": "https://www.drupal.org/files/issues/2023-10-02/book_typeerror-3391035-1.patch",
+                "Force expiration of node cache tag when book outline changes": "https://gist.githubusercontent.com/johangant/8b97bf93525475ee89d8be246a418777/raw/145c727d1df7403ce38819437bc46989e1a85a2b/expire-book-node-cache-key-on-change.patch"
             },
             "drupal/devel": {
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://raw.githubusercontent.com/politsin/snipets/master/patch/kint.patch"
