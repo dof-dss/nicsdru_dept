@@ -208,7 +208,7 @@ class TopicManager {
     if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
 
       // If an entity is a child entry to a book, don't update the
-      // 'topic contents' field to the topics in its site_topics field.
+      // 'topic child contents' field to the topics in its site_topics field.
       if ($book_data = $this->bookManager->loadBookLink($entity->id())) {
         if ($book_data['pid'] !== $entity->id()) {
           return;

@@ -85,6 +85,11 @@ function dept_book_form_alter(&$form, FormStateInterface $form_state, $form_id) 
 
 /**
  * Callback to process topics for book content.
+ *
+ * Entities will also be processed from the dept_topics module.
+ *
+ * @see \Drupal\dept_topics\TopicManager.php
+ * @see \Drupal\dept_topics\dept_topics.module
  */
 function dept_book_process_topics(array $form, FormStateInterface $form_state) {
   $values = $form_state->getValues();
