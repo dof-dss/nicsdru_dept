@@ -298,8 +298,14 @@ function dept_topics_node_presave(EntityInterface $node) {
 
     if (count($original) > count($updated)) {
       $removed = array_diff($original, $updated);
+      $book_manager = \Drupal::service('book.manager');
 
       foreach ($removed as $nid) {
+        // Do not remove site topics from the node if it is a book page.
+        if ($book_manager->loadBookLink($nid) === FALSE) {
+          continue;
+        }
+
         $child_node = Node::load($nid);
 
         if (!empty($child_node)) {

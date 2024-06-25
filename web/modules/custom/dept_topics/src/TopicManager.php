@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_topics;
 
+use Drupal\book\BookManagerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
@@ -64,6 +65,13 @@ class TopicManager {
   protected $entityDisplayRepository;
 
   /**
+   * The Book manager service.
+   *
+   * @var \Drupal\book\BookManagerInterface
+   */
+  protected $bookManager;
+
+  /**
    * Constructs a TopicManager object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -74,6 +82,8 @@ class TopicManager {
    *   The Entity Field Manager service.
    * @param \Drupal\Core\Entity\EntityDisplayRepository $entity_display_repository
    *   The Entity Display Repository service.
+   * @param \Drupal\book\BookManagerInterface $book_manager
+   *   The Book manager service.
    *
    */
   public function __construct(
@@ -81,12 +91,14 @@ class TopicManager {
     Connection $connection,
     EntityFieldManagerInterface $entity_field_manager,
     EntityDisplayRepository $entity_display_repository,
+    BookManagerInterface $book_manager,
     ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->dbConn = $connection;
     $this->entityFieldManager = $entity_field_manager;
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->entityDisplayRepository = $entity_display_repository;
+    $this->bookManager = $book_manager;
   }
 
   /**
@@ -194,6 +206,15 @@ class TopicManager {
   public function updateChildDisplayOnTopics(EntityInterface $entity) {
     // @phpstan-ignore-next-line
     if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
+
+      // If an entity is a child entry to a book, don't update the
+      // 'topic child contents' field to the topics in its site_topics field.
+      if ($book_data = $this->bookManager->loadBookLink($entity->id())) {
+        if ($book_data['pid'] !== $entity->id()) {
+          return;
+        }
+      }
+
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
       // @phpstan-ignore-next-line
       $site_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
