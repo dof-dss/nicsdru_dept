@@ -40,47 +40,6 @@ function dept_node_form_views_exposed_form_alter(&$form, FormStateInterface $for
       $form['dept']['#default_value'] = $dept->id();
     }
   }
-
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function dept_node_form_node_article_book_outline_form_alter(&$form, $form_state) {
-  array_unshift($form['actions']['submit']['#submit'], 'dept_node_book_processing');
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function dept_node_form_book_remove_form_alter(&$form, $form_state) {
-  $form['#submit'][] = 'dept_node_book_processing';
-}
-
-/**
- * Callback to process nodes added to a Book outline.
- */
-function dept_node_book_processing(array $form, FormStateInterface $form_state) {
-  $values = $form_state->getValues();
-
-  if ($form['#form_id'] === 'book_remove_form') {
-    $entity = \Drupal::routeMatch()->getParameter('node');
-    if ($entity->hasField('field_site_topics')) {
-      $topic_manager = \Drupal::service('topic.manager');
-      $topic_manager->updateChildDisplayOnTopics($entity);
-    }
-  }
-
-  // If the entity is not the parent item of the book, remove child content
-  // references for that entity's topics.
-  if ($values['book']['nid'] !== $values['book']['bid']) {
-    // @phpstan-ignore-next-line
-    $entity = $form_state->getFormObject()->getEntity();
-    if ($entity->hasField('field_site_topics')) {
-      $topic_manager = \Drupal::service('topic.manager');
-      $topic_manager->removeChildDisplayFromTopics($entity);
-    }
-  }
 }
 
 /**
