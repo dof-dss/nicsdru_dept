@@ -17,7 +17,6 @@ use Drupal\flag\Entity\Flag;
 use Drupal\flag\FlagInterface;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
-use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_ENTITY_TYPE_presave().

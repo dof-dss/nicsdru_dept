@@ -1,11 +1,5 @@
 <?php
 
-// Default Drupal 8 settings.
-//
-// These are already explained with detailed comments in Drupal's
-// default.settings.php file.
-//
-// See https://api.drupal.org/api/drupal/sites!default!default.settings.php/8
 $databases = [];
 $config_directories = [];
 $settings['update_free_access'] = FALSE;
@@ -44,6 +38,13 @@ $settings['config_readonly'] = (bool) getenv('CONFIG_READONLY');
 // Permit changes via command line.
 if (PHP_SAPI === 'cli') {
   $settings['config_readonly'] = FALSE;
+  // Increase memory for occasional drush tooling that needs it, eg: migration.
+  ini_set('memory_limit', '384M');
+}
+
+// Increase baseline memory on very specific paths to overcome dev env limits.
+if (preg_match('#^\/node\/(add|edit\/\d+)#', $_SERVER['REQUEST_URI'])) {
+  ini_set('memory_limit', '192M');
 }
 
 // Configuration that is allowed to be changed in readonly environments.

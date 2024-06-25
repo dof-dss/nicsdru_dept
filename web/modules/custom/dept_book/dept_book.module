@@ -5,6 +5,7 @@
  * Book admendments for Departmental sites.
  */
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -68,8 +69,51 @@ function dept_book_node_update(EntityInterface $entity) {
 function dept_book_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Interject in the book outline form. Purge cache items
   // from affected book ids and associated node id cache entries.
-  if (preg_match('/book_(outline|remove)/', $form_id) && !str_contains($form_id, 'ajax')) {
-    $form['#submit'][] = 'dept_book_structure_change_cache_clear';
+  if (preg_match('/book_(outline|remove)/', $form_id)) {
+
+    if (NestedArray::keyExists($form, ['actions', 'submit', '#submit'])) {
+      array_unshift($form['actions']['submit']['#submit'], 'dept_book_process_topics');
+    }
+
+    $form['#submit'][] = 'dept_book_process_topics';
+
+    if (!str_contains($form_id, 'ajax')) {
+      $form['#submit'][] = 'dept_book_structure_change_cache_clear';
+    }
+  }
+}
+
+/**
+ * Callback to process topics for book content.
+ *
+ * Entities will also be processed from the dept_topics module.
+ *
+ * @see \Drupal\dept_topics\TopicManager.php
+ * @see \Drupal\dept_topics\dept_topics.module
+ */
+function dept_book_process_topics(array $form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+
+  // Add the entity back into the child content field for each topic for
+  // that entity's site topics values.
+  if ($form['#form_id'] === 'book_remove_form') {
+    $entity = \Drupal::routeMatch()->getParameter('node');
+    if ($entity->hasField('field_site_topics')) {
+      $topic_manager = \Drupal::service('topic.manager');
+      $topic_manager->updateChildDisplayOnTopics($entity);
+    }
+  }
+
+  // If the entity is not the parent item of the book, remove it from the child
+  // content field for each topic in the entity's site topics values.
+  // TL:DR; Hide child pages from topic/subtopic pages.
+  if ($values['book']['nid'] !== $values['book']['bid']) {
+    // @phpstan-ignore-next-line
+    $entity = $form_state->getFormObject()->getEntity();
+    if ($entity->hasField('field_site_topics')) {
+      $topic_manager = \Drupal::service('topic.manager');
+      $topic_manager->removeChildDisplayFromTopics($entity);
+    }
   }
 }
 
