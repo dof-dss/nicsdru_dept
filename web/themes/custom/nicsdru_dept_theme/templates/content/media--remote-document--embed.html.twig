@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Theme implementation to present a remote document media item in 'embed' view mode.
+ *
+ * @ingroup themeable
+ */
+#}
+{% set media_attributes = create_attribute() %}
+{% set media_attributes = media_attributes.setAttribute('lang', media_langcode) %}
+{% set file_classes = [
+  'file-link',
+  'file--ico',
+]
+%}
+
+{% set media_attributes = media_attributes.addClass(file_classes) %}
+{% if url %}
+  <a{{ media_attributes }} href="{{ url }}">
+    {{ media.label }}
+    <span class="meta">PDFPDFETC</span>
+  </a>
+{% else %}
+  {{ media.label }}
+{% endif %}
+
+{{ content | without('name', 'field_media_media_remote') }}
+{{ title_suffix.contextual_links }}
