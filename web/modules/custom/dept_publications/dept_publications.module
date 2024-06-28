@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResultForbidden;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
@@ -255,6 +256,71 @@ function dept_publications_preprocess_views_view_field(&$variables) {
           $variables['output'] = t('Publication (secure)');
         }
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_media().
+ */
+function dept_publications_preprocess_media(&$variables) {
+  if ($variables['media']->bundle() === 'remote_document' && $variables['view_mode'] === 'embed') {
+    $file_url = $variables['content']['field_media_media_remote'][0]['#url']->getUri();
+    $variables['file_url'] = $file_url;
+
+    // Fetch metadata about the file.
+    $file_headers = get_headers($file_url, 1);
+
+    // Initialize metadata variables.
+    $file_size = 0;
+    $file_mimetype = '';
+    $file_extension = '';
+
+    if ($file_headers) {
+      // Get file size if available.
+      if (!empty($file_headers['Content-Length'])) {
+        $file_size = $file_headers['Content-Length'];
+      }
+
+      // Get file mimetype if available.
+      if (isset($file_headers['Content-Type'])) {
+        $file_mimetype = $file_headers['Content-Type'];
+      }
+
+      // Get file extension.
+      $path_info = pathinfo(parse_url($file_url, PHP_URL_PATH));
+      if (isset($path_info['extension'])) {
+        $file_extension = $path_info['extension'];
+      }
+    }
+
+    // Example: Add these values to the $variables array for later use in the template.
+    $variables['file_size_raw'] = $file_size;
+    $variables['file_size'] = ByteSizeMarkup::create($file_size);
+    $variables['file_mimetype'] = $file_mimetype;
+    $variables['file_extension'] = $file_extension;
+
+    // Map file mimetypes to user friendly document types.
+    $pretty_mimes = \Drupal::service('origins_media.pretty_mime_types')->getMimeTypes();
+    if ($file_mimetype && !empty($pretty_mimes[$file_mimetype])) {
+      $variables['pretty_mimetype'] = $pretty_mimes[$file_mimetype];
+    }
+
+    if (array_key_exists($file_mimetype, $pretty_mimes)) {
+      $variables['file_type'] = $pretty_mimes[$file_mimetype];
+    }
+    else {
+      $variables['file_type'] = strtoupper(preg_replace('/^application\/(\w+)$/', '\1', $file_mimetype));
+    }
+
+    // Add an extra 'is external' preprocess variable so we can distinguish it
+    // when rendering markup in the template.
+    $variables['file_is_external'] = (bool) preg_match('/^http/', $file_url);
+
+    $variables['media_langcode'] = $variables['media']->language()->getId();
+    // Do not output the langcode if is undefined.
+    if ($variables['media_langcode'] === 'und') {
+      unset($variables['media_langcode']);
     }
   }
 }
