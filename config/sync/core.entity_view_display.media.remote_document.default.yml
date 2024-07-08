@@ -1,0 +1,33 @@
+uuid: 331cdf77-8031-417f-b730-51cd95c2c85b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.remote_document.field_domain_access
+    - field.field.media.remote_document.field_domain_source
+    - field.field.media.remote_document.field_media_media_remote
+    - media.type.remote_document
+  module:
+    - dept_core
+id: media.remote_document.default
+targetEntityType: media
+bundle: remote_document
+mode: default
+content:
+  field_media_media_remote:
+    type: media_remote_document
+    label: visually_hidden
+    settings:
+      formatter_class: Drupal\dept_core\Plugin\Field\FieldFormatter\MediaRemoteDocumentFormatter
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_domain_access: true
+  field_domain_source: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true
