@@ -282,7 +282,6 @@ function dept_publications_preprocess_media(&$variables) {
 
     // Fetch metadata about the file.
     $http_client = \Drupal::httpClient();
-    // $file_headers = get_headers($file_url, 1);
     $file_headers = $http_client->request('HEAD', $file_url)->getHeaders();
 
     // Initialize metadata variables.
