@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\ByteSizeMarkup;
+use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
@@ -265,32 +266,46 @@ function dept_publications_preprocess_views_view_field(&$variables) {
  */
 function dept_publications_preprocess_media(&$variables) {
   if ($variables['media']->bundle() === 'remote_document' && $variables['view_mode'] === 'embed') {
-    $file_url = $variables['content']['field_media_media_remote'][0]['#url']->getUri();
+    /* @var \Drupal\Core\Url $url */
+    $url = $variables['content']['field_media_media_remote'][0]['#url'];
+
+    if ($url instanceof Url) {
+      $file_url = $url->getUri();
+    }
+    else {
+      // No URL to work with for whatever reason so return early.
+      return;
+    }
+
+    // Full URL string for use in later preprocessing.
     $variables['file_url'] = $file_url;
 
     // Fetch metadata about the file.
-    $file_headers = get_headers($file_url, 1);
+    $http_client = \Drupal::httpClient();
+    // $file_headers = get_headers($file_url, 1);
+    $file_headers = $http_client->request('HEAD', $file_url)->getHeaders();
 
     // Initialize metadata variables.
     $file_size = 0;
     $file_mimetype = '';
     $file_extension = '';
+    $file_type = '';
 
     if ($file_headers) {
       // Get file size if available.
       if (!empty($file_headers['Content-Length'])) {
-        $file_size = $file_headers['Content-Length'];
+        $file_size = $file_headers['Content-Length'][0] ?? 0;
       }
 
       // Get file mimetype if available.
-      if (isset($file_headers['Content-Type'])) {
-        $file_mimetype = $file_headers['Content-Type'];
+      if (!empty($file_headers['content-type'])) {
+        $file_mimetype = $file_headers['content-type'][0] ?? '';
       }
 
       // Get file extension.
       $path_info = pathinfo(parse_url($file_url, PHP_URL_PATH));
-      if (isset($path_info['extension'])) {
-        $file_extension = $path_info['extension'];
+      if (!empty($path_info['extension'])) {
+        $file_extension = $path_info['extension'] ?? '';
       }
     }
 
