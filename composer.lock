@@ -1839,16 +1839,16 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "10.3.8",
+            "version": "10.3.9",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "a27b32be33b1a42ae6a533e1655cba31060c4f1e"
+                "reference": "77c841da01f3415a4c42f12ac48ac42767284eeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/a27b32be33b1a42ae6a533e1655cba31060c4f1e",
-                "reference": "a27b32be33b1a42ae6a533e1655cba31060c4f1e",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/77c841da01f3415a4c42f12ac48ac42767284eeb",
+                "reference": "77c841da01f3415a4c42f12ac48ac42767284eeb",
                 "shasum": ""
             },
             "require": {
@@ -1860,7 +1860,7 @@
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2024-06-27T11:47:01+00:00"
+            "time": "2024-07-09T09:35:25+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
@@ -20787,5 +20787,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
