@@ -1,0 +1,11 @@
+uuid: 8523a14b-fd68-449e-93f7-8bf9dc24a223
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.remote_document
+id: media.remote_document
+target_entity_type_id: media
+target_bundle: remote_document
+default_langcode: site_default
+language_alterable: false
