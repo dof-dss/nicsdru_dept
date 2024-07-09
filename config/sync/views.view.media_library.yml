@@ -10,6 +10,7 @@ dependencies:
     - media.type.audio
     - media.type.document
     - media.type.image
+    - media.type.remote_document
     - media.type.remote_video
     - media.type.secure_file
     - media.type.video
@@ -409,6 +410,7 @@ display:
             audio: audio
             document: document
             image: image
+            remote_document: remote_document
             remote_video: remote_video
             video: video
           group: 1
@@ -614,6 +616,9 @@ display:
         - 'config:core.entity_view_display.media.image.portrait_float_xp'
         - 'config:core.entity_view_display.media.image.portrait_full'
         - 'config:core.entity_view_display.media.image.preview'
+        - 'config:core.entity_view_display.media.remote_document.default'
+        - 'config:core.entity_view_display.media.remote_document.embed'
+        - 'config:core.entity_view_display.media.remote_document.media_library'
         - 'config:core.entity_view_display.media.remote_video.default'
         - 'config:core.entity_view_display.media.remote_video.embed'
         - 'config:core.entity_view_display.media.remote_video.media_library'
@@ -1634,6 +1639,9 @@ display:
         - 'config:core.entity_view_display.media.image.portrait_float_xp'
         - 'config:core.entity_view_display.media.image.portrait_full'
         - 'config:core.entity_view_display.media.image.preview'
+        - 'config:core.entity_view_display.media.remote_document.default'
+        - 'config:core.entity_view_display.media.remote_document.embed'
+        - 'config:core.entity_view_display.media.remote_document.media_library'
         - 'config:core.entity_view_display.media.remote_video.default'
         - 'config:core.entity_view_display.media.remote_video.embed'
         - 'config:core.entity_view_display.media.remote_video.media_library'
@@ -2056,6 +2064,9 @@ display:
         - 'config:core.entity_view_display.media.image.portrait_float_xp'
         - 'config:core.entity_view_display.media.image.portrait_full'
         - 'config:core.entity_view_display.media.image.preview'
+        - 'config:core.entity_view_display.media.remote_document.default'
+        - 'config:core.entity_view_display.media.remote_document.embed'
+        - 'config:core.entity_view_display.media.remote_document.media_library'
         - 'config:core.entity_view_display.media.remote_video.default'
         - 'config:core.entity_view_display.media.remote_video.embed'
         - 'config:core.entity_view_display.media.remote_video.media_library'
