@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6f3c5afef87780e8adf4717d01c7d135",
+    "content-hash": "ef8ff07320044ed160a9120e10128a0b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3191,6 +3191,10 @@
                     "homepage": "https://www.drupal.org/user/157725"
                 },
                 {
+                    "name": "AstonVictor",
+                    "homepage": "https://www.drupal.org/user/3466615"
+                },
+                {
                     "name": "chr.fritsch",
                     "homepage": "https://www.drupal.org/user/2103716"
                 },
@@ -3276,7 +3280,7 @@
                     "homepage": "https://www.drupal.org/user/3301055"
                 },
                 {
-                    "name": "djanse97",
+                    "name": "Danny Janse",
                     "homepage": "https://www.drupal.org/user/3774093"
                 }
             ],
@@ -3959,6 +3963,10 @@
                     "role": "Maintainer"
                 },
                 {
+                    "name": "Junyor",
+                    "homepage": "https://www.drupal.org/user/7006"
+                },
+                {
                     "name": "lhangea",
                     "homepage": "https://www.drupal.org/user/2743803"
                 },
@@ -4506,18 +4514,6 @@
                     "name": "Severin Unger (sevi)",
                     "homepage": "https://www.drupal.org/u/sevi",
                     "role": "Ex Maintainer (D6)"
-                },
-                {
-                    "name": "podarok",
-                    "homepage": "https://www.drupal.org/user/116002"
-                },
-                {
-                    "name": "sevi",
-                    "homepage": "https://www.drupal.org/user/199290"
-                },
-                {
-                    "name": "ygerasimov",
-                    "homepage": "https://www.drupal.org/user/257311"
                 }
             ],
             "description": "DraggableViews module makes views draggable.",
@@ -6501,6 +6497,50 @@
             }
         },
         {
+            "name": "drupal/media_remote",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/media_remote.git",
+                "reference": "1.8.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/media_remote-1.8.0.zip",
+                "reference": "1.8.0",
+                "shasum": "4f7c8e8e7bd61501183ef62f91d804edbdb611f9"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.8.0",
+                    "datestamp": "1691050855",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "marcoscano",
+                    "homepage": "https://www.drupal.org/user/1288796"
+                }
+            ],
+            "description": "Provides Media integration for remote content (non-OEmbed).",
+            "homepage": "https://www.drupal.org/project/media_remote",
+            "support": {
+                "source": "https://git.drupalcode.org/project/media_remote"
+            }
+        },
+        {
             "name": "drupal/metatag",
             "version": "2.0.0",
             "source": {
@@ -6876,7 +6916,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.17",
-                    "datestamp": "1705234146",
+                    "datestamp": "1709804220",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6945,7 +6985,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.12",
-                    "datestamp": "1696776683",
+                    "datestamp": "1712319355",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7444,7 +7484,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.32",
-                    "datestamp": "1711906241",
+                    "datestamp": "1712242273",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16420,8 +16460,8 @@
                 "schema"
             ],
             "support": {
-                "issues": "https://github.com/justinrainbow/json-schema/issues",
-                "source": "https://github.com/justinrainbow/json-schema/tree/v5.2.13"
+                "issues": "https://github.com/jsonrainbow/json-schema/issues",
+                "source": "https://github.com/jsonrainbow/json-schema/tree/v5.2.13"
             },
             "time": "2023-09-26T02:20:38+00:00"
         },

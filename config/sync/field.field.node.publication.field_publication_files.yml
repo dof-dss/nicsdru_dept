@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.field_publication_files
     - media.type.document
+    - media.type.remote_document
     - node.type.publication
 id: node.publication.field_publication_files
 field_name: field_publication_files
@@ -21,9 +22,10 @@ settings:
   handler_settings:
     target_bundles:
       document: document
+      remote_document: remote_document
     sort:
       field: _none
       direction: ASC
     auto_create: false
-    auto_create_bundle: ''
+    auto_create_bundle: document
 field_type: entity_reference
