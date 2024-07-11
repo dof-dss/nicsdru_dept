@@ -11,7 +11,28 @@ source:
   plugin: d7_dept_node
   node_type: protected_area
   track_changes: true
+  constants:
+    migrate_ignore_sites: 'MIGRATE_IGNORE_SITES'
 process:
+  site_topics:
+    - plugin: sub_process
+      source: field_site_topics
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
+  site_subtopics:
+    - plugin: sub_process
+      source: field_site_subtopics
+      process:
+        target_id:
+          - plugin: d7_node_lookup
+            source: target_id
+  field_site_topics:
+    - plugin: merge
+      source:
+        - '@site_topics'
+        - '@site_subtopics'
   langcode:
     - plugin: default_value
       source: langcode
@@ -42,18 +63,8 @@ process:
   revision_log: log
   revision_timestamp: timestamp
   body:
-    - plugin: get
+    - plugin: body_field_process
       source: body
-    - plugin: str_replace
-      regex: true
-      search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
-      replace: ''
-    - plugin: str_replace
-      search: '&nbsp;</p>'
-      replace: '</p>'
-    - plugin: str_replace
-      search: '&nbsp;'
-      replace: ' '
     - plugin: media_wysiwyg_filter
   body/0/format:
     - plugin: static_map
@@ -71,20 +82,6 @@ process:
   field_council: field_council
   field_county: field_county
   field_protected_area_feature: field_protected_area_feature
-  field_site_subtopics:
-    - plugin: sub_process
-      source: field_site_subtopics
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
-  field_site_topics:
-    - plugin: sub_process
-      source: field_site_topics
-      process:
-        target_id:
-          - plugin: d7_node_lookup
-            source: target_id
   field_protected_area_type: field_protected_area_type
   field_domain_access:
     - plugin: sub_process
@@ -99,6 +96,24 @@ process:
   field_domain_all_affiliates:
     - plugin: get
       source: domain_all_affiliates
+  list_of_depts_to_ignore:
+    - plugin: callback
+      callable: getenv
+      source:
+        - 'constants/migrate_ignore_sites'
+      unpack_source: true
+    - plugin: default_value
+      default_value: ''
+    - plugin: explode
+      delimiter: ','
+  ignore_live_depts:
+    - plugin: flatten
+      source: domain_source_node
+    - plugin: skip_on_condition
+      condition:
+        plugin: in_array
+        property: '@list_of_depts_to_ignore'
+      method: row
 destination:
   plugin: 'entity:node'
   default_bundle: protected_area

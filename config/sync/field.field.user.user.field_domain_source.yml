@@ -1,0 +1,27 @@
+uuid: cebf6668-e45d-4d73-8dd6-9144790d62fa
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_domain_source
+  module:
+    - domain_entity
+    - user
+third_party_settings:
+  domain_entity:
+    exclude_routes:
+      canonical: canonical
+id: user.user.field_domain_source
+field_name: field_domain_source
+entity_type: user
+bundle: user
+label: 'Domain Source'
+description: 'Select the canonical domain for this entity.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: domain_entity_field_default_domains
+settings:
+  handler: 'default:domain'
+  handler_settings: {  }
+field_type: entity_reference

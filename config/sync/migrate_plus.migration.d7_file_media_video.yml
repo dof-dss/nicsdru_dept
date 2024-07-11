@@ -2,8 +2,6 @@ uuid: 824c9c18-168d-4504-bd00-6c75acb8399a
 langcode: en
 status: true
 dependencies: {  }
-_core:
-  default_config_hash: AOWp77AmkB14S860Wgq0d8f66S4N1K3PKZXvdXIf7Jw
 id: d7_file_media_video
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldInstanceMigration
@@ -41,6 +39,14 @@ process:
     -
       source: uri
       plugin: video_url
+  field_domain_access:
+    -
+      plugin: d7_media_domain
+      source: fid
+  field_domain_source:
+    -
+      plugin: d7_media_domain
+      source: fid
 destination:
   plugin: 'entity:media'
 migration_dependencies:

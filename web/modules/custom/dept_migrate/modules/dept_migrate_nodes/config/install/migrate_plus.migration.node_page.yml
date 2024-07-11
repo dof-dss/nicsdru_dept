@@ -11,6 +11,8 @@ source:
   plugin: d7_dept_node
   node_type: page
   track_changes: true
+  constants:
+    migrate_ignore_sites: 'MIGRATE_IGNORE_SITES'
 process:
   langcode:
     - plugin: default_value
@@ -24,36 +26,14 @@ process:
   uid:
     - plugin: d7_user_lookup
       source: node_uid
-  status: status
-  moderation_state:
-    plugin: static_map
-    source: status
-    default_value: draft
-    map:
-      - 0: draft
-      - 1: published
-  created: created
-  changed: changed
-  promote: promote
-  sticky: sticky
   revision_uid:
     - plugin: d7_user_lookup
       source: revision_uid
   revision_log: log
   revision_timestamp: timestamp
   body:
-    - plugin: get
+    - plugin: body_field_process
       source: body
-    - plugin: str_replace
-      regex: true
-      search: /(<p>[<br>|\s]*&nbsp;<\/p>)/im
-      replace: ''
-    - plugin: str_replace
-      search: '&nbsp;</p>'
-      replace: '</p>'
-    - plugin: str_replace
-      search: '&nbsp;'
-      replace: ' '
     - plugin: media_wysiwyg_filter
   body/0/format:
     - plugin: static_map
@@ -67,6 +47,18 @@ process:
         html_for_admins: full_html
         paste_format: plain_text
         plain_text: plain_text
+  status: status
+  moderation_state:
+    plugin: static_map
+    source: status
+    default_value: draft
+    map:
+      - 0: draft
+      - 1: published
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
   field_domain_access:
     - plugin: sub_process
       source: domain_access_node
@@ -80,9 +72,27 @@ process:
   field_domain_all_affiliates:
     - plugin: get
       source: domain_all_affiliates
+  list_of_depts_to_ignore:
+    - plugin: callback
+      callable: getenv
+      source:
+        - 'constants/migrate_ignore_sites'
+      unpack_source: true
+    - plugin: default_value
+      default_value: ''
+    - plugin: explode
+      delimiter: ','
+  ignore_live_depts:
+    - plugin: flatten
+      source: domain_source_node
+    - plugin: skip_on_condition
+      condition:
+        plugin: in_array
+        property: '@list_of_depts_to_ignore'
+      method: row
 destination:
   plugin: 'entity:node'
-  default_bundle: page
+  default_bundle: article
 migration_dependencies:
   required:
     - users

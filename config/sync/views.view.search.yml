@@ -131,7 +131,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: search_api_tag
+        type: search_api_none
         options: {  }
       empty:
         area:
@@ -179,7 +179,6 @@ display:
           title: ''
           default_argument_type: active_domain
           default_argument_options: {  }
-          default_argument_skip_url: false
           summary_options: {  }
           summary:
             sort_order: asc
@@ -274,11 +273,9 @@ display:
               article: search_result
               consultation: search_result
               contact: search_result
-              landing_page: search_result
               news: search_result
               page: search_result
               profile: search_result
-              project: search_result
               protected_area: search_result
               publication: search_result
               subtopic: search_result

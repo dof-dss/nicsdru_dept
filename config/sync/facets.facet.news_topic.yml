@@ -6,20 +6,16 @@ dependencies:
     - search_api.index.news_index
     - views.view.news_search
   module:
-    - facets_pretty_paths
     - search_api
-third_party_settings:
-  facets_pretty_paths:
-    coder: default_coder
 id: news_topic
-name: 'Global topics'
+name: Topics
 weight: 0
 min_count: 1
 missing: false
 missing_label: others
 url_alias: topic
 facet_source_id: 'search_api:views_page__news_search__news_search'
-field_identifier: field_global_topics
+field_identifier: field_site_topics
 query_operator: and
 hard_limit: 0
 exclude: false

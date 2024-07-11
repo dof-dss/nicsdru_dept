@@ -1,6 +1,21 @@
 entity_type_groups:
   node:
+    application:
+      basic: basic
+      advanced: advanced
+      open_graph: open_graph
+      twitter_cards: twitter_cards
+    article:
+      basic: basic
+      advanced: advanced
+      open_graph: open_graph
+      twitter_cards: twitter_cards
     consultation:
+      basic: basic
+      advanced: advanced
+      open_graph: open_graph
+      twitter_cards: twitter_cards
+    contact:
       basic: basic
       advanced: advanced
       open_graph: open_graph
@@ -11,6 +26,7 @@ entity_type_groups:
       open_graph: open_graph
       twitter_cards: twitter_cards
 tag_trim_method: beforeValue
+use_maxlength: true
 tag_trim_maxlength:
   metatag_maxlength_abstract: null
   metatag_maxlength_description: null

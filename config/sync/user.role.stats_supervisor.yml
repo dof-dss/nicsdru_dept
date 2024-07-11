@@ -1,0 +1,53 @@
+uuid: b71a4ef2-58b2-463f-9109-8f7ae4c0421c
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - media.type.document
+    - media.type.image
+    - media.type.remote_document
+    - media.type.secure_file
+    - workflows.workflow.nics_editorial_workflow
+  module:
+    - content_moderation
+    - dept_publications
+    - domain_access
+    - domain_entity
+    - file
+    - filter
+    - media
+    - moderation_sidebar
+    - origins_metatag
+    - scheduler
+id: stats_supervisor
+label: 'Stats supervisor (Add-on role)'
+weight: 10
+is_admin: null
+permissions:
+  - 'access files overview'
+  - 'create secure publication'
+  - 'create secure_file media content on assigned domains'
+  - 'delete own document media'
+  - 'delete own image media'
+  - 'delete own remote_document media'
+  - 'delete own secure_file media'
+  - 'delete secure_file media content on assigned domains'
+  - 'edit any secure_file media'
+  - 'edit basic meta tags'
+  - 'edit own document media'
+  - 'edit own image media'
+  - 'edit own remote_document media'
+  - 'edit own secure_file media'
+  - 'publish secure publication'
+  - 'publish to any assigned domain'
+  - 'update document media content on assigned domains'
+  - 'update secure_file media content on assigned domains'
+  - 'use moderation sidebar'
+  - 'use nics_editorial_workflow transition quick_publish'
+  - 'use text format basic_html'
+  - 'view any unpublished secure publication'
+  - 'view own unpublished media'
+  - 'view own unpublished secure publication'
+  - 'view scheduled content'
+  - 'view unpublished domain content'

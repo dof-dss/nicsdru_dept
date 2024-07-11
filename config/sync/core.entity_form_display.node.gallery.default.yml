@@ -10,17 +10,16 @@ dependencies:
     - field.field.node.gallery.field_gallery_images
     - field.field.node.gallery.field_global_topics
     - field.field.node.gallery.field_metatags
-    - field.field.node.gallery.field_site_subtopics
     - field.field.node.gallery.field_site_topics
     - field.field.node.gallery.field_summary
     - node.type.gallery
-    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
+    - dept_topics
     - media_library
+    - media_library_edit
     - metatag
     - path
-    - scheduler
     - text
 id: node.gallery.default
 targetEntityType: node
@@ -29,7 +28,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 5
+    weight: 4
     region: content
     settings:
       rows: 9
@@ -39,36 +38,38 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 9
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
   field_domain_access:
     type: options_buttons
-    weight: 40
+    weight: 19
     region: content
     settings: {  }
     third_party_settings: {  }
   field_domain_all_affiliates:
     type: boolean_checkbox
-    weight: 41
+    weight: 20
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   field_domain_source:
     type: options_select
-    weight: 42
+    weight: 21
     region: content
     settings: {  }
     third_party_settings: {  }
   field_gallery_images:
     type: media_library_widget
-    weight: 6
+    weight: 5
     region: content
     settings:
       media_types: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: '1'
   field_global_topics:
     type: options_select
     weight: 1
@@ -77,27 +78,23 @@ content:
     third_party_settings: {  }
   field_metatags:
     type: metatag_firehose
-    weight: 28
+    weight: 18
     region: content
     settings:
       sidebar: true
       use_details: true
     third_party_settings: {  }
-  field_site_subtopics:
-    type: options_select
-    weight: 3
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_site_topics:
-    type: options_select
+    type: dept_topic_tree_widget
     weight: 2
     region: content
-    settings: {  }
+    settings:
+      excluded: true
+      limit: 3
     third_party_settings: {  }
   field_summary:
-    type: text_textarea
-    weight: 4
+    type: string_textarea
+    weight: 3
     region: content
     settings:
       rows: 5
@@ -110,35 +107,29 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 7
+    weight: 6
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 19
+    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }
   path:
     type: path
-    weight: 17
+    weight: 14
     region: content
     settings: {  }
     third_party_settings: {  }
   promote:
     type: boolean_checkbox
-    weight: 11
+    weight: 10
     region: content
     settings:
       display_label: true
-    third_party_settings: {  }
-  publish_on:
-    type: datetime_timestamp_no_default
-    weight: 16
-    region: content
-    settings: {  }
     third_party_settings: {  }
   publish_state:
     type: options_select
@@ -146,16 +137,21 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  simple_sitemap:
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 20
+    weight: 17
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
-    weight: 12
+    weight: 11
     region: content
     settings:
       display_label: true
@@ -170,19 +166,13 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 8
+    weight: 7
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
       placeholder: ''
-    third_party_settings: {  }
-  unpublish_on:
-    type: datetime_timestamp_no_default
-    weight: 15
-    region: content
-    settings: {  }
     third_party_settings: {  }
   unpublish_state:
     type: options_select
@@ -191,7 +181,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   url_redirects:
-    weight: 18
+    weight: 15
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -199,3 +189,5 @@ hidden:
   entitygroupfield: true
   groups: true
   groups_type_department_site: true
+  publish_on: true
+  unpublish_on: true

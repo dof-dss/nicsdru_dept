@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_migrate\Plugin\migrate\process;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
@@ -11,7 +12,6 @@ use Drupal\migrate\Row;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Drupal\Core\Database\Connection;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 /**
@@ -118,7 +118,7 @@ class MediaWysiwygFilter extends ProcessPluginBase implements ContainerFactoryPl
     $nid = $lookup['nid'] ?? 0;
 
     $value['value'] = preg_replace_callback($pattern, function ($matches) use ($messenger, $nid) {
-      $decoder = new JsonDecode(TRUE);
+      $decoder = new JsonDecode([JsonDecode::ASSOCIATIVE => TRUE]);
 
       try {
         // Extract the D7 embedded media data.
@@ -141,7 +141,7 @@ class MediaWysiwygFilter extends ProcessPluginBase implements ContainerFactoryPl
 
         $replacement_template = '';
 
-        if ($media['filemime'] === 'video/oembed' && !empty($midd9)) {
+        if (is_array($media) && $media['filemime'] === 'video/oembed' && !empty($midd9)) {
           // Search for oembed/remote media which doesn't have a
           // managed file entry.
           $query = $this->connDb->select('media', 'm');
@@ -276,14 +276,16 @@ TEMPLATE;
     // value if found in the tag.
     $style_map = [
       'landscape' => [
-        'inline' => 'landscape_float',
-        'inline_expandable' => 'landscape_float_xp',
-        'inline_xl' => 'landscape_full_xp',
+        'inline' => 'article_float',
+        'inline_expandable' => 'article_float_expandable',
+        'inline_xl' => 'article_full',
+        'inline_xl_expandable' => 'article_full_expandable',
       ],
       'portrait' => [
-        'inline' => 'portrait_float',
-        'inline_expandable' => 'portrait_float_xp',
-        'inline_xl' => 'portrait_full',
+        'inline' => 'article_float',
+        'inline_expandable' => 'article_float_expandable',
+        'inline_xl' => 'article_full',
+        'inline_xl_expandable' => 'article_full_expandable',
       ],
     ];
 
@@ -292,7 +294,7 @@ TEMPLATE;
     $orientation = ($media['width'] >= $media['height']) ? 'landscape' : 'portrait';
 
     // Set a default image style.
-    $image_style = 'article_full';
+    $image_style = 'article_float';
 
     // Assign the image style to the embedded image if we can extract it from
     // the original image tag.

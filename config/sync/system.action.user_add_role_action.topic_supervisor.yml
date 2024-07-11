@@ -1,0 +1,14 @@
+uuid: c5062578-5ffb-4849-a914-c475f1fb2cdc
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.topic_supervisor
+  module:
+    - user
+id: user_add_role_action.topic_supervisor
+label: 'Add the topic supervisor role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: topic_supervisor

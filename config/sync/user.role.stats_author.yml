@@ -1,0 +1,38 @@
+uuid: 5af6de02-4a47-4f5b-b1b4-93f620319e42
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.basic_html
+    - media.type.document
+    - media.type.image
+    - media.type.remote_document
+    - media.type.secure_file
+  module:
+    - dept_publications
+    - domain_access
+    - domain_entity
+    - filter
+    - media
+    - moderation_sidebar
+id: stats_author
+label: 'Stats author (Add-on role)'
+weight: 10
+is_admin: null
+permissions:
+  - 'create secure publication'
+  - 'create secure_file media content on assigned domains'
+  - 'delete own document media'
+  - 'delete own image media'
+  - 'delete own remote_document media'
+  - 'delete own secure_file media'
+  - 'edit own document media'
+  - 'edit own image media'
+  - 'edit own remote_document media'
+  - 'edit own secure_file media'
+  - 'publish to any assigned domain'
+  - 'use moderation sidebar'
+  - 'use text format basic_html'
+  - 'view own unpublished media'
+  - 'view own unpublished secure publication'
+  - 'view unpublished domain content'

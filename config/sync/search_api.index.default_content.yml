@@ -162,7 +162,7 @@ field_settings:
     label: 'Title fulltext'
     property_path: aggregated_field
     type: text
-    boost: !!float 21
+    boost: 21.0
     configuration:
       type: concat
       fields:
@@ -202,11 +202,9 @@ datasource_settings:
         - article
         - consultation
         - contact
-        - landing_page
         - news
         - page
         - profile
-        - project
         - protected_area
         - publication
         - subtopic
@@ -256,7 +254,7 @@ processor_settings:
       - title
       - title_fulltext
       - type
-    ignorable: '[''¿¡!?,.:;]'
+    ignorable: "['¿¡!?,.:;]"
     ignorable_classes:
       - Pc
       - Pd

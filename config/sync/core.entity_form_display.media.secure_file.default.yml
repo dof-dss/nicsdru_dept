@@ -3,11 +3,33 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.secure_file.field_domain_access
+    - field.field.media.secure_file.field_domain_source
     - field.field.media.secure_file.field_media_file_1
     - media.type.secure_file
   module:
+    - field_group
     - file
     - path
+third_party_settings:
+  field_group:
+    group_domain_settings:
+      children:
+        - field_domain_access
+        - field_domain_source
+      label: 'Domain settings'
+      region: content
+      parent_name: ''
+      weight: 8
+      format_type: details_sidebar
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        open: true
+        description: ''
+        required_fields: true
+        weight: 0
 id: media.secure_file.default
 targetEntityType: media
 bundle: secure_file
@@ -16,6 +38,18 @@ content:
   created:
     type: datetime_timestamp
     weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_access:
+    type: options_buttons
+    weight: 101
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_domain_source:
+    type: options_select
+    weight: 102
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -64,4 +98,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-hidden: {  }
+hidden:
+  publish_on: true
+  unpublish_on: true

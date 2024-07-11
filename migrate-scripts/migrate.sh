@@ -1,6 +1,34 @@
 #!/usr/bin/env bash
 echo ">>> Started at: $(date -u +"%Y-%m-%d %H:%M:%S")"
 
+departments=(daera communities economy education finance health infrastructure justice executiveoffice)
+# Note: This is not the full list of content types, review the other imports in this script.
+content_types=(topic subtopic actions application article collection consultation contact easychart gallery heritage_site infogram link page profile protected_area ual)
+
+# Check that the $MIGRATE_IGNORE_SITES environment variable is present.
+if [ -z "$MIGRATE_IGNORE_SITES" ]
+then
+  echo "MIGRATE_IGNORE_SITES environment variable is not set"
+  exit 1
+else
+  # Create array of excluded departments from environment variable.
+  IFS=', ' read -r -a excluded_departments <<< "$MIGRATE_IGNORE_SITES"
+fi
+
+# *****************************************************
+# Array of content types that should not be migrated. *
+# *****************************************************
+if [ -n "$MIGRATE_IGNORE_TYPES" ]
+then
+  echo "Ignoring the following content types: $MIGRATE_IGNORE_TYPES"
+  # Create array of excluded types from environment variable.
+  IFS=', ' read -r -a excluded_content_types <<< "$MIGRATE_IGNORE_TYPES"
+
+  for i in "${excluded_content_types[@]}"; do
+    content_types=(${content_types[@]//*$i*})
+  done
+fi
+
 export DRUSH=/app/vendor/bin/drush
 # shellcheck disable=SC2089
 export MIGRATIONS="\
@@ -56,17 +84,17 @@ then
     $DRUSH migrate:reset $m
   done
 
-  echo "Make sure active config matches that from migrate modules"
-  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_flags/config/install -y
-  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_taxo/config/install -y
+#  echo "Make sure active config matches that from migrate modules"
+#  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_flags/config/install -y
+#  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_taxo/config/install -y
+#
+#  for type in users files nodes
+#  do
+#    $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_$type/config/install -y
+#  done
 
-  for type in users files nodes
-  do
-    $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_$type/config/install -y
-  done
-
-#  echo "Migrating D7 taxonomy data"
-#  $DRUSH migrate:import --group=migrate_drupal_7_taxo --force
+  echo "Migrating D7 taxonomy data"
+  $DRUSH migrate:import --group=migrate_drupal_7_taxo
 
   echo "Migrating D7 user and roles"
   $DRUSH migrate:import users --force
@@ -87,7 +115,11 @@ then
     $DRUSH migrate:import d7_file_media_document --force --limit=10000
   done
 
-  for type in topic subtopic actions application article collection consultation contact easychart gallery heritage_site infogram landing_page link page profile protected_area ual
+  # Turn off content_lock modules as they interfere with node and redirect entity creation here.
+  $DRUSH pmu content_lock,content_lock_timeout
+  # NB: module will be re-enabled by config import at end of this script.
+
+  for type in "${content_types[@]}"
   do
     echo "Migrate D7 ${type} nodes"
     $DRUSH migrate:import node_$type --force
@@ -106,6 +138,12 @@ then
     $DRUSH migrate:import node_publication --force --limit=2500
   done
 
+  # Force a refresh on some node types to see if this alleviates
+  # occasional missing content issues from the body field on articles.
+  $DRUSH migrate:import node_article --update --force
+  $DRUSH migrate:import node_page --update --force
+  $DRUSH migrate:import node_subtopic --update --force
+
   echo "Migrate book config"
   $DRUSH migrate:import dept_book --force
 
@@ -113,20 +151,46 @@ then
   $DRUSH migrate:import url_aliases_nodes --force
   $DRUSH migrate:import redirects --force
 
-  echo "Rebuilding Group content relationships"
-  $DRUSH etgrm:removeAll
-  $DRUSH etgrm:createAll
-
   echo "Updating content links"
   $DRUSH dept:updatelinks
 
-  echo "Syncing featured content on the department hompages"
+
+
+  # ******************************************
+  # Execute any non-live department commands *
+  #                                          *
+  # From this point on the departments array *
+  # will only contain those departments not  *
+  # present in the $MIGRATE_IGNORE_SITES     *
+  # environment variable                     *
+  # ******************************************
+  echo "Syncing featured content on the department homepages"
   $DRUSH dept:sync-homepage-content
 
-  echo "Restoring config from config/sync"
-  $DRUSH cim -y
+  # Remove the departments in the $MIGRATE_IGNORE_SITES
+  # excluded_departments array from the departments array.
+  for i in "${excluded_departments[@]}"; do
+    departments=(${departments[@]//*$i*})
+  done
+
+  # Loop through the list of non-live departments.
+  for dept in "${departments[@]}"
+    do
+      echo "Creating Topic/Subtopic content entries for ${dept}"
+      $DRUSH dept:topic-child-content $dept
+      $DRUSH dept:subtopic-child-content $dept
+
+      echo "Removing Audit Due entries for ${dept}"
+      $DRUSH dept:remove-audit-date $dept
+
+      echo "Creating Audit Due entries for ${dept}"
+      $DRUSH dept:update-audit-date $dept
+    done
 
   echo ".... DONE"
 fi
+
+  echo "Restoring config from config/sync"
+  $DRUSH cim -y
 
 echo ">>> Finished at: $(date -u +"%Y-%m-%d %H:%M:%S")"

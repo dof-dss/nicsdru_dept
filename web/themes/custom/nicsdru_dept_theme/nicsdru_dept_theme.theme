@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the nicsdru_dept_theme.
+ */
+
+use Drupal\Core\Url;
+
+// Import the theme's individual hook files.
+require_once __DIR__ . '/inc/alter.inc';
+require_once __DIR__ . '/inc/preprocess.inc';
+require_once __DIR__ . '/inc/process.inc';
+require_once __DIR__ . '/inc/theme.inc';

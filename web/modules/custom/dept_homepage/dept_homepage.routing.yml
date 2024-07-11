@@ -5,3 +5,11 @@ dept_homepage.homepage_controller_default:
     _title: 'Home'
   requirements:
     _permission: 'access content'
+dept_homepage.featured_content:
+  path: '/admin/content/featured'
+  defaults:
+    _controller: '\Drupal\dept_homepage\Controller\HomepageController::featuredContentEdit'
+    _title: 'Featured content'
+  requirements:
+    _role: 'homepage_supervisor+administrator'
+

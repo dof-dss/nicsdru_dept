@@ -1,0 +1,29 @@
+uuid: 92dccd03-9649-441f-893f-502b3b631098
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_banner_image_thin
+    - media.type.image
+    - node.type.subtopic
+id: node.subtopic.field_banner_image_thin
+field_name: field_banner_image_thin
+entity_type: node
+bundle: subtopic
+label: 'Banner image thin'
+description: 'Smaller banner image displayed on topic/subtopic child pages.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

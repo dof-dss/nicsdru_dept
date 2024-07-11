@@ -1,0 +1,17 @@
+uuid: 575872fa-9fa7-4d71-8231-47721859d20f
+langcode: en
+status: true
+dependencies:
+  module:
+    - dept_topics
+title: 'Default cron handler'
+id: dept_topics_cron
+weight: 0
+module: dept_topics
+callback: dept_topics_cron
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

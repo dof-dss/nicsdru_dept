@@ -11,13 +11,14 @@ dependencies:
     - field.field.node.application.field_global_topics
     - field.field.node.application.field_link
     - field.field.node.application.field_metatags
-    - field.field.node.application.field_site_subtopics
     - field.field.node.application.field_site_topics
     - field.field.node.application.field_summary
     - node.type.application
   module:
+    - dept_topics
     - link
     - metatag
+    - smart_trim
     - text
     - user
 id: node.application.default
@@ -27,29 +28,21 @@ mode: default
 content:
   body:
     type: text_default
-    label: hidden
+    label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 2
     region: content
   field_additional_info:
     type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 6
-    region: content
-  field_global_topics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 0
+    weight: 4
     region: content
   field_link:
     type: link
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
@@ -57,37 +50,42 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 5
+    weight: 3
     region: content
   field_metatags:
     type: metatag_empty_formatter
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 7
-    region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 2
+    weight: 5
     region: content
   field_site_topics:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  field_summary:
-    type: text_default
-    label: above
+    type: dept_topics_topic_tags
+    label: inline
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 0
+    region: content
+  field_summary:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 600
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options: {  }
+    third_party_settings: {  }
+    weight: 1
     region: content
 hidden:
   content_moderation_control: true
@@ -95,6 +93,7 @@ hidden:
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
+  field_global_topics: true
   groups: true
   groups_type_department_site: true
   langcode: true

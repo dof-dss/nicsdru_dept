@@ -7,6 +7,7 @@ dependencies:
     - field.field.user.user.field_domain_access
     - field.field.user.user.field_domain_admin
     - field.field.user.user.field_domain_all_affiliates
+    - field.field.user.user.field_domain_source
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
@@ -40,6 +41,7 @@ hidden:
   field_domain_access: true
   field_domain_admin: true
   field_domain_all_affiliates: true
+  field_domain_source: true
   groups: true
   groups_type_department_site: true
   langcode: true

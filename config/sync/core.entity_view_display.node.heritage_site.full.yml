@@ -22,7 +22,6 @@ dependencies:
     - field.field.node.heritage_site.field_phone
     - field.field.node.heritage_site.field_photo
     - field.field.node.heritage_site.field_postcode
-    - field.field.node.heritage_site.field_site_subtopics
     - field.field.node.heritage_site.field_site_topics
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
@@ -30,10 +29,10 @@ dependencies:
     - node.type.heritage_site
   module:
     - field_group
+    - google_map_field
     - layout_builder
     - link
     - options
-    - origins_common
     - text
     - user
 third_party_settings:
@@ -46,7 +45,7 @@ third_party_settings:
       label: Contact
       parent_name: ''
       region: content
-      weight: 7
+      weight: 3
       format_type: html_element
       format_settings:
         classes: ''
@@ -69,7 +68,7 @@ third_party_settings:
       label: 'Additional Information'
       parent_name: ''
       region: content
-      weight: 8
+      weight: 4
       format_type: html_element
       format_settings:
         classes: additional-info
@@ -92,7 +91,7 @@ third_party_settings:
       label: Address
       parent_name: ''
       region: content
-      weight: 1
+      weight: 2
       format_type: html_element
       format_settings:
         classes: ''
@@ -101,6 +100,25 @@ third_party_settings:
         element: address
         show_label: false
         label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_heritage_site_body:
+      children:
+        - body
+      label: About
+      parent_name: ''
+      region: content
+      weight: 5
+      format_type: html_element
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: true
+        label_element: h2
         label_element_classes: ''
         attributes: ''
         effect: none
@@ -118,7 +136,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 9
+    weight: 5
     region: content
   field_address_line_1:
     type: string
@@ -144,7 +162,7 @@ content:
     weight: 6
     region: content
   field_email:
-    type: basic_string
+    type: email_mailto
     label: inline
     settings: {  }
     third_party_settings: {  }
@@ -171,17 +189,11 @@ content:
     weight: 10
     region: content
   field_map_location:
-    type: gmaps_lazy_load_formatter
+    type: google_map_field_default
     label: hidden
-    settings:
-      map_type: roadmap
-      zoom: '15'
-      placeholder: empty
-      link_text: ''
-      map_width: '600'
-      map_height: '400'
+    settings: {  }
     third_party_settings: {  }
-    weight: 11
+    weight: 2
     region: content
   field_nismr_link:
     type: link
@@ -217,7 +229,7 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
   field_postcode:
     type: string
@@ -226,6 +238,14 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 5
+    region: content
+  field_site_topics:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
     region: content
   field_sm_number:
     type: string
@@ -263,8 +283,6 @@ hidden:
   field_domain_all_affiliates: true
   field_domain_source: true
   field_metatags: true
-  field_site_subtopics: true
-  field_site_topics: true
   groups: true
   groups_type_department_site: true
   langcode: true

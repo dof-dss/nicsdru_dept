@@ -49,13 +49,22 @@ class MdashLogViewerBlock extends BlockBase implements ContainerFactoryPluginInt
   public function build() {
     $build = [];
 
-    $log_contents = file_get_contents($this->logContents);
+    if (file_exists($this->logContents)) {
+      $log_contents = file_get_contents($this->logContents);
 
-    if (!empty($log_contents)) {
+      if (!empty($log_contents)) {
+        $build['content'] = [
+          '#type' => 'html_tag',
+          '#tag' => 'pre',
+          '#value' => $log_contents,
+        ];
+      }
+    }
+    else {
       $build['content'] = [
         '#type' => 'html_tag',
         '#tag' => 'pre',
-        '#value' => $log_contents,
+        '#value' => "Log file not found.",
       ];
     }
 

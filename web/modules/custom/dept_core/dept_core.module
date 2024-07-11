@@ -7,11 +7,32 @@
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
-use Drupal\Core\Link;
+use Drupal\dept_core\Entity\Department;
+use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function dept_core_media_presave(EntityInterface $entity) {
+  if ($entity instanceof MediaInterface) {
+    $domain_access = $entity->get('field_domain_access')->getValue();
+    $domain_source = $entity->get('field_domain_source')->getValue();
+    $current_domain = \Drupal::service('department.manager')->getCurrentDepartment();
+
+    if ($current_domain instanceof Department
+      && (empty($domain_access) && empty($domain_source))) {
+
+      $entity->set('field_domain_source', ['target_id' => $current_domain->id()]);
+      $entity->set('field_domain_access', ['target_id' => $current_domain->id()]);
+    }
+  }
+}
 
 /**
  * Implements hook_preprocess_page().
@@ -38,6 +59,26 @@ function dept_core_preprocess_field(&$variables) {
  * Implements hook_preprocess_menu().
  */
 function dept_core_preprocess_menu(&$variables) {
+  // domain_source module does a variety of conversions for routed paths
+  // changing, for example, <front> from a relative path to the source/canonical
+  // domain's absolute URI. This causes some interesting disruption around what link
+  // is rendered for some things. It's extremely opaque as to precisely what
+  // causes this and how best to intercept/adjust, but nothing in domain_source.api.php
+  // triggers. DomainRouteProvider.php and DomainSourcePathProcess.php also don't seem
+  // to have a visible role in the rewriting of the route path.
+  if ($variables['menu_name'] === 'main' && !empty($variables['items'])) {
+    foreach ($variables['items'] as $id => &$item) {
+      $url = $item['url'];
+      /* @var \Drupal\Core\Url $item */
+      if ($url->getRouteName() === '<front>') {
+        /* @var \Drupal\dept_core\DepartmentManager $dept_manager */
+        $dept_manager = \Drupal::service('department.manager');
+        $current_dept = $dept_manager->getCurrentDepartment();
+        $item['url'] = Url::fromUri($current_dept->url());
+      }
+    }
+  }
+
   if ($variables['menu_name'] === 'footer' && !empty($variables['items'])) {
     // Add a menu link to the end of the menu with a link to the
     // accessibility statement defined in the group field value.
@@ -230,6 +271,7 @@ function dept_core_department_links(): array {
   $department_ids = $dept_storage->getQuery()
     ->condition('status', TRUE)
     ->sort('weight')
+    ->accessCheck(FALSE)
     ->execute();
 
   $departments = $dept_storage->loadMultiple($department_ids);
@@ -255,4 +297,105 @@ function dept_core_department_links(): array {
     $classes = [];
   }
   return $links;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'views_exposed_form') {
+    if (!empty($form['dept'])) {
+      /** @var \Drupal\dept_core\DepartmentManager $dept_manager */
+      $dept_manager = \Drupal::service('department.manager');
+      /** @var \Drupal\dept_core\Entity\Department $current_dept */
+      $current_dept = $dept_manager->getCurrentDepartment();
+
+      // Fetch current user's assigned domains.
+      $current_user = \Drupal::entityTypeManager()->getStorage('user')->load(\Drupal::currentUser()->id());
+      $user_domains = $current_user->get('field_domain_access')->referencedEntities();
+
+      // If the user doesn't have top level domain permissions or no assigned domains, hide this filter option.
+      if (!\Drupal::currentUser()->hasPermission('administer domains') || empty($user_domains)) {
+        $form['dept']['#value'] = $current_dept->id();
+        hide($form['dept']);
+        return;
+      }
+
+      // Change to select list of known depts.
+      $depts = $dept_manager->getAllDepartments();
+
+      $form['dept'] = [
+        '#type' => 'select',
+        '#sort_options' => TRUE,
+        '#required' => FALSE,
+        '#empty_value' => FALSE,
+      ];
+
+      foreach ($user_domains as $domain) {
+        $dept = $depts[$domain->id()];
+        $form['dept']['#options'][$dept->id()] = $dept->label();
+      }
+
+      // #default_value doesn't work for select elements
+      // see web/core/lib/Drupal/Core/Render/Element/Select.php
+      // So instead, here we bodge the pre-selected value with either
+      // the current dept id (if no selection) or let the user
+      // pick their own which then takes precedent.
+      $dept_selection = \Drupal::request()->query->get('dept');
+      if (empty($dept_selection)) {
+        $form['dept']['#value'] = $current_dept->id();
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function dept_core_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Attach admin theme fixes.
+  $form['#attached']['library'][] = 'nicsdru_dept_theme/admin-forms';
+
+  if (\Drupal::currentUser()->hasPermission('view departments on entity forms') === FALSE) {
+    dept_core_set_entity_domain_defaults($form);
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function dept_core_form_media_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (\Drupal::currentUser()->hasPermission('view departments on entity forms') === FALSE) {
+    dept_core_set_entity_domain_defaults($form);
+  }
+}
+
+/**
+ * Function to hide domain access/source form elements
+ * and set a default value for both of the current department.
+ */
+function dept_core_set_entity_domain_defaults(&$form) {
+  $dept = \Drupal::service('department.manager')->getCurrentDepartment();
+
+  foreach (['field_domain_access', 'field_domain_source'] as $element_id) {
+    if (!empty($form[$element_id])) {
+      // #default_value does not pass later validation. Odd but
+      // shouldn't matter as the user won't be able to see the form options.
+      $form[$element_id]['widget']['#value'] = $dept->id();
+      // hide() doesn't hide the wrapping container element.
+      // Changing the element type does.
+      $form[$element_id]['#type'] = 'hidden';
+    }
+  }
+}
+
+/**
+ * Implements hook_clientside_validation_should_validate().
+ */
+function dept_core_clientside_validation_should_validate($element, FormStateInterface &$form_state, $form_id) {
+  // If node or media form, clientside validation won't validate.
+  if (str_starts_with($form_id, 'node_')
+    || str_starts_with($form_id, 'media_')) {
+    return TRUE;
+  }
 }

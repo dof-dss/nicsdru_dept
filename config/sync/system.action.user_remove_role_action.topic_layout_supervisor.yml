@@ -1,0 +1,14 @@
+uuid: cf94ccd5-b3d3-4a88-911c-15af7a236d3c
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.topic_layout_supervisor
+  module:
+    - user
+id: user_remove_role_action.topic_layout_supervisor
+label: 'Remove the topic layout_supervisor role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: topic_layout_supervisor

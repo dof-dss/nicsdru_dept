@@ -9,13 +9,14 @@ label: Topics
 type: 'canonical_entities:node'
 pattern: 'topics/[node:title]'
 selection_criteria:
-  7cd993ca-34d2-4c4a-82b0-e5d5a02e0ab5:
+  c4640a4c-dd82-4ad4-8e30-40f3c4a4b88c:
     id: 'entity_bundle:node'
     negate: false
-    uuid: 7cd993ca-34d2-4c4a-82b0-e5d5a02e0ab5
+    uuid: c4640a4c-dd82-4ad4-8e30-40f3c4a4b88c
     context_mapping:
       node: node
     bundles:
+      subtopic: subtopic
       topic: topic
 selection_logic: and
 weight: -5

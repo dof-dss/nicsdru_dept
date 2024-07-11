@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.embed
+    - field.field.media.audio.field_domain_access
+    - field.field.media.audio.field_domain_source
     - field.field.media.audio.field_media_audio_file
     - media.type.audio
   module:
@@ -33,6 +35,8 @@ content:
     region: content
 hidden:
   created: true
+  field_domain_access: true
+  field_domain_source: true
   langcode: true
   name: true
   search_api_excerpt: true

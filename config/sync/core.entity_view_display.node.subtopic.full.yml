@@ -6,19 +6,18 @@ dependencies:
     - core.entity_view_mode.node.full
     - field.field.node.subtopic.body
     - field.field.node.subtopic.field_banner_image
-    - field.field.node.subtopic.field_banner_link
+    - field.field.node.subtopic.field_banner_image_overlay
+    - field.field.node.subtopic.field_banner_image_thin
     - field.field.node.subtopic.field_domain_access
     - field.field.node.subtopic.field_domain_all_affiliates
     - field.field.node.subtopic.field_domain_source
-    - field.field.node.subtopic.field_link
     - field.field.node.subtopic.field_metatags
-    - field.field.node.subtopic.field_parent_subtopic
-    - field.field.node.subtopic.field_parent_topic
+    - field.field.node.subtopic.field_site_topics
     - field.field.node.subtopic.field_summary
+    - field.field.node.subtopic.field_topic_content
     - field.field.node.subtopic.layout_builder__layout
     - node.type.subtopic
   module:
-    - dept_topics
     - layout_builder
     - layout_builder_restrictions
     - layout_discovery
@@ -33,37 +32,15 @@ third_party_settings:
         layout_id: layout_onecol
         layout_settings:
           label: ''
-          context_mapping: {  }
         components:
-          6f8945b8-c242-4186-9f64-74e7e0b2c371:
-            uuid: 6f8945b8-c242-4186-9f64-74e7e0b2c371
+          89d83f97-2ad5-4a67-a66a-70aab6c30e3f:
+            uuid: 89d83f97-2ad5-4a67-a66a-70aab6c30e3f
             region: content
             configuration:
               id: 'field_block:node:subtopic:field_summary'
-              label: Summary
               label_display: '0'
-              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings: {  }
-            weight: 1
-            additional: {  }
-          81e133e6-ada6-4396-b665-6ac7a6d2e679:
-            uuid: 81e133e6-ada6-4396-b665-6ac7a6d2e679
-            region: content
-            configuration:
-              id: 'field_block:node:subtopic:body'
-              label: 'Long description'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
               formatter:
                 type: text_default
                 label: hidden
@@ -71,36 +48,57 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 2
             additional: {  }
-          9a7ac791-2bf2-402b-8fb1-20ee3e71cb9d:
-            uuid: 9a7ac791-2bf2-402b-8fb1-20ee3e71cb9d
+          910563a3-67a3-40e8-9e3d-f5347c929198:
+            uuid: 910563a3-67a3-40e8-9e3d-f5347c929198
             region: content
             configuration:
-              id: dept_topics_subtopic_content_block
-              label: 'Subtopic content block'
+              id: 'field_block:node:subtopic:body'
               label_display: '0'
-              provider: dept_topics
               context_mapping:
-                node: layout_builder.entity
+                entity: layout_builder.entity
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
             weight: 3
             additional: {  }
-          73952788-1e03-446c-b82f-c84a88694c19:
-            uuid: 73952788-1e03-446c-b82f-c84a88694c19
+          372d99f9-3680-4a27-bb19-8c3a3707f46b:
+            uuid: 372d99f9-3680-4a27-bb19-8c3a3707f46b
             region: content
             configuration:
-              id: 'field_block:node:subtopic:field_banner_image'
-              label: 'Thin banner image'
+              id: 'field_block:node:subtopic:field_topic_content'
+              label: 'More in this topic'
+              label_display: visible
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: hidden
+                settings:
+                  link: true
+                third_party_settings: {  }
+            weight: 4
+            additional: {  }
+          c36aafe4-cd87-4d02-8379-ed10bcb891bf:
+            uuid: c36aafe4-cd87-4d02-8379-ed10bcb891bf
+            region: content
+            configuration:
+              id: 'field_block:node:subtopic:field_site_topics'
+              label: Topics
               label_display: '0'
               provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: entity_reference_entity_view
-                label: hidden
-                settings:
-                  view_mode: banner_thin
+                type: dept_topics_topic_tags
+                label: inline
+                settings: {  }
                 third_party_settings: {  }
-            weight: 0
+            weight: 1
             additional: {  }
         third_party_settings: {  }
   layout_builder_restrictions:
@@ -108,6 +106,7 @@ third_party_settings:
       - 'Content fields'
       - 'Custom block types'
       - 'Custom blocks'
+      - Departmental
       - 'Departmental sites'
       - 'Departmental sites: search'
       - Devel
@@ -117,7 +116,6 @@ third_party_settings:
       - Facets
       - 'Facets summary (Experimental)'
       - Forms
-      - Geolocation
       - Help
       - 'Inline blocks'
       - 'Lists (Views)'
@@ -138,9 +136,11 @@ third_party_settings:
       denylisted_blocks: {  }
       allowlisted_blocks:
         'Content fields':
-          - 'field_block:node:subtopic:body'
-          - 'field_block:node:subtopic:field_summary'
           - 'field_block:node:subtopic:field_banner_image'
+          - 'field_block:node:subtopic:body'
+          - 'field_block:node:subtopic:field_topic_content'
+          - 'field_block:node:subtopic:field_summary'
+          - 'field_block:node:subtopic:field_site_topics'
         'Custom block types':
           - accordion_menu
           - banner_deep
@@ -151,8 +151,6 @@ third_party_settings:
           - text
           - video
           - video_and_caption
-        'Custom blocks':
-          - dept_topics_subtopic_content_block
         'Inline blocks':
           - 'inline_block:accordion_menu'
           - 'inline_block:banner_deep'
@@ -163,9 +161,9 @@ third_party_settings:
           - 'inline_block:text'
           - 'inline_block:video'
           - 'inline_block:video_and_caption'
-        'Lists (Views)':
-          - 'views_block:content_by_site_subtopic-articles'
       restricted_categories:
+        - 'Custom blocks'
+        - Departmental
         - 'Departmental sites'
         - 'Departmental sites: search'
         - Devel
@@ -175,8 +173,8 @@ third_party_settings:
         - Facets
         - 'Facets summary (Experimental)'
         - Forms
-        - Geolocation
         - Help
+        - 'Lists (Views)'
         - Menus
         - Origins
         - 'Origins: Social Sharing'
@@ -184,6 +182,7 @@ third_party_settings:
         - User
         - Views
         - Webform
+        - core
         - mdash
     entity_view_mode_restriction_by_region:
       allowed_layouts:
@@ -194,9 +193,11 @@ third_party_settings:
         layout_onecol:
           all_regions:
             'Content fields':
-              - 'field_block:node:subtopic:body'
-              - 'field_block:node:subtopic:field_summary'
               - 'field_block:node:subtopic:field_banner_image'
+              - 'field_block:node:subtopic:body'
+              - 'field_block:node:subtopic:field_topic_content'
+              - 'field_block:node:subtopic:field_summary'
+              - 'field_block:node:subtopic:field_site_topics'
             'Custom block types':
               - accordion_menu
               - banner_deep
@@ -204,8 +205,6 @@ third_party_settings:
               - plain_cards
               - text
               - video_and_caption
-            'Custom blocks':
-              - dept_topics_subtopic_content_block
             'Inline blocks':
               - 'inline_block:accordion_menu'
               - 'inline_block:banner_deep'
@@ -231,15 +230,14 @@ third_party_settings:
               - card_contact
               - card_standard
               - text
-              - video
             'Inline blocks':
               - 'inline_block:card_contact'
               - 'inline_block:card_standard'
               - 'inline_block:text'
-              - 'inline_block:video'
       restricted_categories:
         layout_onecol:
           all_regions:
+            - 'Custom blocks'
             - 'Departmental sites'
             - 'Departmental sites: search'
             - Devel
@@ -249,7 +247,6 @@ third_party_settings:
             - Facets
             - 'Facets summary (Experimental)'
             - Forms
-            - Geolocation
             - Help
             - 'Lists (Views)'
             - Menus
@@ -296,6 +293,7 @@ third_party_settings:
             - Development
             - Domain
             - 'EU Cookie Compliance'
+            - Facets
             - 'Facets summary (Experimental)'
             - Forms
             - Geolocation
@@ -320,27 +318,42 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 2
+    region: content
+  field_banner_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: banner_thin
+      link: false
+    third_party_settings: {  }
+    weight: 0
     region: content
   field_summary:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 1
+    region: content
+  field_topic_content:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
     region: content
 hidden:
   content_moderation_control: true
   entitygroupfield: true
-  field_banner_image: true
-  field_banner_link: true
+  field_banner_image_overlay: true
+  field_banner_image_thin: true
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
-  field_link: true
   field_metatags: true
-  field_parent_subtopic: true
-  field_parent_topic: true
+  field_site_topics: true
   groups: true
   groups_type_department_site: true
   langcode: true

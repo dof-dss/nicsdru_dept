@@ -1,0 +1,53 @@
+{#
+/**
+ * @file
+ * Theme implementation to present a document media item in 'embed' view mode.
+ *
+ * Available variables:
+ * - media: The media item, with limited access to object properties and
+ *   methods. Only method names starting with "get", "has", or "is" and
+ *   a few common methods such as "id", "label", and "bundle" are available.
+ *   For example:
+ *   - entity.getEntityTypeId() will return the entity type ID.
+ *   - entity.hasField('field_example') returns TRUE if the entity includes
+ *     field_example. (This does not indicate the presence of a value in this
+ *     field.)
+ *   Calling other methods, such as entity.delete(), will result in
+ *   an exception.
+ *   See \Drupal\Core\Entity\EntityInterface for a full list of methods.
+ * - name: Name of the media item.
+ * - content: Media content.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - attributes: HTML attributes for the containing element.
+ * - title_attributes: Same as attributes, except applied to the main title
+ *   tag that appears in the template.
+ *
+ * @see template_preprocess_media()
+ *
+ * @ingroup themeable
+ */
+#}
+{% set media_attributes = create_attribute() %}
+{% set media_attributes = media_attributes.setAttribute('lang', media_langcode) %}
+{% set file_classes = [
+  'file-link',
+  'file--ico',
+  'file--ico__' ~ file_extension|lower,
+]
+%}
+{% set media_attributes = media_attributes.addClass(file_classes) %}
+{% if file_url %}
+  <a{{ media_attributes }} href="{{ file_url }}">
+    {{ media.label }}
+    <span class="meta">{{ file_type }} ({{ file_size }})</span>
+  </a>
+{% else %}
+  {{ media.label }}
+{% endif %}
+
+{{ content | without('name', 'field_media_file_1') }}
+{{ title_suffix.contextual_links }}

@@ -10,12 +10,10 @@ dependencies:
     - field.field.node.link.field_link_type
     - field.field.node.link.field_link_url
     - node.type.link
-    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - link
     - path
-    - scheduler
 id: node.link.default
 targetEntityType: node
 bundle: link
@@ -97,15 +95,14 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-  publish_on:
-    type: datetime_timestamp_no_default
-    weight: 11
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   publish_state:
     type: options_select
     weight: 26
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -141,12 +138,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  unpublish_on:
-    type: datetime_timestamp_no_default
-    weight: 12
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   unpublish_state:
     type: options_select
     weight: 27
@@ -162,3 +153,5 @@ hidden:
   entitygroupfield: true
   groups: true
   groups_type_department_site: true
+  publish_on: true
+  unpublish_on: true

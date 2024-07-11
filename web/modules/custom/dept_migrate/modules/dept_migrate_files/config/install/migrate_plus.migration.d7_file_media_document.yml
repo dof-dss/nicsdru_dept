@@ -56,6 +56,12 @@ process:
       source: fid
     - plugin: default_value
       default_value: 99316
+  field_domain_access:
+    - plugin: d7_media_domain
+      source: fid
+  field_domain_source:
+    - plugin: d7_media_domain
+      source: fid
 destination:
   plugin: entity:media
 migration_dependencies:

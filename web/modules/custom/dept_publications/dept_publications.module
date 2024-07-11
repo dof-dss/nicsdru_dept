@@ -9,7 +9,11 @@ use Drupal\Core\Access\AccessResultForbidden;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\ByteSizeMarkup;
+use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -23,34 +27,49 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
   // Toggle the display of the media fields depending on the required
   // attachment type.
   if ($node->bundle() === 'publication') {
-    $form['publication_attachment_type'] = [
-      '#type' => 'radios',
-      '#title' => t('Attachment(s) type'),
-      '#options' => ['Public', 'Secure'],
-      '#default_value' => '0',
-      '#weight' => 0,
-    ];
 
-    $form['field_publication_files']['#states'] = [
-      'invisible' => [
-        ':input[name="publication_attachment_type"]' => ['value' => 1],
-      ],
-    ];
+    $current_user = \Drupal::currentUser();
+    // Allow the selection of 'Public' or 'Secure' publications.
+    if ($current_user->hasPermission('create secure publication') || in_array('administrator', $current_user->getRoles())) {
+      $form['publication_attachment_type'] = [
+        '#type' => 'radios',
+        '#title' => t('Attachment(s) type'),
+        '#options' => ['Public', 'Secure'],
+        '#default_value' => !empty($node->get('field_publication_secure_files')->getValue()) ? '1' : '0',
+        '#weight' => 0,
+      ];
 
-    $form['field_external_publication']['#states'] = [
-      'invisible' => [
-        ':input[name="publication_attachment_type"]' => ['value' => 1],
-      ],
-    ];
+      $form['field_publication_files']['#states'] = [
+        'invisible' => [
+          ':input[name="publication_attachment_type"]' => ['value' => 1],
+        ],
+      ];
+      $form['field_external_publication']['#states'] = [
+        'invisible' => [
+          ':input[name="publication_attachment_type"]' => ['value' => 1],
+        ],
+      ];
 
-    $form['field_publication_secure_files']['#states'] = [
-      'invisible' => [
-        ':input[name="publication_attachment_type"]' => ['value' => 0],
-      ],
-    ];
+      $form['field_publication_secure_files']['#states'] = [
+        'invisible' => [
+          ':input[name="publication_attachment_type"]' => ['value' => 0],
+        ],
+        'required' => [
+          ':input[name="publication_attachment_type"]' => ['value' => 1],
+        ],
+      ];
 
-    if (!empty($node->get('field_publication_secure_files')->getValue())) {
-      $form['publication_attachment_type']['#default_value'] = 1;
+    }
+    else {
+      // Set the publication type to 'public' and prevent access to the secure publication widget.
+      // If the user does not have the 'secure' permission or is non-admin.
+      $form['publication_attachment_type'] = [
+        '#type' => 'hidden',
+        '#default_value' => '0',
+        '#value' => '0',
+      ];
+
+      $form['field_publication_secure_files']['#access'] = FALSE;
     }
 
     $form['#validate'][] = 'dept_publications_validate_publication';
@@ -71,29 +90,10 @@ function dept_publications_validate_publication(&$form, FormStateInterface $form
     }
   }
   else {
-    if (empty($values['field_publication_secure_files'])) {
+    if (empty($values['field_publication_secure_files']['selection'])) {
       $form_state->setErrorByName('field_publication_secure_files', t('You must provide a secure attachment'));
     }
   }
-
-  // Validate that external publications point to a departmental domain.
-  $department_manager = \Drupal::service('department.manager');
-  $departments = $department_manager->getAllDepartments();
-
-  // Build a list of allowed urls.
-  $allowed_domains = [];
-  foreach ($departments as $department) {
-    $allowed_domains[] = $department->hostname();
-  }
-
-  if (!empty($values['field_external_publication'][0]["uri"])) {
-    $regex = '/https?:\/\/(?:www.)?(' . rtrim(implode('|', $allowed_domains), '|') . ')\/publications\/.+/m';
-
-    if (preg_match($regex, $values['field_external_publication'][0]['uri']) !== 1) {
-      $form_state->setErrorByName('field_external_publication', t('External publications links can only be to departmental websites e.g http://www.health-ni.gov.uk/publications/alternative-languages-and-accessible-formats'));
-    }
-  }
-
 }
 
 /**
@@ -143,6 +143,198 @@ function dept_publications_entity_operation_alter(array &$operations, EntityInte
       if (!\Drupal::currentUser()->hasPermission('publish secure publication')) {
         return $operations;
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_file_download().
+ */
+function dept_publications_file_download($uri) {
+  // Return -1 which is then later converted to AccessDeniedHttpException response.
+  if (\Drupal::service('secure_publications_file_access')->canAccessSecureFileAttachment($uri) === FALSE) {
+    return -1;
+  }
+}
+
+/**
+ * Implements hook_views_pre_execute().
+ */
+function dept_publications_views_pre_execute(ViewExecutable $view) {
+
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  $current_user = \Drupal::currentUser();
+
+  if ($view->id() === 'content' && $view->current_display == 'page_1') {
+    // @phpstan-ignore-next-line
+    foreach ($query->where[1]['conditions'] as $index => $condition) {
+      if ($condition['field'] === 'node__field_publication_secure_files.field_publication_secure_files_target_id') {
+        // Unset this condition if stats supervisor/related permissions.
+        if ($current_user->hasPermission('view any unpublished secure publication') || $current_user->hasPermission('view own unpublished secure publication')) {
+          // @phpstan-ignore-next-line
+          unset($query->where[1]['conditions'][$index]);
+
+          // Set a notice message for top-level admins.
+          if ($current_user->hasPermission('bypass node access')) {
+            \Drupal::messenger()
+              ->addWarning('Secure publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
+          }
+        }
+      }
+    }
+  }
+
+  if ($view->id() === 'workflow_moderation') {
+    // @phpstan-ignore-next-line
+    foreach ($query->where[1]['conditions'] as $index => $condition) {
+      if ($condition['field'] === 'node_field_data_node_field_revision__node__field_publication_secure_files.field_publication_secure_files_target_id') {
+        // Unset this condition if stats supervisor/related permissions.
+        if ($current_user->hasPermission('view any unpublished secure publication') || $current_user->hasPermission('view own unpublished secure publication')) {
+          // @phpstan-ignore-next-line
+          unset($query->where[1]['conditions'][$index]);
+
+          // Set a notice message for top-level admins.
+          if ($current_user->hasPermission('bypass node access')) {
+            \Drupal::messenger()
+              ->addWarning('Secure publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
+          }
+        }
+      }
+    }
+  }
+
+  if ($view->id() === 'media_library') {
+    // @phpstan-ignore-next-line
+    foreach ($query->where[1]['conditions'] as $index => $condition) {
+      if ($condition['field'] === 'media_field_data.bundle' && $condition['value'][0] === 'secure_file') {
+        // Unset this condition if stats supervisor/related permissions.
+        if ($current_user->hasPermission('view any unpublished secure publication') || $current_user->hasPermission('view own unpublished secure publication')) {
+          // @phpstan-ignore-next-line
+          unset($query->where[1]['conditions'][$index]);
+
+          // Set a notice message for top-level admins.
+          if ($current_user->hasPermission('administer media')) {
+            \Drupal::messenger()
+              ->addWarning('Files for secure publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dept_publications_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (str_starts_with($form['#id'], 'views-exposed-form-media-library') &&
+    \Drupal::currentUser()->hasPermission('view any unpublished secure publication')) {
+
+    // Permit secure files in exposed filter. Dovetails with
+    // dept_publications_views_query_alter above.
+    $form['type']['#options']['secure_file'] = t('Secure file');
+    ksort($form['type']['#options']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_views_view_field().)
+ */
+function dept_publications_preprocess_views_view_field(&$variables) {
+  $view = $variables['view'];
+
+  // If the content type is publication with secure attachments, update the 'type' text if it is unpublished.
+  if ($view->storage->id() === 'workflow_moderation' || $view->storage->id() === 'content') {
+    if ($variables['field']->field === 'type' && $variables['output'] == 'Publication') {
+      $entity = $variables["row"]->_entity;
+      if ($entity->hasField('field_publication_secure_files') && !$entity->get('field_publication_secure_files')->isEmpty()) {
+        if ($entity->get('moderation_state')->getString() !== 'published') {
+          $variables['output'] = t('Publication (secure)');
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_media().
+ */
+function dept_publications_preprocess_media(&$variables) {
+  if ($variables['media']->bundle() === 'remote_document' && $variables['view_mode'] === 'embed') {
+    /* @var \Drupal\Core\Url $url */
+    $url = $variables['content']['field_media_media_remote'][0]['#url'];
+
+    if ($url instanceof Url) {
+      $file_url = $url->getUri();
+    }
+    else {
+      // No URL to work with for whatever reason so return early.
+      return;
+    }
+
+    // Full URL string for use in later preprocessing.
+    $variables['file_url'] = $file_url;
+
+    // Fetch metadata about the file.
+    $http_client = \Drupal::httpClient();
+    $file_headers = $http_client->request('HEAD', $file_url)->getHeaders();
+
+    // Initialize metadata variables.
+    $file_size = 0;
+    $file_mimetype = '';
+    $file_extension = '';
+    $file_type = '';
+
+    if ($file_headers) {
+      // Get file size if available.
+      if (!empty($file_headers['Content-Length'])) {
+        $file_size = $file_headers['Content-Length'][0] ?? 0;
+      }
+
+      // Get file mimetype if available.
+      if (!empty($file_headers['content-type'])) {
+        $file_mimetype = $file_headers['content-type'][0] ?? '';
+      }
+
+      // Get file extension.
+      $path_info = pathinfo(parse_url($file_url, PHP_URL_PATH));
+      if (!empty($path_info['extension'])) {
+        $file_extension = $path_info['extension'] ?? '';
+      }
+    }
+
+    // Example: Add these values to the $variables array for later use in the template.
+    $variables['file_size_raw'] = $file_size;
+    $variables['file_size'] = ByteSizeMarkup::create($file_size);
+    $variables['file_mimetype'] = $file_mimetype;
+    $variables['file_extension'] = $file_extension;
+
+    // Map file mimetypes to user friendly document types.
+    $pretty_mimes = \Drupal::service('origins_media.pretty_mime_types')->getMimeTypes();
+    if ($file_mimetype && !empty($pretty_mimes[$file_mimetype])) {
+      $variables['pretty_mimetype'] = $pretty_mimes[$file_mimetype];
+    }
+
+    if (array_key_exists($file_mimetype, $pretty_mimes)) {
+      $variables['file_type'] = $pretty_mimes[$file_mimetype];
+    }
+    else {
+      $variables['file_type'] = strtoupper(preg_replace('/^application\/(\w+)$/', '\1', $file_mimetype));
+    }
+
+    // Add an extra 'is external' preprocess variable so we can distinguish it
+    // when rendering markup in the template.
+    $variables['file_is_external'] = (bool) preg_match('/^http/', $file_url);
+
+    $variables['media_langcode'] = $variables['media']->language()->getId();
+    // Do not output the langcode if is undefined.
+    if ($variables['media_langcode'] === 'und') {
+      unset($variables['media_langcode']);
     }
   }
 }

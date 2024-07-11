@@ -15,6 +15,10 @@ services:
     arguments: ['@department.manager']
     tags:
       - { name: 'context_provider' }
+  department.route_subscriber:
+    class: Drupal\dept_core\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
 parameters:
   topic_route_patterns:
     - /publications/(topic)/(\d+)

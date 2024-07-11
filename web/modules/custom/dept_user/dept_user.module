@@ -4,3 +4,18 @@
  * @file
  * Departmental User module for Departmental sites.
  */
+
+use Drupal\Core\Session\AccountInterface;
+
+/**
+ * Implements hook_user_logout().
+ */
+function dept_user_user_logout(AccountInterface $account) {
+  // Remove all sessions for the user.
+  // Fixes the issue of users remaining logged in on
+  // multiple departmental sites.
+  \Drupal::database()
+    ->delete('sessions')
+    ->condition('uid', $account->id())
+    ->execute();
+}

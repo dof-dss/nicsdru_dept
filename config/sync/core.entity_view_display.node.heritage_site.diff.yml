@@ -22,7 +22,6 @@ dependencies:
     - field.field.node.heritage_site.field_phone
     - field.field.node.heritage_site.field_photo
     - field.field.node.heritage_site.field_postcode
-    - field.field.node.heritage_site.field_site_subtopics
     - field.field.node.heritage_site.field_site_topics
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
@@ -33,7 +32,6 @@ dependencies:
     - layout_builder
     - link
     - options
-    - origins_common
     - text
     - user
 third_party_settings:
@@ -99,7 +97,6 @@ third_party_settings:
     group_additional_content_details:
       children:
         - field_site_topics
-        - field_site_subtopics
       label: 'Additional content details'
       parent_name: ''
       region: content
@@ -181,19 +178,6 @@ content:
     third_party_settings: {  }
     weight: 4
     region: content
-  field_map_location:
-    type: gmaps_lazy_load_formatter
-    label: hidden
-    settings:
-      zoom: '10'
-      map_type: roadmap
-      placeholder: empty
-      link_text: ''
-      map_width: '300'
-      map_height: '300'
-    third_party_settings: {  }
-    weight: 5
-    region: content
   field_nismr_link:
     type: link
     label: hidden
@@ -238,14 +222,6 @@ content:
     third_party_settings: {  }
     weight: 5
     region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 15
-    region: content
   field_site_topics:
     type: entity_reference_label
     label: inline
@@ -289,6 +265,7 @@ hidden:
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
+  field_map_location: true
   field_metatags: true
   groups: true
   groups_type_department_site: true

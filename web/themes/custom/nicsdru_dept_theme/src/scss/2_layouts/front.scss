@@ -1,0 +1,115 @@
+/*
+ * @file
+ * Provides the layout styles for front page.
+ */
+
+@import '../init';
+
+// Front page layout
+//
+// Markup: ../kss-templates/layouts-front.twig
+//
+// Weight: -6
+//
+// Style guide: layouts.front
+
+.layout--front {
+  grid-template-columns: repeat(12, 1fr);
+  grid-column-gap: 1rem;
+
+  // By default, home page sections span full width
+  // of the grid.
+  > *,
+  .section-front {
+    grid-column: 1 / span 12;
+  }
+
+  @include breakpoint($tab) {
+
+    .section-front {
+
+      &--featured {
+        grid-column: 1 / span 7;
+        grid-row: 1 / span 2;
+      }
+
+      &--quick-links,
+      &--latest-news {
+        grid-column: 9 / span 4;
+      }
+
+      &--social-links {
+        grid-column: 9 / span 4;
+        align-self: end;
+      }
+
+      &--topics {
+        grid-column: 1 / span 12;
+      }
+
+      &--featured-topics {
+        grid-column: 1 / span 12;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 0 3em;
+
+        > * {
+          grid-column: 1 / span 2;
+        }
+
+        .niexec-budget {
+          grid-column: 1;
+        }
+
+        .niexec-pfg {
+          grid-column: 2;
+        }
+      }
+
+      &--agency-links {
+        grid-column: 1 / span 12;
+      }
+
+      &--our-documents {
+        grid-column: 1 / span 12;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 0 3em;
+
+        > * {
+          grid-column: 1 / span 2;
+        }
+
+        .latest-publications {
+          grid-column: 1;
+          grid-row: 2;
+        }
+
+        .latest-consultations {
+          grid-column: 2;
+          grid-row: 2;
+        }
+      }
+
+      &--access-to-information {
+        grid-column: 1 / span 12;
+      }
+
+      &--about-us {
+        grid-column: 1 / span 7;
+
+        @at-root .dept-nigov & {
+          grid-column: 1 / span 12;
+        }
+      }
+
+      &--corporate-links {
+        grid-column: 9 / span 4;
+      }
+
+      &--contact-us {
+        grid-column: 1 / span 12;
+      }
+    }
+  }
+}

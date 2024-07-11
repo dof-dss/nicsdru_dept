@@ -28,7 +28,7 @@ mode: default
 content:
   field_age:
     type: number_integer
-    label: above
+    label: inline
     settings:
       thousand_separator: ''
       prefix_suffix: true
@@ -37,21 +37,21 @@ content:
     region: content
   field_description:
     type: basic_string
-    label: above
+    label: inline
     settings: {  }
     third_party_settings: {  }
     weight: 5
     region: content
   field_distinguishing_marks:
     type: basic_string
-    label: above
+    label: inline
     settings: {  }
     third_party_settings: {  }
     weight: 8
     region: content
   field_eye_colour:
     type: string
-    label: above
+    label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -59,7 +59,7 @@ content:
     region: content
   field_hair_colour:
     type: string
-    label: above
+    label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -67,30 +67,30 @@ content:
     region: content
   field_offence:
     type: basic_string
-    label: above
+    label: inline
     settings: {  }
     third_party_settings: {  }
     weight: 4
     region: content
   field_photo:
     type: entity_reference_entity_view
-    label: above
+    label: hidden
     settings:
-      view_mode: default
-      link: true
+      view_mode: article_float
+      link: false
     third_party_settings: {  }
     weight: 0
     region: content
   field_prison:
     type: list_default
-    label: above
+    label: inline
     settings: {  }
     third_party_settings: {  }
     weight: 3
     region: content
   field_release_type:
     type: string
-    label: above
+    label: inline
     settings:
       link_to_entity: false
     third_party_settings: {  }
@@ -98,10 +98,10 @@ content:
     region: content
   field_ual_from:
     type: datetime_default
-    label: above
+    label: inline
     settings:
       timezone_override: ''
-      format_type: medium
+      format_type: medium_date
     third_party_settings: {  }
     weight: 1
     region: content

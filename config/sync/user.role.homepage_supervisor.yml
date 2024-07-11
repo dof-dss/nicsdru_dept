@@ -1,0 +1,23 @@
+uuid: 7b356c56-75f9-435a-9ee7-85ac1b312bcd
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.featured_content_list
+    - workflows.workflow.nics_editorial_workflow
+  module:
+    - content_moderation
+    - domain_access
+    - draggableviews
+    - node
+id: homepage_supervisor
+label: 'Homepage supervisor (Add-on role)'
+weight: 10
+is_admin: null
+permissions:
+  - 'access content overview'
+  - 'access draggableviews'
+  - 'revert featured_content_list revisions'
+  - 'update featured_content_list content on assigned domains'
+  - 'use nics_editorial_workflow transition quick_publish'
+  - 'view featured_content_list revisions'

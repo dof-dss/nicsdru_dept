@@ -11,12 +11,11 @@ dependencies:
     - field.field.node.contact.field_map_location
     - field.field.node.contact.field_metatags
     - field.field.node.contact.field_next_audit_due
-    - field.field.node.contact.field_site_subtopics
     - field.field.node.contact.field_site_topics
     - node.type.contact
   module:
+    - google_map_field
     - layout_builder
-    - origins_common
     - text
     - user
 third_party_settings:
@@ -33,20 +32,22 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
   field_map_location:
-    type: gmaps_lazy_load_formatter
-    label: hidden
-    settings:
-      map_type: roadmap
-      zoom: '15'
-      placeholder: empty
-      link_text: ''
-      map_width: '400'
-      map_height: '400'
+    type: google_map_field_default
+    label: above
+    settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 2
+    region: content
+  field_site_topics:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   content_moderation_control: true
@@ -56,8 +57,6 @@ hidden:
   field_domain_source: true
   field_metatags: true
   field_next_audit_due: true
-  field_site_subtopics: true
-  field_site_topics: true
   groups: true
   groups_type_department_site: true
   langcode: true

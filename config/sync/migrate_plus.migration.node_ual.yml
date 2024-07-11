@@ -1,4 +1,4 @@
-uuid: 4def2618-b413-44da-8cb8-cfd335c72017
+uuid: 6996a4db-6533-4a19-8f7d-08cd725830b6
 langcode: en
 status: true
 dependencies: {  }
@@ -14,6 +14,8 @@ source:
   plugin: d7_dept_node
   node_type: ual
   track_changes: true
+  constants:
+    migrate_ignore_sites: MIGRATE_IGNORE_SITES
 process:
   langcode:
     -
@@ -66,6 +68,7 @@ process:
           -
             plugin: d7_file_lookup
             source: fid
+            entity_type: media
   field_prison: field_prison
   field_release_type: field_release_type
   field_ual_from:
@@ -94,6 +97,29 @@ process:
     -
       plugin: get
       source: domain_all_affiliates
+  list_of_depts_to_ignore:
+    -
+      plugin: callback
+      callable: getenv
+      source:
+        - constants/migrate_ignore_sites
+      unpack_source: true
+    -
+      plugin: default_value
+      default_value: ''
+    -
+      plugin: explode
+      delimiter: ','
+  ignore_live_depts:
+    -
+      plugin: flatten
+      source: domain_source_node
+    -
+      plugin: skip_on_condition
+      condition:
+        plugin: in_array
+        property: '@list_of_depts_to_ignore'
+      method: row
 destination:
   plugin: 'entity:node'
   default_bundle: ual

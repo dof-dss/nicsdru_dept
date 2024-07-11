@@ -5,7 +5,16 @@
  or your current system user. See core/tests/README.md and
  https://www.drupal.org/node/2116263 for details.
 -->
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="/app/web/core/tests/bootstrap.php" colors="true" beStrictAboutTestsThatDoNotTestAnything="true" beStrictAboutOutputDuringTests="true" beStrictAboutChangesToGlobalState="true" failOnWarning="true" printerClass="\Drupal\Tests\Listeners\HtmlOutputPrinter" cacheResult="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="./web/core/tests/bootstrap.php"
+         colors="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutChangesToGlobalState="true"
+         failOnWarning="true"
+         printerClass="\Drupal\Tests\Listeners\HtmlOutputPrinter"
+         cacheResult="false"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
   <coverage>
     <include>
       <directory>./includes</directory>
@@ -48,23 +57,24 @@
     <!-- Example for changing the driver args to webdriver tests MINK_DRIVER_ARGS_WEBDRIVER value: '["chrome", { "chromeOptions": { "w3c": false } }, "http://localhost:4444/wd/hub"]' For using the Firefox browser, replace "chrome" with "firefox" -->
     <env name="MINK_DRIVER_ARGS_WEBDRIVER" value=""/>
   </php>
-  <testsuites>
+<!--  <testsuites>-->
     <testsuite name="unit">
       <file>./web/core/tests/TestSuites/UnitTestSuite.php</file>
     </testsuite>
-    <testsuite name="kernel">
-      <file>./web/core/tests/TestSuites/KernelTestSuite.php</file>
-    </testsuite>
-    <testsuite name="functional">
-      <file>./web/core/tests/TestSuites/FunctionalTestSuite.php</file>
-    </testsuite>
-    <testsuite name="functional-javascript">
-      <file>./web/core/tests/TestSuites/FunctionalJavascriptTestSuite.php</file>
-    </testsuite>
-    <testsuite name="build">
-      <file>./web/core/tests/TestSuites/BuildTestSuite.php</file>
-    </testsuite>
-  </testsuites>
+    <!-- Commenting out until contrib modules get support for tests in 10.2 -->
+<!--    <testsuite name="kernel">-->
+<!--      <file>./web/core/tests/TestSuites/KernelTestSuite.php</file>-->
+<!--    </testsuite>-->
+<!--    <testsuite name="functional">-->
+<!--      <file>./web/core/tests/TestSuites/FunctionalTestSuite.php</file>-->
+<!--    </testsuite>-->
+<!--    <testsuite name="functional-javascript">-->
+<!--      <file>./web/core/tests/TestSuites/FunctionalJavascriptTestSuite.php</file>-->
+<!--    </testsuite>-->
+<!--    <testsuite name="build">-->
+<!--      <file>./web/core/tests/TestSuites/BuildTestSuite.php</file>-->
+<!--    </testsuite>-->
+<!--  </testsuites>-->
   <listeners>
     <listener class="\Drupal\Tests\Listeners\DrupalListener">
     </listener>

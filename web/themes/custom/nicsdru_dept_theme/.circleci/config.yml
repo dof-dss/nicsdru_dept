@@ -1,0 +1,106 @@
+version: 2.1
+
+default_docker_image: &docker_image
+  docker:
+    - image: thecodingmachine/php:8.1-v4-apache-node14
+      environment:
+        PROJECT_ROOT: "/home/docker/project"
+        PHP_EXTENSION_GD: 1
+        PHP_INI_MEMORY_LIMIT: 1g
+
+jobs:
+  install:
+    <<: *docker_image
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-node_modules-{{ .Branch }}-{{ checksum "package.json" }}
+      - run:
+          name: Fetch dependencies
+          command: npm install
+      - save_cache:
+          key: v1-node_modules-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./
+  # Code static analysis.
+  lint:
+    <<: *docker_image
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Lint all frontend code
+          command: |
+            npm run lint
+  # Build front-end assets.
+  build_assets:
+    <<: *docker_image
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Fetch dependencies
+          command: npm run build
+
+  # Static analysis of any PHP/Drupal code.
+  coding_standards:
+    <<: *docker_image
+    steps:
+      - checkout
+      - run:
+          name: Fetch phpcs and dependencies
+          command: |
+            composer require drupal/coder
+            # Move vendor directory up a level as we don't want to code-check all of that.
+            mv vendor ../
+      - run:
+          name: Fetch phpcs convenience script
+          command: |
+            curl https://raw.githubusercontent.com/dof-dss/nicsdru_dept/main/phpcs.sh -o $PROJECT_ROOT/phpcs.sh
+            chmod +x $PROJECT_ROOT/phpcs.sh
+      - run:
+          name: PHPCS analysis
+          command: $PROJECT_ROOT/phpcs.sh ~/ "${PROJECT_ROOT}"
+
+  deprecated_code:
+    <<: *docker_image
+    steps:
+      - checkout:
+          path: ~/nicsdru_dept_theme
+      - run:
+          name: Fetch latest Drupal version
+          command: |
+            cd $PROJECT_ROOT
+            composer create-project drupal/recommended-project:9.5.x-dev $PROJECT_ROOT --no-interaction
+      - run:
+          name: Download dependent contrib modules.
+          command: |
+            cd $PROJECT_ROOT
+            composer require mglaman/drupal-check:1.4 mglaman/phpstan-drupal:1.1.27 --no-interaction
+      - run:
+          name: Move custom code into position
+          command: mv ~/nicsdru_dept_theme $PROJECT_ROOT/web/themes/custom/
+      - run:
+          name: Deprecated code check
+          command: |
+            cd $PROJECT_ROOT/web
+            ../vendor/bin/drupal-check themes/custom
+
+workflows:
+  version: 2
+
+  build-static-analysis:
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - build_assets:
+          requires:
+            - install
+      - coding_standards
+      - deprecated_code

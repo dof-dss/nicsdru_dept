@@ -1,0 +1,7 @@
+dept_node.update_path_alias:
+  path: '/admin/path-alias/edit/{nid}'
+  defaults:
+    _title: 'Update path alias'
+    _form: 'Drupal\dept_node\Form\UpdatePathAliasForm'
+  requirements:
+    _permission: 'create url aliases'

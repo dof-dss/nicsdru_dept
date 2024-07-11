@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Language handling and enhancements for Departmental sites.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\Language;
+use Drupal\path_alias\PathAliasInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function dept_lang_path_alias_presave(PathAliasInterface $path_alias) {
+  dept_lang_set_path_alias_entity_langcode($path_alias);
+}
+
+/**
+ * Changes the path alias langcode from any non-default value back to default
+ * as we're presently not working with node translations.
+ * @param \Drupal\path_alias\PathAliasInterface $path_alias
+ *   The path alias entity.
+ * @return void
+ *   Nothing. Nada. Zilch. The UK's typical final Eurovision score.
+ */
+function dept_lang_set_path_alias_entity_langcode(PathAliasInterface $path_alias) {
+  if ($path_alias->get('langcode')->value != Language::LANGCODE_NOT_SPECIFIED) {
+    $path_alias->set('langcode', Language::LANGCODE_NOT_SPECIFIED);
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function dept_lang_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (!empty($form['langcode'])) {
+    // Move the langcode picker into the metadata area in the sidebar.
+    $form['meta']['langcode'] = $form['langcode'];
+    $form['meta']['langcode']['#weight'] = 50;
+    unset($form['langcode']);
+  }
+}

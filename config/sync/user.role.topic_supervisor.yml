@@ -1,0 +1,44 @@
+uuid: 3bf21580-24e4-48ab-a487-415a4f921d86
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.subtopic
+    - node.type.topic
+    - workflows.workflow.nics_editorial_workflow
+  module:
+    - content_moderation
+    - domain_access
+    - flag
+    - node
+    - scheduled_transitions
+    - view_unpublished
+id: topic_supervisor
+label: 'Topic supervisor (Add-on role)'
+weight: 10
+is_admin: null
+permissions:
+  - 'add scheduled transitions node subtopic'
+  - 'add scheduled transitions node topic'
+  - 'administer nodes'
+  - 'create subtopic content on assigned domains'
+  - 'create topic content on assigned domains'
+  - 'delete subtopic content on assigned domains'
+  - 'delete topic content on assigned domains'
+  - 'flag hide_listing'
+  - 'publish to any assigned domain'
+  - 'reschedule scheduled transitions node subtopic'
+  - 'reschedule scheduled transitions node topic'
+  - 'revert subtopic revisions'
+  - 'revert topic revisions'
+  - 'unflag hide_listing'
+  - 'update subtopic content on assigned domains'
+  - 'update topic content on assigned domains'
+  - 'use nics_editorial_workflow transition quick_publish'
+  - 'view any unpublished subtopic content'
+  - 'view any unpublished topic content'
+  - 'view scheduled transitions node subtopic'
+  - 'view scheduled transitions node topic'
+  - 'view subtopic revisions'
+  - 'view topic revisions'
+  - 'view unpublished domain content'

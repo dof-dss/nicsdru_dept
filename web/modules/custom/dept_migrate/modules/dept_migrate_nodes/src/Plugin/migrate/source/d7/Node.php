@@ -2,14 +2,14 @@
 
 namespace Drupal\dept_migrate_nodes\Plugin\migrate\source\d7;
 
-use Drupal\dept_migrate\MigrateUtils;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\migrate\Row;
-use Drupal\migrate_drupal\Plugin\migrate\source\d7\FieldableEntity;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\dept_migrate\MigrateUtils;
 use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\Row;
+use Drupal\migrate_drupal\Plugin\migrate\source\d7\FieldableEntity;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -195,7 +195,8 @@ class Node extends FieldableEntity {
 
     // Determine if the News node is a 'Press release'.
     if ($type === 'news') {
-      if ($row->getSourceProperty('field_news_type')[0]['value'] === 'pressrelease') {
+      $type_value = $row->getSourceProperty('field_news_type');
+      if (isset($type_value[0]) && $row->getSourceProperty('field_news_type')[0]['value'] === 'pressrelease') {
         $is_press_release = TRUE;
       }
       elseif ($has_nigov_entry) {
@@ -323,7 +324,7 @@ class Node extends FieldableEntity {
         ->condition('da.domain_id', $domain)
         ->execute()
         ->fetchCol();
-      $row_source_properties[] = ['target_id' => MigrateUtils::d7DomianToD9Domain($domain_target_ids[0])];
+      $row_source_properties[] = ['target_id' => MigrateUtils::d7DomainToD9Domain($domain_target_ids[0])];
     }
     return $row_source_properties;
   }
@@ -360,7 +361,7 @@ class Node extends FieldableEntity {
         ->fetchCol();
     }
 
-    $row_source_properties[] = ['target_id' => MigrateUtils::d7DomianToD9Domain($domain_source_id[0])];
+    $row_source_properties[] = ['target_id' => MigrateUtils::d7DomainToD9Domain($domain_source_id[0])];
 
     return $row_source_properties;
   }

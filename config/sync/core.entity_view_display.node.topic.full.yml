@@ -1,23 +1,27 @@
-uuid: 82d1e3d8-013c-4d78-8552-e2d9ab0e9197
+uuid: 32fe7409-9d80-4891-a3af-55ef31c41eeb
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_view_mode.node.full
     - field.field.node.topic.body
+    - field.field.node.topic.field_banner_image
+    - field.field.node.topic.field_banner_image_overlay
+    - field.field.node.topic.field_banner_image_thin
     - field.field.node.topic.field_domain_access
     - field.field.node.topic.field_domain_all_affiliates
     - field.field.node.topic.field_domain_source
     - field.field.node.topic.field_metatags
     - field.field.node.topic.field_photo
     - field.field.node.topic.field_summary
+    - field.field.node.topic.field_topic_content
     - field.field.node.topic.layout_builder__layout
     - node.type.topic
   module:
-    - dept_topics
     - layout_builder
     - layout_builder_restrictions
     - layout_discovery
+    - metatag
     - text
     - user
 third_party_settings:
@@ -77,17 +81,24 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 2
             additional: {  }
-          d86fdc53-d5d9-4d69-bdb0-71f34d9f4058:
-            uuid: d86fdc53-d5d9-4d69-bdb0-71f34d9f4058
+          77adab66-fe02-458e-abd9-8e0f64332f81:
+            uuid: 77adab66-fe02-458e-abd9-8e0f64332f81
             region: content
             configuration:
-              id: dept_topics_topic_content_block
-              label: 'In this topic'
-              label_display: visible
-              provider: dept_topics
+              id: 'field_block:node:topic:field_topic_content'
+              label: 'Topic content'
+              label_display: '0'
+              provider: layout_builder
               context_mapping:
-                node: layout_builder.entity
-            weight: 3
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: hidden
+                settings:
+                  view_mode: topics_teaser
+                third_party_settings: {  }
+            weight: 8
             additional: {  }
         third_party_settings: {  }
   layout_builder_restrictions:
@@ -128,6 +139,7 @@ third_party_settings:
           - 'field_block:node:topic:body'
           - 'field_block:node:topic:field_photo'
           - 'field_block:node:topic:field_summary'
+          - 'field_block:node:topic:field_topic_content'
         'Custom block types':
           - accordion_menu
           - banner_deep
@@ -138,8 +150,7 @@ third_party_settings:
           - text
           - video
           - video_and_caption
-        'Custom blocks':
-          - dept_topics_topic_content_block
+        'Custom blocks': {  }
         'Inline blocks':
           - 'inline_block:accordion_menu'
           - 'inline_block:banner_deep'
@@ -184,6 +195,7 @@ third_party_settings:
               - 'field_block:node:topic:body'
               - 'field_block:node:topic:field_photo'
               - 'field_block:node:topic:field_summary'
+              - 'field_block:node:topic:field_topic_content'
             'Custom block types':
               - accordion_menu
               - banner_deep
@@ -191,8 +203,7 @@ third_party_settings:
               - plain_cards
               - text
               - video_and_caption
-            'Custom blocks':
-              - dept_topics_topic_content_block
+            'Custom blocks': {  }
             'Inline blocks':
               - 'inline_block:accordion_menu'
               - 'inline_block:banner_deep'
@@ -308,7 +319,14 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 4
+    region: content
+  field_metatags:
+    type: metatag_empty_formatter
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
     region: content
   field_photo:
     type: entity_reference_entity_view
@@ -324,14 +342,25 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 3
+    region: content
+  field_topic_content:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: topics_teaser
+      link: false
+    third_party_settings: {  }
+    weight: 6
     region: content
 hidden:
   content_moderation_control: true
+  field_banner_image: true
+  field_banner_image_overlay: true
+  field_banner_image_thin: true
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
-  field_metatags: true
   groups: true
   langcode: true
   layout_builder__layout: true

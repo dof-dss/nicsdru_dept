@@ -1,0 +1,14 @@
+uuid: 42f39d86-70af-4d98-bd1c-8327be541b64
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.stats_author
+  module:
+    - user
+id: user_remove_role_action.stats_author
+label: 'Remove the stats author role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: stats_author

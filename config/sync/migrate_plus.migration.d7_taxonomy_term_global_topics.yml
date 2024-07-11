@@ -1,4 +1,4 @@
-uuid: fc293eaa-5b9c-4c56-8804-a67ec01532f5
+uuid: d11c2944-b302-4ecd-bfd7-dd7df871717c
 langcode: en
 status: true
 dependencies: {  }
@@ -17,11 +17,7 @@ source:
   batch_size: 1000
 process:
   tid: tid
-  vid:
-    -
-      plugin: migration_lookup
-      migration: upgrade_d7_taxonomy_vocabulary
-      source: vid
+  vid: global_topics
   name: name
   description/value:
     -

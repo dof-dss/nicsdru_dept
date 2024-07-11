@@ -6,6 +6,7 @@ dependencies:
     - 'block_content:basic:236532b2-dbc6-419e-8e10-a8f2fc9a64b9'
   module:
     - block_content
+    - block_visibility_groups
     - domain
     - system
   theme:
@@ -28,11 +29,14 @@ visibility:
   request_path:
     id: request_path
     negate: false
-    pages: "/press-releases\r\n/press-releases*\r\n/news\r\n/news*"
+    pages: "/press-releases\r\n/news"
   domain:
     id: domain
     negate: true
     context_mapping:
       domain: '@domain.current_domain_context:domain'
-    domains:
-      group_1: group_1
+    domains: {  }
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''

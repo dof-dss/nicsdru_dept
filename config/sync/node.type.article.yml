@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - dept_node
     - menu_ui
     - origins_toc
     - scheduler
@@ -28,11 +29,23 @@ third_party_settings:
     toc_title: Contents
     toc_location: .page-summary
     toc_insert: after
-    toc_source_container: '#main-article'
+    toc_source_container: .article-content
     toc_element: h2
     toc_exclusions: ''
     toc_screen_depth: '2'
     toc_debug: 0
+  dept_node:
+    department_restrictions:
+      communities: communities
+      daera: daera
+      economy: economy
+      education: education
+      executiveoffice: executiveoffice
+      finance: finance
+      health: health
+      infrastructure: infrastructure
+      justice: justice
+      nigov: nigov
 _core:
   default_config_hash: AeW1SEDgb1OTQACAWGhzvMknMYAJlcZu0jljfeU3oso
 name: Article

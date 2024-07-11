@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Theme template for a subtopic content list.
+ *
+ * Available variables:
+ * - title: the title of the subtopic list
+ * - content_links: an array of link render elements.
+ * - show_more_link: a link back to the subtopic page.
+#}
+<article class="card">
+  {% if title_link %}
+  <h3 class="card__title">{{ title_link }}</h3>
+  {% endif %}
+  <div class="card__content">
+    {% if content_summary and content_links|length < 3 %}
+      {{ content_summary }}
+    {% endif %}
+    {% if content_links %}
+      <ul class="list--hyphen-bullet">
+        {% for link in content_links|slice(0, 3) %}
+          <li>{{ link }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% if read_more_link and content_links|length >= 3 %}
+      <div class="more-link">
+        <a href="{{ read_more_link.url }}">Learn more <span class="visually-hidden">about {{ title }}</span></a>
+      </div>
+    {% endif %}
+  </div>
+</article>

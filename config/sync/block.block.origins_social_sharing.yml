@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   module:
+    - block_visibility_groups
+    - node
     - origins_social_sharing
     - system
   theme:
@@ -23,3 +25,31 @@ visibility:
     id: request_path
     negate: false
     pages: '/node/*'
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      application: application
+      article: article
+      book: book
+      consultation: consultation
+      contact: contact
+      featured_content_list: featured_content_list
+      gallery: gallery
+      global_page: global_page
+      heritage_site: heritage_site
+      link: link
+      news: news
+      page: page
+      protected_area: protected_area
+      publication: publication
+      subtopic: subtopic
+      topic: topic
+      ual: ual
+      webform: webform

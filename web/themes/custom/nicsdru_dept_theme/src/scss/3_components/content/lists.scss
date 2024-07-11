@@ -1,0 +1,87 @@
+/*
+ * @file
+ * Provides the styling for list components.
+ */
+@import '../../init';
+
+.list {
+  &--no-bullet {
+    list-style: none;
+    padding: 0;
+  }
+
+  &--hyphen-bullet {
+    list-style: none;
+    padding: 0;
+
+    li {
+      position: relative;
+      padding-left: 1em;
+
+      &::before {
+        content: '-';
+        position: absolute;
+        left: 0;
+      }
+    }
+  }
+
+  &--inline li {
+    display: inline-block;
+    padding-right: .334em;
+    white-space: nowrap;
+  }
+
+  &--csv {
+    display: inline;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: inline;
+
+      &::after {
+        display: inline-block;
+        content: ',';
+        margin-right: var(--rhythm-spacing-sm);
+      }
+
+      &:last-child::after {
+        content: '';
+      }
+    }
+  }
+
+  &--checklist {
+    li {
+      color: $grey-dark;
+      background: transparent resolve('status.svg') no-repeat left / 16px 16px;
+      margin-bottom: 0;
+      margin-right: 4px;
+      padding-left: 21px;
+
+      @include breakpoint($phone, $no-query: true) {
+        background-size: 18px 18px;
+        margin-right: 7px;
+        padding-left: 24px;
+      }
+
+      @include breakpoint($phab, $no-query: true) {
+        background-size: 19px 19px;
+        margin-right: 9px;
+      }
+    }
+  }
+
+  &--split-list {
+    columns: 2;
+    column-gap: 2em;
+  }
+}
+
+.split-list {
+  @include breakpoint($phab) {
+    columns: 2;
+    column-gap: 2em;
+  }
+}

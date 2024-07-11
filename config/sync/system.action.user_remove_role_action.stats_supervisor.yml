@@ -1,0 +1,14 @@
+uuid: bb67959c-8659-4d2f-ba4b-427d2e5570ad
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.stats_supervisor
+  module:
+    - user
+id: user_remove_role_action.stats_supervisor
+label: 'Remove the stats supervisor role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: stats_supervisor

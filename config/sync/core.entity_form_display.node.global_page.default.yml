@@ -9,12 +9,10 @@ dependencies:
     - field.field.node.global_page.field_domain_source
     - field.field.node.global_page.field_metatags
     - node.type.global_page
-    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - metatag
     - path
-    - scheduler
     - text
 id: node.global_page.default
 targetEntityType: node
@@ -95,15 +93,14 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-  publish_on:
-    type: datetime_timestamp_no_default
-    weight: 30
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   publish_state:
     type: options_select
     weight: 122
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -139,12 +136,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  unpublish_on:
-    type: datetime_timestamp_no_default
-    weight: 30
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   unpublish_state:
     type: options_select
     weight: 123
@@ -158,3 +149,5 @@ content:
     third_party_settings: {  }
 hidden:
   groups: true
+  publish_on: true
+  unpublish_on: true

@@ -14,7 +14,6 @@ dependencies:
     - field.field.node.protected_area.field_protected_area_documents
     - field.field.node.protected_area.field_protected_area_feature
     - field.field.node.protected_area.field_protected_area_type
-    - field.field.node.protected_area.field_site_subtopics
     - field.field.node.protected_area.field_site_topics
     - node.type.protected_area
   module:
@@ -50,7 +49,6 @@ hidden:
   field_protected_area_documents: true
   field_protected_area_feature: true
   field_protected_area_type: true
-  field_site_subtopics: true
   field_site_topics: true
   groups: true
   groups_type_department_site: true

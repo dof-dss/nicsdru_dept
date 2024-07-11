@@ -68,7 +68,12 @@ class D7UserUuid extends FieldableEntity {
       ->fetchCol();
     $row->setSourceProperty('roles', $roles);
 
-    $row->setSourceProperty('data', unserialize($row->getSourceProperty('data'), ['allowed_classes' => FALSE]));
+    // Fetch data first to prevent unserialize() warning with null values.
+    $data = $row->getSourceProperty('data');
+
+    if (!empty($data)) {
+      $row->setSourceProperty('data', unserialize($row->getSourceProperty('data'), ['allowed_classes' => FALSE]));
+    }
 
     // If this entity was translated using Entity Translation, we need to get
     // its source language to get the field values in the right language.
@@ -87,6 +92,18 @@ class D7UserUuid extends FieldableEntity {
       $row->setSourceProperty($field_name, $this->getFieldValues('user', $field_name, $uid, NULL, $field_language));
     }
 
+    $access = $row->getSourceProperty('access');
+    // Block account if last accessed was 9 months or more.
+    if (floor((time() - $access) / 2592000) >= 9) {
+      $row->setSourceProperty('status', 0);
+    }
+
+    // Fetch domain assignments.
+    $user_domains = $this->getDomainTargetIds($uid);
+    $row->setSourceProperty('domain_access_user', $user_domains);
+    // Assign canonical domain (use first result if multiple).
+    $row->setSourceProperty('domain_source_user', reset($user_domains));
+
     return parent::prepareRow($row);
   }
 
@@ -96,6 +113,35 @@ class D7UserUuid extends FieldableEntity {
   public function getIds() {
     $ids['uuid']['type'] = 'string';
     return $ids;
+  }
+
+  /**
+   * Helper method to get the gids as target ids from d7 domain_editor.
+   *
+   * @param int $uid
+   *   Uid of the current row.
+   *
+   * @return array
+   *   returns target ids of domains
+   */
+  private function getDomainTargetIds(int $uid) {
+    $row_source_properties = [];
+
+    $domains = $this->select('domain_editor', 'de')
+      ->fields('de', ['domain_id'])
+      ->condition('de.uid', $uid)
+      ->execute()
+      ->fetchCol();
+
+    foreach ($domains as $domain) {
+      $domain_target_ids = $this->select('domain', 'da')
+        ->fields('da', ['machine_name'])
+        ->condition('da.domain_id', $domain)
+        ->execute()
+        ->fetchCol();
+      $row_source_properties[] = ['target_id' => $domain_target_ids[0]];
+    }
+    return $row_source_properties;
   }
 
 }

@@ -4,9 +4,9 @@ namespace Drupal\dept_core;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\domain\Entity\Domain;
+use Drupal\domain_access\DomainAccessManager;
 use Drupal\node\NodeInterface;
 use Drupal\path_alias\AliasManagerInterface;
-use Drupal\domain_access\DomainAccessManager;
 
 /**
  * Class to inspect url and return the absolute path

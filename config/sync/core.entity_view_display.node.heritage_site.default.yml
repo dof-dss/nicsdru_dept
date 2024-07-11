@@ -21,7 +21,6 @@ dependencies:
     - field.field.node.heritage_site.field_phone
     - field.field.node.heritage_site.field_photo
     - field.field.node.heritage_site.field_postcode
-    - field.field.node.heritage_site.field_site_subtopics
     - field.field.node.heritage_site.field_site_topics
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
@@ -30,10 +29,10 @@ dependencies:
   module:
     - address
     - field_group
+    - google_map_field
     - link
     - metatag
     - options
-    - origins_common
     - text
     - user
 third_party_settings:
@@ -89,7 +88,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 14
+    weight: 12
     region: content
   field_address_line_1:
     type: string
@@ -119,7 +118,7 @@ content:
     label: inline
     settings: {  }
     third_party_settings: {  }
-    weight: 8
+    weight: 9
     region: content
   field_grid_reference:
     type: string
@@ -142,24 +141,18 @@ content:
     weight: 9
     region: content
   field_map_location:
-    type: gmaps_lazy_load_formatter
-    label: hidden
-    settings:
-      map_type: roadmap
-      zoom: '15'
-      placeholder: empty
-      link_text: ''
-      map_width: '600'
-      map_height: '400'
+    type: google_map_field_default
+    label: above
+    settings: {  }
     third_party_settings: {  }
-    weight: 13
+    weight: 2
     region: content
   field_metatags:
     type: metatag_empty_formatter
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 12
+    weight: 10
     region: content
   field_nismr_link:
     type: link
@@ -231,7 +224,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 9
+    weight: 10
     region: content
 hidden:
   content_moderation_control: true
@@ -239,7 +232,6 @@ hidden:
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
-  field_site_subtopics: true
   field_site_topics: true
   groups: true
   groups_type_department_site: true

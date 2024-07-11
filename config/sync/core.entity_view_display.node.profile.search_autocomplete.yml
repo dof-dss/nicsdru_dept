@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.profile.field_domain_all_affiliates
     - field.field.node.profile.field_domain_source
     - field.field.node.profile.field_metatags
+    - field.field.node.profile.field_next_audit_due
     - field.field.node.profile.field_photo
     - field.field.node.profile.field_summary
     - node.type.profile
@@ -41,6 +42,7 @@ hidden:
   field_domain_access: true
   field_domain_all_affiliates: true
   field_metatags: true
+  field_next_audit_due: true
   field_photo: true
   field_summary: true
   groups: true

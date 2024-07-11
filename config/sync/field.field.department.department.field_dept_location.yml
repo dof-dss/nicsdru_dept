@@ -1,4 +1,4 @@
-uuid: 2f4395a3-bf75-4e07-bd1b-4a6a5d79bc5d
+uuid: f57d3fe2-5106-43ca-9eb6-be390f5a3a5f
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - field.storage.department.field_dept_location
   module:
     - dept_core
-    - geolocation
+    - google_map_field
 id: department.department.field_dept_location
 field_name: field_dept_location
 entity_type: department
@@ -18,4 +18,4 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
-field_type: geolocation
+field_type: google_map_field

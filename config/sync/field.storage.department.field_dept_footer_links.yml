@@ -1,0 +1,19 @@
+uuid: dfa39668-6c3d-4a79-8030-945588d28f0f
+langcode: en
+status: true
+dependencies:
+  module:
+    - dept_core
+    - link
+id: department.field_dept_footer_links
+field_name: field_dept_footer_links
+entity_type: department
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

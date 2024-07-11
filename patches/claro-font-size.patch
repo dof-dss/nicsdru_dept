@@ -1,0 +1,17 @@
+Index: themes/claro/css/base/variables.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/themes/claro/css/base/variables.css b/themes/claro/css/base/variables.css
+--- a/themes/claro/css/base/variables.css
++++ b/themes/claro/css/base/variables.css
+@@ -98,7 +98,7 @@
+   --font-size-h5: 1.266rem; /* ~20px */
+   --font-size-h6: 1.125rem; /* 18px */
+   --font-size-s: 0.889rem; /* ~14px */
+-  --font-size-xs: 0.79rem; /* ~13px */
++  --font-size-xs: 0.889rem; /* ~13px */
+   --font-size-xxs: 0.702rem; /* ~11px */
+   --font-size-label: var(--font-size-s);
+   --font-size-description: var(--font-size-xs);

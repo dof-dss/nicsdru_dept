@@ -1,0 +1,9 @@
+name: 'Departmental sites: book'
+type: module
+description: 'Provides overrides and changes for handling book content.'
+package: 'NICS: Departmental'
+core_version_requirement: ^8 || ^9 || ^10 || ^10
+dependencies:
+  - drupal:book
+  - flag
+  - origins_toc

@@ -1,0 +1,58 @@
+/*
+ * @file
+ * Provides very specific styling for consultations / content types.
+ */
+@import '../../init';
+
+.page-node-type-consultation {
+
+  .consultation-dates {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1.5em;
+    width: 100%;
+    clear: both;
+    margin: 1em 0 1.5em;
+    padding: 1em;
+    font-size: inherit;
+    background-color: var(--brand-primary-color-high-contrast-white);
+    color: #fff;
+
+    p {
+      flex: auto 1 1;
+      margin: 0;
+      color: inherit;
+      @include responsive-typo-map($smallish-text);
+
+      .label {
+        display: block;
+        color: inherit;
+        font-weight: bold;
+        @include responsive-typo-map($medium-text);
+        margin-bottom: var(--rhythm-spacing-xs);
+      }
+    }
+  }
+
+  .consultation-respond {
+
+    .field {
+      display: flex;
+      align-items: baseline;
+      gap: 1em;
+      margin: 1em 0;
+
+      &__label {
+        flex: auto 0 1;
+      }
+
+      address {
+        margin: 0;
+      }
+    }
+
+    &:has(.field--name-field-postal) .field__label {
+      flex: 6.5em 0 1;
+    }
+  }
+}

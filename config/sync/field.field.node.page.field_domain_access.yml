@@ -5,6 +5,12 @@ dependencies:
   config:
     - field.storage.node.field_domain_access
     - node.type.page
+  module:
+    - domain_entity
+third_party_settings:
+  domain_entity:
+    domains: {  }
+    behavior: auto
 id: node.page.field_domain_access
 field_name: field_domain_access
 entity_type: node

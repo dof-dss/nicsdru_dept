@@ -99,7 +99,7 @@ class PostMigrationFileImportTidy implements EventSubscriberInterface {
       // Find all records in file_managed with NULL filename.
       $results = $this->dbconn->query("SELECT f.*, m.*
         FROM {file_managed} f
-        JOIN {migrate_map_${event_id}} m ON m.destid1 = f.fid
+        JOIN {migrate_map_$event_id} m ON m.destid1 = f.fid
         WHERE f.filename IS NULL")->fetchAll();
 
       foreach ($results as $row) {

@@ -7,10 +7,6 @@ DRUPAL_SERVICES_FILE=$DRUPAL_ROOT/sites/default/services.yml
 DRUPAL_CUSTOM_CODE=$DRUPAL_ROOT/modules/custom
 DRUPAL_CUSTOM_THEME=$DRUPAL_ROOT/themes/custom/nicsdru_dept_theme
 
-# Semaphore files to control whether we need to trigger an install
-# of supporting software or config files.
-NODE_INSTALLED=/etc/NODE_INSTALLED
-
 # Create export directories for config and data.
 if [ ! -d "/app/.lando/exports" ]; then
   echo "Creating export directories"
@@ -58,33 +54,4 @@ if [ ! -f "${DRUPAL_ROOT}/core/phpunit.xml" ]; then
   sed -i -e "s|<!-- <env name=\"SYMFONY_DEPRECATIONS_HELPER\" value=\"disabled\"/> -->|<env name=\"SYMFONY_DEPRECATIONS_HELPER\" value=\"disabled\"/>|g" $DRUPAL_ROOT/core/phpunit.xml
   # Set the base URL for kernel tests.
   sed -i -e "s|name=\"SIMPLETEST_BASE_URL\" value=\"\"|name=\"SIMPLETEST_BASE_URL\" value=\"http:\/\/${LANDO_APP_NAME}.${LANDO_DOMAIN}\"|g" $DRUPAL_ROOT/core/phpunit.xml
-fi
-
-# Add yarn/nodejs packages to allow functional testing on this service.
-if [ ! -f "${NODE_INSTALLED}" ]; then
-  apt update
-  # Add and fetch node 14 plus related OS packages to support it.
-  curl -sL https://deb.nodesource.com/setup_14.x | bash -
-  apt install -y nodejs gcc g++ make
-
-  # Fetch and install node packages if they're not already present.
-  if [ ! -d "${DRUPAL_ROOT}/core/node_modules" ]; then
-    cd $DRUPAL_ROOT/core
-    npm install
-  fi
-
-  # Install any known extra npm packges.
-#  if [ ! -d "${DRUPAL_CUSTOM_CODE}/node_modules" ]; then
-#    cd $DRUPAL_CUSTOM_CODE
-#    npm install
-#  fi
-
-  # Install any known extra npm packges.
-  if [ ! -d "${DRUPAL_CUSTOM_THEME}/node_modules" ]; then
-    cd $DRUPAL_CUSTOM_THEME
-    npm install
-  fi
-
-  touch $NODE_INSTALLED
-
 fi

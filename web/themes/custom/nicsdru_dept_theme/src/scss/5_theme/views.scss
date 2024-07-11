@@ -1,0 +1,47 @@
+/*
+ * @file
+ * Provides very specific styling for view pages and blocks.
+ */
+@import '../init';
+
+// News
+//
+// For the list of older news items
+//
+// Weight: 0
+//
+// Style guide: theme.views.news
+.hr-above {
+  border-top: 5px solid $brand-secondary;
+  margin-top: 1.8rem;
+  padding-top: 1.6rem;
+}
+
+.older-news {
+  .card__meta {
+    color: $meta;
+    display: block;
+    margin-bottom: 0;
+  }
+}
+
+.path-unlawfully-at-large {
+  .ual.card-deck {
+    header {
+      grid-column: 1 / -1;
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+    }
+
+    .media-image {
+      margin: .5em 0;
+
+      img {
+        max-width: 180px;
+        width: unset;
+      }
+    }
+  }
+}

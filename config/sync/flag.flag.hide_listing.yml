@@ -7,12 +7,11 @@ dependencies:
 id: hide_listing
 label: 'Hide listing'
 bundles:
-  - subtopic
   - topic
 entity_type: node
 global: true
-flag_short: 'Hide listing'
-flag_long: 'Check this box to hide the listing of content and subtopics'
+flag_short: 'Hide topic'
+flag_long: 'Select this option to prevent this topic being listed on parent topic pages and on the home page.'
 flag_message: ''
 unflag_short: 'Show listing'
 unflag_long: 'Check this box to show the listing of content and subtopics'

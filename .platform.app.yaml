@@ -7,13 +7,15 @@
 name: 'dept'
 
 # The runtime the application uses.
-type: 'php:8.1'
+type: 'php:8.2'
 
 variables:
   php:
-    memory_limit: "256M"
-    xdebug.mode: "debug"
-
+    memory_limit: "128M"
+#    xdebug.mode: "debug"
+    display_startup_errors: "off"
+    date.timezone: "Europe/Dublin"
+    realpath_cache_ttl: 3600
 dependencies:
   php:
     composer/composer: '^2'
@@ -23,8 +25,9 @@ runtime:
   extensions:
     - apcu
     - redis
-  xdebug:
-    idekey: PHPSTORM
+    - blackfire
+#  xdebug:
+#    idekey: PHPSTORM
 
 # The relationships of the application with services or other applications.
 #
@@ -32,14 +35,14 @@ runtime:
 # to the application in the PLATFORM_RELATIONSHIPS variable. The right-hand
 # side is in the form `:`.
 relationships:
-  solr: 'solr:solr'
+  solr: 'solr_8_11:solr'
   redis: "redis:redis"
   #  For MariaDB, the endpoint does not change whether you used the mysql or mariadb service type.
   database: 'db:dept'
   drupal7db: 'drupal7db:admin'
 
 # The size of the persistent disk of the application (in MB).
-disk: 99000
+disk: 106000
 
 # The 'mounts' describe writable, persistent filesystem mounts in the application.
 mounts:
@@ -55,6 +58,9 @@ mounts:
   '/imports':
     source: local
     source_path: 'imports'
+  '/log':
+    source: local
+    source_path: 'log'
   '/.drush':
     source: local
     source_path: 'drush'
@@ -80,6 +86,8 @@ hooks:
     rm -rf ckeditor4-fix-widget-dnd
     echo ">>> Install Platform CLI tool"
     curl -fsSL https://raw.githubusercontent.com/platformsh/cli/main/installer.sh | bash
+    echo "Update robots.txt with customisations"
+    cp -f robots_custom.txt web/robots.txt
   # The deploy hook runs after your application has been deployed and started.
   deploy: |
     set -e
@@ -98,11 +106,20 @@ hooks:
 
     cd /app/web
 
-    echo "$QA_USERNAMES" | tr ',' '\n' | while read username; do
+    if [[ $QA_USERNAMES ]]; then
+      echo "$QA_USERNAMES" | tr ',' '\n' | while read username; do
+
       echo $item
       ../vendor/bin/drush ucrt $username --password=$QA_PASSWORD
       ../vendor/bin/drush urol administrator $username
-    done
+      done
+    fi
+
+    echo "***** Reset QA Account passwords ******"
+
+    cd /app/web
+
+    ../vendor/bin/drush password_qa_accounts
 
 # The configuration of app when it is exposed to the web.
 web:
@@ -183,3 +200,8 @@ crons:
   sync_files:
     spec: '30 0 * * *'
     cmd: 'migrate-scripts/sync-private-files.sh $D7_PROJECT_ID $D7_PROJECT_ENV'
+  logging:
+    spec: '*/5 * * * *'
+    commands:
+      start: '/bin/bash /app/cronjob.sh'
+    shutdown_timeout: 290

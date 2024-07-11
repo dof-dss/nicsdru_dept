@@ -1,0 +1,52 @@
+uuid: a1603e95-1682-4149-8a8f-a0f3a9d398bf
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_visibility_groups
+    - domain
+    - system
+id: health_ni
+label: 'Department of Health'
+weight: 0
+tag_container_ids:
+  - GTM-PT94H44
+advanced_settings:
+  gtm:
+    GTM-PT94H44:
+      data_layer: dataLayer
+      include_environment: false
+dimensions_metrics: {  }
+conditions:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: true
+    pages: "/admin*\r\n/batch*\r\n/node/add*\r\n/node/*/edit\r\n/node/*/delete\r\n/user/*/edit*\r\n/user/*/cancel*"
+  response_code:
+    id: response_code
+    negate: true
+    response_codes: |-
+      403
+      404
+  domain:
+    id: domain
+    negate: false
+    context_mapping:
+      domain: '@domain.current_domain_context:domain'
+    domains:
+      health: health
+events:
+  search: {  }
+  custom: {  }
+  login:
+    method: CMS
+  webform_purchase: {  }
+  sign_up:
+    method: CMS
+  generate_lead:
+    value: ''
+    currency: ''

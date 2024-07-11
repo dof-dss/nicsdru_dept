@@ -13,7 +13,7 @@ field_name: field_accordion_sections
 entity_type: block_content
 bundle: accordion_menu
 label: 'Accordion sections'
-description: 'Add accordion sections.'
+description: 'An accordion menu usually contains multiple accordion sections.  Select <b>Add Accordion section</b> below to add additional sections.'
 required: true
 translatable: false
 default_value: {  }
@@ -28,4 +28,7 @@ settings:
       accordion_section:
         weight: 2
         enabled: true
+      card_plain:
+        weight: 4
+        enabled: false
 field_type: entity_reference_revisions

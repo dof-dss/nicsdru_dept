@@ -7,7 +7,9 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\RevisionableContentEntityBase;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\dept_core\Annotations\DepartmentField;
 use Drupal\dept_core\DepartmentInterface;
+use Drupal\domain\Entity\Domain;
 use Drupal\user\EntityOwnerTrait;
 
 /**
@@ -71,9 +73,9 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   /**
    * Domain for the department.
    *
-   * @var array
+   * @var \Drupal\domain\Entity\Domain
    */
-  protected array $domain;
+  protected Domain $domain;
 
   /**
    * Hostnames for the department.
@@ -306,6 +308,8 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Management and Structure details.
+   *
+   * @DepartmentField(label="Management and structure")
    */
   public function managementAndStructure() {
     return $this->get('field_dept_management_structure')->view();
@@ -313,6 +317,8 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Access to information details.
+   *
+   * @DepartmentField(label="Access to information")
    */
   public function accessToInformation() {
     return $this->get('field_dept_access_to_info')->view();
@@ -320,6 +326,8 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Contact Information details.
+   *
+   * @DepartmentField(label="Contact information")
    */
   public function contactInformation() {
     return $this->get('field_dept_contact_info')->view();
@@ -327,6 +335,8 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Social media links.
+   *
+   * @DepartmentField(label="Social media links")
    */
   public function socialMediaLinks() {
     return $this->get('field_dept_social_media_links')->view();
@@ -334,6 +344,8 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Point of contact map location.
+   *
+   * @DepartmentField(label="Location (map)")
    */
   public function location() {
     return $this->get('field_dept_location')->view();
@@ -341,10 +353,20 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Accessibility statement.
+   *
+   * @DepartmentField(label="Accessibility statement")
    */
   public function accessibilityStatement() {
     return (empty($this->get('field_dept_accessibility')->referencedEntities())) ? NULL : $this->get('field_dept_accessibility')->referencedEntities()[0];
+  }
 
+  /**
+   * Page footer links.
+   *
+   * @DepartmentField(label="Page footer links")
+   */
+  public function footerLinks() {
+    return $this->get('field_dept_footer_links')->view();
   }
 
 }

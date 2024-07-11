@@ -22,7 +22,6 @@ dependencies:
     - field.field.node.heritage_site.field_phone
     - field.field.node.heritage_site.field_photo
     - field.field.node.heritage_site.field_postcode
-    - field.field.node.heritage_site.field_site_subtopics
     - field.field.node.heritage_site.field_site_topics
     - field.field.node.heritage_site.field_sm_number
     - field.field.node.heritage_site.field_town
@@ -70,7 +69,6 @@ hidden:
   field_phone: true
   field_photo: true
   field_postcode: true
-  field_site_subtopics: true
   field_site_topics: true
   field_sm_number: true
   field_town: true

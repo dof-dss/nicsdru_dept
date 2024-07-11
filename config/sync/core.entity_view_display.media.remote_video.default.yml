@@ -3,9 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.remote_video.field_domain_access
+    - field.field.media.remote_video.field_domain_source
     - field.field.media.remote_video.field_media_oembed_video
+    - field.field.media.remote_video.field_media_video_file
     - media.type.remote_video
   module:
+    - file
     - media
 _core:
   default_config_hash: gUaDZKMQD3lmLKWPn727X3JHVdKJ525g4EJCCcDVAqk
@@ -14,12 +18,44 @@ targetEntityType: media
 bundle: remote_video
 mode: default
 content:
+  field_domain_access:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_domain_source:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
   field_media_oembed_video:
     type: oembed
     label: hidden
     settings:
       max_width: 0
       max_height: 0
+      loading:
+        attribute: eager
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_media_video_file:
+    type: file_video
+    label: visually_hidden
+    settings:
+      controls: true
+      autoplay: false
+      loop: false
+      multiple_file_display_type: tags
+      muted: false
+      width: 640
+      height: 480
     third_party_settings: {  }
     weight: 0
     region: content

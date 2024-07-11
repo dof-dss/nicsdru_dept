@@ -7,10 +7,12 @@ label: development
 description: 'Development environment split'
 weight: 0
 stackable: false
+no_patching: false
 storage: folder
 folder: ../config/development
 module:
   permissions_filter: 0
+  dept_dev: 0
 theme: {  }
 complete_list: {  }
 partial_list:

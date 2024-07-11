@@ -1,0 +1,14 @@
+uuid: c89e8551-951e-45dd-bd01-426d7c04790d
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.topic_layout_supervisor
+  module:
+    - user
+id: user_add_role_action.topic_layout_supervisor
+label: 'Add the Topic layout supervisor role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: topic_layout_supervisor

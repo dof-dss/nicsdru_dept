@@ -1,0 +1,124 @@
+uuid: 0d2c60a8-df5e-4547-9e89-e5e23e18aabf
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.diff
+    - field.field.node.ual.field_age
+    - field.field.node.ual.field_description
+    - field.field.node.ual.field_distinguishing_marks
+    - field.field.node.ual.field_domain_access
+    - field.field.node.ual.field_domain_all_affiliates
+    - field.field.node.ual.field_domain_source
+    - field.field.node.ual.field_eye_colour
+    - field.field.node.ual.field_hair_colour
+    - field.field.node.ual.field_offence
+    - field.field.node.ual.field_photo
+    - field.field.node.ual.field_prison
+    - field.field.node.ual.field_release_type
+    - field.field.node.ual.field_ual_from
+    - node.type.ual
+  module:
+    - datetime
+    - layout_builder
+    - options
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.ual.diff
+targetEntityType: node
+bundle: ual
+mode: diff
+content:
+  field_age:
+    type: number_integer
+    label: inline
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_description:
+    type: basic_string
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_distinguishing_marks:
+    type: basic_string
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_eye_colour:
+    type: string
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_hair_colour:
+    type: string
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_offence:
+    type: basic_string
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_photo:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: article_float
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_prison:
+    type: list_default
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_release_type:
+    type: string
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  field_ual_from:
+    type: datetime_default
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: medium_date
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  content_moderation_control: true
+  entitygroupfield: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
+  groups: true
+  groups_type_department_site: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

@@ -10,7 +10,7 @@ dependencies:
     - field.field.node.article.field_domain_source
     - field.field.node.article.field_global_topics
     - field.field.node.article.field_metatags
-    - field.field.node.article.field_site_subtopics
+    - field.field.node.article.field_next_audit_due
     - field.field.node.article.field_site_topics
     - field.field.node.article.field_summary
     - node.type.article
@@ -67,22 +67,6 @@ content:
     third_party_settings: {  }
     weight: 5
     region: content
-  field_site_subtopics:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 7
-    region: content
-  field_site_topics:
-    type: entity_reference_label
-    label: inline
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 6
-    region: content
   field_summary:
     type: text_default
     label: hidden
@@ -102,6 +86,8 @@ hidden:
   field_domain_all_affiliates: true
   field_domain_source: true
   field_metatags: true
+  field_next_audit_due: true
+  field_site_topics: true
   groups: true
   groups_type_department_site: true
   langcode: true

@@ -16,7 +16,6 @@ dependencies:
     - field.field.node.publication.field_publication_secure_files
     - field.field.node.publication.field_publication_type
     - field.field.node.publication.field_published_date
-    - field.field.node.publication.field_site_subtopics
     - field.field.node.publication.field_site_topics
     - field.field.node.publication.field_summary
     - node.type.publication
@@ -24,6 +23,7 @@ dependencies:
     - datetime
     - layout_builder
     - link
+    - smart_trim
     - text
     - user
 third_party_settings:
@@ -40,7 +40,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
   field_external_publication:
     type: link
@@ -52,7 +52,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 4
+    weight: 5
     region: content
   field_last_updated:
     type: datetime_default
@@ -61,7 +61,7 @@ content:
       timezone_override: ''
       format_type: medium_date
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
   field_publication_files:
     type: entity_reference_entity_view
@@ -70,7 +70,7 @@ content:
       view_mode: embed
       link: false
     third_party_settings: {  }
-    weight: 5
+    weight: 6
     region: content
   field_publication_secure_files:
     type: entity_reference_entity_view
@@ -79,7 +79,7 @@ content:
       view_mode: embed
       link: false
     third_party_settings: {  }
-    weight: 6
+    weight: 7
     region: content
   field_published_date:
     type: datetime_default
@@ -88,14 +88,36 @@ content:
       timezone_override: ''
       format_type: medium_date
     third_party_settings: {  }
+    weight: 1
+    region: content
+  field_site_topics:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
     weight: 0
     region: content
   field_summary:
-    type: text_default
+    type: smart_trim
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 600
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
 hidden:
   content_moderation_control: true
@@ -106,8 +128,6 @@ hidden:
   field_global_topics: true
   field_metatags: true
   field_publication_type: true
-  field_site_subtopics: true
-  field_site_topics: true
   groups: true
   langcode: true
   links: true
