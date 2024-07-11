@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Favicon related html for head section.
+ *
+ * Variables:
+ * - site_dept_id: the department id e.g. 'finance'
+ *
+ * @see template_preprocess_html()
+ */
+#}
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="{{ '/' ~ active_theme_path() ~ '/images/favicons/favicon-' ~ site_dept_id ~ '.svg' }}">
+<link rel="mask-icon" href="{{ '/' ~ active_theme_path() ~ '/images/favicons/mask-icon.svg' }}" color="#000000">
+<link rel="apple-touch-icon" href="{{ '/' ~ active_theme_path() ~ '/images/favicons/apple-touch-icon-' ~ site_dept_id ~ '.png' }}">
