@@ -195,7 +195,8 @@ class Node extends FieldableEntity {
 
     // Determine if the News node is a 'Press release'.
     if ($type === 'news') {
-      if ($row->getSourceProperty('field_news_type')[0]['value'] === 'pressrelease') {
+      $type_value = $row->getSourceProperty('field_news_type');
+      if (isset($type_value[0]) && $row->getSourceProperty('field_news_type')[0]['value'] === 'pressrelease') {
         $is_press_release = TRUE;
       }
       elseif ($has_nigov_entry) {
