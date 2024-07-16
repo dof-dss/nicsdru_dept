@@ -282,7 +282,8 @@
                 "Avoid error when $options is NULL in buildUrl()": "https://www.drupal.org/files/issues/2022-10-03/2871217-68_0.patch",
                 "Increase claro xs font size": "patches/claro-font-size.patch",
                 "TypeError when adding book page": "https://www.drupal.org/files/issues/2023-10-02/book_typeerror-3391035-1.patch",
-                "Force expiration of node cache tag when book outline changes": "https://gist.githubusercontent.com/johangant/8b97bf93525475ee89d8be246a418777/raw/145c727d1df7403ce38819437bc46989e1a85a2b/expire-book-node-cache-key-on-change.patch"
+                "Force expiration of node cache tag when book outline changes": "https://gist.githubusercontent.com/johangant/8b97bf93525475ee89d8be246a418777/raw/145c727d1df7403ce38819437bc46989e1a85a2b/expire-book-node-cache-key-on-change.patch",
+                "Stubs should only be created if the referenced source row actually exists": "https://www.drupal.org/files/issues/2024-01-04/core-create_stub_only_when_matching_source_row_exists-3156730-57--10.2.x.patch"
             },
             "drupal/devel": {
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://raw.githubusercontent.com/politsin/snipets/master/patch/kint.patch"
