@@ -19,13 +19,15 @@ use Drupal\node\Entity\Node;
  * Implements hook_preprocess_html().
  */
 function nicsdru_dept_theme_preprocess_html(array &$variables) {
-  // Set body classes for specific departments.
+  // Set department specific variables.
   $dept = \Drupal::service('department.manager')->getCurrentDepartment();
   if (is_object($dept) && method_exists($dept, 'id')) {
     $variables['attributes']['class'][] = 'dept-' . $dept->id();
+    $variables['site_dept_id'] = $dept->id();
   }
   else {
     $variables['attributes']['class'][] = 'dept-admin';
+    $variables['site_dept_id'] = 'nigov';
   }
 }
 
