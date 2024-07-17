@@ -273,3 +273,34 @@
     }
   }
 }
+
+.page-node-type-protected-area {
+  .page-summary {
+    @include responsive-typo-map($normal-text);
+    display: table;
+
+    .row {
+      display: table-row;
+
+      .field__label,
+      .field__item,
+      .field__items {
+        display: table-cell;
+      }
+
+      .field__label {
+        font-weight: bold;
+        padding-right: 1em;
+      }
+
+      .field__items {
+        padding-left: 0;
+
+        .field__item {
+          display: inline;
+        }
+      }
+
+    }
+  }
+}
