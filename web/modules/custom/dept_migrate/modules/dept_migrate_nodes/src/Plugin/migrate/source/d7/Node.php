@@ -220,7 +220,7 @@ class Node extends FieldableEntity {
 
     // If we have no access records, assign it to nigov.
     if (empty($domain_access_ids)) {
-      $domain_access_ids = ['target_id' => 'nigov'];
+      $domain_access_ids[] = ['target_id' => 'nigov'];
     }
 
     $row->setSourceProperty('domain_access_node', $domain_access_ids);
