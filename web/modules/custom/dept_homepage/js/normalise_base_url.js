@@ -9,15 +9,14 @@
 
   Drupal.behaviors.normaliseBaseUrl = {
     attach: function (context, settings) {
-      $('#toolbar-administration a[href^="http"]:not(#toolbar-item-sites-tray a)').each(function (index, linkElement) {
+      $('a[href^="http"]:not(#toolbar-item-sites-tray a)').each(function (index, linkElement) {
         let href = $(linkElement).attr('href');
-        const currentDeptUrl = $(location).attr('origin');
         const currentDeptHostname = $(location).attr('host');
 
         // Absolute link, check if it matches our dept hostname.
         if (href.indexOf(currentDeptHostname) < 0) {
           // Not found/different, so adjust the hostname to the current dept.
-          href = href.replace(href, currentDeptUrl);
+          href = href.replace(href, currentDeptHostname);
           $(linkElement).attr('href', href);
         }
       });
