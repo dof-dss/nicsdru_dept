@@ -42,7 +42,7 @@ relationships:
   drupal7db: 'drupal7db:admin'
 
 # The size of the persistent disk of the application (in MB).
-disk: 106000
+disk: 108048
 
 # The 'mounts' describe writable, persistent filesystem mounts in the application.
 mounts:
@@ -106,11 +106,14 @@ hooks:
 
     cd /app/web
 
-    echo "$QA_USERNAMES" | tr ',' '\n' | while read username; do
+    if [[ $QA_USERNAMES ]]; then
+      echo "$QA_USERNAMES" | tr ',' '\n' | while read username; do
+
       echo $item
       ../vendor/bin/drush ucrt $username --password=$QA_PASSWORD
       ../vendor/bin/drush urol administrator $username
-    done
+      done
+    fi
 
     echo "***** Reset QA Account passwords ******"
 

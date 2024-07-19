@@ -19,13 +19,15 @@ use Drupal\node\Entity\Node;
  * Implements hook_preprocess_html().
  */
 function nicsdru_dept_theme_preprocess_html(array &$variables) {
-  // Set body classes for specific departments.
+  // Set department specific variables.
   $dept = \Drupal::service('department.manager')->getCurrentDepartment();
   if (is_object($dept) && method_exists($dept, 'id')) {
     $variables['attributes']['class'][] = 'dept-' . $dept->id();
+    $variables['site_dept_id'] = $dept->id();
   }
   else {
     $variables['attributes']['class'][] = 'dept-admin';
+    $variables['site_dept_id'] = 'nigov';
   }
 }
 
@@ -44,6 +46,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
         case "article":
         case "news":
         case "page":
+        case "protected_area":
           // If page is not in a book, it has a main and aside.
           if (empty($node->book)) {
             $variables['main_content_attr']->addClass(LayoutClasses::MAIN_SIDE);
@@ -54,7 +57,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
             $variables['main_content_attr']->addClass(LayoutClasses::MAIN_LIMITED);
             unset($variables['page']['sidebar_second']);
           }
-          break;
+        break;
 
         // Specific node types have a main only.
         case "ual":
@@ -189,6 +192,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
         case 'article':
         case 'news':
         case 'page':
+        case "protected_area":
           if ($node_type === 'news') {
             // Render Featured and Latest news block.
             $variables['page']['sidebar_second'][] = Helpers::blockContent('featurednews');
@@ -207,6 +211,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
         case "application":
         case "news":
         case "page":
+        case "protected_area":
           $variables['main_content_attr']->addClass(LayoutClasses::MAIN_SIDE);
           $variables['sidebar_second_attr']->addClass('ga-aside');
           break;
@@ -275,6 +280,7 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
     case "news":
     case "publication":
     case "subtopic":
+    case "protected_area":
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('ga-main');
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('article-content');
 

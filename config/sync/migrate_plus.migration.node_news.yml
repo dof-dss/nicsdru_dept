@@ -106,7 +106,10 @@ process:
       plugin: callback
       callable: html_entity_decode
   field_notes_to_editors: field_notes_to_editors
-  field_notes_to_editors/0/format: basic_html
+  field_notes_to_editors/0/format:
+    -
+      plugin: default_value
+      default_value: basic_html
   field_teaser: field_teaser
   field_photo:
     -
