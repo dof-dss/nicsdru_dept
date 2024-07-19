@@ -14,6 +14,7 @@ use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
+use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -282,13 +283,25 @@ function dept_publications_preprocess_media(&$variables) {
 
     // Fetch metadata about the file.
     $http_client = \Drupal::httpClient();
-    $file_headers = $http_client->request('HEAD', $file_url)->getHeaders();
 
+    $file_headers = [];
     // Initialize metadata variables.
     $file_size = 0;
     $file_mimetype = '';
     $file_extension = '';
     $file_type = '';
+
+    try {
+      $file_headers = $http_client->request('HEAD', $file_url)->getHeaders();
+    }
+    catch (GuzzleRequestException $reqex) {
+      $message = t('Could not retrieve headers from :file_url', [':file_url' => $file_url]);
+      if (\Drupal::currentUser()->isAuthenticated()) {
+        \Drupal::messenger()->addWarning($message);
+      }
+
+      \Drupal::logger('warning')->warning($message);
+    }
 
     if ($file_headers) {
       // Get file size if available.
