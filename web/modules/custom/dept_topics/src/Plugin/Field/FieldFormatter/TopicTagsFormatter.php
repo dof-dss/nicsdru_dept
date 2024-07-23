@@ -2,12 +2,8 @@
 
 namespace Drupal\dept_topics\Plugin\Field\FieldFormatter;
 
-use Drupal\Core\Entity\ContentEntityTypeInterface;
-use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 
@@ -30,25 +26,33 @@ class TopicTagsFormatter extends FormatterBase {
   public function viewElements(FieldItemListInterface $items, $langcode) {
 
     $element = [];
-    $nodes = [];
+    $parent_topics = [];
+    $sub_topics = [];
     $topic_manager = \Drupal::service('topic.manager');
     $entities = $items->referencedEntities();
 
     foreach ($entities as $entity) {
       if ($entity->bundle() === 'topic') {
-        $nodes[] = $entity;
+        $parent_topics[] = $entity;
       }
       elseif ($entity->bundle() === 'subtopic') {
-        $nodes[] = $entity;
+        $sub_topics[] = $entity;
         $parents = $topic_manager->getParentNodes($entity);
 
         foreach ($parents as $parent) {
           if ($parent->type === 'topic') {
-            $nodes[] = Node::load($parent->nid);
+            $parent_topics[] = Node::load($parent->nid);
           }
         }
       }
     }
+
+    // Reverse to display top level topics first.
+    if (!empty($parent_topics)) {
+      $parent_topics = array_reverse($parent_topics);
+    }
+
+    $nodes = array_merge(array_reverse($sub_topics), $parent_topics);
 
     foreach ($nodes as $node) {
       $element[$node->id()] = [
