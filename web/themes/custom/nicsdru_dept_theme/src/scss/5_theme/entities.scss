@@ -277,30 +277,46 @@
 .page-node-type-protected-area {
   .page-summary {
     @include responsive-typo-map($normal-text);
-    display: table;
+
+    @include breakpoint($phone) {
+      display: table;
+    }
 
     .row {
-      display: table-row;
+      margin-bottom: 1em;
 
-      .field__label,
-      .field__item,
-      .field__items {
-        display: table-cell;
+      @include breakpoint($phone) {
+        display: table-row;
       }
 
-      .field__label {
-        font-weight: bold;
-        padding-right: 1em;
-      }
+      .field {
+        &__label,
+        &__item,
+        &__items {
+          display: block;
 
-      .field__items {
-        padding-left: 0;
+          @include breakpoint($phone) {
+            display: table-cell;
+          }
+        }
 
-        .field__item {
-          display: inline;
+        &__label {
+          font-weight: bold;
+
+          @include breakpoint($phone) {
+            padding-right: 1em;
+          }
+        }
+
+        &__items {
+          padding-left: 0;
+          margin: 0;
+
+          .field__item {
+            display: inline;
+          }
         }
       }
-
     }
   }
 }
