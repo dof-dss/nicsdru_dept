@@ -179,10 +179,11 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
     case 'entity.node.revision':
     case 'entity.node.latest':
       $node_id = \Drupal::routeMatch()->getRawParameter('node');
-      $node = Node::load($node_id);
 
-      if ($node === NULL) {
+      if ($node_id === NULL) {
         $node = \Drupal::routeMatch()->getParameter('node_preview');
+      } else {
+        $node = Node::load($node_id);
       }
 
       $node_type = $node->getType();
@@ -342,7 +343,7 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
     $book = $node->book;
     $pid = $book['pid'];
 
-    if ($pid) {
+    if ($pid && $pid != -1) {
       $parent_node = Node::load($pid);
       $parent_title = $parent_node->getTitle();
       $variables['book_parent_title'] = $parent_title;
