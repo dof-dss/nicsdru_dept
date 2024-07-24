@@ -7,9 +7,10 @@ dept_migrate_audit.upload_form:
     _permission: 'upload migration audit data'
 
 dept_migrate_audit.results:
-  path: '/admin/dept/mdash/audit/results'
+  path: '/admin/dept/mdash/audit/results/{type}'
   defaults:
     _controller: '\Drupal\dept_migrate_audit\Controller\AuditController::showResults'
     _title: 'Migration audit report'
+    type: article
   requirements:
     _permission: 'view migration audit report'

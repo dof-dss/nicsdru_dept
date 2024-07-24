@@ -5,6 +5,8 @@ namespace Drupal\dept_migrate_audit\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AuditController extends ControllerBase {
@@ -34,13 +36,21 @@ class AuditController extends ControllerBase {
   /**
    * Show audit report.
    *
+   * @param string $type
+   *   Content type required. Defaults to 'article'.
    * @param int $page
    *   Pager page number.
    *
    * @return array
    *   Render array.
    */
-  public function showResults(int $page = 0) {
+  public function showResults(string $type, int $page = 0) {
+    if (empty($type)) {
+      return [
+        '#markup' => '<div>' . $this->t('No results found. Specify a type in the URL path, eg: article') . '</div>',
+      ];
+    }
+
     $header = [
       ['data' => $this->t('D10 Node ID'), 'field' => 'nid'],
       ['data' => $this->t('D7 Node ID'), 'field' => 'd7nid'],
@@ -51,8 +61,7 @@ class AuditController extends ControllerBase {
       ['data' => $this->t('Created'), 'field' => 'created'],
     ];
 
-    // TODO: vary by type somehow.
-    $map_table = 'migrate_map_node_article';
+    $map_table = 'migrate_map_node_' . $type;
 
     $subquery = $this->database->select('dept_migrate_audit', 'dma');
     $subquery->fields('dma', ['uuid']);
@@ -73,9 +82,17 @@ class AuditController extends ControllerBase {
 
     $rows = [];
     foreach ($results as $row) {
+      $dept_id = $row->field_domain_access_target_id;
+      if ($dept_id === 'nigov') {
+        $dept_id = 'northernireland';
+      }
+      else {
+        $dept_id .= '-ni';
+      }
+
       $rows[] = [
         'nid' => $row->nid,
-        'd7nid' => $row->sourceid2,
+        'd7nid' => Link::fromTextAndUrl($row->sourceid2, Url::fromUri('https://' . $dept_id . '.gov.uk/node/' . $row->sourceid2, ['absolute' => TRUE]))->toString(),
         'depts' => $row->field_domain_access_target_id,
         'type' => $row->type,
         'title' => $row->title,
