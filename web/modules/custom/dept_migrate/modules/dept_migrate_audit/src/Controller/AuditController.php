@@ -45,8 +45,42 @@ class AuditController extends ControllerBase {
    *   Render array.
    */
   public function showResults(string $type, int $page = 0) {
+    $top_links = [];
+    $types = [
+      'application' => 'Application',
+      'article' => 'Article',
+      'collection' => 'Collection',
+      'consultation' => 'Consultation',
+      'contact' => 'Contact',
+      'gallery' => 'Gallery',
+      'heritage_site' => 'Heritage site',
+      'link' => 'Link',
+      'news' => 'News',
+      'page' => 'Page',
+      'profile' => 'Profile',
+      'protected_area' => 'Protected area',
+      'publication' => 'Publication (including secure)',
+      'subtopic' => 'Subtopic',
+      'topic' => 'Topic',
+      'ual' => 'Unlawfully at large',
+    ];
+
+    foreach ($types as $type_id => $label) {
+      $link_element = Link::createFromRoute($label,
+        'dept_migrate_audit.results',
+        ['type' => $type_id],
+        [
+          'attributes' => [
+            'class' => ['link'],
+            'style' => 'padding: 0 5px',
+          ]
+        ])->toRenderable();
+
+      $top_links[] = $link_element;
+    }
+
     if (empty($type)) {
-      return [
+      return $top_links + [
         '#markup' => '<div>' . $this->t('No results found. Specify a type in the URL path, eg: article') . '</div>',
       ];
     }
@@ -75,11 +109,16 @@ class AuditController extends ControllerBase {
     $query->condition('map.sourceid1', $subquery, 'NOT IN');
     $query->orderBy('nfd.created', 'DESC');
 
+    $num_rows = $query->countQuery()->execute()->fetchField();
+
     $pager = $query
       ->extend('Drupal\Core\Database\Query\PagerSelectExtender')
       ->limit(50);
 
     $results = $pager->execute()->fetchAll();
+
+    // Get total count and last import timestamp.
+    $last_import_time = $this->database->query("SELECT last_import FROM {dept_migrate_audit} ORDER BY last_import DESC LIMIT 1")->fetchField();
 
     $rows = [];
     foreach ($results as $row) {
@@ -92,17 +131,36 @@ class AuditController extends ControllerBase {
       }
 
       $rows[] = [
-        'nid' => $row->nid,
+        'nid' => Link::fromTextAndUrl($row->nid, Url::fromRoute('entity.node.canonical', ['node' => $row->nid])),
         'd7nid' => Link::fromTextAndUrl($row->sourceid2, Url::fromUri('https://' . $dept_id . '.gov.uk/node/' . $row->sourceid2, ['absolute' => TRUE]))->toString(),
         'depts' => $row->field_domain_access_target_id,
         'type' => $row->type,
         'title' => $row->title,
-        'status' => $row->status,
+        'status' => ($row->status == 1) ? $this->t('Published') : $this->t('Not published'),
         'created' => \Drupal::service('date.formatter')->format($row->created),
       ];
     }
 
-    $build = [
+    $build = [];
+
+    $build[] = $top_links;
+
+    $build[] = [
+      '#markup' => $this->t('<h3>:numrows results. </h3>', [
+        ':numrows' => $num_rows,
+      ]),
+    ];
+
+    $build[] = [
+      '#markup' => $this->t("<p>NB: Content shared across department
+          sites will appear more than once in the table.
+          <strong>Last audit data imported on :importtime</strong></p>", [
+            ':importtime' => \Drupal::service('date.formatter')
+              ->format($last_import_time, 'medium'),
+          ]),
+    ];
+
+    $build[] = [
       'table' => [
         '#type' => 'table',
         '#header' => $header,
