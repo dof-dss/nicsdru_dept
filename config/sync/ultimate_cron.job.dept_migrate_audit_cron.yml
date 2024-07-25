@@ -1,0 +1,29 @@
+uuid: 3576f503-5f0b-4b2c-a32d-b45dc974d48d
+langcode: en
+status: true
+dependencies:
+  module:
+    - dept_migrate_audit
+title: 'Default cron handler'
+id: dept_migrate_audit_cron
+weight: 0
+module: dept_migrate_audit
+callback: dept_migrate_audit_cron
+scheduler:
+  id: simple
+  configuration:
+    rules:
+      - '0+@ */3 * * *'
+launcher:
+  id: serial
+  configuration:
+    timeouts:
+      lock_timeout: 3600
+    launcher:
+      thread: 0
+logger:
+  id: database
+  configuration:
+    method: '3'
+    expire: 1209600
+    retain: 1000
