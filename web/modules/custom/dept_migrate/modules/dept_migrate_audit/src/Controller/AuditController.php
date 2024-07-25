@@ -103,14 +103,35 @@ class AuditController extends ControllerBase {
       ['data' => $this->t('Depts')],
       ['data' => $this->t('Type')],
       ['data' => $this->t('Title')],
-      ['data' => $this->t('Published')],
+      ['data' => $this->t('D10 Publish status')],
       ['data' => $this->t('Created')],
+    ];
+
+    // D7 to D10 content type map.
+    $type_map = [
+      'application' => 'application',
+      'article' => ['article', 'page'],
+      'collection' => 'collection',
+      'consultation' => 'consultation',
+      'contact' => 'contact',
+      'gallery' => 'gallery',
+      'heritage_site' => 'heritage_site',
+      'link' => 'link',
+      'news' => ['news', 'press_release'],
+      'page' => 'page',
+      'profile' => 'profile',
+      'protected_area' => 'protected_area',
+      'publication' => ['publication', 'secure_publication'],
+      'subtopic' => 'subtopic',
+      'topic' => ['topic', 'landing_page'],
+      'ual' => 'ual',
     ];
 
     $map_table = 'migrate_map_node_' . $type;
 
     $subquery = $this->database->select('dept_migrate_audit', 'dma');
     $subquery->fields('dma', ['uuid']);
+    $subquery->condition('dma.type', $type_map[$type], 'IN');
 
     $query = $this->database->select('node_field_data', 'nfd');
     $query->join($map_table, 'map', 'nfd.nid = map.destid1');

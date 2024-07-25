@@ -18,6 +18,12 @@ function dept_migrate_audit_install() {
         'not null' => TRUE,
         'default' => '',
       ],
+      'type' => [
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ],
       'last_import' => [
         'type' => 'int',
         'unsigned' => TRUE,
