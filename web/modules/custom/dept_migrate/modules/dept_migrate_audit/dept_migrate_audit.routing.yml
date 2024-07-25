@@ -1,11 +1,3 @@
-dept_migrate_audit.upload_form:
-  path: '/admin/dept/mdash/audit/upload'
-  defaults:
-    _form: '\Drupal\dept_migrate_audit\Form\AuditFileUploadForm'
-    _title: 'Upload migrate source data keys'
-  requirements:
-    _permission: 'upload migration audit data'
-
 dept_migrate_audit.results:
   path: '/admin/dept/mdash/audit/results/{type}'
   defaults:

@@ -66,17 +66,29 @@ class AuditController extends ControllerBase {
     ];
 
     foreach ($types as $type_id => $label) {
-      $link_element = Link::createFromRoute($label,
-        'dept_migrate_audit.results',
-        ['type' => $type_id],
-        [
-          'attributes' => [
-            'class' => ['link'],
+      if ($type_id === $type) {
+        $top_links[] = [
+          '#type' => 'html_tag',
+          '#tag' => 'span',
+          '#attributes' => [
             'style' => 'padding: 0 5px',
-          ]
-        ])->toRenderable();
+          ],
+          '#value' => $label,
+        ];
+      }
+      else {
+        $link_element = Link::createFromRoute($label,
+          'dept_migrate_audit.results',
+          ['type' => $type_id],
+          [
+            'attributes' => [
+              'class' => ['link'],
+              'style' => 'padding: 0 5px',
+            ]
+          ])->toRenderable();
 
-      $top_links[] = $link_element;
+        $top_links[] = $link_element;
+      }
     }
 
     if (empty($type)) {
