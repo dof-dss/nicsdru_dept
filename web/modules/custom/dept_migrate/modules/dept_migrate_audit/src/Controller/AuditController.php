@@ -144,9 +144,9 @@ class AuditController extends ControllerBase {
 
     $num_rows = $query->countQuery()->execute()->fetchField();
 
+    // @phpstan-ignore-next-line
     $pager = $query
       ->extend('Drupal\Core\Database\Query\PagerSelectExtender')
-      // @phpstan-ignore-next-line
       ->limit(50);
 
     $results = $pager->execute()->fetchAll();
