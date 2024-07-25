@@ -52,13 +52,13 @@ class AuditController extends ControllerBase {
     }
 
     $header = [
-      ['data' => $this->t('D10 Node ID'), 'field' => 'nid'],
-      ['data' => $this->t('D7 Node ID'), 'field' => 'd7nid'],
-      ['data' => $this->t('Depts'), 'field' => 'depts'],
-      ['data' => $this->t('Type'), 'field' => 'type'],
-      ['data' => $this->t('Title'), 'field' => 'title'],
-      ['data' => $this->t('Published'), 'field' => 'status'],
-      ['data' => $this->t('Created'), 'field' => 'created'],
+      ['data' => $this->t('D10 Node ID')],
+      ['data' => $this->t('D7 Node ID')],
+      ['data' => $this->t('Depts')],
+      ['data' => $this->t('Type')],
+      ['data' => $this->t('Title')],
+      ['data' => $this->t('Published')],
+      ['data' => $this->t('Created')],
     ];
 
     $map_table = 'migrate_map_node_' . $type;
@@ -73,10 +73,11 @@ class AuditController extends ControllerBase {
     $query->fields('map', ['sourceid1', 'sourceid2']);
     $query->fields('nfda', ['field_domain_access_target_id']);
     $query->condition('map.sourceid1', $subquery, 'NOT IN');
+    $query->orderBy('nfd.created', 'DESC');
 
-    $pager = $query->extend('Drupal\Core\Database\Query\PagerSelectExtender')
-      ->limit(50)
-      ->element(0);
+    $pager = $query
+      ->extend('Drupal\Core\Database\Query\PagerSelectExtender')
+      ->limit(50);
 
     $results = $pager->execute()->fetchAll();
 
