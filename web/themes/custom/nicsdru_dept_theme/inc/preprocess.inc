@@ -247,6 +247,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
 function nicsdru_dept_theme_preprocess_node(array &$variables) {
   /** @var \Drupal\node\NodeInterface $node */
   $node = &$variables['node'];
+  $node_type = $node->getType();
 
   // Check if the node has a custom layout.
   if ($node->hasField('layout_builder__layout') && !$node->get('layout_builder__layout')->isEmpty()) {
@@ -270,11 +271,12 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
   ];
 
   $variables['display_social_links'] = in_array($node->bundle(), $social_bundles);
-
-  $variables['show_title'] = TRUE;
   $variables['show_topics'] = TRUE;
+  $variables['show_title'] = TRUE;
+  $variables['title'] = $node->getTitle();
+  $variables['node_type'] = $node_type;
 
-  switch ($node->getType()) {
+  switch ($node_type) {
     case "article":
     case "application":
     case "contact":
@@ -313,7 +315,7 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
   }
 
   // Only use this code for consultations content type.
-  if ($variables['node']->getType() === 'consultation') {
+  if ($node_type === 'consultation') {
 
     // Get the current time to gauge consultation start and end dates off.
     $current_time = \Drupal::time()->getCurrentTime();
