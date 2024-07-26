@@ -1,0 +1,33 @@
+{% if node_header.banner_image %}
+  {{ node_header.banner_image }}
+{% endif %}
+ {{ include('@nicsdru_dept_theme/content/page-title.html.twig') }}
+{% if node_header.show_title %}
+  {{ content.field_site_topics }}
+{% endif %}
+
+{{ content.field_published_date }}
+{{ content.field_last_updated }}
+{{ content.field_site_topics }}
+
+{% if node_type == "consultation" %}
+<div class="consultation-dates">
+  {% if consultation_in_progress %}
+    <p>
+      <strong class="label">{{ 'Consultation closes'|t }}</strong>
+      {{ consultation_end_date | date('U') | format_date('medium_date_time') }}
+    </p>
+  {% elseif consultation_pending %}
+    <p>
+      <strong class="label">{{ 'Consultation opens'|t }}</strong>
+      {{ consultation_start_date | date('U') | format_date('medium_date_time') }}
+    </p>
+  {% else %}
+    <p>
+      <strong class="label">{{ 'Consultation closed'|t }}</strong>
+      {{ 'Consultation opened'|t }} {{ consultation_start_date | date('U') | format_date('medium_date_time') }}
+      {{ 'and closed'|t }} {{ consultation_end_date | date('U') | format_date('medium_date_time') }}
+    </p>
+  {% endif %}
+</div>
+{% endif %}

@@ -272,7 +272,7 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
 
   $variables['display_social_links'] = in_array($node->bundle(), $social_bundles);
   $variables['show_topics'] = TRUE;
-  $variables['show_title'] = TRUE;
+  $variables['title_visible'] = TRUE;
   $variables['title'] = $node->getTitle();
   $variables['node_type'] = $node_type;
 

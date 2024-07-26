@@ -22,10 +22,21 @@
 {{ title_prefix }}
 {% if title %}
   <h1{{ title_attributes.addClass(title_classes) }}>
-    {{ title }}
-    {%- if title_subtitle %}
-      <span class="subtitle">{{ title_subtitle }}</span>
-    {%- endif -%}
+{# Consultations additional info start #}
+  {% if node_type == "consultation" %}
+    {% if consultation_pending %}
+      <span class="page-title__prefix">Pending consultation</span>
+    {% elseif consultation_in_progress %}
+      <span class="page-title__prefix">Open consultation</span>
+    {% else %}
+      <span class="page-title__prefix">Closed consultation</span>
+    {% endif %}
+  {% endif %}
+{# Consultations additional info end #}
+  {{ title }}
+  {%- if title_subtitle %}
+    <span class="subtitle">{{ title_subtitle }}</span>
+  {%- endif -%}
   </h1>
 {% endif %}
 {{ title_suffix }}
