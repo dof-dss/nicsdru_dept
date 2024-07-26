@@ -345,9 +345,11 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
 
     if ($pid && $pid != -1) {
       $parent_node = Node::load($pid);
-      $parent_title = $parent_node->getTitle();
-      $variables['book_parent_title'] = $parent_title;
-      $variables['book_parent_url'] = '/node/' . strval($pid);
+      if ($parent_node) {
+        $parent_title = $parent_node->getTitle();
+        $variables['book_parent_title'] = $parent_title;
+        $variables['book_parent_url'] = '/node/' . strval($pid);
+      }
     }
   }
 }
