@@ -272,7 +272,8 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
 
   $variables['display_social_links'] = in_array($node->bundle(), $social_bundles);
   $variables['show_topics'] = TRUE;
-  $variables['title_visible'] = TRUE;
+  $variables['show_title'] = TRUE;
+  $variables['title_text_visible'] = TRUE;
   $variables['title'] = $node->getTitle();
   $variables['node_type'] = $node_type;
 
@@ -392,9 +393,13 @@ function nicsdru_dept_theme_preprocess_block(array &$variables) {
  * Implements hook_preprocess_page_title().
  */
 function nicsdru_dept_theme_preprocess_page_title(&$variables) {
+  // Preprocess titles on certain routes.
+  $route = \Drupal::routeMatch();
 
-  // By default page titles are visible.
-  $variables['title_visible'] = TRUE;
+  // Will need bits and pieces from the request for titles.
+  $request = \Drupal::request();
+
+  $variables['title_text_visible'] = TRUE;
 
   // Set the home page title and visually hide it.
   if (\Drupal::service('path.matcher')->isFrontPage()) {
@@ -403,14 +408,8 @@ function nicsdru_dept_theme_preprocess_page_title(&$variables) {
       $variables['title'] = t('Welcome to ') . $dept->name();
     }
 
-    $variables['title_visible'] = FALSE;
+    $variables['title_text_visible'] = FALSE;
   }
-
-  // Preprocess titles on certain routes.
-  $route = \Drupal::routeMatch();
-
-  // Will need bits and pieces from the request for titles.
-  $request = \Drupal::request();
 
   switch ($route->getRouteName()) {
 

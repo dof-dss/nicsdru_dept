@@ -75,7 +75,7 @@
 {% endif %}
 <article{{ attributes.setAttribute('id', 'main-article').removeAttribute('role') }}>
   {% if show_title %}
-    {{ drupal_block('page_title_block', wrapper=false) }}
+    {{ include('@nicsdru_dept_theme/content/page-title.html.twig') }}
     {{ content.field_site_topics }}
   {% endif %}
   <div class="layout--main-n-side">
