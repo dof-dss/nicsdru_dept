@@ -57,7 +57,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
             $variables['main_content_attr']->addClass(LayoutClasses::MAIN_LIMITED);
             unset($variables['page']['sidebar_second']);
           }
-        break;
+          break;
 
         // Specific node types have a main only.
         case "ual":
@@ -121,6 +121,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
             ->setAttribute('role', 'presentation');
         }
         break;
+
       case "contacts":
         $variables['main_content_attr']->addClass(LayoutClasses::MAIN_LIMITED);
         if ($variables['content_wrapper_attr'] instanceof Attribute) {
@@ -182,7 +183,8 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
 
       if ($node_id === NULL) {
         $node = \Drupal::routeMatch()->getParameter('node_preview');
-      } else {
+      }
+      else {
         $node = Node::load($node_id);
       }
 
@@ -271,8 +273,11 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
   ];
 
   $variables['display_social_links'] = in_array($node->bundle(), $social_bundles);
+  // Display the topics link list.
   $variables['show_topics'] = TRUE;
+  // Display the title element.
   $variables['show_title'] = TRUE;
+  // Hide the title text within the title element.
   $variables['title_text_visible'] = TRUE;
   $variables['title'] = $node->getTitle();
   $variables['node_type'] = $node_type;
