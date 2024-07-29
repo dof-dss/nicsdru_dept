@@ -399,3 +399,11 @@ function dept_core_clientside_validation_should_validate($element, FormStateInte
     return TRUE;
   }
 }
+
+/**
+ * Implements hook_page_attachments().
+ */
+function dept_core_page_attachments(array &$attachments) {
+  // Attach extra custom css for admin menu.
+  $attachments['#attached']['library'][] = 'nicsdru_dept_theme/admin-content';
+}
