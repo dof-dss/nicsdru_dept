@@ -71,14 +71,8 @@
  */
 #}
 <article{{ attributes.setAttribute('id', 'main-article').removeAttribute('role') }}>
-  {% if banner_image %}
-    {{ banner_image }}
-  {% endif %}
-  {% if show_title %}
-    {{ drupal_block('page_title_block', wrapper=false) }}
-  {% endif %}
-  {{ content.field_published_date }}
-  {{ content.field_site_topics }}
+  {{ include('@nicsdru_dept_theme/content/node-header.html.twig') }}
+
   {% if content_attributes is not empty %}
   <div{{ content_attributes }}>
   {% endif %}
@@ -86,7 +80,7 @@
   {% if content_attributes is not empty %}
   </div>
   {% endif %}
-  {% if display_social_links %}
-    {{ drupal_entity('block', 'originssocialsharing', check_access=false) }}
-  {% endif %}
+
+  {{ include('@nicsdru_dept_theme/content/node-footer.html.twig') }}
 </article>
+
