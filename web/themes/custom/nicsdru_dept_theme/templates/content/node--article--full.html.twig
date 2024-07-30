@@ -92,7 +92,5 @@
   </div>
   {% endif %}
 
-  {% if display_social_links %}
-    {{ drupal_entity('block', 'originssocialsharing', check_access=false) }}
-  {% endif %}
+  {{ include('@nicsdru_dept_theme/content/node-footer.html.twig') }}
 </article>

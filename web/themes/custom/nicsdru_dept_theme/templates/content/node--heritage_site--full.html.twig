@@ -78,6 +78,7 @@
     {{ include('@nicsdru_dept_theme/content/page-title.html.twig') }}
     {{ content.field_site_topics }}
   {% endif %}
+
   <div class="layout--main-n-side">
     <div class="ga-main">
       {% if content_attributes is not empty %}
@@ -98,7 +99,6 @@
       {% endif %}
     </div>
   </div>
-  {% if display_social_links %}
-    {{ drupal_entity('block', 'originssocialsharing', check_access=false) }}
-  {% endif %}
+
+  {{ include('@nicsdru_dept_theme/content/node-footer.html.twig') }}
 </article>
