@@ -4,7 +4,6 @@ namespace Drupal\dept_migrate_audit\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -153,6 +152,12 @@ class AuditController extends ControllerBase {
 
     // Get total count and last import timestamp.
     $last_import_time = $this->database->query("SELECT last_import FROM {dept_migrate_audit} ORDER BY last_import DESC LIMIT 1")->fetchField();
+
+    if (empty($last_import_time)) {
+      return [
+        '#markup' => 'Audit database table not found.'
+      ];
+    }
 
     $rows = [];
     foreach ($results as $row) {
