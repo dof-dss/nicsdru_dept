@@ -24,7 +24,7 @@ class AuditController extends ControllerBase {
   /**
    * @param \Drupal\Core\Database\Connection $database
    *   The database service.
-   * @param \Drupal\dept_migrate_audit\MigrationAuditBatchServicen $migration_audit_service
+   * @param \Drupal\dept_migrate_audit\MigrationAuditBatchService $migration_audit_service
    *   The database service.
    */
   public function __construct(Connection $database, MigrationAuditBatchService $migration_audit_service) {
