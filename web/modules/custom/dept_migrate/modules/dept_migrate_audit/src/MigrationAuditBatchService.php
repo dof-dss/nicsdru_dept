@@ -24,17 +24,18 @@ class MigrationAuditBatchService {
   protected $d7Database;
 
   /**
-   * Creates a CountryRepository instance.
+   * Creates an Audit Batch Service instance.
    *
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   The cache backend.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   The language manager.
+   * @param \Drupal\Core\Database\Connection $d7_database
+   *   Drupal 7/migration database connection.
    */
   public function __construct(Connection $d7_database) {
     $this->d7Database = $d7_database;
   }
 
+  /**
+   * Creates a batch process to process audit data.
+   */
   public function setupBatch() {
 
     $types = [
@@ -80,6 +81,16 @@ class MigrationAuditBatchService {
     batch_set($batch_builder->toArray());
   }
 
+  /**
+   * Batch process.
+   *
+   * @param string $id
+   *   ID of the batch process.
+   * @param array $data
+   *   Dataset to process.
+   * @param array $context
+   *   Batch context object.
+   */
   public function processAuditData($id, $data, &$context) {
 
     $now = \Drupal::time()->getCurrentTime();
@@ -96,12 +107,22 @@ class MigrationAuditBatchService {
     $context['results'][] = $id;
 
     // Optional message displayed under the progressbar.
-    $context['message'] = $this->t('Processing audit data for @type' ,
+    $context['message'] = $this->t('Processing audit data for @type',
       ['@type' => $id]
     );
 
   }
 
+  /**
+   * Callback for finished batch.
+   *
+   * @param bool $success
+   *   Indicate that the batch API tasks were all completed successfully.
+   * @param array $results
+   *   An array of all the results that were updated in update_do_one().
+   * @param array $operations
+   *   A list of all the operations that had not been completed by the batch API.
+   */
   public function processAuditDataFinished($success, array $results, array $operations) {
     $messenger = \Drupal::messenger();
 

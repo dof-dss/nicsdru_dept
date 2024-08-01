@@ -13,12 +13,12 @@ use Drupal\dept_migrate_audit\MigrationAuditBatchService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a Department sites: migration audit form.
+ * Provides a  migration audit form.
  */
 final class MigrateAuditProcessDataForm extends FormBase {
 
   /**
-   * The messenger.
+   * The messenger service.
    *
    * @var \Drupal\Core\Messenger\MessengerInterface
    */
@@ -32,19 +32,21 @@ final class MigrateAuditProcessDataForm extends FormBase {
   protected $auditBatchService;
 
   /**
+   * Database connection.
+   *
    * @var \Drupal\Core\Database\Connection
    */
   protected $database;
 
   /**
-   * Constructor.
+   * Form constructor.
    *
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
-   * @param \Drupal\dept_migrate_audit\MigrationAuditBatchService $batch
-   *   THe batch service.
+   * @param \Drupal\dept_migrate_audit\MigrationAuditBatchService $audit_batch
+   *   The batch service.
    * @param \Drupal\Core\Database\Connection $database
-   * The database service.
+   *   The database service.
    */
   public function __construct(MessengerInterface $messenger, MigrationAuditBatchService $audit_batch, Connection $database) {
     $this->messenger = $messenger;
@@ -74,11 +76,10 @@ final class MigrateAuditProcessDataForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-
     $results = $this->database->select('dept_migrate_audit', 'dma')
       ->fields('dma', ['uuid'])
       ->execute()->fetchAll();
-    
+
     if (empty($results)) {
       $form['notice'] = [
         '#type' => 'html_tag',
