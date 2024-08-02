@@ -71,54 +71,12 @@
  */
 #}
 <article{{ attributes.addClass('ga-main').setAttribute('id', 'main-article').removeAttribute('role') }}>
+  {{ include('@nicsdru_dept_theme/content/node-header.html.twig') }}
 
-  {% if banner_image %}
-    {{ banner_image }}
-  {% endif %}
-
-  {% if show_title -%}
-    <h1{{ title_attributes.addClass('page-title') }}>
-      {% if consultation_pending %}
-        <span class="page-title__prefix">Pending consultation</span>
-      {% elseif consultation_in_progress %}
-        <span class="page-title__prefix">Open consultation</span>
-      {% else %}
-        <span class="page-title__prefix">Closed consultation</span>
-      {% endif %}
-      {{ label }}
-      {%- if title_subtitle %}
-        <span class="page-title__suffix subtitle">{{ title_subtitle }}</span>
-      {%- endif -%}
-    </h1>
-  {% endif %}
-
-  {{ content.field_published_date }}
-  {{ content.field_site_topics }}
-
-  <div{{ content_attributes.addClass('content') }}>
-    <div class="consultation-dates">
-      {% if consultation_in_progress %}
-        <p>
-          <strong class="label">{{ 'Consultation closes'|t }}</strong>
-          {{ consultation_end_date | date('U') | format_date('medium_date_time') }}
-        </p>
-      {% elseif consultation_pending %}
-        <p>
-          <strong class="label">{{ 'Consultation opens'|t }}</strong>
-          {{ consultation_start_date | date('U') | format_date('medium_date_time') }}
-        </p>
-      {% else %}
-        <p>
-          <strong class="label">{{ 'Consultation closed'|t }}</strong>
-          {{ 'Consultation opened'|t }} {{ consultation_start_date | date('U') | format_date('medium_date_time') }}
-          {{ 'and closed'|t }} {{ consultation_end_date | date('U') | format_date('medium_date_time') }}
-        </p>
-      {% endif %}
-    </div>
-
+  <div{{ content_attributes.addClass(['article-content', 'max-body-text-width']) }}>
     <h2>{{ content.field_summary['#title'] }}</h2>
-    {{ content.field_summary }}
 
+    {{ content.field_summary }}
     {{ content.field_attachment }}
 
     <h2>{{ 'Consultation description'|t }}</h2>
@@ -128,17 +86,12 @@
       {{ content.group_ways_to_respond }}
     {% elseif consultation_pending %}
       <h2>Ways to respond</h2>
-      <p class="info-notice">
-        {{ 'Consultation pending — details on ways to respond will be provided when the consultation has opened.'|t }}
-      </p>
+      <p class="info-notice">{{ 'Consultation pending — details on ways to respond will be provided when the consultation has opened.'|t }}</p>
     {% else %}
       <h2>Ways to respond</h2>
-      <p class="info-notice">
-        {{ 'Consultation closed — responses are no longer being accepted.'|t }}
-      </p>
+      <p class="info-notice">{{ 'Consultation closed — responses are no longer being accepted.'|t }}</p>
     {% endif %}
   </div>
-  {% if display_social_links %}
-    {{ drupal_entity('block', 'originssocialsharing', check_access=false) }}
-  {% endif %}
+
+  {{ include('@nicsdru_dept_theme/content/node-footer.html.twig') }}
 </article>

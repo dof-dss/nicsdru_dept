@@ -54,6 +54,7 @@ nidirect-global-styles:
       css/3_components/content/consultations.css: { minified: true }
       css/3_components/field/field-label.css: { minified: true }
       css/3_components/field/file-link.css: { minified: true }
+      css/3_components/field/field-topic-contents.css: { minified: true }
       css/3_components/block/section-feedback.css: { minified: true }
       css/3_components/block/related-sites.css: { minified: true }
       css/3_components/block/section-translation-help.css: { minified: true }
@@ -146,3 +147,7 @@ admin-forms:
     component:
       css/admin/forms.css: { minified: true }
 
+admin-content:
+  css:
+    component:
+      css/admin/content.css: { minified: true }

@@ -234,6 +234,12 @@ header .search-api-form {
   }
 }
 
+.facet-summary__list {
+  .facet-summary-item--facet a:focus {
+    color: $charcoal;
+  }
+}
+
 // Search autocomplete suggestions.
 .search-api-autocomplete-search {
 

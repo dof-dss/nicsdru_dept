@@ -17,6 +17,15 @@ source:
   constants:
     migrate_ignore_sites: MIGRATE_IGNORE_SITES
 process:
+  field_site_topics:
+    -
+      plugin: sub_process
+      source: field_parent_topic
+      process:
+        target_id:
+          -
+            plugin: d7_node_lookup
+            source: target_id
   langcode:
     -
       plugin: default_value
@@ -55,26 +64,8 @@ process:
   revision_timestamp: timestamp
   body:
     -
-      plugin: get
+      plugin: body_field_process
       source: body
-    -
-      plugin: str_replace
-      regex: true
-      search: '/(<p>[<br>|\s]*&nbsp;<\/p>)/im'
-      replace: ''
-    -
-      plugin: str_replace
-      search: '&nbsp;</p>'
-      replace: '</p>'
-    -
-      plugin: str_replace
-      search: '&nbsp;'
-      replace: ' '
-    -
-      plugin: str_replace
-      regex: true
-      search: /<a>(.+)<\/a>/iU
-      replace: $1
     -
       plugin: media_wysiwyg_filter
   body/0/format:

@@ -6,8 +6,6 @@ dependencies:
     - field.storage.node.field_topic_content
     - node.type.application
     - node.type.article
-    - node.type.contact
-    - node.type.publication
     - node.type.subtopic
 id: node.subtopic.field_topic_content
 field_name: field_topic_content
@@ -25,8 +23,6 @@ settings:
     target_bundles:
       application: application
       article: article
-      contact: contact
-      publication: publication
       subtopic: subtopic
     sort:
       field: _none

@@ -46,7 +46,7 @@ third_party_settings:
                 label: hidden
                 settings: {  }
                 third_party_settings: {  }
-            weight: 1
+            weight: 2
             additional: {  }
           910563a3-67a3-40e8-9e3d-f5347c929198:
             uuid: 910563a3-67a3-40e8-9e3d-f5347c929198
@@ -61,23 +61,44 @@ third_party_settings:
                 label: hidden
                 settings: {  }
                 third_party_settings: {  }
-            weight: 2
+            weight: 3
             additional: {  }
           372d99f9-3680-4a27-bb19-8c3a3707f46b:
             uuid: 372d99f9-3680-4a27-bb19-8c3a3707f46b
             region: content
             configuration:
               id: 'field_block:node:subtopic:field_topic_content'
-              label_display: '0'
+              label: 'More in this topic'
+              label_display: visible
+              provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
                 type: entity_reference_label
                 label: hidden
                 settings:
                   link: true
                 third_party_settings: {  }
-            weight: 3
+            weight: 4
+            additional: {  }
+          c36aafe4-cd87-4d02-8379-ed10bcb891bf:
+            uuid: c36aafe4-cd87-4d02-8379-ed10bcb891bf
+            region: content
+            configuration:
+              id: 'field_block:node:subtopic:field_site_topics'
+              label: Topics
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: dept_topics_topic_tags
+                label: inline
+                settings: {  }
+                third_party_settings: {  }
+            weight: 1
             additional: {  }
         third_party_settings: {  }
   layout_builder_restrictions:
@@ -95,7 +116,6 @@ third_party_settings:
       - Facets
       - 'Facets summary (Experimental)'
       - Forms
-      - Geolocation
       - Help
       - 'Inline blocks'
       - 'Lists (Views)'
@@ -120,6 +140,7 @@ third_party_settings:
           - 'field_block:node:subtopic:body'
           - 'field_block:node:subtopic:field_topic_content'
           - 'field_block:node:subtopic:field_summary'
+          - 'field_block:node:subtopic:field_site_topics'
         'Custom block types':
           - accordion_menu
           - banner_deep
@@ -152,7 +173,6 @@ third_party_settings:
         - Facets
         - 'Facets summary (Experimental)'
         - Forms
-        - Geolocation
         - Help
         - 'Lists (Views)'
         - Menus
@@ -173,10 +193,11 @@ third_party_settings:
         layout_onecol:
           all_regions:
             'Content fields':
+              - 'field_block:node:subtopic:field_banner_image'
               - 'field_block:node:subtopic:body'
               - 'field_block:node:subtopic:field_topic_content'
               - 'field_block:node:subtopic:field_summary'
-              - 'field_block:node:subtopic:field_banner_image'
+              - 'field_block:node:subtopic:field_site_topics'
             'Custom block types':
               - accordion_menu
               - banner_deep
@@ -226,7 +247,6 @@ third_party_settings:
             - Facets
             - 'Facets summary (Experimental)'
             - Forms
-            - Geolocation
             - Help
             - 'Lists (Views)'
             - Menus

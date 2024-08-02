@@ -1,0 +1,11 @@
+dept_redirects.admin:
+  title: 'Check redirects'
+  description: 'Check redirects for non-200 or non-300 response codes.'
+  parent: redirect.list
+  route_name: dept_redirects.check_redirects
+
+dept_redirects.config:
+  title: 'Redirect check settings'
+  description: 'Configure the batch size for redirect checks.'
+  parent: system.admin_config_search
+  route_name: dept_redirects.settings

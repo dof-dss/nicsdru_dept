@@ -3,7 +3,6 @@
 namespace Drupal\dept_migrate\Commands;
 
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -115,7 +114,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
         // Update all node links.
         $updated_value = preg_replace_callback(
           '/(<a href="\/node\/)(\d+)/m',
-          function ($matches) {
+          function ($matches) use ($result, $field) {
             // Fetch the new D9 nid for the D7 nid.
             $d9_lookup = $this->lookupManager->lookupBySourceNodeId([$matches[2]]);
 
@@ -128,6 +127,23 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
                 // Replace the '<a href="/nodeXXX' markup with LinkIt markup.
                 return '<a data-entity-substitution="canonical" data-entity-type="node" data-entity-uuid="' . $d9_uuid . '" href="/node/' . $node_data['nid'];
               }
+              else {
+                // Log the broken link to the DB and leave it untouched in the field.
+                $d7_source_nid = $this->lookupManager->lookupByDestinationNodeIds([$result->nid]);
+                $entity_id = $d7_source_nid[$result->nid]['d7nid'];
+
+                if (!empty($entity_id)) {
+                  $this->dbConn->insert('dept_migrate_invalid_links')
+                    ->fields([
+                      'entity_id' => $entity_id,
+                      'bad_link' => $matches[0] . '">',
+                      'field' => $field
+                    ])
+                    ->execute();
+                }
+              }
+
+              return $matches[0];
             }
           },
           $result->value
@@ -307,6 +323,14 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       return;
     }
 
+    // Remove existing content reference links for the given department.
+    $this->dbConn->query("DELETE tc FROM node__field_topic_content tc
+      LEFT JOIN node__field_domain_source ds
+      ON tc.entity_id = ds.entity_id
+      WHERE ds.field_domain_source_target_id = '" . $domain_id . "'
+      AND tc.bundle = 'topic'"
+    )->execute();
+
     $topic_content_sql = "
       WITH content_stack_cte (nid, type, title, weight) AS (
         SELECT
@@ -426,6 +450,19 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
    * @aliases scc
    */
   public function createSubtopicContentReferences($domain_id) {
+
+    if (empty($domain_id)) {
+      return;
+    }
+
+    // Remove existing content reference links for the given department.
+    $this->dbConn->query("DELETE tc FROM node__field_topic_content tc
+      LEFT JOIN node__field_domain_source ds
+      ON tc.entity_id = ds.entity_id
+      WHERE ds.field_domain_source_target_id = '" . $domain_id . "'
+      AND tc.bundle = 'subtopic'"
+    )->execute();
+
     $domain_topics_d9 = $this->dbConn->query("
     SELECT ds.entity_id FROM node__field_domain_source ds
     INNER JOIN node_field_data nfd

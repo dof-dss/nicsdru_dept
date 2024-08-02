@@ -51,6 +51,7 @@
 .page-node-type-embargoed-publication,
 .page-node-type-consultation,
 .page-node-type-subtopic {
+
   .narrow-title {
     @include breakpoint($phab) {
       width: 83.33%;
@@ -135,7 +136,7 @@
   .article-content {
 
     * {
-      max-width: $max-content-width;
+      max-width: $max-body-text-width;
     }
 
     .field-photo .media-image {
@@ -170,8 +171,48 @@
 }
 
 .page-node-type-subtopic {
+
   .toc-menu {
     max-width: 64rem;
+  }
+
+  .field-topic-content {
+    margin: 0 0 var(--rhythm-spacing-xl);
+
+    > *:first-child {
+      margin-top: 0;
+    }
+
+    > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // field-topic-content is a list of links to a subtopic's
+  // child content.
+
+  // If the subtopic has a summary or page body, add extra styling to
+  // field-topic-content link list to help it stand out.
+  .page-summary + .field-topic-content .field-topic-content__list,
+  .article-content + .field-topic-content .field-topic-content__list {
+    border-left: var(--rhythm-spacing-sm) solid var(--brand-primary-color);
+    padding-left: var(--rhythm-spacing-lg);
+  }
+
+  // By default, do not display the field-topic-content heading.
+  .field-topic-content > h2 {
+    display: none;
+
+    + ul {
+      margin-top: 0;
+    }
+  }
+
+  // Display the field-topic-content heading when subtopic has a page
+  // body and the page body's last element is not a heading.
+  .article-content:not(:has(h2:last-child, h3:last-child)) + .field-topic-content > h2 {
+    display: block;
+    margin-top: var(--rhythm-spacing-xxl);
   }
 }
 
@@ -217,6 +258,65 @@
     img {
       max-width: 100%;
       width: unset;
+    }
+  }
+}
+
+.path-contact,
+.page-node-type-contact {
+
+  .google-map-field .map-container {
+    min-height: 300px;
+
+    @include breakpoint($tab) {
+      min-height: 400px;
+    }
+  }
+}
+
+.page-node-type-protected-area {
+  .page-summary {
+    @include responsive-typo-map($normal-text);
+
+    @include breakpoint($phone) {
+      display: table;
+    }
+
+    .row {
+      margin-bottom: 1em;
+
+      @include breakpoint($phone) {
+        display: table-row;
+      }
+
+      .field {
+        &__label,
+        &__item,
+        &__items {
+          display: block;
+
+          @include breakpoint($phone) {
+            display: table-cell;
+          }
+        }
+
+        &__label {
+          font-weight: bold;
+
+          @include breakpoint($phone) {
+            padding-right: 1em;
+          }
+        }
+
+        &__items {
+          padding-left: 0;
+          margin: 0;
+
+          .field__item {
+            display: inline;
+          }
+        }
+      }
     }
   }
 }

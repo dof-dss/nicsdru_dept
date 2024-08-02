@@ -11,10 +11,11 @@ type: 'php:8.2'
 
 variables:
   php:
-    memory_limit: "256M"
+    memory_limit: "128M"
 #    xdebug.mode: "debug"
+    display_startup_errors: "off"
     date.timezone: "Europe/Dublin"
-
+    realpath_cache_ttl: 3600
 dependencies:
   php:
     composer/composer: '^2'
@@ -24,6 +25,7 @@ runtime:
   extensions:
     - apcu
     - redis
+    - blackfire
 #  xdebug:
 #    idekey: PHPSTORM
 
@@ -40,7 +42,7 @@ relationships:
   drupal7db: 'drupal7db:admin'
 
 # The size of the persistent disk of the application (in MB).
-disk: 106000
+disk: 108048
 
 # The 'mounts' describe writable, persistent filesystem mounts in the application.
 mounts:
@@ -104,11 +106,20 @@ hooks:
 
     cd /app/web
 
-    echo "$QA_USERNAMES" | tr ',' '\n' | while read username; do
+    if [[ $QA_USERNAMES ]]; then
+      echo "$QA_USERNAMES" | tr ',' '\n' | while read username; do
+
       echo $item
       ../vendor/bin/drush ucrt $username --password=$QA_PASSWORD
       ../vendor/bin/drush urol administrator $username
-    done
+      done
+    fi
+
+    echo "***** Reset QA Account passwords ******"
+
+    cd /app/web
+
+    ../vendor/bin/drush password_qa_accounts
 
 # The configuration of app when it is exposed to the web.
 web:

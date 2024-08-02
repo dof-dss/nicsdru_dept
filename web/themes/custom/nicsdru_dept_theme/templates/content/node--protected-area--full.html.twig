@@ -71,43 +71,44 @@
  */
 #}
 <article{{ attributes.setAttribute('id', 'main-article').removeAttribute('role') }}>
-  <div class="narrow-title">
-    {% if show_title %}
-      <h1 class="page-title">{{ label }}</h1>
-    {% endif %}
-  </div>
+  {{ include('@nicsdru_dept_theme/content/node-header.html.twig') }}
 
-  <div{{ content_attributes.addClass('content') }}>
-    <div class="summary content-field--label-inline">
-      <div class="consultation-dates content-field__label">
-        {{ 'Consultation opened on'|t }}
-        {% apply spaceless %}
-          <strong>{{ content.field_consultation_dates[0].start_date }}</strong>{{ '.'|t }}
-        {% endapply %}
-        {{ 'Closing date '|t }}
-        <strong>{{ content.field_consultation_dates[0].end_date }}</strong>
-        {{ 'at '|t }}
-        <strong>{{ consultation_end_time }}</strong>{{ '.'|t }}
-      </div>
-      <div class="field-summary content-field__value">
-        <h2>{{ content.field_summary['#title'] }}</h2>
-        <p>{{ content.field_summary }}</p>
-      </div>
-    </div>
-    {{ content.field_attachment }}
-    <div class="description content-field--label-inline">
-      <h2 class="content-field__label">{{ 'Consultation description'|t }}</h2>
-      <div class="content-field__value">{{ content.body }}</div>
-    </div>
-
-    {% if consultation_in_progress == 1 %}
-      {{ content.group_ways_to_respond }}
-    {% endif %}
-
-    {{ content.group_additional_content_details }}
-
-  </div>
-  {% if display_social_links %}
-    {{ drupal_entity('block', 'originssocialsharing', check_access=false) }}
+  {% if content_attributes is not empty %}
+  <div{{ content_attributes }}>
   {% endif %}
+    <div class="page-summary">
+      {% for row in content|without('field_site_topics', 'body') %}
+        {% if row|field_value %}
+        <div class="row">
+          <span class="field__label">
+            {% if row|field_label == "Document" %}
+              {{ "Guidance and literature:" }}
+            {% else %}
+              {{ row|field_label }}{{ ":" }}
+            {% endif %}
+          </span>
+          {% if row|field_value|length == 1 %}
+            <span class="field__item">
+              {{ row|field_value }}
+            </span>
+          {% else %}
+            <ul class="field__items">
+              {% for item in row|field_value %}
+                <li class="field__item">
+                  {{- item -}}
+                  {%- if not loop.last -%}{{- ", " -}}{%- endif -%}
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {{ content.body }}
+  {% if content_attributes is not empty %}
+  </div>
+  {% endif %}
+
+  {{ include('@nicsdru_dept_theme/content/node-footer.html.twig') }}
 </article>

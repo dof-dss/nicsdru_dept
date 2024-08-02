@@ -167,6 +167,7 @@ final class ManageTopicContentForm extends FormBase {
     }
 
     foreach ($child_contents as $weight => $child) {
+
       // Don't add removed child content from the table.
       if (!empty($form['removed_children']['#value'])) {
         if (in_array($child->id(), explode(',', $form['removed_children']['#value']))) {
@@ -327,8 +328,6 @@ final class ManageTopicContentForm extends FormBase {
 
       $weight = 0;
 
-      // If we have child content, grab the weight of the last entry
-      // and increment for the new entry.
       if (is_array($child_content) && !empty($child_content)) {
         $weight = $child_content[array_key_last($child_content)]['weight'];
         $weight++;
@@ -387,6 +386,9 @@ final class ManageTopicContentForm extends FormBase {
     $form_state->setRedirect('entity.node.canonical', ['node' => $topic_nid]);
   }
 
+  /**
+   * Form cancel handler.
+   */
   public function cancel(array $form, FormStateInterface $form_state) {
     $form_state->setRedirect('entity.node.canonical', ['node' => $form_state->getValue('topic_nid')]);
   }

@@ -36,12 +36,13 @@
  * @see template_preprocess_field()
  */
 #}
-{%
-  set classes = ['contact--body']
-%}
-<div{{ attributes.addClass(classes) }}>
+{% if attributes is not empty %}
+<div{{ attributes }}>
+{% endif %}
   {% for item in items %}
     {{ item.content }}
   {% endfor %}
+{% if attributes is not empty %}
 </div>
+{% endif %}
 

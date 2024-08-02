@@ -95,7 +95,7 @@ class MigrateUuidLookupManager {
         continue;
       }
 
-      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $d7uuid]);
+      $migrate_map = $this->dbconn->query("SELECT * from {$table} WHERE sourceid1 = :uuid", [':uuid' => $d7uuid]);
 
       foreach ($migrate_map as $row) {
         if (empty($row->destid1)) {
@@ -164,7 +164,7 @@ class MigrateUuidLookupManager {
         continue;
       }
 
-      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $node['d7uuid']]);
+      $migrate_map = $this->dbconn->query("SELECT * from {$table} WHERE sourceid1 = :uuid", [':uuid' => $node['d7uuid']]);
 
       foreach ($migrate_map as $row) {
         if (empty($row->destid1)) {
@@ -234,7 +234,7 @@ class MigrateUuidLookupManager {
         continue;
       }
 
-      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $user_data['d7uuid']]);
+      $migrate_map = $this->dbconn->query("SELECT * from {$table} WHERE sourceid1 = :uuid", [':uuid' => $user_data['d7uuid']]);
 
       foreach ($migrate_map as $row) {
         // UID 1 might give some odd results, so look it up by username instead.
@@ -304,7 +304,7 @@ class MigrateUuidLookupManager {
         continue;
       }
 
-      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
+      $migrate_map = $this->dbconn->query("SELECT * from {$table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
 
       foreach ($migrate_map as $row) {
         if (empty($row->destid1)) {
@@ -366,7 +366,7 @@ class MigrateUuidLookupManager {
         continue;
       }
 
-      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
+      $migrate_map = $this->dbconn->query("SELECT * from {$table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
 
       foreach ($migrate_map as $row) {
         if (empty($row->destid1)) {
@@ -441,7 +441,7 @@ class MigrateUuidLookupManager {
         continue;
       }
 
-      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
+      $migrate_map = $this->dbconn->query("SELECT * from {$table} WHERE sourceid1 = :uuid", [':uuid' => $file['d7uuid']]);
 
       foreach ($migrate_map as $row) {
         if (empty($row->destid1)) {
@@ -471,6 +471,11 @@ class MigrateUuidLookupManager {
           ]);
 
           $media_entity = is_array($media_entities) ? array_pop($media_entities) : NULL;
+        }
+
+        // Final juggle of remote_video types, try by media id alone.
+        if (empty($media_entity)) {
+          $media_entity = $this->entityTypeManager->getStorage('media')->load($row->destid1);
         }
 
         if ($media_entity instanceof EntityInterface) {
@@ -528,7 +533,7 @@ class MigrateUuidLookupManager {
         continue;
       }
 
-      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE destid1 = :nid", [':nid' => $node->id()]);
+      $migrate_map = $this->dbconn->query("SELECT * from {$table} WHERE destid1 = :nid", [':nid' => $node->id()]);
 
       foreach ($migrate_map as $row) {
         $d7results = $this->d7conn->query("
@@ -591,7 +596,7 @@ class MigrateUuidLookupManager {
         continue;
       }
 
-      $migrate_map = $this->dbconn->query("SELECT * from ${table} WHERE destid1 = :nid", [':nid' => $node->id()]);
+      $migrate_map = $this->dbconn->query("SELECT * from {$table} WHERE destid1 = :nid", [':nid' => $node->id()]);
 
       foreach ($migrate_map as $row) {
         $d7results = $this->d7conn->query("

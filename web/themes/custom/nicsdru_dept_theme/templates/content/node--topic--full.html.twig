@@ -70,20 +70,16 @@
  *   in different view modes.
  */
 #}
-{% if banner_image %}
-  {{ banner_image }}
-{% endif %}
 <article{{ attributes.setAttribute('id', 'main-article').removeAttribute('role') }}>
-
-  {% if show_title %}
-    {{ drupal_block('page_title_block', wrapper=false) }}
-  {% endif %}
+  {{ include('@nicsdru_dept_theme/content/node-header.html.twig') }}
 
   {% if content_attributes is not empty %}
   <div{{ content_attributes }}>
   {% endif %}
-
-  {{- content | without('field_topic_content') -}}
+    {{- content | without('field_topic_content') -}}
+  {% if content_attributes is not empty %}
+  </div>
+  {% endif %}
 
   {% if content.field_topic_content.0 is not empty %}
     <div class="subtopics">
@@ -94,7 +90,5 @@
     </div>
   {% endif %}
 
-  {% if content_attributes is not empty %}
-  </div>
-  {% endif %}
+  {{ include('@nicsdru_dept_theme/content/node-footer.html.twig') }}
 </article>

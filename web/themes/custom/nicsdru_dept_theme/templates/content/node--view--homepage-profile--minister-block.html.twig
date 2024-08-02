@@ -70,22 +70,16 @@
  *   in different view modes.
  */
 #}
-<article{{ attributes.setAttribute('id', 'main-article').removeAttribute('role') }}>
-  <div class="narrow-title">
-  {% if show_title %}
-    <h1 class="page-title">{{ label }}</h1>
-  {% endif %}
-{#  {% if  content_attributes is not empty %}#}
-{#  <div{{ content_attributes }}>#}
-{#  {% endif %}#}
-    {{ content.field_published_date }}
-    {{ content.field_site_topics }}
-  </div>
-  {{- content|without('field_published_date', 'field_site_topics') -}}
-{#  {% if  content_attributes is not empty %}#}
-{#  </div>#}
-{#  {% endif %}#}
-  {% if display_social_links %}
-    {{ drupal_entity('block', 'originssocialsharing', check_access=false) }}
-  {% endif %}
+<article>
+  <a href="{{ url }}" class="card card--plain card--no-border card--no-shadow">
+    <div class="card__image">
+        {{ content.field_photo }}
+    </div>
+    <div class="card__body">
+      <h3{{ title_attributes.addClass('card__title') }}>
+        {{ label }}
+      </h3>
+      {{ content.field_summary }}
+    </div>
+  </a>
 </article>

@@ -55,26 +55,8 @@ process:
   revision_timestamp: timestamp
   body:
     -
-      plugin: get
+      plugin: body_field_process
       source: body
-    -
-      plugin: str_replace
-      regex: true
-      search: '/(<p>[<br>|\s]*&nbsp;<\/p>)/im'
-      replace: ''
-    -
-      plugin: str_replace
-      search: '&nbsp;</p>'
-      replace: '</p>'
-    -
-      plugin: str_replace
-      search: '&nbsp;'
-      replace: ' '
-    -
-      plugin: str_replace
-      regex: true
-      search: /<a>(.+)<\/a>/iU
-      replace: $1
     -
       plugin: media_wysiwyg_filter
   body/0/format:
@@ -99,6 +81,7 @@ process:
           -
             plugin: d7_file_lookup
             source: fid
+            entity_type: media
   field_summary:
     -
       plugin: callback

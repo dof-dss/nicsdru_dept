@@ -64,7 +64,7 @@ class TopicTreeDataController {
     foreach ($child_content as $child) {
       if ($child->bundle() === 'subtopic') {
         $this->topics[] = [
-          'id' => $child->id() . '--' . $parent->id(),
+          'id' => $child->id(),
           'text' => $child->label(),
           'parent' => $parent->id(),
         ];

@@ -71,23 +71,13 @@
  */
 #}
 <article{{ attributes.addClass('ga-main').setAttribute('id', 'main-article').removeAttribute('role') }}>
+  {{ include('@nicsdru_dept_theme/content/node-header.html.twig') }}
 
-  {% if banner_image %}
-    {{ banner_image }}
-  {% endif %}
+  {{ content.field_summary }}
 
-  {% if show_title %}
-    {{ drupal_block('page_title_block', wrapper=false) }}
-  {% endif %}
+  <div{{ content_attributes.addClass(['article-content', 'max-body-text-width']) }}>
+    {{- content|without('field_published_date', 'field_last_updated', 'field_site_topics', 'field_summary') -}}
+  </div>
 
-  {{ content.field_published_date }}
-  {{ content.field_last_updated }}
-  {{ content.field_site_topics }}
-
-  {{- content|without('field_published_date', 'field_last_updated', 'field_site_topics') -}}
-
-  {% if display_social_links %}
-    {{ drupal_entity('block', 'originssocialsharing', check_access=false) }}
-  {% endif %}
-
+  {{ include('@nicsdru_dept_theme/content/node-footer.html.twig') }}
 </article>

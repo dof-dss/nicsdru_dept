@@ -117,7 +117,7 @@ final class TopicTreeForm extends FormBase {
     }
 
     // Convert back to a string for use by the JS function callback.
-    $topic_values = implode(',', $topic_values);
+    $topic_values = is_array($topic_values) ? implode(',', $topic_values) : '';
 
     $response = new AjaxResponse();
     $response->addCommand(new InvokeCommand(NULL, 'topicTreeAjaxCallback', [

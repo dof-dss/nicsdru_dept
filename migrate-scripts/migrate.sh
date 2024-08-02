@@ -84,14 +84,14 @@ then
     $DRUSH migrate:reset $m
   done
 
-  echo "Make sure active config matches that from migrate modules"
-  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_flags/config/install -y
-  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_taxo/config/install -y
-
-  for type in users files nodes
-  do
-    $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_$type/config/install -y
-  done
+#  echo "Make sure active config matches that from migrate modules"
+#  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_flags/config/install -y
+#  $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_taxo/config/install -y
+#
+#  for type in users files nodes
+#  do
+#    $DRUSH cim --partial --source=/app/web/modules/custom/dept_migrate/modules/dept_migrate_$type/config/install -y
+#  done
 
   echo "Migrating D7 taxonomy data"
   $DRUSH migrate:import --group=migrate_drupal_7_taxo
@@ -138,6 +138,12 @@ then
     $DRUSH migrate:import node_publication --force --limit=2500
   done
 
+  # Force a refresh on some node types to see if this alleviates
+  # occasional missing content issues from the body field on articles.
+  $DRUSH migrate:import node_article --update --force
+  $DRUSH migrate:import node_page --update --force
+  $DRUSH migrate:import node_subtopic --update --force
+
   echo "Migrate book config"
   $DRUSH migrate:import dept_book --force
 
@@ -148,11 +154,7 @@ then
   echo "Updating content links"
   $DRUSH dept:updatelinks
 
-  echo "Syncing featured content on the department homepages"
-  $DRUSH dept:sync-homepage-content
 
-  echo "Restoring config from config/sync"
-  $DRUSH cim -y
 
   # ******************************************
   # Execute any non-live department commands *
@@ -162,6 +164,8 @@ then
   # present in the $MIGRATE_IGNORE_SITES     *
   # environment variable                     *
   # ******************************************
+  echo "Syncing featured content on the department homepages"
+  $DRUSH dept:sync-homepage-content
 
   # Remove the departments in the $MIGRATE_IGNORE_SITES
   # excluded_departments array from the departments array.
@@ -185,5 +189,8 @@ then
 
   echo ".... DONE"
 fi
+
+  echo "Restoring config from config/sync"
+  $DRUSH cim -y
 
 echo ">>> Finished at: $(date -u +"%Y-%m-%d %H:%M:%S")"

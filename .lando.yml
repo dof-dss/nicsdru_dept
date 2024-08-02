@@ -35,9 +35,6 @@ services:
     scanner: false
     build_as_root:
       - /app/.lando/scripts/appserver_build.sh
-    run:
-      - touch ~/.bashrc
-      - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
     overrides:
       environment:
         # Support debugging CLI with XDEBUG.
@@ -46,10 +43,6 @@ services:
         XDEBUG_SESSION_START: lando
         SIMPLETEST_BASE_URL: "http://nigov.lndo.site"
         SIMPLETEST_DB: "sqlite://localhost//dev/shm/test.sqlite"
-        # Set node compilation flag to allow arm64 and x86 chipset compilation.
-        CPPFLAGS: "-DPNG_ARM_NEON_OPT=0"
-        # node version set here will be used by the nvm installer script.
-        NODE_VERSION: 14.21.3
   redis:
     type: redis:5.0
     # Use persist: true to persist the cache's data between restarts and rebuilds.
@@ -72,6 +65,12 @@ services:
     portforward: true
     hogfrom:
       - appserver
+  node:
+    type: 'node:14'
+    overrides:
+      environment:
+        # Set node compilation flag to allow arm64 and x86 chipset compilation.
+        CPPFLAGS: "-DPNG_ARM_NEON_OPT=0"
 tooling:
   devmode:
     service: appserver
@@ -85,8 +84,9 @@ tooling:
     server: appserver
     cmd: /app/vendor/bin/drush -r /app/web
   npm:
-    service: appserver
-    cmd: npm
+    service: node
+  node:
+    service: node
   phpcs:
     description: Run PHPCS checks against all custom Drupal code
     service: appserver

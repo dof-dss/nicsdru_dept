@@ -26,7 +26,7 @@
   }
 
   p {
-    max-width: $max-content-width;
+    max-width: $max-body-text-width;
   }
 
   p,
@@ -406,6 +406,67 @@
 
     a.more {
       @include responsive-typo-map($large-text);
+    }
+  }
+
+  &.section--minister {
+    box-shadow: 0 5px 0 0 var(--brand-primary-color);
+    //
+    //h2 {
+    //  margin-top: 0;
+    //}
+
+    .card-deck {
+      margin-bottom: 0;
+    }
+
+    article {
+      a {
+        flex-wrap: wrap;
+
+        @include breakpoint($phab) {
+          flex-wrap: nowrap;
+        }
+      }
+
+      .card {
+        display: flex;
+
+        @include breakpoint($phab) {
+          flex-flow: row nowrap;
+        }
+      }
+
+      .card__image {
+        margin-bottom: var(--rhythm-spacing-sm);
+        flex-basis: 100%;
+        padding-right: 0;
+        max-width: 100%;
+
+        @include breakpoint($phab) {
+          flex-basis: 30%;
+          min-width: 16.5rem;
+        }
+      }
+
+      .card__body {
+        align-self: auto;
+        padding-left: 0;
+
+        @include breakpoint($phab) {
+          padding-left: var(--rhythm-spacing-lg);
+          padding-top: 0;
+        }
+
+        .card__title {
+          margin: 0 0 var(--rhythm-spacing-sm);
+        }
+
+        p {
+          @include responsive-typo-map($normal-text);
+          margin: var(--rhythm-spacing-xs) 0 0;
+        }
+      }
     }
   }
 }

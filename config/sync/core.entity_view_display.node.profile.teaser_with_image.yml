@@ -1,0 +1,84 @@
+uuid: 5d1f9721-7468-4fb9-9517-e620a89325d8
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser_with_image
+    - field.field.node.profile.body
+    - field.field.node.profile.field_department
+    - field.field.node.profile.field_domain_access
+    - field.field.node.profile.field_domain_all_affiliates
+    - field.field.node.profile.field_domain_source
+    - field.field.node.profile.field_metatags
+    - field.field.node.profile.field_next_audit_due
+    - field.field.node.profile.field_photo
+    - field.field.node.profile.field_summary
+    - node.type.profile
+  module:
+    - layout_builder
+    - metatag
+    - smart_trim
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.profile.teaser_with_image
+targetEntityType: node
+bundle: profile
+mode: teaser_with_image
+content:
+  field_metatags:
+    type: metatag_empty_formatter
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_photo:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: featured_news_thumbnail
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_summary:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 600
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  body: true
+  content_moderation_control: true
+  entitygroupfield: true
+  field_department: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
+  field_next_audit_due: true
+  groups: true
+  groups_type_department_site: true
+  langcode: true
+  links: true
+  search_api_excerpt: true
