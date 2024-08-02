@@ -6,6 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\dept_migrate_audit\MigrationAuditBatchService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AuditController extends ControllerBase {
@@ -16,11 +17,19 @@ class AuditController extends ControllerBase {
   protected $database;
 
   /**
+   * @var \Drupal\dept_migrate_audit\MigrationAuditBatchService
+   */
+  protected $auditProcessService;
+
+  /**
    * @param \Drupal\Core\Database\Connection $database
    *   The database service.
+   * @param \Drupal\dept_migrate_audit\MigrationAuditBatchService $migration_audit_service
+   *   The database service.
    */
-  public function __construct(Connection $database) {
+  public function __construct(Connection $database, MigrationAuditBatchService $migration_audit_service) {
     $this->database = $database;
+    $this->auditProcessService = $migration_audit_service;
   }
 
   /**
@@ -28,7 +37,8 @@ class AuditController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('database')
+      $container->get('database'),
+      $container->get('dept_migrate_audit.audit_batch_service')
     );
   }
 
@@ -83,7 +93,7 @@ class AuditController extends ControllerBase {
             'attributes' => [
               'class' => ['link'],
               'style' => 'padding: 0 5px',
-            ]
+            ],
           ])->toRenderable();
 
         $top_links[] = $link_element;
@@ -155,7 +165,7 @@ class AuditController extends ControllerBase {
 
     if (empty($last_import_time)) {
       return [
-        '#markup' => 'Audit database table not found.'
+        '#markup' => $this->t('Audit database table empty, @link.', ['@link' => Link::createFromRoute('Process audit data', 'dept_migrate_audit.migrate_audit_process_data')->toString()])
       ];
     }
 
