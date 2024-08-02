@@ -8,35 +8,45 @@ use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
- * Batch service for processing Migration Audit data..
+ * Batch service for processing Migration Audit data.
  */
 class MigrationAuditBatchService {
 
   use StringTranslationTrait;
   use DependencySerializationTrait;
 
+  /**
+   * The database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected Connection $database;
 
   /**
    * The D7 database connection.
    *
    * @var \Drupal\Core\Database\Connection
    */
-  protected $d7Database;
+  protected Connection $d7Database;
 
   /**
    * Creates an Audit Batch Service instance.
    *
+   * @param \Drupal\Core\Database\Connection $database
+   *   Drupal database connection.
    * @param \Drupal\Core\Database\Connection $d7_database
    *   Drupal 7/migration database connection.
    */
-  public function __construct(Connection $d7_database) {
+  public function __construct(Connection $database, Connection $d7_database) {
+    $this->database = $database;
     $this->d7Database = $d7_database;
   }
 
   /**
    * Creates a batch process to process audit data.
    */
-  public function setupBatch() {
+  public function setupBatch(): void {
+    $this->database->truncate('dept_migrate_audit')->execute();
 
     $types = [
       'application',
@@ -59,10 +69,10 @@ class MigrationAuditBatchService {
 
     // Initialize batch builder.
     $batch_builder = new BatchBuilder();
-    $batch_builder->setTitle($this->t('Checking redirects'))
-      ->setInitMessage($this->t('Redirect check is starting...'))
+    $batch_builder->setTitle($this->t('Migration Audit'))
+      ->setInitMessage($this->t('Processing audit data'))
       ->setProgressMessage($this->t('@current items out of @total.'))
-      ->setErrorMessage($this->t('Redirect check has encountered an error.'))
+      ->setErrorMessage($this->t('Error processing audit data.'))
       ->setFinishCallback([$this, 'processAuditDataFinished']);
 
     foreach ($types as $type) {
@@ -95,7 +105,7 @@ class MigrationAuditBatchService {
 
     $now = \Drupal::time()->getCurrentTime();
 
-    $query = \Drupal::database()
+    $query = $this->database
       ->insert('dept_migrate_audit')
       ->fields(['uuid', 'type', 'last_import']);
     foreach ($data as $index => $row) {
