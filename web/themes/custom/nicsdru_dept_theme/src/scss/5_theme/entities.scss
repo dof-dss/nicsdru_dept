@@ -273,3 +273,50 @@
     }
   }
 }
+
+.page-node-type-protected-area {
+  .page-summary {
+    @include responsive-typo-map($normal-text);
+
+    @include breakpoint($phone) {
+      display: table;
+    }
+
+    .row {
+      margin-bottom: 1em;
+
+      @include breakpoint($phone) {
+        display: table-row;
+      }
+
+      .field {
+        &__label,
+        &__item,
+        &__items {
+          display: block;
+
+          @include breakpoint($phone) {
+            display: table-cell;
+          }
+        }
+
+        &__label {
+          font-weight: bold;
+
+          @include breakpoint($phone) {
+            padding-right: 1em;
+          }
+        }
+
+        &__items {
+          padding-left: 0;
+          margin: 0;
+
+          .field__item {
+            display: inline;
+          }
+        }
+      }
+    }
+  }
+}

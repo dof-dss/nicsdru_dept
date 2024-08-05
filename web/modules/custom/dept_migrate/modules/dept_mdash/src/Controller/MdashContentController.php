@@ -139,6 +139,8 @@ class MdashContentController extends ControllerBase {
       ->execute()
       ->fetchAllAssoc('sitename');
 
+    $total_records = 0;
+
     foreach ($domains as $domain => $val) {
       $rows = [];
 
@@ -158,6 +160,8 @@ class MdashContentController extends ControllerBase {
       if (count($results) < 1) {
         continue;
       }
+
+      $total_records += count($results);
 
       foreach ($results as $result) {
         $rows[] = [
@@ -188,6 +192,12 @@ class MdashContentController extends ControllerBase {
           'title'
         ],
         '#rows' => $rows,
+      ];
+    }
+
+    if ($total_records === 0) {
+      return [
+        '#markup' => $this->t('No revision information available.'),
       ];
     }
 

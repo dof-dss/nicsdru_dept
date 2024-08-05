@@ -19,13 +19,15 @@ use Drupal\node\Entity\Node;
  * Implements hook_preprocess_html().
  */
 function nicsdru_dept_theme_preprocess_html(array &$variables) {
-  // Set body classes for specific departments.
+  // Set department specific variables.
   $dept = \Drupal::service('department.manager')->getCurrentDepartment();
   if (is_object($dept) && method_exists($dept, 'id')) {
     $variables['attributes']['class'][] = 'dept-' . $dept->id();
+    $variables['site_dept_id'] = $dept->id();
   }
   else {
     $variables['attributes']['class'][] = 'dept-admin';
+    $variables['site_dept_id'] = 'nigov';
   }
 }
 
@@ -44,6 +46,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
         case "article":
         case "news":
         case "page":
+        case "protected_area":
           // If page is not in a book, it has a main and aside.
           if (empty($node->book)) {
             $variables['main_content_attr']->addClass(LayoutClasses::MAIN_SIDE);
@@ -118,6 +121,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
             ->setAttribute('role', 'presentation');
         }
         break;
+
       case "contacts":
         $variables['main_content_attr']->addClass(LayoutClasses::MAIN_LIMITED);
         if ($variables['content_wrapper_attr'] instanceof Attribute) {
@@ -176,10 +180,12 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
     case 'entity.node.revision':
     case 'entity.node.latest':
       $node_id = \Drupal::routeMatch()->getRawParameter('node');
-      $node = Node::load($node_id);
 
-      if ($node === NULL) {
+      if ($node_id === NULL) {
         $node = \Drupal::routeMatch()->getParameter('node_preview');
+      }
+      else {
+        $node = Node::load($node_id);
       }
 
       $node_type = $node->getType();
@@ -189,6 +195,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
         case 'article':
         case 'news':
         case 'page':
+        case "protected_area":
           if ($node_type === 'news') {
             // Render Featured and Latest news block.
             $variables['page']['sidebar_second'][] = Helpers::blockContent('featurednews');
@@ -207,6 +214,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
         case "application":
         case "news":
         case "page":
+        case "protected_area":
           $variables['main_content_attr']->addClass(LayoutClasses::MAIN_SIDE);
           $variables['sidebar_second_attr']->addClass('ga-aside');
           break;
@@ -241,6 +249,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
 function nicsdru_dept_theme_preprocess_node(array &$variables) {
   /** @var \Drupal\node\NodeInterface $node */
   $node = &$variables['node'];
+  $node_type = $node->getType();
 
   // Check if the node has a custom layout.
   if ($node->hasField('layout_builder__layout') && !$node->get('layout_builder__layout')->isEmpty()) {
@@ -264,17 +273,23 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
   ];
 
   $variables['display_social_links'] = in_array($node->bundle(), $social_bundles);
-
-  $variables['show_title'] = TRUE;
+  // Display the topics link list.
   $variables['show_topics'] = TRUE;
+  // Display the title element.
+  $variables['show_title'] = TRUE;
+  // Hide the title text within the title element.
+  $variables['title_text_visible'] = TRUE;
+  $variables['title'] = $node->getTitle();
+  $variables['node_type'] = $node_type;
 
-  switch ($node->getType()) {
+  switch ($node_type) {
     case "article":
     case "application":
     case "contact":
     case "news":
     case "publication":
     case "subtopic":
+    case "protected_area":
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('ga-main');
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('article-content');
 
@@ -306,7 +321,7 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
   }
 
   // Only use this code for consultations content type.
-  if ($variables['node']->getType() === 'consultation') {
+  if ($node_type === 'consultation') {
 
     // Get the current time to gauge consultation start and end dates off.
     $current_time = \Drupal::time()->getCurrentTime();
@@ -336,11 +351,13 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
     $book = $node->book;
     $pid = $book['pid'];
 
-    if ($pid) {
+    if ($pid && $pid != -1) {
       $parent_node = Node::load($pid);
-      $parent_title = $parent_node->getTitle();
-      $variables['book_parent_title'] = $parent_title;
-      $variables['book_parent_url'] = '/node/' . strval($pid);
+      if ($parent_node) {
+        $parent_title = $parent_node->getTitle();
+        $variables['book_parent_title'] = $parent_title;
+        $variables['book_parent_url'] = '/node/' . strval($pid);
+      }
     }
   }
 }
@@ -381,9 +398,13 @@ function nicsdru_dept_theme_preprocess_block(array &$variables) {
  * Implements hook_preprocess_page_title().
  */
 function nicsdru_dept_theme_preprocess_page_title(&$variables) {
+  // Preprocess titles on certain routes.
+  $route = \Drupal::routeMatch();
 
-  // By default page titles are visible.
-  $variables['title_visible'] = TRUE;
+  // Will need bits and pieces from the request for titles.
+  $request = \Drupal::request();
+
+  $variables['title_text_visible'] = TRUE;
 
   // Set the home page title and visually hide it.
   if (\Drupal::service('path.matcher')->isFrontPage()) {
@@ -392,14 +413,8 @@ function nicsdru_dept_theme_preprocess_page_title(&$variables) {
       $variables['title'] = t('Welcome to ') . $dept->name();
     }
 
-    $variables['title_visible'] = FALSE;
+    $variables['title_text_visible'] = FALSE;
   }
-
-  // Preprocess titles on certain routes.
-  $route = \Drupal::routeMatch();
-
-  // Will need bits and pieces from the request for titles.
-  $request = \Drupal::request();
 
   switch ($route->getRouteName()) {
 

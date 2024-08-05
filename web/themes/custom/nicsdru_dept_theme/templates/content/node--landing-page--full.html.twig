@@ -74,11 +74,11 @@
 Landing pages have a boolean field to enable title visibility.
 #}
 {% if node.field_enable_title %}
-  {%- set title_visible = node.field_enable_title.0.value == 1 ? true : false -%}
+  {%- set title_text_visible = node.field_enable_title.0.value == 1 ? true : false -%}
 {% endif %}
 <article{{ attributes.setAttribute('id', 'main-article').removeAttribute('role') }}>
   {{- title_prefix -}}
-  {% if title_visible %}
+  {% if title_text_visible %}
     <h1{{ title_attributes.addClass('page-title') }}>{{- label -}}</h1>
     {{ content.field_site_topics }}
   {% else %}

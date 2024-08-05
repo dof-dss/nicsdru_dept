@@ -9,6 +9,7 @@ dependencies:
     - node.type.article
     - node.type.consultation
     - node.type.news
+    - node.type.protected_area
     - node.type.publication
   module:
     - book
@@ -377,6 +378,7 @@ display:
           value:
             application: application
             article: article
+            protected_area: protected_area
           group: 1
           exposed: false
           expose:
