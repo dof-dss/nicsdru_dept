@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "201538599e6d32ae019759f1e8864abb",
+    "content-hash": "4d94ea1f7173953ca5f2ea6522dad3f1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5728,6 +5728,52 @@
             }
         },
         {
+            "name": "drupal/glightbox",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/glightbox.git",
+                "reference": "1.0.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/glightbox-1.0.7.zip",
+                "reference": "1.0.7",
+                "shasum": "13dba397cf36c1f4d5be2bdc7c08809d0f65d43e"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9 || ^10",
+                "levmyshkin/glightbox": "^3.2"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.7",
+                    "datestamp": "1713942568",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "levmyshkin",
+                    "homepage": "https://www.drupal.org/user/1079574"
+                }
+            ],
+            "description": "GLightbox is a pure javascript lightbox.",
+            "homepage": "https://www.drupal.org/project/glightbox",
+            "support": {
+                "source": "https://git.drupalcode.org/project/glightbox",
+                "issues": "https://www.drupal.org/project/issues/glightbox"
+            }
+        },
+        {
             "name": "drupal/google_map_field",
             "version": "dev-1.x",
             "source": {
@@ -10260,6 +10306,37 @@
                 }
             ],
             "time": "2024-03-13T13:12:53+00:00"
+        },
+        {
+            "name": "levmyshkin/glightbox",
+            "version": "3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/levmyshkin/glightbox.git",
+                "reference": "ec02687a888436767b2800f949ab9f5e7db5c681"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/levmyshkin/glightbox/zipball/ec02687a888436767b2800f949ab9f5e7db5c681",
+                "reference": "ec02687a888436767b2800f949ab9f5e7db5c681",
+                "shasum": ""
+            },
+            "type": "drupal-library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "GLightbox is a pure javascript lightbox",
+            "support": {
+                "source": "https://github.com/levmyshkin/glightbox/tree/3.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://www.paypal.com/paypalme/bdigital9816/5usd",
+                    "type": "custom"
+                }
+            ],
+            "time": "2022-11-22T11:31:00+00:00"
         },
         {
             "name": "maennchen/zipstream-php",

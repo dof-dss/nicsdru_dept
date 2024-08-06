@@ -1,0 +1,51 @@
+uuid: 2fb2bca7-3a9c-42cb-843a-e4922af3585e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.gallery_image
+    - field.field.media.image.field_caption
+    - field.field.media.image.field_domain_access
+    - field.field.media.image.field_domain_source
+    - field.field.media.image.field_media_image
+    - image.style.large
+    - image.style.nigov_full_1240_x2
+    - media.type.image
+  module:
+    - glightbox
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+_core:
+  default_config_hash: jOwnt_yq6AKAfqU6f0xKnxEkFQ2eTPJWxrk3WMLbL68
+id: media.image.gallery_image
+targetEntityType: media
+bundle: image
+mode: gallery_image
+content:
+  field_media_image:
+    type: glightbox
+    label: visually_hidden
+    settings:
+      glightbox_node_style: large
+      glightbox_node_style_first: ''
+      glightbox_image_style: nigov_full_1240_x2
+      glightbox_gallery: parent
+      glightbox_gallery_custom: ''
+      glightbox_caption: auto
+      glightbox_caption_custom: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_caption: true
+  field_domain_access: true
+  field_domain_source: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true
