@@ -149,7 +149,9 @@ function dept_node_preprocess_node(array &$variables) {
 
   // Transform node URL's from absolute to relative..
   if ($node instanceof NodeInterface) {
-    $variables['url'] = str_starts_with($variables['url'], $host) ? substr($variables['url'], strlen($host)) : $variables['url'];
+    if (!empty($variables['url'])) {
+      $variables['url'] = str_starts_with($variables['url'], $host) ? substr($variables['url'], strlen($host)) : $variables['url'];
+    }
   }
 
   if (!$node instanceof NodeInterface || $view_mode === 'search_autocomplete') {
