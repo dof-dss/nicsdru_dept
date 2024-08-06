@@ -91,7 +91,7 @@ final class MigrateAuditProcessDataForm extends FormBase {
       $form['notice'] = [
         '#type' => 'html_tag',
         '#tag' => 'strong',
-        '#value' => $this->t("Migrate Audit table contains data. @link", ['@link' => Link::createFromRoute('View audit results.', 'dept_migrate_audit.results')->toString()]),
+        '#value' => $this->t("Migrate Audit table contains data. @link", ['@link' => Link::createFromRoute('View audit results.', 'dept_migrate_audit.migration_audit')->toString()]),
       ];
     }
 

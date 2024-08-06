@@ -1,69 +1,69 @@
 <?php
 
-namespace Drupal\dept_migrate_audit\Controller;
+declare(strict_types=1);
 
-use Drupal\Core\Controller\ControllerBase;
+namespace Drupal\dept_migrate_audit\Form;
+
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate_audit\MigrationAuditBatchService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class AuditController extends ControllerBase {
+/**
+ * Provides a Department sites: migration audit form.
+ */
+final class MigrationAuditForm extends FormBase {
 
   /**
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $database;
-
-  /**
-   * @var \Drupal\dept_migrate_audit\MigrationAuditBatchService
-   */
-  protected $auditProcessService;
-
-  /**
-   * @var \Drupal\dept_core\DepartmentManager
-   */
-  protected $deptManager;
-
-  /**
+   * Constructs Migrate Audit Form.
+   *
    * @param \Drupal\Core\Database\Connection $database
-   *   The database service.
-   * @param \Drupal\dept_migrate_audit\MigrationAuditBatchService $migration_audit_service
-   *   The database service.
-   * @param \Drupal\dept_core\DepartmentManager $dept_manager
-   *   Department manager service object.
+   *   Database connection.
+   * @param \Drupal\dept_migrate_audit\MigrationAuditBatchService $auditProcessService
+   *   The Migration Audit Process service.
+   * @param \Drupal\dept_core\DepartmentManager $deptManager
+   *   The Department Manager.
+   * @param string $type
+   *   A content type (node bundle).
    */
-  public function __construct(Connection $database, MigrationAuditBatchService $migration_audit_service, DepartmentManager $dept_manager) {
-    $this->database = $database;
-    $this->auditProcessService = $migration_audit_service;
-    $this->deptManager = $dept_manager;
+  public function __construct(
+    protected Connection $database,
+    protected MigrationAuditBatchService $auditProcessService,
+    protected DepartmentManager $deptManager,
+    protected string $type) {
   }
 
   /**
-   * @inheritDoc
+   * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('database'),
       $container->get('dept_migrate_audit.audit_batch_service'),
-      $container->get('department.manager')
+      $container->get('department.manager'),
+      $container->get('current_route_match')->getParameter('type'),
     );
   }
 
+
   /**
-   * Show audit report.
-   *
-   * @param string $type
-   *   Content type required. Defaults to 'article'.
-   * @param int $page
-   *   Pager page number.
-   *
-   * @return array
-   *   Render array.
+   * {@inheritdoc}
    */
-  public function showResults(string $type, int $page = 0) {
+  public function getFormId(): string {
+    return 'dept_migrate_audit_migration_audit';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state): array {
+
+    ksm($this->type);
+
     $top_links = [];
     $types = [
       'application' => 'Application',
@@ -85,7 +85,7 @@ class AuditController extends ControllerBase {
     ];
 
     foreach ($types as $type_id => $label) {
-      if ($type_id === $type) {
+      if ($type_id === $this->type) {
         $top_links[] = [
           '#type' => 'html_tag',
           '#tag' => 'span',
@@ -97,7 +97,7 @@ class AuditController extends ControllerBase {
       }
       else {
         $link_element = Link::createFromRoute($label,
-          'dept_migrate_audit.results',
+          'dept_migrate_audit.migration_audit',
           ['type' => $type_id],
           [
             'attributes' => [
@@ -110,10 +110,10 @@ class AuditController extends ControllerBase {
       }
     }
 
-    if (empty($type)) {
+    if (empty($this->type)) {
       return $top_links + [
-        '#markup' => '<div>' . $this->t('No results found. Specify a type in the URL path, eg: article') . '</div>',
-      ];
+          '#markup' => '<div>' . $this->t('No results found. Specify a type in the URL path, eg: article') . '</div>',
+        ];
     }
 
     $header = [
@@ -146,11 +146,11 @@ class AuditController extends ControllerBase {
       'ual' => 'ual',
     ];
 
-    $map_table = 'migrate_map_node_' . $type;
+    $map_table = 'migrate_map_node_' . $this->type;
 
     $subquery = $this->database->select('dept_migrate_audit', 'dma');
     $subquery->fields('dma', ['uuid']);
-    $subquery->condition('dma.type', $type_map[$type], 'IN');
+    $subquery->condition('dma.type', $type_map[$this->type], 'IN');
 
     $current_dept = $this->deptManager->getCurrentDepartment();
     $dept_filter = $current_dept->id();
@@ -170,7 +170,7 @@ class AuditController extends ControllerBase {
     // @phpstan-ignore-next-line
     $pager = $query
       ->extend('Drupal\Core\Database\Query\PagerSelectExtender')
-      ->limit(50);
+      ->limit(25);
 
     $results = $pager->execute()->fetchAll();
 
@@ -218,9 +218,9 @@ class AuditController extends ControllerBase {
       '#markup' => $this->t("<p>NB: Content shared across department
           sites will appear more than once in the table.
           <strong>Last audit data imported on :importtime</strong></p>", [
-            ':importtime' => \Drupal::service('date.formatter')
-              ->format($last_import_time, 'medium'),
-          ]),
+        ':importtime' => \Drupal::service('date.formatter')
+          ->format($last_import_time, 'medium'),
+      ]),
     ];
 
     $build[] = [
@@ -236,6 +236,24 @@ class AuditController extends ControllerBase {
     ];
 
     return $build;
+
+    $form['actions'] = [
+      '#type' => 'actions',
+      'submit' => [
+        '#type' => 'submit',
+        '#value' => $this->t('Send'),
+      ],
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
+    $this->messenger()->addStatus($this->t('The message has been sent.'));
+    $form_state->setRedirect('<front>');
   }
 
 }

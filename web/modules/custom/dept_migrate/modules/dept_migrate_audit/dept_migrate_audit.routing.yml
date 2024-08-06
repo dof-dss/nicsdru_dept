@@ -1,16 +1,16 @@
-dept_migrate_audit.results:
-  path: '/admin/dept/mdash/audit/results/{type}'
-  defaults:
-    _controller: '\Drupal\dept_migrate_audit\Controller\AuditController::showResults'
-    _title: 'Migration audit report'
-    type: article
-  requirements:
-    _permission: 'view migration audit report'
-
 dept_migrate_audit.migrate_audit_process_data:
   path: '/admin/dept/mdash/audit/process/form'
   defaults:
     _title: 'Migrate Audit Process Data'
     _form: 'Drupal\dept_migrate_audit\Form\MigrateAuditProcessDataForm'
+  requirements:
+    _permission: 'view migration audit report'
+
+dept_migrate_audit.migration_audit:
+  path: 'admin/dept/mdash/audit/{type}'
+  defaults:
+    _title: 'Migration Audit'
+    _form: 'Drupal\dept_migrate_audit\Form\MigrationAuditForm'
+    type: article
   requirements:
     _permission: 'view migration audit report'
