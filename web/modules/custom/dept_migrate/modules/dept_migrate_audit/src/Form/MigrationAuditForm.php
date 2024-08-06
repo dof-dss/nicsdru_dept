@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\dept_migrate_audit\Form;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -27,6 +28,8 @@ final class MigrationAuditForm extends FormBase {
    *   The Migration Audit Process service.
    * @param \Drupal\dept_core\DepartmentManager $deptManager
    *   The Department Manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The Entity Type Manager.
    * @param string $type
    *   A content type (node bundle).
    */
@@ -34,6 +37,7 @@ final class MigrationAuditForm extends FormBase {
     protected Connection $database,
     protected MigrationAuditBatchService $auditProcessService,
     protected DepartmentManager $deptManager,
+    protected EntityTypeManagerInterface $entityTypeManager,
     protected string $type) {
   }
 
@@ -45,6 +49,7 @@ final class MigrationAuditForm extends FormBase {
       $container->get('database'),
       $container->get('dept_migrate_audit.audit_batch_service'),
       $container->get('department.manager'),
+      $container->get('entity_type.manager'),
       $container->get('current_route_match')->getParameter('type'),
     );
   }
@@ -61,9 +66,6 @@ final class MigrationAuditForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-
-    ksm($this->type);
-
     $top_links = [];
     $types = [
       'application' => 'Application',
@@ -193,28 +195,26 @@ final class MigrationAuditForm extends FormBase {
         $dept_id .= '-ni';
       }
 
-      $rows[] = [
-        'nid' => Link::fromTextAndUrl($row->nid, Url::fromRoute('entity.node.canonical', ['node' => $row->nid])),
-        'd7nid' => Link::fromTextAndUrl($row->sourceid2, Url::fromUri('https://' . $dept_id . '.gov.uk/node/' . $row->sourceid2, ['absolute' => TRUE]))->toString(),
-        'depts' => $row->field_domain_access_target_id,
-        'type' => $row->type,
-        'title' => $row->title,
-        'status' => ($row->status == 1) ? $this->t('Published') : $this->t('Not published'),
-        'created' => \Drupal::service('date.formatter')->format($row->created),
+      $rows[$row->nid] = [
+        Link::fromTextAndUrl($row->nid, Url::fromRoute('entity.node.canonical', ['node' => $row->nid])),
+        Link::fromTextAndUrl($row->sourceid2, Url::fromUri('https://' . $dept_id . '.gov.uk/node/' . $row->sourceid2, ['absolute' => TRUE]))->toString(),
+        $row->field_domain_access_target_id,
+        $row->type,
+        $row->title,
+        ($row->status == 1) ? $this->t('Published') : $this->t('Not published'),
+        \Drupal::service('date.formatter')->format($row->created),
       ];
     }
 
-    $build = [];
+    $form[] = $top_links;
 
-    $build[] = $top_links;
-
-    $build[] = [
+    $form[] = [
       '#markup' => $this->t('<h3>:numrows results. </h3>', [
         ':numrows' => $num_rows,
       ]),
     ];
 
-    $build[] = [
+    $form[] = [
       '#markup' => $this->t("<p>NB: Content shared across department
           sites will appear more than once in the table.
           <strong>Last audit data imported on :importtime</strong></p>", [
@@ -223,11 +223,11 @@ final class MigrationAuditForm extends FormBase {
       ]),
     ];
 
-    $build[] = [
+    $form[] = [
       'table' => [
-        '#type' => 'table',
+        '#type' => 'tableselect',
         '#header' => $header,
-        '#rows' => $rows,
+        '#options' => $rows,
         '#empty' => $this->t('Nothing to display.'),
       ],
       'pager' => [
@@ -235,13 +235,11 @@ final class MigrationAuditForm extends FormBase {
       ],
     ];
 
-    return $build;
-
     $form['actions'] = [
       '#type' => 'actions',
       'submit' => [
         '#type' => 'submit',
-        '#value' => $this->t('Send'),
+        '#value' => $this->t('Delete'),
       ],
     ];
 
@@ -252,8 +250,15 @@ final class MigrationAuditForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $this->messenger()->addStatus($this->t('The message has been sent.'));
-    $form_state->setRedirect('<front>');
+    $nids = array_keys(array_filter($form_state->getValue('table')));
+
+    if (!empty($nids)) {
+      $node_storage = $this->entityTypeManager->getStorage('node');
+      $nodes = $node_storage->loadMultiple($nids);
+      $node_storage->delete($nodes);
+      \Drupal::messenger()->addMessage($this->t('Deleted @total @type nodes.', ['@type' => $this->type, '@total' => count($nids)]));
+
+    }
   }
 
 }
