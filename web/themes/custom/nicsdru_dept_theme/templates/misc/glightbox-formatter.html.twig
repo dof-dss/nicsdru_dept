@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a formatted glightbox image field.
+ *
+ * Available variables:
+ * - image: A collection of image data.
+ * - url: An URL the image can be linked to.
+ * - attributes: Link attributes.
+ *
+ * @see template_preprocess_glightbox_formatter()
+ *
+ * @ingroup themeable
+ */
+#}
+
+<a href="{{ url }}" aria-controls="glightbox" aria-label="{{ attributes['data-gbox-img-attrs']|raw }}" role="button" {{ attributes }}>
+  <figure>
+    {{ image }}
+    {% if attributes['title'] is not empty %}
+      <figcaption>{{ attributes['title'] }}</figcaption>
+    {% endif %}
+  </figure>
+</a>
