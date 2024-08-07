@@ -3,3 +3,9 @@ dept_migrate_audit.results:
   description: 'Discover orphaned content from source data UUIDs'
   route_name: dept_migrate_audit.results
   parent: dept_mdash_dashboard
+
+dept_migrate_audit.process_form:
+  title: Process form
+  description: 'Form to initiate the batch process to generate audit data'
+  route_name: dept_migrate_audit.migrate_audit_process_data
+  parent: dept_migrate_audit.results
