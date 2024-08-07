@@ -1,0 +1,47 @@
+/*
+ * @file
+ * Provides very specific styling for gallery node pages.
+ */
+@import '../init';
+
+.field--name-field-gallery-images {
+  grid-gap: 24px;
+
+  &.layout--triptych {
+    @include breakpoint($phone) {
+      grid-template-columns: 1fr 1fr;
+      //grid-gap: 24px;
+    }
+
+    @include breakpoint($phab) {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  .media-image {
+    margin: 0;
+  }
+
+  a.glightbox {
+    display: block;
+    background-color: $grey-lightest;
+    padding: .5em;
+  }
+}
+
+.glightbox-container {
+  .ginner-container {
+    &.desc-bottom {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .gdesc-inner {
+    padding: .5em 1em;
+
+    .gslide-title {
+      margin: 0;
+    }
+  }
+}
