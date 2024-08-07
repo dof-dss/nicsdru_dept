@@ -6,6 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate_audit\MigrationAuditBatchService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -22,14 +23,22 @@ class AuditController extends ControllerBase {
   protected $auditProcessService;
 
   /**
+   * @var \Drupal\dept_core\DepartmentManager
+   */
+  protected $deptManager;
+
+  /**
    * @param \Drupal\Core\Database\Connection $database
    *   The database service.
    * @param \Drupal\dept_migrate_audit\MigrationAuditBatchService $migration_audit_service
    *   The database service.
+   * @param \Drupal\dept_core\DepartmentManager $dept_manager
+   *   Department manager service object.
    */
-  public function __construct(Connection $database, MigrationAuditBatchService $migration_audit_service) {
+  public function __construct(Connection $database, MigrationAuditBatchService $migration_audit_service, DepartmentManager $dept_manager) {
     $this->database = $database;
     $this->auditProcessService = $migration_audit_service;
+    $this->deptManager = $dept_manager;
   }
 
   /**
@@ -38,7 +47,8 @@ class AuditController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('database'),
-      $container->get('dept_migrate_audit.audit_batch_service')
+      $container->get('dept_migrate_audit.audit_batch_service'),
+      $container->get('department.manager')
     );
   }
 
@@ -142,6 +152,9 @@ class AuditController extends ControllerBase {
     $subquery->fields('dma', ['uuid']);
     $subquery->condition('dma.type', $type_map[$type], 'IN');
 
+    $current_dept = $this->deptManager->getCurrentDepartment();
+    $dept_filter = $current_dept->id();
+
     $query = $this->database->select('node_field_data', 'nfd');
     $query->join($map_table, 'map', 'nfd.nid = map.destid1');
     $query->join('node__field_domain_access', 'nfda', 'nfda.entity_id = nfd.nid');
@@ -149,6 +162,7 @@ class AuditController extends ControllerBase {
     $query->fields('map', ['sourceid1', 'sourceid2']);
     $query->fields('nfda', ['field_domain_access_target_id']);
     $query->condition('map.sourceid1', $subquery, 'NOT IN');
+    $query->condition('nfda.field_domain_access_target_id', $dept_filter);
     $query->orderBy('nfd.created', 'DESC');
 
     $num_rows = $query->countQuery()->execute()->fetchField();
