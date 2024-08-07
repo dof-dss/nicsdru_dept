@@ -215,9 +215,9 @@ class AuditController extends ControllerBase {
     ];
 
     $build[] = [
-      '#markup' => $this->t("<p>NB: Content shared across department
-          sites will appear more than once in the table.
-          <strong>Last audit data imported on :importtime</strong></p>", [
+      '#markup' => $this->t("<p>NB: Content listed is only for the
+           current department.</p>
+          <p><strong>Last audit data imported on :importtime</strong></p>", [
             ':importtime' => \Drupal::service('date.formatter')
               ->format($last_import_time, 'medium'),
           ]),

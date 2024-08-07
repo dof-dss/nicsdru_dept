@@ -59,6 +59,7 @@ class MigrationAuditBatchService {
       'link',
       'news',
       'page',
+      'profile',
       'protected_area',
       'publication',
       'secure_publication',
