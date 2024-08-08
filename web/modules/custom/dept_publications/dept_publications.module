@@ -318,6 +318,12 @@ function dept_publications_preprocess_media(&$variables) {
 
     $file_headers = dept_publications_get_remote_file_metadata($file_url);
 
+    // Initialize metadata variables.
+    $file_size = 0;
+    $file_mimetype = '';
+    $file_extension = '';
+    $file_type = '';
+
     if ($file_headers) {
       // Get file size if available.
       if (!empty($file_headers['Content-Length'])) {
@@ -375,11 +381,6 @@ function dept_publications_get_remote_file_metadata(string $file_url) {
   $http_client = \Drupal::httpClient();
 
   $file_headers = [];
-  // Initialize metadata variables.
-  $file_size = 0;
-  $file_mimetype = '';
-  $file_extension = '';
-  $file_type = '';
 
   try {
     $file_headers = $http_client->request('HEAD', $file_url)->getHeaders();
