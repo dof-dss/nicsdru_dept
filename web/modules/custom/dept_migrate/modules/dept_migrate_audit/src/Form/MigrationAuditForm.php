@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Url;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate_audit\MigrationAuditBatchService;
@@ -33,6 +34,8 @@ final class MigrationAuditForm extends FormBase {
    *   The Entity Type Manager.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
    *   The Entity Type Manager.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger factory.
    * @param string $type
    *   A content type (node bundle).
    */
@@ -42,6 +45,7 @@ final class MigrationAuditForm extends FormBase {
     protected DepartmentManager $deptManager,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EntityFieldManagerInterface $entityFieldManager,
+    protected LoggerChannelInterface $logger,
     protected string $type) {
   }
 
@@ -55,6 +59,7 @@ final class MigrationAuditForm extends FormBase {
       $container->get('department.manager'),
       $container->get('entity_type.manager'),
       $container->get('entity_field.manager'),
+      $container->get('logger.factory')->get('dept_migrate_audit'),
       $container->get('current_route_match')->getParameter('type'),
     );
   }
@@ -261,22 +266,9 @@ final class MigrationAuditForm extends FormBase {
       $media_storage = $this->entityTypeManager->getStorage('media');
       $mediaEntitiesToDelete = [];
       $nodes = $node_storage->loadMultiple($nids);
-      $type_fields = $this->entityFieldManager->getFieldDefinitions('node', $this->type);
-      $bundle_reference_fields = [];
-
-      foreach ($type_fields as $type_field) {
-        if ($type_field->getType() === 'entity_reference') {
-          $settings = $type_field->getSettings();
-          if ($settings['handler'] === 'default:media') {
-            foreach ($settings['handler_settings']['target_bundles'] as $target) {
-              $bundle_reference_fields[$target][] = $type_field->getName();
-            }
-          }
-        }
-      }
 
       foreach ($nodes as $node) {
-        foreach ($bundle_reference_fields as $media_type => $bundle_reference_type) {
+        foreach ($this->bundleMediaFields() as $media_type => $bundle_reference_type) {
           foreach ($bundle_reference_type as $field_name) {
             if ($node->hasField($field_name)) {
               $referenced_entities = $node->get($field_name)->referencedEntities();
@@ -307,9 +299,10 @@ final class MigrationAuditForm extends FormBase {
       $mediaEntitiesToDelete = array_unique($mediaEntitiesToDelete);
 
       if ($mediaEntitiesToDelete) {
-        // TODO: Log the list of media entities deleted.
         $media_entities = $media_storage->loadMultiple($mediaEntitiesToDelete);
         $media_storage->delete($media_entities);
+
+        $this->logger->info($this->t('Media entries deleted: @mids', ['@mids' => implode(', ', $mediaEntitiesToDelete)]));
       }
 
       $nodes = $node_storage->loadMultiple($nids);
@@ -321,6 +314,25 @@ final class MigrationAuditForm extends FormBase {
       }
 
     }
+  }
+
+
+  protected function bundleMediaFields() {
+    $type_fields = $this->entityFieldManager->getFieldDefinitions('node', $this->type);
+    $bundle_reference_fields = [];
+
+    foreach ($type_fields as $type_field) {
+      if ($type_field->getType() === 'entity_reference') {
+        $settings = $type_field->getSettings();
+        if ($settings['handler'] === 'default:media') {
+          foreach ($settings['handler_settings']['target_bundles'] as $target) {
+            $bundle_reference_fields[$target][] = $type_field->getName();
+          }
+        }
+      }
+    }
+
+    return $bundle_reference_fields;
   }
 
   protected function mediaFieldData(string $type): array {
