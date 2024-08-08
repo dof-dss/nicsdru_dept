@@ -253,12 +253,89 @@ final class MigrationAuditForm extends FormBase {
     $nids = array_keys(array_filter($form_state->getValue('table')));
 
     if (!empty($nids)) {
+      // TODO: Inject service
+      $entityFieldManager = \Drupal::service('entity_field.manager');
       $node_storage = $this->entityTypeManager->getStorage('node');
+      $media_storage = $this->entityTypeManager->getStorage('media');
+      $node_types = $this->entityTypeManager->getStorage('node_type')->loadMultiple();
+      $nodes = $node_storage->loadMultiple($nids);
+      $mediaEntitiesToDelete = [];
+
+      foreach ($node_types as $node_type) {
+        $fields = $entityFieldManager->getFieldDefinitions('node', $node_type->id());
+
+        foreach ($fields as $field) {
+          if ($field->getType() === 'entity_reference') {
+            $settings = $field->getSettings();
+            if ($settings['handler'] === 'default:media') {
+              foreach ($settings['handler_settings']['target_bundles'] as $target) {
+                $tables = $this->entityTypeManager->getStorage('node')->getTableMapping()->getAllFieldTableNames($field->getName());
+                $reference_fields[$target][$field->getName()] = $tables;
+              }
+            }
+          }
+        }
+      }
+
+      $type_fields = $entityFieldManager->getFieldDefinitions('node', $this->type);
+      $type_reference_fields = [];
+
+      foreach ($type_fields as $type_field) {
+        if ($type_field->getType() === 'entity_reference') {
+          $settings = $type_field->getSettings();
+          if ($settings['handler'] === 'default:media') {
+            foreach ($settings['handler_settings']['target_bundles'] as $target) {
+              $type_reference_fields[$target][] = $type_field->getName();
+            }
+          }
+        }
+      }
+
+
+      foreach ($nodes as $node) {
+        foreach ($type_reference_fields as $media_type => $type_reference_type) {
+          foreach ($type_reference_type as $field_name) {
+            if ($node->hasField($field_name)) {
+              $referenced_entities = $node->get($field_name)->referencedEntities();
+
+              foreach ($referenced_entities as $referenced_entity) {
+                $mid = $referenced_entity->id();
+                $record_count = 0;
+
+                foreach ($reference_fields[$media_type] as $reference_field => $reference_field_tables) {
+                  $count = $this->database->select($reference_field_tables[0])
+                    ->condition($reference_field . '_target_id', $mid)
+                    ->countQuery()
+                    ->execute()
+                    ->fetchField();
+
+                  $record_count += $count;
+                }
+
+                if ($record_count === 1) {
+                  $mediaEntitiesToDelete[] = $mid;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      $mediaEntitiesToDelete = array_unique($mediaEntitiesToDelete);
+
+      if ($mediaEntitiesToDelete) {
+        $media_entities = $media_storage->loadMultiple($mediaEntitiesToDelete);
+        $media_storage->delete($media_entities);
+      }
+
       $nodes = $node_storage->loadMultiple($nids);
       $node_storage->delete($nodes);
-      \Drupal::messenger()->addMessage($this->t('Deleted @total @type nodes.', ['@type' => $this->type, '@total' => count($nids)]));
+      if ($mediaEntitiesToDelete) {
+        \Drupal::messenger()->addMessage($this->t('Deleted @total @type nodes and @media_total Media entities', ['@type' => $this->type, '@total' => count($nids), '@media_total' => count($mediaEntitiesToDelete)]));
+      } else {
+        \Drupal::messenger()->addMessage($this->t('Deleted @total @type nodes.', ['@type' => $this->type, '@total' => count($nids)]));
+      }
 
     }
   }
-
 }
