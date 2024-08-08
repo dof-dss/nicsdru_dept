@@ -123,8 +123,8 @@ final class MigrationAuditForm extends FormBase {
 
     if (empty($this->type)) {
       return $top_links + [
-          '#markup' => '<div>' . $this->t('No results found. Specify a type in the URL path, eg: article') . '</div>',
-        ];
+        '#markup' => '<div>' . $this->t('No results found. Specify a type in the URL path, eg: article') . '</div>',
+      ];
     }
 
     $header = [
@@ -224,12 +224,11 @@ final class MigrationAuditForm extends FormBase {
     ];
 
     $form[] = [
-      '#markup' => $this->t("<p>NB: Content shared across department
-          sites will appear more than once in the table.
-          <strong>Last audit data imported on :importtime</strong></p>", [
-        ':importtime' => \Drupal::service('date.formatter')
-          ->format($last_import_time, 'medium'),
-      ]),
+      '#markup' => $this->t("<p>NB: Content shared across department sites will appear more than once in the table.
+        <strong>Last audit data imported on :importtime</strong></p>", [
+          ':importtime' => \Drupal::service('date.formatter')->format($last_import_time, 'medium'),
+        ]
+      ),
     ];
 
     $form[] = [
@@ -267,29 +266,35 @@ final class MigrationAuditForm extends FormBase {
       $mediaEntitiesToDelete = [];
       $nodes = $node_storage->loadMultiple($nids);
 
+      // For each node we iterate the Media fields for that bundle, extract the
+      // referenced entities and check if that media item is referenced in any
+      // other fields for that media type.
       foreach ($nodes as $node) {
-        foreach ($this->bundleMediaFields() as $media_type => $bundle_reference_type) {
+        foreach ($this->bundleMediaFields($this->type) as $media_type => $bundle_reference_type) {
           foreach ($bundle_reference_type as $field_name) {
-            if ($node->hasField($field_name)) {
-              $referenced_entities = $node->get($field_name)->referencedEntities();
+            $referenced_entities = $node->get($field_name)->referencedEntities();
 
-              foreach ($referenced_entities as $referenced_entity) {
-                $mid = $referenced_entity->id();
-                $record_count = 0;
+            foreach ($referenced_entities as $referenced_entity) {
+              $mid = $referenced_entity->id();
+              $record_count = 0;
 
-                foreach ($this->mediaFieldData($media_type) as $reference_field => $reference_field_tables) {
-                  $count = $this->database->select($reference_field_tables[0])
-                    ->condition($reference_field . '_target_id', $mid)
-                    ->countQuery()
-                    ->execute()
-                    ->fetchField();
+              foreach ($this->mediaFieldTableData($media_type) as $reference_field => $reference_field_tables) {
+                // We're only checking the main field table and not the revision
+                // fields as we haven't migrated revisions.
+                $count = $this->database->select($reference_field_tables[0])
+                  ->condition($reference_field . '_target_id', $mid)
+                  ->countQuery()
+                  ->execute()
+                  ->fetchField();
 
-                  $record_count += $count;
-                }
+                $record_count += $count;
+              }
 
-                if ($record_count === 1) {
-                  $mediaEntitiesToDelete[] = $mid;
-                }
+              // If we only have 1 entry for the Media entity across all field
+              // tables for that Media bundle then it only belongs to this node
+              // and is added to the array for deletion.
+              if ($record_count === 1) {
+                $mediaEntitiesToDelete[] = $mid;
               }
             }
           }
@@ -298,6 +303,7 @@ final class MigrationAuditForm extends FormBase {
 
       $mediaEntitiesToDelete = array_unique($mediaEntitiesToDelete);
 
+      // Delete media entities only for these nodes.
       if ($mediaEntitiesToDelete) {
         $media_entities = $media_storage->loadMultiple($mediaEntitiesToDelete);
         $media_storage->delete($media_entities);
@@ -305,20 +311,38 @@ final class MigrationAuditForm extends FormBase {
         $this->logger->info($this->t('Media entries deleted: @mids', ['@mids' => implode(', ', $mediaEntitiesToDelete)]));
       }
 
+      // Delete the selected nodes.
       $nodes = $node_storage->loadMultiple($nids);
       $node_storage->delete($nodes);
       if ($mediaEntitiesToDelete) {
-        \Drupal::messenger()->addMessage($this->t('Deleted @total @type nodes and @media_total Media entities', ['@type' => $this->type, '@total' => count($nids), '@media_total' => count($mediaEntitiesToDelete)]));
-      } else {
-        \Drupal::messenger()->addMessage($this->t('Deleted @total @type nodes.', ['@type' => $this->type, '@total' => count($nids)]));
+        \Drupal::messenger()->addMessage($this->t('Deleted @total @type nodes and @media_total Media entities', [
+          '@type' => $this->type,
+          '@total' => count($nids),
+          '@media_total' => count($mediaEntitiesToDelete)
+        ]));
       }
-
+      else {
+        \Drupal::messenger()->addMessage($this->t('Deleted @total @type nodes.', [
+          '@type' => $this->type,
+          '@total' => count($nids)
+        ]));
+      }
     }
+
   }
 
-
-  protected function bundleMediaFields() {
-    $type_fields = $this->entityFieldManager->getFieldDefinitions('node', $this->type);
+  /**
+   *
+   * Returns an array of media fields for the given node bundle.
+   *
+   * @param string $bundle
+   *   The bundle ID.
+   *
+   * @return array
+   *   Array of Media fields for the given bundle.
+   */
+  protected function bundleMediaFields(string $bundle) {
+    $type_fields = $this->entityFieldManager->getFieldDefinitions('node', $bundle);
     $bundle_reference_fields = [];
 
     foreach ($type_fields as $type_field) {
@@ -335,7 +359,17 @@ final class MigrationAuditForm extends FormBase {
     return $bundle_reference_fields;
   }
 
-  protected function mediaFieldData(string $type): array {
+  /**
+   *
+   * Return database tables used by the given Media bundle ID.
+   *
+   * @param string $type
+   *   A Media entity bundle ID.
+   *
+   * @return array
+   *   Array of fields and their database tables for the bundle ID.
+   */
+  protected function mediaFieldTableData(string $type): array {
     $reference_fields = [];
     $node_types = $this->entityTypeManager->getStorage('node_type')->loadMultiple();
 
@@ -357,4 +391,5 @@ final class MigrationAuditForm extends FormBase {
 
     return $reference_fields[$type];
   }
+
 }
