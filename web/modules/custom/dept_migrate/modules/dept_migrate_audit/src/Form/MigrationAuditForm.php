@@ -102,7 +102,8 @@ final class MigrationAuditForm extends FormBase {
           '#type' => 'html_tag',
           '#tag' => 'span',
           '#attributes' => [
-            'style' => 'padding: 0 5px',
+            'style' => 'display: inline-block; padding: 5px; margin: 0 5px',
+            'class' => ['button', 'button--primary'],
           ],
           '#value' => $label,
         ];
@@ -113,8 +114,8 @@ final class MigrationAuditForm extends FormBase {
           ['type' => $type_id],
           [
             'attributes' => [
-              'class' => ['link'],
-              'style' => 'padding: 0 5px',
+              'style' => 'display: inline-block; padding: 5px; margin: 0 5px',
+              'class' => ['button'],
             ],
           ])->toRenderable();
 
@@ -412,6 +413,13 @@ final class MigrationAuditForm extends FormBase {
     return $reference_fields[$type];
   }
 
+  /**
+   * Logs details about Media entities that have been deleted.
+   *
+   * @param array $entities
+   *   The media entities to log.
+   *
+   */
   protected function logMediaEntities($entities): void {
     $message = $this->t('Media entries deleted for @type : ', ['@type' => $this->type]);
 
@@ -421,7 +429,7 @@ final class MigrationAuditForm extends FormBase {
         ->condition('destid1', $entity->id())
         ->execute()
         ->fetchField();
-      $message .= $entity->id() . ' (' . $source_uuid . ') ' .  substr($entity->label(), 0, 40) . '... | ';
+      $message .= $entity->id() . ' (' . $source_uuid . ') ' . substr($entity->label(), 0, 40) . '... | ';
     }
 
     $this->logger->info($message);
