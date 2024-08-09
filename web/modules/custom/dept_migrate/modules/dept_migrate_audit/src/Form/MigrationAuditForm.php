@@ -75,6 +75,7 @@ final class MigrationAuditForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
+
     $top_links = [];
     $types = [
       'application' => 'Application',
@@ -307,8 +308,7 @@ final class MigrationAuditForm extends FormBase {
       if ($mediaEntitiesToDelete) {
         $media_entities = $media_storage->loadMultiple($mediaEntitiesToDelete);
         $media_storage->delete($media_entities);
-
-        $this->logger->info($this->t('Media entries deleted: @mids', ['@mids' => implode(', ', $mediaEntitiesToDelete)]));
+        $this->logMediaEntities($media_entities);
       }
 
       // Delete the selected nodes.
@@ -390,6 +390,21 @@ final class MigrationAuditForm extends FormBase {
     }
 
     return $reference_fields[$type];
+  }
+
+  protected function logMediaEntities($entities): void {
+    $message = $this->t('Media entries deleted for @type : ', ['@type' => $this->type]);
+
+    foreach ($entities as $entity) {
+      $source_uuid = $this->database->select("migrate_map_d7_file_media_" . $entity->bundle(), 'mm')
+        ->fields('mm', ['sourceid1'])
+        ->condition('destid1', $entity->id())
+        ->execute()
+        ->fetchField();
+      $message .= $entity->id() . ' (' . $source_uuid . ') ' .  substr($entity->label(), 0, 40) . '... | ';
+    }
+
+    $this->logger->info($message);
   }
 
 }
