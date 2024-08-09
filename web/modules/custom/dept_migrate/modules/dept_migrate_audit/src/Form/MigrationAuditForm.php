@@ -238,7 +238,7 @@ final class MigrationAuditForm extends FormBase {
     ];
 
     $form[] = [
-      '#markup' => $this->t("<p>NB: Content shared across department sites will appear more than once in the table.
+      '#markup' => $this->t("<p>NB: Content listed is only for the current department.
         <strong>Last audit data imported on :importtime</strong></p>", [
           ':importtime' => \Drupal::service('date.formatter')->format($last_import_time, 'medium'),
         ]
@@ -261,12 +261,31 @@ final class MigrationAuditForm extends FormBase {
       '#type' => 'actions',
       'submit' => [
         '#type' => 'submit',
-        '#value' => $this->t('Delete'),
+        '#value' => $this->t('Delete selected nodes'),
         '#name' => 'submitDelete',
+        '#attributes' => [
+          'class' => ['button--danger'],
+        ],
+
       ],
     ];
 
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $submit_button = $form_state->getTriggeringElement();
+
+    if ($submit_button['#name'] === 'submitDelete') {
+      $nids = array_keys(array_filter($form_state->getValue('table')));
+
+      if (empty($nids)) {
+        $form_state->setErrorByName('actions', 'To delete you must select at least one item from the table.');
+      }
+    }
   }
 
   /**

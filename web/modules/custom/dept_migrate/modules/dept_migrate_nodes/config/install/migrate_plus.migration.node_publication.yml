@@ -112,26 +112,26 @@ process:
           from_format: 'Y-m-d H:i:s'
           to_format: 'Y-m-d'
           source: value
-#  field_publication_files:
-#    plugin: sub_process
-#    source: field_attachment
-#    process:
-#      target_id:
-#        - plugin: d7_file_lookup
-#          source: fid
-#          entity_type: media
-#        - plugin: default_value
-#          default_value: 97431
-#  field_publication_secure_files:
-#    plugin: sub_process
-#    source: field_secure_attachment
-#    process:
-#      target_id:
-#        - plugin: d7_file_lookup
-#          source: fid
-#          entity_type: media
-#        - plugin: default_value
-#          default_value: 97431
+  field_publication_files:
+    plugin: sub_process
+    source: field_attachment
+    process:
+      target_id:
+        - plugin: d7_file_lookup
+          source: fid
+          entity_type: media
+        - plugin: default_value
+          default_value: 97431
+  field_publication_secure_files:
+    plugin: sub_process
+    source: field_secure_attachment
+    process:
+      target_id:
+        - plugin: d7_file_lookup
+          source: fid
+          entity_type: media
+        - plugin: default_value
+          default_value: 97431
   field_external_publication:
     plugin: sub_process
     source: field_external_publication
