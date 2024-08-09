@@ -26,6 +26,7 @@ dependencies:
     - field.field.node.heritage_site.field_town
     - field.field.node.heritage_site.field_website
     - node.type.heritage_site
+    - workflows.workflow.nics_editorial_workflow
   module:
     - address
     - content_moderation
@@ -103,7 +104,7 @@ third_party_settings:
       region: content
       parent_name: ''
       weight: 2
-      format_type: details_sidebar
+      format_type: details
       format_settings:
         classes: ''
         show_empty_fields: false
