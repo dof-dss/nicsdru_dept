@@ -190,9 +190,21 @@ final class MigrationAuditForm extends FormBase {
     $last_import_time = $this->database->query("SELECT last_import FROM {dept_migrate_audit} ORDER BY last_import DESC LIMIT 1")->fetchField();
 
     if (empty($last_import_time)) {
-      return [
-        '#markup' => $this->t('Audit database table empty, @link.', ['@link' => Link::createFromRoute('Process audit data', 'dept_migrate_audit.migrate_audit_process_data')->toString()])
+
+      $form['notice'] = [
+        '#markup' => $this->t('Audit database table empty. Click the button below to generate.')
       ];
+
+      $form['actions'] = [
+        '#type' => 'actions',
+        'submit' => [
+          '#type' => 'submit',
+          '#value' => $this->t('Generate audit data'),
+          '#name' => 'submitGenerateAuditData',
+        ],
+      ];
+
+      return $form;
     }
 
     $rows = [];
@@ -249,6 +261,7 @@ final class MigrationAuditForm extends FormBase {
       'submit' => [
         '#type' => 'submit',
         '#value' => $this->t('Delete'),
+        '#name' => 'submitDelete',
       ],
     ];
 
@@ -259,6 +272,13 @@ final class MigrationAuditForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
+    $submit_button = $form_state->getTriggeringElement();
+
+    if ($submit_button['#name'] === 'submitGenerateAuditData') {
+      $this->auditProcessService->setupBatch();
+      return;
+    }
+
     $nids = array_keys(array_filter($form_state->getValue('table')));
 
     if (!empty($nids)) {
