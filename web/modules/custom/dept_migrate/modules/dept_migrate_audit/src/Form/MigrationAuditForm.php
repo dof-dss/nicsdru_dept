@@ -258,7 +258,10 @@ final class MigrationAuditForm extends FormBase {
     ];
 
     $form['actions'] = [
-      '#type' => 'actions',
+      '#type' => 'actions'
+    ];
+
+    $form['actions']['delete'] = [
       'submit' => [
         '#type' => 'submit',
         '#value' => $this->t('Delete selected nodes'),
@@ -266,7 +269,17 @@ final class MigrationAuditForm extends FormBase {
         '#attributes' => [
           'class' => ['button--danger'],
         ],
+      ],
+    ];
 
+    $form['actions']['audit_data'] = [
+      'submit' => [
+        '#type' => 'submit',
+        '#value' => $this->t('Regenerate audit data'),
+        '#name' => 'submitGenerateAuditData',
+        '#attributes' => [
+          'class' => ['button--secondary'],
+        ],
       ],
     ];
 
