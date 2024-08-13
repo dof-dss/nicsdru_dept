@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "201538599e6d32ae019759f1e8864abb",
+    "content-hash": "0b0edf3a164f4ec433b0af4bdb25014f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6454,6 +6454,69 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/linkit",
                 "issues": "http://drupal.org/project/linkit"
+            }
+        },
+        {
+            "name": "drupal/media_duplicates",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/media_duplicates.git",
+                "reference": "2.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/media_duplicates-2.0.2.zip",
+                "reference": "2.0.2",
+                "shasum": "f2862c57e81c08a7d50e16d3d6a047a8deb214e2"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10",
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "drupal/coder": "^8.3.3"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.2",
+                    "datestamp": "1695281329",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Nathan ter Bogt",
+                    "homepage": "https://www.drupal.org/u/nterbogt",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Grevil",
+                    "homepage": "https://www.drupal.org/user/3668491"
+                },
+                {
+                    "name": "nterbogt",
+                    "homepage": "https://www.drupal.org/user/102218"
+                }
+            ],
+            "description": "Detect duplicate media entities.",
+            "homepage": "https://drupal.org/project/media_duplicates",
+            "support": {
+                "source": "http://cgit.drupalcode.org/media_duplicates",
+                "issues": "https://www.drupal.org/project/issues/media_duplicates"
             }
         },
         {
