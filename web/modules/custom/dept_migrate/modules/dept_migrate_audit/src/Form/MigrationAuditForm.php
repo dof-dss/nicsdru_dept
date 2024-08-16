@@ -14,6 +14,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Url;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate_audit\MigrationAuditBatchService;
+use Drupal\migrate\Plugin\MigrateIdMapInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -258,7 +259,10 @@ final class MigrationAuditForm extends FormBase {
     ];
 
     $form['actions'] = [
-      '#type' => 'actions',
+      '#type' => 'actions'
+    ];
+
+    $form['actions']['delete'] = [
       'submit' => [
         '#type' => 'submit',
         '#value' => $this->t('Delete selected nodes'),
@@ -266,7 +270,17 @@ final class MigrationAuditForm extends FormBase {
         '#attributes' => [
           'class' => ['button--danger'],
         ],
+      ],
+    ];
 
+    $form['actions']['audit_data'] = [
+      'submit' => [
+        '#type' => 'submit',
+        '#value' => $this->t('Regenerate audit data'),
+        '#name' => 'submitGenerateAuditData',
+        '#attributes' => [
+          'class' => ['button--secondary'],
+        ],
       ],
     ];
 
@@ -348,12 +362,15 @@ final class MigrationAuditForm extends FormBase {
       if ($mediaEntitiesToDelete) {
         $media_entities = $media_storage->loadMultiple($mediaEntitiesToDelete);
         $media_storage->delete($media_entities);
+        $this->markEntitiesAsIgnored($media_entities);
         $this->logMediaEntities($media_entities);
       }
 
       // Delete the selected nodes.
       $nodes = $node_storage->loadMultiple($nids);
       $node_storage->delete($nodes);
+      $this->markEntitiesAsIgnored($nodes);
+
       if ($mediaEntitiesToDelete) {
         \Drupal::messenger()->addMessage($this->t('Deleted @total @type nodes and @media_total Media entities', [
           '@type' => $this->type,
@@ -452,6 +469,32 @@ final class MigrationAuditForm extends FormBase {
     }
 
     $this->logger->info($message);
+  }
+
+  /**
+   * Mark entities as ignored from future migrations. Used as part of the
+   * deletion process.
+   *
+   * @param array $entities
+   *   The entities to process.
+   */
+  protected function markEntitiesAsIgnored(array $entities): void {
+    foreach ($entities as $entity) {
+      $entity_type = $entity->getEntityTypeId();
+      $bundle = $entity->bundle();
+
+      if ($entity_type === 'media') {
+        $table_name = 'migrate_map_d7_file_media_' . $bundle;
+      }
+      else {
+        $table_name = 'migrate_map_' . $entity_type . '_' . $bundle;
+      }
+
+      $this->database->update($table_name)
+        ->fields(['source_row_status' => MigrateIdMapInterface::STATUS_IGNORED])
+        ->condition('destid1', $entity->id())
+        ->execute();
+    }
   }
 
 }
