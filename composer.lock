@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e83fe1008f371ccd5cf8cdbb1245bc7c",
+    "content-hash": "c362df743cee9f27553b154336031edf",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2209,6 +2209,92 @@
             "homepage": "https://www.drupal.org/project/antibot",
             "support": {
                 "source": "https://git.drupalcode.org/project/antibot"
+            }
+        },
+        {
+            "name": "drupal/auditfiles",
+            "version": "4.1.0-beta2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/auditfiles.git",
+                "reference": "4.1.0-beta2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/auditfiles-4.1.0-beta2.zip",
+                "reference": "4.1.0-beta2",
+                "shasum": "88376ea398be97cfd8673b938a42ffd1d188d23f"
+            },
+            "require": {
+                "drupal/core": "^10",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "composer/installers": "^2",
+                "dealerdirect/phpcodesniffer-composer-installer": "^1",
+                "drupal/core-dev": "^10.0",
+                "phpstan/extension-installer": "^1.3",
+                "phpstan/phpstan": "^1.11",
+                "phpstan/phpstan-deprecation-rules": "*",
+                "phpstan/phpstan-phpunit": "^1.3@stable",
+                "phpstan/phpstan-strict-rules": "^1@stable",
+                "previousnext/coding-standard": "^0.1.2"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "4.1.0-beta2",
+                    "datestamp": "1701347461",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                },
+                "drupal-scaffold": {
+                    "locations": {
+                        "web-root": "web/"
+                    }
+                },
+                "installer-paths": {
+                    "web/core": [
+                        "type:drupal-core"
+                    ]
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "andyceo",
+                    "homepage": "https://www.drupal.org/user/152512"
+                },
+                {
+                    "name": "dpi",
+                    "homepage": "https://www.drupal.org/user/81431"
+                },
+                {
+                    "name": "keshavv",
+                    "homepage": "https://www.drupal.org/user/3254066"
+                },
+                {
+                    "name": "mikeryan",
+                    "homepage": "https://www.drupal.org/user/4420"
+                },
+                {
+                    "name": "oadaeh",
+                    "homepage": "https://www.drupal.org/user/4649"
+                },
+                {
+                    "name": "Stuart Greenfield",
+                    "homepage": "https://www.drupal.org/user/54866"
+                }
+            ],
+            "description": "Allows for comparing and correcting files and file references in the files directory, in the database, and in content.",
+            "homepage": "https://www.drupal.org/project/auditfiles",
+            "support": {
+                "source": "https://git.drupalcode.org/project/auditfiles"
             }
         },
         {
@@ -20932,6 +21018,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "drupal/auditfiles": 10,
         "drupal/block_field": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
@@ -20939,6 +21026,7 @@
         "drupal/domain_entity": 5,
         "drupal/domain_path": 10,
         "drupal/domain_simple_sitemap": 10,
+        "drupal/file_delete_ui": 10,
         "drupal/flag": 10,
         "drupal/migrate_conditions": 10,
         "drupal/purge_users": 10,
