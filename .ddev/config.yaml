@@ -28,7 +28,9 @@ web_environment:
     - PLATFORM_APPLICATION_NAME=dept
     - PLATFORM_ENVIRONMENT=
     - PLATFORM_PROJECT=dnvkwx4xjhiza
+    - CPPFLAGS=-DPNG_ARM_NEON_OPT=0
 corepack_enable: false
+nodejs_version: 14
 
 # Key features of DDEV's config.yaml:
 
