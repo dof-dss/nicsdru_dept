@@ -415,6 +415,10 @@ function dept_core_page_attachments(array &$attachments) {
  * Implements hook_preprocess_HOOK() for file_managed_file.
  */
 function dept_core_preprocess_file_managed_file(&$variables) {
+  if (empty($variables['element']['remove_button'])) {
+    return;
+  }
+
   if (\Drupal::currentUser()->hasPermission('delete any file') === FALSE) {
     unset($variables['element']['remove_button']);
   }
