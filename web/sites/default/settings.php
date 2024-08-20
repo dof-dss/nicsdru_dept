@@ -9,12 +9,6 @@ $settings['file_scan_ignore_directories'] = [
   'bower_components',
 ];
 
-// Trusted host configuration.
-// platform.sh hosts added dynamically in settings.platformsh.php.
-$settings['trusted_host_patterns'] = [
-  '^.+\.lndo\.site$',
-];
-
 // Site hash salt.
 $settings['hash_salt'] = getenv('HASH_SALT');
 

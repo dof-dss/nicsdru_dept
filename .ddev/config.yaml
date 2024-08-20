@@ -25,10 +25,14 @@ use_dns_when_possible: true
 timezone: Europe/Dublin
 composer_version: "2"
 web_environment:
-    - PLATFORM_APPLICATION_NAME=dept
-    - PLATFORM_ENVIRONMENT=
-    - PLATFORM_PROJECT=dnvkwx4xjhiza
+    - CONFIG_SYNC_DIRECTORY=../config/sync
     - CPPFLAGS=-DPNG_ARM_NEON_OPT=0
+    - PLATFORM_ENVIRONMENT=main-bvxea6i
+    - PLATFORM_PROJECT=dnvkwx4xjhiza
+    - MIGRATE_IGNORE_SITES=change-me-when-ready
+    - SIMPLEI_ENV_COLOUR=#637C16
+    - SIMPLEI_ENV_NAME=Local
+    - CONFIG_READONLY=0
 corepack_enable: false
 nodejs_version: 14
 
