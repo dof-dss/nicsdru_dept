@@ -138,7 +138,7 @@ class MigrationAuditBatchService {
     $messenger = \Drupal::messenger();
 
     if ($success) {
-      $messenger->addMessage($this->t('@count results processed.', ['@count' => count($results)]));
+      $messenger->addMessage($this->t('@count node bundle types processed.', ['@count' => count($results)]));
     }
     else {
       $error_operation = reset($operations);
