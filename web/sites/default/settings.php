@@ -57,7 +57,7 @@ $config['geocoder.settings']['plugins_options']['googlemaps']['apikey'] = getenv
 $config['google_map_field.settings']['google_map_field_apikey'] = getenv('GOOGLE_MAP_API_KEY');
 
 // Environment indicator defaults.
-$env_colour = !empty(getenv('SIMPLEI_ENV_COLOR')) ? getenv('SIMPLEI_ENV_COLOR') : '#000000';;
+$env_colour = !empty(getenv('SIMPLEI_ENV_COLOUR')) ? getenv('SIMPLEI_ENV_COLOUR') : '#000000';;
 $env_name = !empty(getenv('SIMPLEI_ENV_NAME')) ? getenv('SIMPLEI_ENV_NAME') : getenv('PLATFORM_BRANCH');
 
 // Prevents legacy Symfony ApcClassLoader from being used instead of Composer's.
