@@ -1,10 +1,10 @@
 name: solr
-repository: ddev/ddev-solr
-version: 0.5.0
-install_date: "2024-07-22T16:36:49+01:00"
+repository: ddev/ddev-drupal-solr
+version: v1.2.3
+install_date: "2024-08-21T11:49:40+01:00"
 project_files:
-    - commands/solr/
+    - solr/conf
+    - solr/docker-entrypoint-initdb.d/solr-configupdate.sh
     - docker-compose.solr.yaml
-    - solr/
 global_files: []
 removal_actions: []
