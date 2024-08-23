@@ -3,7 +3,6 @@
 **NOTE: NIGov (northernireland.gov.uk)**
 The custom modules automatically grant access to all news press releases, publications and consultations from the NIGov domain.
 
-
 # Departmental sites codebase
 
 This source code is for the Departmental sites. It is built with Drupal 9 in a single codebase, single database manner using the Domain module to control content and access across the sites:
@@ -16,58 +15,56 @@ Continuous Integration services are provided by [Circle CI](https://github.com/d
 
 ## Getting started
 
-We recommend Lando for local development. To get started, ensure you have the following installed:
+We recommend DDEV for local development. To get started, ensure you have the following installed:
 
-1. Lando [https://docs.devwithlando.io/](https://docs.devwithlando.io/)
-2. Composer [https://getcomposer.org/](https://getcomposer.org/)
-3. Platform CLI tool [https://docs.platform.sh/development/cli.html](https://docs.platform.sh/development/cli.html)
+1. DDEV [https://ddev.com/get-started/](https://ddev.com/get-started/)
+  - Installation will include OrbStack (alternative to Docker Desktop)
+  - The project uses a Mutagen (a file sync agent) performance profile for all platforms.
+2. Platform CLI tool [https://docs.platform.sh/development/cli.html](https://docs.platform.sh/development/cli.html)
+  - You will need to request access to the projects you work on.
+  - Once granted, log in with `platform login -f` to renew any local SSH certs.
+3. Environment variables
+  - You need to populate the sensitive values in `.ddev/.env` as part of the build process.
+  - Ask the team for how best to obtain these.
 
 - Clone this repo
 - at the command line, 'cd' into your new directory
-- `lando start`
+- `ddev start`
 
-Once this has finished, it is recommended that you download the databases from Platform.sh using the 'platform db:dump'
+Once this has finished, it is recommended that you download the databases from Platform.sh using the `platform db:dump`
 command.
 
-The 'main' database may be imported into your local Lando site as follows:
+The 'main' database may be imported into your local stack as follows:
 
-`lando db-import <downloaded file name>`
+`ddev import-db --file=<downloaded file name>`
 
-The 'drupal7db' database may be imported into your local Lando site as follows:
+The 'drupal7db' database may be imported into your local stack as follows:
 
-`lando db-import -h drupal7db <downloaded file name>`
+`ddev import-db --database=drupal7db --file=<downloaded file name>`
 
 ## Project goals
 
 * Provide non-admin users with an editorial experience that:
   * Masks the complexity around Domain architecture when operating the site for routine content tasks.
   * Is consistent with NIDirect and Unity sites for editorial tasks, with the exception of form elements to share content across multiple sites.
-* Permit rolling content migrations from Drupal 7 for sites yet to launch without irregularities, content id clashes or service interruptions to either D7 or D9 applications.
-  * We use D7 UUIDs rather than node ids to help with this, the tradeoff is that a D7 node will have a different node id in D9. This won't affect path aliases but migrate lookups will be needed for any migration plugin config, in favour of verbatim node id values from D7.
-  * A D7 site will have a D9 domain record from the start. As migrations run, content will be added and updated for all sites. In short: we will get updates for all D7 sites for the migration configurations we have completed, on a rolling basis, until a site is launched on D9.
-  * When a site launches to D9, we add the site id to the relevant migration config ignore list.
-  * A site launch to D9 will involve (precise steps TBC):
+* Permit rolling content migrations from Drupal 7 for sites yet to launch without irregularities, content id clashes or service interruptions to either D7 or D10 applications.
+  * We use D7 UUIDs rather than node ids to help with this, the tradeoff is that a D7 node will have a different node id in D10. This won't affect path aliases but migrate lookups will be needed for any migration plugin config, in favour of verbatim node id values from D7.
+  * A D7 site will have a D10 domain record from the start. As migrations run, content will be added and updated for all sites. In short: we will get updates for all D7 sites for the migration configurations we have completed, on a rolling basis, until a site is launched on D10.
+  * When a site launches to D10, we add the site id to the relevant migration config ignore list.
+  * A site launch to D10 will involve (precise steps TBC):
     * Brief content embargo/freeze on D7.
     * DNS record updates, if not already resolving to Platform.sh IPs.
-    * Platform.sh application config updates for D7 and D9; routes/domain bindings, for example.
+    * Platform.sh application config updates for D7 and D10; routes/domain bindings, for example.
     * Fastly config, as required.
     * Migrate config updates to exclude the new site from rolling D7 content updates.
 
-
 ### Domain hostnames
 
-See `.lando.yml` and the `proxy` configuration section for local hostnames to represent the different sites.
-
-* For administrators, we recommend using `https://nigov.lndo.site` for general site administration.
-* All other authenticated users should sign in to the site that they are managing content for, eg: `https://finance.lndo.site`
-
-When running locally it's important that the environment settings are set to local, this will ensure that the 'local' config split will import and this includes all of the recommended
-Lando site domains, see https://github.com/dof-dss/nicsdru_dept/tree/development/config/local
+See `.ddev/config.yaml` and the `additional_hostnames` configuration section for local hostnames to represent the different sites.
 
 ## Site/content negotiation and detection
 
 The project serves content for a number of websites. We can split the process of determining which site is being asked for (detection) and how we isolate and present the content (negotiation).
-
 
 ### Site detection
 
@@ -90,9 +87,9 @@ By looking at the hostname, we can assess which site we need to use for creating
 
 #### Local development
 
-We use Lando for this, see `.lando.yml` for the structure and configuration of the services involved.
+We use DDEV for this, see `.ddev/config.yaml` for the structure and configuration of the services involved.
 
-* Hostname pattern: `https://SITE_ID.lndo.site`
+* Hostname pattern: `https://SITE_ID.ddev.site`
 * See `web/sites/default/settings.domain.php` for how the SITE_ID key is extracted.
 
 ### Content negotiation
@@ -110,7 +107,7 @@ field_domain_source : Single reference to the domain the content belongs to.
 ## Migrations
 
 You will need to install modules that start with `Department sites: migration` in order to run migrations to import Drupal 7
-content into your Drupal 9 database.
+content into your Drupal 10 database.
 
 Listing key migrations: `lando drush migrate:status --tag=dept_sites`
 
@@ -125,7 +122,7 @@ There are a number of Drush commands to process migration data.
 
 * Views and other things that rely on entity API are able to use entity access rules in conjunction with user permissions to determine whether a node can be seen on a given site. Pros: it happens without the need for explicit filters to be added to views config or entity queries. Cons: it can be confusing if viewing the site as a user with an administrative role as it will usually bypass usual access conditions.
 * Revisions: these are deemed too complex to track/import on a rolling basis. Access to older content will be available on the D7 application, running on platform.sh on an internal hostname.
-* Negative numbers of unprocessed source items: This sometimes occurs when source items (in D7) are removed. The removals are not replicated on the destination (D9) resulting in a natural imbalance to the way unprocessed items are calculated by Migrate API. This is acknowledged/documented here: https://www.drupal.org/project/migrate_tools/issues/2843383. It is possible to re-sync the counts with the `--sync` flag but this isn't recommended, as the process involes a full rollback (removal of prior migrated D9 content) followed by a full import. This can be very time consuming and result in a confusing experience for any site users. It could also lead to inconsistencies in data if executed in an incorrect sequence. **Where possible, irregularities should be investigated on a case-by-case basis and a bulk update or sync operation carried out where there is a clear trend or pattern of inconsistencies to correct.**
+* Negative numbers of unprocessed source items: This sometimes occurs when source items (in D7) are removed. The removals are not replicated on the destination (D10) resulting in a natural imbalance to the way unprocessed items are calculated by Migrate API. This is acknowledged/documented here: https://www.drupal.org/project/migrate_tools/issues/2843383. It is possible to re-sync the counts with the `--sync` flag but this isn't recommended, as the process involes a full rollback (removal of prior migrated D10 content) followed by a full import. This can be very time consuming and result in a confusing experience for any site users. It could also lead to inconsistencies in data if executed in an incorrect sequence. **Where possible, irregularities should be investigated on a case-by-case basis and a bulk update or sync operation carried out where there is a clear trend or pattern of inconsistencies to correct.**
 * The Domain Access module creates a number of node fields to handle access. Although the values of these fields are saved to the relevant database table if you try retrieve these values (e.g via a preprocess hook) you will always have a null value. This is because these fields use a callback to retrieve the value. To view these callbacks you can look at the field definition and the callback property for that field.
 
 ### DepartmentManager helper class
