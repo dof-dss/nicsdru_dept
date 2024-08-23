@@ -23,7 +23,18 @@ database:
 timezone: Europe/Dublin
 composer_version: "2"
 nodejs_version: 14
+fail_on_hook_fail: true
 hooks:
+  pre-start:
+    # Ensure env var file is deployed; needs to be filled in manually for sensitive values.
+    - exec: "if [ ! -d /app/.ddev/.env ]; then cp -v /app/.env.sample /app/.ddev/.env; fi"
+    - exec: "echo PLEASE FILL IN SENSITIVE ENV VAR VALUES IN .ddev/.env THEN RUN ddev restart"
+    - exec: "exit 1"
   post-start:
-    - exec: "composer install --optimize-autoloader --no-interaction"
+    - composer: install
     - exec: ".ddev/homeadditions/appserver_build.sh"
+  post-import-db:
+    # Ensure the local config split profile is detected and active.
+    - exec: "drush cr"
+    # Import any local config split profile overrides.
+    - exec: "drush cim -y"
