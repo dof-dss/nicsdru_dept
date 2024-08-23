@@ -27,9 +27,9 @@ fail_on_hook_fail: true
 hooks:
   pre-start:
     # Ensure env var file is deployed; needs to be filled in manually for sensitive values.
-    - exec: "if [ ! -d /app/.ddev/.env ]; then cp -v /app/.env.sample /app/.ddev/.env; fi"
-    - exec: "echo PLEASE FILL IN SENSITIVE ENV VAR VALUES IN .ddev/.env THEN RUN ddev restart"
-    - exec: "exit 1"
+    - exec-host: "if [ ! -d /app/.ddev/.env ]; then cp -v /app/.env.sample /app/.ddev/.env; fi"
+    - exec-host: "echo PLEASE FILL IN SENSITIVE ENV VAR VALUES IN .ddev/.env THEN RUN ddev restart"
+    - exec-host: "exit 1"
   post-start:
     - composer: install
     - exec: ".ddev/homeadditions/appserver_build.sh"
