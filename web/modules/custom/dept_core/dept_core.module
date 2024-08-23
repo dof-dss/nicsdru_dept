@@ -59,6 +59,7 @@ function dept_core_preprocess_field(&$variables) {
  * Implements hook_preprocess_menu().
  */
 function dept_core_preprocess_menu(&$variables) {
+
   // domain_source module does a variety of conversions for routed paths
   // changing, for example, <front> from a relative path to the source/canonical
   // domain's absolute URI. This causes some interesting disruption around what link
@@ -70,7 +71,7 @@ function dept_core_preprocess_menu(&$variables) {
     foreach ($variables['items'] as $id => &$item) {
       $url = $item['url'];
       /* @var \Drupal\Core\Url $item */
-      if ($url->getRouteName() === '<front>') {
+      if ($url->getRouteName() === '<front>' && \Drupal::routeMatch()->getRouteName() !== 'dept_homepage.homepage_controller_default') {
         /* @var \Drupal\dept_core\DepartmentManager $dept_manager */
         $dept_manager = \Drupal::service('department.manager');
         $current_dept = $dept_manager->getCurrentDepartment();
