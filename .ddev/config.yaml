@@ -1,10 +1,5 @@
 # DDEV project level config. See https://ddev.readthedocs.io/en/stable/users/configuration/config/
 # for full set of options that can be used.
-name: dept
-type: drupal
-docroot: web
-php_version: "8.2"
-xdebug_enabled: false
 additional_hostnames:
     - nigov
     - communities-ni
@@ -16,13 +11,11 @@ additional_hostnames:
     - health-ni
     - infrastructure-ni
     - justice-ni
-additional_fqdns: []
+composer_version: "2"
 database:
     type: mariadb
     version: "10.11"
-timezone: Europe/Dublin
-composer_version: "2"
-nodejs_version: 14
+docroot: web
 fail_on_hook_fail: true
 hooks:
   pre-start:
@@ -36,3 +29,9 @@ hooks:
     - exec: "drush cr"
     # Import any local config split profile overrides.
     - exec: "drush cim -y"
+name: dept
+nodejs_version: 14
+php_version: "8.2"
+timezone: Europe/Dublin
+type: drupal
+xdebug_enabled: false
