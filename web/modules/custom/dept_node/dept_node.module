@@ -78,7 +78,7 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
   }
 
   // Set the Domain source entry if not already provided.
-  if (empty($form['field_domain_source']['widget']['#default_value'])) {
+  if (array_key_exists('field_domain_access', $form) && empty($form['field_domain_source']['widget']['#default_value'])) {
     $domain_access_ids = $form['field_domain_access']['widget']['#default_value'];
 
     // If we don't have any ids, use the value added by dept_core_set_entity_domain_defaults().
