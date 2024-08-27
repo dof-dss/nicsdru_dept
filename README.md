@@ -17,13 +17,15 @@ Continuous Integration services are provided by [Circle CI](https://github.com/d
 
 We recommend DDEV for local development. To get started, ensure you have the following installed:
 
-1. DDEV [https://ddev.com/get-started/](https://ddev.com/get-started/)
-  - Installation will include OrbStack (alternative to Docker Desktop)
+1. Rancher Desktop [https://docs.rancherdesktop.io/(https://docs.rancherdesktop.io/)]
+  - Rancher is an cross-platform Open Source container management tool, as an alternative to Docker Desktop.
+2. DDEV [https://ddev.com/get-started/](https://ddev.com/get-started/)
   - The project uses a Mutagen (a file sync agent) performance profile for all platforms.
-2. Platform CLI tool [https://docs.platform.sh/development/cli.html](https://docs.platform.sh/development/cli.html)
+  - DDEV will detect that you're using Rancher by itself.
+3. Platform CLI tool [https://docs.platform.sh/development/cli.html](https://docs.platform.sh/development/cli.html)
   - You will need to request access to the projects you work on.
   - Once granted, log in with `platform login -f` to renew any local SSH certs.
-3. Environment variables
+4. Environment variables
   - You need to populate the sensitive values in `.ddev/.env` as part of the build process.
   - Ask the team for how best to obtain these.
 
