@@ -70,8 +70,6 @@ function dept_core_preprocess_menu(&$variables) {
   if ($variables['menu_name'] === 'main' && !empty($variables['items'])) {
     foreach ($variables['items'] as $id => &$item) {
       $url = $item['url'];
-      $routematch = \Drupal::routeMatch()->getRouteName();
-      $routename = $url->getRouteName();
       /* @var \Drupal\Core\Url $item */
       if ($url->getRouteName() === '<front>' && \Drupal::routeMatch()->getRouteName() !== 'dept_homepage.homepage_controller_default') {
         /* @var \Drupal\dept_core\DepartmentManager $dept_manager */
