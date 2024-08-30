@@ -40,9 +40,10 @@ Continuous Integration services are provided by [Circle CI](https://github.com/d
 - `mv <path-to-dot-env-file> .ddev/.env`
 - `ddev start`. This will run composer inside the container for you, avoiding host-level inconsistencies.
 - Verify env vars have taken effect with: `ddev exec "env | sort""`
-- Import your migration source database, if needed with: `ddev import-db --database=drupal7db --file=<path-to-drupal7db-dump-file.sql.gz>`
+- Import your migration source database **FIRST**, if needed with: `ddev import-db --database=drupal7db --file=<path-to-drupal7db-dump-file.sql.gz>`
 - Import your main db with `ddev import-db --file=<path-to-your-main-db-file.sql.gz`
 - Config import should run and import local split profile values.
+- The order of the databases isn't essential, but importing the drupal7db first makes things a lot less confusing.
 
 ## Troubleshooting
 
