@@ -15,34 +15,44 @@ Continuous Integration services are provided by [Circle CI](https://github.com/d
 
 ## Getting started
 
-We recommend DDEV for local development. To get started, ensure you have the following installed:
+### Pre-requisites
 
 1. Rancher Desktop [https://docs.rancherdesktop.io/(https://docs.rancherdesktop.io/)]
+  - Install notes: https://ddev.readthedocs.io/en/stable/users/install/docker-installation/#rancher-desktop
   - Rancher is an cross-platform Open Source container management tool, as an alternative to Docker Desktop.
+  - **Make sure you turn off Kubernetes support or it can block port 80 and 443 causing DDEV to fail to start.**
 2. DDEV [https://ddev.com/get-started/](https://ddev.com/get-started/)
-  - The project uses a Mutagen (a file sync agent) performance profile for all platforms.
-  - DDEV will detect that you're using Rancher by itself.
-3. Platform CLI tool [https://docs.platform.sh/development/cli.html](https://docs.platform.sh/development/cli.html)
+  - The project uses a Mutagen (a file sync agent) performance profile for all platforms. It installs itself into each project, as needed.
+3. Platform CLI tool and access [https://docs.platform.sh/development/cli.html](https://docs.platform.sh/development/cli.html)
   - You will need to request access to the projects you work on.
   - Once granted, log in with `platform login -f` to renew any local SSH certs.
 4. Environment variables
   - You need to populate the sensitive values in `.ddev/.env` as part of the build process.
-  - Ask the team for how best to obtain these.
+  - **Ask the team for how best to obtain these.**
+5. Databases
+  - `platform db:dump -z -e main` (select main database)
+  - Repeat for `drupal7db`.
+  - **Recommend these remain compressed to save network download time and local storage space**
 
-- Clone this repo
-- at the command line, 'cd' into your new directory
-- `ddev start`
+### Next installation/import steps
 
-Once this has finished, it is recommended that you download the databases from Platform.sh using the `platform db:dump`
-command.
+- Clone this repo and change directory into it.
+- `mv <path-to-dot-env-file> .ddev/.env`
+- `ddev start`. This will run composer inside the container for you, avoiding host-level inconsistencies.
+- Verify env vars have taken effect with: `ddev exec "env | sort""`
+- Import your migration source database, if needed with: `ddev import-db --database=drupal7db --file=<path-to-drupal7db-dump-file.sql.gz>`
+- Import your main db with `ddev import-db --file=<path-to-your-main-db-file.sql.gz`
+- Config import should run and import local split profile values.
 
-The 'main' database may be imported into your local stack as follows:
+## Troubleshooting
 
-`ddev import-db --file=<downloaded file name>`
-
-The 'drupal7db' database may be imported into your local stack as follows:
-
-`ddev import-db --database=drupal7db --file=<downloaded file name>`
+- Can't connect to the database
+  - Ensure your .env file values are valid and in effect. See https://ddev.readthedocs.io/en/stable/users/extend/customization-extendibility/#environment-variables-for-containers-and-services for details.
+  - Ensure your databases have fully imported.
+- Port 443 or 80 is blocked.
+  - Make sure Rancher Desktop's Kubernetes option is disabled.
+  - Run `lando poweroff` to ensure any legacy applications are not listening on the ports.
+  - https://ddev.readthedocs.io/en/stable/users/usage/troubleshooting/#web-server-ports-already-occupied
 
 ## Project goals
 
