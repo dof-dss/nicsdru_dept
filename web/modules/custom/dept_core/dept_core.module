@@ -410,6 +410,10 @@ function dept_core_page_attachments(array &$attachments) {
     // Attach extra custom css for admin menu.
     $attachments['#attached']['library'][] = 'nicsdru_dept_theme/admin-content';
   }
+
+  if (\Drupal::routeMatch()->getRouteName() === 'dept_homepage.homepage_controller_default') {
+    $attachments['#attached']['library'][] = 'dept_core/main_menu_navigation';
+  }
 }
 
 /**
