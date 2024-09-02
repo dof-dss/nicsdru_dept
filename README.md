@@ -44,6 +44,7 @@ Continuous Integration services are provided by [Circle CI](https://github.com/d
 - Import your main db with `ddev import-db --file=<path-to-your-main-db-file.sql.gz`
 - Config import should run and import local split profile values.
 - The order of the databases isn't essential, but importing the drupal7db first makes things a lot less confusing.
+  - If you plan to import the main db first, use the `--skip-hooks` argument with the `import-db` command for a bit less confusion.
 
 ## Troubleshooting
 
