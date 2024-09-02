@@ -67,15 +67,15 @@ export MIGRATIONS="\
   flagging_hide_listing \
   flagging_hide_on_topic_subtopic_pages "
 
-if [ -z ${PLATFORM_BRANCH} ] && [ -z ${LANDO} ];
+if [ -z ${PLATFORM_BRANCH} ] && [ -z ${DDEV_PROJECT} ];
 then
-  # Not running on a platform environment, or Lando, so exit.
-  echo "Couldn't detect platform branch or Lando variable, exiting."
+  # Not running on a platform environment, or locally, so exit.
+  echo "Couldn't detect platform branch or local project variable, exiting."
   exit 1
 fi
 
 # Only execute on the main environment.
-if [[ "${PLATFORM_BRANCH}" == "main" || "${LANDO}" == "ON" ]];
+if [[ "${PLATFORM_BRANCH}" == "main" || "${DDEV_PROJECT}" == "dept" ]];
 then
 
   echo "Resetting all migrations"
