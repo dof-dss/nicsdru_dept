@@ -173,9 +173,17 @@ then
     departments=(${departments[@]//*$i*})
   done
 
+  # Grab an array of sites we want to avoid adjusting topics/subtopics content for.
+  IFS=',' read -r -a freeze_array <<< "$MIGRATE_TOPIC_FREEZE"
   # Loop through the list of non-live departments.
   for dept in "${departments[@]}"
     do
+      # Check if the department is in the MIGRATE_TOPIC_FREEZE list
+      if [[ " ${freeze_array[@]} " =~ " ${dept} " ]]; then
+        echo "Skipping ${dept} as it is in the MIGRATE_TOPIC_FREEZE list"
+        continue
+      fi
+
       echo "Creating Topic/Subtopic content entries for ${dept}"
       $DRUSH dept:topic-child-content $dept
       $DRUSH dept:subtopic-child-content $dept
