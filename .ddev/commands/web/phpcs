@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+## Description: Execute local PHPCS static analysis checks.
+## Usage: phpcs
+## Example: "ddev phpcs"
+
+/app/phpcs.sh "/app" "/app/web/modules/origins /app/web/modules/custom /app/web/themes/custom"

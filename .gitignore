@@ -33,9 +33,6 @@ console/
 # Ignore raw SQL files, potentially dangerous.
 *.sql
 
-# Local dev outputs.
-.lando/exports
-
 # Misc tooling files to ingore.
 .swp
 .vscode
@@ -47,3 +44,6 @@ web/modules/*/package-lock.json
 
 # Ignore filelog directory
 /log
+
+# Ignore local cron log.
+cron-log.txt
