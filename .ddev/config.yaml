@@ -32,7 +32,7 @@ hooks:
     - exec: "drush cim -y"
 name: dept
 nodejs_version: 14
-php_version: "8.2"
+php_version: "8.3"
 timezone: Europe/Dublin
 type: drupal
 xdebug_enabled: false
