@@ -1,10 +1,26 @@
 adding:
+  dependencies:
+    config:
+      - search_api_solr.solr_field_type.text_edge_und_6_0_0
+      - search_api_solr.solr_field_type.text_en_6_0_0
+      - search_api_solr.solr_field_type.text_ngram_und_6_0_0
+      - search_api_solr.solr_field_type.text_und_6_0_0
   backend_config:
     connector_config:
       host: solr
       port: 8983
+      core: dev
+      solr_install_dir: /opt/solr
 removing:
+  dependencies:
+    config:
+      - search_api_solr.solr_field_type.text_edge_und_7_0_0
+      - search_api_solr.solr_field_type.text_en_7_0_0
+      - search_api_solr.solr_field_type.text_ngram_und_7_0_0
+      - search_api_solr.solr_field_type.text_und_7_0_0
   backend_config:
     connector_config:
       host: solr.internal
       port: 8080
+      core: default
+      solr_install_dir: ''

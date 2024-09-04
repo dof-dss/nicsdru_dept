@@ -164,7 +164,7 @@ class NodeDetailController extends ControllerBase {
       // Table for: migrate_map_node_<type>.
       $table = 'migrate_map_node_' . $node->bundle();
 
-      $results = $this->dbconn->query("SELECT * FROM ${table} WHERE destid1 = :nid", [':nid' => $nid])
+      $results = $this->dbconn->query("SELECT * FROM {$table} WHERE destid1 = :nid", [':nid' => $nid])
         ->fetchAll();
       if (!empty($results)) {
         foreach ($results as $idx => $row) {
