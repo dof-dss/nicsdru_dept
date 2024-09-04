@@ -140,7 +140,15 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
 
     // Get current department from the domain_access field.
     if (!empty($form['field_domain_access']['widget']['#default_value'])) {
-      $current_dept = current($form['field_domain_access']['widget']['#default_value']);
+      $domain_access_values = $form['field_domain_access']['widget']['#default_value'];
+      // If we have multiple domain access values check for the existence of 'nigov',
+      // remove it and then use the current array value.
+      if (count($domain_access_values) > 1) {
+        if (($key = array_search('nigov', $domain_access_values)) !== FALSE) {
+          unset($domain_access_values[$key]);
+        }
+      }
+      $current_dept = current($domain_access_values);
     }
 
     // If we cannot determine the department via domain_access, use the current domain department.

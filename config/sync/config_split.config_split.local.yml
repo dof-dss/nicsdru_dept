@@ -11,6 +11,7 @@ no_patching: false
 storage: folder
 folder: ../config/local
 module:
+  dept_dev: 0
   devel: 0
   easy_install: 0
   masquerade: 0
@@ -18,9 +19,9 @@ module:
   syslog: 0
   update: 0
   views_ui: 0
-  dept_dev: 0
 theme: {  }
 complete_list: {  }
 partial_list:
   - search_api.server.default
   - 'domain.record.*'
+  - 'migrate_plus.migration_group.*'
