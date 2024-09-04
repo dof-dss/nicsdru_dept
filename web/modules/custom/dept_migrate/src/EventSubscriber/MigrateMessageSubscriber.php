@@ -13,40 +13,21 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Class MigrateMessageSubscriber.
  */
-class MigrateMessageSubscriber implements EventSubscriberInterface {
+final class MigrateMessageSubscriber implements EventSubscriberInterface {
 
   /**
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * @var \Drupal\dept_migrate\MigrateUuidLookupManager
-   */
-  protected $lookupManager;
-
-  /**
-   * Drupal\Core\Logger\LoggerChannelFactory definition.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelFactory
-   */
-  protected $logger;
-
-  /**
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager service.
-   * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookup_manager
+   * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookupManager
    *   Lookup Manager.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
    *   Drupal logger.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager,
-                              MigrateUuidLookupManager $lookup_manager,
-                              LoggerChannelFactory $logger) {
-
-    $this->entityTypeManager = $entity_type_manager;
-    $this->lookupManager = $lookup_manager;
-    $this->logger = $logger->get('dept_migrate');
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected MigrateUuidLookupManager $lookupManager,
+    protected LoggerChannelFactory $logger,
+  ) {
   }
 
   /**
