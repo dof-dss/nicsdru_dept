@@ -60,7 +60,7 @@
         "composer/installers": "^2.0",
         "cweagans/composer-patches": "^1.7",
         "deaemth/easychart": "^3.1",
-        "dof-dss/nicsdru_origins_modules": "^10.4",
+        "dof-dss/nicsdru_origins_modules": "10.3.8",
         "dof-dss/nicsdru_origins_theme": "^10.1",
         "drupal/a11y_form_helpers": "^2.0",
         "drupal/address": "^2.0",
@@ -283,7 +283,8 @@
                 "Avoid error when $options is NULL in buildUrl()": "https://www.drupal.org/files/issues/2022-10-03/2871217-68_0.patch",
                 "Increase claro xs font size": "patches/claro-font-size.patch",
                 "TypeError when adding book page": "https://www.drupal.org/files/issues/2023-10-02/book_typeerror-3391035-1.patch",
-                "Force expiration of node cache tag when book outline changes": "https://gist.githubusercontent.com/johangant/8b97bf93525475ee89d8be246a418777/raw/145c727d1df7403ce38819437bc46989e1a85a2b/expire-book-node-cache-key-on-change.patch"
+                "Force expiration of node cache tag when book outline changes": "https://gist.githubusercontent.com/johangant/8b97bf93525475ee89d8be246a418777/raw/145c727d1df7403ce38819437bc46989e1a85a2b/expire-book-node-cache-key-on-change.patch",
+                "Submitting a form during an ajax request or before ajax is triggered results in data loss": "https://www.drupal.org/files/issues/2023-09-08/1736308-57.patch"
             },
             "drupal/devel": {
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://gitlab.com/-/project/18040690/uploads/7897853cd83cb829ae8d752657e2f497/kint.221-5-3.patch"
@@ -320,8 +321,7 @@
                 "'Draft available' text still appears after deleting a forward revision": "https://www.drupal.org/files/issues/2020-02-24/3115474-3.patch"
             },
             "drupal/redirect": {
-                "Add URL Redirects tab to taxonomy term edit form": "https://www.drupal.org/files/issues/2021-03-26/redirect_provide_redirect_tab_on_taxonomy_terms_3205896.patch",
-                "Validation issue on adding url redirect": "https://www.drupal.org/files/issues/2024-08-11/redirect--2024-08-11--3057250-79.patch"
+                "Add URL Redirects tab to taxonomy term edit form": "https://www.drupal.org/files/issues/2021-03-26/redirect_provide_redirect_tab_on_taxonomy_terms_3205896.patch"
             },
             "drupal/simple_gmap": {
                 "Add support for address module": "https://www.drupal.org/files/issues/2023-09-21/drupal.org_files_issues_2022-09-29_simple_gmap-address-formatter-2863979-54.patch"
