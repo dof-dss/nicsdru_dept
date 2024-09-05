@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.gallery.field_summary
     - node.type.gallery
   module:
+    - field_group
     - layout_builder
     - metatag
     - smart_trim
@@ -24,6 +25,28 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
+  field_group:
+    group_additional_content_details:
+      children:
+        - field_global_topics
+        - field_site_topics
+        - field_metatags
+      label: 'Additional content details'
+      parent_name: ''
+      region: content
+      weight: 5
+      format_type: html_element
+      format_settings:
+        classes: field-collection
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
 id: node.gallery.diff
 targetEntityType: node
 bundle: gallery
@@ -40,17 +63,25 @@ content:
     type: entity_reference_entity_view
     label: hidden
     settings:
-      view_mode: default
+      view_mode: article_full
       link: false
     third_party_settings: {  }
     weight: 3
     region: content
+  field_global_topics:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 10
+    region: content
   field_metatags:
     type: metatag_empty_formatter
-    label: above
+    label: inline
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 12
     region: content
   field_site_topics:
     type: entity_reference_label
@@ -58,7 +89,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 0
+    weight: 11
     region: content
   field_summary:
     type: smart_trim
@@ -87,7 +118,6 @@ hidden:
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
-  field_global_topics: true
   groups: true
   groups_type_department_site: true
   langcode: true
