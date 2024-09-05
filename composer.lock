@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f4edead9e3f20d534e8b49967d1f98b7",
+    "content-hash": "e6bd0160ea3abeb02600f344d97a36ed",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3655,27 +3655,27 @@
         },
         {
             "name": "drupal/csp",
-            "version": "1.33.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/csp.git",
-                "reference": "8.x-1.33"
+                "reference": "2.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/csp-8.x-1.33.zip",
-                "reference": "8.x-1.33",
-                "shasum": "c923468c3cf077bbc89967ee7fa6c6e48c7254df"
+                "url": "https://ftp.drupal.org/files/projects/csp-2.1.0.zip",
+                "reference": "2.1.0",
+                "shasum": "b698ce2f128b5e910fa40632710ccb510a55b791"
             },
             "require": {
-                "drupal/core": "~10.0.0 || ^10.1.3 || ^11",
+                "drupal/core": "^10.1.3 || ^11",
                 "ext-json": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.33",
-                    "datestamp": "1721292907",
+                    "version": "2.1.0",
+                    "datestamp": "1725489878",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3753,26 +3753,26 @@
         },
         {
             "name": "drupal/datetime_flatpickr",
-            "version": "2.0.10",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/datetime_flatpickr.git",
-                "reference": "2.0.10"
+                "reference": "3.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/datetime_flatpickr-2.0.10.zip",
-                "reference": "2.0.10",
-                "shasum": "5376e33ddc3c3324c4ee5f33da4ec030ef4d4dad"
+                "url": "https://ftp.drupal.org/files/projects/datetime_flatpickr-3.0.2.zip",
+                "reference": "3.0.2",
+                "shasum": "cac5d1c6c1169d37d1d3364b575fae1c55d92fe6"
             },
             "require": {
-                "drupal/core": "^8.9 || ^9 || ^10 || ^11"
+                "drupal/core": "^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.10",
-                    "datestamp": "1715872910",
+                    "version": "3.0.2",
+                    "datestamp": "1725472081",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6350,31 +6350,26 @@
         },
         {
             "name": "drupal/layout_builder_restrictions",
-            "version": "2.20.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/layout_builder_restrictions.git",
-                "reference": "8.x-2.20"
+                "reference": "3.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/layout_builder_restrictions-8.x-2.20.zip",
-                "reference": "8.x-2.20",
-                "shasum": "cd5c87869a0843f91fae0600f74b6c2ed102e398"
+                "url": "https://ftp.drupal.org/files/projects/layout_builder_restrictions-3.0.0.zip",
+                "reference": "3.0.0",
+                "shasum": "baa37fa293d149e5eb792e0199d02aa7f2716106"
             },
             "require": {
-                "drupal/core": "^9.3 || ^10"
-            },
-            "require-dev": {
-                "drupal/dashboards": "^2",
-                "drupal/layout_library": "dev-1.x",
-                "drupal/mini_layouts": "dev-2.0.x"
+                "drupal/core": "^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.20",
-                    "datestamp": "1715895237",
+                    "version": "3.0.0",
+                    "datestamp": "1715966111",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6667,26 +6662,26 @@
         },
         {
             "name": "drupal/media_remote",
-            "version": "1.8.0",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/media_remote.git",
-                "reference": "1.8.0"
+                "reference": "1.9.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/media_remote-1.8.0.zip",
-                "reference": "1.8.0",
-                "shasum": "4f7c8e8e7bd61501183ef62f91d804edbdb611f9"
+                "url": "https://ftp.drupal.org/files/projects/media_remote-1.9.0.zip",
+                "reference": "1.9.0",
+                "shasum": "9bd63134f34131adfe2fb7be8863de6216002e64"
             },
             "require": {
-                "drupal/core": "^9 || ^10"
+                "drupal/core": "^9 || ^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.8.0",
-                    "datestamp": "1691050855",
+                    "version": "1.9.0",
+                    "datestamp": "1725532916",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6709,8 +6704,12 @@
             ],
             "description": "Provides Media integration for remote content (non-OEmbed).",
             "homepage": "https://www.drupal.org/project/media_remote",
+            "keywords": [
+                "Drupal"
+            ],
             "support": {
-                "source": "https://git.drupalcode.org/project/media_remote"
+                "source": "http://cgit.drupalcode.org/media_remote",
+                "issues": "http://drupal.org/project/issues/media_remote"
             }
         },
         {
@@ -7021,26 +7020,26 @@
         },
         {
             "name": "drupal/noreferrer",
-            "version": "1.18.0",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/noreferrer.git",
-                "reference": "8.x-1.18"
+                "reference": "2.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/noreferrer-8.x-1.18.zip",
-                "reference": "8.x-1.18",
-                "shasum": "2faed2bc3f104eafcc061d941137f981bbea2078"
+                "url": "https://ftp.drupal.org/files/projects/noreferrer-2.0.3.zip",
+                "reference": "2.0.3",
+                "shasum": "b15c77f9c7fcc4b62299f69f83030850a3380d00"
             },
             "require": {
-                "drupal/core": "^8.7.7 || ^9 || ^10 || ^11"
+                "drupal/core": "^10.2 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.18",
-                    "datestamp": "1716361226",
+                    "version": "2.0.3",
+                    "datestamp": "1716356500",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16095,20 +16094,20 @@
         },
         {
             "name": "drupal/migrate_devel",
-            "version": "2.3.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/migrate_devel.git",
-                "reference": "8.x-2.3"
+                "reference": "3.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/migrate_devel-8.x-2.3.zip",
-                "reference": "8.x-2.3",
-                "shasum": "2e8efc7c16f9c3d830444a6af674dd3d511eaa69"
+                "url": "https://ftp.drupal.org/files/projects/migrate_devel-3.0.0.zip",
+                "reference": "3.0.0",
+                "shasum": "3a30c9bc3934f05627fa228b77c0e18fc1005229"
             },
             "require": {
-                "drupal/core": "^9.5 || ^10"
+                "drupal/core": "^9.5 || ^10 || ^11"
             },
             "conflict": {
                 "drush/drush": "<9"
@@ -16116,8 +16115,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.3",
-                    "datestamp": "1698392974",
+                    "version": "3.0.0",
+                    "datestamp": "1725055513",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -16164,39 +16163,37 @@
         },
         {
             "name": "drupal/stage_file_proxy",
-            "version": "2.1.5",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/stage_file_proxy.git",
-                "reference": "2.1.5"
+                "reference": "3.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/stage_file_proxy-2.1.5.zip",
-                "reference": "2.1.5",
-                "shasum": "6f5974c106d45211e54945e4d9f5bbf8ec6699de"
+                "url": "https://ftp.drupal.org/files/projects/stage_file_proxy-3.1.2.zip",
+                "reference": "3.1.2",
+                "shasum": "1aba8488efc193db71a991e8f8f76825af219079"
             },
             "require": {
-                "drupal/core": "^9 || ^10",
-                "php": ">=8"
+                "drupal/core": "^10.3 || ^11",
+                "php": ">=8.1"
+            },
+            "conflict": {
+                "drush/drush": "<12"
             },
             "require-dev": {
                 "drupal/coder": "^8.3",
-                "drush/drush": "^11 || ^12"
+                "drush/drush": ">=12"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.1.5",
-                    "datestamp": "1719499510",
+                    "version": "3.1.2",
+                    "datestamp": "1724012934",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "stage_file_proxy.drush.services.yml": "^11"
                     }
                 }
             },
