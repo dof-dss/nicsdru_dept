@@ -60,7 +60,7 @@
         "composer/installers": "^2.0",
         "cweagans/composer-patches": "^1.7",
         "deaemth/easychart": "^3.1",
-        "dof-dss/nicsdru_origins_modules": "10.3.8",
+        "dof-dss/nicsdru_origins_modules": "^10.4",
         "dof-dss/nicsdru_origins_theme": "^10.1",
         "drupal/a11y_form_helpers": "^2.0",
         "drupal/address": "^2.0",
@@ -292,7 +292,8 @@
             "drupal/domain": {
                 "Migration path for domain": "https://www.drupal.org/files/issues/2020-02-27/domain-migration-path-for-domain-2882837-13.patch",
                 "Available on Current Domain doesn't instantiate": "https://www.drupal.org/files/issues/2023-06-21/3367785-domain-php8-boolean.patch",
-                "Cached routes are not deleted when the cache is cleared": "https://www.drupal.org/files/issues/2023-09-18/3266520-9.patch"
+                "Cached routes are not deleted when the cache is cleared": "https://www.drupal.org/files/issues/2023-09-18/3266520-9.patch",
+                "DomainAccessCurrentAllFilter operators method is not compatible": "https://git.drupalcode.org/project/domain/-/merge_requests/83.diff"
             },
             "drupal/domain_entity": {
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch",
