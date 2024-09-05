@@ -29,24 +29,12 @@
       padding: .5em;
       min-height: 170px;
       height: 100%;
+
+      &:focus {
+        figcaption {
+          color: $link;
+        }
+      }
     }
   }
-
-  //.glightbox-container {
-  //  .ginner-container {
-  //    &.desc-bottom {
-  //      display: flex;
-  //      flex-direction: column;
-  //    }
-  //  }
-  //
-  //  .gdesc-inner {
-  //    padding: .5em 1em;
-  //
-  //    .gslide-title {
-  //      margin: 0;
-  //    }
-  //  }
-  //}
-
 }
