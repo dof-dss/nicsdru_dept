@@ -6,16 +6,23 @@ dependencies:
     - block_visibility_groups
     - domain
     - system
+    - user
 id: nigov
 label: 'The Northern Ireland Executive'
 weight: 0
 tag_container_ids:
   - GTM-PT94H44
 advanced_settings:
+  consent_mode: false
   gtm:
     GTM-PT94H44:
       data_layer: dataLayer
+      include_classes: false
+      allowlist_classes: ''
+      blocklist_classes: ''
       include_environment: false
+      environment_id: ''
+      environment_token: ''
 dimensions_metrics: {  }
 conditions:
   condition_group:
@@ -39,14 +46,21 @@ conditions:
       domain: '@domain.current_domain_context:domain'
     domains:
       nigov: nigov
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous
 events:
-  search: {  }
+  sign_up:
+    method: CMS
   custom: {  }
   login:
     method: CMS
-  webform_purchase: {  }
-  sign_up:
-    method: CMS
+  search: {  }
   generate_lead:
     value: ''
     currency: ''
+  webform_purchase: {  }
