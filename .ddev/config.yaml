@@ -31,7 +31,7 @@ hooks:
     # Import any local config split profile overrides.
     - exec: "drush cim -y"
 name: dept
-nodejs_version: 14
+nodejs_version: 20
 php_version: "8.2"
 timezone: Europe/Dublin
 type: drupal
