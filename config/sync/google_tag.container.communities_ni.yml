@@ -12,10 +12,16 @@ weight: 0
 tag_container_ids:
   - GTM-PT94H44
 advanced_settings:
+  consent_mode: false
   gtm:
     GTM-PT94H44:
       data_layer: dataLayer
+      include_classes: false
+      allowlist_classes: ''
+      blocklist_classes: ''
       include_environment: false
+      environment_id: ''
+      environment_token: ''
 dimensions_metrics: {  }
 conditions:
   condition_group:
@@ -40,13 +46,13 @@ conditions:
     domains:
       communities: communities
 events:
-  search: {  }
+  sign_up:
+    method: CMS
   custom: {  }
   login:
     method: CMS
-  webform_purchase: {  }
-  sign_up:
-    method: CMS
+  search: {  }
   generate_lead:
     value: ''
     currency: ''
+  webform_purchase: {  }
