@@ -18,6 +18,8 @@ use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
 
+const HISTORIC_ENVIRONMENT_NID = 409882;
+
 /**
  * Implements hook_help().
  */
@@ -191,6 +193,14 @@ function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
 function dept_topics_form_node_form_alter(&$form, $form_state) {
   $form_object = $form_state->getFormObject();
   $topic_id = \Drupal::request()->query->get('topic');
+
+  // Set the Site Topic to 'Historic environment' for Heritage sites.
+  if ($form_object->getEntity()->bundle() === 'heritage_site') {
+    // Select the site topic passed by the querystring parameter (coming from the moderation sidebar).
+    if (array_key_exists('field_site_topics', $form)) {
+      $form['field_site_topics']['widget']['#default_value'] = [HISTORIC_ENVIRONMENT_NID];
+    }
+  }
 
   if (!empty($topic_id)) {
     // Select the site topic passed by the querystring parameter (coming from the moderation sidebar).
