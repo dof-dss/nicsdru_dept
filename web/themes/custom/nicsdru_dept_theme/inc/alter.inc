@@ -86,7 +86,7 @@ function nicsdru_dept_theme_form_node_landing_page_layout_builder_form_alter(&$f
  * Implements hook_theme_suggestions_responsive_image_alter().
  */
 function nicsdru_dept_theme_theme_suggestions_responsive_image_alter(array &$suggestions, array $variables, $hook) {
-  // Add hook suggestions to responsive image based on content type
+  // Add hook suggestions to responsive image based on content type.
   if (($node = \Drupal::routeMatch()->getParameter('node')) || ($node = \Drupal::routeMatch()->getParameter('node_preview'))) {
     $type = $node->getType();
   }
@@ -94,5 +94,7 @@ function nicsdru_dept_theme_theme_suggestions_responsive_image_alter(array &$sug
   if (isset($type)) {
     $suggestions[] = $hook . '__' . $type;
   }
-}
 
+  // Add hook suggestions based on responsive image style.
+  $suggestions[] = $hook . '__' . $variables['responsive_image_style_id'];
+}
