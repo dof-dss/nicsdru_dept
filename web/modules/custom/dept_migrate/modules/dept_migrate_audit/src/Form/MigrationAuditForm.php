@@ -47,7 +47,8 @@ final class MigrationAuditForm extends FormBase {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EntityFieldManagerInterface $entityFieldManager,
     protected LoggerChannelInterface $logger,
-    protected string $type) {
+    protected string $type,
+  ) {
   }
 
   /**

@@ -9,96 +9,48 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\node\NodeStorage;
+use Drupal\node\NodeStorageInterface;
 
 /**
  * Provides methods for managing Sub/Topic referenced (child) content.
  */
-class TopicManager {
+final class TopicManager {
 
   /**
-   * Array of department topics.
-   *
-   * @var array
-   */
-  protected $deptTopics = [];
-
-  /**
-   * Array of target bundes.
-   *
-   * @var array
-   */
-  protected $targetBundles = [];
-
-  /**
-   * The Entity Type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $dbConn;
-
-  /**
-   * The Entity Field manager.
-   *
-   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
-   */
-  protected $entityFieldManager;
-
-  /**
-   * Node Storage instance.
-   *
-   * @var \Drupal\node\NodeStorage
+   * @var \Drupal\node\NodeStorageInterface
    */
   protected $nodeStorage;
 
   /**
-   * The Entity Display Repository.
-   *
-   * @var \Drupal\Core\Entity\EntityDisplayRepository
-   */
-  protected $entityDisplayRepository;
-
-  /**
-   * The Book manager service.
-   *
-   * @var \Drupal\book\BookManagerInterface
-   */
-  protected $bookManager;
-
-  /**
    * Constructs a TopicManager object.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The Entity Type Manager service.
    * @param \Drupal\Core\Database\Connection $connection
    *   The database connection.
-   * @param \Drupal\Core\Entity\EntityFieldManager $entity_field_manager
+   * @param \Drupal\Core\Entity\EntityFieldManager $entityFieldManager
    *   The Entity Field Manager service.
-   * @param \Drupal\Core\Entity\EntityDisplayRepository $entity_display_repository
+   * @param \Drupal\Core\Entity\EntityDisplayRepository $entityDisplayRepository
    *   The Entity Display Repository service.
-   * @param \Drupal\book\BookManagerInterface $book_manager
+   * @param \Drupal\book\BookManagerInterface $bookManager
    *   The Book manager service.
+   * @param array $targetBundles
+   *   Array of target bundles.
+   * @param array $deptTopics
+   *   Array of department topics used around this class.
    *
    */
   public function __construct(
-    EntityTypeManagerInterface $entity_type_manager,
-    Connection $connection,
-    EntityFieldManagerInterface $entity_field_manager,
-    EntityDisplayRepository $entity_display_repository,
-    BookManagerInterface $book_manager,
-    ) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->dbConn = $connection;
-    $this->entityFieldManager = $entity_field_manager;
-    $this->nodeStorage = $entity_type_manager->getStorage('node');
-    $this->entityDisplayRepository = $entity_display_repository;
-    $this->bookManager = $book_manager;
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected Connection $connection,
+    protected EntityFieldManagerInterface $entityFieldManager,
+    protected EntityDisplayRepository $entityDisplayRepository,
+    protected BookManagerInterface $bookManager,
+    protected array $targetBundles = [],
+    protected array $deptTopics = [],
+  ) {
+    $this->nodeStorage = $this->entityTypeManager->getStorage('node');
   }
 
   /**
@@ -122,7 +74,7 @@ class TopicManager {
       $nid = $node;
     }
 
-    $nodes = $this->dbConn->query("SELECT n.nid, nfd.title, nfd.type FROM node n
+    $nodes = $this->connection->query("SELECT n.nid, nfd.title, nfd.type FROM node n
         LEFT JOIN node_field_data nfd
         ON nfd.nid = n.nid
         LEFT JOIN node__field_topic_content ftc

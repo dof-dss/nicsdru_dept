@@ -16,62 +16,34 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Class RedirectMigrateSubscriber.
  */
-class RedirectMigrateSubscriber implements EventSubscriberInterface {
+final class RedirectMigrateSubscriber implements EventSubscriberInterface {
 
   /**
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * @var \Drupal\dept_migrate\MigrateUuidLookupManager
-   */
-  protected $lookupManager;
-
-  /**
-   * Drupal\Core\Logger\LoggerChannelFactory definition.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelFactory
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
   protected $logger;
 
   /**
-   * Database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $dbconn;
-
-
-  /**
-   * Database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $d7dbconn;
-
-  /**
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager service.
-   * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookup_manager
+   * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookupManager
    *   Lookup Manager.
-   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerFactory
    *   Drupal logger.
-   * @param \Drupal\Core\Database\Connection $connection
+   * @param \Drupal\Core\Database\Connection $dbconn
    *   Database connection.
-   * @param \Drupal\Core\Database\Connection $d7_connection
+   * @param \Drupal\Core\Database\Connection $d7dbconn
    *   Database connection.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager,
-                              MigrateUuidLookupManager $lookup_manager,
-                              LoggerChannelFactory $logger,
-                              Connection $connection,
-                              Connection $d7_connection) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->lookupManager = $lookup_manager;
-    $this->logger = $logger->get('dept_migrate');
-    $this->dbconn = $connection;
-    $this->d7dbconn = $d7_connection;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected MigrateUuidLookupManager $lookupManager,
+    protected LoggerChannelFactory $loggerFactory,
+    protected Connection $dbconn,
+    protected Connection $d7dbconn,
+  ) {
+    /* @var \Drupal\Core\Logger\LoggerChannelFactory */
+    $this->logger = $loggerFactory->get('dept_migrate');
   }
 
   /**
