@@ -29,10 +29,12 @@ Continuous Integration services are provided by [Circle CI](https://github.com/d
 4. Environment variables
   - You need to populate the sensitive values in `.ddev/.env` as part of the build process.
   - **Ask the team for how best to obtain these.**
-5. Databases
-  - `platform db:dump -z -e main` (select main database)
-  - Repeat for `drupal7db`.
-  - **Recommend these remain compressed to save network download time and local storage space**
+5. Platform SH API Token
+  - You will need to generate an API Token for DDev. This can be found on platform.sh -> My Profile -> API Tokens
+  - Assign the token to the PLATFORMSH_CLI_TOKEN key of your .env file.
+6. Install DBeaver or SequelAce (if you haven't done so already)
+  - DBeaver (MacOS for Apple Silicon) https://dbeaver.io/download/
+  - Sequel Ace https://sequel-ace.com
 
 ### Next installation/import steps
 
@@ -40,11 +42,8 @@ Continuous Integration services are provided by [Circle CI](https://github.com/d
 - `mv <path-to-dot-env-file> .ddev/.env`
 - `ddev start`. This will run composer inside the container for you, avoiding host-level inconsistencies.
 - Verify env vars have taken effect with: `ddev exec "env | sort""`
-- Import your migration source database **FIRST**, if needed with: `ddev import-db --database=drupal7db --file=<path-to-drupal7db-dump-file.sql.gz>`
-- Import your main db with `ddev import-db --file=<path-to-your-main-db-file.sql.gz`
-- Config import should run and import local split profile values.
-- The order of the databases isn't essential, but importing the drupal7db first makes things a lot less confusing.
-  - If you plan to import the main db first, use the `--skip-hooks` argument with the `import-db` command for a bit less confusion.
+- Run `ddev pull dept` which will import both databases and run config import.
+- To inspect the databases you can use either `ddev dbeaver` or `ddev sequelace` depending on the DBMS you have installed.
 
 ## Troubleshooting
 

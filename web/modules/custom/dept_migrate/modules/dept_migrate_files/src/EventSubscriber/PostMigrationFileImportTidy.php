@@ -14,64 +14,35 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Post migration subscriber to correct managed file import properties.
  */
-class PostMigrationFileImportTidy implements EventSubscriberInterface {
+final class PostMigrationFileImportTidy implements EventSubscriberInterface {
 
   /**
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * @var \Drupal\Core\Logger\LoggerChannel
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
   protected $logger;
 
   /**
-   * Database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $dbconn;
-
-  /**
-   * D7 database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $d7dbconn;
-
-  /**
-   * Lookup manager service.
-   *
-   * @var \Drupal\dept_migrate\MigrateUuidLookupManager
-   */
-  protected $migrateLookupManager;
-
-  /**
    * Constructs event subscriber.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger
+   * @param \Drupal\Core\Logger\LoggerChannelFactory $loggerFactory
    *   Drupal logger.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
-   * @param \Drupal\Core\Database\Connection $d7_connection
+   * @param \Drupal\Core\Database\Connection $d7Connection
    *   D7 database connection.
-   * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookup_manager
+   * @param \Drupal\dept_migrate\MigrateUuidLookupManager $lookupManager
    *   Migrate lookup manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager,
-                              LoggerChannelFactory $logger,
-                              Connection $connection,
-                              Connection $d7_connection,
-                              MigrateUuidLookupManager $lookup_manager) {
-
-    $this->entityTypeManager = $entity_type_manager;
-    $this->logger = $logger->get('dept_migrate');
-    $this->dbconn = $connection;
-    $this->d7dbconn = $d7_connection;
-    $this->migrateLookupManager = $lookup_manager;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected LoggerChannelFactory $loggerFactory,
+    protected Connection $connection,
+    protected Connection $d7Connection,
+    protected MigrateUuidLookupManager $lookupManager,
+  ) {
+    $this->logger = $loggerFactory->get('dept_migrate');
   }
 
   /**
@@ -97,18 +68,18 @@ class PostMigrationFileImportTidy implements EventSubscriberInterface {
       $this->logger->notice("Fixing missing file properties for " . $event_id);
 
       // Find all records in file_managed with NULL filename.
-      $results = $this->dbconn->query("SELECT f.*, m.*
+      $results = $this->connection->query("SELECT f.*, m.*
         FROM {file_managed} f
         JOIN {migrate_map_$event_id} m ON m.destid1 = f.fid
         WHERE f.filename IS NULL")->fetchAll();
 
       foreach ($results as $row) {
-        $d7_metadata = $this->migrateLookupManager->lookupBySourceFileUuid([$row->sourceid1]);
+        $d7_metadata = $this->lookupManager->lookupBySourceFileUuid([$row->sourceid1]);
         $d7_fid = key($d7_metadata);
 
         if (!empty($d7_metadata)) {
           $d7_metadata = reset($d7_metadata);
-          $d7_file = $this->d7dbconn->query('SELECT * from {file_managed} WHERE fid = :fid', [
+          $d7_file = $this->d7Connection->query('SELECT * from {file_managed} WHERE fid = :fid', [
             ':fid' => $d7_fid,
           ])->fetchAssoc();
 

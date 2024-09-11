@@ -9,35 +9,20 @@ use Drupal\domain\DomainNegotiatorInterface;
 /**
  * Service class for managing Department objects.
  */
-class DepartmentManager {
-
-  /**
-   * The domain.negotiator service.
-   *
-   * @var \Drupal\domain\DomainNegotiatorInterface
-   */
-  protected $domainNegotiator;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
+final class DepartmentManager {
 
   /**
    * Constructs a DepartmentManager object.
    *
-   * @param \Drupal\domain\DomainNegotiatorInterface $domain_negotiator
+   * @param \Drupal\domain\DomainNegotiatorInterface $domainNegotiator
    *   The Domain negotiator service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The Entity Type Manager service.
    */
   public function __construct(
-    DomainNegotiatorInterface $domain_negotiator,
-    EntityTypeManagerInterface $entity_type_manager) {
-    $this->domainNegotiator = $domain_negotiator;
-    $this->entityTypeManager = $entity_type_manager;
+    protected DomainNegotiatorInterface $domainNegotiator,
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {
   }
 
   /**
