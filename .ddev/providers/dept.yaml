@@ -34,6 +34,7 @@ db_import_command:
     gzip -dc .ddev/.downloads/drupal7.sql.gz | ddev import-db --database=drupal7 --skip-hooks
     gzip -dc .ddev/.downloads/db.sql.gz | ddev mysql db
     ddev drush cim -y
+    ddev drush cr
   service: host
 
 files_pull_command:
