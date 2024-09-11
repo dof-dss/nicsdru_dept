@@ -28,6 +28,7 @@ dependencies:
     - field.field.node.heritage_site.field_website
     - node.type.heritage_site
   module:
+    - address
     - field_group
     - google_map_field
     - layout_builder
@@ -45,7 +46,7 @@ third_party_settings:
       label: Contact
       parent_name: ''
       region: content
-      weight: 3
+      weight: 4
       format_type: html_element
       format_settings:
         classes: ''
@@ -68,7 +69,7 @@ third_party_settings:
       label: 'Additional Information'
       parent_name: ''
       region: content
-      weight: 4
+      weight: 5
       format_type: html_element
       format_settings:
         classes: additional-info
@@ -83,15 +84,11 @@ third_party_settings:
         speed: fast
     group_address:
       children:
-        - field_address_line_1
-        - field_address_line_2
-        - field_town
-        - field_postcode
-        - field_county
+        - field_address
       label: Address
       parent_name: ''
       region: content
-      weight: 2
+      weight: 3
       format_type: html_element
       format_settings:
         classes: ''
@@ -104,13 +101,14 @@ third_party_settings:
         attributes: ''
         effect: none
         speed: fast
+        description: ''
     group_heritage_site_body:
       children:
         - body
       label: About
       parent_name: ''
       region: content
-      weight: 5
+      weight: 6
       format_type: html_element
       format_settings:
         classes: ''
@@ -138,28 +136,12 @@ content:
     third_party_settings: {  }
     weight: 5
     region: content
-  field_address_line_1:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  field_address_line_2:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 3
-    region: content
-  field_county:
-    type: list_default
+  field_address:
+    type: address_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 6
+    weight: 10
     region: content
   field_email:
     type: email_mailto
@@ -186,7 +168,7 @@ content:
       rel: '0'
       target: '0'
     third_party_settings: {  }
-    weight: 10
+    weight: 11
     region: content
   field_map_location:
     type: google_map_field_default
@@ -205,7 +187,7 @@ content:
       rel: '0'
       target: '0'
     third_party_settings: {  }
-    weight: 12
+    weight: 13
     region: content
   field_open_to_the_public:
     type: list_default
@@ -231,14 +213,6 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
-  field_postcode:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 5
-    region: content
   field_site_topics:
     type: entity_reference_label
     label: inline
@@ -253,15 +227,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 11
-    region: content
-  field_town:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 4
+    weight: 12
     region: content
   field_website:
     type: link
@@ -278,11 +244,15 @@ content:
 hidden:
   content_moderation_control: true
   entitygroupfield: true
-  field_address: true
+  field_address_line_1: true
+  field_address_line_2: true
+  field_county: true
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
   field_metatags: true
+  field_postcode: true
+  field_town: true
   groups: true
   groups_type_department_site: true
   langcode: true

@@ -53,6 +53,30 @@
                     "type": "zip"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "dimsemenov/photoswipe",
+                "version": "5.4.4",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/dimsemenov/PhotoSwipe/archive/refs/tags/v5.4.4.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "dimsemenov/photoswipe-dynamic-caption-plugin",
+                "version": "1.2.7",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/dimsemenov/photoswipe-dynamic-caption-plugin/archive/refs/heads/main.zip",
+                    "type": "zip"
+                }
+            }
         }
     ],
     "require": {
@@ -60,6 +84,8 @@
         "composer/installers": "^2.0",
         "cweagans/composer-patches": "^1.7",
         "deaemth/easychart": "^3.1",
+        "dimsemenov/photoswipe": "^5.4",
+        "dimsemenov/photoswipe-dynamic-caption-plugin": "^1.2",
         "dof-dss/nicsdru_origins_modules": "^10.4",
         "dof-dss/nicsdru_origins_theme": "^10.1",
         "drupal/a11y_form_helpers": "^2.0",
@@ -138,6 +164,7 @@
         "drupal/paragraphs": "^1.15",
         "drupal/pathauto": "^1.12",
         "drupal/permissions_filter": "^1.5",
+        "drupal/photoswipe": "^5.0",
         "drupal/purge_users": "^4.0@beta",
         "drupal/redirect": "^1.10",
         "drupal/redis": "^1.5",
