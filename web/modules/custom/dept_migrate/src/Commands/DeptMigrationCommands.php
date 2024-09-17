@@ -419,7 +419,9 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
   /**
    * Debug D7 child nodes for the given nid.
    *
-   *    * @param string $nid
+   *    * @param string $parent_id
+   *    The parent node id of the node.
+   *    * @param string $node_id
    *   The node id to display child nodes.
    *    * @param string $version
    *   The version of the site the nid comes from (d9 or d7).
@@ -427,17 +429,17 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
    * @command dept:debug-subtopic-child-content
    * @aliases dscc
    */
-  public function displaySubtopicChildContent($nid, $version = 'd9') {
+  public function displaySubtopicChildContent($parent_id, $node_id, $version = 'd9') {
     if ($version === 'd9') {
-      $d7_nid = $this->lookupManager->lookupByDestinationNodeIds([$nid]);
-      $node_id = $d7_nid[$nid]['d7nid'];
-    }
-    else {
-      $node_id = $nid;
+      $d7_parent_nid = $this->lookupManager->lookupByDestinationNodeIds([$parent_id]);
+      $parent_id = $d7_parent_nid[$parent_id]['d7nid'];
+
+      $d7_nid = $this->lookupManager->lookupByDestinationNodeIds([$node_id]);
+      $node_id = $d7_nid[$node_id]['d7nid'];
     }
 
-    print "Child nodes for $version node " . $nid;
-    print_r($this->fetchSubtopicChildContent($node_id));
+    print "Child nodes for $version node " . $node_id;
+    print_r($this->fetchSubtopicChildContent($parent_id, $node_id));
   }
 
   /**
@@ -450,7 +452,6 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
    * @aliases scc
    */
   public function createSubtopicContentReferences($domain_id) {
-
     if (empty($domain_id)) {
       return;
     }
@@ -463,7 +464,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       AND tc.bundle = 'subtopic'"
     )->execute();
 
-    $domain_topics_d9 = $this->dbConn->query("
+    $d10_domain_topics = $this->dbConn->query("
     SELECT ds.entity_id FROM node__field_domain_source ds
     INNER JOIN node_field_data nfd
     ON ds.entity_id = nfd.nid
@@ -471,38 +472,26 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     AND ds.field_domain_source_target_id = '$domain_id'"
     )->fetchCol();
 
-    $topic_nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($domain_topics_d9);
 
-    // Loop Topics and get node ids.
-    foreach ($topic_nodes as $topic_node) {
-      $topic_content_references = $topic_node->get('field_topic_content');
+    foreach ($d10_domain_topics as $d10_domain_topic_id) {
+      $d7_domain_topic_id = $this->lookupManager->lookupByDestinationNodeIds([$d10_domain_topic_id])[$d10_domain_topic_id]['d7nid'] ?: NULL;
 
-      foreach ($topic_content_references as $reference) {
-        // @phpstan-ignore-next-line
-        $topic_nid = $reference->get('entity')->getTargetIdentifier();
-        $topic_data = $this->lookupManager->lookupByDestinationNodeIds([$topic_nid]);
-        $this->processSubtopicChildContent($topic_data[$topic_nid]['d7nid']);
+      if (empty($d7_domain_topic_id)) {
+        continue;
+      }
+
+      $d7_topic_children = $this->fetchSubtopicChildContent($d7_domain_topic_id, $d7_domain_topic_id);
+      $d10_topic_node = $this->entityTypeManager->getStorage('node')->load($d10_domain_topic_id);
+
+      foreach ($d7_topic_children as $d7_topic_child) {
+        $d10_topic_child = $this->lookupManager->lookupBySourceNodeId([$d7_topic_child->nid]);
+        $d10_topic_child_nid = $d10_topic_child[$d7_topic_child->nid]['nid'];
+
+        if (!empty($d10_topic_child_nid)) {
+          $this->createSubtopicContentRefLink($d10_topic_node, $d10_topic_child_nid);
+        }
       }
     }
-
-    if (count($this->selfReferencedTopicsCount) > 0) {
-      $selfRefList = implode(",", $this->selfReferencedTopicsCount);
-      $this->logger->warning("Self referencing topics: " . $selfRefList);
-      $this->io()->caution("Rubber chickens awarded: " . count($this->selfReferencedTopicsCount) . " 🐔");
-    }
-
-    if (count($this->missingTopicsContentCount) > 0) {
-      $missingContentList = implode(",", $this->missingTopicsContentCount);
-      $this->logger->warning("Missing subtopic content nodes: " . $missingContentList);
-      $this->io()->caution("Missing topic content nodes: " . count($this->missingTopicsContentCount));
-    }
-
-    // @phpstan-ignore-next-line
-    $process = $this->processManager()->drush($this->siteAliasManager()->getSelf(), 'cache:rebuild', []);
-    $process->mustRun();
-
-    $this->io()->success("Subtopic content entity references completed for " . $domain_id);
-
   }
 
   /**
@@ -545,49 +534,35 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
   /**
    * Fetch subtopic child nodes and add as a reference to the parent.
    *
-   * @param int $nid
+   * @param int $node_id
+   *   Drupal 7 parent node ID.
+   * @param int $parent_id
    *   Drupal 7 parent node ID.
    *
    * @command dept:process-subtopic-child-content
    * @aliases pscc
    *
    */
-  public function processSubtopicChildContent($nid) {
-    $child_nodes = $this->fetchSubtopicChildContent($nid);
+  public function processSubtopicChildContent($node_id, $parent_id = NULL) {
+    $parent_id ??= $node_id;
+    $child_nodes =  $this->fetchSubtopicChildContent($parent_id, $node_id);
     // Fetch the D9/D7 data for the parent node.
-    $parent_data = $this->lookupManager->lookupbySourceNodeId([$nid]);
+    $parent_data = $this->lookupManager->lookupbySourceNodeId([$node_id]);
 
     // Some topic nodes (new content) won't have a D7 counterpart.
-    if (empty($parent_data[$nid]['nid'])) {
+    if (empty($parent_data[$node_id]['nid'])) {
       return;
     }
 
-    $parent_node = $this->entityTypeManager->getStorage('node')->load($parent_data[$nid]['nid']);
+    $parent_node = $this->entityTypeManager->getStorage('node')->load($parent_id);
 
     foreach ($child_nodes as $child_node) {
       $child_data = $this->lookupManager->lookupBySourceNodeId([$child_node->nid]);
 
-      // If the child node is a reference to the parent, ignore it.
-      if ($child_node->nid == $nid) {
-        $this->selfReferencedTopicsCount[] = $nid;
-        continue;
-      }
-
-      // If we don't have a D9 nid it might be that the node in question hasn't
-      // been migrated so skip adding it.
-      if (!array_key_exists('nid', $child_data[$child_node->nid]) || empty($child_data[$child_node->nid]['nid'])) {
-        $this->missingTopicsContentCount[] = $child_node->nid;
-      }
-      else {
-        // Don't add child pages of books to the topic contents, only the book entry.
-        if (!$this->isBookPage($child_data[$child_node->nid]['nid'])) {
-          $this->createSubtopicContentRefLink($parent_node, $child_data[$child_node->nid]['nid']);
-        }
-      }
-
       // If the child node is a subtopic then process it for child content.
       if ($child_node->type === 'subtopic') {
-        $this->processSubtopicChildContent($child_node->nid);
+        echo "FOO \r\n";
+        $this->processSubtopicChildContent($child_node, $parent_data[$node_id]['d7nid']);
       }
     }
   }
@@ -706,62 +681,31 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
    * @return array
    *   Array elements containing node id, type and title.
    */
-  private function fetchSubtopicChildContent($nid) {
+  private function fetchSubtopicChildContent($parent_nid, $nid) {
     // Select nodes from the draggable view, with associated parent term or
     // subtopic term.
-    $subcontent_sql = "WITH content_stack_cte (nid, type, title, weight) AS (
-    SELECT
-        n.nid,
-        n.type,
-        n.title,
-        ds.weight
-    FROM draggableviews_structure ds
-    JOIN node n ON n.nid = ds.entity_id
-    WHERE ds.view_name = 'draggable_subtopics'
-      AND ds.view_display = 'panel_pane_2'
-      AND ds.args = :nidargs
-      AND n.status = 1
-     UNION
-         SELECT
-        st_n.nid,
-        st_n.type,
-        st_n.title,
-        99 as weight
-    FROM node st_n
-    JOIN field_data_field_parent_topic nfps ON st_n.nid = nfps.entity_id
-    LEFT OUTER JOIN field_data_field_parent_subtopic nfpst ON st_n.nid = nfpst.entity_id
-    WHERE st_n.type = 'subtopic'
-    AND nfps.field_parent_topic_target_id = :nid
-    AND st_n.status = 1
-    AND nfpst.entity_id IS NULL
-    UNION
-      SELECT
-        st_n.nid,
-        st_n.type,
-        st_n.title,
-        99 as weight
-    FROM node st_n
-    JOIN field_data_field_parent_subtopic nfpst ON st_n.nid = nfpst.entity_id
-    WHERE st_n.type = 'subtopic'
-    AND nfpst.field_parent_subtopic_target_id = :nid
-    AND st_n.status = 1
-    UNION
-    SELECT
-        ar_n.nid,
-        ar_n.type,
-        ar_n.title,
-        99 as weight
-    FROM node ar_n
-    JOIN field_data_field_site_subtopics nfss ON ar_n.nid = nfss.entity_id
-    WHERE ar_n.type = 'article' AND nfss.field_site_subtopics_target_id = :nid
-    AND ar_n.status = 1
-)
-SELECT DISTINCT nid, type, title FROM content_stack_cte
-ORDER BY weight, title";
+    $subcontent_sql = "SELECT node.nid, node.type, node.title, COALESCE(draggableviews_structure.weight, 2147483647) AS weight
+FROM node node
+LEFT JOIN flagging flagging_node
+ON node.nid = flagging_node.entity_id AND (flagging_node.fid = '5')
+LEFT JOIN domain_access domain_access
+ON node.nid = domain_access.nid AND (domain_access.realm = 'domain_id')
+LEFT JOIN field_data_field_parent_subtopic  field_data_field_parent_subtopic
+ON node.nid = field_data_field_parent_subtopic.entity_id AND (field_data_field_parent_subtopic.entity_type = 'node' AND field_data_field_parent_subtopic.deleted = '0')
+LEFT JOIN field_data_field_parent_topic field_data_field_parent_topic
+ON node.nid = field_data_field_parent_topic.entity_id AND (field_data_field_parent_topic.entity_type = 'node' AND field_data_field_parent_topic.deleted = '0')
+LEFT JOIN field_data_field_site_subtopics field_data_field_site_subtopics
+ON node.nid = field_data_field_site_subtopics.entity_id AND (field_data_field_site_subtopics.entity_type = 'node' AND field_data_field_site_subtopics.deleted = '0')
+LEFT JOIN draggableviews_structure
+ON node.nid = draggableviews_structure.entity_id AND draggableviews_structure.view_name = 'draggable_subtopics' AND draggableviews_structure.view_display = 'default' AND draggableviews_structure.args = :nidargs
+WHERE (( (field_data_field_parent_topic.field_parent_topic_target_id = :pnid )
+OR (field_data_field_site_subtopics.field_site_subtopics_target_id = :nid ) )AND(( (node.status = '1') AND (node.type IN  ('subtopic')) AND (((domain_access.realm = 'domain_id' AND domain_access.gid = 7) OR (domain_access.realm = 'domain_site' AND domain_access.gid = 0))) AND (field_data_field_parent_subtopic.field_parent_subtopic_target_id IS NULL ) AND (flagging_node.uid IS NULL ) )))
+ORDER BY weight ASC";
 
     $nodes = $this->d7conn->query($subcontent_sql, [
-      ':nidargs' => '["' . $nid . '","' . $nid . '"]',
-      ':nid' => $nid
+      ':nidargs' => '["' . $parent_nid . '","' . $nid . '"]',
+      ':nid' => $nid,
+      ':pnid' => $parent_nid,
     ])->fetchAll();
 
     return $nodes;
