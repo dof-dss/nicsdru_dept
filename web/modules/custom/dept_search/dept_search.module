@@ -29,10 +29,14 @@ function dept_search_preprocess_facets_summary_item_list(&$variables) {
   // display that instead of the default facet (machine) name.
   if ($summary_facet instanceof FacetsSummary) {
     $facets = $summary_facet->getFacets();
+    $summaries=[];
     foreach ($variables['items'] as $index => $item) {
       $label = $facets[$item['#title']['#facet']->id()]['label'];
       $variables['items'][$index]['#title']['#facet']->set('description', $label);
+
+      $summaries[$label][] = $variables['items'][$index];
     }
+    $variables['summaries'] = $summaries;
   }
 }
 
