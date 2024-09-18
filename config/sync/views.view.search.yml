@@ -100,6 +100,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 20
           total_pages: null
           id: 0
@@ -117,7 +118,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       exposed_form:
         type: basic
         options:
@@ -274,6 +274,7 @@ display:
               article: search_result
               consultation: search_result
               contact: search_result
+              heritage_site: search_result
               news: search_result
               page: search_result
               profile: search_result
@@ -314,6 +315,7 @@ display:
       tags:
         - 'config:field.storage.node.body'
         - 'config:search_api.index.default_content'
+        - 'search_api_list:default_content'
   site_search:
     id: site_search
     display_title: Page
@@ -335,6 +337,7 @@ display:
       tags:
         - 'config:field.storage.node.body'
         - 'config:search_api.index.default_content'
+        - 'search_api_list:default_content'
   site_search_embed:
     id: site_search_embed
     display_title: Embed
@@ -637,3 +640,4 @@ display:
       tags:
         - 'config:field.storage.node.field_domain_access'
         - 'config:search_api.index.default_content'
+        - 'search_api_list:default_content'
