@@ -5,24 +5,7 @@
 @import '../../init';
 
 .banner {
-  @include rhythm-margins(2.5, 4);
-
-  @include breakpoint($phab, $no-query: true) {
-    @include rhythm-margins(3.5, 4);
-  }
-
-  @include breakpoint($tab, $no-query: true) {
-    @include rhythm-margins(3.5, 6);
-  }
-
-  @include breakpoint($lap, $no-query: true) {
-    @include rhythm-margins(4.5, 7.5);
-  }
-
-  @include breakpoint($desk, $no-query: true) {
-    @include rhythm-margins(5, 7.5);
-  }
-
+  margin: 0 0 var(--rhythm-spacing-xxxl);
   position: relative;
   width: 100%;
   font-size: .1px;
@@ -34,14 +17,10 @@
     margin: 0;
     padding: 0;
 
-    + img {
+    +img {
       position: absolute;
       top: 0;
     }
-  }
-
-  &--thin {
-    margin-bottom: 0;
   }
 
   &__strapline {

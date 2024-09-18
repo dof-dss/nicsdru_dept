@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Controller to alter display of Layout builder Block form.
  */
-class LandingPagesChooseBlockController implements ContainerInjectionInterface {
+final class LandingPagesChooseBlockController implements ContainerInjectionInterface {
 
   use AjaxHelperTrait;
   use LayoutBuilderContextTrait;
@@ -27,64 +27,26 @@ class LandingPagesChooseBlockController implements ContainerInjectionInterface {
   use StringTranslationTrait;
 
   /**
-   * The block manager.
-   *
-   * @var \Drupal\Core\Block\BlockManagerInterface
-   */
-  protected $blockManager;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
-
-  /**
-   * The module handler service.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandler
-   */
-  protected $moduleHandler;
-
-  /**
-   * The file system service.
-   *
-   * @var \Drupal\Core\File\FileSystem
-   */
-  protected $fileSystem;
-
-  /**
    * Class constructor.
    *
-   * @param \Drupal\Core\Block\BlockManagerInterface $block_manager
+   * @param \Drupal\Core\Block\BlockManagerInterface $blockManager
    *   The block manager.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current user.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module handler service object.
-   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   File system service object.
    */
-  public function __construct(BlockManagerInterface $block_manager,
-                              EntityTypeManagerInterface $entity_type_manager,
-                              AccountInterface $current_user,
-                              ModuleHandlerInterface $module_handler,
-                              FileSystemInterface $file_system) {
-    $this->blockManager = $block_manager;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->currentUser = $current_user;
-    $this->moduleHandler = $module_handler;
-    $this->fileSystem = $file_system;
+  public function __construct(
+    protected BlockManagerInterface $blockManager,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected AccountInterface $currentUser,
+    protected ModuleHandlerInterface $moduleHandler,
+    protected FileSystemInterface $fileSystem,
+  ) {
   }
 
   /**

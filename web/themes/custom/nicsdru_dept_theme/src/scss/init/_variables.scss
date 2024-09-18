@@ -515,7 +515,7 @@ $link-card--contact: (
 
 $link-heading-no-visited: (
   color: (
-    default: inherit,
+    default: $link,
     focus: #fff,
     active: $link-active
   ),
