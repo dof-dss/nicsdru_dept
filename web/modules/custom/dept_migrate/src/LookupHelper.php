@@ -18,17 +18,17 @@ class LookupHelper {
 
   public function id($id) {
     if ($this->direction == 'source') {
-      return $this->lookupManager->lookupBySourceNodeId([$id]);
+      return new LookupEntry($this->lookupManager->lookupBySourceNodeId([$id]));
     } else {
-      return $this->lookupManager->lookupByDestinationNodeIds([$id]);
+      return new LookupEntry($this->lookupManager->lookupByDestinationNodeIds([$id]));
     }
   }
 
   public function uuid($uuid) {
     if ($this->direction == 'source') {
-      return $this->lookupManager->lookupBySourceUuId([$uuid]);
+      return new LookupEntry($this->lookupManager->lookupBySourceUuId([$uuid]));
     } else {
-      return $this->lookupManager->lookupByDestinationUuid([$uuid]);
+      return new LookupEntry($this->lookupManager->lookupByDestinationUuid([$uuid]));
     }
   }
 
