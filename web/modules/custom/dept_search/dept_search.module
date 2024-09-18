@@ -165,4 +165,10 @@ function dept_search_preprocess_node(array &$variables) {
       unset($variables['content']['field_domain_source']);
     }
   }
+  if ($view_mode === 'search_result' && $node->bundle() === 'heritage_site') {
+    // No summary field for search, so preprocess it from the body field
+    // in here to render in the template.
+    $body = $node->get('body')->getValue();
+    $variables['content']['custom_summary'] = $body[0]['value'] ?? '';
+  }
 }
