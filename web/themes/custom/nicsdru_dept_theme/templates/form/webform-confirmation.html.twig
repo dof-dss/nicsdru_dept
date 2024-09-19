@@ -15,7 +15,6 @@
 #}
 
 {{ attach_library('webform/webform.confirmation') }}
-{{ drupal_block('page_title_block', wrapper=false) }}
 
 {% if progress %}
   {{ progress }}
@@ -29,7 +28,7 @@
 
   {% if back %}
   <div class="webform-confirmation__back">
-    <a class="btn btn--large btn--secondary btn--left" href="{{ back_url }}" rel="prev"{{ back_attributes }}>{{ back_label }}</a>
+    <a class="btn btn-large-left btn--secondary" href="{{ back_url }}"rel="prev" {{ back_attributes }}>{{ back_label|t }}</a>
   </div>
   {% endif %}
 
