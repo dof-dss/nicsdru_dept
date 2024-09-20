@@ -55,6 +55,13 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
   protected $departmentManager;
 
   /**
+   * List of self referencing Subtopic nodes.
+   *
+   * @var array
+   */
+  private $selfReferencedTopicsCount = [];
+
+  /**
    * Command constructor.
    */
   public function __construct(Connection $database, Connection $d7_database, LookupHelper $lookup_helper, EntityTypeManagerInterface $etm, DepartmentManager $dept_manager) {
@@ -78,13 +85,22 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
       return;
     }
 
-    // Remove existing content reference links for the given department.
+    // Remove existing topic content reference links for the given department.
     $this->dbConn->query("DELETE tc FROM node__field_topic_content tc
       LEFT JOIN node__field_domain_source ds
       ON tc.entity_id = ds.entity_id
       WHERE ds.field_domain_source_target_id = '" . $domain_id . "'
       AND tc.bundle = 'topic'"
     )->execute();
+
+    // Remove existing subtopic content reference links for the given department.
+    $this->dbConn->query("DELETE tc FROM node__field_topic_content tc
+      LEFT JOIN node__field_domain_source ds
+      ON tc.entity_id = ds.entity_id
+      WHERE ds.field_domain_source_target_id = '" . $domain_id . "'
+      AND tc.bundle = 'subtopic'"
+    )->execute();
+
 
     $domain_topic_ids = $this->dbConn->query("
         SELECT ds.entity_id AS nid FROM node__field_domain_source ds
@@ -126,8 +142,48 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
                 'field_topic_content_target_id' => $child_content->id(),
               ])
               ->execute();
+
+            if ($child_content->type() === 'subtopic') {
+              $this->subtopicChildContents($child_content->id());
+            }
           }
         }
+      }
+    }
+  }
+  
+  private function subtopicChildContents($subtopic_id) {
+    $child_items = $this->subtopicsByTopicWithArticles($subtopic_id);
+
+    if (empty($child_items)) {
+      return;
+    }
+
+    $subtopic = $this->entityTypeManager->getStorage('node')->load($subtopic_id);
+
+    foreach ($child_items as $child_item) {
+
+      // If the child node is a reference to the parent, ignore it.
+      if ($child_item->id() == $subtopic_id) {
+        $this->selfReferencedTopicsCount[] = $subtopic_id;
+        continue;
+      }
+
+      // If the node hasn't been migrated, move along.
+      if (empty($child_item->id())) {
+        continue;
+      }
+
+      // Don't add child pages of books to the topic contents, only the book entry.
+      if ($this->isBookPage($child_item->id())) {
+        continue;
+      }
+
+      $this->createSubtopicContentRefLink($subtopic, $child_item->id());
+
+      // If the child node is a subtopic then process it for child content.
+      if ($child_item->type() === 'subtopic') {
+        $this->subtopicChildContents($child_item->id());
       }
     }
   }
@@ -170,6 +226,49 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
     ])->fetchAll();
 
     $results = [];
+
+    foreach ($nodes as $node) {
+      $node = $this->lookupHelper->source()->id($node->nid);
+
+      if ($node) {
+        $results[] = $node;
+      }
+    }
+
+    return $results;
+  }
+
+
+  /**
+   * Returns child content for subtopics.
+   *
+   * @param $topic_id
+   *
+   * @return array
+   */
+  private function subtopicsByTopicWithArticles($subtopic_id) {
+    $results = [];
+    // Lookup the D7 nid for the given D10 topic id.
+    $subtopic_d7_id = $this->lookupHelper->destination()->id($subtopic_id)->d7_id();
+
+    if (empty($subtopic_d7_id)) {
+      return $results;
+    }
+
+    $sql = "SELECT node.nid AS nid, node.title AS node_title, node.created AS node_created, COALESCE(draggableviews_structure.weight, 2147483647) AS draggableviews_structure_weight_coalesce
+            FROM node
+            LEFT JOIN flagging flagging_node ON node.nid = flagging_node.entity_id AND (flagging_node.fid = '5')
+            LEFT JOIN domain_access domain_access ON node.nid = domain_access.nid AND (domain_access.realm = 'domain_id')
+            LEFT JOIN field_data_field_site_subtopics field_data_field_site_subtopics ON node.nid = field_data_field_site_subtopics.entity_id AND (field_data_field_site_subtopics.entity_type = 'node' AND field_data_field_site_subtopics.deleted = '0')
+            LEFT JOIN field_data_field_parent_subtopic field_data_field_parent_subtopic ON node.nid = field_data_field_parent_subtopic.entity_id AND (field_data_field_parent_subtopic.entity_type = 'node' AND field_data_field_parent_subtopic.deleted = '0')
+            LEFT JOIN draggableviews_structure draggableviews_structure ON node.nid = draggableviews_structure.entity_id AND draggableviews_structure.view_name = 'draggable_subtopics' AND draggableviews_structure.view_display = 'panel_pane_2' AND draggableviews_structure.args = :nid_args
+            WHERE (( (field_data_field_site_subtopics.field_site_subtopics_target_id = :nid ) OR (field_data_field_parent_subtopic.field_parent_subtopic_target_id = :nid ) )AND(( (node.status = '1') AND (node.type IN  ('application', 'article', 'project', 'subtopic')) AND (((domain_access.realm = 'domain_id' AND domain_access.gid = 7) OR (domain_access.realm = 'domain_site' AND domain_access.gid = 0))) AND (flagging_node.uid IS NULL ) )))
+            ORDER BY draggableviews_structure_weight_coalesce ASC, node_created DESC";
+
+    $nodes = $this->d7conn->query($sql, [
+      ':nid_args' => '["' . $subtopic_d7_id . '","' . $subtopic_d7_id . '"]',
+      ':nid' => $subtopic_d7_id,
+    ])->fetchAll();
 
     foreach ($nodes as $node) {
       $node = $this->lookupHelper->source()->id($node->nid);
@@ -228,6 +327,27 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
     }
   }
 
+  /**
+   * Determines if a node is a page within a book content type.
+   *
+   * @param int $node_id
+   *   The node ID to check.
+   * @return bool
+   *   True if the node is a book page, otherwise false.
+   */
+  protected function isBookPage($node_id) {
+    $book_nids = \Drupal::cache()->get('book_page_nids');
+
+    if (empty($book_nids)) {
+      $book_nids = $this->dbConn->query("SELECT book.nid FROM book WHERE book.depth > 1")->fetchAllAssoc('nid');
+      \Drupal::cache()->set('book_page_nids', $book_nids, strtotime('+1 hour', time()));
+    }
+    else {
+      $book_nids = $book_nids->data;
+    }
+
+    return array_key_exists($node_id, $book_nids);
+  }
 
 
 }
