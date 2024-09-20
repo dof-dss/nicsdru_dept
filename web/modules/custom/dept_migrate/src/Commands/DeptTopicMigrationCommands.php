@@ -74,7 +74,7 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
   }
 
   /**
-   * Create Topic sub contents.
+   * Create Topic child contents.
    *
    * @command dept:topics-child-contents
    * @aliases tcc
@@ -100,7 +100,6 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
       WHERE ds.field_domain_source_target_id = '" . $domain_id . "'
       AND tc.bundle = 'subtopic'"
     )->execute();
-
 
     $domain_topic_ids = $this->dbConn->query("
         SELECT ds.entity_id AS nid FROM node__field_domain_source ds
@@ -156,6 +155,22 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
     $process->mustRun();
   }
 
+  /**
+   * Preview content of a topic.
+   *
+   * @command dept:topics-child-contents
+   * @aliases ptcc
+   */
+  public function previewTopicChildContents($topic_id) {
+    print_r($this->subtopicsByTopic($topic_id));
+  }
+
+  /**
+   * Create Subtopic child contents.
+   *
+   * @param string $subtopic_id
+   *   A Drupal 10 topic id.
+   */
   private function subtopicChildContents($subtopic_id) {
     $child_items = $this->subtopicsByTopicWithArticles($subtopic_id);
 
@@ -193,25 +208,17 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
   }
 
   /**
-   * Preview content of a topic.
-   *
-   * @command dept:topics-child-contents
-   * @aliases ptcc
-   */
-  public function previewTopicChildContents($topic_id) {
-    print_r($this->subtopicsByTopic($topic_id));
-  }
-
-  /**
    * Returns child content for top level topics.
    *
-   * @param $topic_id
+   * @param string $topic_id
+   *   A Drupal 10 topic id.
    *
    * @return array
+   *   Array of LookupEntry items.
    */
   private function subtopicsByTopic($topic_id) {
     // Lookup the D7 nid for the given D10 topic id.
-    $topic_id = $this->lookupHelper->destination()->id($topic_id)->d7_id();
+    $topic_id = $this->lookupHelper->destination()->id($topic_id)->d7Id();
 
     $sql = "SELECT node.nid AS nid, node.title AS node_title, node.created AS node_created, COALESCE(draggableviews_structure.weight, 2147483647) AS draggableviews_structure_weight_coalesce
             FROM node
@@ -242,18 +249,19 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
     return $results;
   }
 
-
   /**
    * Returns child content for subtopics.
    *
-   * @param $topic_id
+   * @param string $subtopic_id
+   *   A Drupal 10 subtopic id.
    *
    * @return array
+   *   Array of LookupEntry items.
    */
   private function subtopicsByTopicWithArticles($subtopic_id) {
     $results = [];
     // Lookup the D7 nid for the given D10 topic id.
-    $subtopic_d7_id = $this->lookupHelper->destination()->id($subtopic_id)->d7_id();
+    $subtopic_d7_id = $this->lookupHelper->destination()->id($subtopic_id)->d7Id();
 
     if (empty($subtopic_d7_id)) {
       return $results;
@@ -285,14 +293,13 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
     return $results;
   }
 
-
   /**
    * Creates an entity reference link in the topic contents field
    *
    * @param \Drupal\node\Entity\Node $parent_node
-   *   Node to which we add the entity reference.
+   *   Drupal 10 node to which we add the entity reference.
    * @param int $child_nid
-   *   Entity reference node id.
+   *   Drupal 10 entity id.
    */
   private function createSubtopicContentRefLink($parent_node, $child_nid) {
     // Fetch the max delta number, so we can add our new entity reference
@@ -311,10 +318,11 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
         WHERE nftc.entity_id = :entity_id
         AND nftc.revision_id = :rev_id
         AND nftc.field_topic_content_target_id = :target_id", [
-      ':entity_id' => $parent_node->id(),
-      ':rev_id' => $parent_node->getRevisionId(),
-      ':target_id' => $child_nid,
-    ])->fetchAll();
+          ':entity_id' => $parent_node->id(),
+          ':rev_id' => $parent_node->getRevisionId(),
+          ':target_id' => $child_nid,
+        ]
+    )->fetchAll();
 
     if (empty($existing_topic_data)) {
       $this->dbConn->insert('node__field_topic_content')
@@ -335,7 +343,7 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
    * Determines if a node is a page within a book content type.
    *
    * @param int $node_id
-   *   The node ID to check.
+   *   The Drupal 10 node ID to check.
    * @return bool
    *   True if the node is a book page, otherwise false.
    */
@@ -352,6 +360,5 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
 
     return array_key_exists($node_id, $book_nids);
   }
-
 
 }
