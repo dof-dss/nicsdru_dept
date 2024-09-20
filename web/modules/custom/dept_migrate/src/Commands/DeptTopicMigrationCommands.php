@@ -10,6 +10,7 @@ use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate\LookupHelper;
 use Drush\Commands\DrushCommands;
 use Drush\SiteAlias\SiteAliasManagerAwareInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 /**
  * Drush commands processing Departmental migrations.
@@ -62,6 +63,13 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
   private $selfReferencedTopicsCount = [];
 
   /**
+   * Holds total number of subtopics updated.
+   *
+   * @var int
+   */
+  private $subtopicUpdateCount = 0;
+
+  /**
    * Command constructor.
    */
   public function __construct(Connection $database, Connection $d7_database, LookupHelper $lookup_helper, EntityTypeManagerInterface $etm, DepartmentManager $dept_manager) {
@@ -80,10 +88,13 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
    * @aliases tcc
    */
   public function topicChildContents($domain_id) {
+    $topic_update_count = 0;
 
     if (empty($domain_id)) {
       return;
     }
+
+    $this->io()->writeln("Creating topic contents for $domain_id.");
 
     // Remove existing topic content reference links for the given department.
     $this->dbConn->query("DELETE tc FROM node__field_topic_content tc
@@ -111,10 +122,19 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
 
     $domain_topics = $this->entityTypeManager->getStorage('node')->loadMultiple(array_values($domain_topic_ids));
 
+    ProgressBar::setFormatDefinition('custom', "%bar% %current%/%max% -- %message%");
+    $progress_bar = $this->io()->createProgressBar(count($domain_topics));
+    $progress_bar->setFormat('custom');
+    $progress_bar->setMessage('Updating Topic contents for ' . $domain_id);
+    $progress_bar->start();
+
     foreach ($domain_topics as $domain_topic) {
+      $progress_bar->setMessage('Updating ' . $domain_topic->label());
       $child_contents = $this->subtopicsByTopic($domain_topic->id());
+
       if ($child_contents) {
         $delta = 0;
+        $topic_update_count++;
 
         /* @var $child_content \Drupal\dept_migrate\LookupEntry */
         foreach ($child_contents as $child_content) {
@@ -148,11 +168,27 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
           }
         }
       }
+
+      $progress_bar->advance();
     }
 
     // @phpstan-ignore-next-line
     $process = $this->processManager()->drush($this->siteAliasManager()->getSelf(), 'cache:rebuild', []);
     $process->mustRun();
+
+    $progress_bar->setMessage('Finished');
+    $progress_bar->finish();
+    $this->io()->writeln('');
+
+    $this->io()->writeln('Topics updated: ' . $topic_update_count);
+    $this->io()->writeln('Subtopics updated: ' . $this->subtopicUpdateCount);
+
+    if (count($this->selfReferencedTopicsCount) > 0) {
+      $selfRefList = implode(",", $this->selfReferencedTopicsCount);
+      $this->logger->warning("Self referencing topics: " . $selfRefList);
+      $this->io()->caution("Rubber chickens awarded: " . count($this->selfReferencedTopicsCount) . " 🐔");
+    }
+
   }
 
   /**
@@ -177,6 +213,8 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
     if (empty($child_items)) {
       return;
     }
+
+    $this->subtopicUpdateCount++;
 
     $subtopic = $this->entityTypeManager->getStorage('node')->load($subtopic_id);
 
