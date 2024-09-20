@@ -150,8 +150,12 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
         }
       }
     }
+
+    // @phpstan-ignore-next-line
+    $process = $this->processManager()->drush($this->siteAliasManager()->getSelf(), 'cache:rebuild', []);
+    $process->mustRun();
   }
-  
+
   private function subtopicChildContents($subtopic_id) {
     $child_items = $this->subtopicsByTopicWithArticles($subtopic_id);
 
