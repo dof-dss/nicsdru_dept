@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate\LookupHelper;
+use Drupal\dept_migrate\MigrateUtils;
 use Drush\Commands\DrushCommands;
 use Drush\SiteAlias\SiteAliasManagerAwareInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -69,6 +70,14 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
    */
   private $subtopicUpdateCount = 0;
 
+
+  /**
+   * The Drupal 7 GID for the domain.
+   *
+   * @var int|string
+   */
+  private $domainGid;
+
   /**
    * Command constructor.
    */
@@ -91,6 +100,14 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
     $topic_update_count = 0;
 
     if (empty($domain_id)) {
+      return;
+    }
+
+    $d7_domain = MigrateUtils::d9DomainToD7Domain($domain_id);
+    $this->domainGid = $this->d7conn->query("SELECT domain_id FROM domain WHERE machine_name = '" . $d7_domain . "'")->fetchField(0);
+
+    if (empty($this->domainGid)) {
+      $this->io()->error("Domain not found.");
       return;
     }
 
@@ -266,12 +283,13 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
             LEFT JOIN field_data_field_parent_topic field_data_field_parent_topic ON node.nid = field_data_field_parent_topic.entity_id AND (field_data_field_parent_topic.entity_type = 'node' AND field_data_field_parent_topic.deleted = '0')
             LEFT JOIN field_data_field_site_topics field_data_field_site_topics ON node.nid = field_data_field_site_topics.entity_id AND (field_data_field_site_topics.entity_type = 'node' AND field_data_field_site_topics.deleted = '0')
             LEFT JOIN draggableviews_structure draggableviews_structure ON node.nid = draggableviews_structure.entity_id AND draggableviews_structure.view_name = 'draggable_subtopics' AND draggableviews_structure.view_display = 'panel_pane_1' AND draggableviews_structure.args = :nid_args
-            WHERE (( (field_data_field_parent_topic.field_parent_topic_target_id = :nid ) OR (field_data_field_site_topics.field_site_topics_target_id = :nid ) )AND(( (node.status = '1') AND (node.type IN  ('subtopic')) AND (((domain_access.realm = 'domain_id' AND domain_access.gid = 7) OR (domain_access.realm = 'domain_site' AND domain_access.gid = 0))) AND (field_data_field_parent_subtopic.field_parent_subtopic_target_id IS NULL ) AND (flagging_node.uid IS NULL ) )))
+            WHERE (( (field_data_field_parent_topic.field_parent_topic_target_id = :nid ) OR (field_data_field_site_topics.field_site_topics_target_id = :nid ) )AND(( (node.status = '1') AND (node.type IN  ('subtopic')) AND (((domain_access.realm = 'domain_id' AND domain_access.gid = :gid) OR (domain_access.realm = 'domain_site' AND domain_access.gid = 0))) AND (field_data_field_parent_subtopic.field_parent_subtopic_target_id IS NULL ) AND (flagging_node.uid IS NULL ) )))
             ORDER BY draggableviews_structure_weight_coalesce ASC, node_created DESC";
 
     $nodes = $this->d7conn->query($sql, [
       ':nid_args' => '["' . $topic_id . '","' . $topic_id . '"]',
       ':nid' => $topic_id,
+      ':gid' => $this->domainGid,
     ])->fetchAll();
 
     $results = [];
@@ -312,12 +330,13 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
             LEFT JOIN field_data_field_site_subtopics field_data_field_site_subtopics ON node.nid = field_data_field_site_subtopics.entity_id AND (field_data_field_site_subtopics.entity_type = 'node' AND field_data_field_site_subtopics.deleted = '0')
             LEFT JOIN field_data_field_parent_subtopic field_data_field_parent_subtopic ON node.nid = field_data_field_parent_subtopic.entity_id AND (field_data_field_parent_subtopic.entity_type = 'node' AND field_data_field_parent_subtopic.deleted = '0')
             LEFT JOIN draggableviews_structure draggableviews_structure ON node.nid = draggableviews_structure.entity_id AND draggableviews_structure.view_name = 'draggable_subtopics' AND draggableviews_structure.view_display = 'panel_pane_2' AND draggableviews_structure.args = :nid_args
-            WHERE (( (field_data_field_site_subtopics.field_site_subtopics_target_id = :nid ) OR (field_data_field_parent_subtopic.field_parent_subtopic_target_id = :nid ) )AND(( (node.status = '1') AND (node.type IN  ('application', 'article', 'project', 'subtopic')) AND (((domain_access.realm = 'domain_id' AND domain_access.gid = 7) OR (domain_access.realm = 'domain_site' AND domain_access.gid = 0))) AND (flagging_node.uid IS NULL ) )))
+            WHERE (( (field_data_field_site_subtopics.field_site_subtopics_target_id = :nid ) OR (field_data_field_parent_subtopic.field_parent_subtopic_target_id = :nid ) )AND(( (node.status = '1') AND (node.type IN  ('application', 'article', 'project', 'subtopic')) AND (((domain_access.realm = 'domain_id' AND domain_access.gid = :gid) OR (domain_access.realm = 'domain_site' AND domain_access.gid = 0))) AND (flagging_node.uid IS NULL ) )))
             ORDER BY draggableviews_structure_weight_coalesce ASC, node_created DESC";
 
     $nodes = $this->d7conn->query($sql, [
       ':nid_args' => '["' . $subtopic_d7_id . '","' . $subtopic_d7_id . '"]',
       ':nid' => $subtopic_d7_id,
+      ':gid' => $this->domainGid,
     ])->fetchAll();
 
     foreach ($nodes as $node) {
