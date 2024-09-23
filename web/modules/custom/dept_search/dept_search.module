@@ -29,10 +29,14 @@ function dept_search_preprocess_facets_summary_item_list(&$variables) {
   // display that instead of the default facet (machine) name.
   if ($summary_facet instanceof FacetsSummary) {
     $facets = $summary_facet->getFacets();
+    $summaries = [];
     foreach ($variables['items'] as $index => $item) {
       $label = $facets[$item['#title']['#facet']->id()]['label'];
       $variables['items'][$index]['#title']['#facet']->set('description', $label);
+
+      $summaries[$label][] = $variables['items'][$index];
     }
+    $variables['summaries'] = $summaries;
   }
 }
 
@@ -160,5 +164,11 @@ function dept_search_preprocess_node(array &$variables) {
       // Hide the domain source field.
       unset($variables['content']['field_domain_source']);
     }
+  }
+  if ($view_mode === 'search_result' && $node->bundle() === 'heritage_site') {
+    // No summary field for search, so preprocess it from the body field
+    // in here to render in the template.
+    $body = $node->get('body')->getValue();
+    $variables['content']['custom_summary'] = $body[0]['value'] ?? '';
   }
 }

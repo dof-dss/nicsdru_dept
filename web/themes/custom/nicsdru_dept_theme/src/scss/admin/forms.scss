@@ -28,11 +28,11 @@ body {
   }
 }
 
-.block-system-main-block .layout-node-form .layout-region__content,
-.block-system-main-block .department-form {
-  .field--type {
-    &-entity-reference,
-    &-link {
+.block-system-main-block {
+  .layout-node-form .layout-region__content,
+  .department-form {
+    .field--type-entity-reference,
+    .field--type-link {
       table {
         th,
         td {
@@ -51,6 +51,23 @@ body {
           font-size: var(--font-size-base);
         }
       }
+    }
+  }
+
+  .layout-region--secondary {
+    table {
+      th,
+      td {
+        font-size: var(--font-size-base);
+      }
+    }
+
+    .redirect-table__path {
+      width: 60%;
+    }
+
+    .redirect-table__operations {
+      width: 40%;
     }
   }
 }

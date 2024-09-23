@@ -6,7 +6,14 @@
 {% set department_name = content.field_domain_source.0["#plain_text"] %}
 <a class="card card--plain no-ext-icon" href="{{ url }}">
   <h3 class="card__title">{{ label }}</h3>
-  <div class="card__summary">{{ content.field_summary | field_value }}</div>
+  <div class="card__summary">
+    {% if content.field_summary %}
+      {{ content.field_summary | field_value }}
+    {% endif %}
+    {% if content.custom_summary %}
+      {{ content.custom_summary | smart_trim_words(35, '...', true) }}
+    {% endif %}
+  </div>
   <div class="card__meta">
     {%- if department.id == 'nigov' and department_name %}
       {%- if 'Agriculture' in department_name %}

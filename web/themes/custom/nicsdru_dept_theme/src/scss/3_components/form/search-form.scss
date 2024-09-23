@@ -235,6 +235,10 @@ header .search-api-form {
 }
 
 .facet-summary__list {
+  ul {
+    padding: 0;
+  }
+
   .facet-summary-item--facet a:focus {
     color: $charcoal;
   }
