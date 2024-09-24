@@ -145,6 +145,7 @@ class MigrateUuidLookupManager {
 
     foreach ($d7results as $row) {
       $map[$row->nid] = [
+        'd7nid' => $row->nid,
         'd7uuid' => $row->uuid,
         'd7type' => $row->type,
         'd7title' => $row->title,
