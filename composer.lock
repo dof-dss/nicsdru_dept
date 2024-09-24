@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e14cfba3a302ac6fe7dbd4a93100da9a",
+    "content-hash": "6395b487c468ea051e9089833fdf88ff",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4049,20 +4049,20 @@
         },
         {
             "name": "drupal/domain",
-            "version": "2.0.0-beta1",
+            "version": "2.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/domain.git",
-                "reference": "2.0.0-beta1"
+                "reference": "2.0.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/domain-2.0.0-beta1.zip",
-                "reference": "2.0.0-beta1",
-                "shasum": "0edbc9d6c79cb0a61c08c656e9258c2450710664"
+                "url": "https://ftp.drupal.org/files/projects/domain-2.0.0-beta2.zip",
+                "reference": "2.0.0-beta2",
+                "shasum": "af75edc81a41544296260e4ab21ed1ab8f7531e0"
             },
             "require": {
-                "drupal/core": "^9 || ^10"
+                "drupal/core": "^9 || ^10 || ^11"
             },
             "require-dev": {
                 "drupal/domain_access": "*",
@@ -4071,8 +4071,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-beta1",
-                    "datestamp": "1686067462",
+                    "version": "2.0.0-beta2",
+                    "datestamp": "1726699929",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -4461,28 +4461,28 @@
         },
         {
             "name": "drupal/domain_site_settings",
-            "version": "1.5.0",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/domain_site_settings.git",
-                "reference": "8.x-1.5"
+                "reference": "8.x-1.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/domain_site_settings-8.x-1.5.zip",
-                "reference": "8.x-1.5",
-                "shasum": "df40448e042008170a6e01f77ae66615043f973a"
+                "url": "https://ftp.drupal.org/files/projects/domain_site_settings-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "d0f89411c5dd934a63a1a5991fbc0f76c1515cb2"
             },
             "require": {
-                "drupal/core": "^8.8 || ^9 || ^10",
+                "drupal/core": "^8.8 || ^9 || ^10 || ^11",
                 "drupal/domain": "^1.0 || ^2.0",
                 "drupal/domain_config": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.5",
-                    "datestamp": "1692773264",
+                    "version": "8.x-1.6",
+                    "datestamp": "1726238712",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4499,7 +4499,7 @@
                     "homepage": "https://www.drupal.org/user/906640"
                 },
                 {
-                    "name": "JeroenT",
+                    "name": "jeroent",
                     "homepage": "https://www.drupal.org/user/2228934"
                 },
                 {
