@@ -44,6 +44,7 @@ Continuous Integration services are provided by [Circle CI](https://github.com/d
 - Verify env vars have taken effect with: `ddev exec "env | sort""`
 - Run `ddev pull dept` which will import both databases and run config import.
 - To inspect the databases you can use either `ddev dbeaver` or `ddev sequelace` depending on the DBMS you have installed.
+- Copy your ~/.composer/auth.json to .ddev/homeadditions/.composer to allow git operations inside the container using `ddev composer`
 
 ## Troubleshooting
 
