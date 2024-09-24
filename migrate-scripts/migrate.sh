@@ -185,8 +185,7 @@ then
       fi
 
       echo "Creating Topic/Subtopic content entries for ${dept}"
-      $DRUSH dept:topic-child-content $dept
-      $DRUSH dept:subtopic-child-content $dept
+      $DRUSH dept:topics-child-contents $dept
 
       echo "Removing Audit Due entries for ${dept}"
       $DRUSH dept:remove-audit-date $dept
