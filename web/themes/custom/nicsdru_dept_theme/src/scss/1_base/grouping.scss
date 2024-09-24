@@ -25,48 +25,10 @@
 //
 // Style guide: base.grouping.blockquote
 
-/*
-Add box-shadow to blockquote.
-*/
 blockquote {
-  border: 0;
-  box-shadow: 0 -1.5px 0 0 #e8e7e7, 0 1.5px 0 0 #e8e7e7;
-  padding: .5em 1.5em;
-  margin: 2em 0;
-
-  /*
-  If first in chain, only top box-shadow
-   */
-  &:has(+ blockquote) {
-    padding: .5em 1.5em 0;
-    margin: 2em 0 0;
-    box-shadow: 0 -1.5px 0 0 #e8e7e7;
-  }
-
-  /*
-  Remove box-shadow from subsequent blockquotes in a chain.
-  */
-  & + blockquote {
-    box-shadow: none;
-    padding: 0 1.5em;
-    margin: 0;
-
-    /*
-    Add bottom box-shadow to blockquote if it
-    is the last one or it is not followed by
-    another blockquote and it is not the first in the chain.
-    */
-    &:not(:first-of-type) {
-      &:last-of-type,
-      &:has(+ *:not(blockquote)) {
-        box-shadow: 0 1.5px 0 0 #e8e7e7;
-        padding: 0 1.5em .5em;
-        margin-bottom: 2em;
-      }
-    }
-  }
-
-
+  border-left: .25em solid $grey-light;
+  padding: 0 1.5em;
+  margin: 1em 0 1.5em;
 
   cite {
     display: block;
