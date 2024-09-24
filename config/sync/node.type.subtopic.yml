@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - dept_node
     - menu_ui
     - origins_toc
     - scheduler
@@ -33,10 +34,22 @@ third_party_settings:
     unpublish_enable: false
     unpublish_required: false
     unpublish_revision: false
+  dept_node:
+    department_restrictions:
+      communities: communities
+      daera: daera
+      economy: economy
+      education: education
+      executiveoffice: executiveoffice
+      finance: finance
+      health: health
+      infrastructure: infrastructure
+      justice: justice
+      nigov: nigov
 name: Subtopic
 type: subtopic
 description: 'Use this content type to create a site subtopic page.'
-help: null
+help: "Subtopics should be used when a section contains multiple sub-content items. If you require only one page then use an article type instead.\r\nIf your content is long with multiple headings you should create an article for each heading and link to those from a subtopic."
 new_revision: true
 preview_mode: 1
 display_submitted: false
