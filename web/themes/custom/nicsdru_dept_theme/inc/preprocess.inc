@@ -71,6 +71,13 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
           $variables['main_content_attr']->addClass(LayoutClasses::MAIN_LIMITED);
           break;
       }
+
+      // If node has custom layout, then hide the related region.
+      $variables['landing_page'] = $node->layout_page ? TRUE : FALSE;
+
+      if ($variables['landing_page'] && ($node->bundle()=='topic' || $node->bundle()=='subtopic')) {
+        unset($variables['page']['related']);
+      }
     }
   }
 
@@ -257,9 +264,11 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
   // Check if the node has a custom layout.
   if ($node->hasField('layout_builder__layout') && !$node->get('layout_builder__layout')->isEmpty()) {
     $variables['has_custom_layout'] = TRUE;
+    $variables['node']-> layout_page = TRUE;
   }
   else {
     $variables['has_custom_layout'] = FALSE;
+    $variables['node']-> layout_page = FALSE;
   }
 
   // Array of bundles for which the social sharing block should be displayed.
