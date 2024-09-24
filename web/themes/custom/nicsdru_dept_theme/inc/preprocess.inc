@@ -72,7 +72,7 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
           break;
       }
 
-      // If node has custom layout, then hide the related region.
+      // If node has custom layout (landing pages), then hide the related region.
       $variables['landing_page'] = $node->layout_page ? TRUE : FALSE;
 
       if ($variables['landing_page'] && ($node->bundle()=='topic' || $node->bundle()=='subtopic')) {
