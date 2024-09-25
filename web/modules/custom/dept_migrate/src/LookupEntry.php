@@ -18,7 +18,7 @@ class LookupEntry {
   /**
    * Drupal 7 entity ID.
    *
-   * @return string
+   * @return string|null
    *   Entity ID.
    */
   public function d7Id(): string|null {
@@ -28,7 +28,7 @@ class LookupEntry {
   /**
    * Drupal 7 UUID.
    *
-   * @return string
+   * @return string|null
    *   UUID.
    */
   public function d7Uuid(): string|null {
@@ -38,7 +38,7 @@ class LookupEntry {
   /**
    * Drupal 10 entity ID.
    *
-   * @return string
+   * @return string|null
    *   Entity ID.
    */
   public function id(): string|null {
@@ -48,7 +48,7 @@ class LookupEntry {
   /**
    * Drupal 10 entity UUID.
    *
-   * @return string
+   * @return string|null
    *   UUID.
    */
   public function uuid(): string|null {
@@ -58,7 +58,7 @@ class LookupEntry {
   /**
    * Bundle ID.
    *
-   * @return string
+   * @return string|null
    *   Bundle ID.
    */
   public function type(): string|null {
@@ -68,7 +68,7 @@ class LookupEntry {
   /**
    * Domains for the entry.
    *
-   * @return mixed
+   * @return array|null
    *   Array of domain ids.
    */
   public function domains(): array|null {
