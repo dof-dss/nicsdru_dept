@@ -123,7 +123,7 @@
         "drupal/domain_path": "^1.0@beta",
         "drupal/domain_path_redirect": "^1.5",
         "drupal/domain_simple_sitemap": "^3.0@beta",
-        "drupal/domain_site_settings": "^1.4",
+        "drupal/domain_site_settings": "^1.6",
         "drupal/draggableviews": "^2.1",
         "drupal/dynamic_entity_reference": "^3.2",
         "drupal/entity": "^1.4",
@@ -317,10 +317,7 @@
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://gitlab.com/-/project/18040690/uploads/7897853cd83cb829ae8d752657e2f497/kint.221-5-3.patch"
             },
             "drupal/domain": {
-                "Migration path for domain": "https://www.drupal.org/files/issues/2020-02-27/domain-migration-path-for-domain-2882837-13.patch",
-                "Available on Current Domain doesn't instantiate": "https://www.drupal.org/files/issues/2023-06-21/3367785-domain-php8-boolean.patch",
-                "Cached routes are not deleted when the cache is cleared": "https://www.drupal.org/files/issues/2023-09-18/3266520-9.patch",
-                "DomainAccessCurrentAllFilter operators method is not compatible": "https://git.drupalcode.org/project/domain/-/merge_requests/83.diff"
+                "Migration path for domain": "https://www.drupal.org/files/issues/2020-02-27/domain-migration-path-for-domain-2882837-13.patch"
             },
             "drupal/domain_entity": {
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch",
