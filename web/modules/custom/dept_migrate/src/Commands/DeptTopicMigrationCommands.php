@@ -237,6 +237,11 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
 
     foreach ($child_items as $child_item) {
 
+      if (empty($child_item->id())) {
+        $this->io()->warning("No D10 node for the D7 node id: " . $child_item->d7Id());
+        continue;
+      }
+
       // If the child node is a reference to the parent, ignore it.
       if ($child_item->id() == $subtopic_id) {
         $this->selfReferencedTopicsCount[] = $subtopic_id;
@@ -272,8 +277,14 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
    *   Array of LookupEntry items.
    */
   private function subtopicsByTopic($topic_id) {
+    $results = [];
     // Lookup the D7 nid for the given D10 topic id.
-    $topic_id = $this->lookupHelper->destination()->id($topic_id)->d7Id();
+    $topic_id_d7 = $this->lookupHelper->destination()->id($topic_id)->d7Id();
+
+    if (empty($topic_id)) {
+      $this->io()->warning("D7 nid not found for D10 nid " . $topic_id);
+      return $results;
+    }
 
     $sql = "SELECT node.nid AS nid, node.title AS node_title, node.created AS node_created, COALESCE(draggableviews_structure.weight, 2147483647) AS draggableviews_structure_weight_coalesce
             FROM node
@@ -287,12 +298,10 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
             ORDER BY draggableviews_structure_weight_coalesce ASC, node_created DESC";
 
     $nodes = $this->d7conn->query($sql, [
-      ':nid_args' => '["' . $topic_id . '","' . $topic_id . '"]',
-      ':nid' => $topic_id,
+      ':nid_args' => '["' . $topic_id_d7 . '","' . $topic_id_d7 . '"]',
+      ':nid' => $topic_id_d7,
       ':gid' => $this->domainGid,
     ])->fetchAll();
-
-    $results = [];
 
     foreach ($nodes as $node) {
       $node = $this->lookupHelper->source()->id($node->nid);
@@ -320,6 +329,7 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
     $subtopic_d7_id = $this->lookupHelper->destination()->id($subtopic_id)->d7Id();
 
     if (empty($subtopic_d7_id)) {
+      $this->io()->warning("D7 nid not found for D10 nid " . $subtopic_id);
       return $results;
     }
 
