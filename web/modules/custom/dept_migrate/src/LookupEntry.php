@@ -21,8 +21,8 @@ class LookupEntry {
    * @return string
    *   Entity ID.
    */
-  public function d7Id(): string {
-    return $this->item['d7nid'];
+  public function d7Id(): string|null {
+    return $this->item['d7nid'] ?? NULL;
   }
 
   /**
@@ -31,8 +31,8 @@ class LookupEntry {
    * @return string
    *   UUID.
    */
-  public function d7Uuid(): string {
-    return $this->item['d7uuid'];
+  public function d7Uuid(): string|null {
+    return $this->item['d7uuid'] ?? NULL;
   }
 
   /**
@@ -41,8 +41,8 @@ class LookupEntry {
    * @return string
    *   Entity ID.
    */
-  public function id(): string {
-    return $this->item['nid'];
+  public function id(): string|null {
+    return $this->item['nid'] ?? NULL;
   }
 
   /**
@@ -51,8 +51,8 @@ class LookupEntry {
    * @return string
    *   UUID.
    */
-  public function uuid(): string {
-    return $this->item['uuid'];
+  public function uuid(): string|null {
+    return $this->item['uuid'] ?? NULL;
   }
 
   /**
@@ -61,8 +61,8 @@ class LookupEntry {
    * @return string
    *   Bundle ID.
    */
-  public function type(): string {
-    return $this->item['type'];
+  public function type(): string|null {
+    return $this->item['type'] ?? NULL;
   }
 
   /**
@@ -71,8 +71,8 @@ class LookupEntry {
    * @return mixed
    *   Array of domain ids.
    */
-  public function domains() {
-    return $this->item['domains'];
+  public function domains(): array|null {
+    return $this->item['domains'] ?? NULL;
   }
 
 }
