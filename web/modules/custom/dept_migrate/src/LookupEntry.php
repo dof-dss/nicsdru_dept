@@ -18,61 +18,61 @@ class LookupEntry {
   /**
    * Drupal 7 entity ID.
    *
-   * @return string
+   * @return string|null
    *   Entity ID.
    */
-  public function d7Id(): string {
-    return $this->item['d7nid'];
+  public function d7Id(): string|null {
+    return $this->item['d7nid'] ?? NULL;
   }
 
   /**
    * Drupal 7 UUID.
    *
-   * @return string
+   * @return string|null
    *   UUID.
    */
-  public function d7Uuid(): string {
-    return $this->item['d7uuid'];
+  public function d7Uuid(): string|null {
+    return $this->item['d7uuid'] ?? NULL;
   }
 
   /**
    * Drupal 10 entity ID.
    *
-   * @return string
+   * @return string|null
    *   Entity ID.
    */
-  public function id(): string {
-    return $this->item['nid'];
+  public function id(): string|null {
+    return $this->item['nid'] ?? NULL;
   }
 
   /**
    * Drupal 10 entity UUID.
    *
-   * @return string
+   * @return string|null
    *   UUID.
    */
-  public function uuid(): string {
-    return $this->item['uuid'];
+  public function uuid(): string|null {
+    return $this->item['uuid'] ?? NULL;
   }
 
   /**
    * Bundle ID.
    *
-   * @return string
+   * @return string|null
    *   Bundle ID.
    */
-  public function type(): string {
-    return $this->item['type'];
+  public function type(): string|null {
+    return $this->item['type'] ?? NULL;
   }
 
   /**
    * Domains for the entry.
    *
-   * @return mixed
+   * @return array|null
    *   Array of domain ids.
    */
-  public function domains() {
-    return $this->item['domains'];
+  public function domains(): array|null {
+    return $this->item['domains'] ?? NULL;
   }
 
 }
