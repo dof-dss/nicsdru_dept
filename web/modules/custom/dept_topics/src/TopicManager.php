@@ -9,8 +9,6 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
-use Drupal\node\NodeStorage;
-use Drupal\node\NodeStorageInterface;
 
 /**
  * Provides methods for managing Sub/Topic referenced (child) content.

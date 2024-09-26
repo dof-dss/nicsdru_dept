@@ -6,8 +6,6 @@ use Drupal\Core\Config\FileStorage;
 use Drupal\domain\Entity\Domain;
 use Drupal\domain_access\DomainAccessManagerInterface;
 use Drupal\domain_source\DomainSourceElementManagerInterface;
-use Drupal\field\Entity\FieldConfig;
-use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\media\Entity\Media;
 use Drupal\Tests\domain\Functional\DomainTestBase;
 use Symfony\Component\HttpFoundation\Response;

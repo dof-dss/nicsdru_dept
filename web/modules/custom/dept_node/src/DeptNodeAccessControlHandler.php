@@ -29,7 +29,7 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
    *   The entity type definition.
    * @param \Drupal\node\NodeGrantDatabaseStorageInterface $grant_storage
    *   The node grant storage.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface|null $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
   public function __construct(EntityTypeInterface $entity_type, NodeGrantDatabaseStorageInterface $grant_storage, EntityTypeManagerInterface $entity_type_manager = NULL) {
@@ -41,7 +41,7 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
   /**
    * {@inheritdoc}
    */
-  public function createAccess($entity_bundle = NULL, AccountInterface $account = NULL, array $context = [], $return_as_object = FALSE) {
+  public function createAccess($entity_bundle = NULL, AccountInterface $account, array $context = [], $return_as_object = FALSE) {
 
     $node_type = $this->entityTypeManager->getStorage('node_type')->load($entity_bundle);
     $department_restrictions = $node_type->getThirdPartySetting('dept_node', 'department_restrictions', NULL);
