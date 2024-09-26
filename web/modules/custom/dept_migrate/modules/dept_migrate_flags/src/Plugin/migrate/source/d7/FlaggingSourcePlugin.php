@@ -4,8 +4,8 @@ namespace Drupal\dept_migrate_flags\Plugin\migrate\source\d7;
 
 use Drupal\Core\State\StateInterface;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
-use Drupal\migrate\Plugin\migrate\source\SqlBase;
 use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\Plugin\migrate\source\SqlBase;
 use Drupal\migrate\Row;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

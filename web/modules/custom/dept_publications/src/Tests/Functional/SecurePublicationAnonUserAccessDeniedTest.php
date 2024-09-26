@@ -3,11 +3,11 @@
 namespace Drupal\Tests\dept_publications\Functional;
 
 use Drupal\Core\Config\FileStorage;
+use Drupal\Tests\domain\Functional\DomainTestBase;
 use Drupal\domain\Entity\Domain;
 use Drupal\domain_access\DomainAccessManagerInterface;
 use Drupal\domain_source\DomainSourceElementManagerInterface;
 use Drupal\media\Entity\Media;
-use Drupal\Tests\domain\Functional\DomainTestBase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

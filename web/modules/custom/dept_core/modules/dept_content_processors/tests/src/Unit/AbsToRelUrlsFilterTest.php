@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\dept_content_processors\Unit;
 
-use Drupal\dept_content_processors\Plugin\Filter\AbsToRelUrlsFilter;
 use Drupal\Tests\UnitTestCase;
+use Drupal\dept_content_processors\Plugin\Filter\AbsToRelUrlsFilter;
 
 /**
  * @coversDefaultClass \Drupal\dept_content_processors\Plugin\Filter\AbsToRelUrlsFilter
