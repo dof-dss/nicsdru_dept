@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6395b487c468ea051e9089833fdf88ff",
+    "content-hash": "7bd713fc6e648c44a5e15049284779c9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5476,17 +5476,11 @@
         },
         {
             "name": "drupal/filelog",
-            "version": "3.0.0",
+            "version": "dev-3.0.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/filelog.git",
-                "reference": "3.0.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/filelog-3.0.0.zip",
-                "reference": "3.0.0",
-                "shasum": "76b66ad0b9920e782a3d289500827e6a5cc8ea44"
+                "reference": "0e7cc3b6525562b537ce5b7671e83349e1eb474d"
             },
             "require": {
                 "drupal/core": "^9 || ^10",
@@ -5495,12 +5489,15 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-3.0.x": "3.0.x-dev"
+                },
                 "drupal": {
-                    "version": "3.0.0",
-                    "datestamp": "1721989445",
+                    "version": "3.0.0+2-dev",
+                    "datestamp": "1724417155",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -21141,6 +21138,7 @@
         "drupal/domain_path": 10,
         "drupal/domain_simple_sitemap": 10,
         "drupal/file_delete_ui": 10,
+        "drupal/filelog": 20,
         "drupal/flag": 10,
         "drupal/migrate_conditions": 10,
         "drupal/purge_users": 10,

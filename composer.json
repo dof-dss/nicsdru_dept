@@ -136,7 +136,7 @@
         "drupal/fastly": "^4.0",
         "drupal/field_group": "^3.2",
         "drupal/file_delete_ui": "^1.0@beta",
-        "drupal/filelog": "^3.0",
+        "drupal/filelog": "3.0.x-dev@dev",
         "drupal/filter_perms": "^2.0",
         "drupal/flag": "^4.0@beta",
         "drupal/fpa": "^4.0",
@@ -328,9 +328,6 @@
             },
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
-            },
-            "drupal/filelog": {
-                "Automated Drupal 11 compatibility fixes for filelog": "https://www.drupal.org/files/issues/2024-07-28/filelog.3.0.x-dev.rector.patch"
             },
             "drupal/flag": {
                 "[regression] Flag form element also appearing on non-edit forms #3169627": "https://www.drupal.org/files/issues/2020-09-08/flag-form_element_on_non_edit-forms-3169627-2.patch"
