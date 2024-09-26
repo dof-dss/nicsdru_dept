@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7bd713fc6e648c44a5e15049284779c9",
+    "content-hash": "d104658bb885a94fd8bf871d10fe5e0e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5967,17 +5967,17 @@
         },
         {
             "name": "drupal/http_cache_control",
-            "version": "2.2.0",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/http_cache_control.git",
-                "reference": "8.x-2.2"
+                "reference": "8.x-2.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/http_cache_control-8.x-2.2.zip",
-                "reference": "8.x-2.2",
-                "shasum": "e4be55d9eaa156206e87da5911e600149cffdb94"
+                "url": "https://ftp.drupal.org/files/projects/http_cache_control-8.x-2.3.zip",
+                "reference": "8.x-2.3",
+                "shasum": "43ad2f589f8ac9cc2eb20fe07d7dbe0b6d42430a"
             },
             "require": {
                 "drupal/core": "^9 || ^10 || ^11"
@@ -5985,8 +5985,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.2",
-                    "datestamp": "1723471034",
+                    "version": "8.x-2.3",
+                    "datestamp": "1726747036",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5999,7 +5999,7 @@
             ],
             "authors": [
                 {
-                    "name": "DieterHolvoet",
+                    "name": "dieterholvoet",
                     "homepage": "https://www.drupal.org/user/3567222"
                 },
                 {
