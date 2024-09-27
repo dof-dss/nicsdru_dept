@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6395b487c468ea051e9089833fdf88ff",
+    "content-hash": "d104658bb885a94fd8bf871d10fe5e0e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5476,17 +5476,11 @@
         },
         {
             "name": "drupal/filelog",
-            "version": "3.0.0",
+            "version": "dev-3.0.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/filelog.git",
-                "reference": "3.0.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/filelog-3.0.0.zip",
-                "reference": "3.0.0",
-                "shasum": "76b66ad0b9920e782a3d289500827e6a5cc8ea44"
+                "reference": "0e7cc3b6525562b537ce5b7671e83349e1eb474d"
             },
             "require": {
                 "drupal/core": "^9 || ^10",
@@ -5495,12 +5489,15 @@
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-3.0.x": "3.0.x-dev"
+                },
                 "drupal": {
-                    "version": "3.0.0",
-                    "datestamp": "1721989445",
+                    "version": "3.0.0+2-dev",
+                    "datestamp": "1724417155",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -5970,17 +5967,17 @@
         },
         {
             "name": "drupal/http_cache_control",
-            "version": "2.2.0",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/http_cache_control.git",
-                "reference": "8.x-2.2"
+                "reference": "8.x-2.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/http_cache_control-8.x-2.2.zip",
-                "reference": "8.x-2.2",
-                "shasum": "e4be55d9eaa156206e87da5911e600149cffdb94"
+                "url": "https://ftp.drupal.org/files/projects/http_cache_control-8.x-2.3.zip",
+                "reference": "8.x-2.3",
+                "shasum": "43ad2f589f8ac9cc2eb20fe07d7dbe0b6d42430a"
             },
             "require": {
                 "drupal/core": "^9 || ^10 || ^11"
@@ -5988,8 +5985,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.2",
-                    "datestamp": "1723471034",
+                    "version": "8.x-2.3",
+                    "datestamp": "1726747036",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6002,7 +5999,7 @@
             ],
             "authors": [
                 {
-                    "name": "DieterHolvoet",
+                    "name": "dieterholvoet",
                     "homepage": "https://www.drupal.org/user/3567222"
                 },
                 {
@@ -15970,16 +15967,16 @@
         },
         {
             "name": "drupal/coder",
-            "version": "8.3.24",
+            "version": "8.3.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pfrenssen/coder.git",
-                "reference": "1a59890f972db5da091354f0191dec1037f7c582"
+                "reference": "c58e5a0c44c0010bbc8a91fc468f4667e177b976"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pfrenssen/coder/zipball/1a59890f972db5da091354f0191dec1037f7c582",
-                "reference": "1a59890f972db5da091354f0191dec1037f7c582",
+                "url": "https://api.github.com/repos/pfrenssen/coder/zipball/c58e5a0c44c0010bbc8a91fc468f4667e177b976",
+                "reference": "c58e5a0c44c0010bbc8a91fc468f4667e177b976",
                 "shasum": ""
             },
             "require": {
@@ -16017,7 +16014,7 @@
                 "issues": "https://www.drupal.org/project/issues/coder",
                 "source": "https://www.drupal.org/project/coder"
             },
-            "time": "2024-04-21T06:13:24+00:00"
+            "time": "2024-09-22T19:02:16+00:00"
         },
         {
             "name": "drupal/core-dev",
@@ -21141,6 +21138,7 @@
         "drupal/domain_path": 10,
         "drupal/domain_simple_sitemap": 10,
         "drupal/file_delete_ui": 10,
+        "drupal/filelog": 20,
         "drupal/flag": 10,
         "drupal/migrate_conditions": 10,
         "drupal/purge_users": 10,
