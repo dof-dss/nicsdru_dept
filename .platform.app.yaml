@@ -49,6 +49,9 @@ mounts:
   '/web/sites/default/files':
     source: local
     source_path: 'files'
+  '/web/.well-known':
+    source: local
+    source_path: well-known
   '/tmp':
     source: local
     source_path: 'tmp'
@@ -166,6 +169,8 @@ web:
         '^\/themes\/custom\/.+\/favicons\/.+\.webmanifest$':
           allow: true
           expires: 2w
+        '^/\.well-known/security\.txt$':
+          allow: true
 
         # Deny direct access to configuration files.
         '^/sites/sites\.php$':
@@ -184,9 +189,29 @@ web:
       scripts: false
 
       rules:
+        # Allow a longer Fastly TTL for publication files
+        '^/sites/default/files/publications/':
+          headers:
+            Surrogate-Control: max-age=31536000
         # Provide a longer TTL (2 weeks) for aggregated CSS and JS files.
         '^/sites/default/files/(css|js)':
           expires: 2w
+        # Provide a longer TTL (2 weeks) for Drupal image files.
+        '^/sites/default/files/styles/[^\.]+\.(jpe?g|png|gif|svgz?)$':
+          expires: 2w
+
+    '/themes/custom/nicsdru_dept_theme/images':
+      allow: false
+      passthru: 'index.php'
+      scripts: false
+      rules:
+        # Allow access to common static files in theme
+      '\.(jpe?g|png|gif|svgz?)$':
+        allow: true
+        expires: 2w
+
+access:
+  ssh: contributer
 
 # Set up migration content refresh every night.
 crons:
