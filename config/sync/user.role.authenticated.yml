@@ -4,8 +4,11 @@ status: true
 dependencies:
   config:
     - filter.format.basic_html
+    - search_api_autocomplete.search.search
     - taxonomy.vocabulary.global_topics
   module:
+    - domain_access
+    - domain_entity
     - filter
     - help
     - media
@@ -28,6 +31,8 @@ permissions:
   - 'access content'
   - 'access help pages'
   - 'access toolbar'
+  - 'create gallery content on assigned domains'
+  - 'create gallery node content on assigned domains'
   - 'create url aliases'
   - 'select terms in global_topics'
   - 'use moderation sidebar'
