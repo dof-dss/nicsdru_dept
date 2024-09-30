@@ -95,12 +95,12 @@
         "drupal/antibot": "^2.0",
         "drupal/block_field": "^1.0@RC",
         "drupal/block_visibility_groups": "^2.0",
-        "drupal/chosen": "^4.0",
+        "drupal/chosen": "^5.0@RC",
         "drupal/ckeditor": "^1.0",
         "drupal/ckeditor5_allowed_html": "^1.2-dev",
         "drupal/ckeditor5_paste_filter": "^1.0",
         "drupal/ckeditor5_premium_features": "^1.2",
-        "drupal/clientside_validation": "^4.0",
+        "drupal/clientside_validation": "^4.1",
         "drupal/config_delete": "^2.0",
         "drupal/config_filter": "^2.2",
         "drupal/config_ignore": "^3.2",
@@ -123,7 +123,7 @@
         "drupal/domain_path": "^1.0@beta",
         "drupal/domain_path_redirect": "^1.5",
         "drupal/domain_simple_sitemap": "^3.0@beta",
-        "drupal/domain_site_settings": "^1.4",
+        "drupal/domain_site_settings": "^1.6",
         "drupal/draggableviews": "^2.1",
         "drupal/dynamic_entity_reference": "^3.2",
         "drupal/entity": "^1.4",
@@ -136,7 +136,7 @@
         "drupal/fastly": "^4.0",
         "drupal/field_group": "^3.2",
         "drupal/file_delete_ui": "^1.0@beta",
-        "drupal/filelog": "^3.0",
+        "drupal/filelog": "3.0.x-dev@dev",
         "drupal/filter_perms": "^2.0",
         "drupal/flag": "^4.0@beta",
         "drupal/fpa": "^4.0",
@@ -144,7 +144,7 @@
         "drupal/google_map_field": "^1.14",
         "drupal/google_tag": "^2.0",
         "drupal/handy_cache_tags": "^1.4",
-        "drupal/http_cache_control": "^2.0",
+        "drupal/http_cache_control": "^2.3",
         "drupal/interval": "^1.9",
         "drupal/jquery_ui_autocomplete": "^2.0",
         "drupal/jquery_ui_menu": "^2.0",
@@ -317,10 +317,7 @@
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://gitlab.com/-/project/18040690/uploads/7897853cd83cb829ae8d752657e2f497/kint.221-5-3.patch"
             },
             "drupal/domain": {
-                "Migration path for domain": "https://www.drupal.org/files/issues/2020-02-27/domain-migration-path-for-domain-2882837-13.patch",
-                "Available on Current Domain doesn't instantiate": "https://www.drupal.org/files/issues/2023-06-21/3367785-domain-php8-boolean.patch",
-                "Cached routes are not deleted when the cache is cleared": "https://www.drupal.org/files/issues/2023-09-18/3266520-9.patch",
-                "DomainAccessCurrentAllFilter operators method is not compatible": "https://git.drupalcode.org/project/domain/-/merge_requests/83.diff"
+                "Migration path for domain": "https://www.drupal.org/files/issues/2020-02-27/domain-migration-path-for-domain-2882837-13.patch"
             },
             "drupal/domain_entity": {
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch",
@@ -331,9 +328,6 @@
             },
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
-            },
-            "drupal/filelog": {
-                "Automated Drupal 11 compatibility fixes for filelog": "https://www.drupal.org/files/issues/2024-07-28/filelog.3.0.x-dev.rector.patch"
             },
             "drupal/flag": {
                 "[regression] Flag form element also appearing on non-edit forms #3169627": "https://www.drupal.org/files/issues/2020-09-08/flag-form_element_on_non_edit-forms-3169627-2.patch"

@@ -28,7 +28,7 @@
 
   {% if back %}
   <div class="webform-confirmation__back">
-    <a class="btn btn-large-left btn--secondary" href="{{ back_url }}"rel="prev" {{ back_attributes }}>{{ back_label|t }}</a>
+    <a class="btn btn-large-left btn--secondary" href="{{ back_url }}" rel="prev" data-self-ref="true" {{ back_attributes }}>{{ back_label|t }}</a>
   </div>
   {% endif %}
 

@@ -46,3 +46,5 @@ if [ ! -f "${DRUPAL_ROOT}/core/phpunit.xml" ]; then
   # Set the base URL for kernel tests.
   sed -i -e "s|name=\"SIMPLETEST_BASE_URL\" value=\"\"|name=\"SIMPLETEST_BASE_URL\" value=\"http:\/\/${LANDO_APP_NAME}.${LANDO_DOMAIN}\"|g" $DRUPAL_ROOT/core/phpunit.xml
 fi
+
+drush chosenplugin
