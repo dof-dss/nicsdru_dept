@@ -1,3 +1,4 @@
+
 # Each route describes how an incoming URL is going to be processed by Platform.sh.
 #---------------------------------
 "https://nigov.{default}":
@@ -68,4 +69,4 @@
 
 "https://www.{default}/":
   type: redirect
-  to: "https://nigov.{default}/"
+  to: "https://{default}/"
