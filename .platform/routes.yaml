@@ -1,4 +1,3 @@
-
 # Each route describes how an incoming URL is going to be processed by Platform.sh.
 #---------------------------------
 "https://nigov.{default}":
@@ -37,12 +36,6 @@
   cache:
     enabled: false
 #---------------------------------
-"https://finance-ni.{default}":
-  type: upstream
-  upstream: "dept:http"
-  cache:
-    enabled: false
-#---------------------------------
 "https://health-ni.{default}":
   type: upstream
   upstream: "dept:http"
@@ -61,12 +54,12 @@
   cache:
     enabled: false
 #---------------------------------
-"https://{default}/":
+"https://www.{all}/":
   type: upstream
   upstream: "dept:http"
   cache:
     enabled: false
 
-"https://www.{default}/":
+"https://{all}/":
   type: redirect
-  to: "https://{default}/"
+  to: "https://www.{all}/"
