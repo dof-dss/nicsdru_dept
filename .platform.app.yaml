@@ -200,19 +200,6 @@ web:
         '^/sites/default/files/styles/[^\.]+\.(jpe?g|png|gif|svgz?)$':
           expires: 2w
 
-    '/themes/custom/nicsdru_dept_theme/images':
-      allow: false
-      passthru: 'index.php'
-      scripts: false
-      rules:
-        # Allow access to common static files in theme
-      '\.(jpe?g|png|gif|svgz?)$':
-        allow: true
-        expires: 2w
-
-access:
-  ssh: contributer
-
 # Set up migration content refresh every night.
 crons:
   daily_edge_solr_reindex:
