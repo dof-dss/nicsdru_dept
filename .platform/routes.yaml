@@ -36,6 +36,12 @@
   cache:
     enabled: false
 #---------------------------------
+"https://finance-ni.{default}":
+  type: upstream
+  upstream: "dept:http"
+  cache:
+    enabled: false
+#---------------------------------
 "https://health-ni.{default}":
   type: upstream
   upstream: "dept:http"
