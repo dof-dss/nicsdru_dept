@@ -96,8 +96,8 @@ then
   echo "Migrating D7 taxonomy data"
   $DRUSH migrate:import --group=migrate_drupal_7_taxo
 
-  echo "Migrating D7 user and roles"
-  $DRUSH migrate:import users --force
+  echo "Migrating D7 user and roles -- TEMP SKIPPED"
+  # $DRUSH migrate:import users --force
 
   echo "Migrating D7 files and media entities"
   $DRUSH migrate:import d7_file_private --force
