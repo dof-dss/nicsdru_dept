@@ -5,6 +5,7 @@
  * Search related overrides and preprocessing.
  */
 
+use Drupal\Core\Url;
 use Drupal\block\Entity\Block;
 use Drupal\dept_core\Entity\Department;
 use Drupal\facets\FacetInterface;
@@ -63,15 +64,38 @@ function dept_search_preprocess_facets_item_list(array &$variables) {
 
   }
 
-  // Prevent dept_node/link-manager.js disabling self referential facet links.
+  // Alter links so that they are not treated as self-referential links
+  // and, to help prevent bots following the links, output a data-href
+  // instead of href which JS will then convert to a href on page load.
+
+  // Attach library which converts link data-href to href.
+  $variables['#attached']['library'][] = 'dept_search/data_facet_href';
+
   foreach ($variables['items'] as $index => &$item) {
 
     /** @var \Drupal\Core\Url $url */
     $url = $variables['items'][$index]['#url'];
-
     $options = $url->getOptions();
+
+    // Get the original href (URL) from the Url object.
+    $original_href = $url->toString();
+
+    // Set the 'data-href' attribute to the original href.
+    $options['attributes']['data-facet-href'] = $original_href;
+
+    // Set attribute to prevent link being treated as self-referential.
     $options['attributes']['data-self-ref'] = 'false';
-    $variables['items'][$index]['#url']->mergeOptions($options);
+
+    // Discard the query string from options if it's set.
+    if (isset($options['query'])) {
+      unset($options['query']);
+    }
+
+    // Rebuild the URL object to have href pointing at an anchor.
+    $new_url = Url::fromUserInput('#main-content', $options);
+
+    // Replace the facet link URL with the new one.
+    $variables['items'][$index]['#url'] = $new_url;
   }
 }
 
