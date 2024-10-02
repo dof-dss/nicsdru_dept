@@ -59,9 +59,7 @@ Disallow: /index.php/user/password
 Disallow: /index.php/user/register
 Disallow: /index.php/user/login
 Disallow: /index.php/user/logout
-
 # NICS custom
-
 # Files
 Disallow: /*.pdf
 Disallow: /*.doc
@@ -76,3 +74,27 @@ Disallow: /*.ods
 Disallow: /*.odp
 Disallow: /*.dot
 Disallow: /*.zip
+# Paths (no clean URLs)
+Disallow: /consultations?*
+Disallow: /news?*
+Disallow: /press-releases?*
+Disallow: /publications?*
+Allow: /consultations?page=*
+Allow: /news?page=*
+Allow: /press-releases?page=*
+Allow: /publications?page=*
+# Paths (clean URLs)
+Disallow: /consultations/type/
+Disallow: /consultations/topic/
+Disallow: /consultations/date/
+Disallow: /news/type/
+Disallow: /news/topic/
+Disallow: /news/date/
+Disallow: /news/feed/
+Disallow: /press-releases/type/
+Disallow: /press-releases/topic/
+Disallow: /press-releases/date/
+Disallow: /publications/type/
+Disallow: /publications/topic/
+Disallow: /publications/date/
+# TODO add sitemaps
