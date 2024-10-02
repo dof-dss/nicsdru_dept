@@ -5,8 +5,8 @@
  * Search related overrides and preprocessing.
  */
 
-use Drupal\block\Entity\Block;
 use Drupal\Core\Url;
+use Drupal\block\Entity\Block;
 use Drupal\dept_core\Entity\Department;
 use Drupal\facets\FacetInterface;
 use Drupal\facets_summary\Entity\FacetsSummary;
