@@ -121,8 +121,11 @@ process:
     - plugin: explode
       delimiter: ','
   ignore_live_depts:
-    - plugin: flatten
+    - plugin: extract
       source: domain_source_node
+      index:
+        - 0
+        - target_id
     - plugin: skip_on_condition
       condition:
         plugin: in_array
