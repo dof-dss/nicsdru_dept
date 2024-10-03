@@ -24,7 +24,14 @@ process:
       value:
         - 0
         - 1
-  name: name
+  name:
+    -
+      plugin: skip_on_value
+      method: row
+      source: name
+      value:
+        - connollyl
+        - nw_test_author
   pass: pass
   mail: mail
   created: created
@@ -67,37 +74,11 @@ process:
         default_value: null
   field_domain_access:
     -
-      plugin: skip_on_value
-      method: row
-      source: uid
-      value:
-        - 1
-    -
       plugin: sub_process
       source: domain_access_user
       process:
-        target_id:
-          -
-            plugin: skip_on_empty
-            method: row
-            source: target_id
-          -
-            plugin: static_map
-            bypass: true
-            source: target_id
-            map:
-              newnigov: nigov
-              execoffice: executiveoffice
-              dfp: finance
-  field_domain_source:
-    -
-      plugin: static_map
-      source: domain_source_user
-      bypass: true
-      map:
-        newnigov: nigov
-        execoffice: executiveoffice
-        dfp: finance
+        target_id: target_id
+  field_domain_source: domain_source_user
   list_of_depts_to_ignore:
     -
       plugin: callback
@@ -113,8 +94,13 @@ process:
       delimiter: ','
   ignore_live_depts:
     -
-      plugin: flatten
+      plugin: extract
       source: domain_source_user
+      index:
+        - target_id
+    -
+      plugin: default_value
+      default_value: nigov
     -
       plugin: skip_on_condition
       condition:

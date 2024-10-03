@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_user\Plugin\migrate\source\d7;
 
+use Drupal\dept_migrate\MigrateUtils;
 use Drupal\migrate\Row;
 use Drupal\migrate_drupal\Plugin\migrate\source\d7\FieldableEntity;
 
@@ -102,7 +103,7 @@ class D7UserUuid extends FieldableEntity {
     $user_domains = $this->getDomainTargetIds($uid);
     $row->setSourceProperty('domain_access_user', $user_domains);
     // Assign canonical domain (use first result if multiple).
-    $row->setSourceProperty('domain_source_user', reset($user_domains));
+    $row->setSourceProperty('domain_source_user', $user_domains[0]);
 
     return parent::prepareRow($row);
   }
@@ -133,14 +134,20 @@ class D7UserUuid extends FieldableEntity {
       ->execute()
       ->fetchCol();
 
-    foreach ($domains as $domain) {
-      $domain_target_ids = $this->select('domain', 'da')
-        ->fields('da', ['machine_name'])
-        ->condition('da.domain_id', $domain)
-        ->execute()
-        ->fetchCol();
-      $row_source_properties[] = ['target_id' => $domain_target_ids[0]];
+    if (empty($domains)) {
+      $row_source_properties[] = ['target_id' => 'nigov'];
     }
+    else {
+      foreach ($domains as $domain) {
+        $domain_target_ids = $this->select('domain', 'da')
+          ->fields('da', ['machine_name'])
+          ->condition('da.domain_id', $domain)
+          ->execute()
+          ->fetchCol();
+        $row_source_properties[] = ['target_id' => MigrateUtils::d7DomainToD9Domain($domain_target_ids[0])];
+      }
+    }
+
     return $row_source_properties;
   }
 
