@@ -54,8 +54,11 @@ function dept_sitemap_cron() {
     }
 
     // Local dev override.
-    if (!empty(getenv('LANDO'))) {
-      $replace = "https://{$dept_prefix}.lndo.site";
+    $split_manager = \Drupal::service('config_split.manager');
+    $splits = $split_manager->loadMultiple($split_manager->listAll());
+
+    if ($splits['config_split.config_split.local']->get('status') === TRUE) {
+      $replace = "https://{$dept_prefix}.ddev.site";
     }
 
     if (empty($replace)) {
