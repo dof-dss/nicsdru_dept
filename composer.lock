@@ -2185,6 +2185,50 @@
             }
         },
         {
+            "name": "drupal/advban",
+            "version": "1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/advban.git",
+                "reference": "8.x-1.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/advban-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "855fc220c71c08ab4c20b54aedf45acdbdd78af6"
+            },
+            "require": {
+                "drupal/core": "^10.1 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.6",
+                    "datestamp": "1722870455",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "goodboy",
+                    "homepage": "https://www.drupal.org/user/222910"
+                }
+            ],
+            "description": "Advanced banning of IP addresses.",
+            "homepage": "https://www.drupal.org/project/advban",
+            "support": {
+                "source": "https://git.drupalcode.org/project/advban"
+            }
+        },
+        {
             "name": "drupal/antibot",
             "version": "2.0.4",
             "source": {
@@ -2234,6 +2278,53 @@
             "homepage": "https://www.drupal.org/project/antibot",
             "support": {
                 "source": "https://git.drupalcode.org/project/antibot"
+            }
+        },
+        {
+            "name": "drupal/autoban",
+            "version": "1.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/autoban.git",
+                "reference": "8.x-1.10"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/autoban-8.x-1.10.zip",
+                "reference": "8.x-1.10",
+                "shasum": "fa2d14c7a45ae1bfcb0bce03c245399656bbf3c3"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11"
+            },
+            "require-dev": {
+                "drupal/advban": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.10",
+                    "datestamp": "1723188799",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "goodboy",
+                    "homepage": "https://www.drupal.org/user/222910"
+                }
+            ],
+            "description": "Automatic IP ban using dblog table.",
+            "homepage": "https://www.drupal.org/project/autoban",
+            "support": {
+                "source": "https://git.drupalcode.org/project/autoban"
             }
         },
         {
@@ -3722,11 +3813,11 @@
         },
         {
             "name": "drupal/date_facet_drilldown",
-            "version": "dev-5.x",
+            "version": "dev-7.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/date_facet_drilldown.git",
-                "reference": "727320bcc53239dbe615b4a86d13d25ed0585125"
+                "reference": "b4cef2dada7cb6d81a84a654c7f84193dbd3afc9"
             },
             "require": {
                 "drupal/core": "^8 || ^9 || ^10"
@@ -3734,11 +3825,11 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-5.x": "5.x-dev"
+                    "dev-7.x": "7.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-5.x-dev",
-                    "datestamp": "1688987471",
+                    "version": "8.x-7.x-dev",
+                    "datestamp": "1728039386",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -3751,7 +3842,7 @@
             ],
             "authors": [
                 {
-                    "name": "DuttonMa",
+                    "name": "duttonma",
                     "homepage": "https://www.drupal.org/user/2250396"
                 },
                 {
@@ -21125,19 +21216,20 @@
         "drupal/chosen": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
+        "drupal/date_facet_drilldown": 20,
         "drupal/domain": 10,
         "drupal/domain_entity": 5,
         "drupal/domain_path": 10,
         "drupal/domain_simple_sitemap": 10,
+        "drupal/easy_install_d10": 20,
         "drupal/file_delete_ui": 10,
         "drupal/filelog": 20,
         "drupal/flag": 10,
+        "drupal/masquerade": 10,
         "drupal/migrate_conditions": 10,
         "drupal/purge_users": 10,
         "drupal/ultimate_cron": 15,
-        "drupal/views_tree": 15,
-        "drupal/easy_install_d10": 20,
-        "drupal/masquerade": 10
+        "drupal/views_tree": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,

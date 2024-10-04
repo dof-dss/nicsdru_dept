@@ -1,0 +1,17 @@
+uuid: 263b2231-0232-4913-8324-1a089ed31047
+langcode: en
+status: true
+dependencies:
+  module:
+    - advban
+title: 'Default cron handler'
+id: advban_cron
+weight: 0
+module: advban
+callback: advban_cron
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database
