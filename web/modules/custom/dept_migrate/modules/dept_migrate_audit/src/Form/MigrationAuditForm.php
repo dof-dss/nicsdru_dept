@@ -285,6 +285,22 @@ final class MigrationAuditForm extends FormBase {
       ],
     ];
 
+    // Disable buttons on sites that are live.
+    $ignore_sites = explode(',', getenv('MIGRATE_IGNORE_SITES')) ?? [];
+    $current_dept = \Drupal::service('department.manager')->getCurrentDepartment();
+
+    foreach ($ignore_sites as $site) {
+      if ($site === $current_dept->id()) {
+        $form['actions']['delete']['submit']['#attributes']['disabled'] = TRUE;
+        $form['actions']['audit_data']['submit']['#attributes']['disabled'] = TRUE;
+        $form['disabled_buttons_explain'] = [
+          '#markup' => '<p><strong>These buttons have been disabled as this site is live. Pruning D10 data not in D7 would remove content added since switchover.</strong></p>',
+        ];
+
+        break;
+      }
+    }
+
     return $form;
   }
 
