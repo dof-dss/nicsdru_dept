@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - media.type.document
     - media.type.image
     - node.type.application
     - node.type.article
@@ -104,6 +105,7 @@ permissions:
   - 'delete remote_video media content on assigned domains'
   - 'delete ual content on assigned domains'
   - 'delete ual revisions'
+  - 'edit any document media'
   - 'edit any image media'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
