@@ -1,6 +1,6 @@
 uuid: 8b70aa18-4452-4b03-b386-598e5bfc7f64
 langcode: en
-status: false
+status: true
 dependencies: {  }
 id: production
 label: production
@@ -14,4 +14,5 @@ module:
   fastly: 0
 theme: {  }
 complete_list: {  }
-partial_list: {  }
+partial_list:
+  - metatag.metatag_defaults.global
