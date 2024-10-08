@@ -454,7 +454,7 @@ function dept_core_simple_sitemap_arbitrary_links_alter(array &$arbitrary_links,
   // Generate the homepage link in sitemap instead of using the
   // 'Replace default front page URL to base domain URL.' option in Domain
   // Simple Sitemap which won't with our custom homepage controller.
-  if (!empty($department)) {
+  if (!is_null($department)) {
     $arbitrary_links[] = [
       'url' => $department->url(),
       'priority' => '0.5',
