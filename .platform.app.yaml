@@ -227,5 +227,5 @@ crons:
   autoban:
     spec: '*/13 * * * *'
     commands:
-      start: /app/psh-tools/autoban_in_fastly.sh
+      start: platformsh-tools/autoban_in_fastly.sh
     shutdown_timeout: 31
