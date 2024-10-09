@@ -5,6 +5,9 @@ namespace Drupal\dept_migrate_audit\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Database;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Drupal\migrate\Plugin\MigrateIdMapInterface;
 
 class PublicationDocumentsReport extends ControllerBase {
 
@@ -49,16 +52,37 @@ class PublicationDocumentsReport extends ControllerBase {
           $d10p->domain_source,
           $d10p->type,
           $d10p->title,
-          $d10p->status,
-          $d10p->source_row_status,
+          ($d10p->status == 1) ? $this->t('Published') : $this->t('Unpublished'),
+          $this->mapSourceRowStatusToLabel($d10p->source_row_status),
           $d10p_count,
           $d7p_count,
+          Link::fromTextAndUrl($this->t('View'), Url::fromRoute('entity.node.canonical', ['node' => $d10p->nid])),
         ];
       }
 
     }
 
     return $results;
+  }
+
+  /**
+   * Callback to return a nicer to read label for MigrateIdMapInterface
+   * constant values used in the migrate map table.
+   *
+   * @param int $sourceRowStatus
+   *   Values found under MigrateIdMapInterface constants.
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   Label corresponding to migrate source status code keys.
+   */
+  private function mapSourceRowStatusToLabel(int $sourceRowStatus) {
+    $statusMap = [
+      MigrateIdMapInterface::STATUS_IMPORTED => $this->t('Imported'),
+      MigrateIdMapInterface::STATUS_NEEDS_UPDATE => $this->t('Pending update'),
+      MigrateIdMapInterface::STATUS_IGNORED => $this->t('Ignored'),
+      MigrateIdMapInterface::STATUS_FAILED => $this->t('Failed'),
+    ];
+
+    return $statusMap[$sourceRowStatus] ?? $this->t('Unknown');
   }
 
   /**
@@ -80,7 +104,7 @@ class PublicationDocumentsReport extends ControllerBase {
       join domain d on d.domain_id = da.gid
       left join field_data_field_attachment fdfa on fdfa.entity_id = n.nid
       where
-      n.type like '%publication%' and machine_name = 'dfp'
+      n.type like '%publication%'
       group by
       n.nid")->fetchAllAssoc('nid');
 
@@ -112,7 +136,6 @@ class PublicationDocumentsReport extends ControllerBase {
       where
       nfd.type = 'publication' and mmnp.source_row_status > 0
       group by nfd.nid, nfd.title
-      having count(nfpf.field_publication_files_target_id) = 0 and count(nfpsf.field_publication_secure_files_target_id) = 0
     ")->fetchAll();
 
     return $publications;
@@ -127,6 +150,13 @@ class PublicationDocumentsReport extends ControllerBase {
   public function default() {
     $content = [];
 
+    $content[] = [
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' => t("This report highlights publications for all departments
+        that have a different number of attachments/files between D7 and D10 versions."),
+    ];
+
     $results = $this->getZeroDocsPublicationReport();
 
     $header = [
@@ -139,6 +169,7 @@ class PublicationDocumentsReport extends ControllerBase {
       ['data' => $this->t('Migration status')],
       ['data' => $this->t('D10 Document references')],
       ['data' => $this->t('D7 Document references')],
+      ['data' => $this->t('Actions')],
     ];
 
     $content[] = [
