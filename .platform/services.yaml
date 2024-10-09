@@ -20,7 +20,7 @@ db:
       migration:
         default_schema: drupal7db
         privileges:
-          drupal7db: rw
+          drupal7db: admin
 
 # Fudging the service name forces a full rebuild with any new config.
 solr_8_11:
