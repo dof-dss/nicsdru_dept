@@ -91,6 +91,8 @@ hooks:
     curl -fsSL https://raw.githubusercontent.com/platformsh/cli/main/installer.sh | bash
     echo "Update robots.txt with customisations"
     cp -f robots_custom.txt web/robots.txt
+    echo "Add AI bots to robots.txt"
+    bash /app/platformsh-tools/add_ai_bots_to_robots_txt.sh
   # The deploy hook runs after your application has been deployed and started.
   deploy: |
     set -e
@@ -225,5 +227,5 @@ crons:
   autoban:
     spec: '*/13 * * * *'
     commands:
-      start: /app/psh-tools/autoban_in_fastly.sh
+      start: /app/platformsh-tools/autoban_in_fastly.sh
     shutdown_timeout: 31
