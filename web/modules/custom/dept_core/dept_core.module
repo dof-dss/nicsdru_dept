@@ -15,6 +15,7 @@ use Drupal\Core\Url;
 use Drupal\dept_core\Entity\Department;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
+use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
@@ -442,4 +443,25 @@ function dept_core_theme_registry_alter(&$theme_registry) {
       $theme_registry[$key] = $suggestion;
     }
   }
+}
+
+/**
+ * Implements hook__simple_sitemap_arbitrary_links_alter().
+ */
+function dept_core_simple_sitemap_arbitrary_links_alter(array &$arbitrary_links, SimpleSitemapInterface $sitemap) {
+  $department = \Drupal::service('department.manager')->getDepartment($sitemap->id());
+
+  // Generate the homepage link in sitemap instead of using the
+  // 'Replace default front page URL to base domain URL.' option in Domain
+  // Simple Sitemap which won't work with our custom homepage controller.
+  if (!is_null($department)) {
+    $arbitrary_links[] = [
+      'url' => $department->url(),
+      'priority' => '0.5',
+      // An ISO8601 formatted date.
+      'lastmod' => date('r'),
+      'changefreq' => 'yearly',
+    ];
+  }
+
 }
