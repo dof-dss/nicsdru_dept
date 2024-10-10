@@ -967,10 +967,9 @@ display:
           separator: ', '
           field_api_classes: false
       pager:
-        type: some
+        type: none
         options:
           offset: 0
-          items_per_page: 9
       access:
         type: perm
         options:
