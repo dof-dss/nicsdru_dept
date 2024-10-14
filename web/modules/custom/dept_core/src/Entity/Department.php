@@ -43,6 +43,7 @@ use Drupal\user\EntityOwnerTrait;
  *   revision_table = "department_revision",
  *   show_revision_ui = TRUE,
  *   admin_permission = "administer department",
+ *   collection_permission = "update department",
  *   entity_keys = {
  *     "id" = "id",
  *     "revision" = "revision_id",
