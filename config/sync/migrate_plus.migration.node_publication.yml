@@ -145,6 +145,8 @@ process:
           source: fid
           entity_type: media
         -
+          plugin: media_value_filter
+        -
           plugin: default_value
           default_value: 97431
   field_publication_secure_files:
@@ -156,6 +158,8 @@ process:
           plugin: d7_file_lookup
           source: fid
           entity_type: media
+        -
+          - plugin: media_value_filter
         -
           plugin: default_value
           default_value: 97431
