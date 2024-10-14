@@ -47,12 +47,12 @@ class DepartmentAccessControlHandler extends EntityAccessControlHandler {
     $user = \Drupal::entityTypeManager()
       ->getStorage('user')
       ->load($account->id());
-    $user_departments = array_column($user->get('field_domain_access')
-      ->getValue(), 'target_id');
 
     if ($user->hasPermission('administer department')) {
       return AccessResult::allowed();
     }
+
+    $user_departments = array_column($user->get('field_domain_access')->getValue(), 'target_id');
 
     if (in_array($department->id(), $user_departments)) {
       return AccessResult::allowedIfHasPermission($account, 'update department');
