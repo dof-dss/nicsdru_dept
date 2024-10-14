@@ -35,7 +35,8 @@ use Drupal\user\EntityOwnerTrait;
  *     },
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     }
+ *     },
+ *    "access" = "Drupal\dept_core\DepartmentAccessControlHandler"
  *   },
  *   base_table = "department",
  *   fieldable = TRUE,
