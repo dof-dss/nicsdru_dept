@@ -46,7 +46,7 @@ third_party_settings:
       label: Contact
       parent_name: ''
       region: content
-      weight: 4
+      weight: 3
       format_type: html_element
       format_settings:
         classes: ''
@@ -69,7 +69,7 @@ third_party_settings:
       label: 'Additional Information'
       parent_name: ''
       region: content
-      weight: 5
+      weight: 4
       format_type: html_element
       format_settings:
         classes: additional-info
@@ -88,7 +88,7 @@ third_party_settings:
       label: Address
       parent_name: ''
       region: content
-      weight: 3
+      weight: 2
       format_type: html_element
       format_settings:
         classes: ''
@@ -108,7 +108,7 @@ third_party_settings:
       label: About
       parent_name: ''
       region: content
-      weight: 6
+      weight: 5
       format_type: html_element
       format_settings:
         classes: ''
@@ -175,7 +175,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 6
     region: content
   field_nismr_link:
     type: link
