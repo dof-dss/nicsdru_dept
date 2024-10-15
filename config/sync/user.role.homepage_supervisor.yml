@@ -7,6 +7,7 @@ dependencies:
     - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
+    - dept_core
     - domain_access
     - draggableviews
     - node
@@ -18,6 +19,7 @@ permissions:
   - 'access content overview'
   - 'access draggableviews'
   - 'revert featured_content_list revisions'
+  - 'update department'
   - 'update featured_content_list content on assigned domains'
   - 'use nics_editorial_workflow transition quick_publish'
   - 'view featured_content_list revisions'
