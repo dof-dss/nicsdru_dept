@@ -208,7 +208,7 @@ crons:
     spec: '0 6 * * 0-5'
     cmd: './reindex-edge-solr.sh'
   d7db:
-    spec: '0 1 * * *'
+    spec: '30 0 * * *'
     cmd: 'migrate-scripts/sync-db.sh $D7_PROJECT_ID $D7_PROJECT_ENV'
   drupal:
     spec: '*/15 * * * *'
@@ -217,7 +217,7 @@ crons:
 #    spec: '30 2 * * *'
 #    cmd: 'migrate-scripts/migrate.sh 2>&1 | tee /app/imports/last-migrate-output.txt'
   sync_files:
-    spec: '30 0 * * *'
+    spec: '0 1 * * *'
     cmd: 'migrate-scripts/sync-private-files.sh $D7_PROJECT_ID $D7_PROJECT_ENV'
   logging:
     spec: '*/5 * * * *'
