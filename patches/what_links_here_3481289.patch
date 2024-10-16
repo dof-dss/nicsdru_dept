@@ -1,0 +1,144 @@
+From 95abd902ca10f8cf50debe64333d9960beea252b Mon Sep 17 00:00:00 2001
+From: OMAHM <hello@onemanandhismouse.com>
+Date: Wed, 16 Oct 2024 20:35:49 +0100
+Subject: [PATCH] Update routing to use entity instead of ids
+
+---
+ src/Controller/WhatLinksHereController.php | 42 +++++++---------------
+ whatlinkshere.routing.yml                  | 12 +++++--
+ 2 files changed, 21 insertions(+), 33 deletions(-)
+
+diff --git a/src/Controller/WhatLinksHereController.php b/src/Controller/WhatLinksHereController.php
+index 26593b5..b60a6ec 100644
+--- a/src/Controller/WhatLinksHereController.php
++++ b/src/Controller/WhatLinksHereController.php
+@@ -94,12 +94,12 @@ class WhatLinksHereController extends ControllerBase {
+   /**
+    * Present a report of related content from the current node ID parameter.
+    *
+-   * @param int $node
+-   *   Node ID of the node, defined in core/modules/node/node.routing.yml.
++   * @param NodeInterface $node
++   *   The Node entity.
+    * @return array
+    *   Render array for Drupal to convert to HTML.
+    */
+-  public function node(int $node) {
++  public function node(NodeInterface $node) {
+     $build = [];
+ 
+     // Table header/sort options.
+@@ -119,13 +119,7 @@ class WhatLinksHereController extends ControllerBase {
+     $num_per_page = 25;
+     $offset = $num_per_page * $page;
+ 
+-    // Fetch data about what content links to this node.
+-    $entity = $this->entityTypeManager->getStorage('node')->load($node);
+-    // Send a 404 if entity does not exist.
+-    if ($entity instanceof NodeInterface === FALSE) {
+-      throw new NotFoundHttpException();
+-    }
+-    $related_content = $this->linkManager->getReferenceContent($entity, $num_per_page, $offset, $header);
++    $related_content = $this->linkManager->getReferenceContent($node, $num_per_page, $offset, $header);
+ 
+     // Now that we have the total number of results, initialize the pager.
+     $this->pagerManager->createPager($related_content['total'], $num_per_page);
+@@ -163,12 +157,12 @@ class WhatLinksHereController extends ControllerBase {
+   /**
+    * Present a report of related content from the current taxonomy term ID parameter.
+    *
+-   * @param int $taxonomy_term
+-   *   Taxonomy term ID.
++   * @param TermInterface $taxonomy_term
++   *   The Taxonomy term entity.
+    * @return array
+    *   Render array for Drupal to convert to HTML.
+    */
+-  public function taxonomyTerm(int $taxonomy_term) {
++  public function taxonomyTerm(TermInterface $taxonomy_term) {
+     $build = [];
+ 
+     // Table header/sort options.
+@@ -188,13 +182,7 @@ class WhatLinksHereController extends ControllerBase {
+     $num_per_page = 25;
+     $offset = $num_per_page * $page;
+ 
+-    // Fetch data about what content links to this node.
+-    $entity = $this->entityTypeManager->getStorage('taxonomy_term')->load($taxonomy_term);
+-    // Send a 404 if term does not exist.
+-    if ($entity instanceof TermInterface === FALSE) {
+-      throw new NotFoundHttpException();
+-    }
+-    $related_content = $this->linkManager->getReferenceContent($entity, $num_per_page, $offset, $header);
++    $related_content = $this->linkManager->getReferenceContent($taxonomy_term, $num_per_page, $offset, $header);
+ 
+     // Now that we have the total number of results, initialize the pager.
+     $this->pagerManager->createPager($related_content['total'], $num_per_page);
+@@ -232,12 +220,12 @@ class WhatLinksHereController extends ControllerBase {
+   /**
+    * Present a report of related content from the current media ID parameter.
+    *
+-   * @param int $media
+-   *   Media ID.
++   * @param MediaInterface $media
++   *   The Media entity.
+    * @return array
+    *   Render array for Drupal to convert to HTML.
+    */
+-  public function media(int $media) {
++  public function media(MediaInterface $media) {
+     $build = [];
+ 
+     // Table header/sort options.
+@@ -257,13 +245,7 @@ class WhatLinksHereController extends ControllerBase {
+     $num_per_page = 25;
+     $offset = $num_per_page * $page;
+ 
+-    // Fetch data about what content links to this node.
+-    $entity = $this->entityTypeManager->getStorage('media')->load($media);
+-    // Send a 404 if media does not exist.
+-    if ($entity instanceof MediaInterface === FALSE) {
+-      throw new NotFoundHttpException();
+-    }
+-    $related_content = $this->linkManager->getReferenceContent($entity, $num_per_page, $offset, $header);
++    $related_content = $this->linkManager->getReferenceContent($media, $num_per_page, $offset, $header);
+ 
+     // Now that we have the total number of results, initialize the pager.
+     $this->pagerManager->createPager($related_content['total'], $num_per_page);
+diff --git a/whatlinkshere.routing.yml b/whatlinkshere.routing.yml
+index efd019e..599d97a 100644
+--- a/whatlinkshere.routing.yml
++++ b/whatlinkshere.routing.yml
+@@ -8,7 +8,9 @@ whatlinkshere.references.node:
+     node: \d+
+   options:
+     _admin_route: TRUE
+-  methods: GET
++    parameters:
++      node:
++        type: entity:node
+ 
+ whatlinkshere.references.taxonomy_term:
+   path: '/taxonomy/term/{taxonomy_term}/whatlinkshere'
+@@ -20,7 +22,9 @@ whatlinkshere.references.taxonomy_term:
+     taxonomy_term: \d+
+   options:
+     _admin_route: TRUE
+-  methods: GET
++    parameters:
++      node:
++        type: entity:taxonomy_term
+ 
+ whatlinkshere.references.media:
+   path: '/media/{media}/whatlinkshere'
+@@ -32,4 +36,6 @@ whatlinkshere.references.media:
+     media: \d+
+   options:
+     _admin_route: TRUE
+-  methods: GET
++    parameters:
++      node:
++        type: entity:media
+-- 
+GitLab
+
