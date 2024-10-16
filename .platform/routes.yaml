@@ -1,60 +1,60 @@
 # Each route describes how an incoming URL is going to be processed by Platform.sh.
 #---------------------------------
-"https://nigov.{default}":
+"https://www.nigov.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
     enabled: false
 #---------------------------------
-"https://communities-ni.{default}":
+"https://www.communities-ni.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
     enabled: false
 #---------------------------------
-"https://daera-ni.{default}":
+"https://www.daera-ni.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
     enabled: false
 #---------------------------------
-"https://economy-ni.{default}":
+"https://www.economy-ni.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
     enabled: false
 #---------------------------------
-"https://education-ni.{default}":
+"https://www.education-ni.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
     enabled: false
 #---------------------------------
-"https://executiveoffice-ni.{default}":
+"https://www.executiveoffice-ni.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
     enabled: false
 #---------------------------------
-"https://finance-ni.{default}":
+"https://www.finance-ni.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
     enabled: false
 #---------------------------------
-"https://health-ni.{default}":
+"https://www.health-ni.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
     enabled: false
 #---------------------------------
-"https://infrastructure-ni.{default}":
+"https://www.infrastructure-ni.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
     enabled: false
 #---------------------------------
-"https://justice-ni.{default}":
+"https://www.justice-ni.{default}":
   type: upstream
   upstream: "dept:http"
   cache:
