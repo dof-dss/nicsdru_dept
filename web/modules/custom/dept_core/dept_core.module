@@ -465,3 +465,20 @@ function dept_core_simple_sitemap_arbitrary_links_alter(array &$arbitrary_links,
   }
 
 }
+
+/**
+ * Implements hook_simple_sitemap_links_alter().)
+ */
+function dept_core_simple_sitemap_links_alter(array &$links, SimpleSitemapInterface $sitemap) {
+  $department = \Drupal::service('department.manager')->getDepartment($sitemap->id());
+
+  if (!is_null($department)) {
+    $domain = $department->url();
+    // Replace generated domain with the department config domain.
+
+    foreach ($links as $key => $link) {
+      $link['url'] = $domain . substr($link['url'], strpos($link['url'], '/', 3));
+    }
+  }
+
+}
