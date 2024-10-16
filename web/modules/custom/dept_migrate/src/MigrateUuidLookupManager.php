@@ -159,7 +159,14 @@ class MigrateUuidLookupManager {
 
     // Match up to D9 nodes using uuid as key from migrate table.
     foreach ($map as $d7nid => $node) {
-      $table = 'migrate_map_node_' . $node['d7type'];
+      if ($node['d7type'] === 'secure_publication') {
+        // Normalised into single publication type in D10.
+        $table = 'migrate_map_node_publication';
+      }
+      else {
+        $table = 'migrate_map_node_' . $node['d7type'];
+      }
+
       if ($this->dbconn->schema()->tableExists($table) === FALSE) {
         // Skip the rest if this table doesn't exist.
         continue;
