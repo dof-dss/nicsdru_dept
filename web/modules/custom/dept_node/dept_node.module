@@ -185,9 +185,11 @@ function dept_node_preprocess_node(array &$variables) {
 
     if ($consultation_started && $consultation_ended) {
       $consultation_status = t('Closed');
-    } elseif (!$consultation_started) {
+    }
+    elseif (!$consultation_started) {
       $consultation_status = t('Pending');
-    } else {
+    }
+    else {
       $consultation_status = t('Open');
     }
 
