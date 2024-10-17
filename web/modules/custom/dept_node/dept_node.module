@@ -176,10 +176,20 @@ function dept_node_preprocess_node(array &$variables) {
 
   if (str_starts_with($view_mode, 'search_') && $node->bundle() === 'consultation') {
     $consultation_dates = $node->get('field_consultation_dates')->getValue();
-    // Set the consultation status to open/closed based on its date values.
+    // Set the consultation status to open/closed/pending based on its date values.
     $now = \Drupal::service('datetime.time')->getCurrentTime();
+    $consultation_start = strtotime($consultation_dates[0]['value']);
     $consultation_end = strtotime($consultation_dates[0]['end_value']);
+    $consultation_started = ($consultation_start - $now) <= 0;
     $consultation_ended = ($consultation_end - $now) <= 0;
+
+    if ($consultation_started && $consultation_ended) {
+      $consultation_status = t('Closed');
+    } elseif (!$consultation_started) {
+      $consultation_status = t('Pending');
+    } else {
+      $consultation_status = t('Open');
+    }
 
     // Preprocess variable to examine consultation end date relative to
     // the current request timestamp and determine whether it is open
@@ -193,7 +203,7 @@ function dept_node_preprocess_node(array &$variables) {
           'card__meta-type',
         ],
       ],
-      '#value' => $consultation_ended ? t('Closed') : t('Open'),
+      '#value' => $consultation_status,
       '#weight' => count($variables['content']) + 1,
     ];
   }
