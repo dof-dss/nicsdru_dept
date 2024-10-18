@@ -6,18 +6,19 @@ dependencies:
     - field.storage.node.body
     - field.storage.node.field_domain_access
     - field.storage.node.field_global_topics
+    - field.storage.node.field_publication_type
     - field.storage.node.field_published_date
     - field.storage.node.field_site_topics
     - field.storage.node.field_summary
-    - field.storage.node.field_publication_type
     - search_api.server.default
   module:
     - search_api_solr
+    - taxonomy
     - node
     - user
-    - taxonomy
     - scheduler
     - search_api
+    - flag_search_api
 third_party_settings:
   search_api_solr:
     finalize: false
@@ -124,6 +125,42 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_summary
+  flag_disable_toc:
+    label: 'Disable Table of Contents'
+    property_path: flag_disable_toc
+    type: integer
+    indexed_locked: true
+    type_locked: true
+  flag_disable_toc_count:
+    label: 'Disable Table of Contents count'
+    property_path: flag_disable_toc_count
+    type: integer
+    indexed_locked: true
+    type_locked: true
+  flag_display_on_rss_feeds:
+    label: 'Display on RSS feeds'
+    property_path: flag_display_on_rss_feeds
+    type: integer
+    indexed_locked: true
+    type_locked: true
+  flag_display_on_rss_feeds_count:
+    label: 'Display on RSS feeds count'
+    property_path: flag_display_on_rss_feeds_count
+    type: integer
+    indexed_locked: true
+    type_locked: true
+  flag_hide_listing:
+    label: 'Hide listing'
+    property_path: flag_hide_listing
+    type: integer
+    indexed_locked: true
+    type_locked: true
+  flag_hide_listing_count:
+    label: 'Hide listing count'
+    property_path: flag_hide_listing_count
+    type: integer
+    indexed_locked: true
+    type_locked: true
   global_topics_id:
     label: 'Global topics » Taxonomy term » Term ID'
     datasource_id: 'entity:node'
@@ -209,8 +246,19 @@ processor_settings:
   add_url: {  }
   aggregated_field: {  }
   auto_aggregated_fulltext_field: {  }
+  custom_value: {  }
   entity_status: {  }
   entity_type: {  }
+  flag_count_indexer:
+    flag_index:
+      - disable_toc
+      - display_on_rss_feeds
+      - hide_listing
+  flag_indexer:
+    flag_index:
+      - disable_toc
+      - display_on_rss_feeds
+      - hide_listing
   html_filter:
     weights:
       preprocess_index: -15

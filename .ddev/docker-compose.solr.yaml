@@ -43,7 +43,7 @@ services:
     environment:
       # This defines the host name the service should be accessible from. This
       # will be sitename.ddev.site.
-      - VIRTUAL_HOST=$DDEV_HOSTNAME
+      - VIRTUAL_HOST=solr.$DDEV_HOSTNAME
       # HTTP_EXPOSE exposes http traffic from the container port 8983
       # to the host port 8983 vid ddev-router reverse proxy.
       - HTTP_EXPOSE=8983:8983

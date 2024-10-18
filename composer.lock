@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5892ad68253bd2873cf71cc718de5c62",
+    "content-hash": "ef666cb331655a2b21e965958e1d346b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5760,6 +5760,68 @@
             "homepage": "https://www.drupal.org/project/flag",
             "support": {
                 "source": "https://git.drupalcode.org/project/flag"
+            }
+        },
+        {
+            "name": "drupal/flag_search_api",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/flag_search_api.git",
+                "reference": "2.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/flag_search_api-2.0.1.zip",
+                "reference": "2.0.1",
+                "shasum": "59cbad24ed6e0d97c279c6999c61094c3c1dc8d0"
+            },
+            "require": {
+                "drupal/core": "^9.4 || ^10 || ^11",
+                "drupal/flag": "*",
+                "drupal/search_api": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.1",
+                    "datestamp": "1714487855",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Ahmed Eldesoky",
+                    "homepage": "https://www.drupal.org/user/3572198"
+                },
+                {
+                    "name": "tamerzg",
+                    "homepage": "https://www.drupal.org/user/464564"
+                },
+                {
+                    "name": "ws.agency",
+                    "homepage": "https://www.drupal.org/user/2851415"
+                },
+                {
+                    "name": "xSDx",
+                    "homepage": "https://www.drupal.org/user/3273632"
+                },
+                {
+                    "name": "MilosR",
+                    "homepage": "https://www.drupal.org/user/3613218"
+                }
+            ],
+            "description": "Search API support for flag module.",
+            "homepage": "https://www.drupal.org/project/flag_search_api",
+            "support": {
+                "source": "https://git.drupalcode.org/project/flag_search_api"
             }
         },
         {
