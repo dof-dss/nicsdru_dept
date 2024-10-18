@@ -159,7 +159,8 @@ process:
           source: fid
           entity_type: media
         -
-          - plugin: media_value_filter
+          -
+            plugin: media_value_filter
         -
           plugin: default_value
           default_value: 97431
