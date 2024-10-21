@@ -93,6 +93,8 @@ hooks:
     cp -f robots_custom.txt web/robots.txt
     echo "Add AI bots to robots.txt"
     bash /app/platformsh-tools/add_ai_bots_to_robots_txt.sh
+    echo "Adjust domain records config to match development environments"
+    bash /app/.platform/scripts/adjust-domain-records-dev-env.sh
   # The deploy hook runs after your application has been deployed and started.
   deploy: |
     set -e
