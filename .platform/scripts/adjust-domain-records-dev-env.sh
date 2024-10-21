@@ -11,6 +11,9 @@ if [ -z "$PLATFORM_BRANCH" ]; then
     exit 1
 fi
 
+# Convert FEATURE_BRANCH_NAME to lowercase for the URL replacement.
+feature_branch_name_lower=$(echo "$PLATFORM_BRANCH" | tr '[:upper:]' '[:lower:]')
+
 # Define the file pattern to search for
 file_pattern="config/development/config_split.patch.domain.record.*.yml"
 
@@ -19,7 +22,7 @@ for file in "/app/${file_pattern}"; do
     if [ -f "$file" ]; then
         echo "Processing file: $file"
         # Replace 'dept-edge' with the value of $FEATURE_BRANCH_NAME
-        sed -i "s/dept-edge/$PLATFORM_BRANCH/g" "$file"
+        sed -i "s/dept-edge/$feature_branch_name_lower/g" "$file"
     else
         echo "No files matching the pattern were found."
     fi
