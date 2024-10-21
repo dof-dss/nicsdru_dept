@@ -203,7 +203,7 @@ crons:
     spec: '0 6 * * 0-5'
     cmd: './reindex-edge-solr.sh'
   d7db:
-    spec: '30 0 * * *'
+    spec: '0 4 * * *'
     cmd: 'migrate-scripts/sync-db.sh $D7_PROJECT_ID $D7_PROJECT_ENV'
   drupal:
     spec: '*/15 * * * *'

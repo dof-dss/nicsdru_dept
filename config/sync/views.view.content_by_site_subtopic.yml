@@ -937,13 +937,15 @@ display:
         arguments: true
         filters: false
         filter_groups: false
+        footer: false
       relationships: {  }
       display_description: ''
       use_more: true
-      use_more_always: false
-      use_more_text: 'See all related consultations'
+      use_more_always: true
+      use_more_text: 'See all consultations in this topic'
       link_display: custom_url
-      link_url: '/consultations?f[0]=topic:{{ arguments.field_site_topics_target_id }}'
+      link_url: '/consultations?f[0]=topic:{{ raw_arguments.field_site_topics_target_id }}'
+      footer: {  }
       display_extenders: {  }
       block_hide_empty: true
     cache_metadata:
@@ -1259,10 +1261,10 @@ display:
       relationships: {  }
       display_description: ''
       use_more: true
-      use_more_always: false
-      use_more_text: 'See all related news'
+      use_more_always: true
+      use_more_text: 'See all news in this topic'
       link_display: custom_url
-      link_url: '/news?f[0]=topic:{{ arguments.field_site_topics_target_id }}'
+      link_url: '/news?f[0]=topic:{{ raw_arguments.field_site_topics_target_id }}'
       display_extenders: {  }
       block_hide_empty: true
     cache_metadata:
@@ -1576,10 +1578,10 @@ display:
         filter_groups: false
       display_description: ''
       use_more: true
-      use_more_always: false
-      use_more_text: 'See all related publications'
+      use_more_always: true
+      use_more_text: 'See all publications in this topic'
       link_display: custom_url
-      link_url: '/publications?f[0]=topic:{{ arguments.field_site_topics_target_id }}'
+      link_url: '/publications?f[0]=topic:{{ raw_arguments.field_site_topics_target_id }}'
       display_extenders: {  }
       block_hide_empty: true
     cache_metadata:
