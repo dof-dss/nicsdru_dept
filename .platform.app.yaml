@@ -12,7 +12,7 @@ type: 'php:8.3'
 variables:
   php:
     memory_limit: "128M"
-#    xdebug.mode: "debug"
+    xdebug.mode: "debug"
     display_startup_errors: "off"
     date.timezone: "Europe/Dublin"
     realpath_cache_ttl: 3600
