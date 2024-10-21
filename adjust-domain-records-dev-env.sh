@@ -19,7 +19,7 @@ file_pattern="config/development/config_split.patch.domain.record.*.yml"
 
 # Loop through all files that match the pattern
 for file in "/app/${file_pattern}"; do
-    if [ -f "$file" ]; then
+    if [ -r "$file" ]; then
         echo "Processing file: $file"
         # Replace 'dept-edge' with the value of $FEATURE_BRANCH_NAME
         sed -i "s/dept-edge/$feature_branch_name_lower/g" "$file"
