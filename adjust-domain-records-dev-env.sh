@@ -15,12 +15,12 @@ fi
 feature_branch_name_lower=$(echo "$PLATFORM_BRANCH" | tr '[:upper:]' '[:lower:]')
 
 # Define the file pattern to search for
-file_pattern="config/development/config_split.patch.domain.record.*.yml"
+file_pattern="/app/config/development/config_split.patch.domain.record.*.yml"
 
 # Loop through all files that match the pattern
-for file in "/app/${file_pattern}"; do
+for file in $file_pattern; do
+    echo "Testing for/processing file: $file"
     if [ -r "$file" ]; then
-        echo "Processing file: $file"
         # Replace 'dept-edge' with the value of $FEATURE_BRANCH_NAME
         sed -i "s/dept-edge/$feature_branch_name_lower/g" "$file"
     else
