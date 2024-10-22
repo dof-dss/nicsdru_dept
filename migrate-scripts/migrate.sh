@@ -74,7 +74,7 @@ then
   exit 1
 fi
 
-if [[ "${PLATFORM_BRANCH}" == "DfC-migrate-impact-test" || "${DDEV_PROJECT}" == "dept" ]];
+if [[ "${PLATFORM_BRANCH}" == "dfc-migrate-test" || "${DDEV_PROJECT}" == "dept" ]];
 then
 
   echo "Resetting all migrations"
