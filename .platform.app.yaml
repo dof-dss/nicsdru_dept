@@ -39,7 +39,7 @@ relationships:
   redis: "redis:redis"
   #  For MariaDB, the endpoint does not change whether you used the mysql or mariadb service type.
   database: 'db:dept'
-  drupal7db: 'db:migration
+  drupal7db: 'db:migration'
 
 # The size of the persistent disk of the application (in MB).
 disk: 137216
