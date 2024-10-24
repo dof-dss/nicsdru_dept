@@ -7,27 +7,20 @@ db:
   # the CLI will return an error.
   type: mariadb:10.4
   # The disk attribute is the size of the persistent disk (in MB) allocated to the service.
-  disk: 5120
+  disk: 15120
   configuration:
     schemas:
       - main
+      - drupal7db
     endpoints:
       dept:
         default_schema: main
         privileges:
           main: admin
-
-drupal7db:
-  type: mariadb:10.4
-  disk: 10240
-  configuration:
-    schemas:
-      - main
-    endpoints:
-      admin:
-        default_schema: main
+      migration:
+        default_schema: drupal7db
         privileges:
-          main: admin
+          drupal7db: admin
 
 # Fudging the service name forces a full rebuild with any new config.
 solr_8_11:
