@@ -77,6 +77,18 @@ if (!empty(getenv('PLATFORM_BRANCH'))) {
       break;
 
     default:
+      // Remap domain records to match PSH environment URLs.
+      foreach (['finance', 'communities', 'health', 'infrastructure', 'daera', 'nigov', 'justice', 'economy', 'education', 'executiveoffice'] as $dept) {
+        if ($dept != 'nigov') {
+          $dept .= '-ni';
+        }
+
+        $config["domain.record.{$dept}"]['hostname'] = sprintf("www.%s.%s-%s.uk-1.platformsh.site",
+          $dept,
+          getenv('PLATFORM_ENVIRONMENT'),
+          getenv('PLATFORM_PROJECT'));
+      }
+      
       // Default to use development settings/services for general platform.sh environments.
       $config['config_split.config_split.development']['status'] = TRUE;
   }
