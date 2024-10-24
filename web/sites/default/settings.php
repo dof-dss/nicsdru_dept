@@ -79,7 +79,11 @@ if (!empty(getenv('PLATFORM_BRANCH'))) {
     default:
       // Remap domain records to match PSH environment URLs.
       foreach (['finance', 'communities', 'health', 'infrastructure', 'daera', 'nigov', 'justice', 'economy', 'education', 'executiveoffice'] as $dept) {
-        $config["domain.record.{$dept}"]['hostname'] = sprintf("www.%s-ni.%s-%s.uk-1.platformsh.site",
+        if ($dept != 'nigov') {
+          $dept .= '-ni';
+        }
+
+        $config["domain.record.{$dept}"]['hostname'] = sprintf("www.%s.%s-%s.uk-1.platformsh.site",
           $dept,
           getenv('PLATFORM_ENVIRONMENT'),
           getenv('PLATFORM_PROJECT'));
