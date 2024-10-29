@@ -75,7 +75,7 @@ then
 fi
 
 # Only execute on the main environment.
-if [[ "${PLATFORM_BRANCH}" == "main" || "${DDEV_PROJECT}" == "dept" ]];
+if [[ "${PLATFORM_BRANCH}" == "main" || "${DDEV_PROJECT}" == "dept" || ${MIGRATE_OVERRIDE} == "override" ]];
 then
 
   echo "Resetting all migrations"
