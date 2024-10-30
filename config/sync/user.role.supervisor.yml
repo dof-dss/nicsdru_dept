@@ -26,6 +26,7 @@ dependencies:
     - dept_topics
     - domain_access
     - domain_entity
+    - flag
     - media
     - node
     - origins_workflow
@@ -107,6 +108,9 @@ permissions:
   - 'delete ual revisions'
   - 'edit any document media'
   - 'edit any image media'
+  - 'flag display_on_rss_feeds'
+  - 'flag display_on_rss_feeds other items'
+  - 'flag display_on_rss_feeds own items'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
   - 'reschedule scheduled transitions node consultation'
@@ -131,6 +135,9 @@ permissions:
   - 'revert publication revisions'
   - 'revert ual revisions'
   - 'schedule publishing of nodes'
+  - 'unflag display_on_rss_feeds'
+  - 'unflag display_on_rss_feeds other items'
+  - 'unflag display_on_rss_feeds own items'
   - 'update application content on assigned domains'
   - 'update article content on assigned domains'
   - 'update book content on assigned domains'
