@@ -9,7 +9,7 @@
 
   Drupal.behaviors.normaliseBaseUrl = {
     attach: function (context, settings) {
-      $('#toolbar-administration a[href^="http"]:not(#toolbar-item-sites-tray a)').each(function (index, linkElement) {
+      $('#toolbar-administration a[href^="http"]:not(#toolbar-item-sites-tray a, #nav-main-menu a)').each(function (index, linkElement) {
         let href = $(linkElement).attr('href');
         const currentDeptHostname = $(location).attr('host');
 
