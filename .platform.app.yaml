@@ -126,6 +126,9 @@ hooks:
 
     ../vendor/bin/drush password_qa_accounts
 
+    # Temp fix as the config is not always updated on Edge.
+    ../vendor/bin/drush cim -y
+
 # The configuration of app when it is exposed to the web.
 web:
   # Specific parameters for different URL prefixes.
