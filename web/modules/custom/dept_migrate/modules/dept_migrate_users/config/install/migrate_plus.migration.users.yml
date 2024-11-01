@@ -26,6 +26,13 @@ process:
       value:
         - connollyl
         - nw_test_author
+    - plugin: entity_lookup
+      entity_type: user
+      value_key: name
+      ignore_case: true
+    - plugin: skip_on_condition
+      method: row
+      condition: empty
   pass: pass
   mail: mail
   created: created
