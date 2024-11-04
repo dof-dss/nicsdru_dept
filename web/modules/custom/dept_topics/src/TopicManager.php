@@ -205,6 +205,7 @@ final class TopicManager {
       // Remove any topic content references.
       foreach ($site_topics_removed as $remove) {
         $topic_node = $this->nodeStorage->load($remove);
+        $child_removed = FALSE;
 
         if (empty($topic_node)) {
           continue;
@@ -216,11 +217,14 @@ final class TopicManager {
           // @phpstan-ignore-next-line
           if ($child_refs->get($i)->target_id == $entity->id()) {
             $child_refs->removeItem($i);
+            $child_removed = TRUE;
             $i--;
           }
         }
 
-        $topic_node->save();
+        if ($child_removed) {
+          $topic_node->save();
+        }
       }
     }
   }

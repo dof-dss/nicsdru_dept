@@ -6,3 +6,11 @@ dept_migrate_audit.migration_audit:
     type: article
   requirements:
     _permission: 'view migration audit report'
+
+dept_migrate_audit.publication_docs:
+  path: 'admin/dept/mdash/audit/publications/documents'
+  defaults:
+    _title: 'Publication documents'
+    _controller: 'Drupal\dept_migrate_audit\Controller\PublicationDocumentsReport::default'
+  requirements:
+    _permission: 'view migration audit report'

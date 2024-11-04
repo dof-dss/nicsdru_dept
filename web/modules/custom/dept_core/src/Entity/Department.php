@@ -35,13 +35,15 @@ use Drupal\user\EntityOwnerTrait;
  *     },
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
- *     }
+ *     },
+ *    "access" = "Drupal\dept_core\DepartmentAccessControlHandler"
  *   },
  *   base_table = "department",
  *   fieldable = TRUE,
  *   revision_table = "department_revision",
  *   show_revision_ui = TRUE,
  *   admin_permission = "administer department",
+ *   collection_permission = "update department",
  *   entity_keys = {
  *     "id" = "id",
  *     "revision" = "revision_id",

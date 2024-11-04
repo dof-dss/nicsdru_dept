@@ -967,10 +967,9 @@ display:
           separator: ', '
           field_api_classes: false
       pager:
-        type: some
+        type: none
         options:
           offset: 0
-          items_per_page: 9
       access:
         type: perm
         options:
@@ -991,7 +990,7 @@ display:
           exposed: false
           draggable_views_reference: 'links:draggable_agency_links'
           draggable_views_null_order: after
-          draggable_views_pass_arguments: false
+          draggable_views_pass_arguments: 0
         title:
           id: title
           table: node_field_data
@@ -1277,7 +1276,7 @@ display:
           exposed: false
           draggable_views_reference: 'links:draggable_corporate_links'
           draggable_views_null_order: after
-          draggable_views_pass_arguments: false
+          draggable_views_pass_arguments: 0
         title:
           id: title
           table: node_field_data
@@ -1567,7 +1566,7 @@ display:
           exposed: false
           draggable_views_reference: 'links:draggable_quick_links'
           draggable_views_null_order: after
-          draggable_views_pass_arguments: false
+          draggable_views_pass_arguments: 0
         title:
           id: title
           table: node_field_data
@@ -1958,7 +1957,7 @@ display:
           exposed: false
           draggable_views_reference: this
           draggable_views_null_order: after
-          draggable_views_pass_arguments: false
+          draggable_views_pass_arguments: 0
         title:
           id: title
           table: node_field_data
@@ -2385,7 +2384,7 @@ display:
           exposed: false
           draggable_views_reference: this
           draggable_views_null_order: after
-          draggable_views_pass_arguments: false
+          draggable_views_pass_arguments: 0
         title:
           id: title
           table: node_field_data
@@ -2812,7 +2811,7 @@ display:
           exposed: false
           draggable_views_reference: this
           draggable_views_null_order: after
-          draggable_views_pass_arguments: false
+          draggable_views_pass_arguments: 0
         title:
           id: title
           table: node_field_data

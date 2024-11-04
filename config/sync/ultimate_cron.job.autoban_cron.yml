@@ -1,0 +1,17 @@
+uuid: 66d6c7a0-c034-49d7-9b4c-fa66316b86fe
+langcode: en
+status: true
+dependencies:
+  module:
+    - autoban
+title: 'Default cron handler'
+id: autoban_cron
+weight: 0
+module: autoban
+callback: autoban_cron
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database

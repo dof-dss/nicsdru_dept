@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "10ccea059ae13b51b7e7b1d6317a7fb8",
+    "content-hash": "cf6cb4bfd045303cbadd99f5b698310c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1860,16 +1860,16 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "10.4.1",
+            "version": "10.4.2",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "906059f4af77c3f727a6f1b4b766b085342d838b"
+                "reference": "7953d556d521cf1728b99089ff5e4b1023f662b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/906059f4af77c3f727a6f1b4b766b085342d838b",
-                "reference": "906059f4af77c3f727a6f1b4b766b085342d838b",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/7953d556d521cf1728b99089ff5e4b1023f662b3",
+                "reference": "7953d556d521cf1728b99089ff5e4b1023f662b3",
                 "shasum": ""
             },
             "require": {
@@ -1881,7 +1881,7 @@
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2024-09-05T10:39:36+00:00"
+            "time": "2024-10-21T08:37:27+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
@@ -2185,6 +2185,50 @@
             }
         },
         {
+            "name": "drupal/advban",
+            "version": "1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/advban.git",
+                "reference": "8.x-1.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/advban-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "855fc220c71c08ab4c20b54aedf45acdbdd78af6"
+            },
+            "require": {
+                "drupal/core": "^10.1 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.6",
+                    "datestamp": "1722870455",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "goodboy",
+                    "homepage": "https://www.drupal.org/user/222910"
+                }
+            ],
+            "description": "Advanced banning of IP addresses.",
+            "homepage": "https://www.drupal.org/project/advban",
+            "support": {
+                "source": "https://git.drupalcode.org/project/advban"
+            }
+        },
+        {
             "name": "drupal/antibot",
             "version": "2.0.4",
             "source": {
@@ -2234,6 +2278,53 @@
             "homepage": "https://www.drupal.org/project/antibot",
             "support": {
                 "source": "https://git.drupalcode.org/project/antibot"
+            }
+        },
+        {
+            "name": "drupal/autoban",
+            "version": "1.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/autoban.git",
+                "reference": "8.x-1.10"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/autoban-8.x-1.10.zip",
+                "reference": "8.x-1.10",
+                "shasum": "fa2d14c7a45ae1bfcb0bce03c245399656bbf3c3"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11"
+            },
+            "require-dev": {
+                "drupal/advban": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.10",
+                    "datestamp": "1723188799",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "goodboy",
+                    "homepage": "https://www.drupal.org/user/222910"
+                }
+            ],
+            "description": "Automatic IP ban using dblog table.",
+            "homepage": "https://www.drupal.org/project/autoban",
+            "support": {
+                "source": "https://git.drupalcode.org/project/autoban"
             }
         },
         {
@@ -2600,11 +2691,11 @@
         },
         {
             "name": "drupal/ckeditor5_allowed_html",
-            "version": "dev-1.2.x",
+            "version": "dev-1.5.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ckeditor5_allowed_html.git",
-                "reference": "66db8fef57d6b4ccfa42bbea3039482f1282cde2"
+                "reference": "1ac530b30f4a07b17e14e2e520c1f722357bf5b4"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9 || ^10 || ^11"
@@ -2612,11 +2703,11 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-1.2.x": "1.2.x-dev"
+                    "dev-1.5.x": "1.5.x-dev"
                 },
                 "drupal": {
-                    "version": "1.2.x-dev",
-                    "datestamp": "1711446853",
+                    "version": "1.5.x-dev",
+                    "datestamp": "1729178881",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -2629,7 +2720,7 @@
             ],
             "authors": [
                 {
-                    "name": "DuttonMa",
+                    "name": "duttonma",
                     "homepage": "https://www.drupal.org/user/2250396"
                 }
             ],
@@ -3722,11 +3813,11 @@
         },
         {
             "name": "drupal/date_facet_drilldown",
-            "version": "dev-5.x",
+            "version": "dev-7.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/date_facet_drilldown.git",
-                "reference": "727320bcc53239dbe615b4a86d13d25ed0585125"
+                "reference": "b4cef2dada7cb6d81a84a654c7f84193dbd3afc9"
             },
             "require": {
                 "drupal/core": "^8 || ^9 || ^10"
@@ -3734,11 +3825,11 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-5.x": "5.x-dev"
+                    "dev-7.x": "7.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-5.x-dev",
-                    "datestamp": "1688987471",
+                    "version": "8.x-7.x-dev",
+                    "datestamp": "1728039386",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -3751,7 +3842,7 @@
             ],
             "authors": [
                 {
-                    "name": "DuttonMa",
+                    "name": "duttonma",
                     "homepage": "https://www.drupal.org/user/2250396"
                 },
                 {
@@ -4385,17 +4476,17 @@
         },
         {
             "name": "drupal/domain_simple_sitemap",
-            "version": "3.0.0-beta1",
+            "version": "3.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/domain_simple_sitemap.git",
-                "reference": "3.0.0-beta1"
+                "reference": "3.0.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/domain_simple_sitemap-3.0.0-beta1.zip",
-                "reference": "3.0.0-beta1",
-                "shasum": "d08fd5d964540a0a6b7dc23a95f2c084039863f1"
+                "url": "https://ftp.drupal.org/files/projects/domain_simple_sitemap-3.0.0-beta2.zip",
+                "reference": "3.0.0-beta2",
+                "shasum": "c05b06e99c9544f804ae1c7eeef081329819a028"
             },
             "require": {
                 "drupal/core": "^9 || ^10",
@@ -4405,8 +4496,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0-beta1",
-                    "datestamp": "1702927641",
+                    "version": "3.0.0-beta2",
+                    "datestamp": "1726231317",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -4429,14 +4520,13 @@
                     "email": "keopx@keopx.net"
                 },
                 {
-                    "name": "Bram Goffings a.k.a aspilicious",
+                    "name": "Ambroise Nicolas a.k.a nambroise",
                     "homepage": "https://www.drupal.org/user/3204205",
-                    "email": ""
+                    "email": "info@nicolasambroise.com"
                 },
                 {
-                    "name": "Ambroise Nicolas a.k.a nambroise",
-                    "homepage": "https://www.drupal.org/user/3546872",
-                    "email": "info@nicolasambroise.com"
+                    "name": "i-trokhanenko",
+                    "homepage": "https://www.drupal.org/user/3546872"
                 },
                 {
                     "name": "keopx",
@@ -5670,6 +5760,68 @@
             "homepage": "https://www.drupal.org/project/flag",
             "support": {
                 "source": "https://git.drupalcode.org/project/flag"
+            }
+        },
+        {
+            "name": "drupal/flag_search_api",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/flag_search_api.git",
+                "reference": "2.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/flag_search_api-2.0.1.zip",
+                "reference": "2.0.1",
+                "shasum": "59cbad24ed6e0d97c279c6999c61094c3c1dc8d0"
+            },
+            "require": {
+                "drupal/core": "^9.4 || ^10 || ^11",
+                "drupal/flag": "*",
+                "drupal/search_api": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.1",
+                    "datestamp": "1714487855",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Ahmed Eldesoky",
+                    "homepage": "https://www.drupal.org/user/3572198"
+                },
+                {
+                    "name": "tamerzg",
+                    "homepage": "https://www.drupal.org/user/464564"
+                },
+                {
+                    "name": "ws.agency",
+                    "homepage": "https://www.drupal.org/user/2851415"
+                },
+                {
+                    "name": "xSDx",
+                    "homepage": "https://www.drupal.org/user/3273632"
+                },
+                {
+                    "name": "MilosR",
+                    "homepage": "https://www.drupal.org/user/3613218"
+                }
+            ],
+            "description": "Search API support for flag module.",
+            "homepage": "https://www.drupal.org/project/flag_search_api",
+            "support": {
+                "source": "https://git.drupalcode.org/project/flag_search_api"
             }
         },
         {
@@ -10431,12 +10583,55 @@
         },
         {
             "name": "harvesthq/chosen",
-            "version": "1.8.7",
+            "version": "v1.8.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/harvesthq/chosen-package.git",
+                "reference": "ad86732b668627c131e61ee8f0e6e9ed52e4db8d"
+            },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/harvesthq/chosen/releases/download/v1.8.7/chosen_v1.8.7.zip"
+                "url": "https://api.github.com/repos/harvesthq/chosen-package/zipball/ad86732b668627c131e61ee8f0e6e9ed52e4db8d",
+                "reference": "ad86732b668627c131e61ee8f0e6e9ed52e4db8d",
+                "shasum": ""
             },
-            "type": "drupal-library"
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Koen Punt",
+                    "homepage": "https://github.com/koenpunt"
+                },
+                {
+                    "name": "Patrick Filler",
+                    "homepage": "https://github.com/pfiller"
+                },
+                {
+                    "name": "Christophe Coevoet",
+                    "homepage": "https://github.com/stof"
+                },
+                {
+                    "name": "Ken Earley",
+                    "homepage": "https://github.com/kenearley"
+                }
+            ],
+            "description": "Chosen is a JavaScript plugin that makes select boxes user-friendly. It is currently available in both jQuery and Prototype flavors.",
+            "homepage": "https://harvesthq.github.io/chosen/",
+            "keywords": [
+                "dropdown",
+                "form",
+                "input",
+                "multiselect",
+                "select",
+                "ui"
+            ],
+            "support": {
+                "source": "https://github.com/harvesthq/chosen-package/tree/v1.8.7"
+            },
+            "time": "2018-06-28T20:32:51+00:00"
         },
         {
             "name": "highcharts/highcharts",
@@ -10949,6 +11144,15 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v5.1.0"
             },
             "time": "2024-07-01T20:03:41+00:00"
+        },
+        {
+            "name": "noli42/chosen",
+            "version": "3.0.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/noli42/chosen/releases/download/3.0.0/chosen-assets-v3.0.0.zip"
+            },
+            "type": "drupal-library"
         },
         {
             "name": "openai-php/client",
@@ -21126,6 +21330,7 @@
         "drupal/chosen": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
+        "drupal/date_facet_drilldown": 20,
         "drupal/domain": 10,
         "drupal/domain_entity": 5,
         "drupal/domain_path": 10,
