@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef666cb331655a2b21e965958e1d346b",
+    "content-hash": "cf6cb4bfd045303cbadd99f5b698310c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -21335,21 +21335,21 @@
         "drupal/domain_entity": 5,
         "drupal/domain_path": 10,
         "drupal/domain_simple_sitemap": 10,
-        "drupal/easy_install_d10": 20,
         "drupal/file_delete_ui": 10,
         "drupal/filelog": 20,
         "drupal/flag": 10,
-        "drupal/masquerade": 10,
         "drupal/migrate_conditions": 10,
         "drupal/purge_users": 10,
         "drupal/ultimate_cron": 15,
-        "drupal/views_tree": 15
+        "drupal/views_tree": 15,
+        "drupal/easy_install_d10": 20,
+        "drupal/masquerade": 10
     },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "ext-pdo": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }
