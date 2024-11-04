@@ -11,8 +11,14 @@ jquery_selector: 'select:visible'
 search_contains: false
 disable_search: false
 allow_single_deselect: false
-disabled_themes: {  }
-chosen_include: 2
+allow_mobile: false
+add_helper_buttons: false
+disabled_themes:
+  claro: '0'
+  seven: '0'
+  nicsdru_dept_theme: '0'
+  nicsdru_origins_theme: '0'
+chosen_include: 0
 placeholder_text_multiple: 'Choose some options'
 placeholder_text_single: 'Choose an option'
 no_results_text: 'No results match'
