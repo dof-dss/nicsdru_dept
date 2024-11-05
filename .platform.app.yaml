@@ -12,7 +12,7 @@ type: 'php:8.3'
 variables:
   php:
     memory_limit: "128M"
-#    xdebug.mode: "debug"
+    xdebug.mode: "debug"
     display_startup_errors: "off"
     date.timezone: "Europe/Dublin"
     realpath_cache_ttl: 3600
@@ -26,8 +26,8 @@ runtime:
     - apcu
     - redis
     - blackfire
-#  xdebug:
-#    idekey: PHPSTORM
+  xdebug:
+    idekey: PHPSTORM
 
 # The relationships of the application with services or other applications.
 #
@@ -126,10 +126,8 @@ hooks:
 
     ../vendor/bin/drush password_qa_accounts
 
-    echo "***** Install Chosen library ******"
-
-    ../vendor/bin/drush chosenplugin
-
+    # Temp fix as the config is not always updated on Edge.
+    ../vendor/bin/drush cim -y
 
 # The configuration of app when it is exposed to the web.
 web:
@@ -208,7 +206,7 @@ crons:
     spec: '0 6 * * 0-5'
     cmd: './reindex-edge-solr.sh'
   d7db:
-    spec: '0 1 * * *'
+    spec: '0 4 * * *'
     cmd: 'migrate-scripts/sync-db.sh $D7_PROJECT_ID $D7_PROJECT_ENV'
   drupal:
     spec: '*/15 * * * *'
@@ -217,7 +215,7 @@ crons:
 #    spec: '30 2 * * *'
 #    cmd: 'migrate-scripts/migrate.sh 2>&1 | tee /app/imports/last-migrate-output.txt'
   sync_files:
-    spec: '30 0 * * *'
+    spec: '0 1 * * *'
     cmd: 'migrate-scripts/sync-private-files.sh $D7_PROJECT_ID $D7_PROJECT_ENV'
   logging:
     spec: '*/5 * * * *'

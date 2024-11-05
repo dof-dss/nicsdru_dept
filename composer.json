@@ -45,11 +45,11 @@
         {
             "type": "package",
             "package": {
-                "name": "harvesthq/chosen",
-                "version": "1.8.7",
+                "name": "noli42/chosen",
+                "version": "3.0.0",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/harvesthq/chosen/releases/download/v1.8.7/chosen_v1.8.7.zip",
+                    "url": "https://github.com/noli42/chosen/releases/download/3.0.0/chosen-assets-v3.0.0.zip",
                     "type": "zip"
                 }
             }
@@ -141,6 +141,7 @@
         "drupal/filelog": "3.0.x-dev@dev",
         "drupal/filter_perms": "^2.0",
         "drupal/flag": "^4.0@beta",
+        "drupal/flag_search_api": "^2.0",
         "drupal/fpa": "^4.0",
         "drupal/geolocation": "^4.0",
         "drupal/google_map_field": "^1.14",
@@ -203,6 +204,7 @@
         "drush/drush": "^12.5",
         "harvesthq/chosen": "^1.8",
         "highcharts/highcharts": "^10",
+        "noli42/chosen": "3.0.0",
         "php-kit/ext-pdo": "^1.1",
         "platformsh/config-reader": "^2.4"
     },
@@ -323,7 +325,8 @@
             },
             "drupal/domain": {
                 "Migration path for domain": "https://www.drupal.org/files/issues/2020-02-27/domain-migration-path-for-domain-2882837-13.patch",
-                "Fix Undefined array key #3478122": "https://www.drupal.org/files/issues/2024-10-01/domain_3478122.patch"
+                "Fix Undefined array key #3478122": "https://www.drupal.org/files/issues/2024-10-01/domain_3478122.patch",
+                "Using Domain Config UI creates *.yml files with duplicate UUIDs": "https://www.drupal.org/files/issues/2024-08-25/3222413--domain_config_ui--duplicate-uuid--31.patch"
             },
             "drupal/domain_entity": {
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch",
@@ -354,6 +357,9 @@
             },
             "drupal/simple_gmap": {
                 "Add support for address module": "https://www.drupal.org/files/issues/2023-09-21/drupal.org_files_issues_2022-09-29_simple_gmap-address-formatter-2863979-54.patch"
+            },
+            "drupal/whatlinkshere": {
+                "Fix disappearing 'Scheduled transitions' link #": "patches/what_links_here_3481289.patch"
             }
         }
     }
