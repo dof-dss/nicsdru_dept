@@ -12,6 +12,7 @@ use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 use Drush\SiteAlias\SiteAliasManagerAwareInterface;
+use Symfony\Component\Console\Helper\Table;
 
 /**
  * Drush commands processing Departmental migrations.
@@ -398,6 +399,37 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       ON ad.entity_id = ds.entity_id
       WHERE ds.field_domain_access_target_id ='" . $domain . "'");
 
+  }
+
+  /**
+   * Fix migrated usernames.
+   *
+   * @command dept:fix-usernames
+   * @aliases fix-usernames
+   */
+  public function fixUsernames() {
+    $query = $this->dbConn->select('users_field_data', 'ud');
+    $query->join('migrate_map_users', 'mmu', 'ud.uid = mmu.destid1');
+
+    $results = $query->fields('ud', ['uid'])
+      ->fields('mmu', ['sourceid1'])
+      ->condition('ud.name', '^[0-9]+$', 'REGEXP')
+      ->execute()->fetchAll();
+
+    $rows = [];
+
+    foreach ($results as &$result) {
+      $query = $this->d7conn->select('users', 'u')
+        ->fields('u', ['name'])
+        ->condition('uuid', $result->sourceid1, '=');
+      $rows[] = [ $result->uid, $query->execute()->fetchField(), $result->sourceid1];
+    }
+
+    $table = new Table($this->output());
+    $table->setHeaders(['UID', 'Username', 'Hash'])
+      ->setRows($rows);
+
+    $table->render();
   }
 
 }
