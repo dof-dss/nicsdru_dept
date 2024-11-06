@@ -404,6 +404,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
   /**
    * Fix migrated usernames.
    *
+   * @see DEPT-973
    * @command dept:fix-usernames
    * @aliases fix-usernames
    */
@@ -422,7 +423,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       $query = $this->d7conn->select('users', 'u')
         ->fields('u', ['name'])
         ->condition('uuid', $result->sourceid1, '=');
-      $rows[] = [ $result->uid, $query->execute()->fetchField(), $result->sourceid1];
+      $rows[] = [$result->uid, $query->execute()->fetchField(), $result->sourceid1];
     }
 
     $table = new Table($this->output());
