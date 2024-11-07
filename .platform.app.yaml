@@ -11,8 +11,11 @@ type: 'php:8.3'
 
 variables:
   php:
-    opcache.memory_consumption: "96"
     memory_limit: "128M"
+    opcache.interned_strings_buffer: "16"
+    opcache.max_accelerated_files: "8000"
+    opcache.memory_consumption: "128"
+    zend.detect_unicode: "Off"
     xdebug.mode: "debug"
     display_startup_errors: "off"
     date.timezone: "Europe/Dublin"
