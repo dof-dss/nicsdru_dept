@@ -11,7 +11,6 @@ type: 'php:8.3'
 
 variables:
   php:
-    apc.shm_size: "48M"
     memory_limit: "128M"
     xdebug.mode: "debug"
     display_startup_errors: "off"
