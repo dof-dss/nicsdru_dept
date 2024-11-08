@@ -233,6 +233,8 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "apcu-autoloader": true,
+    "optimize-autoloader": true,
     "config": {
         "sort-packages": true,
         "allow-plugins": {
