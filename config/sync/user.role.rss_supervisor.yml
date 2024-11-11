@@ -1,0 +1,23 @@
+uuid: 1d02d719-16de-41a7-99e3-03d474a21072
+langcode: en
+status: true
+dependencies:
+  module:
+    - flag
+id: rss_supervisor
+label: 'RSS supervisor'
+weight: -3
+is_admin: null
+permissions:
+  - 'flag display_on_rss_feeds'
+  - 'flag display_on_rss_feeds other items'
+  - 'flag display_on_rss_feeds own items'
+  - 'flag exclude_from_rss_feed'
+  - 'flag exclude_from_rss_feed other items'
+  - 'flag exclude_from_rss_feed own items'
+  - 'unflag display_on_rss_feeds'
+  - 'unflag display_on_rss_feeds other items'
+  - 'unflag display_on_rss_feeds own items'
+  - 'unflag exclude_from_rss_feed'
+  - 'unflag exclude_from_rss_feed other items'
+  - 'unflag exclude_from_rss_feed own items'

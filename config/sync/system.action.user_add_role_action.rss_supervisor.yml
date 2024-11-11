@@ -1,0 +1,14 @@
+uuid: fe56c2c2-0337-4557-836e-d8a084441112
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.rss_supervisor
+  module:
+    - user
+id: user_add_role_action.rss_supervisor
+label: 'Add the RSS supervisor role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: rss_supervisor
