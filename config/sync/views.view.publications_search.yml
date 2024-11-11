@@ -317,7 +317,6 @@ display:
         type: full
         options:
           offset: 0
-          pagination_heading_level: h4
           items_per_page: 20
           total_pages: null
           id: 0
@@ -335,6 +334,7 @@ display:
             offset: false
             offset_label: Offset
           quantity: 5
+          pagination_heading_level: h4
       exposed_form:
         type: basic
         options:
@@ -1097,9 +1097,6 @@ display:
         type: perm
         options:
           perm: 'access content'
-      cache:
-        type: search_api_tag
-        options: {  }
       sorts:
         search_api_relevance:
           id: search_api_relevance
@@ -1212,50 +1209,6 @@ display:
           parse_mode: sloppy_terms
           min_length: null
           fields: {  }
-        flag_display_on_rss_feeds:
-          id: flag_display_on_rss_feeds
-          table: search_api_index_publications_index
-          field: flag_display_on_rss_feeds
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_numeric
-          operator: 'not empty'
-          value:
-            min: ''
-            max: ''
-            value: ''
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -1278,7 +1231,6 @@ display:
             guid_field_is_permalink: true
       defaults:
         access: false
-        cache: false
         title: false
         fields: false
         sorts: false
@@ -1295,15 +1247,19 @@ display:
         publications_search: publications_search
         default: '0'
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
+        - url.query_args
         - url.site
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:facets.facet.feed_publication_topics'
+        - 'config:facets.facet.feed_publication_type'
+        - 'config:facets.facet.feed_published_date'
         - 'config:field.storage.node.field_domain_source'
         - 'config:field.storage.node.field_publication_type'
         - 'config:field.storage.node.field_published_date'
@@ -1680,7 +1636,7 @@ display:
       display_extenders: {  }
       path: publications
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -1691,6 +1647,9 @@ display:
         - url.site
         - 'user.node_grants:view'
       tags:
+        - 'config:facets.facet.publication_date'
+        - 'config:facets.facet.publication_topics'
+        - 'config:facets.facet.publication_type'
         - 'config:field.storage.node.field_publication_type'
         - 'config:field.storage.node.field_published_date'
         - 'config:field.storage.node.field_summary'
