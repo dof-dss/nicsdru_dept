@@ -4,6 +4,7 @@ namespace Drupal\dept_migrate\EventSubscriber;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactory;
+use Drupal\dept_migrate\MigrateUtils;
 use Drupal\migrate\Event\MigrateEvents;
 use Drupal\migrate\Event\MigrateImportEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -11,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Post migration subscriber for tidying up any known, awkward body values.
  */
-class PostMigrationBodyTIdySubscriber implements EventSubscriberInterface {
+class PostMigrationBodyTidySubscriber implements EventSubscriberInterface {
 
   /**
    * Drupal\Core\Logger\LoggerChannel definition.
@@ -62,10 +63,18 @@ class PostMigrationBodyTIdySubscriber implements EventSubscriberInterface {
     if (strpos($event_id, 'node_') === 0) {
       $this->logger->notice("Removing unwanted data-entity-uuid references from node body table");
 
+      $departments = implode(',', MigrateUtils::activeMigrationDepartments());
+
       // Regex: removes the entirety of the data-entity-uuid key+value from the
       // stored markup because it interferes with entity token replacement
       // when rendering the node resulting in WSOD.
-      $this->dbconn->query("UPDATE node__body SET body_value = REGEXP_REPLACE(body_value, 'data-entity-type=\"node\" (data-entity-uuid=\".+)\" ', '') WHERE body_value LIKE '%data-entity-type=\"node\" data-entity-uuid=%'");
+      $this->dbconn->query("UPDATE node__body b
+        JOIN node__field_domain_source s
+        ON b.entity_id = s.entity_id
+        SET b.body_value = REGEXP_REPLACE(b.body_value, 'data-entity-type=\"node\" (data-entity-uuid=\".+)\" ', '')
+        WHERE s.field_domain_source_target_id IN ($departments)
+        AND b.body_value LIKE '%data-entity-type=\"node\" data-entity-uuid=%'
+        ");
     }
   }
 

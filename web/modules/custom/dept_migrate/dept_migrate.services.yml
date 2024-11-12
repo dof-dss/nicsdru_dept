@@ -23,7 +23,7 @@ services:
     tags:
       - { name: event_subscriber }
   dept_migrate.eventsubscriber.migrate.body_tidy:
-    class: Drupal\dept_migrate\EventSubscriber\PostMigrationBodyTIdySubscriber
+    class: Drupal\dept_migrate\EventSubscriber\PostMigrationBodyTidySubscriber
     arguments: [ '@logger.factory', '@database' ]
     tags:
       - { name: event_subscriber }
