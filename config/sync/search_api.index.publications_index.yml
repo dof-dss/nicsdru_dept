@@ -149,6 +149,12 @@ field_settings:
     type: integer
     indexed_locked: true
     type_locked: true
+  flag_exclude_from_rss_feed:
+    label: 'Exclude from RSS feed'
+    property_path: flag_exclude_from_rss_feed
+    type: integer
+    indexed_locked: true
+    type_locked: true
   flag_hide_listing:
     label: 'Hide listing'
     property_path: flag_hide_listing
@@ -258,6 +264,7 @@ processor_settings:
     flag_index:
       - disable_toc
       - display_on_rss_feeds
+      - exclude_from_rss_feed
       - hide_listing
   html_filter:
     weights:
