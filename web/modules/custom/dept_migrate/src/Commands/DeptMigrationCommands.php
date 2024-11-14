@@ -456,7 +456,13 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
 
     $pdo->exec('DROP PROCEDURE IF EXISTS UPDATE_PATH_ALIAS_DEPARTMENT_SUFFIX');
-    $pdo->exec(file_get_contents($module_path . '/inc/update_path_alias_department_suffix.sproc'));
+    $result = $pdo->exec(file_get_contents($module_path . '/inc/update_path_alias_department_suffix.sproc'));
+
+    if ($result === FALSE) {
+      $this->logger->warning("Unable to add stored procedure to database");
+    } else {
+      $this->logger->notice("Stored procedure added database");
+    }
   }
 
 }
