@@ -37,8 +37,10 @@ if (PHP_SAPI === 'cli') {
 }
 
 // Increase baseline memory on very specific paths to overcome dev env limits.
-if (preg_match('#(^\/node\/(add|edit\/\d+))|(files\/styles\/\w+)#', $_SERVER['REQUEST_URI'])) {
-  ini_set('memory_limit', '192M');
+if (!empty(getenv('PLATFORM_BRANCH'))) {
+  if (preg_match('#(^\/node\/(add|edit\/\d+))|(files\/styles\/\w+)#', $_SERVER['REQUEST_URI'])) {
+    ini_set('memory_limit', '192M');
+  }
 }
 
 // Configuration that is allowed to be changed in readonly environments.
