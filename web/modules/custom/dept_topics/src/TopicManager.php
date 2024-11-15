@@ -134,17 +134,25 @@ final class TopicManager {
    *   Array of Topic/Subtopic nodes, indexed by node ID.
    */
   public function getTopicsForDepartment(string $department_id) {
-    $parent_topics = $this->entityTypeManager->getStorage('node')->loadByProperties([
-      'type' => 'topic',
-      'field_domain_source' => $department_id,
-    ]);
+    $dept_topics = \Drupal::cache()->get('dept_topics:' . $department_id);
 
-    foreach ($parent_topics as $nid => $parent) {
-      $this->deptTopics[$parent->id()] = $parent;
-      $this->getChildTopics($parent);
+    if (empty($dept_topics->data)) {
+      $parent_topics = $this->entityTypeManager->getStorage('node')
+        ->loadByProperties([
+          'type' => 'topic',
+          'field_domain_source' => $department_id,
+        ]);
+
+      foreach ($parent_topics as $nid => $parent) {
+        $this->deptTopics[$parent->id()] = $parent;
+        $this->getChildTopics($parent);
+      }
+
+      \Drupal::cache()->set('dept_topics:' . $department_id, $this->deptTopics);
+      $dept_topics = $this->deptTopics;
     }
 
-    return $this->deptTopics;
+    return $dept_topics->data;
   }
 
   /**
