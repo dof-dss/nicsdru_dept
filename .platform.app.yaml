@@ -11,7 +11,7 @@ type: 'php:8.3'
 
 variables:
   php:
-    memory_limit: "128M"
+    memory_limit: "256M"
     xdebug.mode: "debug"
     display_startup_errors: "off"
     date.timezone: "Europe/Dublin"
