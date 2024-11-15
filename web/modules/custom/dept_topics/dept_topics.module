@@ -413,8 +413,12 @@ function dept_topics_clear_child_caches($node) {
   }
 }
 
+/**
+ * Function to invalidate the topic tree cache structure
+ * whenever a topic or subtopic node is changed, removed or created.
+ */
 function dept_topics_clear_topic_tree_cache(NodeInterface $node) {
-  if ($node->bundle() != 'topic') {
+  if ($node->bundle() != 'topic' || $node->bundle() != 'subtopic') {
     return;
   }
 
