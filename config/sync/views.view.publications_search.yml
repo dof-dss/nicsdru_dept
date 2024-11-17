@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.field_domain_source
     - field.storage.node.field_publication_type
     - field.storage.node.field_published_date
+    - field.storage.node.field_site_topics
     - field.storage.node.field_summary
     - search_api.index.publications_index
   module:
@@ -1088,6 +1089,11 @@ display:
             display_methods:
               domain:
                 display_method: label
+        field_site_topics:
+          id: field_site_topics
+          table: search_api_index_publications_index
+          field: field_site_topics
+          plugin_id: search_api_field
       pager:
         type: none
         options:
@@ -1296,6 +1302,94 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        field_site_topics:
+          id: field_site_topics
+          table: search_api_index_publications_index
+          field: field_site_topics
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_numeric
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: '409821'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_site_topics_1:
+          id: field_site_topics_1
+          table: search_api_index_publications_index
+          field: field_site_topics
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_numeric
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: '412524'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -1348,6 +1442,7 @@ display:
         - 'config:field.storage.node.field_domain_source'
         - 'config:field.storage.node.field_publication_type'
         - 'config:field.storage.node.field_published_date'
+        - 'config:field.storage.node.field_site_topics'
         - 'config:field.storage.node.field_summary'
         - 'config:search_api.index.publications_index'
         - 'search_api_list:publications_index'
