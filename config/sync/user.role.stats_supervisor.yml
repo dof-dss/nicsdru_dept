@@ -22,7 +22,7 @@ dependencies:
     - scheduler
 id: stats_supervisor
 label: 'Stats supervisor (Add-on role)'
-weight: 10
+weight: -1
 is_admin: null
 permissions:
   - 'access files overview'

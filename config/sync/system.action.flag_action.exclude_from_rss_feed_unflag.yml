@@ -1,0 +1,15 @@
+uuid: e4f0be4d-a46a-4def-adc4-869f2aea8dcc
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.exclude_from_rss_feed
+  module:
+    - flag
+id: flag_action.exclude_from_rss_feed_unflag
+label: 'Include on RSS feeds'
+type: node
+plugin: 'flag_action:exclude_from_rss_feed_unflag'
+configuration:
+  flag_id: exclude_from_rss_feed
+  flag_action: unflag

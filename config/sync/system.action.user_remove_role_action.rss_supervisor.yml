@@ -1,0 +1,14 @@
+uuid: db22ea41-4f75-479b-96c1-bca0b988a2d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.rss_supervisor
+  module:
+    - user
+id: user_remove_role_action.rss_supervisor
+label: 'Remove the RSS supervisor role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: rss_supervisor
