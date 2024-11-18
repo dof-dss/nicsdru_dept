@@ -13,7 +13,6 @@ use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 use Drush\SiteAlias\SiteAliasManagerAwareInterface;
-use PDO;
 use Symfony\Component\Console\Helper\Table;
 
 /**
@@ -435,7 +434,6 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     $table->render();
   }
 
-
   /**
    * Add Stored procedures to database.
    *
@@ -453,14 +451,15 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     $module_handler = \Drupal::service('module_handler');
     $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_migrate')->getPath());
 
-    $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+    $pdo = new \PDO("mysql:host=$host;dbname=$database", $username, $password);
 
     $pdo->exec('DROP PROCEDURE IF EXISTS UPDATE_PATH_ALIAS_DEPARTMENT_SUFFIX');
     $result = $pdo->exec(file_get_contents($module_path . '/inc/update_path_alias_department_suffix.sproc'));
 
     if ($result === FALSE) {
       $this->logger->warning("Unable to add stored procedure to database");
-    } else {
+    }
+    else {
       $this->logger->notice("Stored procedure added database");
     }
   }
