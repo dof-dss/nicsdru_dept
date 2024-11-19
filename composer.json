@@ -235,9 +235,9 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "apcu-autoloader": true,
-    "optimize-autoloader": true,
     "config": {
+        "apcu-autoloader": true,
+        "optimize-autoloader": true,
         "sort-packages": true,
         "allow-plugins": {
             "composer/installers": true,

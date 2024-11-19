@@ -20,7 +20,7 @@ dependencies:
     - content_moderation
     - field_group
     - media_library
-    - metatag
+    - metatag_async_widget
     - path
     - text
 third_party_settings:
@@ -110,7 +110,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_metatags:
-    type: metatag_firehose
+    type: metatag_async_widget_firehose
     weight: 19
     region: content
     settings:
