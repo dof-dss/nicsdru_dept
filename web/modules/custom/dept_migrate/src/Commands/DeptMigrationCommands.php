@@ -4,6 +4,7 @@ namespace Drupal\dept_migrate\Commands;
 
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_core\DepartmentManager;
@@ -431,6 +432,36 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       ->setRows($rows);
 
     $table->render();
+  }
+
+  /**
+   * Add Stored procedures to database.
+   *
+   * @command dept:create-stored-procedures
+   * @aliases create-sprocs
+   */
+  public function createSprocs() {
+    // Define extracted variables or Drupal Check will moan.
+    $database = '';
+    $host = '';
+    $password = '';
+    $username = '';
+    extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+
+    $module_handler = \Drupal::service('module_handler');
+    $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_migrate')->getPath());
+
+    $pdo = new \PDO("mysql:host=$host;dbname=$database", $username, $password);
+
+    $pdo->exec('DROP PROCEDURE IF EXISTS UPDATE_PATH_ALIAS_DEPARTMENT_SUFFIX');
+    $result = $pdo->exec(file_get_contents($module_path . '/inc/update_path_alias_department_suffix.sproc'));
+
+    if ($result === FALSE) {
+      $this->logger->warning("Unable to add stored procedure to database");
+    }
+    else {
+      $this->logger->notice("Stored procedure added database");
+    }
   }
 
 }
