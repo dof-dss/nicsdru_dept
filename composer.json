@@ -159,6 +159,7 @@
         "drupal/media_library_edit": "^3.0",
         "drupal/media_remote": "^1.9",
         "drupal/metatag": "^2.0.0",
+        "drupal/metatag_async_widget": "^1.2",
         "drupal/migrate_conditions": "^2.0@beta",
         "drupal/migrate_plus": "^6",
         "drupal/migrate_tools": "^6",
@@ -200,6 +201,7 @@
         "drupal/views_custom_cache_tag": "^1.2",
         "drupal/views_tree": "^2.0@alpha",
         "drupal/webform": "^6.2.3",
+        "drupal/webprofiler": "10.1.x-dev@dev",
         "drupal/whatlinkshere": "^2.1",
         "drush/drush": "^12.5",
         "harvesthq/chosen": "^1.8",
@@ -233,6 +235,8 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "apcu-autoloader": true,
+    "optimize-autoloader": true,
     "config": {
         "sort-packages": true,
         "allow-plugins": {
