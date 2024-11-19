@@ -20,7 +20,7 @@ dependencies:
     - content_moderation
     - dept_topics
     - link
-    - metatag
+    - metatag_async_widget
     - path
     - text
 id: node.application.default
@@ -86,7 +86,7 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
   field_metatags:
-    type: metatag_firehose
+    type: metatag_async_widget_firehose
     weight: 17
     region: content
     settings:

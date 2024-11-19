@@ -211,7 +211,7 @@ class DeptTopicMigrationCommands extends DrushCommands implements SiteAliasManag
   /**
    * Preview content of a topic.
    *
-   * @command dept:topics-child-contents
+   * @command dept:preview-topics-child-contents
    * @aliases ptcc
    */
   public function previewTopicChildContents($topic_id) {

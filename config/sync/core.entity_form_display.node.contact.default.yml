@@ -18,7 +18,7 @@ dependencies:
     - datetime
     - dept_topics
     - google_map_field
-    - metatag
+    - metatag_async_widget
     - path
     - text
 id: node.contact.default
@@ -68,7 +68,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_metatags:
-    type: metatag_firehose
+    type: metatag_async_widget_firehose
     weight: 16
     region: content
     settings:
