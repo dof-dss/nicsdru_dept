@@ -175,7 +175,7 @@ commands:
     steps:
       - run:
           name: Validate composer.json and composer.lock file for consistency
-          command: composer validate --no-check-all --strict
+          command: composer validate --no-check-publish --strict
       - restore_cache:
           keys:
             - composer-{{ checksum "composer.lock" }}
@@ -191,7 +191,7 @@ commands:
     steps:
       - run:
           name: Validate composer.json and composer.lock file for consistency
-          command: composer validate --no-check-all --strict
+          command: composer validate --no-check-publish --strict
       - run:
           name: Fetch dependencies with composer
           command: composer install --no-interaction --optimize-autoloader
