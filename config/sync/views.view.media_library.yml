@@ -149,6 +149,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 24
           total_pages: null
           id: 0
@@ -166,7 +167,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       exposed_form:
         type: basic
         options:
@@ -182,7 +182,7 @@ display:
         options:
           perm: 'access media overview'
       cache:
-        type: none
+        type: tag
         options: {  }
       empty:
         area_text_custom:
@@ -584,52 +584,7 @@ display:
         - 'url.query_args:sort_by'
         - user
         - user.permissions
-      tags:
-        - 'config:core.entity_view_display.media.audio.default'
-        - 'config:core.entity_view_display.media.audio.embed'
-        - 'config:core.entity_view_display.media.audio.media_library'
-        - 'config:core.entity_view_display.media.audio.preview'
-        - 'config:core.entity_view_display.media.document.default'
-        - 'config:core.entity_view_display.media.document.embed'
-        - 'config:core.entity_view_display.media.document.media_library'
-        - 'config:core.entity_view_display.media.document.preview'
-        - 'config:core.entity_view_display.media.image.article_float'
-        - 'config:core.entity_view_display.media.image.article_float_expandable'
-        - 'config:core.entity_view_display.media.image.article_full'
-        - 'config:core.entity_view_display.media.image.article_full_expandable'
-        - 'config:core.entity_view_display.media.image.banner_deep'
-        - 'config:core.entity_view_display.media.image.banner_thin'
-        - 'config:core.entity_view_display.media.image.card_large'
-        - 'config:core.entity_view_display.media.image.card_small'
-        - 'config:core.entity_view_display.media.image.default'
-        - 'config:core.entity_view_display.media.image.embed'
-        - 'config:core.entity_view_display.media.image.feature_card'
-        - 'config:core.entity_view_display.media.image.featured_news_thumbnail'
-        - 'config:core.entity_view_display.media.image.full'
-        - 'config:core.entity_view_display.media.image.landing_full'
-        - 'config:core.entity_view_display.media.image.landscape_float'
-        - 'config:core.entity_view_display.media.image.landscape_float_xp'
-        - 'config:core.entity_view_display.media.image.landscape_full'
-        - 'config:core.entity_view_display.media.image.landscape_full_xp'
-        - 'config:core.entity_view_display.media.image.media_library'
-        - 'config:core.entity_view_display.media.image.news_thumbnail'
-        - 'config:core.entity_view_display.media.image.portrait_float'
-        - 'config:core.entity_view_display.media.image.portrait_float_xp'
-        - 'config:core.entity_view_display.media.image.portrait_full'
-        - 'config:core.entity_view_display.media.image.preview'
-        - 'config:core.entity_view_display.media.remote_document.default'
-        - 'config:core.entity_view_display.media.remote_document.embed'
-        - 'config:core.entity_view_display.media.remote_document.media_library'
-        - 'config:core.entity_view_display.media.remote_video.default'
-        - 'config:core.entity_view_display.media.remote_video.embed'
-        - 'config:core.entity_view_display.media.remote_video.media_library'
-        - 'config:core.entity_view_display.media.remote_video.preview'
-        - 'config:core.entity_view_display.media.secure_file.default'
-        - 'config:core.entity_view_display.media.secure_file.embed'
-        - 'config:core.entity_view_display.media.secure_file.media_library'
-        - 'config:core.entity_view_display.media.video.default'
-        - 'config:core.entity_view_display.media.video.embed'
-        - 'config:core.entity_view_display.media.video.media_library'
+      tags: {  }
   default_page:
     id: default_page
     display_title: 'Default Page'
@@ -1190,6 +1145,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 25
           total_pages: null
           id: 0
@@ -1207,7 +1163,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-          pagination_heading_level: h4
       style:
         type: table
         options:
@@ -1608,52 +1563,7 @@ display:
         - 'url.query_args:sort_by'
         - user
         - user.permissions
-      tags:
-        - 'config:core.entity_view_display.media.audio.default'
-        - 'config:core.entity_view_display.media.audio.embed'
-        - 'config:core.entity_view_display.media.audio.media_library'
-        - 'config:core.entity_view_display.media.audio.preview'
-        - 'config:core.entity_view_display.media.document.default'
-        - 'config:core.entity_view_display.media.document.embed'
-        - 'config:core.entity_view_display.media.document.media_library'
-        - 'config:core.entity_view_display.media.document.preview'
-        - 'config:core.entity_view_display.media.image.article_float'
-        - 'config:core.entity_view_display.media.image.article_float_expandable'
-        - 'config:core.entity_view_display.media.image.article_full'
-        - 'config:core.entity_view_display.media.image.article_full_expandable'
-        - 'config:core.entity_view_display.media.image.banner_deep'
-        - 'config:core.entity_view_display.media.image.banner_thin'
-        - 'config:core.entity_view_display.media.image.card_large'
-        - 'config:core.entity_view_display.media.image.card_small'
-        - 'config:core.entity_view_display.media.image.default'
-        - 'config:core.entity_view_display.media.image.embed'
-        - 'config:core.entity_view_display.media.image.feature_card'
-        - 'config:core.entity_view_display.media.image.featured_news_thumbnail'
-        - 'config:core.entity_view_display.media.image.full'
-        - 'config:core.entity_view_display.media.image.landing_full'
-        - 'config:core.entity_view_display.media.image.landscape_float'
-        - 'config:core.entity_view_display.media.image.landscape_float_xp'
-        - 'config:core.entity_view_display.media.image.landscape_full'
-        - 'config:core.entity_view_display.media.image.landscape_full_xp'
-        - 'config:core.entity_view_display.media.image.media_library'
-        - 'config:core.entity_view_display.media.image.news_thumbnail'
-        - 'config:core.entity_view_display.media.image.portrait_float'
-        - 'config:core.entity_view_display.media.image.portrait_float_xp'
-        - 'config:core.entity_view_display.media.image.portrait_full'
-        - 'config:core.entity_view_display.media.image.preview'
-        - 'config:core.entity_view_display.media.remote_document.default'
-        - 'config:core.entity_view_display.media.remote_document.embed'
-        - 'config:core.entity_view_display.media.remote_document.media_library'
-        - 'config:core.entity_view_display.media.remote_video.default'
-        - 'config:core.entity_view_display.media.remote_video.embed'
-        - 'config:core.entity_view_display.media.remote_video.media_library'
-        - 'config:core.entity_view_display.media.remote_video.preview'
-        - 'config:core.entity_view_display.media.secure_file.default'
-        - 'config:core.entity_view_display.media.secure_file.embed'
-        - 'config:core.entity_view_display.media.secure_file.media_library'
-        - 'config:core.entity_view_display.media.video.default'
-        - 'config:core.entity_view_display.media.video.embed'
-        - 'config:core.entity_view_display.media.video.media_library'
+      tags: {  }
   widget:
     id: widget
     display_title: Widget
@@ -2033,52 +1943,7 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - user.permissions
-      tags:
-        - 'config:core.entity_view_display.media.audio.default'
-        - 'config:core.entity_view_display.media.audio.embed'
-        - 'config:core.entity_view_display.media.audio.media_library'
-        - 'config:core.entity_view_display.media.audio.preview'
-        - 'config:core.entity_view_display.media.document.default'
-        - 'config:core.entity_view_display.media.document.embed'
-        - 'config:core.entity_view_display.media.document.media_library'
-        - 'config:core.entity_view_display.media.document.preview'
-        - 'config:core.entity_view_display.media.image.article_float'
-        - 'config:core.entity_view_display.media.image.article_float_expandable'
-        - 'config:core.entity_view_display.media.image.article_full'
-        - 'config:core.entity_view_display.media.image.article_full_expandable'
-        - 'config:core.entity_view_display.media.image.banner_deep'
-        - 'config:core.entity_view_display.media.image.banner_thin'
-        - 'config:core.entity_view_display.media.image.card_large'
-        - 'config:core.entity_view_display.media.image.card_small'
-        - 'config:core.entity_view_display.media.image.default'
-        - 'config:core.entity_view_display.media.image.embed'
-        - 'config:core.entity_view_display.media.image.feature_card'
-        - 'config:core.entity_view_display.media.image.featured_news_thumbnail'
-        - 'config:core.entity_view_display.media.image.full'
-        - 'config:core.entity_view_display.media.image.landing_full'
-        - 'config:core.entity_view_display.media.image.landscape_float'
-        - 'config:core.entity_view_display.media.image.landscape_float_xp'
-        - 'config:core.entity_view_display.media.image.landscape_full'
-        - 'config:core.entity_view_display.media.image.landscape_full_xp'
-        - 'config:core.entity_view_display.media.image.media_library'
-        - 'config:core.entity_view_display.media.image.news_thumbnail'
-        - 'config:core.entity_view_display.media.image.portrait_float'
-        - 'config:core.entity_view_display.media.image.portrait_float_xp'
-        - 'config:core.entity_view_display.media.image.portrait_full'
-        - 'config:core.entity_view_display.media.image.preview'
-        - 'config:core.entity_view_display.media.remote_document.default'
-        - 'config:core.entity_view_display.media.remote_document.embed'
-        - 'config:core.entity_view_display.media.remote_document.media_library'
-        - 'config:core.entity_view_display.media.remote_video.default'
-        - 'config:core.entity_view_display.media.remote_video.embed'
-        - 'config:core.entity_view_display.media.remote_video.media_library'
-        - 'config:core.entity_view_display.media.remote_video.preview'
-        - 'config:core.entity_view_display.media.secure_file.default'
-        - 'config:core.entity_view_display.media.secure_file.embed'
-        - 'config:core.entity_view_display.media.secure_file.media_library'
-        - 'config:core.entity_view_display.media.video.default'
-        - 'config:core.entity_view_display.media.video.embed'
-        - 'config:core.entity_view_display.media.video.media_library'
+      tags: {  }
   widget_table:
     id: widget_table
     display_title: 'Widget (table)'

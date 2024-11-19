@@ -26,13 +26,6 @@ process:
         - 1
   name:
     -
-      plugin: skip_on_value
-      method: row
-      source: name
-      value:
-        - connollyl
-        - nw_test_author
-    -
       plugin: entity_lookup
       entity_type: user
       value_key: name

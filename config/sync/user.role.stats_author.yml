@@ -17,7 +17,7 @@ dependencies:
     - moderation_sidebar
 id: stats_author
 label: 'Stats author (Add-on role)'
-weight: 10
+weight: -2
 is_admin: null
 permissions:
   - 'create secure publication'

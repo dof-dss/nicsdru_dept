@@ -1,0 +1,30 @@
+uuid: 3da2ab15-ee46-4d85-a2c7-966d7b0c87a3
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: exclude_from_rss_feed
+label: 'Exclude from RSS feed'
+bundles:
+  - publication
+entity_type: node
+global: true
+flag_short: 'Exclude from RSS feed'
+flag_long: 'Check this flag to indicate that this content should be excluded from RSS feeds.'
+flag_message: 'This content has been flagged to be excluded from RSS feeds.'
+unflag_short: 'Include on RSS feeds'
+unflag_long: 'Uncheck this flag to indicate that this content should be excluded from RSS feeds.'
+unflag_message: 'This content has been flagged to be excluded from RSS feeds'
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:node'
+link_type: ajax_link
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: false
+  show_on_form: true
+  show_contextual_link: false
+  extra_permissions:
+    owner: owner
+linkTypeConfig: {  }

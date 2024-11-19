@@ -27,7 +27,7 @@ dependencies:
     - link
     - media_library
     - media_library_edit
-    - metatag
+    - metatag_async_widget
     - path
     - text
 id: node.publication.default
@@ -91,7 +91,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_metatags:
-    type: metatag_firehose
+    type: metatag_async_widget_firehose
     weight: 22
     region: content
     settings:

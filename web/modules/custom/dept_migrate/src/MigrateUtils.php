@@ -57,4 +57,31 @@ class MigrateUtils {
     };
   }
 
+  /**
+   * Returns array of departments that are active for migration.
+   *
+   * @return string[]
+   *   Department ids.
+   */
+  public static function activeMigrationDepartments() {
+
+    $departments = [
+      'nigov',
+      'daera',
+      'economy',
+      'executiveoffice',
+      'education',
+      'finance',
+      'health',
+      'infrastructure',
+      'justice',
+      'communities',
+    ];
+
+    $ignore_value = getenv('MIGRATE_IGNORE_SITES');
+    $ignore_departments = explode(',', $ignore_value);
+
+    return array_diff($departments, $ignore_departments);
+  }
+
 }

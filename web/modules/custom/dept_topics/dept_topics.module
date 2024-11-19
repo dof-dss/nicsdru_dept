@@ -362,6 +362,7 @@ function dept_topics_node_presave(EntityInterface $node) {
 
     // Clear the cache of the child content nodes (for cases when the thin banner etc. is updated).
     dept_topics_clear_child_caches($node);
+    dept_topics_clear_topic_tree_cache($node);
   }
 }
 
@@ -387,6 +388,15 @@ function dept_topics_node_insert(NodeInterface $node) {
 }
 
 /**
+ * Implements hook_node_delete().
+ */
+function dept_topics_node_delete(NodeInterface $node) {
+  if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
+    dept_topics_clear_topic_tree_cache($node);
+  }
+}
+
+/**
  * Clears the node cache for all the child nodes belonging to a node.
  *
  * @param \Drupal\node\NodeInterface $node
@@ -401,6 +411,21 @@ function dept_topics_clear_child_caches($node) {
 
     Cache::invalidateTags($child_cache_tags);
   }
+}
+
+/**
+ * Function to invalidate the topic tree cache structure
+ * whenever a topic or subtopic node is changed, removed or created.
+ */
+function dept_topics_clear_topic_tree_cache(NodeInterface $node) {
+  if ($node->bundle() != 'topic' || $node->bundle() != 'subtopic') {
+    return;
+  }
+
+  // Clear topic manager stored cache entries for the topic hierarchy.
+  $domain_source = $node->get('field_domain_source')->getValue();
+  $dept_id = $domain_source[0]['target_id'];
+  Cache::invalidateTags(['dept_topics:' . $dept_id]);
 }
 
 /**

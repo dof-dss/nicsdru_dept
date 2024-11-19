@@ -22,11 +22,6 @@ services:
     arguments: ['@entity_field.manager', '@logger.factory', '@database']
     tags:
       - { name: event_subscriber }
-  dept_migrate.eventsubscriber.migrate.body_tidy:
-    class: Drupal\dept_migrate\EventSubscriber\PostMigrationBodyTIdySubscriber
-    arguments: [ '@logger.factory', '@database' ]
-    tags:
-      - { name: event_subscriber }
   dept_migrate.eventsubscriber.migrate.entity_ref_check:
     class: Drupal\dept_migrate\EventSubscriber\PreMigrationEntityReferenceCheck
     arguments: ['@entity_field.manager', '@logger.factory', '@dept_migrate.database_d7']
