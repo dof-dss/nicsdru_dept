@@ -11,7 +11,7 @@ dependencies:
     - node.type.global_page
   module:
     - content_moderation
-    - metatag
+    - metatag_async_widget
     - path
     - text
 id: node.global_page.default
@@ -55,7 +55,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_metatags:
-    type: metatag_firehose
+    type: metatag_async_widget_firehose
     weight: 124
     region: content
     settings:
