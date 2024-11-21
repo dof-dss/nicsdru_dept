@@ -16,7 +16,10 @@ source:
   batch_size: 1000
 process:
   tid: tid
-  vid: 'outcomes'
+  vid:
+    plugin: migration_lookup
+    migration: d7_taxonomy_vocabulary
+    source: vid
   name: name
   description/value:
     -

@@ -1,4 +1,3 @@
-uuid: d963868f-0a31-4076-98fb-9130116d1c91
 langcode: en
 status: true
 dependencies: {  }
@@ -6,9 +5,9 @@ id: d7_taxonomy_term_chart_type
 class: Drupal\migrate\Plugin\Migration
 field_plugin_method: alterFieldFormatterMigration
 cck_plugin_method: null
+migration_group: migrate_drupal_7_taxo
 migration_tags:
   - dept_sites
-migration_group: migrate_drupal_7_taxo
 label: 'Taxonomy terms (Chart type)'
 source:
   plugin: d7_taxonomy_term
@@ -17,7 +16,10 @@ source:
   batch_size: 1000
 process:
   tid: tid
-  vid: chart_type
+  vid:
+    plugin: migration_lookup
+    migration: d7_taxonomy_vocabulary
+    source: vid
   name: name
   description/value:
     -
@@ -31,4 +33,4 @@ process:
 destination:
   plugin: 'entity:taxonomy_term'
   default_bundle: chart_type
-migration_dependencies: {  }
+migration_dependencies: { }
