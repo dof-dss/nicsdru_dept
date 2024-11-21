@@ -491,10 +491,8 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       return;
     }
 
-    if (!empty($table)) {
-      $this->logger->notice('Purging ' . $table . ' table');
-      $this->dbConn->truncate($table)->execute();
-    }
+    $this->logger->notice('Purging ' . $table . ' table');
+    $this->dbConn->truncate($table)->execute();
   }
 
 }
