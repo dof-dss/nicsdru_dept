@@ -32,10 +32,7 @@ fi
 export DRUSH=/app/vendor/bin/drush
 # shellcheck disable=SC2089
 export MIGRATIONS="\
-  d7_taxonomy_term_chart_type \
   d7_taxonomy_term_global_topics
-  d7_taxonomy_term_indicators \
-  d7_taxonomy_term_outcomes users \
   d7_file \
   d7_file_private \
   d7_file_media_document \
@@ -151,11 +148,6 @@ then
   $DRUSH migrate:import url_aliases_nodes --force
   $DRUSH migrate:import redirects --force
 
-  echo "Updating content links"
-  $DRUSH dept:updatelinks
-
-
-
   # ******************************************
   # Execute any non-live department commands *
   #                                          *
@@ -166,6 +158,8 @@ then
   # ******************************************
   echo "Syncing featured content on the department homepages"
   $DRUSH dept:sync-homepage-content
+
+  $DRUSH purge-mig-logs dept_migrate_invalid_links
 
   # Remove the departments in the $MIGRATE_IGNORE_SITES
   # excluded_departments array from the departments array.
@@ -192,6 +186,10 @@ then
 
       echo "Creating Audit Due entries for ${dept}"
       $DRUSH dept:update-audit-date $dept
+
+      echo "Updating content links for ${dept}"
+      $DRUSH dept:updatelinks $dept
+
     done
 
   echo ".... DONE"

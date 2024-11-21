@@ -40,6 +40,13 @@
 // The media-video wrapper wraps all videos embedded with an iframe.
 .media-video {
   @include media-video;
+
+  .field--name-field {
+    &-domain-access,
+    &-domain-source {
+      display:none;
+    }
+  }
 }
 
 // Video and caption component.
