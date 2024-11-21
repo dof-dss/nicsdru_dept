@@ -139,8 +139,6 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
               }
 
               return $matches[0];
-            } else {
-
             }
           },
           $result->value
@@ -476,15 +474,19 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
   /**
    *  Removes entries from the migration logging tables (dept_migrate_).
    *
-   * @param $table
-   *   Table name to purge
+   * @param string $table
+   *   Table name to purge.
    *
    * @command dept:purge-migration-logs
    * @aliases purge-mig-logs
    */
-  public function purgeMigrationLogging($table) {
+  public function purgeMigrationLogging(string $table) {
 
-    if (empty($table) || !in_array($table, ['dept_migrate_audit', 'dept_migrate_invalid_links', 'dept_redirects_results'])) {
+    if (empty($table) || !in_array($table, [
+        'dept_migrate_audit',
+        'dept_migrate_invalid_links',
+        'dept_redirects_results'
+      ])) {
       $this->logger->warning('Invalid table name');
       return;
     }
@@ -494,4 +496,5 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       $this->dbConn->truncate($table)->execute();
     }
   }
+
 }
