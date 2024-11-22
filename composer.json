@@ -168,7 +168,6 @@
         "drupal/noreferrer": "^2.0",
         "drupal/paragraphs": "^1.15",
         "drupal/pathauto": "^1.12",
-        "drupal/permissions_filter": "^1.5",
         "drupal/photoswipe": "^5.0",
         "drupal/purge_users": "^4.0@beta",
         "drupal/redirect": "^1.10",
@@ -247,7 +246,8 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "phpstan/extension-installer": true,
             "drupal/core-project-message": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "tbachert/spi": true
         }
     },
     "scripts": {
@@ -338,7 +338,8 @@
             },
             "drupal/domain_entity": {
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch",
-                "Make module compatible with PHP 8.2 #3405907": "https://www.drupal.org/files/issues/2023-12-04/3405907-1.patch"
+                "Make module compatible with PHP 8.2 #3405907": "https://www.drupal.org/files/issues/2023-12-04/3405907-1.patch",
+                "Remove unnecessary User::load from domain_entity_entity_access": "https://www.drupal.org/files/issues/2022-11-17/remove_unnecessary_user_load_from_domain_entity_entity_access-3322113-2.patch"
             },
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"

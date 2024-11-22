@@ -76,7 +76,12 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
    * @command dept:updatelinks
    * @aliases uplnks
    */
-  public function updateInternalLinks() {
+  public function updateInternalLinks($department_id) {
+
+    if (empty($department_id)) {
+      $this->logger->warning("You must provide a department id");
+      return;
+    }
 
     $fields = [
       'body',
@@ -92,9 +97,11 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       // Select all 'node/XXXX' links from the current field table.
       $table = 'node__' . $field;
       $query = $this->dbConn->select($table, 't');
+      $query->join('node__field_domain_source', 'ds', 't.entity_id = ds.entity_id');
       $query->addField('t', 'entity_id', 'nid');
       $query->addField('t', $field . '_value', 'value');
-      $query->condition($field . '_value', 'node\/[0-9]+', 'REGEXP');
+      $query->condition('ds.field_domain_source_target_id', $department_id);
+      $query->condition('t.' . $field . '_value', 'node\/[0-9]+', 'REGEXP');
 
       $results = $query->execute()->fetchAll();
 
@@ -462,6 +469,30 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
     else {
       $this->logger->notice("Stored procedure added database");
     }
+  }
+
+  /**
+   *  Removes entries from the migration logging tables (dept_migrate_).
+   *
+   * @param string $table
+   *   Table name to purge.
+   *
+   * @command dept:purge-migration-logs
+   * @aliases purge-mig-logs
+   */
+  public function purgeMigrationLogging(string $table) {
+
+    if (empty($table) || !in_array($table, [
+        'dept_migrate_audit',
+        'dept_migrate_invalid_links',
+        'dept_redirects_results'
+      ])) {
+      $this->logger->warning('Invalid table name');
+      return;
+    }
+
+    $this->logger->notice('Purging ' . $table . ' table');
+    $this->dbConn->truncate($table)->execute();
   }
 
 }
