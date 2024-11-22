@@ -1,0 +1,11 @@
+uuid: cdb91ef5-4984-4260-ab4d-457e7f8b6d83
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.chart_type
+id: taxonomy_term.chart_type
+target_entity_type_id: taxonomy_term
+target_bundle: chart_type
+default_langcode: und
+language_alterable: false

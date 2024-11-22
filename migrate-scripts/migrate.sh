@@ -32,7 +32,10 @@ fi
 export DRUSH=/app/vendor/bin/drush
 # shellcheck disable=SC2089
 export MIGRATIONS="\
+  d7_taxonomy_term_chart_type \
   d7_taxonomy_term_global_topics
+  d7_taxonomy_term_indicators \
+  d7_taxonomy_term_outcomes users \
   d7_file \
   d7_file_private \
   d7_file_media_document \

@@ -1,0 +1,20 @@
+uuid: 9cc2dd2c-e662-4592-bb6d-f559cf80e762
+langcode: und
+status: true
+dependencies:
+  module:
+    - datetime
+    - taxonomy
+id: taxonomy_term.field_last_update
+field_name: field_last_update
+entity_type: taxonomy_term
+type: datetime
+settings:
+  datetime_type: date
+module: datetime
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
