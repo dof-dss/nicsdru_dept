@@ -3,8 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
+    - media.type.audio
     - media.type.document
     - media.type.image
+    - media.type.remote_document
+    - media.type.remote_video
     - node.type.application
     - node.type.article
     - node.type.book
@@ -72,6 +75,7 @@ permissions:
   - 'create publication content on assigned domains'
   - 'create publication node content on assigned domains'
   - 'create remote_document media content on assigned domains'
+  - 'create remote_video media'
   - 'create remote_video media content on assigned domains'
   - 'create secure_file media content on assigned domains'
   - 'create ual content on assigned domains'
@@ -96,7 +100,11 @@ permissions:
   - 'delete media'
   - 'delete news content on assigned domains'
   - 'delete news revisions'
+  - 'delete own audio media'
   - 'delete own document media'
+  - 'delete own image media'
+  - 'delete own remote_document media'
+  - 'delete own remote_video media'
   - 'delete profile content on assigned domains'
   - 'delete profile revisions'
   - 'delete protected_area content on assigned domains'
@@ -110,6 +118,10 @@ permissions:
   - 'delete ual revisions'
   - 'edit any document media'
   - 'edit any image media'
+  - 'edit any remote_document media'
+  - 'edit own audio media'
+  - 'edit own image media'
+  - 'edit own remote_video media'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
   - 'reschedule scheduled transitions node consultation'
