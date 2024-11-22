@@ -1,0 +1,23 @@
+uuid: faf41582-b70f-4f21-a850-af9e48809bd3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_id
+    - taxonomy.vocabulary.outcomes
+id: taxonomy_term.outcomes.field_id
+field_name: field_id
+entity_type: taxonomy_term
+bundle: outcomes
+label: 'Outcome ID'
+description: 'Enter a numeric ID for this outcome.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1
+  max: 20
+  prefix: ''
+  suffix: ''
+field_type: integer

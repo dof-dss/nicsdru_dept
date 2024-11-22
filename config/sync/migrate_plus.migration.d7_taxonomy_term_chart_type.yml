@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies: {  }
+id: d7_taxonomy_term_chart_type
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: alterFieldFormatterMigration
+cck_plugin_method: null
+migration_group: migrate_drupal_7_taxo
+migration_tags:
+  - dept_sites
+label: 'Taxonomy terms (Chart type)'
+source:
+  plugin: d7_taxonomy_term
+  bundle: chart_type
+  track_changes: true
+  batch_size: 1000
+process:
+  tid: tid
+  vid:
+    plugin: migration_lookup
+    migration: d7_taxonomy_vocabulary
+    source: vid
+  name: name
+  description/value:
+    -
+      plugin: get
+      source: description
+  description/format:
+    -
+      plugin: default_value
+      default_value: basic_html
+  weight: weight
+destination:
+  plugin: 'entity:taxonomy_term'
+  default_bundle: chart_type
+migration_dependencies: { }
