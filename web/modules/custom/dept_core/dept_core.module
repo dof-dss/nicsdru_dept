@@ -36,7 +36,9 @@ function dept_core_entity_access(EntityInterface $entity, $operation, AccountInt
     $typeEntity = $entity->getEntityTypeId();
     $manager = \Drupal::service('domain_access.manager');
 
-    if ($account->hasPermission('delete ' . $type . ' '. $typeEntity . ' content on assigned domains') && $manager->checkEntityAccess($entity, $account)) {
+    if ($account->hasPermission('delete ' . $type . ' ' . $typeEntity . ' content on assigned domains')
+      && $manager->checkEntityAccess($entity, $account)) {
+
       return AccessResult::allowed();
     }
   }
