@@ -223,6 +223,10 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     ];
 
     $element['#attached']['library'][] = 'dept_topics/topic_tree_widget';
+    $element['#cache'] = [
+      'contexts' => ['url.site'],
+      'tags' => ['dept_topics:' . $current_dept],
+    ];
 
     return $element;
   }

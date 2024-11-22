@@ -159,6 +159,7 @@
         "drupal/media_library_edit": "^3.0",
         "drupal/media_remote": "^1.9",
         "drupal/metatag": "^2.0.0",
+        "drupal/metatag_async_widget": "^1.2",
         "drupal/migrate_conditions": "^2.0@beta",
         "drupal/migrate_plus": "^6",
         "drupal/migrate_tools": "^6",
@@ -166,7 +167,6 @@
         "drupal/noreferrer": "^2.0",
         "drupal/paragraphs": "^1.15",
         "drupal/pathauto": "^1.12",
-        "drupal/permissions_filter": "^1.5",
         "drupal/photoswipe": "^5.0",
         "drupal/purge_users": "^4.0@beta",
         "drupal/redirect": "^1.10",
@@ -200,6 +200,7 @@
         "drupal/views_custom_cache_tag": "^1.2",
         "drupal/views_tree": "^2.0@alpha",
         "drupal/webform": "^6.2.3",
+        "drupal/webprofiler": "10.1.x-dev@dev",
         "drupal/whatlinkshere": "^2.1",
         "drush/drush": "^12.5",
         "harvesthq/chosen": "^1.8",
@@ -234,6 +235,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
+        "apcu-autoloader": true,
+        "optimize-autoloader": true,
         "sort-packages": true,
         "allow-plugins": {
             "composer/installers": true,
@@ -242,7 +245,8 @@
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "phpstan/extension-installer": true,
             "drupal/core-project-message": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "tbachert/spi": true
         }
     },
     "scripts": {
@@ -333,7 +337,8 @@
             },
             "drupal/domain_entity": {
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch",
-                "Make module compatible with PHP 8.2 #3405907": "https://www.drupal.org/files/issues/2023-12-04/3405907-1.patch"
+                "Make module compatible with PHP 8.2 #3405907": "https://www.drupal.org/files/issues/2023-12-04/3405907-1.patch",
+                "Remove unnecessary User::load from domain_entity_entity_access": "https://www.drupal.org/files/issues/2022-11-17/remove_unnecessary_user_load_from_domain_entity_entity_access-3322113-2.patch"
             },
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"

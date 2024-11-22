@@ -13,7 +13,7 @@ dependencies:
     - node.type.webform
   module:
     - content_moderation
-    - metatag
+    - metatag_async_widget
     - path
     - text
     - webform
@@ -60,7 +60,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_metatags:
-    type: metatag_firehose
+    type: metatag_async_widget_firehose
     weight: 19
     region: content
     settings:
