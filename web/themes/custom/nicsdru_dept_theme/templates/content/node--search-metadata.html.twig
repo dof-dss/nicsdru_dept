@@ -4,9 +4,16 @@
  * Theme override to display a node in search result view mode.
 #}
 {% set department_name = content.field_domain_source.0["#plain_text"] %}
+{% set content_type = content.field_domain_source["#bundle"] %}
 <a class="card card--plain no-ext-icon" href="{{ url }}">
   <h3 class="card__title">{{ label }}</h3>
-  <div class="card__summary">{{ content.field_summary | field_value }}</div>
+  <div class="card__summary">
+    {%- if content_type == 'news' %}
+      {{ content.field_teaser }}
+    {% else %}
+      {{ content.field_summary | field_value }}
+    {% endif -%}
+  </div>
   <div class="card__meta">
     {%- if department.id == 'nigov' and department_name %}
       {%- if 'Agriculture' in department_name %}
