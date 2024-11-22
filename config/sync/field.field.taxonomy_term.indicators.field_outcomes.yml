@@ -1,0 +1,23 @@
+uuid: 1e161bf5-c71c-4690-937b-9c81d8e15d91
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_outcomes
+    - taxonomy.vocabulary.indicators
+id: taxonomy_term.indicators.field_outcomes
+field_name: field_outcomes
+entity_type: taxonomy_term
+bundle: indicators
+label: Outcomes
+description: 'Choose one or more outcomes for this indicator.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    sort:
+      field: _none
+field_type: entity_reference
