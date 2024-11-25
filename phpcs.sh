@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-DRUPAL_DEPLOY_PATH=$1
+DRUPAL_DEPLOY_PATH='/var/www/html'
+
 # We only care about our custom code folder and custom theme folder.
-PHPCS_CHECK_DIR=$2
+PHPCS_CHECK_DIR=$1
 
 # Dependencies are added with composer. Shouldn't be using a global install even if available.
 PHPCS_PATH="${DRUPAL_DEPLOY_PATH}/vendor/bin/phpcs"
