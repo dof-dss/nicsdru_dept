@@ -216,7 +216,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       // Find the nodes for the content featured for this dept in D7.
       $d7_featured_nodes = [];
 
-      if ($dept->id() === 'nigov' || $dept->id() === 'executiveoffice') {
+      if ($dept->id() === 'nigov') {
         $d7_query = $this->d7conn->query("SELECT n.nid
           FROM {node} n
           JOIN {field_data_eq_node} fdeqn ON fdeqn.eq_node_target_id = n.nid AND fdeqn.bundle = 'niexec_homepage_news'
@@ -261,12 +261,12 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
         LEFT JOIN {flagging} hp_flag ON hp_flag.entity_id = n.nid AND hp_flag.fid = 2
         JOIN {flag_counts} fc on fc.entity_id = n.nid
         JOIN {field_data_field_published_date} fdfpd ON fdfpd.entity_id = n.nid
-        WHERE d.sitename = :site_id AND n.status = 1
+        WHERE d.machine_name = :site_id AND n.status = 1
         ORDER BY
             fn_flag.uid IS NOT NULL DESC,
             hp_flag.uid IS NOT NULL DESC,
             fdfpd.field_published_date_value DESC
-        LIMIT 10", [':site_id' => $dept->id()]
+        LIMIT 10", [':site_id' => MigrateUtils::d9DomainToD7Domain($dept->id())]
         );
 
         if (empty($d7_query)) {
