@@ -271,7 +271,6 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
    */
   public function url(string $environment = 'active', bool $secure_protocol = TRUE): string {
     $hostname = $this->hostname();
-    
     return ($secure_protocol ? "https://" : "http://") . $hostname;
   }
 
