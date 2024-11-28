@@ -2,18 +2,20 @@ _core:
   default_config_hash: mqVsLCNF_WfM-XDhZ0nuTWd7bjvrqR5a6K_-vd0bwjU
 exclude_routes:
   canonical: canonical
-  delete_form: '0'
-  delete_multiple_form: '0'
-  edit_form: '0'
-  version_history: '0'
-  revision: '0'
-  create: '0'
-  book_outline_form: '0'
-  book_remove_form: '0'
-  scheduled_transitions: '0'
-  scheduled_transition_add: '0'
-  latest_version: '0'
-  devel_load: '0'
-  devel_render: '0'
-  devel_definition: '0'
-  token_devel: '0'
+  delete_form: delete_form
+  delete_multiple_form: delete_multiple_form
+  edit_form: edit_form
+  version_history: version_history
+  revision: revision
+  create: create
+  book_outline_form: book_outline_form
+  book_remove_form: book_remove_form
+  scheduled_transitions: scheduled_transitions
+  scheduled_transition_add: scheduled_transition_add
+  latest_version: latest_version
+  devel_load: devel_load
+  devel_load_with_references: devel_load_with_references
+  devel_path_alias: devel_path_alias
+  devel_render: devel_render
+  devel_definition: devel_definition
+  token_devel: token_devel
