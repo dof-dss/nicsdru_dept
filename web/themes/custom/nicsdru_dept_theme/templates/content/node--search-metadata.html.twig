@@ -10,11 +10,11 @@
     {{ snippet }}
   </div>
   <div class="card__meta">
-    {%- if department.id == 'nigov' and domain_source_name %}
-      {%- if 'Agriculture' in domain_source_name %}
+    {%- if department.id == 'nigov' and content_domain_source.name %}
+      {%- if content_domain_source.id == 'daera' %}
         <span class="card__meta-item dept-name">{{ 'DAERA'|t }}</span>
       {% else %}
-        <span class="card__meta-item dept-name">{{ domain_source_name }}</span>
+        <span class="card__meta-item dept-name">{{ content_domain_source.name }}</span>
       {% endif -%}
     {% endif -%}
     {%- if content.field_published_date %}
