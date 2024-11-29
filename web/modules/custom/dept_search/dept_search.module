@@ -200,5 +200,6 @@ function dept_search_preprocess_node(array &$variables) {
   if ($view_mode === 'search_metadata' && $node->bundle() === 'news') {
     $news_type = $node->get('field_news_type')->getValue()[0];
     $variables['snippet'] = $news_type === 'news' ? $variables['content']['field_teaser'] : $variables['content']['field_summary'];
+    $variables['domain_source_name'] = $node->get('field_domain_source')->referencedEntities()[0]->label();
   }
 }
