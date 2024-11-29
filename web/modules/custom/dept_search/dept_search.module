@@ -189,10 +189,16 @@ function dept_search_preprocess_node(array &$variables) {
       unset($variables['content']['field_domain_source']);
     }
   }
+
   if ($view_mode === 'search_result' && $node->bundle() === 'heritage_site') {
     // No summary field for search, so preprocess it from the body field
     // in here to render in the template.
     $body = $node->get('body')->getValue();
     $variables['content']['custom_summary'] = $body[0]['value'] ?? '';
+  }
+
+  if ($view_mode === 'search_metadata' && $node->bundle() === 'news') {
+    $news_type = $node->get('field_news_type')->getValue()[0];
+    $variables['snippet'] = $news_type === 'news' ? $variables['content']['field_summary'] : $variables['content']['field_teaser'];
   }
 }
