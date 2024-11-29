@@ -25,3 +25,8 @@ $databases['migrate']['default'] = $databases['default']['drupal7db'];
 $config['config_split.config_split.local']['status'] = TRUE;
 $config['config_split.config_split.development']['status'] = FALSE;
 $config['config_split.config_split.production']['status'] = FALSE;
+
+// Prevent Drush migrations from running out of memory etc.
+if (PHP_SAPI === 'cli') {
+  ini_set('memory_limit', getenv('DDEV_PHP_CLI_MEMORY_LIMIT'));
+}
