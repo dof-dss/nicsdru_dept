@@ -263,27 +263,6 @@ function dept_node_preprocess_page(&$variables) {
 }
 
 /**
- * Implements hook_pathauto_alias_alter().
- */
-function dept_node_pathauto_alias_alter(&$alias, array &$context) {
-  $dbConn = \Drupal::database();
-
-  $results = $dbConn->query("SELECT pa.path, pa.alias FROM {path_alias} pa WHERE pa.alias = :alias", [':alias' => $alias])->fetchCol();
-
-  // If we have an existing alias, append the department id and notify the user.
-  if ($results && $results[0] !== $context['source']) {
-    $domain = \Drupal::service('domain.negotiator')->getActiveDomain()->id();
-    $alias .= '-' . $domain;
-
-    $update_link = '<a class="use-ajax" data-dialog-type="modal" href="' . Url::fromRoute('dept_node.update_path_alias', ['nid' => substr($context['source'], strrpos($context['source'], '/') + 1)])->toString() . '">edit the alias.</a>';
-
-    if (PHP_SAPI != 'cli') {
-      \Drupal::messenger()->addMessage("A url alias for this content is already in use so additional text has been appended to the end. You can $update_link", MessengerInterface::TYPE_WARNING);
-    }
-  }
-}
-
-/**
  * Implements hook_entity_type_build().
  */
 function dept_node_entity_type_build(array &$entity_types) {
