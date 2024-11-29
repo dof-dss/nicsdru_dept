@@ -3,23 +3,18 @@
  * @file
  * Theme override to display a node in search result view mode.
 #}
-{% set department_name = content.field_domain_source.0["#plain_text"] %}
-{% set content_type = content.field_domain_source["#bundle"] %}
+
 <a class="card card--plain no-ext-icon" href="{{ url }}">
   <h3 class="card__title">{{ label }}</h3>
   <div class="card__summary">
-    {%- if content_type == 'news' %}
-      {{ content.field_teaser }}
-    {% else %}
-      {{ content.field_summary | field_value }}
-    {% endif -%}
+    {{ snippet }}
   </div>
   <div class="card__meta">
-    {%- if department.id == 'nigov' and department_name %}
-      {%- if 'Agriculture' in department_name %}
+    {%- if department.id == 'nigov' and content_domain_source.name %}
+      {%- if content_domain_source.id == 'daera' %}
         <span class="card__meta-item dept-name">{{ 'DAERA'|t }}</span>
       {% else %}
-        <span class="card__meta-item dept-name">{{ department_name }}</span>
+        <span class="card__meta-item dept-name">{{ content_domain_source.name }}</span>
       {% endif -%}
     {% endif -%}
     {%- if content.field_published_date %}
@@ -33,3 +28,4 @@
     {% endif -%}
   </div>
 </a>
+{{ content | without('field_summary', 'field_teaser', 'field_domain_source', 'field_published_date') }}
