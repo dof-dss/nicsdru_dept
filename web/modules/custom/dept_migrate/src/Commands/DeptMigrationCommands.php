@@ -128,13 +128,22 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
                 $entity_id = $d7_source_nid[$result->nid]['d7nid'];
 
                 if (!empty($entity_id)) {
-                  $this->dbConn->insert('dept_migrate_invalid_links')
-                    ->fields([
-                      'entity_id' => $entity_id,
-                      'bad_link' => $matches[0] . '">',
-                      'field' => $field
-                    ])
-                    ->execute();
+
+                  $exists = $this->dbConn->select('dept_migrate_invalid_links', 'il')
+                    ->condition('il.entity_id', $entity_id)
+                    ->condition('il.bad_link', $matches[0] . '">')
+                    ->condition('il.field', $field)
+                    ->countQuery()->execute()->fetchField();
+
+                  if (!$exists) {
+                    $this->dbConn->insert('dept_migrate_invalid_links')
+                      ->fields([
+                        'entity_id' => $entity_id,
+                        'bad_link' => $matches[0] . '">',
+                        'field' => $field
+                      ])
+                      ->execute();
+                  }
                 }
               }
 
