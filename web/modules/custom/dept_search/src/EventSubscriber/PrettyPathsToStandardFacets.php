@@ -31,6 +31,7 @@ class PrettyPathsToStandardFacets implements EventSubscriberInterface {
     $request = clone $event->getRequest();
     $path = $request->getPathInfo();
 
+    // Only intercept and handle publications search with specific known facet paths.
     if (preg_match('#\/publications\/(type|topic|date)\/#', $path)) {
       // Break apart the pairs of facet key/value parts.
       // Remove leading /publications and split the path into segments.
@@ -39,8 +40,12 @@ class PrettyPathsToStandardFacets implements EventSubscriberInterface {
       $facetKeyValuePairs = [];
 
       // Loop through segments and create key-value pairs.
+      // $i < count($segments) - 1:
+      // Ensures the loop stops before the last segment if there is an uneven number of segments.
+      // Example: In ['type', 'circulars', 'date', '2024'], the loop will iterate twice (once for type -> circulars and once for date -> 2024).
       for ($i = 0; $i < count($segments) - 1; $i += 2) {
         if (!empty($segments[$i + 1])) {
+          // Assigns the value ($segments[$i + 1]) to the key ($segments[$i]) in the array.
           $facetKeyValuePairs[$segments[$i]] = $segments[$i + 1];
         }
       }
@@ -51,12 +56,14 @@ class PrettyPathsToStandardFacets implements EventSubscriberInterface {
       // Example target pattern: /publications?f[0]=date:2024&f[1]=type:circulars".
       foreach ($facetKeyValuePairs as $key => $value) {
         if ($facet_count === 0) {
+          // Add ? to split path from query parameters on first facet.
           $redirect_path .= '?';
         }
 
         $redirect_path .= 'f[' . $facet_count . ']=' . $key . ':' . $value;
 
         if ($facet_count < count($facetKeyValuePairs)) {
+          // Append a parameter separator unless it's the final facet.
           $redirect_path .= '&';
         }
 
