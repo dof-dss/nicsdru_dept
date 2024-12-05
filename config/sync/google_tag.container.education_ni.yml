@@ -10,13 +10,18 @@ id: education_ni
 label: 'Department of Education'
 weight: 0
 tag_container_ids:
-  - GTM-PT94H44
+  - GTM-NXDGKFZS
 advanced_settings:
   consent_mode: false
   gtm:
     GTM-PT94H44:
       data_layer: dataLayer
+      include_classes: false
+      allowlist_classes: ''
+      blocklist_classes: ''
       include_environment: false
+      environment_id: ''
+      environment_token: ''
 dimensions_metrics: {  }
 conditions:
   condition_group:
@@ -41,12 +46,12 @@ conditions:
     domains:
       education: education
 events:
-  search: {  }
-  custom: {  }
-  login:
-    method: CMS
-  webform_purchase: {  }
   sign_up:
+    method: CMS
+  custom: {  }
+  search: {  }
+  webform_purchase: {  }
+  login:
     method: CMS
   generate_lead:
     value: ''
