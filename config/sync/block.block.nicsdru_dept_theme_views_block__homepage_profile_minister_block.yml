@@ -6,6 +6,7 @@ dependencies:
     - views.view.homepage_profile
   module:
     - block_visibility_groups
+    - domain
     - system
     - views
   theme:
@@ -32,3 +33,11 @@ visibility:
     id: request_path
     negate: false
     pages: '<front>'
+  domain:
+    id: domain
+    negate: true
+    context_mapping:
+      domain: '@domain.current_domain_context:domain'
+    domains:
+      nigov: nigov
+      executiveoffice: executiveoffice

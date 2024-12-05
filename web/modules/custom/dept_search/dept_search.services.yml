@@ -1,0 +1,5 @@
+services:
+  prettypathstostandardfacets:
+    class: Drupal\dept_search\EventSubscriber\PrettyPathsToStandardFacets
+    tags:
+      - { name: event_subscriber }

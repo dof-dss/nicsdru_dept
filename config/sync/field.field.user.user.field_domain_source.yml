@@ -11,6 +11,18 @@ third_party_settings:
   domain_entity:
     exclude_routes:
       canonical: canonical
+      edit_form: edit_form
+      cancel_form: cancel_form
+      collection: collection
+      scheduled_transitions: scheduled_transitions
+      scheduled_transition_add: scheduled_transition_add
+      devel_load: devel_load
+      devel_load_with_references: devel_load_with_references
+      devel_path_alias: devel_path_alias
+      devel_render: devel_render
+      devel_definition: devel_definition
+      masquerade: masquerade
+      token_devel: token_devel
 id: user.user.field_domain_source
 field_name: field_domain_source
 entity_type: user
