@@ -217,9 +217,9 @@ crons:
   drupal:
     spec: '*/15 * * * *'
     cmd: 'vendor/bin/drush cron'
-#  migrate:
-#    spec: '30 2 * * *'
-#    cmd: 'migrate-scripts/migrate.sh 2>&1 | tee /app/imports/last-migrate-output.txt'
+  migrate:
+    spec: '30 2 * * *'
+    cmd: 'migrate-scripts/migrate.sh 2>&1 | tee /app/imports/last-migrate-output.txt'
   sync_files:
     spec: '0 1 * * *'
     cmd: 'migrate-scripts/sync-private-files.sh $D7_PROJECT_ID $D7_PROJECT_ENV'
