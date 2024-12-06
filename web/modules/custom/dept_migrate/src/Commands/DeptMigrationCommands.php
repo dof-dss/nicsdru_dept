@@ -4,6 +4,7 @@ namespace Drupal\dept_migrate\Commands;
 
 use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_core\DepartmentManager;
@@ -75,7 +76,12 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
    * @command dept:updatelinks
    * @aliases uplnks
    */
-  public function updateInternalLinks() {
+  public function updateInternalLinks($department_id) {
+
+    if (empty($department_id)) {
+      $this->logger->warning("You must provide a department id");
+      return;
+    }
 
     $fields = [
       'body',
@@ -91,9 +97,11 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       // Select all 'node/XXXX' links from the current field table.
       $table = 'node__' . $field;
       $query = $this->dbConn->select($table, 't');
+      $query->join('node__field_domain_source', 'ds', 't.entity_id = ds.entity_id');
       $query->addField('t', 'entity_id', 'nid');
       $query->addField('t', $field . '_value', 'value');
-      $query->condition($field . '_value', 'node\/[0-9]+', 'REGEXP');
+      $query->condition('ds.field_domain_source_target_id', $department_id);
+      $query->condition('t.' . $field . '_value', 'node\/[0-9]+', 'REGEXP');
 
       $results = $query->execute()->fetchAll();
 
@@ -120,13 +128,22 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
                 $entity_id = $d7_source_nid[$result->nid]['d7nid'];
 
                 if (!empty($entity_id)) {
-                  $this->dbConn->insert('dept_migrate_invalid_links')
-                    ->fields([
-                      'entity_id' => $entity_id,
-                      'bad_link' => $matches[0] . '">',
-                      'field' => $field
-                    ])
-                    ->execute();
+
+                  $exists = $this->dbConn->select('dept_migrate_invalid_links', 'il')
+                    ->condition('il.entity_id', $entity_id)
+                    ->condition('il.bad_link', $matches[0] . '">')
+                    ->condition('il.field', $field)
+                    ->countQuery()->execute()->fetchField();
+
+                  if (!$exists) {
+                    $this->dbConn->insert('dept_migrate_invalid_links')
+                      ->fields([
+                        'entity_id' => $entity_id,
+                        'bad_link' => $matches[0] . '">',
+                        'field' => $field
+                      ])
+                      ->execute();
+                  }
                 }
               }
 
@@ -208,7 +225,7 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       // Find the nodes for the content featured for this dept in D7.
       $d7_featured_nodes = [];
 
-      if ($dept->id() === 'nigov' || $dept->id() === 'executiveoffice') {
+      if ($dept->id() === 'nigov') {
         $d7_query = $this->d7conn->query("SELECT n.nid
           FROM {node} n
           JOIN {field_data_eq_node} fdeqn ON fdeqn.eq_node_target_id = n.nid AND fdeqn.bundle = 'niexec_homepage_news'
@@ -253,12 +270,12 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
         LEFT JOIN {flagging} hp_flag ON hp_flag.entity_id = n.nid AND hp_flag.fid = 2
         JOIN {flag_counts} fc on fc.entity_id = n.nid
         JOIN {field_data_field_published_date} fdfpd ON fdfpd.entity_id = n.nid
-        WHERE d.sitename = :site_id AND n.status = 1
+        WHERE d.machine_name = :site_id AND n.status = 1
         ORDER BY
             fn_flag.uid IS NOT NULL DESC,
             hp_flag.uid IS NOT NULL DESC,
             fdfpd.field_published_date_value DESC
-        LIMIT 10", [':site_id' => $dept->id()]
+        LIMIT 10", [':site_id' => MigrateUtils::d9DomainToD7Domain($dept->id())]
         );
 
         if (empty($d7_query)) {
@@ -431,6 +448,60 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
       ->setRows($rows);
 
     $table->render();
+  }
+
+  /**
+   * Add Stored procedures to database.
+   *
+   * @command dept:create-stored-procedures
+   * @aliases create-sprocs
+   */
+  public function createSprocs() {
+    // Define extracted variables or Drupal Check will moan.
+    $database = '';
+    $host = '';
+    $password = '';
+    $username = '';
+    extract(Database::getConnectionInfo('default')['default'], EXTR_OVERWRITE);
+
+    $module_handler = \Drupal::service('module_handler');
+    $module_path = \Drupal::service('file_system')->realpath($module_handler->getModule('dept_migrate')->getPath());
+
+    $pdo = new \PDO("mysql:host=$host;dbname=$database", $username, $password);
+
+    $pdo->exec('DROP PROCEDURE IF EXISTS UPDATE_PATH_ALIAS_DEPARTMENT_SUFFIX');
+    $result = $pdo->exec(file_get_contents($module_path . '/inc/update_path_alias_department_suffix.sproc'));
+
+    if ($result === FALSE) {
+      $this->logger->warning("Unable to add stored procedure to database");
+    }
+    else {
+      $this->logger->notice("Stored procedure added database");
+    }
+  }
+
+  /**
+   *  Removes entries from the migration logging tables (dept_migrate_).
+   *
+   * @param string $table
+   *   Table name to purge.
+   *
+   * @command dept:purge-migration-logs
+   * @aliases purge-mig-logs
+   */
+  public function purgeMigrationLogging(string $table) {
+
+    if (empty($table) || !in_array($table, [
+        'dept_migrate_audit',
+        'dept_migrate_invalid_links',
+        'dept_redirects_results'
+      ])) {
+      $this->logger->warning('Invalid table name');
+      return;
+    }
+
+    $this->logger->notice('Purging ' . $table . ' table');
+    $this->dbConn->truncate($table)->execute();
   }
 
 }

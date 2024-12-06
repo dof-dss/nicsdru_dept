@@ -12,10 +12,16 @@ type: 'php:8.3'
 variables:
   php:
     memory_limit: "256M"
+    opcache.interned_strings_buffer: "32"
+    opcache.max_accelerated_files: "10000"
+    opcache.memory_consumption: "256"
+    opcache.enable_file_override: "1"
+    zend.detect_unicode: "Off"
     xdebug.mode: "debug"
     display_startup_errors: "off"
     date.timezone: "Europe/Dublin"
     realpath_cache_ttl: 3600
+    realpath_cache_size: 512k
 dependencies:
   php:
     composer/composer: '^2'
@@ -211,9 +217,9 @@ crons:
   drupal:
     spec: '*/15 * * * *'
     cmd: 'vendor/bin/drush cron'
-#  migrate:
-#    spec: '30 2 * * *'
-#    cmd: 'migrate-scripts/migrate.sh 2>&1 | tee /app/imports/last-migrate-output.txt'
+  migrate:
+    spec: '30 2 * * *'
+    cmd: 'migrate-scripts/migrate.sh 2>&1 | tee /app/imports/last-migrate-output.txt'
   sync_files:
     spec: '0 1 * * *'
     cmd: 'migrate-scripts/sync-private-files.sh $D7_PROJECT_ID $D7_PROJECT_ENV'

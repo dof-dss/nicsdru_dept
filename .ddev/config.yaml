@@ -24,12 +24,15 @@ hooks:
   post-start:
     - composer: install
     - exec: ".ddev/homeadditions/appserver_build.sh"
+    - exec: perl -pi -e 's/memory_limit.*$/memory_limit = -1/' /etc/php/${DDEV_PHP_VERSION}/cli/conf.d/*.ini
   post-import-db:
     # Use --skip-hooks flag to skip these commands, eg: when importing the migration db for the first time.
     # Ensure the local config split profile is detected and active.
     - exec: "drush cr"
     # Import any local config split profile overrides.
     - exec: "drush cim -y"
+    # Add db sprocs after import.
+    - exec: "drush create-sprocs"
 name: dept
 nodejs_version: 20
 php_version: "8.3"

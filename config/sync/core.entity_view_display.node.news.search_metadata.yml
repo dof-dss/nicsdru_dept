@@ -39,7 +39,7 @@ content:
     settings:
       link: false
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
   field_published_date:
     type: datetime_default
@@ -48,14 +48,38 @@ content:
       timezone_override: ''
       format_type: medium_date
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
   field_summary:
     type: smart_trim
     label: hidden
     settings:
-      trim_length: 45
-      trim_type: words
+      trim_length: 120
+      trim_type: chars
+      trim_suffix: ...
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_teaser:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 120
+      trim_type: chars
       trim_suffix: ...
       wrap_output: false
       wrap_class: trimmed
@@ -86,7 +110,6 @@ hidden:
   field_notes_to_editors: true
   field_photo: true
   field_site_topics: true
-  field_teaser: true
   field_video: true
   groups: true
   groups_type_department_site: true

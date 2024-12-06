@@ -1,0 +1,21 @@
+# Departmental migration configuration.
+#
+# Usage: ddev pull migrate
+# This will import a local Departmental Drupal 7 project database into the migration database.
+#
+
+db_pull_command:
+  command: |
+    # set -x                                      # You can enable bash debugging output by uncommenting.
+    set -eu -o pipefail
+    ddev export-db dept-internet --file .ddev/.downloads/migration.sql.gz
+    gzip -dc .ddev/.downloads/migration.sql.gz | ddev import-db --database=drupal7 --skip-hooks
+  service: host
+
+files_pull_command:
+  command: |
+    echo "Files will not be pulled due to filesize."
+
+files_import_command:
+  command: |
+    echo "Files will not be imported due to filesize."
