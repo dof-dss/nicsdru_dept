@@ -21,6 +21,7 @@ dependencies:
     - node.type.publication
   module:
     - datetime
+    - dept_topics
     - layout_builder
     - link
     - smart_trim
@@ -91,10 +92,9 @@ content:
     weight: 1
     region: content
   field_site_topics:
-    type: entity_reference_label
+    type: dept_topics_topic_tags
     label: inline
-    settings:
-      link: true
+    settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
