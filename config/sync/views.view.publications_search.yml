@@ -350,7 +350,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: search_api_none
+        type: search_api_tag
         options: {  }
       empty: {  }
       sorts:
@@ -2103,15 +2103,19 @@ display:
         publications_search: publications_search
         default: '0'
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
+        - url.query_args
         - url.site
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:facets.facet.feed_publication_topics'
+        - 'config:facets.facet.feed_publication_type'
+        - 'config:facets.facet.feed_published_date'
         - 'config:field.storage.node.field_domain_source'
         - 'config:field.storage.node.field_publication_type'
         - 'config:field.storage.node.field_published_date'
@@ -2488,7 +2492,7 @@ display:
       display_extenders: {  }
       path: publications
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -2499,6 +2503,9 @@ display:
         - url.site
         - 'user.node_grants:view'
       tags:
+        - 'config:facets.facet.publication_date'
+        - 'config:facets.facet.publication_topics'
+        - 'config:facets.facet.publication_type'
         - 'config:field.storage.node.field_publication_type'
         - 'config:field.storage.node.field_published_date'
         - 'config:field.storage.node.field_summary'
