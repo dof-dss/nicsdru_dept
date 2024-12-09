@@ -32,6 +32,7 @@ function dept_postprocess_form_node_form_alter(&$form, FormStateInterface $form_
   }
 
   $form_object = $form_state->getFormObject();
+  // @phpstan-ignore-next-line
   $bundle = $form_object->getEntity()->bundle();
   $dept_manager = \Drupal::service('department.manager');
   $current_dept = $dept_manager->getCurrentDepartment();
