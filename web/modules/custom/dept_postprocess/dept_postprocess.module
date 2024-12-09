@@ -30,4 +30,16 @@ function dept_postprocess_form_node_form_alter(&$form, FormStateInterface $form_
       ];
     }
   }
+
+  $form_object = $form_state->getFormObject();
+  // @phpstan-ignore-next-line
+  $bundle = $form_object->getEntity()->bundle();
+  $dept_manager = \Drupal::service('department.manager');
+  $current_dept = $dept_manager->getCurrentDepartment();
+
+  // Checks the Domain Path by default when logged in with Domain Path
+  // permissions on a node form.
+  if ($bundle === 'topic' || $bundle === 'subtopic') {
+    $form['domain_path'][$current_dept->id()]['pathauto']['#default_value'] = 1;
+  }
 }

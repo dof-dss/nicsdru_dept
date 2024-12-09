@@ -202,10 +202,11 @@ function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
  */
 function dept_topics_form_node_form_alter(&$form, $form_state) {
   $form_object = $form_state->getFormObject();
+  $bundle = $form_object->getEntity()->bundle();
   $topic_id = \Drupal::request()->query->get('topic');
 
   // Set the Site Topic to 'Historic environment' for Heritage sites.
-  if ($form_object->getEntity()->bundle() === 'heritage_site') {
+  if ($bundle === 'heritage_site') {
     // Select the site topic passed by the querystring parameter (coming from the moderation sidebar).
     if (array_key_exists('field_site_topics', $form)) {
       $form['field_site_topics']['widget']['#default_value'] = [HISTORIC_ENVIRONMENT_NID];
@@ -219,10 +220,12 @@ function dept_topics_form_node_form_alter(&$form, $form_state) {
     }
   }
 
-  $bundle = $form_object->getEntity()->bundle();
-
   if (\Drupal::service('topic.manager')->isValidTopicChild($bundle)) {
     $form['actions']['submit']['#submit'][] = 'dept_topics_process_topic_child_contents';
+  }
+
+  if ($bundle === 'topic' || $bundle === 'subtopic') {
+    $form['actions']['submit']['#submit'][] = 'dept_topics_enable_domain_path';
   }
 }
 
@@ -298,6 +301,16 @@ function dept_topics_process_topic_child_contents($form, FormStateInterface $for
 
   // Update topic entries from Node form or Moderation sidebar.
   \Drupal::service('topic.manager')->updateChildDisplayOnTopics($entity);
+}
+
+/**
+ * Submit callback for automatic enabling of Domain Path.
+ */
+function dept_topics_enable_domain_path($form, FormStateInterface $form_state) {
+  $dept = $form_state->getValue(['field_domain_access', '0', 'target_id']);
+  if (!empty($dept)) {
+    $form_state->setValue(['domain_path', $dept, 'pathauto'], 1);
+  }
 }
 
 /**
