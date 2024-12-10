@@ -11,6 +11,9 @@ report-only:
         - 'https://www.google-analytics.com'
         - 'https://*.newrelic.com'
         - 'https://*.nr-data.net'
+        - 'https://*.google-analytics.com'
+        - 'https://*.analytics.google.com'
+        - 'https://*.googletagmanager.com'
     font-src:
       base: self
       sources:
@@ -34,6 +37,8 @@ report-only:
         - 'https://www.gstatic.com'
         - 'https://maps.gstatic.com'
         - 'https://maps.googleapis.com'
+        - 'https://*.google-analytics.com'
+        - 'https://*.googletagmanager.com'
         - 'data:'
     manifest-src:
       base: self
@@ -44,6 +49,7 @@ report-only:
         - 'https://www.google-analytics.com'
         - 'https://*.newrelic.com'
         - 'https://*.nr-data.net'
+        - 'https://*.googletagmanager.com'
     script-src-attr:
       base: self
     script-src-elem:
