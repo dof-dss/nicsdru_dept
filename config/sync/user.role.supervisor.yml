@@ -34,7 +34,6 @@ dependencies:
     - origins_workflow
     - redirect
     - scheduled_transitions
-    - scheduler
     - view_unpublished
 _core:
   default_config_hash: CtfC5LDjVNnbLPFruCI4NqxrtR8ml1OZSXRF58iAYdo
@@ -145,7 +144,6 @@ permissions:
   - 'revert protected_area revisions'
   - 'revert publication revisions'
   - 'revert ual revisions'
-  - 'schedule publishing of nodes'
   - 'update application content on assigned domains'
   - 'update article content on assigned domains'
   - 'update book content on assigned domains'
