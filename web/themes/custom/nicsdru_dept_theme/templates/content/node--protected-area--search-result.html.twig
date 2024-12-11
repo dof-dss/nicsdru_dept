@@ -1,0 +1,14 @@
+{#
+/**
+ * @file
+ * Theme override to display a protected node in search result view mode.
+#}
+<a class="card card--plain no-ext-icon" href="{{ url }}">
+  <h3 class="card__title">{{ label }}</h3>
+  <div class="card__summary">
+    {% for i in content.field_county['#items']|keys %}
+      {{ content.field_county[i] }}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+</a>
+{{ content | without ('field_county') }}

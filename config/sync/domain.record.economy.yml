@@ -4,7 +4,7 @@ status: true
 dependencies: {  }
 id: economy
 domain_id: 13100900
-hostname: www.economy-ni.*.uk-1.platformsh.site
+hostname: 'www.economy-ni.*.uk-1.platformsh.site'
 name: 'Department for the Economy'
 scheme: variable
 weight: -8
