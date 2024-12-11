@@ -1,0 +1,34 @@
+uuid: dff72f80-1139-46d3-b9df-936d9f95ebf3
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.protected_area_county
+  module:
+    - block_visibility_groups
+    - facets
+    - system
+  theme:
+    - nicsdru_dept_theme
+id: nicsdru_dept_theme_protected_area_county
+theme: nicsdru_dept_theme
+region: sidebar_first
+weight: -11
+provider: null
+plugin: 'facet_block:protected_area_county'
+settings:
+  id: 'facet_block:protected_area_county'
+  label: County
+  label_display: visible
+  provider: facets
+  context_mapping: {  }
+  block_id: nicsdru_dept_theme_protected_area_county
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: "/protected-areas\r\n/protected-areas/*"
