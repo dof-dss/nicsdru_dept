@@ -11,14 +11,19 @@ no_patching: false
 storage: folder
 folder: ../config/local
 module:
+  admin_toolbar_tools: 0
+  config_delete: 0
+  config_override_warn: 0
   dept_dev: 0
   devel: 0
+  domain_config_ui: 0
   easy_install: 0
   masquerade: 0
   stage_file_proxy: 0
   syslog: 0
   update: 0
   views_ui: 0
+  webform_ui: 0
 theme: {  }
 complete_list: {  }
 partial_list:
