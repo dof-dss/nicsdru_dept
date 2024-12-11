@@ -19,7 +19,6 @@ dependencies:
     - media
     - moderation_sidebar
     - origins_metatag
-    - scheduler
 id: stats_supervisor
 label: 'Stats supervisor (Add-on role)'
 weight: -1
@@ -49,5 +48,4 @@ permissions:
   - 'view any unpublished secure publication'
   - 'view own unpublished media'
   - 'view own unpublished secure publication'
-  - 'view scheduled content'
   - 'view unpublished domain content'

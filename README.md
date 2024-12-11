@@ -106,6 +106,15 @@ We use DDEV for this, see `.ddev/config.yaml` for the structure and configuratio
 * Hostname pattern: `https://SITE_ID.ddev.site`
 * See `web/sites/default/settings.domain.php` for how the SITE_ID key is extracted.
 
+#### Redis Commander
+
+Redis Commander provides a web based UI to view the Redis keystore which can help with debugging cache issues.
+
+To install, from the root of your project, run: `ddev add-on get ddev/ddev-redis-commander` and `ddev restart`
+The url for the Commander UI will be listed in `ddev describe`
+
+If the Https link doesn't work, change to http and set the port to 1358.
+
 ### Content negotiation
 
 > What content should be displayed for the current detected site?
