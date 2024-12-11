@@ -4,8 +4,11 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
+    - field.storage.node.field_county
     - field.storage.node.field_domain_access
+    - field.storage.node.field_protected_area_feature
     - field.storage.node.field_summary
+    - field.storage.node.field_protected_area_type
     - field.storage.node.field_video
     - search_api.server.default
   module:
@@ -89,6 +92,14 @@ field_settings:
     dependencies:
       module:
         - node
+  field_county:
+    label: County
+    datasource_id: 'entity:node'
+    property_path: field_county
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_county
   field_domain_access:
     label: 'Domain Access'
     datasource_id: 'entity:node'
@@ -97,6 +108,22 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_domain_access
+  field_protected_area_feature:
+    label: 'Feature type'
+    datasource_id: 'entity:node'
+    property_path: field_protected_area_feature
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_protected_area_feature
+  field_protected_area_type:
+    label: 'Protected area type'
+    datasource_id: 'entity:node'
+    property_path: field_protected_area_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_protected_area_type
   field_summary:
     label: 'Introductory paragraph'
     datasource_id: 'entity:node'
