@@ -4,7 +4,7 @@ status: true
 dependencies: {  }
 id: infrastructure
 domain_id: 9344227
-hostname: www.infrastructure-ni.*.uk-1.platformsh.site
+hostname: 'www.infrastructure-ni.*.uk-1.platformsh.site'
 name: 'Department for Infrastructure'
 scheme: variable
 weight: -4
