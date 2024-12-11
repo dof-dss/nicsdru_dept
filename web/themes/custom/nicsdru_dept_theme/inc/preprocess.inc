@@ -88,6 +88,14 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
 
   if (!empty($viewpage)) {
     switch ($viewpage) {
+      case "protected_areas":
+        $variables['main_content_attr']->addClass(LayoutClasses::SIDE_MAIN);
+        $variables['sidebar_first_attr']
+          ->addClass('ga-aside')
+          ->setAttribute('role', 'search')
+          ->setAttribute('aria-roledescription', t('search protected areas'));
+        break;
+
       case "publications_search":
         $variables['main_content_attr']->addClass(LayoutClasses::SIDE_MAIN);
         $variables['sidebar_first_attr']
