@@ -18,7 +18,7 @@ dependencies:
     - node.type.protected_area
   module:
     - layout_builder
-    - smart_trim
+    - options
     - user
 third_party_settings:
   layout_builder:
@@ -29,31 +29,17 @@ targetEntityType: node
 bundle: protected_area
 mode: search_result
 content:
-  body:
-    type: smart_trim
-    label: hidden
-    settings:
-      trim_length: 35
-      trim_type: words
-      trim_suffix: ...
-      wrap_output: false
-      wrap_class: trimmed
-      summary_handler: ignore
-      trim_options:
-        text: true
-        trim_zero: false
-        replace_tokens: false
-      more_link: false
-      more_class: more-link
-      more_text: More
-      more_aria_label: 'Read more about [node:title]'
+  field_county:
+    type: list_default
+    label: visually_hidden
+    settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
 hidden:
+  body: true
   content_moderation_control: true
   field_council: true
-  field_county: true
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
