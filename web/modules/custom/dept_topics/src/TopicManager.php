@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_topics;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
@@ -135,7 +136,7 @@ final class TopicManager {
    */
   public function getTopicsForDepartment(string $department_id) {
     // TODO: replace with injected property.
-    $dept_topics = \Drupal::cache()->get('dept_topics:' . $department_id);
+    $dept_topics = \Drupal::cache()->get('dept_topics_' . $department_id);
 
     if (!empty($dept_topics)) {
       return $dept_topics->data;
@@ -153,7 +154,7 @@ final class TopicManager {
       }
 
       // TODO: replace with injected property.
-      \Drupal::cache()->set('dept_topics:' . $department_id, $this->deptTopics);
+      \Drupal::cache()->set('dept_topics_' . $department_id, $this->deptTopics, Cache::PERMANENT, [$department_id . '_topics']);
 
       return $this->deptTopics;
     }
