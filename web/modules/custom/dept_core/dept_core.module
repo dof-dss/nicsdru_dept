@@ -7,6 +7,7 @@
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -67,6 +68,13 @@ function dept_core_user_presave(EntityInterface $entity) {
  * if the entity does not already have values selected for this.
  */
 function dept_core_set_domain_defaults(EntityInterface &$entity) {
+  // ContentEntityInterface checked here as get/set calls otherwise
+  // potentially polymorphic and undependable as EntityInterface itself
+  // doesn't provide those specific methods.
+  if ($entity instanceof ContentEntityInterface === FALSE) {
+    return;
+  }
+
   $domain_access = $entity->get('field_domain_access')->getValue();
   $domain_source = $entity->get('field_domain_source')->getValue();
   $current_domain = \Drupal::service('department.manager')->getCurrentDepartment();
