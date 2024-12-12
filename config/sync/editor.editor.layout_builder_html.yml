@@ -161,6 +161,12 @@ settings:
         -
           label: 'Big green button'
           element: '<a class="call-to-action">'
+        -
+          label: 'Split bulleted list'
+          element: '<ul class="split-list">'
+        -
+          label: 'Split numbered list'
+          element: '<ol class="split-list">'
     linkit_extension:
       linkit_enabled: true
       linkit_profile: default
