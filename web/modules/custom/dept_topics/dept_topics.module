@@ -318,6 +318,9 @@ function dept_topics_enable_domain_path($form, FormStateInterface $form_state) {
  */
 function dept_topics_node_presave(EntityInterface $node) {
   if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
+
+    dept_topics_clear_topic_tree_cache($node);
+
     if ($node->isNew()) {
       // Ignore new as we don't have a node ID for the topic.
       return;
@@ -375,7 +378,6 @@ function dept_topics_node_presave(EntityInterface $node) {
 
     // Clear the cache of the child content nodes (for cases when the thin banner etc. is updated).
     dept_topics_clear_child_caches($node);
-    dept_topics_clear_topic_tree_cache($node);
   }
 }
 
@@ -397,6 +399,7 @@ function dept_topics_node_insert(NodeInterface $node) {
 
     // Clear the cache of the child content nodes (for cases when the thin banner etc. is added).
     dept_topics_clear_child_caches($node);
+    dept_topics_clear_topic_tree_cache($node);
   }
 }
 
@@ -431,14 +434,14 @@ function dept_topics_clear_child_caches($node) {
  * whenever a topic or subtopic node is changed, removed or created.
  */
 function dept_topics_clear_topic_tree_cache(NodeInterface $node) {
-  if ($node->bundle() != 'topic' || $node->bundle() != 'subtopic') {
+  if (!in_array($node->bundle(), ['topic', 'subtopic'])) {
     return;
   }
 
   // Clear topic manager stored cache entries for the topic hierarchy.
   $domain_source = $node->get('field_domain_source')->getValue();
   $dept_id = $domain_source[0]['target_id'];
-  Cache::invalidateTags(['dept_topics:' . $dept_id]);
+  Cache::invalidateTags([$dept_id . '_topics']);
 }
 
 /**
