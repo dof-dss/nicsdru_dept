@@ -49,16 +49,33 @@ function dept_core_entity_access(EntityInterface $entity, $operation, AccountInt
  */
 function dept_core_media_presave(EntityInterface $entity) {
   if ($entity instanceof MediaInterface) {
-    $domain_access = $entity->get('field_domain_access')->getValue();
-    $domain_source = $entity->get('field_domain_source')->getValue();
-    $current_domain = \Drupal::service('department.manager')->getCurrentDepartment();
+    dept_core_set_domain_defaults($entity);
+  }
+}
 
-    if ($current_domain instanceof Department
-      && (empty($domain_access) && empty($domain_source))) {
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function dept_core_user_presave(EntityInterface $entity) {
+  if ($entity instanceof AccountInterface) {
+    dept_core_set_domain_defaults($entity);
+  }
+}
 
-      $entity->set('field_domain_source', ['target_id' => $current_domain->id()]);
-      $entity->set('field_domain_access', ['target_id' => $current_domain->id()]);
-    }
+/**
+ * Function to set default values based on the current department
+ * if the entity does not already have values selected for this.
+ */
+function dept_core_set_domain_defaults(EntityInterface &$entity) {
+  $domain_access = $entity->get('field_domain_access')->getValue();
+  $domain_source = $entity->get('field_domain_source')->getValue();
+  $current_domain = \Drupal::service('department.manager')->getCurrentDepartment();
+
+  if ($current_domain instanceof Department
+    && (empty($domain_access) && empty($domain_source))) {
+
+    $entity->set('field_domain_source', ['target_id' => $current_domain->id()]);
+    $entity->set('field_domain_access', ['target_id' => $current_domain->id()]);
   }
 }
 
