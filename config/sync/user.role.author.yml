@@ -28,7 +28,6 @@ dependencies:
     - media
     - node
     - scheduled_transitions
-    - scheduler
     - view_unpublished
 _core:
   default_config_hash: 3Ozx7iL-HRO465AnGS4QvafYPacfOKCsg_3eLgClUAg
@@ -118,7 +117,6 @@ permissions:
   - 'revert protected_area revisions'
   - 'revert publication revisions'
   - 'revert ual revisions'
-  - 'schedule publishing of nodes'
   - 'update application content on assigned domains'
   - 'update article content on assigned domains'
   - 'update audio media content on assigned domains'

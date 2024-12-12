@@ -16,7 +16,6 @@ dependencies:
     - taxonomy
     - node
     - user
-    - scheduler
     - search_api
     - flag_search_api
 third_party_settings:
@@ -196,14 +195,6 @@ field_settings:
       module:
         - node
         - user
-  publish_on:
-    label: 'Publish on'
-    datasource_id: 'entity:node'
-    property_path: publish_on
-    type: date
-    dependencies:
-      module:
-        - scheduler
   site_topics_title:
     label: 'Site topics » Content » Title'
     datasource_id: 'entity:node'
