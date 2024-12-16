@@ -175,6 +175,63 @@ function dept_core_preprocess_menu(&$variables) {
  * preprocess variables for use in templates.
  */
 function dept_core_append_dept_info_for_templates(array &$variables) {
+  $host = \Drupal::request()->getHost();
+
+  switch ($host) {
+    case 'www.northernireland.gov.uk':
+      $variables['department']['id'] = 'nigov';
+      $variables['department']['name'] = 'The Northern Ireland Executive';
+      return;
+
+    case 'www.executiveoffice-ni.gov.uk':
+      $variables['department']['id'] = 'executiveoffice';
+      $variables['department']['name'] = 'The Executive Office';
+      return;
+
+    case 'www.daera-ni.gov.uk':
+      $variables['department']['id'] = 'daera';
+      $variables['department']['name'] = 'Department of Agriculture, Environment and Rural Affairs';
+      return;
+
+    case 'www.communities-ni.gov.uk':
+      $variables['department']['id'] = 'communities';
+      $variables['department']['name'] = '	Department for Communities';
+      return;
+
+    case 'www.education-ni.gov.uk':
+      $variables['department']['id'] = 'education';
+      $variables['department']['name'] = 'Department for Education';
+      return;
+
+    case 'www.economy-ni.gov.uk':
+      $variables['department']['id'] = 'economy';
+      $variables['department']['name'] = 'Department for the Economy';
+      return;
+
+    case 'www.finance-ni.gov.uk':
+      $variables['department']['id'] = 'finance';
+      $variables['department']['name'] = 'Department of Finance';
+      return;
+
+    case 'www.infrastructure-ni.gov.uk':
+      $variables['department']['id'] = 'infrastructure';
+      $variables['department']['name'] = 'Department for Infrastructure';
+      return;
+
+    case 'www.health-ni.gov.uk':
+      $variables['department']['id'] = 'health';
+      $variables['department']['name'] = 'Department for Health';
+      return;
+
+    case 'www.justice-ni.gov.uk':
+      $variables['department']['id'] = 'justice';
+      $variables['department']['name'] = 'Department of Justice';
+      return;
+
+    default:
+      break;
+  }
+
   $dept_manager = \Drupal::service('department.manager');
   /** @var \Drupal\dept_core\Entity\Department $dept */
   $dept = $dept_manager->getCurrentDepartment();
