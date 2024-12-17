@@ -10,10 +10,11 @@ weight: 0
 module: scheduled_transitions
 callback: scheduled_transitions_cron
 scheduler:
-  id: simple
+  id: crontab
   configuration:
     rules:
-      - '*/5+@ * * * *'
+      - '*/5 * * * *'
+    catch_up: 0
 launcher:
   id: serial
   configuration:
