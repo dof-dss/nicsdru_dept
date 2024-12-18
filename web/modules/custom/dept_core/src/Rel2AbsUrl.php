@@ -84,6 +84,10 @@ class Rel2AbsUrl {
         // @phpstan-ignore-next-line
         $domain = $this->entityTypeManager->getStorage('domain')->load(array_key_first($domain_id));
         // @phpstan-ignore-next-line
+        if (str_starts_with($url, '/')) {
+          $url = ltrim($url, '/');
+        }
+
         return $domain->getPath() . $url;
       }
 
