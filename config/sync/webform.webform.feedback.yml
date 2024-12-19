@@ -15,16 +15,7 @@ categories: {  }
 elements: |-
   introduction:
     '#type': processed_text
-    '#text': |
-      <div class="page-summary">
-      <p>You can use this form to report errors, broken links or technical problems, or to make a comment about the website. We will give careful consideration to all your comments.</p>
-      </div>
-
-      <p>Feedback received is monitored during normal business hours Monday - Friday. Where applicable, the Department will respond to your enquiry as soon as possible.</p>
-
-      <p>Before you complete the feedback form, please read our <a href="/node/6918">privacy page</a> which explains the Department's privacy policy and how it will use and protect any information about you that you give when you visit this website.</p>
-
-      <p class="info-notice">Don't include any personal or financial information in your feedback, for example your National Insurance&nbsp;or credit card numbers.</p>
+    '#text': '<div class="page-summary"><p>You can use this form to report errors, broken links or technical problems, or to make a comment about the website. We will give careful consideration to all your comments.</p></div><p>Feedback received is monitored during normal business hours Monday - Friday. Where applicable, the Department will respond to your enquiry as soon as possible.</p><p>Before you complete the feedback form, please read our <a href="/your-privacy">privacy page</a> which explains the Department''s privacy policy and how it will use and protect any information about you that you give when you visit this website.</p><p class="info-notice">Don''t include any personal or financial information in your feedback, for example your National Insurance&nbsp;or credit card numbers.</p>'
     '#format': full_html
   your_details:
     '#type': fieldset
@@ -137,6 +128,8 @@ settings:
   wizard_toggle: false
   wizard_toggle_show_label: ''
   wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
   preview: 0
   preview_label: ''
   preview_title: ''
@@ -177,7 +170,7 @@ settings:
   entity_limit_user_interval: null
   purge: all
   purge_days: 1
-  results_disabled: false
+  results_disabled: true
   results_disabled_ignore: false
   results_customize: false
   token_view: false
