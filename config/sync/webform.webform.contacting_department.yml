@@ -1,80 +1,46 @@
-uuid: 90dfd77c-0562-46a9-8370-e5e876e04fa6
+uuid: 53ecb681-bf6e-4da4-a138-8ae1ee6d42ec
 langcode: en
-status: closed
+status: open
 dependencies: {  }
 weight: 0
 open: null
 close: null
-uid: 1319
+uid: 1308
 template: false
 archive: false
-id: truth_recovery_design_panel
-title: 'Truth Recovery Design Panel'
+id: contacting_department
+title: 'Contacting the Department'
 description: ''
 categories: {  }
 elements: |-
   introduction:
     '#type': processed_text
-    '#text': |
-      <p>The recommendations of the report are currently being considered by the Executive and it is hoped that an announcement on next steps will be made shortly. &nbsp;<br />
-      &nbsp;<br />
-      In the meantime, should you wish to be contacted about the Truth Recovery Design Panel’s work, the report or indeed any issue related to the Executive’s Mother and Baby Institution and Magdalene Laundries activities, please provide your details in the following form and one of our team will get back to you with further information once an announcement has been made.<br />
-      &nbsp;<br />
-      We appreciate that you may want to remain anonymous and therefore do not have to provide your full name should you not wish to do so.</p>
-    '#format': basic_html
-  contacted_by_telephone_or_email:
-    '#type': fieldset
-    '#title': 'Do you wish to be contacted by telephone or by email?'
-    choose_one_of_the_following_options:
-      '#type': radios
-      '#title': phone_or_email
-      '#options':
-        telephone: Telephone
-        email: Email
-      '#required': true
-  email_description:
-    '#type': processed_text
-    '#states':
-      visible:
-        ':input[name="choose_one_of_the_following_options"]':
-          value: email
-    '#text': |
-      <p>If you can’t use a phone due to a language, speech or hearing difficulty, complete the sections below.</p>
-    '#format': basic_html
-  phone_description:
-    '#type': processed_text
-    '#states':
-      visible:
-        ':input[name="choose_one_of_the_following_options"]':
-          value: telephone
-    '#text': |
-      <p>Enter your details below and an advisor will call you back.</p>
-    '#format': basic_html
+    '#text': '<p>You can use this form to contact the Department and we will give careful consideration of any issues raised.</p><p>Please note that any communications received via this form will be monitored during normal business hours Monday - Friday. Where applicable, the Department will respond to your enquiry as soon as possible.</p><p class="info-notice">Please don''t include any personal or financial information, for example your National Insurance&nbsp;or credit card numbers.</p><p>Before you complete the feedback form, please read our&nbsp;<a href="/your-privacy" data-cke-saved-href="https://www.justice-ni.gov.uk/publications/doj-privacy-notice">privacy page</a>&nbsp;which explains the Department''s privacy policy and how it will use and protect any information about you that you give when you visit this website.</p>'
+    '#format': full_html
   your_details:
     '#type': fieldset
     '#title': 'Your details'
-    '#states':
-      visible:
-        ':input[name="choose_one_of_the_following_options"]':
-          checked: true
-    your_name:
+    name:
       '#type': textfield
-      '#title': 'Your name'
+      '#title': Name
       '#required': true
-    phone_number:
-      '#type': tel
-      '#title': 'Phone number'
-      '#states':
-        visible:
-          ':input[name="choose_one_of_the_following_options"]':
-            value: telephone
     email_address:
       '#type': email
       '#title': 'Email address'
-      '#states':
-        visible:
-          ':input[name="choose_one_of_the_following_options"]':
-            value: email
+      '#required': true
+  your_feedback:
+    '#type': fieldset
+    '#title': 'Your comments'
+    comments:
+      '#type': textarea
+      '#title': Comments
+      '#description_display': before
+      '#maxlength': 3000
+      '#autocomplete': 'off'
+      '#required': true
+      '#counter_type': character
+      '#counter_minimum': 1
+      '#counter_maximum': 3000
 css: ''
 javascript: ''
 settings:
@@ -87,7 +53,7 @@ settings:
   page_submit_path: ''
   page_confirm_path: ''
   page_theme_name: ''
-  form_title: source_entity_webform
+  form_title: both
   form_submit_once: false
   form_open_message: ''
   form_close_message: ''
@@ -182,7 +148,7 @@ settings:
   confirmation_type: inline
   confirmation_url: ''
   confirmation_title: ''
-  confirmation_message: "<h2>Thank you for your contact request</h2>\r\n\r\n<p>The&nbsp;Truth Recovery Design Panel will be in touch with you shortly.</p>"
+  confirmation_message: 'Thank you for your comments.'
   confirmation_attributes: {  }
   confirmation_back: true
   confirmation_back_label: ''
@@ -204,7 +170,7 @@ settings:
   entity_limit_user_interval: null
   purge: all
   purge_days: 1
-  results_disabled: false
+  results_disabled: true
   results_disabled_ignore: false
   results_customize: false
   token_view: false
@@ -258,5 +224,43 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
-handlers: {  }
+handlers:
+  email:
+    id: email
+    handler_id: email
+    label: Email
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      to_mail: _default
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: _default
+      from_options: {  }
+      from_name: '[site:name] Web Management'
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: 'Form submission from: [site:name] Comments'
+      body: _default
+      excluded_elements:
+        introduction: introduction
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
 variants: {  }
