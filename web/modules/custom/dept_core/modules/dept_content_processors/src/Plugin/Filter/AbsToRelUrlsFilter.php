@@ -38,6 +38,13 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
   protected string $departmentId;
 
   /**
+   * The department hostname/url.
+   *
+   * @var string
+   */
+  protected string $departmentHostname;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -53,6 +60,7 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
     $department = $instance->departmentManager->getCurrentDepartment();
     if ($department instanceof Department) {
       $instance->departmentId = $department->id();
+      $instance->departmentHostname = $department->url();
     }
 
     return $instance;
@@ -164,7 +172,7 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
    */
   protected function hostnameMatchesKnownDepartment(string $url): bool {
     // Match the first part of the domain to the department.
-    return (bool) preg_match('/https?:\/\/(www.)?' . $this->getDepartmentId() . '/', $url);
+    return (bool) preg_match('#' . $this->departmentHostname . '#', $url);
   }
 
 }
