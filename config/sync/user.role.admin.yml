@@ -50,6 +50,7 @@ dependencies:
     - system
     - taxonomy
     - toolbar
+    - users_export
     - view_unpublished
 _core:
   default_config_hash: JbObrzDpJi9e8_S9HPMLHPCIT2f6VlpIBmOlrXNH0P4
@@ -245,6 +246,7 @@ permissions:
   - 'use nics_editorial_workflow transition restore_to_draft'
   - 'use nics_editorial_workflow transition submit_for_review'
   - 'use topic tree widget'
+  - 'users export access export page'
   - 'view all media revisions'
   - 'view all revisions'
   - 'view all scheduled transitions'
