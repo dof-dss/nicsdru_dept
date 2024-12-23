@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.body
     - field.storage.node.field_consultation_dates
     - field.storage.node.field_domain_access
+    - field.storage.node.field_domain_source
     - field.storage.node.field_global_topics
     - field.storage.node.field_published_date
     - field.storage.node.field_site_topics
@@ -88,6 +89,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_domain_access
+  field_domain_source:
+    label: 'Domain Source'
+    datasource_id: 'entity:node'
+    property_path: field_domain_source
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_domain_source
   field_global_topics:
     label: 'Global topics'
     datasource_id: 'entity:node'
@@ -173,6 +182,7 @@ processor_settings:
   content_access:
     weights:
       preprocess_query: -30
+  custom_value: {  }
   entity_status: {  }
   entity_type: {  }
   html_filter:
