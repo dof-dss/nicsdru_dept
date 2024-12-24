@@ -106,6 +106,7 @@ third_party_settings:
       - 'Content fields'
       - 'Custom block types'
       - 'Custom blocks'
+      - Departmental
       - 'Departmental sites'
       - 'Departmental sites: search'
       - Devel
@@ -115,7 +116,6 @@ third_party_settings:
       - Facets
       - 'Facets summary (Experimental)'
       - Forms
-      - Geolocation
       - Help
       - 'Inline blocks'
       - 'Lists (Views)'
@@ -146,6 +146,7 @@ third_party_settings:
           - card_contact
           - card_standard
           - card_wide
+          - image_and_caption
           - plain_cards
           - text
           - video
@@ -157,11 +158,13 @@ third_party_settings:
           - 'inline_block:card_contact'
           - 'inline_block:card_standard'
           - 'inline_block:card_wide'
+          - 'inline_block:image_and_caption'
           - 'inline_block:plain_cards'
           - 'inline_block:text'
           - 'inline_block:video'
           - 'inline_block:video_and_caption'
       restricted_categories:
+        - Departmental
         - 'Departmental sites'
         - 'Departmental sites: search'
         - Devel
@@ -171,7 +174,6 @@ third_party_settings:
         - Facets
         - 'Facets summary (Experimental)'
         - Forms
-        - Geolocation
         - Help
         - 'Lists (Views)'
         - Menus
@@ -200,6 +202,7 @@ third_party_settings:
               - accordion_menu
               - banner_deep
               - card_contact
+              - image_and_caption
               - plain_cards
               - text
               - video_and_caption
@@ -208,6 +211,7 @@ third_party_settings:
               - 'inline_block:accordion_menu'
               - 'inline_block:banner_deep'
               - 'inline_block:card_contact'
+              - 'inline_block:image_and_caption'
               - 'inline_block:plain_cards'
               - 'inline_block:text'
               - 'inline_block:video_and_caption'
@@ -238,6 +242,7 @@ third_party_settings:
       restricted_categories:
         layout_onecol:
           all_regions:
+            - Departmental
             - 'Departmental sites'
             - 'Departmental sites: search'
             - Devel
@@ -247,7 +252,6 @@ third_party_settings:
             - Facets
             - 'Facets summary (Experimental)'
             - Forms
-            - Geolocation
             - Help
             - 'Lists (Views)'
             - Menus
