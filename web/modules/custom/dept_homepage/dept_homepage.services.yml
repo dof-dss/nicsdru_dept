@@ -1,0 +1,5 @@
+services:
+  dept_homepage.event_subscriber:
+    class: Drupal\dept_homepage\EventSubscriber\NodeStatusSubscriber
+    tags:
+      - { name: event_subscriber }
