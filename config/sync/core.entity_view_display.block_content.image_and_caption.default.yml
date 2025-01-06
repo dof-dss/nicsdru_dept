@@ -1,0 +1,42 @@
+uuid: e1969e11-977b-4fe4-a2fb-256b6ee71d42
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.image_and_caption
+    - field.field.block_content.image_and_caption.field_image
+    - field.field.block_content.image_and_caption.field_image_caption
+    - field.field.block_content.image_and_caption.field_video_caption_display
+  module:
+    - options
+id: block_content.image_and_caption.default
+targetEntityType: block_content
+bundle: image_and_caption
+mode: default
+content:
+  field_image:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_image_caption:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_video_caption_display:
+    type: list_key
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  langcode: true
+  search_api_excerpt: true

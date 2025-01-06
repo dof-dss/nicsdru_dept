@@ -1,0 +1,54 @@
+uuid: 0d0c3278-6dac-45f7-8b82-318997a0ebfa
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.image_and_caption
+    - field.field.block_content.image_and_caption.field_image
+    - field.field.block_content.image_and_caption.field_image_caption
+    - field.field.block_content.image_and_caption.field_video_caption_display
+  module:
+    - media_library
+    - media_library_edit
+id: block_content.image_and_caption.default
+targetEntityType: block_content
+bundle: image_and_caption
+mode: default
+content:
+  field_image:
+    type: media_library_widget
+    weight: 0
+    region: content
+    settings:
+      media_types: {  }
+    third_party_settings:
+      media_library_edit:
+        show_edit: '0'
+        edit_form_mode: default
+  field_image_caption:
+    type: string_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 3
+      placeholder: ''
+    third_party_settings:
+      maxlength:
+        maxlength_js: null
+        maxlength_js_label: 'Content limited to @limit characters, remaining: <strong>@remaining</strong>'
+        maxlength_js_enforce: false
+  field_video_caption_display:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  langcode:
+    type: language_select
+    weight: 3
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+hidden:
+  info: true
