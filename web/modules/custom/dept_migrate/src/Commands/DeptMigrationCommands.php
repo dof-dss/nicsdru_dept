@@ -11,6 +11,7 @@ use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_migrate\MigrateUtils;
 use Drupal\dept_migrate\MigrateUuidLookupManager;
 use Drupal\node\NodeInterface;
+use Drupal\redirect\Entity\Redirect;
 use Drush\Commands\DrushCommands;
 use Drush\SiteAlias\SiteAliasManagerAwareInterface;
 use Symfony\Component\Console\Helper\Table;
@@ -502,6 +503,54 @@ class DeptMigrationCommands extends DrushCommands implements SiteAliasManagerAwa
 
     $this->logger->notice('Purging ' . $table . ' table');
     $this->dbConn->truncate($table)->execute();
+  }
+
+  /**
+   *  Copy D7 Redirects to D10.
+   *
+   * @command dept:importRedirects
+   * @aliases importRedirects
+   */
+  public function importRedirects() {
+    $lookup_helper = \Drupal::service('dept_migrate.lookup_helper');
+
+    $d7_redirects = $this->d7conn->select('redirect', 'r')
+      ->fields('r', ['rid', 'source', 'redirect'])
+      ->range(0, 20)
+      ->execute()->fetchAll();
+
+    $count = 0;
+
+    foreach ($d7_redirects as $d7_redirect) {
+      $exists = $this->dbConn->select('redirect', 'r')
+        ->fields('r', ['rid', 'redirect_source__path', 'redirect_redirect__uri'])
+        ->condition('redirect_source__path', $d7_redirect->source)
+        ->execute()->fetchField();
+
+      if (!$exists) {
+        if (str_starts_with($d7_redirect->redirect, 'node/')) {
+          $nid = substr($d7_redirect->redirect, 5);
+          $d10_nid = $lookup_helper->source()->id($nid)->id();
+
+          if (empty($d10_nid)) {
+            continue;
+          }
+          $destination = 'internal:/node/' . $d10_nid;
+        }
+        else {
+          $destination = $d7_redirect->redirect;
+        }
+
+        $redirect = Redirect::create();
+        $redirect->setSource($d7_redirect->source);
+        $redirect->setRedirect($destination);
+        $redirect->setStatusCode(301);
+        $redirect->save();
+        $count++;
+      }
+    }
+
+    $this->logger->notice($count . " redirects created.");
   }
 
 }

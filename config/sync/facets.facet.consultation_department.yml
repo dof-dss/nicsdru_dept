@@ -1,4 +1,4 @@
-uuid: 0e43ee32-9f58-4281-8516-6b19ecca0c2b
+uuid: ae94000c-043b-4a19-9eb9-f68db9250b95
 langcode: en
 status: true
 dependencies:
@@ -7,16 +7,16 @@ dependencies:
     - views.view.consultations_search
   module:
     - search_api
-id: consultation_publication_date
-name: 'Publication date'
-weight: -1
+id: consultation_department
+name: Department
+weight: 0
 min_count: 1
 missing: false
 missing_label: others
-url_alias: date
+url_alias: dept
 facet_source_id: 'search_api:views_page__consultations_search__consultations_search'
-field_identifier: field_published_date
-query_operator: and
+field_identifier: field_domain_source
+query_operator: or
 hard_limit: 0
 exclude: false
 use_hierarchy: false
@@ -48,32 +48,17 @@ processor_configs:
     weights:
       sort: 20
     settings:
-      sort: ASC
-  date_facet_drilldown:
-    processor_id: date_facet_drilldown
-    weights:
-      build: 1
-    settings: {  }
-  date_item:
-    processor_id: date_item
-    weights:
-      build: 35
-    settings:
-      date_display: actual_date
-      granularity: 5
-      date_format: ''
-      hierarchy: false
+      sort: DESC
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
       build: 100
     settings: {  }
-  raw_value_widget_order:
-    processor_id: raw_value_widget_order
+  translate_entity:
+    processor_id: translate_entity
     weights:
-      sort: 50
-    settings:
-      sort: DESC
+      build: 5
+    settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
