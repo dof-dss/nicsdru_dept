@@ -1,5 +1,6 @@
 services:
   dept_homepage.event_subscriber:
     class: Drupal\dept_homepage\EventSubscriber\NodeStatusSubscriber
+    arguments: ['@database']
     tags:
       - { name: event_subscriber }
