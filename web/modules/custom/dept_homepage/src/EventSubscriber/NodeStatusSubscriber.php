@@ -13,7 +13,7 @@ use Drupal\scheduled_transitions\Event\ScheduledTransitionsNewRevisionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * @todo Handles node status changes.
+ * Handles node status changes for homepage content.
  */
 final class NodeStatusSubscriber implements EventSubscriberInterface {
 
@@ -43,7 +43,7 @@ final class NodeStatusSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Updates homepage featured content when moderation state is changed via Origins Workflow.
+   * Handles processes when the moderation state is changed via Origins Workflow.
    *
    * @param \Drupal\origins_workflow\Event\ModerationStateChangeEvent $event
    *   The Origins Workflow moderation change event.
@@ -55,7 +55,7 @@ final class NodeStatusSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Updates homepage featured content when moderation state is changed via Scheduled Transitions.
+   * Handles processes when the moderation state is changed via Scheduled Transitions.
    *
    * @param \Drupal\scheduled_transitions\Event\ScheduledTransitionsNewRevisionEvent $event
    *   Scheduled Transition event.
@@ -69,14 +69,21 @@ final class NodeStatusSubscriber implements EventSubscriberInterface {
     }
   }
 
+  /**
+   * Clears the homepage featured cache block for a featured node.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The node currently undergoing a state change.
+   */
   protected function updateDepartmentFeatured(EntityInterface $entity) {
-    // Clear node domain/dept and nigov featured cache.
+    /** @var \Drupal\node\Entity\Node $entity */
     $domain = $entity->get('field_domain_source')->getString();
 
     if (empty($domain)) {
       return;
     }
 
+    // Fetch a list of featured homepage node ID's for the Node (Entity) domain.
     $query = $this->dbConn->select('node__field_featured_content', 'fc');
     $query->join('node__field_domain_source', 'ds', 'fc.entity_id = ds.entity_id');
     $query
@@ -86,6 +93,7 @@ final class NodeStatusSubscriber implements EventSubscriberInterface {
 
     $featured_nids = $query->execute()->fetchCol();
 
+    // If the node (Entity) is a featured item, clear the cache.
     if (in_array($entity->id(), $featured_nids)) {
       Cache::invalidateTags(['homepage_featured:' . $domain]);
     }
