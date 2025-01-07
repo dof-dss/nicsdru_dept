@@ -103,7 +103,7 @@ class HomepageController extends ControllerBase {
         ],
       ],
       '#cache' => [
-        'tags' => ['featured:' . $active_dept->id()],
+        'tags' => ['homepage_featured:' . $active_dept->id()],
       ],
     ];
     $build['featured_news']['title'] = [
