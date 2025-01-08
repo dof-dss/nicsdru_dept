@@ -284,7 +284,11 @@ function dept_node_preprocess_page(&$variables) {
     $uri = $node->get('field_link_url')->getString();
 
     if (!empty($uri)) {
-      $redirect = new RedirectResponse(Url::fromUri($uri)->toString());
+      $redirect = new RedirectResponse(
+        Url::fromUri($uri)->toString(),
+        '301',
+        ['X-Redirect-Initiator' => 'dept_node'],
+      );
       $redirect->send();
     }
   }
