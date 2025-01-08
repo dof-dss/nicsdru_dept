@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.body
     - field.storage.node.field_county
     - field.storage.node.field_domain_access
+    - field.storage.node.field_domain_source
     - field.storage.node.field_protected_area_feature
     - field.storage.node.field_summary
     - field.storage.node.field_protected_area_type
@@ -108,6 +109,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_domain_access
+  field_domain_source:
+    label: 'Domain Source'
+    datasource_id: 'entity:node'
+    property_path: field_domain_source
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_domain_source
   field_protected_area_feature:
     label: 'Feature type'
     datasource_id: 'entity:node'

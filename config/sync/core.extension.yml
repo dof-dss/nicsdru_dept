@@ -40,6 +40,7 @@ module:
   cookie_content_blocker: 0
   cookie_content_blocker_media: 0
   csp: 0
+  csv_serialization: 0
   date_facet_drilldown: 0
   datetime: 0
   datetime_range: 0
@@ -97,6 +98,7 @@ module:
   filter: 0
   flag: 0
   flag_search_api: 0
+  flood_control: 0
   google_map_field: 0
   google_tag: 0
   handy_cache_tags: 0
@@ -163,6 +165,7 @@ module:
   redirect: 0
   redis: 0
   responsive_image: 0
+  rest: 0
   scheduled_transitions: 0
   scheduler: 0
   search_api: 0
@@ -170,6 +173,7 @@ module:
   search_api_block: 0
   search_api_solr: 0
   search_api_spellcheck: 0
+  serialization: 0
   shortcut: 0
   simple_gmap: 0
   simple_sitemap: 0
@@ -190,11 +194,13 @@ module:
   twig_tweak: 0
   ultimate_cron: 0
   user: 0
+  users_export: 0
   view_unpublished: 0
   views_arg_entity_field: 0
   views_conditional: 0
   views_contextual_filters_or: 0
   views_custom_cache_tag: 0
+  views_data_export: 0
   views_tree: 0
   webform: 0
   webform_node: 0

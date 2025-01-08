@@ -102,6 +102,9 @@ class HomepageController extends ControllerBase {
           'section-front--featured',
         ],
       ],
+      '#cache' => [
+        'tags' => ['homepage_featured:' . $active_dept->id()],
+      ],
     ];
     $build['featured_news']['title'] = [
       '#type' => 'html_tag',

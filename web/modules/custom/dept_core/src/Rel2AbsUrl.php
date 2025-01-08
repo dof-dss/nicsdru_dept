@@ -83,6 +83,10 @@ class Rel2AbsUrl {
         /** @var $domain \Drupal\domain\Entity\Domain */
         // @phpstan-ignore-next-line
         $domain = $this->entityTypeManager->getStorage('domain')->load(array_key_first($domain_id));
+        if (str_starts_with($url, '/')) {
+          $url = ltrim($url, '/');
+        }
+
         // @phpstan-ignore-next-line
         return $domain->getPath() . $url;
       }

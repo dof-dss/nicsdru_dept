@@ -144,13 +144,18 @@ function dept_node_preprocess_node(array &$variables) {
   /** @var \Drupal\node\NodeInterface $node */
   $node = &$variables['node'];
   $view_mode = $variables['view_mode'];
-  $routename = \Drupal::routeMatch()->getRouteName();
-  $host = \Drupal::request()->getSchemeAndHttpHost();
 
-  // Transform node URL's from absolute to relative..
+  // Transform node URL's from absolute to relative based on domain source value.
   if ($node instanceof NodeInterface) {
-    if (!empty($variables['url'])) {
-      $variables['url'] = str_starts_with($variables['url'], $host) ? substr($variables['url'], strlen($host)) : $variables['url'];
+    $domain_source_value = $node->get('field_domain_source')->referencedEntities();
+    // Only one value for canonical domain source.
+    $source_domain = (is_array($domain_source_value)) ? $domain_source_value[0] : NULL;
+    if (!empty($source_domain)) {
+      $domain_path = rtrim($source_domain->getPath(), '/');
+
+      if (!empty($variables['url'])) {
+        $variables['url'] = $domain_path . $variables['url'];
+      }
     }
   }
 
@@ -161,11 +166,6 @@ function dept_node_preprocess_node(array &$variables) {
   }
 
   if (str_starts_with($view_mode, 'search_') && $node->bundle() === 'news') {
-    // Add the department metadata on the press-releases listing.
-    if ($routename != 'view.news_search.press_release_search') {
-      return;
-    }
-
     // Rewrite any existing relative URLs to content to their absolute
     // departmental URL paths, using active config split profile values.
     if (!preg_match('|^http|', $variables['url'])) {

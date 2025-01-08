@@ -11,6 +11,7 @@ dependencies:
     - domain_access
     - draggableviews
     - node
+    - users_export
 id: homepage_supervisor
 label: 'Homepage supervisor (Add-on role)'
 weight: -4
@@ -23,4 +24,5 @@ permissions:
   - 'update department'
   - 'update featured_content_list content on assigned domains'
   - 'use nics_editorial_workflow transition quick_publish'
+  - 'users export access export page'
   - 'view featured_content_list revisions'
