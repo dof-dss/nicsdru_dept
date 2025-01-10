@@ -5,10 +5,74 @@
  * Contains dept_homepage.module.
  */
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Implements hook_preprocess_toolbar().
  */
 function dept_homepage_preprocess_toolbar(&$variables) {
   // Attach JS library to toolbar render element.
   $variables['#attached']['library'][] = 'dept_homepage/normalise_base_url';
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function dept_homepage_form_node_form_alter(&$form, FormStateInterface $form_state) {
+  $form['field_featured_content']['#prefix'] = '<div id="featured-fieldset-wrapper">';
+  $form['field_featured_content']['#suffix'] = '</div>';
+
+  $form['new_featured'] = [
+
+    '#type' => 'fieldset',
+    '#title' => t('Add featured content'),
+    '#attributes' => ['class' => ['container-inline']],
+  ];
+
+  $form['new_featured']['featured_item'] = [
+    '#type' => 'entity_autocomplete',
+    '#target_type' => 'node',
+    '#selection_settings' => ['target_bundles' => ['news']],
+    '#validate_reference' => FALSE,
+    '#maxlength' => 1024,
+    '#size' => '84',
+  ];
+
+  $form['new_featured']['add'] = [
+    '#type' => 'submit',
+    '#value' => t('Add'),
+    '#submit' => ['add_featured_item'],
+//    '#ajax' => [
+//      'callback' => 'add_featured_item_callback',
+//      'wrapper' => 'featured-fieldset-wrapper',
+//    ],
+  ];
+}
+
+/**
+ * Submit handler to add a new featured item.
+ */
+function add_featured_item(array $form, FormStateInterface $form_state) {
+  $existing_featured = $form_state->getValue('field_featured_content');
+  $new_featured = $form_state->getValue('featured_item');
+
+  array_unshift($existing_featured, ['target_id' => $new_featured, '_weight' => 0]);
+  array_pop($existing_featured);
+
+  for ($i = 0; $i < count($existing_featured); $i++) {
+    $existing_featured[$i]['_weight'] = $i;
+  }
+  $form_state->setValue('field_featured_content', $existing_featured);
+//  $form_state->setValueForElement($form['field_featured_content'], $existing_featured);
+  $form_state->setRebuild();
+
+}
+
+/**
+ * Callback for add featured ajax submit.
+ */
+function add_featured_item_callback(array &$form, FormStateInterface $form_state) {
+  return $form['field_featured_content'];
 }
