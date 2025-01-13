@@ -320,3 +320,10 @@
     }
   }
 }
+
+.article-content {
+  a strong,
+  strong a {
+    font-weight: normal;
+  }
+}
