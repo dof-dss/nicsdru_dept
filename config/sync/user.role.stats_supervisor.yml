@@ -14,7 +14,6 @@ dependencies:
     - dept_publications
     - domain_access
     - domain_entity
-    - file
     - filter
     - media
     - moderation_sidebar
@@ -24,7 +23,6 @@ label: 'Stats supervisor (Add-on role)'
 weight: -1
 is_admin: null
 permissions:
-  - 'access files overview'
   - 'create secure publication'
   - 'create secure_file media content on assigned domains'
   - 'delete own document media'
