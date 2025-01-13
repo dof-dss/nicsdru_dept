@@ -10,7 +10,6 @@ dependencies:
   module:
     - ckeditor5_allowed_html
     - ckeditor5_premium_features
-    - cookie_content_blocker
     - dept_content_processors
     - editor
     - entity_embed
@@ -31,13 +30,6 @@ filters:
     status: false
     weight: -42
     settings: {  }
-  cookie_content_blocker_filter:
-    id: cookie_content_blocker_filter
-    provider: cookie_content_blocker
-    status: false
-    weight: -40
-    settings:
-      disable_xss: '1'
   dept_abs2rel_url:
     id: dept_abs2rel_url
     provider: dept_content_processors
@@ -69,8 +61,8 @@ filters:
     weight: -49
     settings:
       allowed_html: '<em> <strong> <cite> <blockquote cite> <code> <ul type class> <ol start type class> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <div class> <p translate class> <br> <img src alt height width data-* typeof> <sup> <table class> <caption> <tbody> <thead> <tfoot> <th scope> <td> <tr> <drupal-entity data-entity-type data-entity-uuid data-entity-embed-display data-entity-embed-display-settings data-align data-caption data-embed-button alt title class> <picture data-* alt title class> <source srcset media type> <address> <drupal-media data-entity-type data-entity-uuid data-entity-embed-display data-entity-embed-display-settings data-align data-caption data-embed-button data-view-mode alt title class> <a href hreflang data-entity-substitution data-entity-type data-entity-uuid title class> <span>'
-      filter_html_help: '0'
-      filter_html_nofollow: '0'
+      filter_html_help: false
+      filter_html_nofollow: false
   filter_autop:
     id: filter_autop
     provider: filter
@@ -157,7 +149,7 @@ filters:
     id: origins_media_cookie_content_blocker_embed_filter
     provider: origins_common
     status: false
-    weight: -41
+    weight: 0
     settings:
       replacement_text: 'Click here to view the video content'
   rel_to_abs_url:
