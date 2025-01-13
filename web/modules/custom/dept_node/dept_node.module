@@ -14,6 +14,7 @@ use Drupal\dept_node\FormatHelper;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\views\ViewExecutable;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -275,6 +276,23 @@ function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_
  * Implements hook_preprocess_page().
  */
 function dept_node_preprocess_page(&$variables) {
+
+  // Redirect requests to Link node URL's to the Link's URL field.
+  if (\Drupal::currentUser()->isAnonymous() && !empty($variables['node']) && $variables['node']->bundle() == 'link') {
+    /** @var \Drupal\node\Entity\Node $node */
+    $node = $variables['node'];
+    $uri = $node->get('field_link_url')->getString();
+
+    if (!empty($uri)) {
+      $redirect = new RedirectResponse(
+        Url::fromUri($uri)->toString(),
+        '301',
+        ['X-Redirect-Initiator' => 'dept_node'],
+      );
+      $redirect->send();
+    }
+  }
+
   if (\Drupal::service('router.admin_context')->isAdminRoute()) {
     return;
   }
