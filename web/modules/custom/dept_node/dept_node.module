@@ -285,7 +285,7 @@ function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_
  * and referenced media entities can appear on both the source domain as well
  * as the nigov domain.
  */
-function dept_node_assign_domain_defaults_media(array $form, FormStateInterface $form_state, array $domain_access) {
+function dept_node_assign_domain_defaults_media(array $form, FormStateInterface $form_state, array $node_domain_access_values) {
   // @phpstan-ignore-next-line
   $bundle = $form_state->getFormObject()->getEntity()->bundle();
 
@@ -322,10 +322,22 @@ function dept_node_assign_domain_defaults_media(array $form, FormStateInterface 
       foreach ($field_value['selection'] as $key => $value) {
         $media = Media::load($value['target_id']);
 
-        if ($media instanceof MediaInterface) {
-          $media->set('field_domain_access', $domain_access);
-          $media->save();
+        if ($media instanceof MediaInterface === FALSE) {
+          continue;
         }
+
+        $media_domain_access = $media->get('field_domain_access')->getValue();
+        if (!empty($media_domain_access)) {
+          // Append nigov.
+          $media_domain_access[] = ['target_id' => 'nigov'];
+          $media_domain_access = array_unique($media_domain_access, SORT_REGULAR);
+          $media->set('field_domain_access', $media_domain_access);
+        }
+        else {
+          $media->set('field_domain_access', $node_domain_access_values);
+        }
+
+        $media->save();
       }
     }
   }
