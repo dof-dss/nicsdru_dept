@@ -41,6 +41,7 @@
   upstream: "dept:http"
   cache:
     enabled: false
+    cookies: ['/^SS?ESS/', 'XDEBUG_SESSION']
 #---------------------------------
 "https://www.health-ni.{default}":
   type: upstream
@@ -65,6 +66,7 @@
   upstream: "dept:http"
   cache:
     enabled: false
+    cookies: ['/^SS?ESS/', 'XDEBUG_SESSION']
 
 "https://{all}/":
   type: redirect
