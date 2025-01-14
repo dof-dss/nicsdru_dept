@@ -5,12 +5,16 @@
  * Departmental Node module for Departmental sites.
  */
 
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
 use Drupal\dept_node\Entity\Node;
 use Drupal\dept_node\Form\DeptNodeForm;
 use Drupal\dept_node\FormatHelper;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\media\Entity\Media;
+use Drupal\media\MediaInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\views\ViewExecutable;
@@ -250,11 +254,12 @@ function dept_node_pathauto_alias_alter(&$alias, array &$context) {
  * conditions are met.
  */
 function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_state) {
-
   $domain_access = $form_state->getValue('field_domain_access');
 
   // @phpstan-ignore-next-line
-  if ($form_state->getFormObject()->getEntity()->bundle() === 'news') {
+  $bundle = $form_state->getFormObject()->getEntity()->bundle();
+
+  if ($bundle === 'news') {
     // If News is not a press release, remove any existing 'nigov' entry.
     if ($form_state->getValue('field_news_type')[0]['value'] !== 'pressrelease') {
       $form_state->setValue('field_domain_access', array_filter($domain_access, function ($domain) {
@@ -267,9 +272,75 @@ function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_
   $domain_access[] = ['target_id' => 'nigov'];
 
   // Remove any duplicate domain entries.
-  array_unique($domain_access, SORT_REGULAR);
+  $domain_access = array_unique($domain_access, SORT_REGULAR);
 
   $form_state->setValue('field_domain_access', $domain_access);
+
+  dept_node_assign_domain_defaults_media($form, $form_state, $domain_access);
+}
+
+/**
+ * Internal callback to set matching domain_access values on media entities
+ * referenced from press release news nodes. This ensures both the news node
+ * and referenced media entities can appear on both the source domain as well
+ * as the nigov domain.
+ */
+function dept_node_assign_domain_defaults_media(array $form, FormStateInterface $form_state, array $node_domain_access_values) {
+  // @phpstan-ignore-next-line
+  $bundle = $form_state->getFormObject()->getEntity()->bundle();
+
+  // Replicate the domain access settings on any referenced media entities.
+  $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $bundle);
+
+  // Initialize an array to store media entity reference fields.
+  $media_reference_fields = [];
+
+  // Loop through field definitions to find media entity reference fields.
+  foreach ($field_definitions as $field_name => $field_definition) {
+    if ($field_definition instanceof BaseFieldDefinition) {
+      // Skip base fields (e.g., 'title', 'status').
+      continue;
+    }
+
+    $field_storage = FieldStorageConfig::loadByName('node', $field_name);
+
+    // Check if the field is a reference field and targets media entities.
+    if ($field_storage && $field_storage->getSetting('target_type') === 'media') {
+      $media_reference_fields[] = $field_name;
+    }
+  }
+
+  if (!empty($media_reference_fields)) {
+    foreach ($media_reference_fields as $field_name) {
+      $field_value = $form_state->getValue($field_name);
+
+      if (empty($field_value['selection'])) {
+        continue;
+      }
+
+      // Load the media entity value and set the domain access values for it.
+      foreach ($field_value['selection'] as $key => $value) {
+        $media = Media::load($value['target_id']);
+
+        if ($media instanceof MediaInterface === FALSE) {
+          continue;
+        }
+
+        $media_domain_access = $media->get('field_domain_access')->getValue();
+        if (!empty($media_domain_access)) {
+          // Append nigov.
+          $media_domain_access[] = ['target_id' => 'nigov'];
+          $media_domain_access = array_unique($media_domain_access, SORT_REGULAR);
+          $media->set('field_domain_access', $media_domain_access);
+        }
+        else {
+          $media->set('field_domain_access', $node_domain_access_values);
+        }
+
+        $media->save();
+      }
+    }
+  }
 }
 
 /**
