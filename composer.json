@@ -93,6 +93,7 @@
         "drupal/admin_toolbar": "^3.3",
         "drupal/adminimal_theme": "^1.7",
         "drupal/advban": "^1.6",
+        "drupal/anchor_link": "~3.0",
         "drupal/antibot": "^2.0",
         "drupal/autoban": "^1.10",
         "drupal/block_field": "^1.0@RC",
@@ -210,7 +211,8 @@
         "highcharts/highcharts": "^10",
         "noli42/chosen": "3.0.0",
         "php-kit/ext-pdo": "^1.1",
-        "platformsh/config-reader": "^2.4"
+        "platformsh/config-reader": "^2.4",
+        "wikimedia/composer-merge-plugin": "^2.1"
     },
     "require-dev": {
         "drupal/coder": "^8.3",
@@ -249,7 +251,8 @@
             "drupal/core-project-message": true,
             "php-http/discovery": true,
             "phpstan/extension-installer": true,
-            "tbachert/spi": true
+            "tbachert/spi": true,
+            "wikimedia/composer-merge-plugin": true
         }
     },
     "scripts": {
@@ -265,6 +268,11 @@
             "locations": {
                 "web-root": "web/"
             }
+        },
+        "merge-plugin": {
+            "include": [
+                "web/modules/contrib/anchor_link/composer.libraries.json"
+            ]
         },
         "installer-paths": {
             "web/core": [
