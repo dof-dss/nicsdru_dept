@@ -591,3 +591,11 @@ function dept_core_simple_sitemap_links_alter(array &$links, SimpleSitemapInterf
   }
 
 }
+
+/**
+ * Implements hook_toolbar_alter().
+ */
+function dept_core_toolbar_alter(&$items) {
+  // Remove the 'Edit' contextual link from the top admin toolbar.
+  unset($items["contextual"]);
+}
