@@ -20,8 +20,9 @@
     width: 100%;
     background: $tangaroa;
     padding-bottom: 1.6rem;
-    max-height: 75vh;
+    max-height: calc(100vh - 5rem);
     overflow: auto;
+    text-wrap: wrap;
 
     @include breakpoint($tab) {
       padding-bottom: 2.1rem;
