@@ -267,7 +267,7 @@ function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_
   $domain_access[] = ['target_id' => 'nigov'];
 
   // Remove any duplicate domain entries.
-  array_unique($domain_access, SORT_REGULAR);
+  $domain_access = array_unique($domain_access, SORT_REGULAR);
 
   $form_state->setValue('field_domain_access', $domain_access);
 }
