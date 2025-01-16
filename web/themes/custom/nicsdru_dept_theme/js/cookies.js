@@ -1,0 +1,1 @@
+(function($,Drupal){Drupal.behaviors.nicsdruCookieFocus={attach:function attach(context){window.onload=function(){document.querySelector(".eu-cookie-compliance-popup-open .eu-cookie-withdraw-tab").focus()}}}})(jQuery,Drupal);
