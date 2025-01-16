@@ -257,11 +257,11 @@ function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_
   $domain_access = $form_state->getValue('field_domain_access');
 
   // @phpstan-ignore-next-line
-  $bundle = $form_state->getFormObject()->getEntity()->bundle();
-
-  if ($bundle === 'news') {
-    // If News is not a press release, remove any existing 'nigov' entry.
-    if ($form_state->getValue('field_news_type')[0]['value'] !== 'pressrelease') {
+  if ($form_state->getFormObject()->getEntity()->bundle() === 'news') {
+    $dept = \Drupal::service('department.manager')->getCurrentDepartment()->id();
+    $type = $form_state->getValue('field_news_type')[0]['value'];
+    // If News is not a press release created on nigov, remove any existing 'nigov' entry.
+    if ($dept !== 'nigov' && $type != 'pressrelease') {
       $form_state->setValue('field_domain_access', array_filter($domain_access, function ($domain) {
         return $domain['target_id'] !== 'nigov';
       }));
@@ -273,7 +273,6 @@ function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_
 
   // Remove any duplicate domain entries.
   $domain_access = array_unique($domain_access, SORT_REGULAR);
-
   $form_state->setValue('field_domain_access', $domain_access);
 
   dept_node_assign_domain_defaults_media($form, $form_state, $domain_access);
