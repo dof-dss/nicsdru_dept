@@ -208,28 +208,19 @@ web:
 
 # Set up migration content refresh every night.
 crons:
-  daily_edge_solr_reindex:
-    spec: '0 6 * * 0-5'
-    cmd: './reindex-edge-solr.sh'
-  d7db:
-    spec: '0 4 * * *'
-    cmd: 'migrate-scripts/sync-db.sh $D7_PROJECT_ID $D7_PROJECT_ENV'
-  drupal:
-    spec: '*/15 * * * *'
-    cmd: 'vendor/bin/drush cron'
-#  migrate:
-#    spec: '30 2 * * *'
-#    cmd: 'migrate-scripts/migrate.sh 2>&1 | tee /app/imports/last-migrate-output.txt'
-  sync_files:
-    spec: '0 1 * * *'
-    cmd: 'migrate-scripts/sync-private-files.sh $D7_PROJECT_ID $D7_PROJECT_ENV'
-  logging:
-    spec: '*/5 * * * *'
-    commands:
-      start: '/bin/bash /app/cronjob.sh'
-    shutdown_timeout: 290
   autoban:
     spec: '*/13 * * * *'
     commands:
       start: /app/platformsh-tools/autoban_in_fastly.sh
     shutdown_timeout: 31
+  daily_edge_solr_reindex:
+    spec: '0 6 * * 0-5'
+    cmd: './reindex-edge-solr.sh'
+  drupal:
+    spec: '*/15 * * * *'
+    cmd: 'vendor/bin/drush cron'
+  logging:
+    spec: '*/5 * * * *'
+    commands:
+      start: '/bin/bash /app/cronjob.sh'
+    shutdown_timeout: 290
