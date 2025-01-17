@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.publication.field_domain_access
     - field.field.node.publication.field_domain_all_affiliates
     - field.field.node.publication.field_domain_source
+    - field.field.node.publication.field_embargoed
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
@@ -46,6 +47,7 @@ hidden:
   field_attachment: true
   field_domain_access: true
   field_domain_all_affiliates: true
+  field_embargoed: true
   field_external_publication: true
   field_global_topics: true
   field_last_updated: true

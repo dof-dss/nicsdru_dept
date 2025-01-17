@@ -1,0 +1,21 @@
+uuid: a9fe2244-fe64-4b8d-9f0f-c0fdf38a204a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_embargoed
+    - node.type.publication
+id: node.publication.field_embargoed
+field_name: field_embargoed
+entity_type: node
+bundle: publication
+label: Embargoed
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

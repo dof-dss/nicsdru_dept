@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.publication.field_domain_access
     - field.field.node.publication.field_domain_all_affiliates
     - field.field.node.publication.field_domain_source
+    - field.field.node.publication.field_embargoed
     - field.field.node.publication.field_external_publication
     - field.field.node.publication.field_global_topics
     - field.field.node.publication.field_last_updated
@@ -35,6 +36,16 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 3
+    region: content
+  field_embargoed:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 8
     region: content
   field_external_publication:
     type: link

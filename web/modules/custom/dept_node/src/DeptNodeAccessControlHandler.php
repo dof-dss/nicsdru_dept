@@ -3,12 +3,14 @@
 namespace Drupal\dept_node;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\node\NodeAccessControlHandler;
 use Drupal\node\NodeGrantDatabaseStorageInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Extends the core node access handler for Departmental sites.
@@ -57,6 +59,36 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
     }
 
     return parent::createAccess($entity_bundle, $account, $context, TRUE);
+  }
+
+  public function access(EntityInterface $entity, $operation, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
+
+    // TODO: temp fix.
+    if (is_null($account)) {
+      return parent::access($entity, $operation, $account, TRUE)->cachePerPermissions();
+    }
+
+    $result = parent::access($entity, $operation, $account, TRUE)->cachePerPermissions();
+
+    if ($entity instanceof NodeInterface && $entity->bundle() === 'publication') {
+      $embargoed = $entity->get('field_embargoed')->getString();
+
+      if ($embargoed) {
+        $id = $account->id();
+        $user = \Drupal\user\Entity\User::load($account->id());
+        if ($user->hasRole('stats_supervisor')) {
+          $result = parent::access($entity, $operation, $account, TRUE)->cachePerPermissions();
+        } elseif ($user->hasRole('stats_author')) {
+          if ($user->id() === $entity->getOwnerId()) {
+            $result = AccessResult::allowed();
+          } else {
+            $result = AccessResult::forbidden();
+          }
+        }
+      }
+    }
+
+    return $return_as_object ? $result : $result->isAllowed();
   }
 
 }
