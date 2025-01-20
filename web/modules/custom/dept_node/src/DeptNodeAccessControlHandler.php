@@ -11,6 +11,7 @@ use Drupal\dept_core\DepartmentManager;
 use Drupal\node\NodeAccessControlHandler;
 use Drupal\node\NodeGrantDatabaseStorageInterface;
 use Drupal\node\NodeInterface;
+use Drupal\user\Entity\User;
 
 /**
  * Extends the core node access handler for Departmental sites.
@@ -74,16 +75,13 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
       $embargoed = $entity->get('field_embargoed')->getString();
 
       if ($embargoed) {
-        $id = $account->id();
-        $user = \Drupal\user\Entity\User::load($account->id());
-        if ($user->hasRole('stats_supervisor')) {
-          $result = parent::access($entity, $operation, $account, TRUE)->cachePerPermissions();
-        } elseif ($user->hasRole('stats_author')) {
-          if ($user->id() === $entity->getOwnerId()) {
-            $result = AccessResult::allowed();
-          } else {
-            $result = AccessResult::forbidden();
-          }
+        switch ($operation) {
+          case "view label":
+            return $this->publicationViewLabel($entity, $operation, $account);
+          case "view":
+          case "update":
+          case "delete":
+            return $this->publicationViewUpdateDelete($entity, $operation, $account);
         }
       }
     }
@@ -91,4 +89,29 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
     return $return_as_object ? $result : $result->isAllowed();
   }
 
+  protected function publicationViewUpdateDelete(NodeInterface $node, $operation, ?AccountInterface $account = NULL) {
+    $id = $account->id();
+    $user = User::load($account->id());
+    if ($user->hasRole('stats_supervisor') || $user->hasRole('administrator')) {
+      $result = parent::access($node, $operation, $account, TRUE)->cachePerPermissions();
+    } elseif ($user->hasRole('stats_author')) {
+      if ($user->id() === $node->getOwnerId()) {
+        $result = AccessResult::allowed();
+      } else {
+        $result = AccessResult::forbidden();
+      }
+    }
+
+    return $result;
+  }
+
+  protected function publicationViewLabel(NodeInterface $node, $operation, ?AccountInterface $account = NULL) {
+    if ($node->isPublished()) {
+      return AccessResult::allowed();
+    } elseif ($account->isAuthenticated()) {
+      return AccessResult::allowed();
+    } else {
+      return AccessResult::forbidden();
+    }
+  }
 }
