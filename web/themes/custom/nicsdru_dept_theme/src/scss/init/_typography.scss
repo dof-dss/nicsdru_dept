@@ -106,6 +106,12 @@ $normal-text-no-margins: (
 );
 
 // Small, medium, large, extra large text (no margins).
+$xs-text: (
+  null: (14px, 20px),
+  xl: (15px, 22px),
+  xxxl: (16px, 24px),
+);
+
 $small-text: (
   null: (15px, 22px),
   xl: (16px, 24px),
