@@ -37,7 +37,7 @@
   {%- if summaries -%}
     <{{ list_type }}{{ attributes }}>
       {%- for summary, facets in summaries -%}
-        <ul>
+        <li><ul>
           <span aria-label="Selected filter" class="facet-item__label">
             {{ summary|t }}
           </span>
@@ -46,7 +46,7 @@
                 {{ link(facet['#title'], facet['#url'], { 'data-self-ref': ['true']}) }}
               </li>
             {%- endfor -%}
-        </ul>
+          </ul></li>
       {%- endfor -%}
   {%- endif %}
 {%- endif %}
