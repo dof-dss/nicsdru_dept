@@ -69,7 +69,6 @@
     "js-compile-ui": "mkdir -p js && uglifyjs src/js/ui.js -o js/ui.js",
     "js-compile-site-search": "mkdir -p js && uglifyjs src/js/site-search.js -o js/site-search.js",
     "js-compile-sitewide-alerts": "mkdir -p js && uglifyjs src/js/sitewide-alerts.js -o js/sitewide-alerts.js",
-    "js-compile-cookies": "mkdir -p js && uglifyjs src/js/cookies.js -o js/cookies.js",
     "––––––– CSS SCRIPTS": "–––––––––––––",
     "css": "npm-run-all --sequential scss-dev css-post",
     "css-lint": "sass-lint -c $npm_package_config_sasslintConfig $npm_package_config_scssfile -v -q",
