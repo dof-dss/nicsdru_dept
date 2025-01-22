@@ -130,7 +130,7 @@
     }
 
     figcaption {
-      @include responsive-typo-map($smallish-text);
+      @include responsive-typo-map($xs-text);
       display: block;
       padding: .5em;
       background-color: $grey-lightest;
