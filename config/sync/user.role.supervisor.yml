@@ -29,6 +29,7 @@ dependencies:
     - dept_topics
     - domain_access
     - domain_entity
+    - file
     - media
     - node
     - origins_workflow
@@ -79,6 +80,7 @@ permissions:
   - 'create secure_file media content on assigned domains'
   - 'create ual content on assigned domains'
   - 'delete all revisions'
+  - 'delete any file'
   - 'delete application content on assigned domains'
   - 'delete application revisions'
   - 'delete article content on assigned domains'
