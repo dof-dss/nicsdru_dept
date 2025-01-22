@@ -6,11 +6,9 @@ dependencies:
     - field.field.media.remote_video.field_domain_access
     - field.field.media.remote_video.field_domain_source
     - field.field.media.remote_video.field_media_oembed_video
-    - field.field.media.remote_video.field_media_video_file
     - media.type.remote_video
   module:
     - field_group
-    - file
     - media
     - path
 third_party_settings:
@@ -64,13 +62,6 @@ content:
     settings:
       size: 60
       placeholder: ''
-    third_party_settings: {  }
-  field_media_video_file:
-    type: file_generic
-    weight: 0
-    region: content
-    settings:
-      progress_indicator: throbber
     third_party_settings: {  }
   langcode:
     type: language_select

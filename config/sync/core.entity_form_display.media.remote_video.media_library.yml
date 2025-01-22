@@ -7,7 +7,6 @@ dependencies:
     - field.field.media.remote_video.field_domain_access
     - field.field.media.remote_video.field_domain_source
     - field.field.media.remote_video.field_media_oembed_video
-    - field.field.media.remote_video.field_media_video_file
     - media.type.remote_video
 id: media.remote_video.media_library
 targetEntityType: media
@@ -27,7 +26,6 @@ hidden:
   field_domain_access: true
   field_domain_source: true
   field_media_oembed_video: true
-  field_media_video_file: true
   langcode: true
   path: true
   publish_on: true
