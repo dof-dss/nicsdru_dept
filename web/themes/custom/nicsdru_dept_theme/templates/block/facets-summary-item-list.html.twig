@@ -29,7 +29,7 @@
     context.list_style ? 'item-list__' ~ context.list_style,
   ]
 %}
-{% set attributes = attributes.addClass(classes).setAttribute('aria-describedby', 'facet-summary-label') %}
+{% set attributes = attributes.addClass(classes) %}
 {% if items or empty %}
   {%- if title is not empty -%}
     <h3>{{ title }}</h3>
