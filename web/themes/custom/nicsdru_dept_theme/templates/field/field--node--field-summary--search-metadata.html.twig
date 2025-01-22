@@ -50,16 +50,16 @@
 {% if label_hidden %}
   {% if multiple %}
       {% for item in items %}
-        <p{{ item.attributes.addClass(field_classes).setAttribute('role', 'presentation') }}>{{- item.content -}}</p>
+        <p{{ item.attributes.addClass(field_classes).setAttribute('role', 'presentation') }}>{{- item.content['#output']['#text'] -}}</p>
       {% endfor %}
   {% else %}
     {% for item in items %}
-      <p{{ attributes.addClass(field_classes).setAttribute('role', 'presentation') }}>{{- item.content -}}</p>
+      <p{{ attributes.addClass(field_classes).setAttribute('role', 'presentation') }}>{{- item.content['#output']['#text'] -}}</p>
     {% endfor %}
   {% endif %}
 {% else %}
   <div{{ title_attributes.addClass(title_classes) }}>{{- label -}}</div>
   {% for item in items %}
-    <p{{ item.attributes.addClass(field_classes).setAttribute('role', 'presentation') }}>{{- item.content -}}</p>
+    <p{{ item.attributes.addClass(field_classes).setAttribute('role', 'presentation') }}>{{- item.content['#output']['#text'] -}}</p>
   {% endfor %}
 {% endif %}
