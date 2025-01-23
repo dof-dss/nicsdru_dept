@@ -405,16 +405,16 @@ function dept_publications_node_grants(AccountInterface $account, $op) {
 
   switch ($op) {
     case 'view':
-      if ($account->hasPermission('view any unpublished secure publication')) {
+      if ($account->hasPermission('view any embargoed publication')) {
         $grants['view_embargoed_publications'][] = 1;
       }
-      elseif ($account->hasPermission('view own unpublished secure publication')) {
+      elseif ($account->hasPermission('view own embargoed publication')) {
         $grants['embargoed_publication_author'][] = $account->id();
       }
       break;
 
     case 'edit':
-      if ($account->hasPermission('edit any secure publication')) {
+      if ($account->hasPermission('edit any embargoed publication')) {
         $grants['edit_embargoed_publications'][] = 1;
       }
       elseif ($account->hasPermission('edit own secure publication')) {
