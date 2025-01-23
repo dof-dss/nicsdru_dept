@@ -396,3 +396,90 @@ function dept_publications_get_remote_file_metadata(string $file_url) {
 
   return $file_headers;
 }
+
+/**
+ * Implements hook_node_grants().
+ */
+function dept_publications_node_grants(AccountInterface $account, $op) {
+  $grants = [];
+
+  switch ($op) {
+    case 'view':
+      if ($account->hasPermission('view any unpublished secure publication')) {
+        $grants['view_embargoed_publications'][] = 1;
+      }
+      elseif ($account->hasPermission('view own unpublished secure publication')) {
+        $grants['embargoed_publication_author'][] = $account->id();
+      }
+      break;
+
+    case 'edit':
+      if ($account->hasPermission('edit any secure publication')) {
+        $grants['edit_embargoed_publications'][] = 1;
+      }
+      elseif ($account->hasPermission('edit own secure publication')) {
+        $grants['embargoed_publication_author'][] = $account->id();
+      }
+      break;
+
+    case 'delete':
+      if ($account->hasPermission('delete any secure publication')) {
+        $grants['delete_embargoed_publications'][] = 1;
+      }
+      elseif ($account->hasPermission('delete own secure publication')) {
+        $grants['embargoed_publication_author'][] = $account->id();
+      }
+      break;
+
+  }
+  return $grants;
+}
+
+/**
+ * Implements hook_node_access_records_alter().
+ */
+function dept_publications_node_access_records_alter(&$grants, $node) {
+  if ($node->bundle() === 'publication') {
+    $embargoed = $node->get('field_embargoed')->getString();
+
+    if ($embargoed && $node->isPublished() === FALSE) {
+      $grants = [];
+
+      $grants[] = [
+        'realm' => 'view_embargoed_publications',
+        'gid' => 1,
+        'grant_view' => 1,
+        'grant_update' => 0,
+        'grant_delete' => 0,
+        'priority' => 0,
+      ];
+
+      $grants[] = [
+        'realm' => "edit_embargoed_publications",
+        'gid' => 1,
+        'grant_view' => 1,
+        'grant_update' => 1,
+        'grant_delete' => 0,
+        'priority' => 0,
+      ];
+
+      $grants[] = [
+        'realm' => "delete_embargoed_publications",
+        'gid' => 1,
+        'grant_view' => 1,
+        'grant_update' => 0,
+        'grant_delete' => 1,
+        'priority' => 0,
+      ];
+
+      $grants[] = [
+        'realm' => 'embargoed_publication_author',
+        'gid' => $node->getOwnerId(),
+        'grant_view' => 1,
+        'grant_update' => 1,
+        'grant_delete' => 1,
+        'priority' => 0,
+      ];
+    }
+  }
+}
