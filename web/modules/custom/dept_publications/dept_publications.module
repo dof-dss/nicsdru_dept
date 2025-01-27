@@ -57,9 +57,10 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
 
     }
     else {
-      // Set the publication type to 'public' and prevent access to the secure publication widget.
-      // If the user does not have the 'secure' permission or is non-admin.
-      $form['publication_attachment_type'] = [
+      // Set the publication type to 'public' and prevent access to the
+      // embargoed publication widget if the user does not have the
+      // 'Create embargoed' permission or is non-admin.
+      $form['field_embargoed'] = [
         '#type' => 'hidden',
         '#default_value' => '0',
         '#value' => '0',
@@ -79,7 +80,7 @@ function dept_publications_validate_publication(&$form, FormStateInterface $form
   $values = $form_state->getValues();
 
   // Validate public and secure file attachments.
-  if ($values['publication_attachment_type'] == 0) {
+  if ($values['field_embargoed'] == 0) {
     if (empty($values['field_publication_files']["selection"][0]) && empty($values['field_external_publication'][0]['uri'])) {
       $form_state->setErrorByName('field_publication_files', t('You must provide an attachment or external link'));
       $form_state->setErrorByName('field_external_publication', t('You must provide an attachment or external link'));
@@ -88,57 +89,6 @@ function dept_publications_validate_publication(&$form, FormStateInterface $form
   else {
     if (empty($values['field_publication_secure_files']['selection'])) {
       $form_state->setErrorByName('field_publication_secure_files', t('You must provide a secure attachment'));
-    }
-  }
-}
-
-/**
- * Implements hook_entity_access().
- */
-function dept_publications_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
-  if ($account->isAnonymous() || $account->hasPermission('bypass node access')) {
-    return;
-  }
-
-  if ($entity instanceof NodeInterface && $entity->getType() === 'publication') {
-    // If there is a secure file field value assume this is a secure publication
-    // and continue to perform access checks.
-    if (empty($entity->get('field_publication_secure_files')->referencedEntities())) {
-      return;
-    }
-
-    // This check is intended to override any broad/generic permissions
-    // eg: 'view any unpublished content'.
-    if ($entity->isPublished() === FALSE || $entity->isDefaultRevision() === FALSE) {
-      $is_own_publication = $entity->getOwnerId() === $account->id();
-
-      if (!$is_own_publication && !$account->hasPermission('view any unpublished secure publication')) {
-        return AccessResultForbidden::forbidden();
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_entity_operation_alter().
- */
-function dept_publications_entity_operation_alter(array &$operations, EntityInterface $entity) {
-  if ($entity instanceof NodeInterface && $entity->getType() === 'publication') {
-    // If there is a secure file field value assume this is a secure publication
-    // and continue to perform access checks.
-    if (empty($entity->get('field_publication_secure_files')->referencedEntities())) {
-      return;
-    }
-
-    // This check is intended to override any broad/generic permissions
-    // as well as the general NICS editorial workflow options. Eg:
-    // prevents an non-admin and non-stats-* role from publishing
-    // embargoed/secure publication content as this must be done
-    // by a stats supervisor author or Administrator.
-    if ($entity->isPublished() === FALSE) {
-      if (!\Drupal::currentUser()->hasPermission('publish secure publication')) {
-        return $operations;
-      }
     }
   }
 }
@@ -158,32 +108,6 @@ function dept_publications_file_download($uri) {
  */
 function dept_publications_views_pre_execute(ViewExecutable $view) {
 
-}
-
-/**
- * Implements hook_views_query_alter().
- */
-function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
-  $current_user = \Drupal::currentUser();
-
-  if ($view->id() === 'media_library') {
-    // @phpstan-ignore-next-line
-    foreach ($query->where[1]['conditions'] as $index => $condition) {
-      if ($condition['field'] === 'media_field_data.bundle' && $condition['value'][0] === 'secure_file') {
-        // Unset this condition if stats supervisor/related permissions.
-        if ($current_user->hasPermission('view any embargoed publication') || $current_user->hasPermission('view own embargoed publication')) {
-          // @phpstan-ignore-next-line
-          unset($query->where[1]['conditions'][$index]);
-
-          // Set a notice message for top-level admins.
-          if ($current_user->hasPermission('administer media')) {
-            \Drupal::messenger()
-              ->addWarning('Files for embargoed publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
-          }
-        }
-      }
-    }
-  }
 }
 
 /**
@@ -213,7 +137,7 @@ function dept_publications_preprocess_views_view_field(&$variables) {
       $entity = $variables["row"]->_entity;
       if ($entity->hasField('field_publication_secure_files') && !$entity->get('field_publication_secure_files')->isEmpty()) {
         if ($entity->get('moderation_state')->getString() !== 'published') {
-          $variables['output'] = t('Publication (secure)');
+          $variables['output'] = t('Publication (embargoed)');
         }
       }
     }
@@ -356,6 +280,13 @@ function dept_publications_get_remote_file_metadata(string $file_url) {
  * Implements hook_node_grants().
  */
 function dept_publications_node_grants(AccountInterface $account, $op) {
+
+  /** @var array $grants_cache */
+  $grants_cache = &drupal_static(__FUNCTION__, []);
+  if (isset($grants_cache[$account->id()][$op])) {
+    return $grants_cache[$account->id()][$op];
+  }
+
   $grants = [];
 
   switch ($op) {
@@ -368,7 +299,7 @@ function dept_publications_node_grants(AccountInterface $account, $op) {
       }
       break;
 
-    case 'edit':
+    case 'update':
       if ($account->hasPermission('edit any embargoed publication')) {
         $grants['edit_embargoed_publications'][] = 1;
       }
@@ -385,9 +316,10 @@ function dept_publications_node_grants(AccountInterface $account, $op) {
         $grants['embargoed_publication_author'][] = $account->id();
       }
       break;
-
   }
-  return $grants;
+
+  $grants_cache[$account->id()][$op] = $grants;
+  return $grants_cache[$account->id()][$op];
 }
 
 /**
