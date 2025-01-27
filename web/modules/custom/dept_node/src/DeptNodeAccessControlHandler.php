@@ -3,6 +3,8 @@
 namespace Drupal\dept_node;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultAllowed;
+use Drupal\Core\Access\AccessResultForbidden;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -63,13 +65,12 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
   }
 
   public function access(EntityInterface $entity, $operation, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
+    $result = parent::access($entity, $operation, $account, TRUE)->cachePerPermissions();
 
     // TODO: temp fix.
     if (is_null($account)) {
-      return parent::access($entity, $operation, $account, TRUE)->cachePerPermissions();
+      return $return_as_object ? $result : $result->isAllowed();
     }
-
-    $result = parent::access($entity, $operation, $account, TRUE)->cachePerPermissions();
 
     if ($entity instanceof NodeInterface && $entity->bundle() === 'publication') {
       $embargoed = $entity->get('field_embargoed')->getString();
@@ -81,7 +82,12 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
           case "view":
           case "update":
           case "delete":
+          case "view scheduled transition":
+          case "View all revisions":
             return $this->publicationViewUpdateDelete($entity, $operation, $account);
+            break;
+          default:
+            return parent::access($entity, $operation, $account, TRUE)->cachePerPermissions();
         }
       }
     }
@@ -92,17 +98,50 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
   protected function publicationViewUpdateDelete(NodeInterface $node, $operation, ?AccountInterface $account = NULL) {
     $id = $account->id();
     $user = User::load($account->id());
-    if ($user->hasRole('stats_supervisor') || $user->hasRole('administrator')) {
-      $result = parent::access($node, $operation, $account, TRUE)->cachePerPermissions();
-    } elseif ($user->hasRole('stats_author')) {
-      if ($user->id() === $node->getOwnerId()) {
-        $result = AccessResult::allowed();
-      } else {
-        $result = AccessResult::forbidden();
-      }
+    // Map access operation to permission action.
+    $action = ($operation == 'update') ? 'edit' : $operation;
+
+    switch ($operation) {
+      case "view":
+      case "update":
+      case "delete":
+
+        if ($operation === 'view' && $node->isPublished()) {
+          $access = new AccessResultAllowed();
+          break;
+        }
+
+        if ($user->hasPermission($action . ' any embargoed publication')) {
+          $access = new AccessResultAllowed();
+        }
+        elseif ($user->hasPermission($action . ' own embargoed publication') && $node->getOwnerId() === $user->id()) {
+          $access = new AccessResultAllowed();
+        }
+        else {
+          $access = new AccessResultForbidden();
+        }
+        break;
+      case "view scheduled transition":
+      case "View all revisions":
+        if ($user->hasPermission('update any embargoed publication')) {
+          $access = new AccessResultAllowed();
+        }
+        elseif ($user->hasPermission('update own embargoed publication') && $node->getOwnerId() === $user->id()) {
+          $access = new AccessResultAllowed();
+        }
+        else {
+          $access = new AccessResultForbidden();
+        }
+        break;
+      default:
+        $access = parent::access($node, $operation, $account, TRUE)->cachePerPermissions();
     }
 
-    return $result;
+    $access->cachePerUser();
+    $access->cachePerPermissions();
+    $access->addCacheTags(['node:' . $node->id()]);
+
+    return $access;
   }
 
   protected function publicationViewLabel(NodeInterface $node, $operation, ?AccountInterface $account = NULL) {
