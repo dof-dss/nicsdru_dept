@@ -33,32 +33,25 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
 
     $current_user = \Drupal::currentUser();
     // Allow the selection of 'Public' or 'Secure' publications.
-    if ($current_user->hasPermission('create secure publication') || in_array('administrator', $current_user->getRoles())) {
-      $form['publication_attachment_type'] = [
-        '#type' => 'radios',
-        '#title' => t('Attachment(s) type'),
-        '#options' => ['Public', 'Secure'],
-        '#default_value' => !empty($node->get('field_publication_secure_files')->getValue()) ? '1' : '0',
-        '#weight' => 0,
-      ];
+    if ($current_user->hasPermission('create embargoed publication') || in_array('administrator', $current_user->getRoles())) {
 
       $form['field_publication_files']['#states'] = [
         'invisible' => [
-          ':input[name="publication_attachment_type"]' => ['value' => 1],
+          ':input[id="edit-field-embargoed-value"]' => ['checked' => TRUE],
         ],
       ];
       $form['field_external_publication']['#states'] = [
         'invisible' => [
-          ':input[name="publication_attachment_type"]' => ['value' => 1],
+          ':input[id="edit-field-embargoed-value"]' => ['checked' => TRUE],
         ],
       ];
 
       $form['field_publication_secure_files']['#states'] = [
         'invisible' => [
-          ':input[name="publication_attachment_type"]' => ['value' => 0],
+          ':input[id="edit-field-embargoed-value"]' => ['checked' => FALSE],
         ],
         'required' => [
-          ':input[name="publication_attachment_type"]' => ['value' => 1],
+          ':input[id="edit-field-embargoed-value"]' => ['checked' => TRUE],
         ],
       ];
 
@@ -173,57 +166,19 @@ function dept_publications_views_pre_execute(ViewExecutable $view) {
 function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
   $current_user = \Drupal::currentUser();
 
-  if ($view->id() === 'content' && $view->current_display == 'page_1') {
-    // @phpstan-ignore-next-line
-    foreach ($query->where[1]['conditions'] as $index => $condition) {
-      if ($condition['field'] === 'node__field_publication_secure_files.field_publication_secure_files_target_id') {
-        // Unset this condition if stats supervisor/related permissions.
-        if ($current_user->hasPermission('view any unpublished secure publication') || $current_user->hasPermission('view own unpublished secure publication')) {
-          // @phpstan-ignore-next-line
-          unset($query->where[1]['conditions'][$index]);
-
-          // Set a notice message for top-level admins.
-          if ($current_user->hasPermission('bypass node access')) {
-            \Drupal::messenger()
-              ->addWarning('Secure publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
-          }
-        }
-      }
-    }
-  }
-
-  if ($view->id() === 'workflow_moderation') {
-    // @phpstan-ignore-next-line
-    foreach ($query->where[1]['conditions'] as $index => $condition) {
-      if ($condition['field'] === 'node_field_data_node_field_revision__node__field_publication_secure_files.field_publication_secure_files_target_id') {
-        // Unset this condition if stats supervisor/related permissions.
-        if ($current_user->hasPermission('view any unpublished secure publication') || $current_user->hasPermission('view own unpublished secure publication')) {
-          // @phpstan-ignore-next-line
-          unset($query->where[1]['conditions'][$index]);
-
-          // Set a notice message for top-level admins.
-          if ($current_user->hasPermission('bypass node access')) {
-            \Drupal::messenger()
-              ->addWarning('Secure publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
-          }
-        }
-      }
-    }
-  }
-
   if ($view->id() === 'media_library') {
     // @phpstan-ignore-next-line
     foreach ($query->where[1]['conditions'] as $index => $condition) {
       if ($condition['field'] === 'media_field_data.bundle' && $condition['value'][0] === 'secure_file') {
         // Unset this condition if stats supervisor/related permissions.
-        if ($current_user->hasPermission('view any unpublished secure publication') || $current_user->hasPermission('view own unpublished secure publication')) {
+        if ($current_user->hasPermission('view any embargoed publication') || $current_user->hasPermission('view own embargoed publication')) {
           // @phpstan-ignore-next-line
           unset($query->where[1]['conditions'][$index]);
 
           // Set a notice message for top-level admins.
           if ($current_user->hasPermission('administer media')) {
             \Drupal::messenger()
-              ->addWarning('Files for secure publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
+              ->addWarning('Files for embargoed publications are included in this content list due to appropriate permissions for the current user. This message only shows for top-level admins.');
           }
         }
       }
@@ -236,7 +191,7 @@ function dept_publications_views_query_alter(ViewExecutable $view, QueryPluginBa
  */
 function dept_publications_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if (str_starts_with($form['#id'], 'views-exposed-form-media-library') &&
-    \Drupal::currentUser()->hasPermission('view any unpublished secure publication')) {
+    \Drupal::currentUser()->hasPermission('view any embargoed publication')) {
 
     // Permit secure files in exposed filter. Dovetails with
     // dept_publications_views_query_alter above.
