@@ -170,7 +170,21 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
+          click_sort_column: value
           type: file_filemime
+          settings:
+            link_to_file: false
+            filemime_image: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
         filesize:
           id: filesize
           table: file_managed
@@ -330,9 +344,10 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
+          click_sort_column: value
           type: timestamp
           settings:
-            date_format: medium
+            date_format: short
             custom_date_format: ''
             timezone: ''
             tooltip:
@@ -344,6 +359,17 @@ display:
               past_format: '@interval ago'
               granularity: 2
               refresh: 60
+              description: ''
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
         changed:
           id: changed
           table: file_managed
@@ -395,9 +421,10 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
+          click_sort_column: value
           type: timestamp
           settings:
-            date_format: medium
+            date_format: short
             custom_date_format: ''
             timezone: ''
             tooltip:
@@ -409,6 +436,17 @@ display:
               past_format: '@interval ago'
               granularity: 2
               refresh: 60
+              description: ''
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
         count:
           id: count
           table: file_usage
@@ -759,7 +797,20 @@ display:
           required: true
       group_by: true
       show_admin_links: true
-      header: {  }
+      header:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: '<p>This listing is for administrators to troubleshoot and remove any problematic files. Normal content management for media should take place at <a href="/admin/content/media">the media listing</a> where image/document entities can be managed as a whole to minimise the occurrence of orphaned files over time.</p>'
+            format: basic_html
+          tokenize: false
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -771,8 +822,8 @@ display:
         - url.query_args
         - user.permissions
       tags: {  }
-  page_1:
-    id: page_1
+  overview:
+    id: overview
     display_title: 'Files overview'
     display_plugin: page
     position: 1
