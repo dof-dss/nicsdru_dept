@@ -64,8 +64,11 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
     return parent::createAccess($entity_bundle, $account, $context, TRUE);
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function access(EntityInterface $entity, $operation, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
-    $result = parent::access($entity, $operation, $account, TRUE)->cachePerPermissions();
+    $result = parent::access($entity, $operation, $account, TRUE);
 
     // TODO: temp fix.
     if (is_null($account)) {
@@ -77,17 +80,15 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
 
       if ($embargoed) {
         switch ($operation) {
-          case "view label":
-            return $this->publicationViewLabel($entity, $operation, $account);
           case "view":
           case "update":
           case "delete":
           case "view scheduled transition":
           case "View all revisions":
             return $this->publicationViewUpdateDelete($entity, $operation, $account);
-            break;
+
           default:
-            return parent::access($entity, $operation, $account, TRUE)->cachePerPermissions();
+            $result = parent::access($entity, $operation, $account, TRUE);
         }
       }
     }
@@ -95,8 +96,17 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
     return $return_as_object ? $result : $result->isAllowed();
   }
 
-  protected function publicationViewUpdateDelete(NodeInterface $node, $operation, ?AccountInterface $account = NULL) {
-    $id = $account->id();
+  /**
+   *  Handle access control for various operation states.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The node to check access for.
+   * @param string $operation
+   *   The operation to perform (view, update, delete)
+   * @param \Drupal\Core\Session\AccountInterface|null $account
+   *   The user account requesting the operation permission.
+   */
+  protected function publicationViewUpdateDelete(NodeInterface $node, string $operation, ?AccountInterface $account = NULL) {
     $user = User::load($account->id());
     // Map access operation to permission action.
     $action = ($operation == 'update') ? 'edit' : $operation;
@@ -121,6 +131,7 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
           $access = new AccessResultForbidden();
         }
         break;
+
       case "view scheduled transition":
       case "View all revisions":
         if ($user->hasPermission('update any embargoed publication')) {
@@ -133,24 +144,17 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
           $access = new AccessResultForbidden();
         }
         break;
+
       default:
-        $access = parent::access($node, $operation, $account, TRUE)->cachePerPermissions();
+        $access = parent::access($node, $operation, $account, TRUE);
     }
 
-    $access->cachePerUser();
-    $access->cachePerPermissions();
-    $access->addCacheTags(['node:' . $node->id()]);
+    /* @phpstan-ignore-next-line */
+    $access->cachePerUser()->cachePerPermissions()->addCacheTags(
+      ['node:' . $node->id()]
+    );
 
     return $access;
   }
 
-  protected function publicationViewLabel(NodeInterface $node, $operation, ?AccountInterface $account = NULL) {
-    if ($node->isPublished()) {
-      return AccessResult::allowed();
-    } elseif ($account->isAuthenticated()) {
-      return AccessResult::allowed();
-    } else {
-      return AccessResult::forbidden();
-    }
-  }
 }
