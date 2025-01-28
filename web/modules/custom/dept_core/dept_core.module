@@ -411,9 +411,30 @@ function dept_core_department_links(): array {
 }
 
 /**
+ * Submission callback for user password form.
+ */
+function dept_core_user_password_reset_redirect_to_domain_homepage(&$form, FormStateInterface $form_state) {
+  // OOTB Core will use a RedirectResponse to <front> which doesn't always work
+  // consistently for domain enabled sites. We set the redirect to the absolute
+  // URL for the active department to work around this.
+
+  /** @var \Drupal\dept_core\DepartmentManager $dept_manager */
+  $dept_manager = \Drupal::service('department.manager');
+  /** @var \Drupal\dept_core\Entity\Department $current_dept */
+  $current_dept = $dept_manager->getCurrentDepartment();
+
+  $form_state->setRedirectUrl(Url::fromUri($current_dept->url(), ['absolute' => TRUE]));
+}
+
+/**
  * Implements hook_form_alter().
  */
 function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id === 'user_pass') {
+    // Add extra callback to work around TrustedRedirectResponse issue on form submit.
+    $form['#submit'][] = 'dept_core_user_password_reset_redirect_to_domain_homepage';
+  }
+
   if ($form_id === 'views_exposed_form') {
     if (!empty($form['dept'])) {
       /** @var \Drupal\dept_core\DepartmentManager $dept_manager */
