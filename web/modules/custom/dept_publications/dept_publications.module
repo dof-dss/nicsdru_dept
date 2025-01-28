@@ -5,15 +5,11 @@
  * Primary module hooks for Dept Publications module.
  */
 
-use Drupal\Core\Access\AccessResultForbidden;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\Core\Url;
 use Drupal\media\MediaInterface;
-use Drupal\node\NodeInterface;
-use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\Render\ViewsRenderPipelineMarkup;
 use Drupal\views\ViewExecutable;
 use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
@@ -27,9 +23,13 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
   /** @var \Drupal\node\NodeInterface $node */
   $node = $form_object->getEntity();
 
-  // Toggle the display of the media fields depending on the required
+  // Toggle the display/availability of  fields depending on the required
   // attachment type.
   if ($node->bundle() === 'publication') {
+
+    if ($node->isNew() === FALSE) {
+      $form['field_embargoed']['#disabled'] = TRUE;
+    }
 
     $current_user = \Drupal::currentUser();
     // Allow the selection of 'Public' or 'Secure' publications.
