@@ -119,14 +119,6 @@ class SecurePublicationAnonUserAccessDeniedTest extends DomainTestBase {
     $config_source = new FileStorage($config_path);
     \Drupal::service('config.installer')->installOptionalConfig($config_source);
 
-//    Domain::create([
-//      'hostname' => 'www.northernireland.ddev.site',
-//      'name' => 'The Northern Ireland Assembly',
-//      'id' => 'nigov',
-//      'domain_id' => '11933791',
-//      'scheme' => 'variable',
-//      'is_default' => TRUE,
-//    ])->save();
     $this->domain = Domain::load('nigov');
 
     $this->adminUser = $this->drupalCreateUser([
