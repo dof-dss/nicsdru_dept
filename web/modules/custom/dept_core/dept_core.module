@@ -527,6 +527,7 @@ function dept_core_page_attachments(array &$attachments) {
     $attachments['#attached']['library'][] = 'dept_core/main_menu_navigation';
   }
 
+  // Add contextual links to layout builder for non admin accounts.
   if (!in_array($route_name, ['layout_builder.overrides.node.view', 'layout_builder.defaults.node.view'])) {
     if (!in_array('administrator', \Drupal::currentUser()->getRoles()) && isset($attachments['#attached']['library'])) {
       $attachments['#attached']['library'] = array_diff($attachments['#attached']['library'], [
@@ -616,6 +617,7 @@ function dept_core_toolbar_alter(&$items) {
  * Implements hook_entity_view_alter().
  */
 function dept_core_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  // Remove all contextual links for non-admins.
   if (!in_array('administrator', \Drupal::currentUser()->getRoles())) {
     if (!in_array(\Drupal::routeMatch()->getRouteName(), [
       'layout_builder.overrides.node.view',
