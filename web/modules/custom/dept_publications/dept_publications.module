@@ -11,7 +11,6 @@ use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\Core\Url;
 use Drupal\media\MediaInterface;
 use Drupal\views\Render\ViewsRenderPipelineMarkup;
-use Drupal\views\ViewExecutable;
 use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
 
 /**
@@ -23,7 +22,7 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
   /** @var \Drupal\node\NodeInterface $node */
   $node = $form_object->getEntity();
 
-  // Toggle the display/availability of  fields depending on the required
+  // Toggle the display/availability of fields depending on the required
   // attachment type.
   if ($node->bundle() === 'publication') {
 
@@ -104,13 +103,6 @@ function dept_publications_file_download($uri) {
 }
 
 /**
- * Implements hook_views_pre_execute().
- */
-function dept_publications_views_pre_execute(ViewExecutable $view) {
-
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function dept_publications_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -125,20 +117,18 @@ function dept_publications_form_views_exposed_form_alter(&$form, FormStateInterf
 }
 
 /**
- * Implements hook_preprocess_views_view_field().)
+ * Implements hook_preprocess_views_view_field().
  */
 function dept_publications_preprocess_views_view_field(&$variables) {
   $view = $variables['view'];
   $field_id = $variables['field']->field;
 
-  // If the content type is publication with secure attachments, update the 'type' text if it is unpublished.
+  // If a publication is embargoed and unpublished, update the 'content type' text.
   if ($view->storage->id() === 'workflow_moderation' || $view->storage->id() === 'content') {
     if ($variables['field']->field === 'type' && $variables['output'] == 'Publication') {
       $entity = $variables["row"]->_entity;
-      if ($entity->hasField('field_publication_secure_files') && !$entity->get('field_publication_secure_files')->isEmpty()) {
-        if ($entity->get('moderation_state')->getString() !== 'published') {
-          $variables['output'] = t('Publication (embargoed)');
-        }
+      if (!$entity->isPublished() && $entity->hasField('field_embargoed') && $entity->get('field_embargoed')->getString()) {
+        $variables['output'] = t('Publication (embargoed)');
       }
     }
   }
@@ -150,7 +140,6 @@ function dept_publications_preprocess_views_view_field(&$variables) {
       $media = $variables['row']->_entity;
 
       if ($media instanceof MediaInterface && $media->bundle() === 'remote_document') {
-        $mime_type_key = '';
         $pretty_mimes = \Drupal::service('origins_media.pretty_mime_types')->getMimeTypes();
         $file_url = $media->get('field_media_media_remote')->getString();
         $file_headers = dept_publications_get_remote_file_metadata($file_url);
@@ -289,6 +278,7 @@ function dept_publications_node_grants(AccountInterface $account, $op) {
 
   $grants = [];
 
+  // Grants for access control to embargoed, unpublished publications.
   switch ($op) {
     case 'view':
       if ($account->hasPermission('view any embargoed publication')) {
@@ -326,6 +316,9 @@ function dept_publications_node_grants(AccountInterface $account, $op) {
  * Implements hook_node_access_records_alter().
  */
 function dept_publications_node_access_records_alter(&$grants, $node) {
+
+  // Creates access records for embargoed publications.
+  // See: https://digitaldevelopment.atlassian.net/wiki/x/AQCNkg
   if ($node->bundle() === 'publication') {
     $embargoed = $node->get('field_embargoed')->getString();
 
