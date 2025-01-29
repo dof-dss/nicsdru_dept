@@ -100,6 +100,8 @@ class SecurePublicationAnonUserAccessDeniedTest extends DomainTestBase {
     'dept_user',
     'domain',
     'domain_access',
+    'domain_alias',
+    'domain_source',
     'field',
     'media',
     'node',
@@ -117,14 +119,14 @@ class SecurePublicationAnonUserAccessDeniedTest extends DomainTestBase {
     $config_source = new FileStorage($config_path);
     \Drupal::service('config.installer')->installOptionalConfig($config_source);
 
-    Domain::create([
-      'hostname' => 'nigov.lndo.site',
-      'name' => 'The Northern Ireland Assembly',
-      'id' => 'nigov',
-      'domain_id' => '11933791',
-      'scheme' => 'variable',
-      'is_default' => TRUE,
-    ])->save();
+//    Domain::create([
+//      'hostname' => 'www.northernireland.ddev.site',
+//      'name' => 'The Northern Ireland Assembly',
+//      'id' => 'nigov',
+//      'domain_id' => '11933791',
+//      'scheme' => 'variable',
+//      'is_default' => TRUE,
+//    ])->save();
     $this->domain = Domain::load('nigov');
 
     $this->adminUser = $this->drupalCreateUser([
@@ -133,20 +135,20 @@ class SecurePublicationAnonUserAccessDeniedTest extends DomainTestBase {
     ]);
     $this->regularAuthorUser = $this->drupalCreateUser([
       'access administration pages',
-      'create publication content',
+      'create publication content on assigned domains',
       'edit own publication content',
     ]);
     $this->statsAuthorUser = $this->drupalCreateUser([
       'access administration pages',
-      'create publication content',
+      'create publication content on assigned domains',
       'edit own publication content',
-      'view own unpublished secure publication',
+      'view own embargoed publication',
     ]);
     $this->statsSuperVisorUser = $this->drupalCreateUser([
       'access administration pages',
-      'create publication content',
+      'create publication content on assigned domains',
       'edit own publication content',
-      'view any unpublished secure publication'
+      'view any embargoed publication'
     ]);
 
     $mediaDoc = Media::create([
@@ -157,7 +159,7 @@ class SecurePublicationAnonUserAccessDeniedTest extends DomainTestBase {
     $this->mediaDoc = $mediaDoc;
 
     $this->unpublishedSecurePublication = $this->drupalCreateNode([
-      'title' => 'Unpublished SECURE publication node',
+      'title' => 'Unpublished embargoed publication node',
       'type' => 'publication',
       'status' => 0,
       'field_publication_secure_files' => [
@@ -168,7 +170,7 @@ class SecurePublicationAnonUserAccessDeniedTest extends DomainTestBase {
     ]);
 
     $this->publishedSecurePublication = $this->drupalCreateNode([
-      'title' => 'Published SECURE publication node',
+      'title' => 'Published embargoed publication node',
       'type' => 'publication',
       'status' => 1,
       'field_publication_secure_files' => [
@@ -202,7 +204,7 @@ class SecurePublicationAnonUserAccessDeniedTest extends DomainTestBase {
   }
 
   /** @test */
-  public function anonymousUserCannotAccessUnpublishedSecurePublication() {
+  public function testAnonymousUserCannotAccessUnpublishedSecurePublication():void {
     $securePubNode = $this->unpublishedSecurePublication;
     $path = $this->domain->getPath() . 'node/' . $securePubNode->id();
     $this->drupalGet($path);
@@ -211,7 +213,7 @@ class SecurePublicationAnonUserAccessDeniedTest extends DomainTestBase {
   }
 
   /** @test */
-  public function editorUserCannotEditPublishedSecurePublication() {
+  public function testEditorUserCannotEditPublishedSecurePublication():void {
     $this->drupalLogin($this->regularAuthorUser);
 
     $securePubNode = $this->publishedSecurePublication;
@@ -222,7 +224,7 @@ class SecurePublicationAnonUserAccessDeniedTest extends DomainTestBase {
   }
 
   /** @test */
-  public function statsUserAuthorCannotEditSomeoneElsesSecurePublication() {
+  public function testStatsUserAuthorCannotEditSomeoneElsesSecurePublication():void {
     $this->drupalLogin($this->statsAuthorUser);
 
     $secureUnpublishedPubNode = $this->unpublishedSecurePublication;
@@ -233,7 +235,7 @@ class SecurePublicationAnonUserAccessDeniedTest extends DomainTestBase {
   }
 
   /** @test */
-  public function statsUserAuthorCanEditOwnSecurePublication() {
+  public function testStatsUserAuthorCanEditOwnSecurePublication():void {
     $this->drupalLogin($this->statsAuthorUser);
 
     $secureUnpublishedPubNode = $this->unpublishedSecurePublication;

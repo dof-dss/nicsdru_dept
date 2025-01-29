@@ -84,7 +84,7 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
           case "update":
           case "delete":
           case "view scheduled transition":
-          case "View all revisions":
+          case "view all revisions":
             return $this->publicationViewUpdateDelete($entity, $operation, $account);
 
           default:
@@ -133,11 +133,11 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
         break;
 
       case "view scheduled transition":
-      case "View all revisions":
-        if ($user->hasPermission('update any embargoed publication')) {
+      case "view all revisions":
+        if ($user->hasPermission('edit any embargoed publication')) {
           $access = new AccessResultAllowed();
         }
-        elseif ($user->hasPermission('update own embargoed publication') && $node->getOwnerId() === $user->id()) {
+        elseif ($user->hasPermission('edit own embargoed publication') && $node->getOwnerId() === $user->id()) {
           $access = new AccessResultAllowed();
         }
         else {
