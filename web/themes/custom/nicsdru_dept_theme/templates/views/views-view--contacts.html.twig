@@ -39,18 +39,13 @@
     dom_id ? 'js-view-dom-id-' ~ dom_id,
   ]
 %}
+{% if rows %}
 <div {{attributes.addClass(classes)}}>
   <h2>{{ "More contacts"|t }}</h2>
 
-  {% if rows %}
     <div class="view-content" role="region">
       {{ rows }}
     </div>
-  {% elseif empty %}
-    <div class="view-empty" role="region">
-      {{ empty }}
-    </div>
-  {% endif %}
 
   {% if pager %}
     {{ pager }}
@@ -64,3 +59,4 @@
     </div>
   {% endif %}
 </div>
+{% endif %}
