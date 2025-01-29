@@ -36,7 +36,9 @@ async function updateLibrariesYml() {
   const newVersion = await generateHash();
 
   let content = fs.readFileSync(librariesFile, 'utf8');
-  content = content.replace(/version: .*/, `version: '${newVersion}'`);
+
+  // Replace all occurrences of 'version: ...' with the new version.
+  content = content.replace(/version:.*/g, `version: '${newVersion}'`);
 
   fs.writeFileSync(librariesFile, content, 'utf8');
   console.log(`✅ Updated theme version to ${newVersion} in libraries.yml`);
