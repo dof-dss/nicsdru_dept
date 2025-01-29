@@ -8,6 +8,7 @@
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -515,15 +516,27 @@ function dept_core_clientside_validation_should_validate($element, FormStateInte
  * Implements hook_page_attachments().
  */
 function dept_core_page_attachments(array &$attachments) {
+  $route_name = \Drupal::routeMatch()->getRouteName();
   // Check if it is an admin page.
   if (\Drupal::service('router.admin_context')->isAdminRoute()) {
     // Attach extra custom css for admin menu.
     $attachments['#attached']['library'][] = 'nicsdru_dept_theme/admin-content';
   }
 
-  if (\Drupal::routeMatch()->getRouteName() === 'dept_homepage.homepage_controller_default') {
+  if ($route_name === 'dept_homepage.homepage_controller_default') {
     $attachments['#attached']['library'][] = 'dept_core/main_menu_navigation';
   }
+
+  // Add contextual links to layout builder for non admin accounts.
+  if (!in_array($route_name, ['layout_builder.overrides.node.view', 'layout_builder.defaults.node.view'])) {
+    if (!in_array('administrator', \Drupal::currentUser()->getRoles()) && isset($attachments['#attached']['library'])) {
+      $attachments['#attached']['library'] = array_diff($attachments['#attached']['library'], [
+        'contextual/drupal.contextual-links',
+        'contextual/drupal.contextual-toolbar'
+      ]);
+    }
+  }
+
 }
 
 /**
@@ -598,4 +611,19 @@ function dept_core_simple_sitemap_links_alter(array &$links, SimpleSitemapInterf
 function dept_core_toolbar_alter(&$items) {
   // Remove the 'Edit' contextual link from the top admin toolbar.
   unset($items["contextual"]);
+}
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function dept_core_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  // Remove all contextual links for non-admins.
+  if (!in_array('administrator', \Drupal::currentUser()->getRoles())) {
+    if (!in_array(\Drupal::routeMatch()->getRouteName(), [
+      'layout_builder.overrides.node.view',
+      'layout_builder.defaults.node.view'
+    ])) {
+      unset($build['#contextual_links']);
+    }
+  }
 }

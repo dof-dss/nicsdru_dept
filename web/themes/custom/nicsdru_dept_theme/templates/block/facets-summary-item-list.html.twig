@@ -29,7 +29,7 @@
     context.list_style ? 'item-list__' ~ context.list_style,
   ]
 %}
-{% set attributes = attributes.addClass(classes).setAttribute('aria-describedby', 'facet-summary-label') %}
+{% set attributes = attributes.addClass(classes) %}
 {% if items or empty %}
   {%- if title is not empty -%}
     <h3>{{ title }}</h3>
@@ -37,7 +37,7 @@
   {%- if summaries -%}
     <{{ list_type }}{{ attributes }}>
       {%- for summary, facets in summaries -%}
-        <ul>
+        <li><ul>
           <span aria-label="Selected filter" class="facet-item__label">
             {{ summary|t }}
           </span>
@@ -46,7 +46,8 @@
                 {{ link(facet['#title'], facet['#url'], { 'data-self-ref': ['true']}) }}
               </li>
             {%- endfor -%}
-        </ul>
+          </ul></li>
       {%- endfor -%}
+    </{{ list_type }}>
   {%- endif %}
 {%- endif %}
