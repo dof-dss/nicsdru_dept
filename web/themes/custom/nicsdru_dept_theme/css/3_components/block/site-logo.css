@@ -1,1 +1,116 @@
-.layout-header--logo{margin:2em auto 1.5em;padding:0 15px}@media (min-width: 768px){.layout-header--logo{margin:3em 0 2em;padding:0}}.layout-header--logo>a{display:block;width:100%;height:100%;color:rgba(0,0,0,0);background-color:rgba(0,0,0,0);text-decoration:none;outline:0;outline-offset:.6rem}.layout-header--logo>a:visited,.layout-header--logo>a.visited{color:rgba(0,0,0,0);background-color:rgba(0,0,0,0);text-decoration:none;outline:0}.layout-header--logo>a:focus,.layout-header--logo>a.focus{color:rgba(0,0,0,0);background-color:rgba(0,0,0,0);text-decoration:none;outline:.3rem dashed #949494}.layout-header--logo>a:hover,.layout-header--logo>a.hover{color:rgba(0,0,0,0);background-color:rgba(0,0,0,0);text-decoration:none;outline:.3rem dashed #949494}.layout-header--logo>a:active,.layout-header--logo>a.active{color:rgba(0,0,0,0);background-color:rgba(0,0,0,0);text-decoration:none;outline:.3rem dashed #4d4d4d}@media (min-width: 480px){.layout-header--logo>a{outline-offset:1.2rem}}.layout-header--logo svg{display:block;width:auto;height:100%;max-height:4.75em;margin:0 auto}@media (min-width: 768px){.layout-header--logo svg{margin:0 .2rem}}@media (min-width: 992px){.layout-header--logo svg{max-height:5em;margin:0 .4rem}}@media all and (-ms-high-contrast: none), (-ms-high-contrast: active){.layout-header--logo a{position:relative;outline:none !important}.layout-header--logo a::after{content:'';display:block;width:calc(100% + 24px);height:calc(100% + 24px);position:absolute;left:-12px;top:-12px}.layout-header--logo a:focus-visible::after{border:3px dashed #949494}}
+/* Vertical rhythm presets =========================================== */
+/* Set the base images folder */
+/* Breakpoints ======================================================== */
+/* Layout max widths for larger breakpoints =========================== */
+/* line 3, src/scss/3_components/block/site-logo.scss */
+.layout-header--logo {
+  margin: 2em auto 1.5em;
+  padding: 0 15px;
+}
+
+@media (min-width: 768px) {
+  /* line 3, src/scss/3_components/block/site-logo.scss */
+  .layout-header--logo {
+    margin: 3em 0 2em;
+    padding: 0;
+  }
+}
+
+/* line 12, src/scss/3_components/block/site-logo.scss */
+.layout-header--logo > a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: transparent;
+  background-color: transparent;
+  text-decoration: none;
+  outline: 0;
+  outline-offset: .6rem;
+}
+
+/* line 116, src/scss/init/links/_links.scss */
+.layout-header--logo > a:visited, .layout-header--logo > a.visited {
+  color: transparent;
+  background-color: transparent;
+  text-decoration: none;
+  outline: 0;
+}
+
+/* line 116, src/scss/init/links/_links.scss */
+.layout-header--logo > a:focus, .layout-header--logo > a.focus {
+  color: transparent;
+  background-color: transparent;
+  text-decoration: none;
+  outline: .3rem dashed #949494;
+}
+
+/* line 116, src/scss/init/links/_links.scss */
+.layout-header--logo > a:hover, .layout-header--logo > a.hover {
+  color: transparent;
+  background-color: transparent;
+  text-decoration: none;
+  outline: .3rem dashed #949494;
+}
+
+/* line 116, src/scss/init/links/_links.scss */
+.layout-header--logo > a:active, .layout-header--logo > a.active {
+  color: transparent;
+  background-color: transparent;
+  text-decoration: none;
+  outline: .3rem dashed #4d4d4d;
+}
+
+@media (min-width: 480px) {
+  /* line 12, src/scss/3_components/block/site-logo.scss */
+  .layout-header--logo > a {
+    outline-offset: 1.2rem;
+  }
+}
+
+/* line 25, src/scss/3_components/block/site-logo.scss */
+.layout-header--logo svg {
+  display: block;
+  width: auto;
+  height: 100%;
+  max-height: 4.75em;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  /* line 25, src/scss/3_components/block/site-logo.scss */
+  .layout-header--logo svg {
+    margin: 0 .2rem;
+  }
+}
+
+@media (min-width: 992px) {
+  /* line 25, src/scss/3_components/block/site-logo.scss */
+  .layout-header--logo svg {
+    max-height: 5em;
+    margin: 0 .4rem;
+  }
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  /* line 45, src/scss/3_components/block/site-logo.scss */
+  .layout-header--logo a {
+    position: relative;
+    outline: none !important;
+  }
+  /* line 50, src/scss/3_components/block/site-logo.scss */
+  .layout-header--logo a::after {
+    content: '';
+    display: block;
+    width: calc(100% + 24px);
+    height: calc(100% + 24px);
+    position: absolute;
+    left: -12px;
+    top: -12px;
+  }
+  /* line 60, src/scss/3_components/block/site-logo.scss */
+  .layout-header--logo a:focus-visible::after {
+    border: 3px dashed #949494;
+  }
+}
+
+/*# sourceMappingURL=site-logo.css.map */

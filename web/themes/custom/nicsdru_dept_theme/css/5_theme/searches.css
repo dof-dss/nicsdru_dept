@@ -1,1 +1,324 @@
-.page-search h1 em.placeholder{font-style:normal;font-size:smaller}@media (min-width: 768px){.search-intro{width:80%;margin:3rem auto}}.search-results header{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-flow:row wrap;flex-flow:row wrap;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:baseline;-ms-flex-align:baseline;align-items:baseline}.search-results header>*{-webkit-box-flex:100%;-ms-flex:100% 1 1;flex:100% 1 1}.search-results header h2,.search-results header .view--count,.search-results header .view--rss-link{-webkit-box-flex:1;-ms-flex:auto 0 1;flex:auto 0 1;-webkit-box-ordinal-group:0;-ms-flex-order:-1;order:-1}.search-results h2:first-of-type,.search-results .view--count{margin:var(--rhythm-spacing-sm) 0 0}@media (min-width: 768px){.search-results h2:first-of-type,.search-results .view--count{margin:0}}.search-results h2:first-of-type .subtitle,.search-results h2:first-of-type+.subtitle,.search-results .view--count .subtitle,.search-results .view--count+.subtitle{font-size:1.5rem;line-height:2.2rem;color:#666;display:block;margin:var(--rhythm-spacing-xs) 0 0}@media screen and (min-width: 992px){.search-results h2:first-of-type .subtitle,.search-results h2:first-of-type+.subtitle,.search-results .view--count .subtitle,.search-results .view--count+.subtitle{font-size:1.6rem;line-height:2.4rem}}@media screen and (min-width: 1679px){.search-results h2:first-of-type .subtitle,.search-results h2:first-of-type+.subtitle,.search-results .view--count .subtitle,.search-results .view--count+.subtitle{font-size:1.7rem;line-height:2.5rem}}.search-results h2:first-of-type .subtitle>*,.search-results h2:first-of-type+.subtitle>*,.search-results .view--count .subtitle>*,.search-results .view--count+.subtitle>*{font-size:inherit;line-height:inherit}.search-results .view-sort-options *{font-size:1.5rem;line-height:2.2rem}@media screen and (min-width: 992px){.search-results .view-sort-options *{font-size:1.6rem;line-height:2.4rem}}@media screen and (min-width: 1679px){.search-results .view-sort-options *{font-size:1.7rem;line-height:2.5rem}}.search-results .view-sort-options .label-inline{color:#666}.search-results .view-sort-options .label-inline:not(:last-child)::after{content:' | '}.search-results .view-sort-options+.facet-summary{margin-top:var(--rhythm-spacing-sm)}.search-results .facet-summary-item--facet{line-height:2.5em}.search-results .view--rss-link{font-size:1.5rem;line-height:2.2rem}@media screen and (min-width: 992px){.search-results .view--rss-link{font-size:1.6rem;line-height:2.4rem}}@media screen and (min-width: 1679px){.search-results .view--rss-link{font-size:1.7rem;line-height:2.5rem}}.search-results .view--rss-link .feed-icon{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-column-gap:.5rem;-moz-column-gap:.5rem;column-gap:.5rem}.search-results-list{margin:0}.search-results--title{margin-top:0}.search-results h3{font-size:2rem;line-height:2.8rem;margin:0 0 var(--rhythm-spacing-xs)}@media screen and (min-width: 992px){.search-results h3{font-size:2.1rem;line-height:3rem}}@media screen and (min-width: 1200px){.search-results h3{font-size:2.2rem;line-height:3.3rem}}@media screen and (min-width: 1679px){.search-results h3{font-size:2.2rem;line-height:3.5rem}}.search-results .meta{margin:var(--rhythm-spacing-sm) 0}.search-results .meta:empty{margin:0}.search-results .meta .meta-list-item{margin-left:var(--rhythm-spacing-sm)}#contacts-az--title{margin:.5em 0}.search-form--contacts{margin-bottom:0}a.facet--btn{line-height:4.4rem;min-height:4.4rem;border:0 !important}@media (min-width: 768px){a.facet--btn{line-height:4.5rem;min-height:4.5rem}}a.facet--btn:focus{outline:0}a.facet--btn:focus-visible{outline:3px solid #000;outline-offset:-3px;-webkit-box-shadow:0 0 0 3px #ff4da4;box-shadow:0 0 0 3px #ff4da4}a.facet--btn .ico-arrow-down{margin:1.2rem}.path-news .proni-archive,.path-press-releases .proni-archive{margin:1.5em 0;-webkit-box-shadow:0 -1px 0 0 #cdcdcd;box-shadow:0 -1px 0 0 #cdcdcd;padding-top:1em}.path-news .proni-archive>*,.path-press-releases .proni-archive>*{font-size:1.5rem;line-height:2.2rem;margin:0}@media screen and (min-width: 992px){.path-news .proni-archive>*,.path-press-releases .proni-archive>*{font-size:1.6rem;line-height:2.4rem}}@media screen and (min-width: 1679px){.path-news .proni-archive>*,.path-press-releases .proni-archive>*{font-size:1.7rem;line-height:2.5rem}}
+/*
+ * @file
+ * Provides very specific styling for search index pages.
+ */
+/* Vertical rhythm presets =========================================== */
+/* Set the base images folder */
+/* Breakpoints ======================================================== */
+/* Layout max widths for larger breakpoints =========================== */
+/* line 8, src/scss/5_theme/searches.scss */
+.page-search h1 em.placeholder {
+  font-style: normal;
+  font-size: smaller;
+}
+
+@media (min-width: 768px) {
+  /* line 14, src/scss/5_theme/searches.scss */
+  .search-intro {
+    width: 80%;
+    margin: 3rem auto;
+  }
+}
+
+/* line 24, src/scss/5_theme/searches.scss */
+.search-results header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
+}
+
+/* line 30, src/scss/5_theme/searches.scss */
+.search-results header > * {
+  -webkit-box-flex: 100%;
+  -ms-flex: 100% 1 1;
+  flex: 100% 1 1;
+}
+
+/* line 34, src/scss/5_theme/searches.scss */
+.search-results header h2,
+.search-results header .view--count,
+.search-results header .view--rss-link {
+  -webkit-box-flex: 1;
+  -ms-flex: auto 0 1;
+  flex: auto 0 1;
+  -webkit-box-ordinal-group: 0;
+  -ms-flex-order: -1;
+  order: -1;
+}
+
+/* line 42, src/scss/5_theme/searches.scss */
+.search-results h2:first-of-type,
+.search-results .view--count {
+  margin: var(--rhythm-spacing-sm) 0 0;
+}
+
+@media (min-width: 768px) {
+  /* line 42, src/scss/5_theme/searches.scss */
+  .search-results h2:first-of-type,
+  .search-results .view--count {
+    margin: 0;
+  }
+}
+
+/* line 50, src/scss/5_theme/searches.scss */
+.search-results h2:first-of-type .subtitle,
+.search-results h2:first-of-type + .subtitle,
+.search-results .view--count .subtitle,
+.search-results .view--count + .subtitle {
+  font-size: 1.5rem;
+  line-height: 2.2rem;
+  color: #666;
+  display: block;
+  margin: var(--rhythm-spacing-xs) 0 0;
+}
+
+@media screen and (min-width: 992px) {
+  /* line 50, src/scss/5_theme/searches.scss */
+  .search-results h2:first-of-type .subtitle,
+  .search-results h2:first-of-type + .subtitle,
+  .search-results .view--count .subtitle,
+  .search-results .view--count + .subtitle {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+}
+
+@media screen and (min-width: 1679px) {
+  /* line 50, src/scss/5_theme/searches.scss */
+  .search-results h2:first-of-type .subtitle,
+  .search-results h2:first-of-type + .subtitle,
+  .search-results .view--count .subtitle,
+  .search-results .view--count + .subtitle {
+    font-size: 1.7rem;
+    line-height: 2.5rem;
+  }
+}
+
+/* line 57, src/scss/5_theme/searches.scss */
+.search-results h2:first-of-type .subtitle > *,
+.search-results h2:first-of-type + .subtitle > *,
+.search-results .view--count .subtitle > *,
+.search-results .view--count + .subtitle > * {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* line 66, src/scss/5_theme/searches.scss */
+.search-results .view-sort-options * {
+  font-size: 1.5rem;
+  line-height: 2.2rem;
+}
+
+@media screen and (min-width: 992px) {
+  /* line 66, src/scss/5_theme/searches.scss */
+  .search-results .view-sort-options * {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+}
+
+@media screen and (min-width: 1679px) {
+  /* line 66, src/scss/5_theme/searches.scss */
+  .search-results .view-sort-options * {
+    font-size: 1.7rem;
+    line-height: 2.5rem;
+  }
+}
+
+/* line 70, src/scss/5_theme/searches.scss */
+.search-results .view-sort-options .label-inline {
+  color: #666;
+}
+
+/* line 73, src/scss/5_theme/searches.scss */
+.search-results .view-sort-options .label-inline:not(:last-child)::after {
+  content: ' | ';
+}
+
+/* line 78, src/scss/5_theme/searches.scss */
+.search-results .view-sort-options + .facet-summary {
+  margin-top: var(--rhythm-spacing-sm);
+}
+
+/* line 84, src/scss/5_theme/searches.scss */
+.search-results .facet-summary-item--facet {
+  line-height: 2.5em;
+}
+
+/* line 88, src/scss/5_theme/searches.scss */
+.search-results .view--rss-link {
+  font-size: 1.5rem;
+  line-height: 2.2rem;
+}
+
+@media screen and (min-width: 992px) {
+  /* line 88, src/scss/5_theme/searches.scss */
+  .search-results .view--rss-link {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+}
+
+@media screen and (min-width: 1679px) {
+  /* line 88, src/scss/5_theme/searches.scss */
+  .search-results .view--rss-link {
+    font-size: 1.7rem;
+    line-height: 2.5rem;
+  }
+}
+
+/* line 91, src/scss/5_theme/searches.scss */
+.search-results .view--rss-link .feed-icon {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-column-gap: .5rem;
+  -moz-column-gap: .5rem;
+  column-gap: .5rem;
+}
+
+/* line 97, src/scss/5_theme/searches.scss */
+.search-results-list {
+  margin: 0;
+}
+
+/* line 101, src/scss/5_theme/searches.scss */
+.search-results--title {
+  margin-top: 0;
+}
+
+/* line 105, src/scss/5_theme/searches.scss */
+.search-results h3 {
+  font-size: 2rem;
+  line-height: 2.8rem;
+  margin: 0 0 var(--rhythm-spacing-xs);
+}
+
+@media screen and (min-width: 992px) {
+  /* line 105, src/scss/5_theme/searches.scss */
+  .search-results h3 {
+    font-size: 2.1rem;
+    line-height: 3rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  /* line 105, src/scss/5_theme/searches.scss */
+  .search-results h3 {
+    font-size: 2.2rem;
+    line-height: 3.3rem;
+  }
+}
+
+@media screen and (min-width: 1679px) {
+  /* line 105, src/scss/5_theme/searches.scss */
+  .search-results h3 {
+    font-size: 2.2rem;
+    line-height: 3.5rem;
+  }
+}
+
+/* line 110, src/scss/5_theme/searches.scss */
+.search-results .meta {
+  margin: var(--rhythm-spacing-sm) 0;
+}
+
+/* line 113, src/scss/5_theme/searches.scss */
+.search-results .meta:empty {
+  margin: 0;
+}
+
+/* line 117, src/scss/5_theme/searches.scss */
+.search-results .meta .meta-list-item {
+  margin-left: var(--rhythm-spacing-sm);
+}
+
+/* line 131, src/scss/5_theme/searches.scss */
+#contacts-az--title {
+  margin: .5em 0;
+}
+
+/* line 135, src/scss/5_theme/searches.scss */
+.search-form--contacts {
+  margin-bottom: 0;
+}
+
+/* line 140, src/scss/5_theme/searches.scss */
+a.facet--btn {
+  line-height: 4.4rem;
+  min-height: 4.4rem;
+  border: 0 !important;
+}
+
+@media (min-width: 768px) {
+  /* line 140, src/scss/5_theme/searches.scss */
+  a.facet--btn {
+    line-height: 4.5rem;
+    min-height: 4.5rem;
+  }
+}
+
+/* line 151, src/scss/5_theme/searches.scss */
+a.facet--btn:focus {
+  outline: 0;
+}
+
+/* line 155, src/scss/5_theme/searches.scss */
+a.facet--btn:focus-visible {
+  outline: 3px solid black;
+  outline-offset: -3px;
+  -webkit-box-shadow: 0 0 0 3px #ff4da4;
+  box-shadow: 0 0 0 3px #ff4da4;
+}
+
+/* line 159, src/scss/5_theme/searches.scss */
+a.facet--btn .ico-arrow-down {
+  margin: 1.2rem;
+}
+
+/* line 168, src/scss/5_theme/searches.scss */
+.path-news .proni-archive,
+.path-press-releases .proni-archive {
+  margin: 1.5em 0;
+  -webkit-box-shadow: 0 -1px 0 0 #cdcdcd;
+  box-shadow: 0 -1px 0 0 #cdcdcd;
+  padding-top: 1em;
+}
+
+/* line 173, src/scss/5_theme/searches.scss */
+.path-news .proni-archive > *,
+.path-press-releases .proni-archive > * {
+  font-size: 1.5rem;
+  line-height: 2.2rem;
+  margin: 0;
+}
+
+@media screen and (min-width: 992px) {
+  /* line 173, src/scss/5_theme/searches.scss */
+  .path-news .proni-archive > *,
+  .path-press-releases .proni-archive > * {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+  }
+}
+
+@media screen and (min-width: 1679px) {
+  /* line 173, src/scss/5_theme/searches.scss */
+  .path-news .proni-archive > *,
+  .path-press-releases .proni-archive > * {
+    font-size: 1.7rem;
+    line-height: 2.5rem;
+  }
+}
+
+/*# sourceMappingURL=searches.css.map */

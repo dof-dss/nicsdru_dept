@@ -1,1 +1,106 @@
-.layout--front{grid-template-columns:repeat(12, 1fr);grid-column-gap:1rem}.layout--front>*,.layout--front .section-front{grid-column:1 / span 12}@media (min-width: 768px){.layout--front .section-front--featured{grid-column:1 / span 7;grid-row:1 / span 2}.layout--front .section-front--quick-links,.layout--front .section-front--latest-news{grid-column:9 / span 4}.layout--front .section-front--social-links{grid-column:9 / span 4;align-self:end}.layout--front .section-front--topics{grid-column:1 / span 12}.layout--front .section-front--featured-topics{grid-column:1 / span 12;display:grid;grid-template-columns:1fr 1fr;grid-gap:0 3em}.layout--front .section-front--featured-topics>*{grid-column:1 / span 2}.layout--front .section-front--featured-topics .niexec-budget{grid-column:1}.layout--front .section-front--featured-topics .niexec-pfg{grid-column:2}.layout--front .section-front--agency-links{grid-column:1 / span 12}.layout--front .section-front--our-documents{grid-column:1 / span 12;display:grid;grid-template-columns:1fr 1fr;grid-gap:0 3em}.layout--front .section-front--our-documents>*{grid-column:1 / span 2}.layout--front .section-front--our-documents .latest-publications{grid-column:1;grid-row:2}.layout--front .section-front--our-documents .latest-consultations{grid-column:2;grid-row:2}.layout--front .section-front--access-to-information{grid-column:1 / span 12}.layout--front .section-front--about-us{grid-column:1 / span 7}.dept-nigov .layout--front .section-front--about-us{grid-column:1 / span 12}.layout--front .section-front--corporate-links{grid-column:9 / span 4}.layout--front .section-front--contact-us{grid-column:1 / span 12}}
+/*
+ * @file
+ * Provides the layout styles for front page.
+ */
+/* Vertical rhythm presets =========================================== */
+/* Set the base images folder */
+/* Breakpoints ======================================================== */
+/* Layout max widths for larger breakpoints =========================== */
+/* line 16, src/scss/2_layouts/front.scss */
+.layout--front {
+  grid-template-columns: repeat(12, 1fr);
+  grid-column-gap: 1rem;
+}
+
+/* line 22, src/scss/2_layouts/front.scss */
+.layout--front > *,
+.layout--front .section-front {
+  grid-column: 1 / span 12;
+}
+
+@media (min-width: 768px) {
+  /* line 31, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--featured {
+    grid-column: 1 / span 7;
+    grid-row: 1 / span 2;
+  }
+  /* line 36, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--quick-links, .layout--front .section-front--latest-news {
+    grid-column: 9 / span 4;
+  }
+  /* line 41, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--social-links {
+    grid-column: 9 / span 4;
+    align-self: end;
+  }
+  /* line 46, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--topics {
+    grid-column: 1 / span 12;
+  }
+  /* line 50, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--featured-topics {
+    grid-column: 1 / span 12;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 0 3em;
+  }
+  /* line 56, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--featured-topics > * {
+    grid-column: 1 / span 2;
+  }
+  /* line 60, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--featured-topics .niexec-budget {
+    grid-column: 1;
+  }
+  /* line 64, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--featured-topics .niexec-pfg {
+    grid-column: 2;
+  }
+  /* line 69, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--agency-links {
+    grid-column: 1 / span 12;
+  }
+  /* line 73, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--our-documents {
+    grid-column: 1 / span 12;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 0 3em;
+  }
+  /* line 79, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--our-documents > * {
+    grid-column: 1 / span 2;
+  }
+  /* line 83, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--our-documents .latest-publications {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  /* line 88, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--our-documents .latest-consultations {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  /* line 94, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--access-to-information {
+    grid-column: 1 / span 12;
+  }
+  /* line 98, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--about-us {
+    grid-column: 1 / span 7;
+  }
+  /* line 101, src/scss/2_layouts/front.scss */
+  .dept-nigov .layout--front .section-front--about-us {
+    grid-column: 1 / span 12;
+  }
+  /* line 106, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--corporate-links {
+    grid-column: 9 / span 4;
+  }
+  /* line 110, src/scss/2_layouts/front.scss */
+  .layout--front .section-front--contact-us {
+    grid-column: 1 / span 12;
+  }
+}
+
+/*# sourceMappingURL=front.css.map */

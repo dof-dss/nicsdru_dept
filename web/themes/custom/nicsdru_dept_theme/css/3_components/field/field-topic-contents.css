@@ -1,1 +1,42 @@
-.moderation-state,.moderation-state--draft,.moderation-state--needs-review,.moderation-state--archived{font-size:1.3rem;display:inline-block;padding:1px 8px;border:1px solid;border-radius:15px;letter-spacing:0.1rem;cursor:default;margin-bottom:2px}.moderation-state--draft{background-color:#fee2e2;color:#b91c1c;border-color:rgba(185,28,28,0.2)}.moderation-state--needs-review{background-color:#fee2c3;color:#854d2c;border-color:rgba(133,77,44,0.2)}.moderation-state--archived{background-color:#f3f4f6;color:#4b5563;border-color:rgba(75,85,99,0.2)}
+/**
+ * @file
+ * Provides the moderation state indicators.
+ */
+/* Vertical rhythm presets =========================================== */
+/* Set the base images folder */
+/* Breakpoints ======================================================== */
+/* Layout max widths for larger breakpoints =========================== */
+/* line 8, src/scss/3_components/field/field-topic-contents.scss */
+.moderation-state, .moderation-state--draft, .moderation-state--needs-review, .moderation-state--archived {
+  font-size: 1.3rem;
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid;
+  border-radius: 15px;
+  letter-spacing: 0.1rem;
+  cursor: default;
+  margin-bottom: 2px;
+}
+
+/* line 19, src/scss/3_components/field/field-topic-contents.scss */
+.moderation-state--draft {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border-color: rgba(185, 28, 28, 0.2);
+}
+
+/* line 26, src/scss/3_components/field/field-topic-contents.scss */
+.moderation-state--needs-review {
+  background-color: #fee2c3;
+  color: #854d2c;
+  border-color: rgba(133, 77, 44, 0.2);
+}
+
+/* line 33, src/scss/3_components/field/field-topic-contents.scss */
+.moderation-state--archived {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border-color: rgba(75, 85, 99, 0.2);
+}
+
+/*# sourceMappingURL=field-topic-contents.css.map */
