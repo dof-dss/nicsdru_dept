@@ -1,0 +1,19 @@
+uuid: 493dae3d-c3e2-4cb1-8769-642e3a067267
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.media_library
+id: media_library_thumbnail
+label: 'Media library thumbnail'
+image_style_mappings:
+  -
+    image_mapping_type: sizes
+    image_mapping:
+      sizes: 100vw
+      sizes_image_styles:
+        - media_library
+    breakpoint_id: responsive_image.viewport_sizing
+    multiplier: 1x
+breakpoint_group: responsive_image
+fallback_image_style: media_library
