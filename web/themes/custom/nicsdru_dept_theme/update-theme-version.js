@@ -3,11 +3,14 @@ const path = require('path');
 const crypto = require('crypto');
 const fg = require('fast-glob');
 
+// The name of the theme. MAKE SURE TO EDIT THIS.
+const themeName = 'nicsdru_dept_theme';
+
 // Path to theme root (relative to this script).
 const themeDir = path.join(__dirname, '.');
 
 // Path to theme's libraries.yml file.
-const librariesFile = path.join(themeDir, 'nicsdru_dept_theme.libraries.yml'); // Adjust if needed.
+const librariesFile = path.join(themeDir, themeName + '.libraries.yml');
 
 // Asset path patterns of files to hash, including subdirectories.
 const assetPatterns = [
@@ -41,7 +44,7 @@ async function updateLibrariesYml() {
   content = content.replace(/version:.*/g, `version: '${newVersion}'`);
 
   fs.writeFileSync(librariesFile, content, 'utf8');
-  console.log(`✅ Updated theme version to ${newVersion} in libraries.yml`);
+  console.log(`✅ Updated theme version to ${newVersion} in ${librariesFile}`);
 }
 
 updateLibrariesYml().catch(console.error);
