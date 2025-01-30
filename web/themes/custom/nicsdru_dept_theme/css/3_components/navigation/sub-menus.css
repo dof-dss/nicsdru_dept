@@ -1,1 +1,184 @@
-.sub-menu{margin:1em 0 1.5em}.sub-menu:first-child{margin:0}.ga-aside .sub-menu{-webkit-box-shadow:0 -3px 0 0 var(--brand-primary-color);box-shadow:0 -3px 0 0 var(--brand-primary-color);padding-top:1.5em;margin-top:1.5em}@media (min-width: 768px){.ga-aside .sub-menu{-webkit-box-shadow:none;box-shadow:none;padding-top:0;margin-top:0}}.sub-menu .menu-title{font-size:2.2rem;line-height:3.2rem;margin-top:0}@media screen and (min-width: 992px){.sub-menu .menu-title{font-size:2.3rem;line-height:3.3rem}}@media screen and (min-width: 1200px){.sub-menu .menu-title{font-size:2.5rem;line-height:3.6rem}}@media screen and (min-width: 1679px){.sub-menu .menu-title{font-size:2.7rem;line-height:4rem}}.sub-menu .nav-menu{margin-top:0;margin-bottom:1.5em}.sub-menu .nav-item{position:relative;list-style:none;padding:0 0 0 1em;margin:.5em 0}.sub-menu .nav-item::before{content:'-';position:absolute;left:0;top:0}.sub-menu .nav-menu a,.sub-menu .nav-link{color:#0e6bb3;text-decoration:none;outline-offset:0;display:inline-block;width:100%}.sub-menu .nav-menu a:visited,.sub-menu .nav-menu a.visited,.sub-menu .nav-link:visited,.sub-menu .nav-link.visited{color:#0e6bb3;text-decoration:none;outline-offset:0}.sub-menu .nav-menu a:focus,.sub-menu .nav-menu a.focus,.sub-menu .nav-link:focus,.sub-menu .nav-link.focus{color:#fff;background-color:#4d4d4d;text-decoration:none;outline:5px solid #4d4d4d;outline-offset:0}.sub-menu .nav-menu a:hover,.sub-menu .nav-menu a.hover,.sub-menu .nav-link:hover,.sub-menu .nav-link.hover{color:#fff;background-color:#4d4d4d;text-decoration:none;outline:5px solid #4d4d4d;outline-offset:0}.sub-menu .nav-menu a:active,.sub-menu .nav-menu a.active,.sub-menu .nav-link:active,.sub-menu .nav-link.active{color:#fff;background-color:#000;text-decoration:none;outline:5px solid #000;outline-offset:0}.sub-menu--related li{font-size:1.5rem;line-height:2.4rem}@media screen and (min-width: 992px){.sub-menu--related li{font-size:1.7rem;line-height:2.7rem}}@media screen and (min-width: 1679px){.sub-menu--related li{font-size:1.8rem;line-height:3rem}}.sub-menu--widget{border-top:5px solid #0a78cd;padding:1.5em .5em .5em;background-color:transparent}.sub-menu--sibling{margin-top:0;padding:0 .5em .5em;background-color:transparent}.sub-menu--book{padding:1.5em 0 0;border-top:5px solid #0a78cd;width:calc(100vw - 30px);max-width:940px}@media (min-width: 768px){.sub-menu--book{width:calc(100vw - 40px)}}
+/*
+ * @file
+ * Provides the styling for menus other than the main menu on the site.
+ */
+/* Vertical rhythm presets =========================================== */
+/* Set the base images folder */
+/* Breakpoints ======================================================== */
+/* Layout max widths for larger breakpoints =========================== */
+/* line 15, src/scss/3_components/navigation/sub-menus.scss */
+.sub-menu {
+  margin: 1em 0 1.5em;
+}
+
+/* line 19, src/scss/3_components/navigation/sub-menus.scss */
+.sub-menu:first-child {
+  margin: 0;
+}
+
+/* line 23, src/scss/3_components/navigation/sub-menus.scss */
+.ga-aside .sub-menu {
+  -webkit-box-shadow: 0 -3px 0 0 var(--brand-primary-color);
+  box-shadow: 0 -3px 0 0 var(--brand-primary-color);
+  padding-top: 1.5em;
+  margin-top: 1.5em;
+}
+
+@media (min-width: 768px) {
+  /* line 23, src/scss/3_components/navigation/sub-menus.scss */
+  .ga-aside .sub-menu {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding-top: 0;
+    margin-top: 0;
+  }
+}
+
+/* line 35, src/scss/3_components/navigation/sub-menus.scss */
+.sub-menu .menu-title {
+  font-size: 2.2rem;
+  line-height: 3.2rem;
+  margin-top: 0;
+}
+
+@media screen and (min-width: 992px) {
+  /* line 35, src/scss/3_components/navigation/sub-menus.scss */
+  .sub-menu .menu-title {
+    font-size: 2.3rem;
+    line-height: 3.3rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  /* line 35, src/scss/3_components/navigation/sub-menus.scss */
+  .sub-menu .menu-title {
+    font-size: 2.5rem;
+    line-height: 3.6rem;
+  }
+}
+
+@media screen and (min-width: 1679px) {
+  /* line 35, src/scss/3_components/navigation/sub-menus.scss */
+  .sub-menu .menu-title {
+    font-size: 2.7rem;
+    line-height: 4rem;
+  }
+}
+
+/* line 41, src/scss/3_components/navigation/sub-menus.scss */
+.sub-menu .nav-menu {
+  margin-top: 0;
+  margin-bottom: 1.5em;
+}
+
+/* line 47, src/scss/3_components/navigation/sub-menus.scss */
+.sub-menu .nav-item {
+  position: relative;
+  list-style: none;
+  padding: 0 0 0 1em;
+  margin: .5em 0;
+}
+
+/* line 53, src/scss/3_components/navigation/sub-menus.scss */
+.sub-menu .nav-item::before {
+  content: '-';
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* line 62, src/scss/3_components/navigation/sub-menus.scss */
+.sub-menu .nav-menu a, .sub-menu .nav-link {
+  color: #0e6bb3;
+  text-decoration: none;
+  outline-offset: 0;
+  display: inline-block;
+  width: 100%;
+}
+
+/* line 116, src/scss/init/links/_links.scss */
+.sub-menu .nav-menu a:visited, .sub-menu .nav-menu a.visited, .sub-menu .nav-link:visited, .sub-menu .nav-link.visited {
+  color: #0e6bb3;
+  text-decoration: none;
+  outline-offset: 0;
+}
+
+/* line 116, src/scss/init/links/_links.scss */
+.sub-menu .nav-menu a:focus, .sub-menu .nav-menu a.focus, .sub-menu .nav-link:focus, .sub-menu .nav-link.focus {
+  color: #fff;
+  background-color: #4d4d4d;
+  text-decoration: none;
+  outline: 5px solid #4d4d4d;
+  outline-offset: 0;
+}
+
+/* line 116, src/scss/init/links/_links.scss */
+.sub-menu .nav-menu a:hover, .sub-menu .nav-menu a.hover, .sub-menu .nav-link:hover, .sub-menu .nav-link.hover {
+  color: #fff;
+  background-color: #4d4d4d;
+  text-decoration: none;
+  outline: 5px solid #4d4d4d;
+  outline-offset: 0;
+}
+
+/* line 116, src/scss/init/links/_links.scss */
+.sub-menu .nav-menu a:active, .sub-menu .nav-menu a.active, .sub-menu .nav-link:active, .sub-menu .nav-link.active {
+  color: #fff;
+  background-color: #000;
+  text-decoration: none;
+  outline: 5px solid #000;
+  outline-offset: 0;
+}
+
+/* line 72, src/scss/3_components/navigation/sub-menus.scss */
+.sub-menu--related li {
+  font-size: 1.5rem;
+  line-height: 2.4rem;
+}
+
+@media screen and (min-width: 992px) {
+  /* line 72, src/scss/3_components/navigation/sub-menus.scss */
+  .sub-menu--related li {
+    font-size: 1.7rem;
+    line-height: 2.7rem;
+  }
+}
+
+@media screen and (min-width: 1679px) {
+  /* line 72, src/scss/3_components/navigation/sub-menus.scss */
+  .sub-menu--related li {
+    font-size: 1.8rem;
+    line-height: 3rem;
+  }
+}
+
+/* line 77, src/scss/3_components/navigation/sub-menus.scss */
+.sub-menu--widget {
+  border-top: 5px solid #0a78cd;
+  padding: 1.5em .5em .5em;
+  background-color: transparent;
+}
+
+/* line 83, src/scss/3_components/navigation/sub-menus.scss */
+.sub-menu--sibling {
+  margin-top: 0;
+  padding: 0 .5em .5em;
+  background-color: transparent;
+}
+
+/* line 89, src/scss/3_components/navigation/sub-menus.scss */
+.sub-menu--book {
+  padding: 1.5em 0 0;
+  border-top: 5px solid #0a78cd;
+  width: calc(100vw - 30px);
+  max-width: 940px;
+}
+
+@media (min-width: 768px) {
+  /* line 89, src/scss/3_components/navigation/sub-menus.scss */
+  .sub-menu--book {
+    width: calc(100vw - 40px);
+  }
+}
+
+/*# sourceMappingURL=sub-menus.css.map */
