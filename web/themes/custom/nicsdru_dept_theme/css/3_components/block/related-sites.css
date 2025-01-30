@@ -1,1 +1,53 @@
-.related-websites-list{list-style:none;padding:0}.department-sites-first,.related-sites-first{font-size:2rem;line-height:2.8rem;font-weight:bold}@media screen and (min-width: 992px){.department-sites-first,.related-sites-first{font-size:2.1rem;line-height:3rem}}@media screen and (min-width: 1200px){.department-sites-first,.related-sites-first{font-size:2.2rem;line-height:3.3rem}}@media screen and (min-width: 1679px){.department-sites-first,.related-sites-first{font-size:2.2rem;line-height:3.5rem}}.related-sites-first{max-width:-webkit-fit-content;max-width:-moz-fit-content;max-width:fit-content;-webkit-box-shadow:0 -2px 0 0 var(--brand-primary-color);box-shadow:0 -2px 0 0 var(--brand-primary-color);margin-top:var(--rhythm-spacing-xxxl);padding-top:var(--rhythm-spacing-xxl)}
+/* Vertical rhythm presets =========================================== */
+/* Set the base images folder */
+/* Breakpoints ======================================================== */
+/* Layout max widths for larger breakpoints =========================== */
+/* line 3, src/scss/3_components/block/related-sites.scss */
+.related-websites-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* line 8, src/scss/3_components/block/related-sites.scss */
+.department-sites-first, .related-sites-first {
+  font-size: 2rem;
+  line-height: 2.8rem;
+  font-weight: bold;
+}
+
+@media screen and (min-width: 992px) {
+  /* line 8, src/scss/3_components/block/related-sites.scss */
+  .department-sites-first, .related-sites-first {
+    font-size: 2.1rem;
+    line-height: 3rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  /* line 8, src/scss/3_components/block/related-sites.scss */
+  .department-sites-first, .related-sites-first {
+    font-size: 2.2rem;
+    line-height: 3.3rem;
+  }
+}
+
+@media screen and (min-width: 1679px) {
+  /* line 8, src/scss/3_components/block/related-sites.scss */
+  .department-sites-first, .related-sites-first {
+    font-size: 2.2rem;
+    line-height: 3.5rem;
+  }
+}
+
+/* line 13, src/scss/3_components/block/related-sites.scss */
+.related-sites-first {
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+  -webkit-box-shadow: 0 -2px 0 0 var(--brand-primary-color);
+  box-shadow: 0 -2px 0 0 var(--brand-primary-color);
+  margin-top: var(--rhythm-spacing-xxxl);
+  padding-top: var(--rhythm-spacing-xxl);
+}
+
+/*# sourceMappingURL=related-sites.css.map */
