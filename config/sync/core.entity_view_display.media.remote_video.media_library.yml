@@ -7,21 +7,21 @@ dependencies:
     - field.field.media.remote_video.field_domain_access
     - field.field.media.remote_video.field_domain_source
     - field.field.media.remote_video.field_media_oembed_video
-    - image.style.media_library
     - media.type.remote_video
+    - responsive_image.styles.media_library_thumbnail
   module:
-    - image
+    - responsive_image
 id: media.remote_video.media_library
 targetEntityType: media
 bundle: remote_video
 mode: media_library
 content:
   thumbnail:
-    type: image
+    type: responsive_image
     label: hidden
     settings:
+      responsive_image_style: media_library_thumbnail
       image_link: ''
-      image_style: media_library
       image_loading:
         attribute: lazy
     third_party_settings: {  }
