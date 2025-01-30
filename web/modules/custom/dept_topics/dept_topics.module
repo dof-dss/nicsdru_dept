@@ -544,13 +544,14 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
     $node = Node::load($nid);
     if ($node->bundle() === 'subtopic') {
       if (!empty($topic_manager->getParentNodes($node->id()) > 0 )) {
-        $topic_issues[] = t("Subtopic @title (@nid)", ['@title' => $node->getTitle(), '@nid' => $node->id()]);
+        $element = $form['field_topic_content']['widget'][$index];
+        $form_state->setError($element, t('This subtopic is already assigned to a parent topic and cannot be linked to multiple parent topics.'));
       }
     }
   }
 
   if ($topic_issues) {
-    $form_state->setErrorByName('field_topic_content', implode(', ', $topic_issues));
+
   }
 }
 
