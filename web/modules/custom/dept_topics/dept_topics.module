@@ -524,6 +524,34 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
       $form['actions']['submit']['#submit'][] = 'dept_topics_update_linkit_targets';
     }
   }
+
+  if (in_array($form_id, ['node_topic_form', 'node_topic_edit_form','node_subtopic_form', 'node_subtopic_edit_form'])) {
+    $form['#validate'][] = 'dept_topics_validate_topics';
+  }
+
+}
+
+function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
+  $topic_contents = $form_state->getValue('field_topic_content');
+  $topic_issues = [];
+  $topic_manager = \Drupal::service('topic.manager');
+
+  foreach ($topic_contents as $index => $topic_content) {
+    if (!is_numeric($index)) {
+      continue;
+    }
+    $nid = $topic_content['target_id'];
+    $node = Node::load($nid);
+    if ($node->bundle() === 'subtopic') {
+      if (!empty($topic_manager->getParentNodes($node->id()) > 0 )) {
+        $topic_issues[] = t("Subtopic @title (@nid)", ['@title' => $node->getTitle(), '@nid' => $node->id()]);
+      }
+    }
+  }
+
+  if ($topic_issues) {
+    $form_state->setErrorByName('field_topic_content', implode(', ', $topic_issues));
+  }
 }
 
 /**
