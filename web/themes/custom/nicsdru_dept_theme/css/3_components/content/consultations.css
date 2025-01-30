@@ -1,1 +1,120 @@
-.page-node-type-consultation .consultation-dates{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-flow:row wrap;flex-flow:row wrap;gap:1.5em;width:100%;clear:both;margin:1em 0 1.5em;padding:1em;font-size:inherit;background-color:var(--brand-primary-color-high-contrast-white);color:#fff}.page-node-type-consultation .consultation-dates p{-webkit-box-flex:1;-ms-flex:auto 1 1;flex:auto 1 1;margin:0;color:inherit;font-size:1.5rem;line-height:2.4rem}@media screen and (min-width: 992px){.page-node-type-consultation .consultation-dates p{font-size:1.7rem;line-height:2.7rem}}@media screen and (min-width: 1679px){.page-node-type-consultation .consultation-dates p{font-size:1.8rem;line-height:3rem}}.page-node-type-consultation .consultation-dates p .label{display:block;color:inherit;font-weight:bold;font-size:1.8rem;line-height:2.8rem;margin-bottom:var(--rhythm-spacing-xs)}@media screen and (min-width: 992px){.page-node-type-consultation .consultation-dates p .label{font-size:1.9rem;line-height:3rem}}@media screen and (min-width: 1200px){.page-node-type-consultation .consultation-dates p .label{font-size:2rem;line-height:3.3rem}}@media screen and (min-width: 1679px){.page-node-type-consultation .consultation-dates p .label{font-size:2.1rem;line-height:3.5rem}}.page-node-type-consultation .consultation-respond .field{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:baseline;-ms-flex-align:baseline;align-items:baseline;gap:1em;margin:1em 0}.page-node-type-consultation .consultation-respond .field__label{-webkit-box-flex:1;-ms-flex:auto 0 1;flex:auto 0 1}.page-node-type-consultation .consultation-respond .field address{margin:0}.page-node-type-consultation .consultation-respond:has(.field--name-field-postal) .field__label{-webkit-box-flex:6.5em;-ms-flex:6.5em 0 1;flex:6.5em 0 1}
+/*
+ * @file
+ * Provides very specific styling for consultations / content types.
+ */
+/* Vertical rhythm presets =========================================== */
+/* Set the base images folder */
+/* Breakpoints ======================================================== */
+/* Layout max widths for larger breakpoints =========================== */
+/* line 9, src/scss/3_components/content/consultations.scss */
+.page-node-type-consultation .consultation-dates {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  gap: 1.5em;
+  width: 100%;
+  clear: both;
+  margin: 1em 0 1.5em;
+  padding: 1em;
+  font-size: inherit;
+  background-color: var(--brand-primary-color-high-contrast-white);
+  color: #fff;
+}
+
+/* line 21, src/scss/3_components/content/consultations.scss */
+.page-node-type-consultation .consultation-dates p {
+  -webkit-box-flex: 1;
+  -ms-flex: auto 1 1;
+  flex: auto 1 1;
+  margin: 0;
+  color: inherit;
+  font-size: 1.5rem;
+  line-height: 2.4rem;
+}
+
+@media screen and (min-width: 992px) {
+  /* line 21, src/scss/3_components/content/consultations.scss */
+  .page-node-type-consultation .consultation-dates p {
+    font-size: 1.7rem;
+    line-height: 2.7rem;
+  }
+}
+
+@media screen and (min-width: 1679px) {
+  /* line 21, src/scss/3_components/content/consultations.scss */
+  .page-node-type-consultation .consultation-dates p {
+    font-size: 1.8rem;
+    line-height: 3rem;
+  }
+}
+
+/* line 27, src/scss/3_components/content/consultations.scss */
+.page-node-type-consultation .consultation-dates p .label {
+  display: block;
+  color: inherit;
+  font-weight: bold;
+  font-size: 1.8rem;
+  line-height: 2.8rem;
+  margin-bottom: var(--rhythm-spacing-xs);
+}
+
+@media screen and (min-width: 992px) {
+  /* line 27, src/scss/3_components/content/consultations.scss */
+  .page-node-type-consultation .consultation-dates p .label {
+    font-size: 1.9rem;
+    line-height: 3rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  /* line 27, src/scss/3_components/content/consultations.scss */
+  .page-node-type-consultation .consultation-dates p .label {
+    font-size: 2rem;
+    line-height: 3.3rem;
+  }
+}
+
+@media screen and (min-width: 1679px) {
+  /* line 27, src/scss/3_components/content/consultations.scss */
+  .page-node-type-consultation .consultation-dates p .label {
+    font-size: 2.1rem;
+    line-height: 3.5rem;
+  }
+}
+
+/* line 39, src/scss/3_components/content/consultations.scss */
+.page-node-type-consultation .consultation-respond .field {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
+  gap: 1em;
+  margin: 1em 0;
+}
+
+/* line 45, src/scss/3_components/content/consultations.scss */
+.page-node-type-consultation .consultation-respond .field__label {
+  -webkit-box-flex: 1;
+  -ms-flex: auto 0 1;
+  flex: auto 0 1;
+}
+
+/* line 49, src/scss/3_components/content/consultations.scss */
+.page-node-type-consultation .consultation-respond .field address {
+  margin: 0;
+}
+
+/* line 54, src/scss/3_components/content/consultations.scss */
+.page-node-type-consultation .consultation-respond:has(.field--name-field-postal) .field__label {
+  -webkit-box-flex: 6.5em;
+  -ms-flex: 6.5em 0 1;
+  flex: 6.5em 0 1;
+}
+
+/*# sourceMappingURL=consultations.css.map */

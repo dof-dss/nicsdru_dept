@@ -1,1 +1,215 @@
-.media-video{width:100%;position:relative;padding-bottom:56.25%;height:0;overflow:hidden}.media-video iframe,.media-video video{position:absolute;top:0;left:0;width:100%;height:100%;border:0;background-color:transparent}.media-video video{background-color:#949494;color:#fff}.media-video video:focus{outline:3px solid #000;background-color:#000}.media-video .field--name-field-domain-access,.media-video .field--name-field-domain-source{display:none}.video-and-caption{width:100%;position:relative}.video-and-caption__content{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-flow:column nowrap;flex-flow:column nowrap}.video-and-caption__content>*{-webkit-box-flex:1;-ms-flex:auto 1 1;flex:auto 1 1}.video-and-caption__caption{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-flow:column nowrap;flex-flow:column nowrap;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;margin:1em 0 1.5em;padding:0 2.5em;color:#4d4d4d}.video-and-caption__caption p{font-size:2rem;line-height:2.8rem;margin-top:0}@media screen and (min-width: 992px){.video-and-caption__caption p{font-size:2.1rem;line-height:3rem}}@media screen and (min-width: 1200px){.video-and-caption__caption p{font-size:2.2rem;line-height:3.3rem}}@media screen and (min-width: 1679px){.video-and-caption__caption p{font-size:2.2rem;line-height:3.5rem}}.video-and-caption__caption p:last-child{margin-bottom:0}.video-and-caption--above .video-and-caption__caption p,.video-and-caption--below .video-and-caption__caption p{font-size:2.2rem;line-height:3.2rem;margin-bottom:0}@media screen and (min-width: 992px){.video-and-caption--above .video-and-caption__caption p,.video-and-caption--below .video-and-caption__caption p{font-size:2.3rem;line-height:3.3rem}}@media screen and (min-width: 1200px){.video-and-caption--above .video-and-caption__caption p,.video-and-caption--below .video-and-caption__caption p{font-size:2.5rem;line-height:3.6rem}}@media screen and (min-width: 1679px){.video-and-caption--above .video-and-caption__caption p,.video-and-caption--below .video-and-caption__caption p{font-size:2.7rem;line-height:4rem}}@media (min-width: 576px){.video-and-caption--left .video-and-caption__content,.video-and-caption--right .video-and-caption__content{-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.video-and-caption--left .video-and-caption__content>*,.video-and-caption--right .video-and-caption__content>*{-webkit-box-flex:calc(50% - 1em);-ms-flex:calc(50% - 1em) 0 0px;flex:calc(50% - 1em) 0 0;margin:0}}.video-and-caption--no-caption .video-and-caption__caption{position:absolute !important;height:1px;width:1px;overflow:hidden;clip:rect(1px, 1px, 1px, 1px);word-wrap:normal}.video-and-caption--left .video-and-caption__video,.video-and-caption--above .video-and-caption__video,.video-and-caption--below .video-and-caption__caption,.video-and-caption--right .video-and-caption__caption{-webkit-box-ordinal-group:3;-ms-flex-order:2;order:2}.video-and-caption.layout-builder-block{padding:0}@media all and (-ms-high-contrast: none), (-ms-high-contrast: active){.video-and-caption__caption>*{max-width:100%}}
+/*
+ * @file
+ * Provides the styling for inline videos.
+ */
+/* Vertical rhythm presets =========================================== */
+/* Set the base images folder */
+/* Breakpoints ======================================================== */
+/* Layout max widths for larger breakpoints =========================== */
+/* line 41, src/scss/3_components/content/video.scss */
+.media-video {
+  width: 100%;
+  position: relative;
+  padding-bottom: 56.25%;
+  /* 16:9 is the expected ratio. */
+  height: 0;
+  overflow: hidden;
+}
+
+/* line 17, src/scss/3_components/content/video.scss */
+.media-video iframe,
+.media-video video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background-color: transparent;
+}
+
+/* line 28, src/scss/3_components/content/video.scss */
+.media-video video {
+  background-color: #949494;
+  color: #fff;
+}
+
+/* line 32, src/scss/3_components/content/video.scss */
+.media-video video:focus {
+  outline: 3px solid #000;
+  background-color: #000;
+}
+
+/* line 45, src/scss/3_components/content/video.scss */
+.media-video .field--name-field-domain-access, .media-video .field--name-field-domain-source {
+  display: none;
+}
+
+/* line 53, src/scss/3_components/content/video.scss */
+.video-and-caption {
+  width: 100%;
+  position: relative;
+}
+
+/* line 60, src/scss/3_components/content/video.scss */
+.video-and-caption__content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: column nowrap;
+  flex-flow: column nowrap;
+}
+
+/* line 66, src/scss/3_components/content/video.scss */
+.video-and-caption__content > * {
+  -webkit-box-flex: 1;
+  -ms-flex: auto 1 1;
+  flex: auto 1 1;
+}
+
+/* line 71, src/scss/3_components/content/video.scss */
+.video-and-caption__caption {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: column nowrap;
+  flex-flow: column nowrap;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin: 1em 0 1.5em;
+  padding: 0 2.5em;
+  color: #4d4d4d;
+}
+
+/* line 83, src/scss/3_components/content/video.scss */
+.video-and-caption__caption p {
+  font-size: 2rem;
+  line-height: 2.8rem;
+  margin-top: 0;
+}
+
+@media screen and (min-width: 992px) {
+  /* line 83, src/scss/3_components/content/video.scss */
+  .video-and-caption__caption p {
+    font-size: 2.1rem;
+    line-height: 3rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  /* line 83, src/scss/3_components/content/video.scss */
+  .video-and-caption__caption p {
+    font-size: 2.2rem;
+    line-height: 3.3rem;
+  }
+}
+
+@media screen and (min-width: 1679px) {
+  /* line 83, src/scss/3_components/content/video.scss */
+  .video-and-caption__caption p {
+    font-size: 2.2rem;
+    line-height: 3.5rem;
+  }
+}
+
+/* line 87, src/scss/3_components/content/video.scss */
+.video-and-caption__caption p:last-child {
+  margin-bottom: 0;
+}
+
+/* line 93, src/scss/3_components/content/video.scss */
+.video-and-caption--above .video-and-caption__caption p,
+.video-and-caption--below .video-and-caption__caption p {
+  font-size: 2.2rem;
+  line-height: 3.2rem;
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 992px) {
+  /* line 93, src/scss/3_components/content/video.scss */
+  .video-and-caption--above .video-and-caption__caption p,
+  .video-and-caption--below .video-and-caption__caption p {
+    font-size: 2.3rem;
+    line-height: 3.3rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  /* line 93, src/scss/3_components/content/video.scss */
+  .video-and-caption--above .video-and-caption__caption p,
+  .video-and-caption--below .video-and-caption__caption p {
+    font-size: 2.5rem;
+    line-height: 3.6rem;
+  }
+}
+
+@media screen and (min-width: 1679px) {
+  /* line 93, src/scss/3_components/content/video.scss */
+  .video-and-caption--above .video-and-caption__caption p,
+  .video-and-caption--below .video-and-caption__caption p {
+    font-size: 2.7rem;
+    line-height: 4rem;
+  }
+}
+
+@media (min-width: 576px) {
+  /* line 104, src/scss/3_components/content/video.scss */
+  .video-and-caption--left .video-and-caption__content, .video-and-caption--right .video-and-caption__content {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+  }
+  /* line 108, src/scss/3_components/content/video.scss */
+  .video-and-caption--left .video-and-caption__content > *, .video-and-caption--right .video-and-caption__content > * {
+    -webkit-box-flex: calc(50% - 1em);
+    -ms-flex: calc(50% - 1em) 0 0px;
+    flex: calc(50% - 1em) 0 0;
+    margin: 0;
+  }
+}
+
+/* line 117, src/scss/3_components/content/video.scss */
+.video-and-caption--no-caption .video-and-caption__caption {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  word-wrap: normal;
+}
+
+/* line 124, src/scss/3_components/content/video.scss */
+.video-and-caption--left .video-and-caption__video,
+.video-and-caption--above .video-and-caption__video,
+.video-and-caption--below .video-and-caption__caption,
+.video-and-caption--right .video-and-caption__caption {
+  -webkit-box-ordinal-group: 3;
+  -ms-flex-order: 2;
+  order: 2;
+}
+
+/* line 132, src/scss/3_components/content/video.scss */
+.video-and-caption.layout-builder-block {
+  padding: 0;
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  /* line 141, src/scss/3_components/content/video.scss */
+  .video-and-caption__caption > * {
+    max-width: 100%;
+  }
+}
+
+/*# sourceMappingURL=video.css.map */
