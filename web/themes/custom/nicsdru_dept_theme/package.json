@@ -100,14 +100,13 @@
     "watch-scss": "onchange 'src/scss/**/*.scss' -- npm run css",
     "watch-js": "onchange 'src/js/**/*.js' -- npm run js-compile",
     "watch-img": "onchange 'src/images/*.{gif,jpg,jpeg,JPG,JPEG,png}' -- npm run imgmin",
-    "------- THEME VERSION SCRIPTS": "–––––––––––––",
+    "------- THEME SCRIPTS": "–––––––––––––",
     "update-theme-version": "node update-theme-version.js",
     "––––––– BUILD SCRIPTS": "–––––––––––––",
-    "build": "npm-run-all --parallel build-* --sequential theme-libraries",
-    "build-css": "npm-run-all --parallel css-lint* scss-normalize scss-prod --sequential css-post theme-libraries",
-    "build-js": "npm run js --sequential theme-libraries",
+    "build": "npm-run-all build-*",
+    "build-css": "npm-run-all --parallel css-lint* scss-normalize scss-prod --sequential css-post update-theme-version",
+    "build-js": "npm run js --sequential update-theme-version",
     "build-img": "npm run imgmin",
-    "theme-libraries": "npm run update-theme-version",
     "lint": "npm-run-all --parallel css-lint js-lint"
   },
   "config": {
