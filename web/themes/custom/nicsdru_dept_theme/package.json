@@ -104,8 +104,8 @@
     "update-theme-version": "node update-theme-version.js",
     "––––––– BUILD SCRIPTS": "–––––––––––––",
     "build": "npm-run-all --parallel build-* --sequential theme-libraries",
-    "build-css": "npm-run-all --parallel css-lint* scss-normalize scss-prod --sequential css-post",
-    "build-js": "npm run js",
+    "build-css": "npm-run-all --parallel css-lint* scss-normalize scss-prod --sequential css-post theme-libraries",
+    "build-js": "npm run js --sequential theme-libraries",
     "build-img": "npm run imgmin",
     "theme-libraries": "npm run update-theme-version",
     "lint": "npm-run-all --parallel css-lint js-lint"
