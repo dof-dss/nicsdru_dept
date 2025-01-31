@@ -1,1 +1,105 @@
-.vcard__item{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-flow:row wrap;flex-flow:row wrap;-webkit-box-align:baseline;-ms-flex-align:baseline;align-items:baseline;margin:0 0 .25em}@media (min-width: 768px){.vcard__item{margin:0 0 .3334em}}@media (min-width: 768px){.vcard__item{margin:0 0 .25em}}.vcard__item .label-inline,.vcard__item .title{display:inline-block;min-width:-webkit-fit-content;min-width:-moz-fit-content;min-width:fit-content}.vcard__item .label-inline::after,.vcard__item .title::after{content:':'}.vcard__item .value,.vcard__item .url{margin:0 .5em}.vcard__item .supplementary{font-size:1.4rem;-webkit-box-ordinal-group:4;-ms-flex-order:3;order:3;-webkit-box-flex:1;-ms-flex:1 0 50%;flex:1 0 50%;color:#666}@media (min-width: 768px){.vcard__item .supplementary{font-size:1.6rem}}.vcard .email{margin-top:1em}.vcard a,.vcard a:hover{-webkit-box-shadow:none;box-shadow:none;text-decoration:underline;text-underline-position:under;text-decoration-thickness:1px}.vcard a:hover{-webkit-text-decoration-color:#0b1647;text-decoration-color:#0b1647;text-decoration-thickness:2px}.vcard a[href^='tel:']{white-space:nowrap}
+/*
+ * @file
+ * Provides the layout styles for content output from field_summary for any entity.
+ */
+/* Vertical rhythm presets =========================================== */
+/* Set the base images folder */
+/* Breakpoints ======================================================== */
+/* Layout max widths for larger breakpoints =========================== */
+/* line 9, src/scss/3_components/field/vcard.scss */
+.vcard__item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -webkit-box-align: baseline;
+  -ms-flex-align: baseline;
+  align-items: baseline;
+  margin: 0 0 .25em;
+}
+
+@media (min-width: 768px) {
+  /* line 9, src/scss/3_components/field/vcard.scss */
+  .vcard__item {
+    margin: 0 0 .3334em;
+  }
+}
+
+@media (min-width: 768px) {
+  /* line 9, src/scss/3_components/field/vcard.scss */
+  .vcard__item {
+    margin: 0 0 .25em;
+  }
+}
+
+/* line 23, src/scss/3_components/field/vcard.scss */
+.vcard__item .label-inline,
+.vcard__item .title {
+  display: inline-block;
+  min-width: -webkit-fit-content;
+  min-width: -moz-fit-content;
+  min-width: fit-content;
+}
+
+/* line 28, src/scss/3_components/field/vcard.scss */
+.vcard__item .label-inline::after,
+.vcard__item .title::after {
+  content: ':';
+}
+
+/* line 33, src/scss/3_components/field/vcard.scss */
+.vcard__item .value,
+.vcard__item .url {
+  margin: 0 .5em;
+}
+
+/* line 38, src/scss/3_components/field/vcard.scss */
+.vcard__item .supplementary {
+  font-size: 1.4rem;
+  -webkit-box-ordinal-group: 4;
+  -ms-flex-order: 3;
+  order: 3;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 0 50%;
+  flex: 1 0 50%;
+  color: #666;
+}
+
+@media (min-width: 768px) {
+  /* line 38, src/scss/3_components/field/vcard.scss */
+  .vcard__item .supplementary {
+    font-size: 1.6rem;
+  }
+}
+
+/* line 50, src/scss/3_components/field/vcard.scss */
+.vcard .email {
+  margin-top: 1em;
+}
+
+/* line 54, src/scss/3_components/field/vcard.scss */
+.vcard a,
+.vcard a:hover {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  text-decoration: underline;
+  text-underline-position: under;
+  text-decoration-thickness: 1px;
+}
+
+/* line 64, src/scss/3_components/field/vcard.scss */
+.vcard a:hover {
+  -webkit-text-decoration-color: #0b1647;
+  text-decoration-color: #0b1647;
+  text-decoration-thickness: 2px;
+}
+
+/* line 71, src/scss/3_components/field/vcard.scss */
+.vcard a[href^='tel:'] {
+  white-space: nowrap;
+}
+
+/*# sourceMappingURL=vcard.css.map */
