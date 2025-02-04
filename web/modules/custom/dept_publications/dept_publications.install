@@ -1,0 +1,12 @@
+<?php
+
+
+/**
+* Update embargoed status for existing secure publications.
+*/
+function dept_publications_update_8001() {
+  \Drupal::database()->query("INSERT INTO node__field_embargoed (bundle, deleted, entity_id, revision_id, langcode, delta, field_embargoed_value)
+    SELECT DISTINCT 'publication', 0, sf.entity_id, sf.revision_id, sf.langcode, 0, 1
+    FROM node__field_publication_secure_files sf
+    WHERE sf.delta = 0")->execute();
+}
