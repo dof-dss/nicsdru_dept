@@ -396,3 +396,11 @@ function dept_publications_get_remote_file_metadata(string $file_url) {
 
   return $file_headers;
 }
+
+/**
+ * Implements hook_preprocess_fieldset__media_library_widget().
+ */
+function dept_publications_preprocess_fieldset__media_library_widget(&$variables) {
+  // Add custom style overrides to the media library field widget.
+  $variables['#attached']['library'][] = 'dept_publications/media_widget_styles';
+}
