@@ -22,16 +22,14 @@ db_pull_command:
     export PLATFORMSH_CLI_NO_INTERACTION=1
     ls /var/www/html/.ddev >/dev/null             # This just refreshes stale NFS if possible.
 
-    platform db:dump --yes ${PLATFORM_APP:+"--app=${PLATFORM_APP}"} --relationship=drupal7db --gzip --file=/var/www/html/.ddev/.downloads/drupal7.sql.gz --project="${PLATFORM_PROJECT:-setme}" --environment="${PLATFORM_ENVIRONMENT:-setme}"
     platform db:dump --yes ${PLATFORM_APP:+"--app=${PLATFORM_APP}"} --relationship=database --gzip --file=/var/www/html/.ddev/.downloads/db.sql.gz --project="${PLATFORM_PROJECT:-setme}" --environment="${PLATFORM_ENVIRONMENT:-setme}"
-    echo "Downloaded db dumps for databases"
+    echo "Downloaded db dump for database"
 
 db_import_command:
   command: |
     set -eu -o pipefail
     # set -x                                      # You can enable bash debugging output by uncommenting.
     ddev snapshot                                 # Comment out to disable snapshots on import.
-    gzip -dc .ddev/.downloads/drupal7.sql.gz | ddev import-db --database=drupal7 --skip-hooks
     gzip -dc .ddev/.downloads/db.sql.gz | ddev mysql db
     ddev drush cim -y
     ddev drush cr
