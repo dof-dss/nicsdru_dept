@@ -19,6 +19,7 @@ dependencies:
   module:
     - dept_topics
     - metatag
+    - published_state_indicator
     - smart_trim
     - text
     - user
@@ -97,10 +98,11 @@ content:
     weight: 4
     region: content
   field_topic_content:
-    type: entity_reference_label
+    type: published_state_indicator
     label: above
     settings:
       link: true
+      display_published_label: false
     third_party_settings: {  }
     weight: 7
     region: content

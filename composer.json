@@ -171,6 +171,7 @@
         "drupal/paragraphs": "^1.15",
         "drupal/pathauto": "^1.12",
         "drupal/photoswipe": "^5.0",
+        "drupal/published_state_indicator": "^1.0",
         "drupal/purge_users": "^4.0@beta",
         "drupal/redirect": "^1.10",
         "drupal/redis": "^1.5",
@@ -318,6 +319,9 @@
             },
             "drupal/cookie_content_blocker": {
                 "Disable XSS for tag settings to allow HTML output": "https://gist.githubusercontent.com/omahm/eb99bc8278b57798a7d82bf06c27b8d1/raw/d9d75e06300a102b072dd8166f82ec381f211b9d/cookie_content_blocker_disable_xss"
+            },
+            "drupal/clientside_validation": {
+                "Allow specific form ids for clientside validation": "https://www.drupal.org/files/issues/2025-01-15/2949540-42.patch"
             },
             "drupal/block_visibility_groups": {
                 "MissingValueContextException: Required contexts without a value: node #3476824": "https://www.drupal.org/files/issues/2024-09-27/block_visibility_groups-fix_required_contexts_without_value-3476824-4.patch"
