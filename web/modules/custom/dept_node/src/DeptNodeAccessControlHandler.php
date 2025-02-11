@@ -109,45 +109,90 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
   protected function publicationViewUpdateDelete(NodeInterface $node, string $operation, ?AccountInterface $account = NULL) {
     $user = User::load($account->id());
     // Map access operation to permission action.
-    $action = ($operation == 'update') ? 'edit' : $operation;
 
-    switch ($operation) {
-      case "view":
-      case "update":
-      case "delete":
-
-        if ($operation === 'view' && $node->isPublished()) {
+    if ($node->isPublished()) {
+      switch ($operation) {
+        case "view":
           $access = new AccessResultAllowed();
           break;
-        }
 
-        if ($user->hasPermission($action . ' any embargoed publication')) {
-          $access = new AccessResultAllowed();
-        }
-        elseif ($user->hasPermission($action . ' own embargoed publication') && $node->getOwnerId() === $user->id()) {
-          $access = new AccessResultAllowed();
-        }
-        else {
-          $access = new AccessResultForbidden();
-        }
-        break;
+        case "update":
+          if ($user->hasPermission('update publication content on assigned domains')) {
+            $access = new AccessResultAllowed();
+          }
+          else {
+            $access = new AccessResultForbidden();
+          }
+          break;
 
-      case "view scheduled transition":
-      case "view all revisions":
-        if ($user->hasPermission('edit any embargoed publication')) {
-          $access = new AccessResultAllowed();
-        }
-        elseif ($user->hasPermission('edit own embargoed publication') && $node->getOwnerId() === $user->id()) {
-          $access = new AccessResultAllowed();
-        }
-        else {
-          $access = new AccessResultForbidden();
-        }
-        break;
+        case "delete":
+          if ($user->hasPermission('delete publication content on assigned domains')) {
+            $access = new AccessResultAllowed();
+          }
+          else {
+            $access = new AccessResultForbidden();
+          }
+          break;
 
-      default:
-        $access = parent::access($node, $operation, $account, TRUE);
+        case "view scheduled transition":
+          if ($user->hasPermission('view scheduled transitions node publication')) {
+            $access = new AccessResultAllowed();
+          }
+          else {
+            $access = new AccessResultForbidden();
+          }
+          break;
+
+
+        case "view all revisions":
+          if ($user->hasPermission('view publication revisions')) {
+            $access = new AccessResultAllowed();
+          }
+          else {
+            $access = new AccessResultForbidden();
+          }
+          break;
+
+      }
     }
+    else {
+      $action = ($operation == 'update') ? 'edit' : $operation;
+
+      switch ($operation) {
+        case "view":
+        case "update":
+        case "delete":
+
+          if ($user->hasPermission($action . ' any embargoed publication')) {
+            $access = new AccessResultAllowed();
+          }
+          elseif ($user->hasPermission($action . ' own embargoed publication') && $node->getOwnerId() === $user->id()) {
+            $access = new AccessResultAllowed();
+          }
+          else {
+            $access = new AccessResultForbidden();
+          }
+          break;
+
+        case "view scheduled transition":
+        case "view all revisions":
+          if ($user->hasPermission('edit any embargoed publication')) {
+            $access = new AccessResultAllowed();
+          }
+          elseif ($user->hasPermission('edit own embargoed publication') && $node->getOwnerId() === $user->id()) {
+            $access = new AccessResultAllowed();
+          }
+          else {
+            $access = new AccessResultForbidden();
+          }
+          break;
+
+        default:
+          $access = parent::access($node, $operation, $account, TRUE);
+      }
+
+    }
+
 
     /* @phpstan-ignore-next-line */
     $access->cachePerUser()->cachePerPermissions()->addCacheTags(
