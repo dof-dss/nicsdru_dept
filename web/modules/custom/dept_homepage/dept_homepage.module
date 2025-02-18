@@ -5,6 +5,7 @@
  * Contains dept_homepage.module.
  */
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
@@ -44,35 +45,44 @@ function dept_homepage_form_node_form_alter(&$form, FormStateInterface $form_sta
     '#type' => 'submit',
     '#value' => t('Add'),
     '#submit' => ['add_featured_item'],
-//    '#ajax' => [
-//      'callback' => 'add_featured_item_callback',
-//      'wrapper' => 'featured-fieldset-wrapper',
-//    ],
+    '#ajax' => [
+      'callback' => 'dept_homepage_add_featured_item_callback',
+      'wrapper' => 'dept_homepage_featured-fieldset-wrapper',
+    ],
   ];
 }
 
 /**
  * Submit handler to add a new featured item.
  */
-function add_featured_item(array $form, FormStateInterface $form_state) {
-  $existing_featured = $form_state->getValue('field_featured_content');
-  $new_featured = $form_state->getValue('featured_item');
+function dept_homepage_add_featured_item(array $form, FormStateInterface $form_state) {
 
-  array_unshift($existing_featured, ['target_id' => $new_featured, '_weight' => 0]);
-  array_pop($existing_featured);
+  $user_input = $form_state->getUserInput();
+  $featured_entries = $user_input['field_featured_content'];
 
-  for ($i = 0; $i < count($existing_featured); $i++) {
-    $existing_featured[$i]['_weight'] = $i;
+  $updated_featured = [];
+  $updated_featured[] = [
+    'target_id' => $user_input['featured_item'],
+    '_weight' => '0',
+  ];
+
+  foreach ($featured_entries as $index => $value) {
+    $new_weight = (int) $value['_weight'] + 1;
+    $updated_featured[] = [
+      'target_id' => $value['target_id'],
+      '_weight' => (string) $new_weight,
+    ];
   }
-  $form_state->setValue('field_featured_content', $existing_featured);
-//  $form_state->setValueForElement($form['field_featured_content'], $existing_featured);
-  $form_state->setRebuild();
 
+  $form_state->setValueForElement($form['field_featured_content']['widget'], $updated_featured);
+  NestedArray::setValue($form_state->getUserInput(), $form['field_featured_content']['widget']['#parents'], $updated_featured);
+
+  $form_state->setRebuild();
 }
 
 /**
  * Callback for add featured ajax submit.
  */
-function add_featured_item_callback(array &$form, FormStateInterface $form_state) {
+function dept_homepage_add_featured_item_callback(array &$form, FormStateInterface $form_state) {
   return $form['field_featured_content'];
 }
