@@ -303,6 +303,11 @@ final class ManageTopicContentForm extends FormBase {
         return;
       }
 
+      if ($this->subtopicHasParent($this->extractNodeIdFromUrl($add_path))) {
+        $form_state->setErrorByName('add_path', 'This subtopic is already assigned to a parent topic and cannot be linked to multiple parent topics.');
+        return;
+      }
+
       $child_content = $form_state->getValue('child_content');
       $new_content_nid = $this->extractNodeIdFromUrl($add_path);
 
@@ -416,6 +421,21 @@ final class ManageTopicContentForm extends FormBase {
     }
 
     return $nid;
+  }
+
+  /**
+   * @param int $nid
+   *   The node id to check.
+   *
+   * @return bool
+   *   True if the node has parents, otherwise false.
+   */
+  protected function subtopicHasParent($nid) {
+    $node = $this->entityTypeManager->getStorage('node')->load($nid);
+    if ($node && $node->bundle() === 'subtopic') {
+      return !empty($this->topicManager->getParentNodes($node));
+    }
+    return FALSE;
   }
 
 }

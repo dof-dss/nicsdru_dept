@@ -50,7 +50,7 @@
       }
 
       a {
-        @include link-state-style($link-sub-menu);
+        @include link-state-style($link-body-no-visited);
         display: inline-block;
         width: 100%;
       }

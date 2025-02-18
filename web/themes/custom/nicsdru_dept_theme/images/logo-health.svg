@@ -1,8 +1,12 @@
-<svg width="370" height="86" viewBox="0 0 370 86" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg">
+<svg role="img" width="370" height="86" viewBox="0 0 370 86" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg">
   <title>Department of Health</title>
   <defs>
-    <style>@import url(https://fonts.googleapis.com/css2?family=Libre+Franklin%3Aital%2Cwght%400%2C100%3B0%2C200%3B0%2C300%3B0%2C400%3B0%2C500%3B0%2C600%3B0%2C700%3B0%2C800%3B0%2C900%3B1%2C100%3B1%2C200%3B1%2C300%3B1%2C400%3B1%2C500%3B1%2C600%3B1%2C700%3B1%2C800%3B1%2C900&amp;display=swap);</style>
-    <style>@import url(https://fonts.googleapis.com/css2?family=Libre+Bodoni%3Aital%2Cwght%400%2C400%3B0%2C500%3B0%2C600%3B0%2C700%3B1%2C400%3B1%2C500%3B1%2C600%3B1%2C700&amp;display=swap);</style>
+    <style>
+      @import url(https://fonts.googleapis.com/css2?family=Libre+Bodoni%3Aital%2Cwght%400%2C400%3B0%2C500%3B0%2C600%3B0%2C700%3B1%2C400%3B1%2C500%3B1%2C600%3B1%2C700&amp;display=swap);
+      @import url(https://fonts.googleapis.com/css2?family=Libre+Franklin%3Aital%2Cwght%400%2C100%3B0%2C200%3B0%2C300%3B0%2C400%3B0%2C500%3B0%2C600%3B0%2C700%3B0%2C800%3B0%2C900%3B1%2C100%3B1%2C200%3B1%2C300%3B1%2C400%3B1%2C500%3B1%2C600%3B1%2C700%3B1%2C800%3B1%2C900&amp;display=swap);
+      .svg-logo-txt-sm {font-family: "Libre Franklin", sans-serif; letter-spacing: -0.2px; white-space: nowrap; font-size: 14px;}
+      .svg-logo-txt-lg {font-family: "Libre Bodoni", Georgia; font-size: 40px; letter-spacing: -1.5px; white-space: nowrap;}
+    </style>
   </defs>
   <g style="" transform="matrix(0.689608, 0, 0, 0.689608, 0.162956, 0.198013)">
     <path d="M 51.182 0.504 L 64.092 7.958 L 64.092 22.865 L 51.182 30.318 L 38.272 22.865 L 38.272 7.958 L 51.182 0.504 Z" style="stroke: rgb(0, 0, 0); stroke-width: 0px; fill: rgb(1, 147, 166);"/>
@@ -20,10 +24,12 @@
     <path d="M 101.822 30.318 C 101.869 45.316 101.804 60.134 101.822 60.132 L 89.912 52.679 L 89.912 37.772 L 101.822 30.318 Z" style="stroke: rgb(0, 0, 0); stroke-width: 0px; fill: rgb(17, 147, 166);"/>
     <path d="M 101.822 60.132 C 101.869 75.13 101.804 89.948 101.822 89.946 L 89.912 82.493 L 89.912 67.586 L 101.822 60.132 Z" style="stroke: rgb(0, 0, 0); stroke-width: 0px; fill: rgb(17, 147, 166);"/>
   </g>
-  <text style="fill: rgb(20, 32, 98); font-family: &quot;Libre Franklin&quot;, sans-serif; letter-spacing: -0.2px; white-space: nowrap; font-size: 14px;" x="86.916" y="13">Department of</text>
-  <text style="fill: rgb(20, 32, 98); font-family: &quot;Libre Bodoni&quot;, Georgia; font-size: 40px; letter-spacing: -1.5px; white-space: nowrap;" x="83.308" y="54">Health</text>
-  <path style="fill: rgb(20, 32, 98); stroke: rgb(20, 32, 98);" d="M 212.5 0 L 212.5 65"/>
-  <text style="fill: rgb(20, 32, 98); font-family: &quot;Libre Franklin&quot;, sans-serif; letter-spacing: -0.2px; white-space: nowrap; font-size: 14px;" x="230.492" y="13">An Roinn Sláinte</text>
-  <path style="fill: rgb(20, 32, 98); stroke: rgb(20, 32, 98);" d="M 300.647 -45.334 L 300.647 94" transform="matrix(0, -1, 1, 0, 275.826004, 325.468002)"/>
-  <text style="fill: rgb(20, 32, 98); font-family: &quot;Libre Franklin&quot;, sans-serif; letter-spacing: -0.2px; white-space: nowrap; font-size: 14px;" x="229.492" y="45">Männystrie O Pouste</text>
+  <g style="fill: rgb(20, 32, 98);" aria-hidden="true">
+    <text role="presentation" class="svg-logo-txt-sm" x="86.916" y="13">Department of</text>
+    <text role="presentation" class="svg-logo-txt-lg" x="83.308" y="54">Health</text>
+    <path style="fill: rgb(20, 32, 98); stroke: rgb(20, 32, 98);" d="M 212.5 0 L 212.5 65"/>
+    <text role="presentation" class="svg-logo-txt-sm" x="230.492" y="13">An Roinn Sláinte</text>
+    <path style="fill: rgb(20, 32, 98); stroke: rgb(20, 32, 98);" d="M 300.647 -45.334 L 300.647 94" transform="matrix(0, -1, 1, 0, 275.826004, 325.468002)"/>
+    <text role="presentation" class="svg-logo-txt-sm" x="229.492" y="45">Männystrie O Pouste</text>
+  </g>
 </svg>

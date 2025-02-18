@@ -22,6 +22,7 @@ settings:
       - insertTable
       - '|'
       - link
+      - anchor
       - '|'
       - bulletedList
       - numberedList
@@ -38,7 +39,6 @@ settings:
   plugins:
     ckeditor5_heading:
       enabled_headings:
-        - address
         - heading2
         - heading3
         - heading4

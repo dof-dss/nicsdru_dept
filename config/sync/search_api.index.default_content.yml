@@ -10,7 +10,6 @@ dependencies:
     - field.storage.node.field_protected_area_feature
     - field.storage.node.field_summary
     - field.storage.node.field_protected_area_type
-    - field.storage.node.field_video
     - search_api.server.default
   module:
     - search_api_solr
@@ -141,14 +140,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_summary
-  field_video:
-    label: Video
-    datasource_id: 'entity:node'
-    property_path: field_video
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_video
   nid:
     label: ID
     datasource_id: 'entity:node'
@@ -164,22 +155,6 @@ field_settings:
     indexed_locked: true
     type_locked: true
     hidden: true
-  revision_log:
-    label: 'Revision log message'
-    datasource_id: 'entity:node'
-    property_path: revision_log
-    type: text
-    dependencies:
-      module:
-        - node
-  revision_uid:
-    label: 'Revision user'
-    datasource_id: 'entity:node'
-    property_path: revision_uid
-    type: integer
-    dependencies:
-      module:
-        - node
   status:
     label: Published
     datasource_id: 'entity:node'
@@ -225,14 +200,6 @@ field_settings:
     dependencies:
       module:
         - node
-  vid:
-    label: 'Revision ID'
-    datasource_id: 'entity:node'
-    property_path: vid
-    type: integer
-    dependencies:
-      module:
-        - node
 datasource_settings:
   'entity:node':
     bundles:
@@ -272,7 +239,6 @@ processor_settings:
     fields:
       - body
       - field_summary
-      - revision_log
       - title
       - title_fulltext
       - type
@@ -292,7 +258,6 @@ processor_settings:
     fields:
       - body
       - field_summary
-      - revision_log
       - title
       - title_fulltext
       - type

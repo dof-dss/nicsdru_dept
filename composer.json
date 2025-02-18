@@ -93,6 +93,7 @@
         "drupal/admin_toolbar": "^3.3",
         "drupal/adminimal_theme": "^1.7",
         "drupal/advban": "^1.6",
+        "drupal/anchor_link": "~3.0",
         "drupal/antibot": "^2.0",
         "drupal/autoban": "^1.10",
         "drupal/block_field": "^1.0@RC",
@@ -170,6 +171,7 @@
         "drupal/paragraphs": "^1.15",
         "drupal/pathauto": "^1.12",
         "drupal/photoswipe": "^5.0",
+        "drupal/published_state_indicator": "^1.0",
         "drupal/purge_users": "^4.0@beta",
         "drupal/redirect": "^1.10",
         "drupal/redis": "^1.5",
@@ -210,7 +212,8 @@
         "highcharts/highcharts": "^10",
         "noli42/chosen": "3.0.0",
         "php-kit/ext-pdo": "^1.1",
-        "platformsh/config-reader": "^2.4"
+        "platformsh/config-reader": "^2.4",
+        "wikimedia/composer-merge-plugin": "^2.1"
     },
     "require-dev": {
         "drupal/coder": "^8.3",
@@ -249,7 +252,8 @@
             "drupal/core-project-message": true,
             "php-http/discovery": true,
             "phpstan/extension-installer": true,
-            "tbachert/spi": true
+            "tbachert/spi": true,
+            "wikimedia/composer-merge-plugin": true
         }
     },
     "scripts": {
@@ -265,6 +269,11 @@
             "locations": {
                 "web-root": "web/"
             }
+        },
+        "merge-plugin": {
+            "include": [
+                "web/modules/contrib/anchor_link/composer.libraries.json"
+            ]
         },
         "installer-paths": {
             "web/core": [
@@ -311,6 +320,9 @@
             "drupal/cookie_content_blocker": {
                 "Disable XSS for tag settings to allow HTML output": "https://gist.githubusercontent.com/omahm/eb99bc8278b57798a7d82bf06c27b8d1/raw/d9d75e06300a102b072dd8166f82ec381f211b9d/cookie_content_blocker_disable_xss"
             },
+            "drupal/clientside_validation": {
+                "Allow specific form ids for clientside validation": "https://www.drupal.org/files/issues/2025-01-15/2949540-42.patch"
+            },
             "drupal/block_visibility_groups": {
                 "MissingValueContextException: Required contexts without a value: node #3476824": "https://www.drupal.org/files/issues/2024-09-27/block_visibility_groups-fix_required_contexts_without_value-3476824-4.patch"
             },
@@ -325,7 +337,8 @@
                 "Increase claro xs font size": "patches/claro-font-size.patch",
                 "TypeError when adding book page": "https://www.drupal.org/files/issues/2023-10-02/book_typeerror-3391035-1.patch",
                 "Force expiration of node cache tag when book outline changes": "https://gist.githubusercontent.com/johangant/8b97bf93525475ee89d8be246a418777/raw/145c727d1df7403ce38819437bc46989e1a85a2b/expire-book-node-cache-key-on-change.patch",
-                "Submitting a form during an ajax request or before ajax is triggered results in data loss": "https://www.drupal.org/files/issues/2023-09-08/1736308-57.patch"
+                "Submitting a form during an ajax request or before ajax is triggered results in data loss": "https://www.drupal.org/files/issues/2023-09-08/1736308-57.patch",
+                "Content Not reverting in Layout builder section #3204494": "https://git.drupalcode.org/project/drupal/-/merge_requests/6959.diff"
             },
             "drupal/date_facet_drilldown": {
                 "Fix to deprecated function preg_replace": "https://www.drupal.org/files/issues/2024-10-02/date_facet_drilldown-3478069.patch"
@@ -343,11 +356,17 @@
                 "Make module compatible with PHP 8.2 #3405907": "https://www.drupal.org/files/issues/2023-12-04/3405907-1.patch",
                 "Remove unnecessary User::load from domain_entity_entity_access": "https://www.drupal.org/files/issues/2022-11-17/remove_unnecessary_user_load_from_domain_entity_entity_access-3322113-2.patch"
             },
+            "drupal/eu_cookie_compliance": {
+                "Elements with role=\"dialog\" or role=\"alertdialog\" do not have accessible names": "https://www.drupal.org/files/issues/2024-10-11/eu_cookie_compliance.3379830.1.25.0.patch"
+            },
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
             },
             "drupal/flag": {
                 "[regression] Flag form element also appearing on non-edit forms #3169627": "https://www.drupal.org/files/issues/2020-09-08/flag-form_element_on_non_edit-forms-3169627-2.patch"
+            },
+            "drupal/flood_control": {
+                "Add Redis support": "https://git.drupalcode.org/project/flood_control/-/merge_requests/53.diff"
             },
             "drupal/linkit": {
                 "Show URL alias after autocomplete selection instead of internal route (e.g., /node/123)": "https://www.drupal.org/files/issues/2023-10-03/linkit-2877535-62.patch",
