@@ -25,6 +25,7 @@
  * @see template_preprocess_block()
  */
 #}
+{% if content %}
 <section{{ attributes.addClass(['section-front', 'section-front--minor', 'section-front--contact-us']).removeClass('views-element-container').removeAttribute('id') }}>
   {{ title_prefix }}
   <h2>Contact us</h2>
@@ -36,3 +37,4 @@
     <a class="more" href="{{ path('view.contacts.contacts_list') }}">{{ 'See all contacts'|t }}</a>
   </p>
 </section>
+{% endif %}
