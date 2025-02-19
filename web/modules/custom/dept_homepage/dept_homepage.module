@@ -5,10 +5,105 @@
  * Contains dept_homepage.module.
  */
 
+use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Implements hook_preprocess_toolbar().
  */
 function dept_homepage_preprocess_toolbar(&$variables) {
   // Attach JS library to toolbar render element.
   $variables['#attached']['library'][] = 'dept_homepage/normalise_base_url';
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function dept_homepage_form_node_form_alter(&$form, FormStateInterface $form_state) {
+
+  $form['featured_content'] = [
+    '#type' => 'container',
+    '#prefix' => '<div id="featured-fieldset-wrapper">',
+    '#suffix' => '</div>',
+  ];
+
+  $form['featured_content']['new_featured'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Add featured content'),
+    '#description' => t('Start typing to search for news content.'),
+    '#attributes' => ['class' => ['container-inline']],
+  ];
+
+  $form['featured_content']['new_featured']['featured_item'] = [
+    '#type' => 'entity_autocomplete',
+    '#target_type' => 'node',
+    '#selection_settings' => ['target_bundles' => ['news']],
+    '#validate_reference' => FALSE,
+    '#maxlength' => 1024,
+    '#size' => '83',
+  ];
+
+  $form['featured_content']['new_featured']['add'] = [
+    '#type' => 'submit',
+    '#value' => t('Add'),
+    '#submit' => ['dept_homepage_add_featured_item'],
+    '#ajax' => [
+      'callback' => 'dept_homepage_add_featured_item_callback',
+      'wrapper' => 'featured-fieldset-wrapper',
+    ],
+  ];
+
+  $form['featured_content']['new_featured']['add'] = [
+    '#type' => 'submit',
+    '#value' => t('Add'),
+    '#submit' => ['dept_homepage_add_featured_item'],
+    '#ajax' => [
+      'callback' => 'dept_homepage_add_featured_item_callback',
+      'wrapper' => 'featured-fieldset-wrapper',
+    ],
+  ];
+
+  $form['featured_content']['field_featured_content'] = $form['field_featured_content'];
+  unset($form['field_featured_content']);
+}
+
+/**
+ * Submit handler to add a new featured item.
+ */
+function dept_homepage_add_featured_item(array $form, FormStateInterface $form_state) {
+  $user_input = $form_state->getUserInput();
+  $featured_entries = $user_input['field_featured_content'];
+
+  $updated_featured = [];
+  $updated_featured[] = [
+    'target_id' => $user_input['featured_item'],
+    '_weight' => '0',
+  ];
+
+  // Increment existing entries and increase weight for each.
+  foreach ($featured_entries as $index => $value) {
+    $new_weight = (int) $value['_weight'] + 1;
+    $updated_featured[] = [
+      'target_id' => $value['target_id'],
+      '_weight' => (string) $new_weight,
+    ];
+  }
+
+  // Update form state with new featured entries.
+  $form_state->setValueForElement($form['featured_content']['field_featured_content']['widget'], $updated_featured);
+  NestedArray::setValue($user_input, $form['featured_content']['field_featured_content']['widget']['#parents'], $updated_featured);
+
+  // Clear 'quick add' textfield and form state.
+  $form_state->setValueForElement($form['featured_content']["new_featured"]["featured_item"], '');
+  $user_input['featured_item'] = '';
+
+  $form_state->setUserInput($user_input);
+  $form_state->setRebuild();
+}
+
+/**
+ * Callback for add featured ajax submit.
+ */
+function dept_homepage_add_featured_item_callback(array &$form, FormStateInterface $form_state) {
+  return $form['featured_content'];
 }
