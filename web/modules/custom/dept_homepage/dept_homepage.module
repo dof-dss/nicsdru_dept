@@ -6,8 +6,6 @@
  */
 
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -32,6 +30,7 @@ function dept_homepage_form_node_form_alter(&$form, FormStateInterface $form_sta
   $form['featured_content']['new_featured'] = [
     '#type' => 'fieldset',
     '#title' => t('Add featured content'),
+    '#description' => t('Start typing to search for news content.'),
     '#attributes' => ['class' => ['container-inline']],
   ];
 
@@ -41,7 +40,17 @@ function dept_homepage_form_node_form_alter(&$form, FormStateInterface $form_sta
     '#selection_settings' => ['target_bundles' => ['news']],
     '#validate_reference' => FALSE,
     '#maxlength' => 1024,
-    '#size' => '84',
+    '#size' => '83',
+  ];
+
+  $form['featured_content']['new_featured']['add'] = [
+    '#type' => 'submit',
+    '#value' => t('Add'),
+    '#submit' => ['dept_homepage_add_featured_item'],
+    '#ajax' => [
+      'callback' => 'dept_homepage_add_featured_item_callback',
+      'wrapper' => 'featured-fieldset-wrapper',
+    ],
   ];
 
   $form['featured_content']['new_featured']['add'] = [
@@ -71,6 +80,7 @@ function dept_homepage_add_featured_item(array $form, FormStateInterface $form_s
     '_weight' => '0',
   ];
 
+  // Increment existing entries and increase weight for each.
   foreach ($featured_entries as $index => $value) {
     $new_weight = (int) $value['_weight'] + 1;
     $updated_featured[] = [
@@ -79,14 +89,15 @@ function dept_homepage_add_featured_item(array $form, FormStateInterface $form_s
     ];
   }
 
+  // Update form state with new featured entries.
   $form_state->setValueForElement($form['featured_content']['field_featured_content']['widget'], $updated_featured);
   NestedArray::setValue($user_input, $form['featured_content']['field_featured_content']['widget']['#parents'], $updated_featured);
 
+  // Clear 'quick add' textfield and form state.
   $form_state->setValueForElement($form['featured_content']["new_featured"]["featured_item"], '');
   $user_input['featured_item'] = '';
 
   $form_state->setUserInput($user_input);
-
   $form_state->setRebuild();
 }
 
