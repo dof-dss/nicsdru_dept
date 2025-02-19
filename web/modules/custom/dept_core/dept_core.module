@@ -431,9 +431,15 @@ function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) 
       $dept_manager = \Drupal::service('department.manager');
       /** @var \Drupal\dept_core\Entity\Department $current_dept */
       $current_dept = $dept_manager->getCurrentDepartment();
+      $current_user = \Drupal::entityTypeManager()->getStorage('user')->load(\Drupal::currentUser()->id());
+
+      if (!$current_user->hasRole('administrator')) {
+        $form['dept']['#value'] = $current_dept->id();
+        hide($form['dept']);
+        return;
+      }
 
       // Fetch current user's assigned domains.
-      $current_user = \Drupal::entityTypeManager()->getStorage('user')->load(\Drupal::currentUser()->id());
       $user_domains = $current_user->get('field_domain_access')->referencedEntities();
 
       // If the user doesn't have top level domain permissions or no assigned domains, hide this filter option.

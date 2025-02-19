@@ -25,6 +25,7 @@
  * @see template_preprocess_block()
  */
 #}
+{% if content %}
 <section{{ attributes.addClass(['section-front', 'section-front--minor', 'section-front--about-us']).removeClass('views-element-container').removeAttribute('id') }}>
   {{ title_prefix }}
   <h2>About us</h2>
@@ -33,3 +34,4 @@
     {{ content }}
   {% endblock %}
 </section>
+{% endif %}
