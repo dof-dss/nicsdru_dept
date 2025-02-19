@@ -22,17 +22,20 @@ function dept_homepage_preprocess_toolbar(&$variables) {
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function dept_homepage_form_node_form_alter(&$form, FormStateInterface $form_state) {
-  $form['field_featured_content']['#prefix'] = '<div id="featured-fieldset-wrapper">';
-  $form['field_featured_content']['#suffix'] = '</div>';
 
-  $form['new_featured'] = [
+  $form['featured_content'] = [
+    '#type' => 'container',
+    '#prefix' => '<div id="featured-fieldset-wrapper">',
+    '#suffix' => '</div>',
+  ];
 
+  $form['featured_content']['new_featured'] = [
     '#type' => 'fieldset',
     '#title' => t('Add featured content'),
     '#attributes' => ['class' => ['container-inline']],
   ];
 
-  $form['new_featured']['featured_item'] = [
+  $form['featured_content']['new_featured']['featured_item'] = [
     '#type' => 'entity_autocomplete',
     '#target_type' => 'node',
     '#selection_settings' => ['target_bundles' => ['news']],
@@ -41,22 +44,24 @@ function dept_homepage_form_node_form_alter(&$form, FormStateInterface $form_sta
     '#size' => '84',
   ];
 
-  $form['new_featured']['add'] = [
+  $form['featured_content']['new_featured']['add'] = [
     '#type' => 'submit',
     '#value' => t('Add'),
-    '#submit' => ['add_featured_item'],
+    '#submit' => ['dept_homepage_add_featured_item'],
     '#ajax' => [
       'callback' => 'dept_homepage_add_featured_item_callback',
-      'wrapper' => 'dept_homepage_featured-fieldset-wrapper',
+      'wrapper' => 'featured-fieldset-wrapper',
     ],
   ];
+
+  $form['featured_content']['field_featured_content'] = $form['field_featured_content'];
+  unset($form['field_featured_content']);
 }
 
 /**
  * Submit handler to add a new featured item.
  */
 function dept_homepage_add_featured_item(array $form, FormStateInterface $form_state) {
-
   $user_input = $form_state->getUserInput();
   $featured_entries = $user_input['field_featured_content'];
 
@@ -74,8 +79,13 @@ function dept_homepage_add_featured_item(array $form, FormStateInterface $form_s
     ];
   }
 
-  $form_state->setValueForElement($form['field_featured_content']['widget'], $updated_featured);
-  NestedArray::setValue($form_state->getUserInput(), $form['field_featured_content']['widget']['#parents'], $updated_featured);
+  $form_state->setValueForElement($form['featured_content']['field_featured_content']['widget'], $updated_featured);
+  NestedArray::setValue($user_input, $form['featured_content']['field_featured_content']['widget']['#parents'], $updated_featured);
+
+  $form_state->setValueForElement($form['featured_content']["new_featured"]["featured_item"], '');
+  $user_input['featured_item'] = '';
+
+  $form_state->setUserInput($user_input);
 
   $form_state->setRebuild();
 }
@@ -84,5 +94,5 @@ function dept_homepage_add_featured_item(array $form, FormStateInterface $form_s
  * Callback for add featured ajax submit.
  */
 function dept_homepage_add_featured_item_callback(array &$form, FormStateInterface $form_state) {
-  return $form['field_featured_content'];
+  return $form['featured_content'];
 }
