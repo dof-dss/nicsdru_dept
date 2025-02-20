@@ -20,51 +20,52 @@ function dept_homepage_preprocess_toolbar(&$variables) {
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function dept_homepage_form_node_form_alter(&$form, FormStateInterface $form_state) {
+  if ($form['#form_id'] === 'node_featured_content_list_edit_form') {
+    $form['featured_content'] = [
+      '#type' => 'container',
+      '#prefix' => '<div id="featured-fieldset-wrapper">',
+      '#suffix' => '</div>',
+    ];
 
-  $form['featured_content'] = [
-    '#type' => 'container',
-    '#prefix' => '<div id="featured-fieldset-wrapper">',
-    '#suffix' => '</div>',
-  ];
+    $form['featured_content']['new_featured'] = [
+      '#type' => 'fieldset',
+      '#title' => t('Add featured content'),
+      '#description' => t('Start typing to search for news content.'),
+      '#attributes' => ['class' => ['container-inline']],
+    ];
 
-  $form['featured_content']['new_featured'] = [
-    '#type' => 'fieldset',
-    '#title' => t('Add featured content'),
-    '#description' => t('Start typing to search for news content.'),
-    '#attributes' => ['class' => ['container-inline']],
-  ];
+    $form['featured_content']['new_featured']['featured_item'] = [
+      '#type' => 'entity_autocomplete',
+      '#target_type' => 'node',
+      '#selection_settings' => ['target_bundles' => ['news']],
+      '#validate_reference' => FALSE,
+      '#maxlength' => 1024,
+      '#size' => '83',
+    ];
 
-  $form['featured_content']['new_featured']['featured_item'] = [
-    '#type' => 'entity_autocomplete',
-    '#target_type' => 'node',
-    '#selection_settings' => ['target_bundles' => ['news']],
-    '#validate_reference' => FALSE,
-    '#maxlength' => 1024,
-    '#size' => '83',
-  ];
+    $form['featured_content']['new_featured']['add'] = [
+      '#type' => 'submit',
+      '#value' => t('Add'),
+      '#submit' => ['dept_homepage_add_featured_item'],
+      '#ajax' => [
+        'callback' => 'dept_homepage_add_featured_item_callback',
+        'wrapper' => 'featured-fieldset-wrapper',
+      ],
+    ];
 
-  $form['featured_content']['new_featured']['add'] = [
-    '#type' => 'submit',
-    '#value' => t('Add'),
-    '#submit' => ['dept_homepage_add_featured_item'],
-    '#ajax' => [
-      'callback' => 'dept_homepage_add_featured_item_callback',
-      'wrapper' => 'featured-fieldset-wrapper',
-    ],
-  ];
+    $form['featured_content']['new_featured']['add'] = [
+      '#type' => 'submit',
+      '#value' => t('Add'),
+      '#submit' => ['dept_homepage_add_featured_item'],
+      '#ajax' => [
+        'callback' => 'dept_homepage_add_featured_item_callback',
+        'wrapper' => 'featured-fieldset-wrapper',
+      ],
+    ];
 
-  $form['featured_content']['new_featured']['add'] = [
-    '#type' => 'submit',
-    '#value' => t('Add'),
-    '#submit' => ['dept_homepage_add_featured_item'],
-    '#ajax' => [
-      'callback' => 'dept_homepage_add_featured_item_callback',
-      'wrapper' => 'featured-fieldset-wrapper',
-    ],
-  ];
-
-  $form['featured_content']['field_featured_content'] = $form['field_featured_content'];
-  unset($form['field_featured_content']);
+    $form['featured_content']['field_featured_content'] = $form['field_featured_content'];
+    unset($form['field_featured_content']);
+  }
 }
 
 /**
