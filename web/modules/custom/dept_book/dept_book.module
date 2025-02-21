@@ -10,7 +10,40 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\flag\FlagInterface;
+use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_entity_presave().
+ */
+function dept_book_entity_presave(EntityInterface $entity) {
+  if ($entity instanceof NodeType) {
+    $book = $entity->book ?? NULL;
+
+    if (empty($book)) {
+      return;
+    }
+    else {
+      /* @var \Drupal\flag\FlagServiceInterface $flag_service */
+      $flag_service = \Drupal::service('flag');
+      /* @var \Drupal\flag\FlagCountManagerInterface $flag_count_service */
+      $flag_count_service = \Drupal::service('flag.count');
+
+      // Has the node already had the ToC flag set? If so, nothing to do.
+      $flags = $flag_count_service->getEntityFlagCounts($entity);
+      if (array_key_exists('disable_toc', $flags) && $flags['disable_toc'] == 1) {
+        return;
+      }
+
+      $toc_flag = $flag_service->getFlagById('disable_toc');
+
+      // Flag the content to disable the toc.
+      if ($toc_flag instanceof FlagInterface) {
+        $flag_service->flag($toc_flag, $entity);
+      }
+    }
+  }
+}
 
 /**
  * Implements hook_entity_type_alter().
