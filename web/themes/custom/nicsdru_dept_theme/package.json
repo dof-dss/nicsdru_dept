@@ -67,7 +67,6 @@
     "js-compile-modernizr": "modernizr -uc config/modernizr-config.json -d js/modernizr.min.js",
     "js-compile-thwoop-images": "mkdir -p js && uglifyjs src/js/thwoop-images.js -o js/thwoop-images.js",
     "js-compile-accordions": "mkdir -p js && uglifyjs src/js/accordions.js -o js/accordions.js",
-    "js-compile-section-feedback": "mkdir -p js && uglifyjs src/js/section-feedback.js -o js/section-feedback.js",
     "js-compile-ui": "mkdir -p js && uglifyjs src/js/ui.js -o js/ui.js",
     "js-compile-site-search": "mkdir -p js && uglifyjs src/js/site-search.js -o js/site-search.js",
     "js-compile-sitewide-alerts": "mkdir -p js && uglifyjs src/js/sitewide-alerts.js -o js/sitewide-alerts.js",
