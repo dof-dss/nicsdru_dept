@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9cba2f02cda6bc92f326dcfd081ed29b",
+    "content-hash": "430ecb3890777d7eb273ee071730215f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3928,11 +3928,11 @@
         },
         {
             "name": "drupal/date_facet_drilldown",
-            "version": "dev-5.x",
+            "version": "dev-7.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/date_facet_drilldown.git",
-                "reference": "727320bcc53239dbe615b4a86d13d25ed0585125"
+                "reference": "b4cef2dada7cb6d81a84a654c7f84193dbd3afc9"
             },
             "require": {
                 "drupal/core": "^8 || ^9 || ^10"
@@ -3940,11 +3940,11 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-5.x": "5.x-dev"
+                    "dev-7.x": "7.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-5.x-dev",
-                    "datestamp": "1688987471",
+                    "version": "8.x-7.x-dev",
+                    "datestamp": "1728039386",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -3957,7 +3957,7 @@
             ],
             "authors": [
                 {
-                    "name": "DuttonMa",
+                    "name": "duttonma",
                     "homepage": "https://www.drupal.org/user/2250396"
                 },
                 {
@@ -22809,6 +22809,7 @@
         "drupal/chosen": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
+        "drupal/date_facet_drilldown": 20,
         "drupal/domain": 10,
         "drupal/domain_entity": 5,
         "drupal/domain_simple_sitemap": 10,
