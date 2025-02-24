@@ -117,7 +117,7 @@
         "drupal/core-project-message": "10.3.13",
         "drupal/core-recommended": "10.3.13",
         "drupal/csp": "^2.1",
-        "drupal/date_facet_drilldown": "^5.0",
+        "drupal/date_facet_drilldown": "^7.0@dev",
         "drupal/datetime_flatpickr": "^3.0",
         "drupal/devel_entity_updates": "^4.0",
         "drupal/diff": "^1.0",
@@ -339,9 +339,6 @@
                 "Force expiration of node cache tag when book outline changes": "https://gist.githubusercontent.com/johangant/8b97bf93525475ee89d8be246a418777/raw/145c727d1df7403ce38819437bc46989e1a85a2b/expire-book-node-cache-key-on-change.patch",
                 "Submitting a form during an ajax request or before ajax is triggered results in data loss": "https://www.drupal.org/files/issues/2023-09-08/1736308-57.patch",
                 "Content Not reverting in Layout builder section #3204494": "https://git.drupalcode.org/project/drupal/-/merge_requests/6959.diff"
-            },
-            "drupal/date_facet_drilldown": {
-                "Fix to deprecated function preg_replace": "https://www.drupal.org/files/issues/2024-10-02/date_facet_drilldown-3478069.patch"
             },
             "drupal/devel": {
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://gitlab.com/-/project/18040690/uploads/7897853cd83cb829ae8d752657e2f497/kint.221-5-3.patch"
