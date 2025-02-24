@@ -262,11 +262,11 @@ function dept_core_entity_insert(EntityInterface $entity) {
   // display will use Chosen, entity reference etc if not explicitly set by the
   // site-builder.
   if ($entity instanceof FieldConfig && in_array($entity->getName(), ['field_domain_source', 'field_domain_access'])) {
-    $entity_form_display = EntityFormDisplay::load('node.' . $entity->getTargetBundle() . '.default');
+    $entity_form_display = EntityFormDisplay::load($entity->getTargetEntityTypeId() . '.' . $entity->getTargetBundle() . '.default');
 
     if (empty($entity_form_display)) {
       $entity_form_display = EntityFormDisplay::create([
-        'targetEntityType' => 'node',
+        'targetEntityType' => $entity->getTargetEntityTypeId(),
         'bundle' => $entity->getTargetBundle(),
         'mode' => 'default',
         'status' => TRUE,
