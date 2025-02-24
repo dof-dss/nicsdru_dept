@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -17,6 +18,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\dept_core\Entity\Department;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
@@ -248,6 +250,36 @@ function dept_core_append_dept_info_for_templates(array &$variables) {
   // and https://www.drupal.org/forum/support/theme-development/2018-09-05/twig-sandbox-security-error-when-calling-object-method
   $variables['department']['id'] = $dept->id();
   $variables['department']['name'] = $dept->name();
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function dept_core_entity_insert(EntityInterface $entity) {
+  // When a Domain field is created in a content type, create/update the form
+  // display and set those fields to use a select element which prevents the
+  // WSOD when creating new content of that type because, by default, the form
+  // display will use Chosen, entity reference etc if not explicitly set by the
+  // site-builder.
+  if ($entity instanceof FieldConfig && in_array($entity->getName(), ['field_domain_source', 'field_domain_access'])) {
+    $entity_form_display = EntityFormDisplay::load($entity->getTargetEntityTypeId() . '.' . $entity->getTargetBundle() . '.default');
+
+    if (empty($entity_form_display)) {
+      $entity_form_display = EntityFormDisplay::create([
+        'targetEntityType' => $entity->getTargetEntityTypeId(),
+        'bundle' => $entity->getTargetBundle(),
+        'mode' => 'default',
+        'status' => TRUE,
+      ]);
+    }
+
+    $entity_form_display->setComponent($entity->getName(), [
+      'type' => 'options_select',
+      'region' => 'content',
+    ]);
+
+    $entity_form_display->save();
+  }
 }
 
 /**
