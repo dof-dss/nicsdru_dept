@@ -675,3 +675,14 @@ function dept_core_entity_view_alter(array &$build, EntityInterface $entity, Ent
     }
   }
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function dept_core_library_info_alter(&$libraries, $extension) {
+  // Remove the Domain library as we hide the options from non-admins.
+  // We cannot remove this on a per-role basis as aggregation would override it.
+  if (array_key_exists('drupal.domain_source', $libraries)) {
+    unset($libraries['drupal.domain_source']);
+  }
+}
