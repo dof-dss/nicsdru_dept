@@ -545,8 +545,9 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
     $nid = $topic_content['target_id'];
     $node = Node::load($nid);
     if ($node->bundle() === 'subtopic') {
+      $num_parent_nodes = count($topic_manager->getParentNodes($node->id())) ?? 0;
       // Warn the user if the subtopic has an assigned parent topic.
-      if (!empty($topic_manager->getParentNodes($node->id()) > 0)) {
+      if ($num_parent_nodes > 1) {
         $element = $form['field_topic_content']['widget'][$index];
         $form_state->setError($element, t('This subtopic is already assigned to a parent topic and cannot be linked to multiple parent topics.'));
       }
