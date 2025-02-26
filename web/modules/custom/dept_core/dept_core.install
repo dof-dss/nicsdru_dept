@@ -1,6 +1,9 @@
 <?php
 
+use Drupal\Core\Database\Database;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\path_alias\Entity\PathAlias;
+use Drupal\path_alias\PathAliasInterface;
 
 /**
  * Add weight to Department entity
@@ -12,4 +15,23 @@ function dept_core_update_8001() {
     ->setDefaultValue(0);
 
   \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('weight', 'department', 'dept_core', $field_storage_definition);
+}
+
+
+/**
+ * Remove Link node path alias entities.
+ */
+function dept_core_update_8002() {
+  $conn = Database::getConnection();
+
+  $alias_ids = $conn->query("SELECT pa.id FROM {path_alias} pa JOIN {node_field_data} nfd ON nfd.nid = SUBSTR(pa.path, (LENGTH('/node/') +1), LENGTH(pa.path)) WHERE nfd.type = :content_type", [':content_type' => 'link'])->fetchCol();
+
+  if (!empty($alias_ids)) {
+    foreach ($alias_ids as $alias_id) {
+      $alias = PathAlias::load($alias_id);
+      if ($alias instanceof PathAliasInterface) {
+        $alias->delete();
+      }
+    }
+  }
 }
