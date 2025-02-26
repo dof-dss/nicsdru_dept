@@ -126,7 +126,9 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
   $form['title-guardian'] = [
     '#type' => 'container',
     '#weight' => $form['title']['#weight'],
-    '#attributes' => ['id' => 'title-guardian-message'],
+    '#attributes' => [
+      'id' => 'title-guardian-message',
+    ],
   ];
 }
 
@@ -136,18 +138,20 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
 function dept_node_title_guardian(array &$form, FormStateInterface $form_state) {
   $department = $form_state->getUserInput()['field_domain_source'];
   $title = $form_state->getValue('title')[0]['value'];
+  $bundle = $form_state->getformObject()->getEntity()->bundle();
 
   $query = \Drupal::database()->select('node_field_data', 'fd');
   $query->leftJoin('node__field_domain_source', 'ds', 'fd.nid = ds.entity_id');
   $query->fields('fd', ['title']);
   $query->condition('fd.title', $title);
+  $query->condition('fd.type', $bundle);
   $query->condition('ds.field_domain_source_target_id', $department);
 
   $result = $query->execute()->fetchCol();
 
   $response = new AjaxResponse();
   if (count($result) > 1) {
-    $response->addCommand(new AppendCommand('#title-guardian-message', '<p>This Title exists for this site.</p>'));
+    $response->addCommand(new AppendCommand('#title-guardian-message', '<p class="form-item__error-message">The specified title already exists for this site. Please choose a different title to ensure uniqueness and avoid duplication.</p>'));
     $response->addCommand(new InvokeCommand('#edit-submit', 'attr', ['disabled', 'disabled']));
   }
   else {
@@ -157,7 +161,6 @@ function dept_node_title_guardian(array &$form, FormStateInterface $form_state) 
 
   return $response;
 }
-
 
 /**
  * Implements hook_views_pre_render().
