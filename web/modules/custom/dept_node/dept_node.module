@@ -113,6 +113,7 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
     }
   }
 
+  // Checks uniqueness of the node title.
   $form['title']['widget'][0]['value']['#ajax'] = [
     'callback' => 'dept_node_title_guardian',
     'event' => 'change',
@@ -140,6 +141,7 @@ function dept_node_title_guardian(array &$form, FormStateInterface $form_state) 
   $title = $form_state->getValue('title')[0]['value'];
   $bundle = $form_state->getformObject()->getEntity()->bundle();
 
+  // Check for existing titles within the same department and content type.
   $query = \Drupal::database()->select('node_field_data', 'fd');
   $query->leftJoin('node__field_domain_source', 'ds', 'fd.nid = ds.entity_id');
   $query->fields('fd', ['title']);
@@ -149,6 +151,7 @@ function dept_node_title_guardian(array &$form, FormStateInterface $form_state) 
 
   $result = $query->execute()->fetchCol();
 
+  // Return/remove warning and toggle the node save button.
   $response = new AjaxResponse();
   if (count($result) > 1) {
     $response->addCommand(new AppendCommand('#title-guardian-message', '<p class="form-item__error-message">The specified title already exists for this site. Please choose a different title to ensure uniqueness and avoid duplication.</p>'));
