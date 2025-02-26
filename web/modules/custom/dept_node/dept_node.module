@@ -108,7 +108,48 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
       \Drupal::logger('dept_node')->error("Domain access ID's not found for entity: @entity", ['@entity' => $form_state->getFormObject()->getEntity()->getEntityTypeId()]);
     }
   }
+
+  $form['title']['widget'][0]['value']['#ajax'] = [
+    'callback' => 'dept_node_title_guardian',
+    'event' => 'change',
+    'wrapper' => 'title-guardian-message',
+    'progress' => [
+      'type' => 'throbber',
+      'message' => t('Checking title...'),
+    ],
+  ];
+
+  $form['title-guardian'] = [
+    '#type' => 'container',
+    '#weight' => $form['title']['#weight'],
+    '#attributes' => ['id' => 'title-guardian-message'],
+  ];
 }
+
+/**
+ * Callback for title field ajax call to warn user of existing title.
+ */
+function dept_node_title_guardian(array &$form, FormStateInterface $form_state) {
+
+  $department = $form_state->getUserInput()['field_domain_source'];
+  $title = $form_state->getValue('title')[0]['value'];
+
+  $query = \Drupal::database()->select('node_field_data', 'fd');
+  $query->leftJoin('node__field_domain_source', 'ds', 'fd.nid = ds.entity_id');
+  $query->fields('fd', ['title']);
+  $query->condition('fd.title', $title);
+  $query->condition('ds.field_domain_source_target_id', $department);
+
+  $result = $query->execute()->fetchCol();
+
+  // Modify the response (example: show title length).
+  $response = [
+    '#markup' => '<p>Existing: ' . count($result) . '</p>',
+  ];
+
+  return $response;
+}
+
 
 /**
  * Implements hook_views_pre_render().
