@@ -40,6 +40,10 @@ libraries-override:
       component:
         css/webform.element.counter.css: false
 
+libraries-extend:
+  media_library/widget:
+    - nicsdru_dept_theme/media_widget
+
 regions:
   header: 'Header'
   primary_menu: 'Primary menu'

@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "6547870d81263102adf4a5efd2fec0fd",
+=======
+    "content-hash": "430ecb3890777d7eb273ee071730215f",
+>>>>>>> development
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1856,16 +1860,16 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "10.4.5",
+            "version": "10.4.7",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "cb2614862f5b4f20b92e7b18ac6bf0861edd0a24"
+                "reference": "0a62be52f2ff773805753a7a124c82779b531f0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/cb2614862f5b4f20b92e7b18ac6bf0861edd0a24",
-                "reference": "cb2614862f5b4f20b92e7b18ac6bf0861edd0a24",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/0a62be52f2ff773805753a7a124c82779b531f0e",
+                "reference": "0a62be52f2ff773805753a7a124c82779b531f0e",
                 "shasum": ""
             },
             "require": {
@@ -1877,7 +1881,7 @@
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2025-02-07T13:51:47+00:00"
+            "time": "2025-02-24T16:32:34+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
@@ -3920,11 +3924,11 @@
         },
         {
             "name": "drupal/date_facet_drilldown",
-            "version": "dev-5.x",
+            "version": "dev-7.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/date_facet_drilldown.git",
-                "reference": "727320bcc53239dbe615b4a86d13d25ed0585125"
+                "reference": "b4cef2dada7cb6d81a84a654c7f84193dbd3afc9"
             },
             "require": {
                 "drupal/core": "^8 || ^9 || ^10"
@@ -3932,11 +3936,11 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-5.x": "5.x-dev"
+                    "dev-7.x": "7.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-5.x-dev",
-                    "datestamp": "1688987471",
+                    "version": "8.x-7.x-dev",
+                    "datestamp": "1728039386",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -3949,7 +3953,7 @@
             ],
             "authors": [
                 {
-                    "name": "DuttonMa",
+                    "name": "duttonma",
                     "homepage": "https://www.drupal.org/user/2250396"
                 },
                 {
@@ -22814,6 +22818,7 @@
         "drupal/block_field": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
+        "drupal/date_facet_drilldown": 20,
         "drupal/domain": 10,
         "drupal/domain_entity": 5,
         "drupal/domain_simple_sitemap": 10,

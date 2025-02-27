@@ -1,14 +1,1 @@
-/* Vertical rhythm presets =========================================== */
-/* Set the base images folder */
-/* Breakpoints ======================================================== */
-/* Layout max widths for larger breakpoints =========================== */
-@media (min-width: 768px) {
-  /* line 12, src/scss/2_layouts/nics-3-col-layouts.scss */
-  .layout--triptych {
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: auto;
-    grid-gap: 24px;
-  }
-}
-
-/*# sourceMappingURL=nics-3-col-layouts.css.map */
+@media (min-width: 768px){.layout--triptych{grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto;grid-gap:24px}}

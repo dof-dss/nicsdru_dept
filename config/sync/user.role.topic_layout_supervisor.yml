@@ -10,6 +10,7 @@ dependencies:
     - block_content.type.card_contact
     - block_content.type.card_standard
     - block_content.type.card_wide
+    - block_content.type.image_and_caption
     - block_content.type.plain_cards
     - block_content.type.text
     - block_content.type.video
@@ -41,6 +42,7 @@ permissions:
   - 'create card_contact block content'
   - 'create card_standard block content'
   - 'create card_wide block content'
+  - 'create image_and_caption block content'
   - 'create plain_cards block content'
   - 'create subtopic content on assigned domains'
   - 'create subtopic node content on assigned domains'
@@ -54,6 +56,7 @@ permissions:
   - 'delete any card_contact block content'
   - 'delete any card_standard block content'
   - 'delete any card_wide block content'
+  - 'delete any image_and_caption block content'
   - 'delete any plain_cards block content'
   - 'delete any text block content'
   - 'delete any video block content'
@@ -65,6 +68,7 @@ permissions:
   - 'edit any card_contact block content'
   - 'edit any card_standard block content'
   - 'edit any card_wide block content'
+  - 'edit any image_and_caption block content'
   - 'edit any plain_cards block content'
   - 'edit any text block content'
   - 'edit any video block content'
@@ -76,6 +80,7 @@ permissions:
   - 'revert any card_contact block content revisions'
   - 'revert any card_standard block content revisions'
   - 'revert any card_wide block content revisions'
+  - 'revert any image_and_caption block content revisions'
   - 'revert any plain_cards block content revisions'
   - 'revert any text block content revisions'
   - 'revert any video block content revisions'
