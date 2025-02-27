@@ -146,14 +146,22 @@ function dept_node_title_guardian(array &$form, FormStateInterface $form_state) 
   $query->leftJoin('node__field_domain_source', 'ds', 'fd.nid = ds.entity_id');
   $query->fields('fd', ['title']);
   $query->condition('fd.title', $title);
-  $query->condition('fd.type', $bundle);
   $query->condition('ds.field_domain_source_target_id', $department);
+
+  // For topics/subtopics check both content types.
+  if ($bundle === 'topic' || $bundle === 'subtopic') {
+    $query->condition('fd.type', ['topic', 'subtopic'], 'IN');
+  }
+  else {
+    $query->condition('fd.type', $bundle);
+  }
 
   $result = $query->execute()->fetchCol();
 
   // Return/remove warning and toggle the node save button.
   $response = new AjaxResponse();
   if (count($result) > 0) {
+    $response->addCommand(new InvokeCommand('#title-guardian-message', 'empty'));
     $response->addCommand(new AppendCommand('#title-guardian-message', '<p class="form-item__error-message">The specified title already exists for this site. Please choose a different title to ensure uniqueness and avoid duplication.</p>'));
     $response->addCommand(new InvokeCommand('#edit-submit', 'attr', ['disabled', 'disabled']));
     $response->addCommand(new InvokeCommand('#edit-submit', 'attr', [
@@ -162,13 +170,13 @@ function dept_node_title_guardian(array &$form, FormStateInterface $form_state) 
     ]));
     // Highlight the title field with the core Drupal validator error classes.
     $response->addCommand(new InvokeCommand('#edit-title-0-value', 'addClass', ['error']));
-    $response->addCommand(new InvokeCommand('label[for="edit-title-0-value"] ', 'addClass', ['has-error']));
+    $response->addCommand(new InvokeCommand('label[for="edit-title-0-value"]', 'addClass', ['has-error']));
   }
   else {
     $response->addCommand(new RemoveCommand('#title-guardian-message p'));
     $response->addCommand(new InvokeCommand('#edit-submit', 'removeAttr', ['disabled title']));
     $response->addCommand(new InvokeCommand('#edit-title-0-value', 'removeClass', ['error']));
-    $response->addCommand(new InvokeCommand('label[for="edit-title-0-value"] ', 'removeClass', ['has-error']));
+    $response->addCommand(new InvokeCommand('label[for="edit-title-0-value"]', 'removeClass', ['has-error']));
   }
 
   return $response;
