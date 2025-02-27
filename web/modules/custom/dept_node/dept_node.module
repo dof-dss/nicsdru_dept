@@ -153,13 +153,22 @@ function dept_node_title_guardian(array &$form, FormStateInterface $form_state) 
 
   // Return/remove warning and toggle the node save button.
   $response = new AjaxResponse();
-  if (count($result) > 1) {
+  if (count($result) > 0) {
     $response->addCommand(new AppendCommand('#title-guardian-message', '<p class="form-item__error-message">The specified title already exists for this site. Please choose a different title to ensure uniqueness and avoid duplication.</p>'));
     $response->addCommand(new InvokeCommand('#edit-submit', 'attr', ['disabled', 'disabled']));
+    $response->addCommand(new InvokeCommand('#edit-submit', 'attr', [
+      'title',
+      'Save disabled, title exists. Please choose a different title to ensure uniqueness and avoid duplication.'
+    ]));
+    // Highlight the title field with the core Drupal validator error classes.
+    $response->addCommand(new InvokeCommand('#edit-title-0-value', 'addClass', ['error']));
+    $response->addCommand(new InvokeCommand('label[for="edit-title-0-value"] ', 'addClass', ['has-error']));
   }
   else {
     $response->addCommand(new RemoveCommand('#title-guardian-message p'));
-    $response->addCommand(new InvokeCommand('#edit-submit', 'removeAttr', ['disabled']));
+    $response->addCommand(new InvokeCommand('#edit-submit', 'removeAttr', ['disabled title']));
+    $response->addCommand(new InvokeCommand('#edit-title-0-value', 'removeClass', ['error']));
+    $response->addCommand(new InvokeCommand('label[for="edit-title-0-value"] ', 'removeClass', ['has-error']));
   }
 
   return $response;
