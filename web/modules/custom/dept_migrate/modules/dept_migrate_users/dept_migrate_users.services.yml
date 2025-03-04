@@ -1,6 +1,0 @@
-services:
-  dept_migrate_users.eventsubscriber.migrate.create_qa_users:
-    class: Drupal\dept_migrate_users\EventSubscriber\PostMigrationCreateQaUsers
-    arguments: ['@entity_type.manager', '@logger.factory']
-    tags:
-      - { name: event_subscriber }

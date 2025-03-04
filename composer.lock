@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2af4de0a405a20949520946521218093",
+    "content-hash": "bfc358add8358c068bafac1275238ed7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7172,186 +7172,6 @@
             }
         },
         {
-            "name": "drupal/migrate_conditions",
-            "version": "2.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/migrate_conditions.git",
-                "reference": "2.2.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/migrate_conditions-2.2.0.zip",
-                "reference": "2.2.0",
-                "shasum": "b969de27f3fa9075d03802d64d87f1bf0599a6be"
-            },
-            "require": {
-                "drupal/core": "^10.3 || ^11"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.2.0",
-                    "datestamp": "1719236630",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "danflanagan8",
-                    "homepage": "https://www.drupal.org/user/3615359"
-                }
-            ],
-            "description": "Provides framework of conditions plugins and process plugins that use them",
-            "homepage": "https://www.drupal.org/project/migrate_conditions",
-            "support": {
-                "source": "https://git.drupalcode.org/project/migrate_conditions"
-            }
-        },
-        {
-            "name": "drupal/migrate_plus",
-            "version": "6.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/migrate_plus.git",
-                "reference": "6.0.4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/migrate_plus-6.0.4.zip",
-                "reference": "6.0.4",
-                "shasum": "0357c416d2a9fd3f4211dd13c6585ed8072fabe7"
-            },
-            "require": {
-                "drupal/core": ">=9.1",
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "drupal/migrate_example_advanced_setup": "*",
-                "drupal/migrate_example_setup": "*"
-            },
-            "suggest": {
-                "ext-soap": "*",
-                "sainsburys/guzzle-oauth2-plugin": "3.0 required for the OAuth2 authentication plugin"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "6.0.4",
-                    "datestamp": "1721745585",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Mike Ryan",
-                    "homepage": "https://www.drupal.org/u/mikeryan",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Lucas Hedding",
-                    "homepage": "https://www.drupal.org/u/heddn",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "mikeryan",
-                    "homepage": "https://www.drupal.org/user/4420"
-                }
-            ],
-            "description": "Enhancements to core migration support.",
-            "homepage": "https://www.drupal.org/project/migrate_plus",
-            "support": {
-                "source": "https://git.drupalcode.org/project/migrate_plus",
-                "issues": "https://www.drupal.org/project/issues/migrate_plus",
-                "slack": "#migrate"
-            }
-        },
-        {
-            "name": "drupal/migrate_tools",
-            "version": "6.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/migrate_tools.git",
-                "reference": "6.0.4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/migrate_tools-6.0.4.zip",
-                "reference": "6.0.4",
-                "shasum": "63c571aefece96b199ce8b8f90da648186502be4"
-            },
-            "require": {
-                "drupal/core": ">=9.1",
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "drupal/migrate_plus": ">=5",
-                "drupal/migrate_source_csv": ">=3",
-                "drush/drush": ">=11"
-            },
-            "suggest": {
-                "drupal/migrate_plus": ">=5",
-                "drush/drush": ">=11"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "6.0.4",
-                    "datestamp": "1707330330",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": ">=9"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Mike Ryan",
-                    "homepage": "https://www.drupal.org/u/mikeryan",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Lucas Hedding",
-                    "homepage": "https://www.drupal.org/u/heddn",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "mikeryan",
-                    "homepage": "https://www.drupal.org/user/4420"
-                }
-            ],
-            "description": "Tools to assist in developing and running migrations.",
-            "homepage": "http://drupal.org/project/migrate_tools",
-            "support": {
-                "source": "https://git.drupalcode.org/project/migrate_tools",
-                "issues": "https://www.drupal.org/project/issues/migrate_tools",
-                "slack": "#migrate"
-            }
-        },
-        {
             "name": "drupal/moderation_sidebar",
             "version": "1.8.0",
             "source": {
@@ -13334,84 +13154,6 @@
                 "source": "https://github.com/ralouphie/getallheaders/tree/develop"
             },
             "time": "2019-03-08T08:55:37+00:00"
-        },
-        {
-            "name": "scrivo/highlight.php",
-            "version": "v9.18.1.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/scrivo/highlight.php.git",
-                "reference": "850f4b44697a2552e892ffe71490ba2733c2fc6e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/scrivo/highlight.php/zipball/850f4b44697a2552e892ffe71490ba2733c2fc6e",
-                "reference": "850f4b44697a2552e892ffe71490ba2733c2fc6e",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8|^5.7",
-                "sabberworm/php-css-parser": "^8.3",
-                "symfony/finder": "^2.8|^3.4|^5.4",
-                "symfony/var-dumper": "^2.8|^3.4|^5.4"
-            },
-            "suggest": {
-                "ext-mbstring": "Allows highlighting code with unicode characters and supports language with unicode keywords"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "HighlightUtilities/functions.php"
-                ],
-                "psr-0": {
-                    "Highlight\\": "",
-                    "HighlightUtilities\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Geert Bergman",
-                    "homepage": "http://www.scrivo.org/",
-                    "role": "Project Author"
-                },
-                {
-                    "name": "Vladimir Jimenez",
-                    "homepage": "https://allejo.io",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Martin Folkers",
-                    "homepage": "https://twobrain.io",
-                    "role": "Contributor"
-                }
-            ],
-            "description": "Server side syntax highlighter that supports 185 languages. It's a PHP port of highlight.js",
-            "keywords": [
-                "code",
-                "highlight",
-                "highlight.js",
-                "highlight.php",
-                "syntax"
-            ],
-            "support": {
-                "issues": "https://github.com/scrivo/highlight.php/issues",
-                "source": "https://github.com/scrivo/highlight.php"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/allejo",
-                    "type": "github"
-                }
-            ],
-            "time": "2022-12-17T21:53:22+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -22901,7 +22643,6 @@
         "drupal/filelog": 20,
         "drupal/flag": 10,
         "drupal/masquerade": 10,
-        "drupal/migrate_conditions": 10,
         "drupal/purge_users": 5,
         "drupal/ultimate_cron": 10,
         "drupal/views_tree": 15,
