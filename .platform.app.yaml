@@ -45,7 +45,6 @@ relationships:
   redis: "redis:redis"
   #  For MariaDB, the endpoint does not change whether you used the mysql or mariadb service type.
   database: 'db:dept'
-  drupal7db: 'db:migration'
 
 # The size of the persistent disk of the application (in MB).
 disk: 137216
@@ -206,7 +205,7 @@ web:
         '^/sites/default/files/styles/[^\.]+\.(jpe?g|png|gif|svgz?)$':
           expires: 2w
 
-# Set up migration content refresh every night.
+# Cron jobs.
 crons:
   autoban:
     spec: '*/13 * * * *'

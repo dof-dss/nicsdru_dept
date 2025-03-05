@@ -1,6 +1,0 @@
-services:
-  dept_migrate_files.eventsubscriber.migrate.file_import_tidy:
-    class: Drupal\dept_migrate_files\EventSubscriber\PostMigrationFileImportTidy
-    arguments: [ '@entity_type.manager', '@logger.factory', '@database', '@dept_migrate.database_d7', '@dept_migrate.migrate_uuid_lookup_manager' ]
-    tags:
-      - { name: event_subscriber }

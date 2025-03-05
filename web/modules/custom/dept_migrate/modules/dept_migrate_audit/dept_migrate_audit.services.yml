@@ -1,4 +1,0 @@
-services:
-  dept_migrate_audit.audit_batch_service:
-    class: 'Drupal\dept_migrate_audit\MigrationAuditBatchService'
-    arguments: ['@database', '@dept_migrate.database_d7']

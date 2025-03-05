@@ -1,7 +1,0 @@
-services:
-  dept_migrate_flags.eventsubscriber.migrate.flag_counts:
-    class: Drupal\dept_migrate_flags\EventSubscriber\MigrationFlagCountsSubscriber
-    arguments: ['@database', '@dept_migrate.database_d7', '@dept_migrate.migrate_uuid_lookup_manager']
-    tags:
-      - { name: event_subscriber }
-

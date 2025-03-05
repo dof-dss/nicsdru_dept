@@ -1,8 +1,0 @@
-name: 'Department sites: migration -- Nodes'
-type: module
-description: 'Node migration module for departmental sites'
-core_version_requirement: ^8.8 || ^9 || ^10
-package: 'NICS: Departmental'
-dependencies:
-  - dept_migrate
-  - dept_migrate_users
