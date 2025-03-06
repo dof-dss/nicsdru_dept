@@ -353,6 +353,9 @@
                 "Make module compatible with PHP 8.2 #3405907": "https://www.drupal.org/files/issues/2023-12-04/3405907-1.patch",
                 "Remove unnecessary User::load from domain_entity_entity_access": "https://www.drupal.org/files/issues/2022-11-17/remove_unnecessary_user_load_from_domain_entity_entity_access-3322113-2.patch"
             },
+            "drupal/domain_path": {
+                "Warning: Undefined array key \"pathauto\" in Drupal\\domain_path_pathauto\\DomainPathautoHelper #3315752": "https://www.drupal.org/files/issues/2024-10-21/3315752-13.patch"
+            },
             "drupal/eu_cookie_compliance": {
                 "Elements with role=\"dialog\" or role=\"alertdialog\" do not have accessible names": "https://www.drupal.org/files/issues/2024-10-11/eu_cookie_compliance.3379830.1.25.0.patch"
             },
