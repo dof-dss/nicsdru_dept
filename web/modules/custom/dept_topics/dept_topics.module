@@ -537,6 +537,8 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
 function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
   $topic_contents = $form_state->getValue('field_topic_content');
   $topic_manager = \Drupal::service('topic.manager');
+  // @phpstan-ignore-next-line.
+  $parent_node = $form_state->getFormObject()->getEntity();
 
   foreach ($topic_contents as $index => $topic_content) {
     // Ignore if the 'add new' or an empty field is encountered.
@@ -546,11 +548,14 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
     $nid = $topic_content['target_id'];
     $node = Node::load($nid);
     if ($node->bundle() === 'subtopic') {
-      $num_parent_nodes = count($topic_manager->getParentNodes($node->id())) ?? 0;
+      $parent_nodes = $topic_manager->getParentNodes($node->id());
       // Warn the user if the subtopic has an assigned parent topic.
-      if ($num_parent_nodes > 1) {
-        $element = $form['field_topic_content']['widget'][$index];
-        $form_state->setError($element, t('This subtopic is already assigned to a parent topic and cannot be linked to multiple parent topics.'));
+      if (!empty($parent_nodes)) {
+        // If the child node parent ID doesn't match this node, warn the user.
+        if (current($parent_nodes)->nid !== $parent_node->id()) {
+          $element = $form['field_topic_content']['widget'][$index];
+          $form_state->setError($element, t('This subtopic is already assigned to a parent topic and cannot be linked to multiple parent topics.'));
+        }
       }
     }
   }
