@@ -681,7 +681,7 @@ function dept_topics_views_query_alter(ViewExecutable $view, QueryPluginBase $qu
  * Implements hook_entity_bundle_field_info_alter().
  */
 function dept_topics_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
-  if ($bundle === 'topic' || $bundle === 'subtopic' ) {
+  if ($bundle === 'topic' || $bundle === 'subtopic') {
     if (isset($fields['field_topic_content'])) {
       $fields['field_topic_content']->addConstraint('unique_list_items');
     }
