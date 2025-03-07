@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_form_node_form_alter().
@@ -41,5 +42,25 @@ function dept_postprocess_form_node_form_alter(&$form, FormStateInterface $form_
   // permissions on a node form.
   if ($bundle === 'topic' || $bundle === 'subtopic') {
     $form['domain_path'][$current_dept->id()]['pathauto']['#default_value'] = 1;
+  }
+}
+
+/**
+ * Implements hook_moderation_sidebar_alter().
+ */
+function dept_postprocess_moderation_sidebar_alter(&$build, &$context) {
+  if ($context instanceof NodeInterface &&
+    in_array($context->bundle(), ['topic', 'subtopic'])) {
+    if (!\Drupal::currentUser()->hasPermission('edit subtopic content')) {
+      // Remove sidebar options for these bundles if user cannot edit a
+      // topic/subtopic.
+      if (isset($build['actions']["primary"]["quick_draft_form"])) {
+        unset($build['actions']["primary"]["quick_draft_form"]);
+      }
+
+      if (isset($build['actions']["primary"]["draft_of_published"])) {
+        unset($build['actions']["primary"]["draft_of_published"]);
+      }
+    }
   }
 }

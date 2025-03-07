@@ -42,7 +42,10 @@ function dept_topics_help($route_name, RouteMatchInterface $route_match) {
 function dept_topics_moderation_sidebar_alter(&$build, &$context) {
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
+
+    // See also: dept_postprocess_moderation_sidebar_alter()
     if (\Drupal::currentUser()->hasPermission('edit subtopic content')) {
+
       $build['actions']['secondary']['info_topic_content'] = [
         '#theme' => 'moderation_sidebar_info_section',
         '#text' => 'Manage topic content',
