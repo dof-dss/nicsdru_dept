@@ -52,14 +52,21 @@ function dept_postprocess_moderation_sidebar_alter(&$build, &$context) {
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
     if (!\Drupal::currentUser()->hasPermission('edit subtopic content')) {
-      // Remove sidebar options for these bundles if user cannot edit a
-      // topic/subtopic.
-      if (isset($build['actions']["primary"]["quick_draft_form"])) {
-        unset($build['actions']["primary"]["quick_draft_form"]);
+      // Remove sidebar actions for topics/subtopic if the user does not have
+      // the edit subtopic permission.
+
+      // Primary actions.
+      foreach (['quick_draft_form', 'draft_of_published', 'archive'] as $action) {
+        if (isset($build['actions']["primary"][$action])) {
+          unset($build['actions']["primary"][$action]);
+        }
       }
 
-      if (isset($build['actions']["primary"]["draft_of_published"])) {
-        unset($build['actions']["primary"]["draft_of_published"]);
+      // Secondary actions.
+      foreach (['version_history', 'entity.node.book_outline_form'] as $action) {
+        if (isset($build['actions']["secondary"][$action])) {
+          unset($build['actions']["secondary"][$action]);
+        }
       }
     }
   }
