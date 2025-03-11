@@ -8,13 +8,12 @@ dependencies:
     - field.storage.node.field_domain_access
     - field.storage.node.field_domain_source
     - field.storage.node.field_protected_area_feature
-    - field.storage.node.field_summary
     - field.storage.node.field_protected_area_type
+    - field.storage.node.field_summary
     - search_api.server.default
   module:
-    - search_api_solr
     - node
-    - search_api
+    - search_api_solr
 third_party_settings:
   search_api_solr:
     finalize: false
@@ -209,6 +208,7 @@ datasource_settings:
         - article
         - consultation
         - contact
+        - event
         - heritage_site
         - news
         - page
@@ -280,6 +280,7 @@ tracker_settings:
     indexing_order: fifo
 options:
   cron_limit: 50
+  delete_on_fail: true
   index_directly: true
   track_changes_in_references: true
 server: default
