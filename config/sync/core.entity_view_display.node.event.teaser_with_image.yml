@@ -1,0 +1,62 @@
+uuid: 99f913af-3f4f-4540-898c-0bd12ae2e173
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser_with_image
+    - field.field.node.event.body
+    - field.field.node.event.field_business_area
+    - field.field.node.event.field_domain_access
+    - field.field.node.event.field_domain_all_affiliates
+    - field.field.node.event.field_domain_source
+    - field.field.node.event.field_event_datetime
+    - field.field.node.event.field_event_host
+    - field.field.node.event.field_teaser
+    - node.type.event
+  module:
+    - smart_trim
+    - user
+id: node.event.teaser_with_image
+targetEntityType: node
+bundle: event
+mode: teaser_with_image
+content:
+  field_teaser:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 120
+      trim_type: chars
+      trim_suffix: ...
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  body: true
+  field_business_area: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
+  field_event_datetime: true
+  field_event_host: true
+  langcode: true
+  search_api_excerpt: true
