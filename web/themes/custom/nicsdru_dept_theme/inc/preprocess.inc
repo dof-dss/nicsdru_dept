@@ -83,9 +83,6 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
   // Process search view pages.
   $viewpage = \Drupal::routeMatch()->getParameter('view_id');
 
-  // Will need bits and pieces from the request.
-  $request = \Drupal::request();
-
   if (!empty($viewpage)) {
     switch ($viewpage) {
       case "protected_areas":
@@ -94,6 +91,14 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
           ->addClass('ga-aside')
           ->setAttribute('role', 'search')
           ->setAttribute('aria-roledescription', t('search protected areas'));
+        break;
+
+      case "events":
+        $variables['main_content_attr']->addClass(LayoutClasses::SIDE_MAIN);
+        $variables['sidebar_first_attr']
+          ->addClass('ga-aside')
+          ->setAttribute('role', 'search')
+          ->setAttribute('aria-roledescription', t('search events'));
         break;
 
       case "publications_search":
@@ -552,6 +557,7 @@ function nicsdru_dept_theme_preprocess_form(array &$variables) {
     case "views-exposed-form-consultations-search-consultations-search":
     case "views-exposed-form-news-search-news-search":
     case "views-exposed-form-news-search-press-release-search":
+    case "views-exposed-form-events-events-search":
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('search-form');
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('search-form--page');
       break;
