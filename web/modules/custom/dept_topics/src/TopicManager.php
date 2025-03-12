@@ -4,6 +4,7 @@ namespace Drupal\dept_topics;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -308,6 +309,29 @@ final class TopicManager {
   public function getTopicChildren(NodeInterface $topic) {
     $this->getChildTopics($topic);
     return $this->deptTopics;
+  }
+
+  /**
+   * Returns the maximum assignable topics permitted for a node type.
+   *
+   * @param mixed $type
+   *   A node type or type ID.
+   * @return int
+   *   The maximum amount.
+   */
+  public static function maximumTopicsForType(mixed $type) {
+    if ($type instanceof ContentEntityInterface) {
+      $type = $type->bundle();
+    }
+
+    if (empty($type)) {
+      throw new \Exception('$type must not be empty');
+    }
+
+    return match($type) {
+      'subtopic' => 1,
+      default =>  3,
+    };
   }
 
 }
