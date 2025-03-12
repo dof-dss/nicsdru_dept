@@ -212,6 +212,7 @@ final class TopicManager {
           $topic_node->get('field_topic_content')->appendItem([
             'target_id' => $entity->id()
           ]);
+          $topic_node->setRevisionLogMessage('Added child: (' . $entity->id() . ') ' . $entity->label());
           $topic_node->save();
         }
       }
@@ -237,6 +238,7 @@ final class TopicManager {
         }
 
         if ($child_removed) {
+          $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
           $topic_node->save();
         }
       }
@@ -266,6 +268,7 @@ final class TopicManager {
           }
         }
 
+        $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
         $topic_node->save();
       }
     }
