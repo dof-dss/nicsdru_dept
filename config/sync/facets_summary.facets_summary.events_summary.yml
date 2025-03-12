@@ -1,0 +1,31 @@
+uuid: fb483a6d-a445-4c77-aeae-11928e8281b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.default_content
+    - views.view.events
+  module:
+    - search_api
+id: events_summary
+name: 'Events summary'
+facet_source_id: 'search_api:views_page__events__events_search'
+processor_configs:
+  hide_when_not_rendered:
+    processor_id: hide_when_not_rendered
+    weights:
+      build: '45'
+    settings: {  }
+facets:
+  business_area:
+    checked: true
+    label: 'Business area'
+    separator: ', '
+    show_count: false
+    weight: 0
+  event_datetime:
+    checked: true
+    label: 'Event date / time'
+    separator: ', '
+    show_count: false
+    weight: 0

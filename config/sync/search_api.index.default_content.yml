@@ -4,9 +4,12 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
+    - field.storage.node.field_business_area
     - field.storage.node.field_county
     - field.storage.node.field_domain_access
     - field.storage.node.field_domain_source
+    - field.storage.node.field_event_datetime
+    - field.storage.node.field_event_host
     - field.storage.node.field_protected_area_feature
     - field.storage.node.field_protected_area_type
     - field.storage.node.field_summary
@@ -91,6 +94,14 @@ field_settings:
     dependencies:
       module:
         - node
+  field_business_area:
+    label: 'Business area'
+    datasource_id: 'entity:node'
+    property_path: field_business_area
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_business_area
   field_county:
     label: County
     datasource_id: 'entity:node'
@@ -115,6 +126,22 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_domain_source
+  field_event_datetime:
+    label: 'Event date and time'
+    datasource_id: 'entity:node'
+    property_path: field_event_datetime
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_event_datetime
+  field_event_host:
+    label: 'Hosted by'
+    datasource_id: 'entity:node'
+    property_path: field_event_host
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_event_host
   field_protected_area_feature:
     label: 'Feature type'
     datasource_id: 'entity:node'
