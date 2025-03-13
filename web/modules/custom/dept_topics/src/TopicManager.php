@@ -312,20 +312,20 @@ final class TopicManager {
   }
 
   /**
-   * Returns the maximum assignable topics permitted for a node type.
+   * Returns the maximum assignable topics permitted for the given node bundle.
    *
    * @param mixed $type
-   *   A node type or type ID.
+   *   A node type ID or content entity.
    * @return int
    *   The maximum amount.
    */
-  public static function maximumTopicsForType(mixed $type) {
-    if ($type instanceof ContentEntityInterface) {
-      $type = $type->bundle();
-    }
-
+  public static function maximumTopicsForType(string|ContentEntityInterface $type) {
     if (empty($type)) {
       throw new \Exception('$type must not be empty');
+    }
+
+    if ($type instanceof ContentEntityInterface) {
+      $type = $type->bundle();
     }
 
     return match($type) {
