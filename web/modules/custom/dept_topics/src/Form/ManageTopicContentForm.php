@@ -143,6 +143,12 @@ final class ManageTopicContentForm extends FormBase {
       ],
     ];
 
+    $form['subtopics_info'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => 'Subtopics can only be removed if they are assigned a new site topic. This can be achieved using the edit link which opens in a new window.',
+    ];
+
     $form['child_content'] = [
       '#type' => 'table',
       '#tree' => TRUE,
