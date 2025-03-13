@@ -11,11 +11,12 @@ dependencies:
     - field.field.node.event.field_domain_source
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
-    - field.field.node.event.field_teaser
+    - field.field.node.event.field_summary
     - node.type.event
   module:
     - datetime_range
     - layout_builder
+    - smart_trim
     - text
     - user
 third_party_settings:
@@ -32,14 +33,22 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 4
+    region: content
+  field_business_area:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
     weight: 0
     region: content
   field_event_datetime:
     type: daterange_default
     label: hidden
     settings:
-      timezone_override: ''
-      format_type: medium_date
+      timezone_override: Europe/Dublin
+      format_type: medium_date_time
       from_to: both
       separator: '-'
     third_party_settings: {  }
@@ -47,18 +56,38 @@ content:
     region: content
   field_event_host:
     type: string
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
     weight: 2
     region: content
+  field_summary:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 600
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
 hidden:
-  field_business_area: true
+  content_moderation_control: true
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
-  field_teaser: true
   langcode: true
   links: true
   search_api_excerpt: true

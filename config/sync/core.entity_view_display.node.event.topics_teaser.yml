@@ -1,9 +1,9 @@
-uuid: 56e74b9c-5d75-495e-b78f-63e2042ad876
+uuid: 3c155cd9-107e-4328-ac04-e4e0db166743
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.diff
+    - core.entity_view_mode.node.topics_teaser
     - field.field.node.event.body
     - field.field.node.event.field_business_area
     - field.field.node.event.field_domain_access
@@ -16,10 +16,10 @@ dependencies:
   module:
     - text
     - user
-id: node.event.diff
+id: node.event.topics_teaser
 targetEntityType: node
 bundle: event
-mode: diff
+mode: topics_teaser
 content:
   content_moderation_control:
     settings: {  }

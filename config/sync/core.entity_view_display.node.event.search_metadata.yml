@@ -11,7 +11,7 @@ dependencies:
     - field.field.node.event.field_domain_source
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
-    - field.field.node.event.field_teaser
+    - field.field.node.event.field_summary
     - node.type.event
   module:
     - datetime_range
@@ -41,7 +41,7 @@ content:
     third_party_settings: {  }
     weight: 2
     region: content
-  field_teaser:
+  field_summary:
     type: smart_trim
     label: hidden
     settings:
