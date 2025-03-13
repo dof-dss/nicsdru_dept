@@ -240,7 +240,7 @@ function dept_node_preprocess_node(array &$variables) {
     if (!empty($source_domain)) {
       $domain_path = rtrim($source_domain->getPath(), '/');
 
-      if (!empty($variables['url'])) {
+      if (!empty($variables['url']) && str_starts_with($variables['url'], 'http') === FALSE) {
         $variables['url'] = $domain_path . $variables['url'];
       }
     }
