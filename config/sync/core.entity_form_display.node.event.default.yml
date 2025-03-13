@@ -10,8 +10,9 @@ dependencies:
     - field.field.node.event.field_domain_source
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
-    - field.field.node.event.field_teaser
+    - field.field.node.event.field_summary
     - node.type.event
+    - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
     - datetime_range
@@ -77,21 +78,21 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_teaser:
+  field_summary:
     type: string_textarea
-    weight: 3
+    weight: 1
     region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings:
       maxlength:
-        maxlength_js: 120
+        maxlength_js: null
         maxlength_js_label: 'Content limited to @limit characters, remaining: <strong>@remaining</strong>'
         maxlength_js_enforce: false
   langcode:
     type: language_select
-    weight: 1
+    weight: 2
     region: content
     settings:
       include_locked: true
@@ -144,7 +145,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 2
+    weight: 3
     region: content
     settings:
       match_operator: CONTAINS

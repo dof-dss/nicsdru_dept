@@ -11,39 +11,19 @@ dependencies:
     - field.field.node.event.field_domain_source
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
-    - field.field.node.event.field_teaser
+    - field.field.node.event.field_summary
     - node.type.event
   module:
-    - smart_trim
     - user
 id: node.event.teaser_with_image
 targetEntityType: node
 bundle: event
 mode: teaser_with_image
 content:
-  field_teaser:
-    type: smart_trim
-    label: hidden
-    settings:
-      trim_length: 120
-      trim_type: chars
-      trim_suffix: ...
-      wrap_output: false
-      wrap_class: trimmed
-      more:
-        display_link: false
-        target_blank: false
-        link_trim_only: false
-        class: more-link
-        text: More
-        aria_label: 'Read more about [node:title]'
-      summary_handler: full
-      trim_options:
-        text: true
-        trim_zero: false
-        replace_tokens: false
+  content_moderation_control:
+    settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: -20
     region: content
   links:
     settings: {  }
@@ -58,5 +38,6 @@ hidden:
   field_domain_source: true
   field_event_datetime: true
   field_event_host: true
+  field_summary: true
   langcode: true
   search_api_excerpt: true
