@@ -3,20 +3,4 @@
  * @file
  * Theme override to display an event node in search result view mode.
 #}
-
-<a class="card card--plain no-ext-icon" href="{{ url }}">
-  <h3 class="card__title">{{ label }}</h3>
-  <div class="card__summary">
-    {{ content.field_teaser }}
-  </div>
-  <div class="card__meta">
-    {%- if department.id == 'nigov' and content_domain_source.name %}
-      {%- if content_domain_source.id == 'daera' %}
-        <span class="card__meta-item dept-name">{{ 'DAERA'|t }}</span>
-      {% else %}
-        <span class="card__meta-item dept-name">{{ content_domain_source.name }}</span>
-      {% endif -%}
-    {% endif -%}
-  </div>
-</a>
-{{ content | without('field_teaser', 'field_domain_source', 'field_event_datetime') }}
+{% include 'node--search-result.html.twig' %}

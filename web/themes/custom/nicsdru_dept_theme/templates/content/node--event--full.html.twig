@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Theme override to display an event node in full display mode.
+#}
+<article{{ attributes.addClass('ga-main').setAttribute('id', 'main-article').removeAttribute('role') }}>
+  {{ include('@nicsdru_dept_theme/content/node-header.html.twig') }}
+
+  <div{{ content_attributes.addClass(['article-content', 'max-body-text-width']) }}>
+
+    <div class="event-details">
+      <h2>Event information</h2>
+      <p>
+        <strong class="label">When</strong>{{ content.field_event_datetime.value | date('D j M Y') }}
+        <strong class="label">Time</strong>{{ content.field_event_datetime.value | date('H:i') }}
+        <strong class="label">Where</strong>{{ content.field_event_host | field_value }}
+      </p>
+    </div>
+
+    <h2>{{ content.field_summary['#title'] }}</h2>
+
+    {{ content.field_summary }}
+
+    <h2>{{ 'Event description'|t }}</h2>
+    {{ content.body }}
+
+    {% if content.field_event_host %}
+      <strong class="label">Hosted by:</strong> {{ content.field_event_host | field_value }}
+    {% endif %}
+    {% if content.field_business_area %}
+      <strong class="label">Business area: </strong>{{ content.field_business_area | field_value }}
+    {% endif %}
+
+    {{ content | without(
+      'body',
+      'field_summary',
+      'field_event_datetime',
+      'field_event_host',
+      'field_business_area') }}
+
+  </div>
+
+  {{ include('@nicsdru_dept_theme/content/node-footer.html.twig') }}
+</article>
