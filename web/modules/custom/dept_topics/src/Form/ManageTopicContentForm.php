@@ -10,6 +10,7 @@ use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\dept_topics\TopicManager;
 use Drupal\path_alias\AliasManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -203,29 +204,49 @@ final class ManageTopicContentForm extends FormBase {
         ],
       ];
 
-      $form['child_content'][$child_nid]['delete'] = [
-        '#type' => 'submit',
-        '#title' => t('Remove'),
-        '#name' => 'delete_' . $child_nid,
-        '#value' => 'Remove',
-        '#submit' => ['::ajaxSubmit'],
-        '#ajax' => [
-          'callback' => '::childContentCallback',
-          'wrapper' => 'form-wrapper',
-        ],
-        '#attributes' => [
-          'class' => [
-            'button--danger',
-            'link',
-          ]
-        ],
-        '#wrapper_attributes' => [
-          'class' => [
-            'manage-topic-content-remove-cell'
+      if ($child->bundle() === 'subtopic') {
+        $form['child_content'][$child_nid]['edit'] = [
+          '#type' => 'link',
+          '#title' => t('Edit'),
+          '#url' => Url::fromRoute('entity.node.edit_form', ['node' => $child->id()]),
+          '#attributes' => [
+            'class' => ['button--danger', 'link', 'button'],
+            'title' => t('Edit this subtopic to assign a new parent topic'),
+            'target' => '_blank',
           ],
-          'title' => $this->t('Remove this content from the topic.')
-        ],
-      ];
+          '#wrapper_attributes' => [
+            'class' => [
+              'manage-topic-content-remove-cell'
+            ],
+            'title' => $this->t('Edit this subtopic to assign a new parent topic.')
+          ],
+        ];
+      }
+      else {
+        $form['child_content'][$child_nid]['delete'] = [
+          '#type' => 'submit',
+          '#title' => t('Remove'),
+          '#name' => 'delete_' . $child_nid,
+          '#value' => 'Remove',
+          '#submit' => ['::ajaxSubmit'],
+          '#ajax' => [
+            'callback' => '::childContentCallback',
+            'wrapper' => 'form-wrapper',
+          ],
+          '#attributes' => [
+            'class' => [
+              'button--danger',
+              'link',
+            ]
+          ],
+          '#wrapper_attributes' => [
+            'class' => [
+              'manage-topic-content-remove-cell'
+            ],
+            'title' => $this->t('Remove this content from the topic.')
+          ],
+        ];
+      }
     }
 
     $form['actions'] = ['#type' => 'actions'];
