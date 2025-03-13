@@ -314,7 +314,7 @@ final class TopicManager {
   /**
    * Returns the maximum assignable topics permitted for the given node bundle.
    *
-   * @param mixed $type
+   * @param string|ContentEntityInterface $type
    *   A node type ID or content entity.
    * @return int
    *   The maximum amount.
