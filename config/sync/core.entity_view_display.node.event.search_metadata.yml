@@ -39,6 +39,14 @@ content:
       from_to: both
       separator: '-'
     third_party_settings: {  }
+    weight: 3
+    region: content
+  field_event_host:
+    type: string
+    label: visually_hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
     weight: 2
     region: content
   field_summary:
@@ -71,7 +79,6 @@ hidden:
   field_business_area: true
   field_domain_access: true
   field_domain_all_affiliates: true
-  field_event_host: true
   langcode: true
   links: true
   search_api_excerpt: true
