@@ -1,15 +1,12 @@
 /*
  * @file
- * Provides very specific styling for consultations / content types.
+ * Provides very specific styling for event content type.
  */
 @import '../../init';
 
 .page-node-type-event {
 
   .event-details {
-    display: flex;
-    flex-flow: row wrap;
-    gap: 1.5em;
     width: 100%;
     clear: both;
     margin: 1em 0 1.5em;
@@ -18,19 +15,21 @@
     background-color: var(--brand-primary-color-high-contrast-white);
     color: #fff;
 
-    p {
-      flex: auto 1 1;
+    h2 {
       margin: 0;
-      color: inherit;
-      @include responsive-typo-map($smallish-text);
+      color: #fff;
+      font-weight: bold;
+    }
 
-      .label {
-        display: block;
-        color: inherit;
-        font-weight: bold;
-        @include responsive-typo-map($medium-text);
-        margin-bottom: var(--rhythm-spacing-xs);
-      }
+    p {
+      margin: 1em 0 0 0;
+    }
+
+    .label {
+      display: block;
+      color: inherit;
+      font-weight: bold;
+      @include responsive-typo-map($medium-text);
     }
 
     .event-host {
@@ -55,6 +54,17 @@
       };
     }
 
+  }
+
+  .event-metadata {
+    color: #666;
+    font-size: 1.6rem;
+
+    .label {
+      display: inline-block;
+      width: 100%;
+      margin-top: 0.5em;
+    }
   }
 
 }
