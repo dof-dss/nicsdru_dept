@@ -275,22 +275,38 @@ function dept_topics_field_topics_autocomplete(array &$form, FormStateInterface 
   $node_manager = \Drupal::entityTypeManager()->getStorage('node');
   $topic_content = $form_state->getValue('field_topic_content');
 
-
   unset($topic_content['add_more']);
 
   foreach ($topic_content as $index => $item) {
     $node = $node_manager->load($item['target_id']);
 
     if ($node->bundle() === 'subtopic') {
-      $form['field_topic_content']["widget"][$index]["_actions"]["delete"]["#value"] = t('edit');
-      $topic_content[$index]["_actions"]["delete"] = t('edit');
+      unset($form['field_topic_content']["widget"][$index]["_actions"]["delete"]);
+      unset($topic_content[$index]["_actions"]["delete"]);
+
+      $form['field_topic_content']["widget"][$index]["_actions"]['edit'] = [
+        '#type' => 'link',
+        '#title' => t('Edit'),
+        '#url' => Url::fromRoute('entity.node.edit_form', ['node' => $node->id()]),
+        '#attributes' => [
+          'class' => ['button', 'form-submit'],
+          'title' => t('Edit this subtopic to assign a new parent topic'),
+          'target' => '_blank',
+        ],
+        '#wrapper_attributes' => [
+          'class' => [
+            'manage-topic-content-remove-cell'
+          ],
+          'title' => t('Edit this subtopic to assign a new parent topic.')
+        ],
+      ];
+
+
     }
   }
 
   $form_state->setValue('field_topic_content', $topic_content);
   $form_state->setRebuild(TRUE);
-
-  $topic_content = $form_state->getValue('field_topic_content');
 
   return $form['field_topic_content'];
 }
