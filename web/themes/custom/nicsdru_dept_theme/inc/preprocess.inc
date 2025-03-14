@@ -664,35 +664,3 @@ function nicsdru_dept_theme_preprocess_region(&$variables) {
     }
   }
 }
-
-/**
- * Implements hook_preprocess_menu().
- */
-function nicsdru_dept_theme_preprocess_menu(&$variables) {
-  /* @var \Drupal\dept_core\Entity\Department $dept */
-  $dept = \Drupal::service('department.manager')->getCurrentDepartment();
-
-  if ($variables['menu_name'] === 'main') {
-    // Only show the events menu item on communities dept so exit
-    // early if we're on that dept.
-    if ($dept->id() === 'communities') {
-      return;
-    }
-
-    foreach ($variables['items'] as $key => $item) {
-      $url = $item['url'];
-      if ($url instanceof Url === FALSE) {
-        continue;
-      }
-
-      if ($url->isRouted() === FALSE) {
-        // Ignore any unrouted entries.
-        continue;
-      }
-
-      if ($url->getRouteName() === 'view.events.events_search') {
-        unset($variables['items'][$key]);
-      }
-    }
-  }
-}
