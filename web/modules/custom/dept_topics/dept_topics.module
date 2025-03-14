@@ -241,7 +241,19 @@ function dept_topics_form_node_form_alter(&$form, $form_state) {
       '#weight' => $form['field_topic_content']['#weight'] - 1,
     ];
 
+    $form['field_topic_content']['#prefix'] = '<div id="topic-content-wrapper">';
+    $form['field_topic_content']['#suffix'] = '</div>';
+
     foreach ($form['field_topic_content']['widget'] as $delta => &$child) {
+      if (isset($child['target_id'])) {
+
+        $child['target_id']['#ajax'] = [
+          'callback' => 'dept_topics_field_topics_autocomplete',
+          'wrapper' => 'topic-content-wrapper',
+          'event' => 'autocompleteclose',
+        ];
+      }
+
       if (isset($child['target_id']['#default_value']) && $child['target_id']['#default_value']->bundle() === 'subtopic') {
         unset($child['_actions']['delete']);
         $child['_actions']['edit'] = [
@@ -257,6 +269,30 @@ function dept_topics_form_node_form_alter(&$form, $form_state) {
       }
     }
   }
+}
+
+function dept_topics_field_topics_autocomplete(array &$form, FormStateInterface $form_state) {
+  $node_manager = \Drupal::entityTypeManager()->getStorage('node');
+  $topic_content = $form_state->getValue('field_topic_content');
+
+
+  unset($topic_content['add_more']);
+
+  foreach ($topic_content as $index => $item) {
+    $node = $node_manager->load($item['target_id']);
+
+    if ($node->bundle() === 'subtopic') {
+      $form['field_topic_content']["widget"][$index]["_actions"]["delete"]["#value"] = t('edit');
+      $topic_content[$index]["_actions"]["delete"] = t('edit');
+    }
+  }
+
+  $form_state->setValue('field_topic_content', $topic_content);
+  $form_state->setRebuild(TRUE);
+
+  $topic_content = $form_state->getValue('field_topic_content');
+
+  return $form['field_topic_content'];
 }
 
 /**
@@ -576,6 +612,11 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
     }
     $nid = $topic_content['target_id'];
     $node = Node::load($nid);
+
+    if(empty($node)) {
+      continue;
+    }
+
     if ($node->bundle() === 'subtopic') {
       $parent_nodes = $topic_manager->getParentNodes($node->id());
       // Warn the user if the subtopic has an assigned parent topic.
