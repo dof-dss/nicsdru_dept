@@ -12,6 +12,7 @@ dependencies:
     - node.type.article
     - node.type.consultation
     - node.type.contact
+    - node.type.event
     - node.type.gallery
     - node.type.heritage_site
     - node.type.news
@@ -42,6 +43,7 @@ permissions:
   - 'add scheduled transitions node article'
   - 'add scheduled transitions node consultation'
   - 'add scheduled transitions node contact'
+  - 'add scheduled transitions node event'
   - 'add scheduled transitions node heritage_site'
   - 'add scheduled transitions node news'
   - 'add scheduled transitions node profile'
@@ -54,6 +56,8 @@ permissions:
   - 'create consultation content on assigned domains'
   - 'create contact content on assigned domains'
   - 'create document media content on assigned domains'
+  - 'create event content on assigned domains'
+  - 'create event node content on assigned domains'
   - 'create gallery content on assigned domains'
   - 'create gallery node content on assigned domains'
   - 'create heritage_site content on assigned domains'
@@ -71,6 +75,7 @@ permissions:
   - 'delete article revisions'
   - 'delete consultation revisions'
   - 'delete contact revisions'
+  - 'delete event revisions'
   - 'delete gallery revisions'
   - 'delete heritage_site revisions'
   - 'delete media'
@@ -81,6 +86,7 @@ permissions:
   - 'delete own consultation content'
   - 'delete own contact content'
   - 'delete own document media'
+  - 'delete own event content'
   - 'delete own gallery content'
   - 'delete own heritage_site content'
   - 'delete own image media'
@@ -104,6 +110,7 @@ permissions:
   - 'reschedule scheduled transitions node article'
   - 'reschedule scheduled transitions node consultation'
   - 'reschedule scheduled transitions node contact'
+  - 'reschedule scheduled transitions node event'
   - 'reschedule scheduled transitions node heritage_site'
   - 'reschedule scheduled transitions node news'
   - 'reschedule scheduled transitions node profile'
@@ -114,6 +121,7 @@ permissions:
   - 'revert article revisions'
   - 'revert consultation revisions'
   - 'revert contact revisions'
+  - 'revert event revisions'
   - 'revert gallery revisions'
   - 'revert heritage_site revisions'
   - 'revert news revisions'
@@ -127,6 +135,8 @@ permissions:
   - 'update consultation content on assigned domains'
   - 'update contact content on assigned domains'
   - 'update document media content on assigned domains'
+  - 'update event content on assigned domains'
+  - 'update event node content on assigned domains'
   - 'update gallery content on assigned domains'
   - 'update gallery node content on assigned domains'
   - 'update heritage_site content on assigned domains'
@@ -151,6 +161,7 @@ permissions:
   - 'view any unpublished consultation content'
   - 'view any unpublished contact content'
   - 'view any unpublished content'
+  - 'view any unpublished event content'
   - 'view any unpublished gallery content'
   - 'view any unpublished heritage_site content'
   - 'view any unpublished news content'
@@ -162,6 +173,7 @@ permissions:
   - 'view article revisions'
   - 'view consultation revisions'
   - 'view contact revisions'
+  - 'view event revisions'
   - 'view gallery revisions'
   - 'view heritage_site revisions'
   - 'view latest version'
@@ -174,6 +186,7 @@ permissions:
   - 'view scheduled transitions node article'
   - 'view scheduled transitions node consultation'
   - 'view scheduled transitions node contact'
+  - 'view scheduled transitions node event'
   - 'view scheduled transitions node heritage_site'
   - 'view scheduled transitions node news'
   - 'view scheduled transitions node profile'

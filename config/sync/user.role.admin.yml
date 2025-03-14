@@ -8,6 +8,7 @@ dependencies:
     - node.type.book
     - node.type.consultation
     - node.type.contact
+    - node.type.event
     - node.type.featured_content_list
     - node.type.gallery
     - node.type.global_page
@@ -77,6 +78,7 @@ permissions:
   - 'add scheduled transitions node article'
   - 'add scheduled transitions node consultation'
   - 'add scheduled transitions node contact'
+  - 'add scheduled transitions node event'
   - 'add scheduled transitions node heritage_site'
   - 'add scheduled transitions node news'
   - 'add scheduled transitions node page'
@@ -120,6 +122,8 @@ permissions:
   - 'create consultation content on assigned domains'
   - 'create contact content on assigned domains'
   - 'create document media content on assigned domains'
+  - 'create event content on assigned domains'
+  - 'create event node content on assigned domains'
   - 'create featured_content_list content on assigned domains'
   - 'create gallery content on assigned domains'
   - 'create global_page content on assigned domains'
@@ -152,6 +156,8 @@ permissions:
   - 'delete contact content on assigned domains'
   - 'delete document media content on assigned domains'
   - 'delete domain content'
+  - 'delete event content on assigned domains'
+  - 'delete event node content on assigned domains'
   - 'delete featured_content_list content on assigned domains'
   - 'delete gallery content on assigned domains'
   - 'delete global_page content on assigned domains'
@@ -180,6 +186,7 @@ permissions:
   - 'reschedule scheduled transitions node article'
   - 'reschedule scheduled transitions node consultation'
   - 'reschedule scheduled transitions node contact'
+  - 'reschedule scheduled transitions node event'
   - 'reschedule scheduled transitions node heritage_site'
   - 'reschedule scheduled transitions node news'
   - 'reschedule scheduled transitions node page'
@@ -195,6 +202,7 @@ permissions:
   - 'revert book revisions'
   - 'revert consultation revisions'
   - 'revert contact revisions'
+  - 'revert event revisions'
   - 'revert featured_content_list revisions'
   - 'revert gallery revisions'
   - 'revert global_page revisions'
@@ -217,6 +225,8 @@ permissions:
   - 'update consultation content on assigned domains'
   - 'update contact content on assigned domains'
   - 'update document media content on assigned domains'
+  - 'update event content on assigned domains'
+  - 'update event node content on assigned domains'
   - 'update featured_content_list content on assigned domains'
   - 'update gallery content on assigned domains'
   - 'update global_page content on assigned domains'
@@ -256,6 +266,7 @@ permissions:
   - 'view any unpublished consultation content'
   - 'view any unpublished contact content'
   - 'view any unpublished content'
+  - 'view any unpublished event content'
   - 'view any unpublished gallery content'
   - 'view any unpublished global_page content'
   - 'view any unpublished heritage_site content'
@@ -274,6 +285,7 @@ permissions:
   - 'view book revisions'
   - 'view consultation revisions'
   - 'view contact revisions'
+  - 'view event revisions'
   - 'view featured_content_list revisions'
   - 'view gallery revisions'
   - 'view global_page revisions'
@@ -292,6 +304,7 @@ permissions:
   - 'view scheduled transitions node article'
   - 'view scheduled transitions node consultation'
   - 'view scheduled transitions node contact'
+  - 'view scheduled transitions node event'
   - 'view scheduled transitions node heritage_site'
   - 'view scheduled transitions node news'
   - 'view scheduled transitions node page'
