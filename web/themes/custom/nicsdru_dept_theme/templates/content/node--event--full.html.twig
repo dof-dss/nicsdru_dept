@@ -11,8 +11,8 @@
     {% if event_in_progress %}
     <p>This event has now passed.</p>
     {% else %}
-    <p><strong class="label">When</strong>{{ content.field_event_datetime.value | date('D j M Y') }}</p>
-    <p><strong class="label">Time</strong>{{ content.field_event_datetime.value | date('H:i') }}</p>
+    <p><strong class="label">When</strong>{{ content.field_event_datetime.0.start_date['#text'] | date('D j M Y') }}</p>
+    <p><strong class="label">Time</strong>{{ content.field_event_datetime.0.start_date['#text'] | date('H:i') }}</p>
     <p><strong class="label">Where</strong>{{ content.field_event_host | field_value }}</p>
     {% endif %}
   </div>
