@@ -9,6 +9,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
 use Drupal\dept_core\Department;
 use Drupal\media\MediaInterface;
 use Drupal\nicsdru_dept_theme\Helpers;
@@ -659,6 +660,38 @@ function nicsdru_dept_theme_preprocess_region(&$variables) {
     if ($node = \Drupal::routeMatch()->getParameter('node')) {
       if ($node->getType() == 'topic' || $node->getType() == 'subtopic') {
         $variables['topic_title'] = $node->get('title')->view();
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_menu().
+ */
+function nicsdru_dept_theme_preprocess_menu(&$variables) {
+  /* @var \Drupal\dept_core\Entity\Department $dept */
+  $dept = \Drupal::service('department.manager')->getCurrentDepartment();
+
+  if ($variables['menu_name'] === 'main') {
+    // Only show the events menu item on communities dept so exit
+    // early if we're on that dept.
+    if ($dept->id() === 'communities') {
+      return;
+    }
+
+    foreach ($variables['items'] as $key => $item) {
+      $url = $item['url'];
+      if ($url instanceof Url === FALSE) {
+        continue;
+      }
+
+      if ($url->isRouted() === FALSE) {
+        // Ignore any unrouted entries.
+        continue;
+      }
+
+      if ($url->getRouteName() === 'view.events.events_search') {
+        unset($variables['items'][$key]);
       }
     }
   }
