@@ -372,6 +372,17 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
     }
   }
 
+  if ($node_type === 'event') {
+    // Set a variable if the event has passed.
+    $current_time = \Drupal::time()->getCurrentTime();
+    $event_datetime = new DrupalDateTime($variables['node']->get('field_event_datetime')->start_date);
+    $variables['event_start_date'] = $event_datetime;
+
+    if ($current_time > $event_datetime->getTimestamp()) {
+      $variables['event_in_progress'] = TRUE;
+    }
+  }
+
   if (!empty($node->book)) {
     $book = $node->book;
     $pid = $book['pid'];
