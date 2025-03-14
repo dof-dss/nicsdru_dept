@@ -146,7 +146,7 @@ function dept_node_title_guardian(array &$form, FormStateInterface $form_state) 
     $department = \Drupal::service('department.manager')->getCurrentDepartment()->id();
   }
 
-  $title = $form_state->getValue('title')[0]['value'];
+  $title = trim($form_state->getValue('title')[0]['value']);
 
   // @phpstan-ignore-next-line
   $bundle = $form_state->getformObject()->getEntity()->bundle();
