@@ -30,7 +30,7 @@
     {% if content.field_event_host %}
       <strong class="label">Hosted by:</strong> {{ content.field_event_host | field_value }}
     {% endif %}
-    {% if content.field_business_area %}
+    {% if content.field_business_area[0] %}
       <strong class="label">Business area: </strong>{{ content.field_business_area | field_value }}
     {% endif %}
     </div>
