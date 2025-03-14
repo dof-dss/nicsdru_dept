@@ -25,6 +25,9 @@
     {%- if content.field_published_date %}
       <span class="card__meta-item field-published-date">{{ 'Published'|t }} {{ content.field_published_date | field_value }}</span>
     {% endif -%}
+    {%- if content.field_event_host %}
+      <span class="card__meta-item field-event-host">{{ content.field_event_host | field_value }}</span>
+    {% endif -%}
     {%- if content.field_event_datetime %}
       <span class="card__meta-item field-event-datetime">{{ content.field_event_datetime | field_value }}</span>
     {% endif -%}
