@@ -3,16 +3,25 @@
  * @file
  * Theme override to display an event node in full display mode.
 #}
+{% set event_start_date = content.field_event_datetime.0.start_date["#attributes"]["datetime"] %}
+{% set event_end_date = content.field_event_datetime.0.end_date["#attributes"]["datetime"] %}
 <article{{ attributes.addClass('ga-main').setAttribute('id', 'main-article').removeAttribute('role') }}>
   {{ include('@nicsdru_dept_theme/content/node-header.html.twig') }}
 
   <div class="event-details">
     <h2>Event information</h2>
     {% if event_in_progress %}
-    <p>This event has now passed.</p>
+      <p>This event has now passed.</p>
     {% else %}
-    <p><strong class="label">When</strong>{{ content.field_event_datetime.0.start_date['#text'] | date('D j M Y') }}</p>
-    <p><strong class="label">Time</strong>{{ content.field_event_datetime.0.start_date['#text'] | date('H:i') }}</p>
+      <p><strong class="label">When</strong>
+      {# If the start date and end date day/month match then show the start day, month, year and start/end time. #}
+      {% if event_start_date | date('U') | format_date('custom', 'd M') == event_end_date | date('U') | format_date('custom', 'd M') %}
+        {{ event_start_date | date('U') | format_date('custom', 'd M Y g:i a') }} — {{ event_end_date | date('U') | format_date('custom', 'g:i a') }}
+      {% else %}
+        {# If not matching print out the extra end date info on top of the time. #}
+        {{ event_start_date | date('U') | format_date('custom', 'd M Y g:i a') }} — {{ event_end_date | date('U') | format_date('custom', 'd M Y g:i a') }}
+      {% endif %}
+    </p>
     <p><strong class="label">Where</strong>{{ content.field_event_host | field_value }}</p>
     {% endif %}
   </div>
