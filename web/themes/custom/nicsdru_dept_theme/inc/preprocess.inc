@@ -9,6 +9,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
 use Drupal\dept_core\Department;
 use Drupal\media\MediaInterface;
 use Drupal\nicsdru_dept_theme\Helpers;
@@ -83,9 +84,6 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
   // Process search view pages.
   $viewpage = \Drupal::routeMatch()->getParameter('view_id');
 
-  // Will need bits and pieces from the request.
-  $request = \Drupal::request();
-
   if (!empty($viewpage)) {
     switch ($viewpage) {
       case "protected_areas":
@@ -94,6 +92,14 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
           ->addClass('ga-aside')
           ->setAttribute('role', 'search')
           ->setAttribute('aria-roledescription', t('search protected areas'));
+        break;
+
+      case "events":
+        $variables['main_content_attr']->addClass(LayoutClasses::SIDE_MAIN);
+        $variables['sidebar_first_attr']
+          ->addClass('ga-aside')
+          ->setAttribute('role', 'search')
+          ->setAttribute('aria-roledescription', t('search events'));
         break;
 
       case "publications_search":
@@ -367,6 +373,17 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
     }
   }
 
+  if ($node_type === 'event') {
+    // Set a variable if the event has passed.
+    $current_time = \Drupal::time()->getCurrentTime();
+    $event_datetime = new DrupalDateTime($variables['node']->get('field_event_datetime')->start_date);
+    $variables['event_start_date'] = $event_datetime;
+
+    if ($current_time > $event_datetime->getTimestamp()) {
+      $variables['event_in_progress'] = TRUE;
+    }
+  }
+
   if (!empty($node->book)) {
     $book = $node->book;
     $pid = $book['pid'];
@@ -552,6 +569,7 @@ function nicsdru_dept_theme_preprocess_form(array &$variables) {
     case "views-exposed-form-consultations-search-consultations-search":
     case "views-exposed-form-news-search-news-search":
     case "views-exposed-form-news-search-press-release-search":
+    case "views-exposed-form-events-events-search":
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('search-form');
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('search-form--page');
       break;

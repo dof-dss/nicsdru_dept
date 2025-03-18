@@ -116,7 +116,7 @@ function dept_search_sort_group_facet_by_title($a, $b) {
 function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
 
   $dept_manager = in_array($view->id(), [
-    'news_search',
+    'events_search',
     'news_search',
     'publications_search',
     'site_search',

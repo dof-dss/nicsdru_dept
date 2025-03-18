@@ -1,0 +1,93 @@
+uuid: 3c280d85-5e65-4656-9d53-eccb0ced6251
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.full
+    - field.field.node.event.body
+    - field.field.node.event.field_business_area
+    - field.field.node.event.field_domain_access
+    - field.field.node.event.field_domain_all_affiliates
+    - field.field.node.event.field_domain_source
+    - field.field.node.event.field_event_datetime
+    - field.field.node.event.field_event_host
+    - field.field.node.event.field_summary
+    - node.type.event
+  module:
+    - datetime_range
+    - layout_builder
+    - smart_trim
+    - text
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.event.full
+targetEntityType: node
+bundle: event
+mode: full
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_business_area:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_event_datetime:
+    type: daterange_default
+    label: hidden
+    settings:
+      timezone_override: Europe/Dublin
+      format_type: medium_date_time
+      from_to: both
+      separator: '-'
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_event_host:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_summary:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 600
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  content_moderation_control: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

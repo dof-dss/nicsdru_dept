@@ -22,7 +22,7 @@ visibility:
   request_path:
     id: request_path
     negate: true
-    pages: "<front>\r\n/node/*\r\n/taxonomy/term/*\r\n/publications\r\n/publications/date/*\r\n/publications/topic/*\r\n/publications/type/*\r\n/consultations\r\n/consultations/date/*\r\n/consultations/topic/*\r\n/news\r\n/news/date/*\r\n/news/topic/*\r\n/press-releases*\r\n/protected-areas\r\n/protected-areas/*"
+    pages: "<front>\r\n/node/*\r\n/taxonomy/term/*\r\n/publications\r\n/publications/date/*\r\n/publications/topic/*\r\n/publications/type/*\r\n/consultations\r\n/consultations/date/*\r\n/consultations/topic/*\r\n/news\r\n/news/date/*\r\n/news/topic/*\r\n/press-releases*\r\n/protected-areas\r\n/protected-areas/*\r\n/events"
   condition_group:
     id: condition_group
     negate: false
