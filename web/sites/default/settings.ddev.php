@@ -32,8 +32,8 @@ if (empty($settings['config_sync_directory'])) {
 // The machine name of the server in your Drupal configuration: 'solr_server'.
 $config['search_api.server.solr_server']['backend_config']['connector'] = 'basic_auth';
 $config['search_api.server.solr_server']['backend_config']['connector_config']['host'] = 'solr';
-$config['search_api.server.solr_server']['backend_config']['connector_config']['username'] = getenv('SOLR_AUTH_USER');
-$config['search_api.server.solr_server']['backend_config']['connector_config']['password'] = getenv('SOLR_AUTH_PASS');
+$config['search_api.server.solr_server']['backend_config']['connector_config']['username'] = 'solr';
+$config['search_api.server.solr_server']['backend_config']['connector_config']['password'] = 'SolrRocks';
 $config['search_api.server.solr_server']['backend_config']['connector_config']['core'] = 'main';
 
 // Override drupal/symfony_mailer default config to use Mailpit.
