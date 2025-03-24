@@ -339,8 +339,10 @@ function dept_topics_node_presave(EntityInterface $node) {
     // @phpstan-ignore-next-line
     $updated = array_column($node->get('field_topic_content')->getValue(), 'target_id');
 
-    if (count($original) > count($updated)) {
-      $removed = array_diff($original, $updated);
+    $removed = array_diff($original, $updated);
+    $added = array_diff($updated, $original);
+
+    if ($removed) {
       $book_manager = \Drupal::service('book.manager');
 
       foreach ($removed as $nid) {
@@ -365,9 +367,8 @@ function dept_topics_node_presave(EntityInterface $node) {
         }
       }
     }
-    else {
-      $added = array_diff($updated, $original);
 
+    if ($added) {
       foreach ($added as $nid) {
         $child_node = Node::load($nid);
         if (!empty($child_node)) {
