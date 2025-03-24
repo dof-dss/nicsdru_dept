@@ -326,12 +326,16 @@ function dept_topics_enable_domain_path($form, FormStateInterface $form_state) {
 function dept_topics_node_presave(EntityInterface $node) {
   if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
 
-    dept_topics_clear_topic_tree_cache($node);
-
     if ($node->isNew()) {
       // Ignore new as we don't have a node ID for the topic.
       return;
     }
+
+    if ($node->get('moderation_state')->getString() !== 'published') {
+      return;
+    }
+
+    dept_topics_clear_topic_tree_cache($node);
 
     // Add or remove site topic tags to nodes that are added or removed from topic child contents.
     // @phpstan-ignore-next-line
@@ -346,8 +350,11 @@ function dept_topics_node_presave(EntityInterface $node) {
       $book_manager = \Drupal::service('book.manager');
 
       foreach ($removed as $nid) {
+
+        $foo = $book_manager->loadBookLink($nid);
+
         // Do not remove site topics from the node if it is a book page.
-        if ($book_manager->loadBookLink($nid) === FALSE) {
+        if ($book_manager->loadBookLink($nid) === TRUE) {
           continue;
         }
 
@@ -364,6 +371,20 @@ function dept_topics_node_presave(EntityInterface $node) {
             }
           }
           $child_node->save();
+
+          if($child_topics->count() == 0) {
+            $orphan_manager = \Drupal::entityTypeManager()->getStorage('topics_orphaned_content');
+
+            $orphan = $orphan_manager->create([
+              'label' => $child_node->label(),
+              'orphan' => $child_node->id(),
+              'former_parent' => $node->id(),
+              'uid' => \Drupal::currentUser()->id(),
+              'created' => time(),
+            ]);
+
+            $orphan_manager->save($orphan);
+          }
         }
       }
     }
