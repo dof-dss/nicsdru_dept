@@ -59,7 +59,7 @@ final class OrphanedTopicContentListBuilder extends EntityListBuilder {
       '#links' => [
         'edit' => [
           'title' => $this->t('Edit orphan'),
-          'url' => Url::fromRoute('entity.node.canonical', ['node' => $entity->get('orphan')->getString()]),
+          'url' => Url::fromRoute('entity.node.edit_form', ['node' => $entity->get('orphan')->getString()]),
         ],
         'delete' => [
           'title' => $this->t('Delete orphan'),

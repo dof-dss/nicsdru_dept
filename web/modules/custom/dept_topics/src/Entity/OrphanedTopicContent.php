@@ -26,10 +26,8 @@ use Drupal\user\EntityOwnerTrait;
  *     plural = "@count orphaned topic contents",
  *   ),
  *   handlers = {
- *     "list_builder" = "Drupal\dept_topics\OrphanedTopicContentListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
  *     "form" = {
- *       "add" = "Drupal\dept_topics\Form\OrphanedTopicContentForm",
  *       "edit" = "Drupal\dept_topics\Form\OrphanedTopicContentForm",
  *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
  *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
@@ -47,8 +45,6 @@ use Drupal\user\EntityOwnerTrait;
  *     "owner" = "uid",
  *   },
  *   links = {
- *     "collection" = "/admin/content/topics-orphaned-content",
- *     "add-form" = "/admin/orphaned-content/add",
  *     "canonical" = "/admin/orphaned-content/{topics_orphaned_content}",
  *     "edit-form" = "/admin/orphaned-content/{topics_orphaned_content}",
  *     "delete-form" = "/admin/orphaned-content/{topics_orphaned_content}/delete",
