@@ -331,6 +331,7 @@ function dept_topics_node_presave(EntityInterface $node) {
       return;
     }
 
+    // @phpstan-ignore-next-line
     if ($node->get('moderation_state')->getString() !== 'published') {
       return;
     }
@@ -372,7 +373,7 @@ function dept_topics_node_presave(EntityInterface $node) {
           }
           $child_node->save();
 
-          if($child_topics->count() == 0) {
+          if ($child_topics->count() == 0) {
             $orphan_manager = \Drupal::entityTypeManager()->getStorage('topics_orphaned_content');
 
             $orphan = $orphan_manager->create([
@@ -576,7 +577,7 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
     $nid = $topic_content['target_id'];
     $node = Node::load($nid);
 
-    if(empty($node)) {
+    if (empty($node)) {
       continue;
     }
 
@@ -727,17 +728,46 @@ function dept_topics_entity_bundle_field_info_alter(&$fields, EntityTypeInterfac
 function dept_topics_preprocess_views_view_field(&$variables) {
   $view = $variables['view'];
   $field = $variables['field'];
+
   if ($view->storage->id() == 'orphaned_content' && $field->field == 'former_parent') {
-      $parent_id = $variables["row"]->_entity->get('former_parent')->getString();
-      $parent = Node::load($parent_id);
+    $parent_id = $variables["row"]->_entity->get('former_parent')->getString();
+    $parent = Node::load($parent_id);
 
-      if ($parent) {
-        $output = $parent->toLink($parent->label());
-      }
-      else {
-        $output = $parent_id;
-      }
+    if ($parent) {
+      $output = $parent->toLink($parent->label());
+    }
+    else {
+      $output = $parent_id;
+    }
 
-      $variables['output'] = $output;
+    $variables['output'] = $output;
+  }
+
+  if ($view->storage->id() == 'orphaned_content' && $field->field == 'operations') {
+
+    $variables['output'] = [
+      '#type' => 'operations',
+      '#links' => [
+        'edit' => [
+          'title' => t('Edit orphan'),
+          'url' => Url::fromRoute('entity.node.edit_form', ['node' => $variables["row"]->_entity->get('orphan')->getString()]),
+        ],
+        'delete' => [
+          'title' => t('Delete orphan'),
+          'url' => Url::fromRoute('entity.node.delete_form', ['node' => $variables["row"]->_entity->get('orphan')->getString()]),
+          'attributes' => [
+            'data-dialog-type' => 'modal',
+            'class' => ['use-ajax'],
+            'data-dialog-options' => Json::encode([
+              'width' => '80%',
+            ]),
+          ]
+        ]
+      ],
+      '#attached' => [
+        'library' => ['core/drupal.dialog.ajax'],
+      ],
+    ];
+
   }
 }
