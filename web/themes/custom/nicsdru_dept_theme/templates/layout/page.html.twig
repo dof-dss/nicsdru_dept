@@ -62,7 +62,7 @@
 {{ banner_display }}
 
 <main{{ main_content_attr }}>{# @see skiplink in html.html.twig  which targets the ID for this element #}
-  {%- if page.sidebar_first|render|striptags('<img>')|trim|length -%}
+  {%- if page.sidebar_first|render|trim|length -%}
     <div{{ sidebar_first_attr }}>
       {{- page.sidebar_first -}}
     </div>
@@ -74,7 +74,7 @@
   {% else %}
     {{- page.content -}}
   {% endif %}
-  {%- if page.sidebar_second|render|striptags('<img>')|trim|length -%}
+  {%- if page.sidebar_second|render|trim|length -%}
     <aside{{ sidebar_second_attr }}>
       {{- page.sidebar_second -}}
     </aside>
