@@ -306,4 +306,28 @@ final class TopicManager {
     return $this->deptTopics;
   }
 
+  /**
+   * Records a log of orphaned content.
+   *
+   * @param \Drupal\node\NodeInterface $orphan
+   *   The node that has been orphaned.
+   * @param $former_parent
+   *   The former parent node of the orphaned node.
+   *
+   * @return void
+   */
+  public function addOrphanContent(NodeInterface $orphan, $former_parent) {
+    $orphan_manager = \Drupal::entityTypeManager()->getStorage('topics_orphaned_content');
+
+    $orphan = $orphan_manager->create([
+      'label' => $orphan->label(),
+      'orphan' => $orphan->id(),
+      'former_parent' => $former_parent->id(),
+      'uid' => \Drupal::currentUser()->id(),
+      'created' => time(),
+    ]);
+
+    $orphan_manager->save($orphan);
+  }
+
 }
