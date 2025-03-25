@@ -27,7 +27,7 @@ solr_9_6:
         conf_dir: !archive "solr_9.x_config/"
     endpoints:
       solr:
-        core: main
+        core: default
 
 redis:
   type: redis:6.0

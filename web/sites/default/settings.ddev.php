@@ -34,7 +34,7 @@ $config['search_api.server.solr_server']['backend_config']['connector'] = 'basic
 $config['search_api.server.solr_server']['backend_config']['connector_config']['host'] = 'solr';
 $config['search_api.server.solr_server']['backend_config']['connector_config']['username'] = getenv('SOLR_AUTH_USER');
 $config['search_api.server.solr_server']['backend_config']['connector_config']['password'] = getenv('SOLR_AUTH_PASS');
-$config['search_api.server.solr_server']['backend_config']['connector_config']['core'] = 'main';
+$config['search_api.server.solr_server']['backend_config']['connector_config']['core'] = 'default';
 
 // Override drupal/symfony_mailer default config to use Mailpit.
 $config['symfony_mailer.settings']['default_transport'] = 'sendmail';
