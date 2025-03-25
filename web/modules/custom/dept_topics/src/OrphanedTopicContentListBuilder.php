@@ -44,7 +44,7 @@ final class OrphanedTopicContentListBuilder extends EntityListBuilder {
       if (!empty($former_parent)) {
         $row['former_parent'] = Link::createFromRoute($former_parent->label(), 'entity.node.canonical', ['node' => $former_parent->id()])->toString();
       } else {
-        $row['former_parent'] = $former_parent_id . ' (not found)';
+        $row['former_parent'] = $former_parent_id;
       }
     }
 
