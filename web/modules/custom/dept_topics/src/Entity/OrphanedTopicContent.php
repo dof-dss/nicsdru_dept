@@ -116,11 +116,11 @@ final class OrphanedTopicContent extends ContentEntityBase implements OrphanedTo
       ])
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['former_parent'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Former parent'))
-      ->setDescription(t('Parent for which the orphan was previously assigned.'))
+    $fields['type'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Orphan type'))
+      ->setDescription(t('The bundle name for the oprhaned content.'))
       ->setRequired(TRUE)
-      ->setSetting('max_length', 255)
+      ->setSetting('max_length', 100)
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
         'weight' => 3,
@@ -130,6 +130,23 @@ final class OrphanedTopicContent extends ContentEntityBase implements OrphanedTo
         'label' => 'hidden',
         'type' => 'string',
         'weight' => 3,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['former_parent'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Former parent'))
+      ->setDescription(t('Parent for which the orphan was previously assigned.'))
+      ->setRequired(TRUE)
+      ->setSetting('max_length', 255)
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => 4,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'string',
+        'weight' => 4,
       ])
       ->setDisplayConfigurable('view', TRUE);
 
@@ -144,13 +161,37 @@ final class OrphanedTopicContent extends ContentEntityBase implements OrphanedTo
           'size' => 60,
           'placeholder' => '',
         ],
-        'weight' => 4,
+        'weight' => 5,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'author',
-        'weight' => 4,
+        'weight' => 5,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['department'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Department'))
+      ->setRequired(TRUE)
+      ->setDescription(t('Department for the content.'))
+      ->setSettings([
+        'target_type' => 'domain',
+      ])
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => 60,
+          'placeholder' => '',
+        ],
+        'weight' => 6,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'node',
+        'weight' => 6,
       ])
       ->setDisplayConfigurable('view', TRUE);
 
@@ -160,12 +201,12 @@ final class OrphanedTopicContent extends ContentEntityBase implements OrphanedTo
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'timestamp',
-        'weight' => 5,
+        'weight' => 7,
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('form', [
-        'type' => 'datetime_timestamp',
-        'weight' => 5,
+        'type' => 'datetime_timestamp ',
+        'weight' => 7,
       ])
       ->setDisplayConfigurable('view', TRUE);
 
