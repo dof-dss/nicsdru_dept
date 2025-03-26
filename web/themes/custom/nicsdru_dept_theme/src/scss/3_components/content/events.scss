@@ -1,0 +1,70 @@
+/*
+ * @file
+ * Provides very specific styling for event content type.
+ */
+@import '../../init';
+
+.page-node-type-event {
+
+  .event-details {
+    width: 100%;
+    clear: both;
+    margin: 1em 0 1.5em;
+    padding: 1em;
+    font-size: inherit;
+    background-color: var(--brand-primary-color-high-contrast-white);
+    color: #fff;
+
+    h2 {
+      margin: 0;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    p {
+      margin: 1em 0 0 0;
+    }
+
+    .label {
+      display: block;
+      color: inherit;
+      font-weight: bold;
+      @include responsive-typo-map($medium-text);
+    }
+
+    .event-host {
+      @include responsive-typo-map($small-text);
+      margin: 1.8rem 0 .7rem;
+      @include breakpoint($tab) {
+        margin: 2.1rem 0 .7rem;
+      };
+      @include breakpoint($desk-plus) {
+        margin: 2.5rem 0 1rem;
+      };
+    }
+
+    .business-area {
+      @include responsive-typo-map($small-text);
+      margin: 1.8rem 0 .7rem;
+      @include breakpoint($tab) {
+        margin: 2.1rem 0 .7rem;
+      };
+      @include breakpoint($desk-plus) {
+        margin: 2.5rem 0 1rem;
+      };
+    }
+
+  }
+
+  .event-metadata {
+    color: #666;
+    font-size: 1.6rem;
+
+    .label {
+      display: inline-block;
+      width: 100%;
+      margin-top: 0.5em;
+    }
+  }
+
+}
