@@ -755,7 +755,7 @@ function dept_topics_preprocess_views_view_field(&$variables) {
     $variables['output'] = $output;
   }
 
-  if ($view->storage->id() == 'orphaned_content' && $field->field == 'operations') {
+  if ($view->storage->id() == 'orphaned_content' && $field->field == 'dropbutton') {
 
     $variables['output'] = [
       '#type' => 'operations',
@@ -764,17 +764,6 @@ function dept_topics_preprocess_views_view_field(&$variables) {
           'title' => t('Edit orphan'),
           'url' => Url::fromRoute('entity.node.edit_form', ['node' => $variables["row"]->_entity->get('orphan')->getString()]),
         ],
-        'delete' => [
-          'title' => t('Delete orphan'),
-          'url' => Url::fromRoute('entity.node.delete_form', ['node' => $variables["row"]->_entity->get('orphan')->getString()]),
-          'attributes' => [
-            'data-dialog-type' => 'modal',
-            'class' => ['use-ajax'],
-            'data-dialog-options' => Json::encode([
-              'width' => '80%',
-            ]),
-          ]
-        ]
       ],
       '#attached' => [
         'library' => ['core/drupal.dialog.ajax'],

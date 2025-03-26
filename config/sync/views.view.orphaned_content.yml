@@ -30,7 +30,7 @@ display:
           entity_type: topics_orphaned_content
           entity_field: orphan
           plugin_id: field
-          label: Orphan
+          label: Title
           exclude: false
           alter:
             alter_text: false
@@ -160,7 +160,7 @@ display:
           entity_type: topics_orphaned_content
           entity_field: uid
           plugin_id: field
-          label: 'Orphaned by'
+          label: Author
           exclude: false
           alter:
             alter_text: false
@@ -225,7 +225,7 @@ display:
           entity_type: topics_orphaned_content
           entity_field: created
           plugin_id: field
-          label: 'Orphaned on'
+          label: Updated
           exclude: false
           alter:
             alter_text: false
@@ -292,15 +292,14 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        operations:
-          id: operations
-          table: topics_orphaned_content
-          field: operations
+        dropbutton:
+          id: dropbutton
+          table: views
+          field: dropbutton
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: topics_orphaned_content
-          plugin_id: entity_operations
+          plugin_id: dropbutton
           label: Operations
           exclude: false
           alter:
@@ -342,7 +341,12 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          destination: false
+          destination: true
+          fields:
+            orphan: '0'
+            former_parent: '0'
+            uid: '0'
+            created: '0'
       pager:
         type: full
         options:
@@ -383,7 +387,46 @@ display:
         options: {  }
       empty: {  }
       sorts: {  }
-      arguments: {  }
+      arguments:
+        department:
+          id: department
+          table: topics_orphaned_content
+          field: department
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: topics_orphaned_content
+          entity_field: department
+          plugin_id: string
+          default_action: default
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: false
+          title: ''
+          default_argument_type: active_domain
+          default_argument_options: {  }
+          summary_options:
+            base_path: ''
+            count: true
+            override: false
+            items_per_page: 25
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          glossary: false
+          limit: 0
+          case: none
+          path_case: none
+          transform_dash: false
+          break_phrase: false
       filters: {  }
       style:
         type: table
@@ -458,7 +501,9 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
         - url.query_args
+        - url.site
       tags: {  }
   orphaned_by_author:
     id: orphaned_by_author
@@ -608,7 +653,7 @@ display:
           entity_type: topics_orphaned_content
           entity_field: created
           plugin_id: field
-          label: 'Orphaned on'
+          label: Updated
           exclude: false
           alter:
             alter_text: false
@@ -675,15 +720,14 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        operations:
-          id: operations
-          table: topics_orphaned_content
-          field: operations
+        dropbutton:
+          id: dropbutton
+          table: views
+          field: dropbutton
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: topics_orphaned_content
-          plugin_id: entity_operations
+          plugin_id: dropbutton
           label: Operations
           exclude: false
           alter:
@@ -725,7 +769,11 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          destination: false
+          destination: true
+          fields:
+            orphan: '0'
+            former_parent: '0'
+            created: '0'
       pager:
         type: full
         options:
@@ -893,4 +941,5 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - url.site
       tags: {  }
