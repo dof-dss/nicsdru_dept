@@ -116,9 +116,9 @@ final class OrphanedTopicContent extends ContentEntityBase implements OrphanedTo
       ])
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['type'] = BaseFieldDefinition::create('string')
+    $fields['orphan_type'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Orphan type'))
-      ->setDescription(t('The bundle name for the oprhaned content.'))
+      ->setDescription(t('The bundle name for the orphaned content.'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 100)
       ->setDisplayOptions('form', [
