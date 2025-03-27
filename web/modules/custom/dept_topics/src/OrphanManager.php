@@ -13,6 +13,9 @@ use Drupal\node\NodeInterface;
  */
 final class OrphanManager {
 
+  /**
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
   protected EntityStorageInterface $orphanEntityStorage;
 
   /**
@@ -25,18 +28,32 @@ final class OrphanManager {
     $this->orphanEntityStorage = $this->entityTypeManager->getStorage('topics_orphaned_content');
   }
 
+  /**
+   * Process a list of child content associated with a topic.
+   *
+   * @param \Drupal\node\NodeInterface $topic
+   *   The parent topic node.
+   * @param array $altered_children
+   *   Array of added or removed children (NID's) from the topic content.
+   */
+  public function process(NodeInterface $topic, array $altered_children): void {
 
-  public function processNode(NodeInterface $node): void {
-
-    if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
-      $topic_childen = $node->get('field_topic_content');
+    if ($topic->bundle() !== 'topic' || $topic->bundle() !== 'subtopic') {
+      return;
     }
 
-    $topic_child_bundles = $this->topicManager->getTopicChildNodeTypes();
+    foreach ($altered_children as $child_id) {
+      $child = $this->entityTypeManager->getStorage('node')->load($child_id);
 
-    if (in_array($node->bundle(), $topic_child_bundles)) {
-      if (count($this->topicManager->getParentNodes($node)) == 0) {
-
+      if (!empty($child)) {
+        if ($child->hasField('field_site_topics')) {
+          if (count($child->get('field_site_topics')->getValue()) > 0) {
+            $this->removeOrphan($child);
+          }
+          else {
+            $this->addOrphan($child, $topic);
+          }
+        }
       }
     }
   }
@@ -51,7 +68,7 @@ final class OrphanManager {
    */
   protected function addOrphan(NodeInterface $node, NodeInterface $parent): void {
     $orphan = $this->orphanEntityStorage->loadByProperties(
-      ['orphan' => $node->id(),]
+      ['orphan' => $node->id()]
     );
 
     if (!empty($orphan)) {
@@ -75,11 +92,11 @@ final class OrphanManager {
    * Removes the orphan entity record for a given node.
    *
    * @param \Drupal\node\NodeInterface $node
-   *  The node for which the orphan record should be removed.
+   *   The node for which the orphan record should be removed.
    */
   protected function removeOrphan(NodeInterface $node): void {
     $orphan = $this->orphanEntityStorage->loadByProperties(
-      ['orphan' => $node->id(),]
+      ['orphan' => $node->id()]
     );
 
     if (empty($orphan)) {
