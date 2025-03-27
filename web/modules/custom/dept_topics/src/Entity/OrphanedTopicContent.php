@@ -27,17 +27,12 @@ use Drupal\user\EntityOwnerTrait;
  *   ),
  *   handlers = {
  *     "views_data" = "Drupal\views\EntityViewsData",
- *     "form" = {
- *       "edit" = "Drupal\dept_topics\Form\OrphanedTopicContentForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *     },
  *     "route_provider" = {
  *       "html" = "Drupal\dept_topics\Routing\OrphanedTopicContentHtmlRouteProvider",
  *     },
  *   },
  *   base_table = "topics_orphaned_content",
- *   admin_permission = "administer topics_orphaned_content",
+ *   admin_permission = "administer topics orphaned content",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
@@ -46,9 +41,6 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  *   links = {
  *     "canonical" = "/admin/orphaned-content/{topics_orphaned_content}",
- *     "edit-form" = "/admin/orphaned-content/{topics_orphaned_content}",
- *     "delete-form" = "/admin/orphaned-content/{topics_orphaned_content}/delete",
- *     "delete-multiple-form" = "/admin/content/topics-orphaned-content/delete-multiple",
  *   },
  * )
  */

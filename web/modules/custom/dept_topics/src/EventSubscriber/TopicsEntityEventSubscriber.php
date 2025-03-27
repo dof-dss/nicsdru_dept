@@ -33,6 +33,10 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   public function onEntityPresave(EntityEvent $event): void {
     $entity = $event->getEntity();
 
+    if ($entity->isNew()) {
+      return;
+    }
+
     if ($entity->bundle() === 'topic' || $entity->bundle() === 'subopic') {
       $moderation_state = $entity->get('moderation_state')->getString();
 
