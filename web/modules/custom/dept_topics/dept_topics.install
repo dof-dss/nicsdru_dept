@@ -21,7 +21,7 @@ function dept_topics_update_8001() {
     ],
     "base_table" => "topics_orphaned_content",
     "translatable" => FALSE,
-    "admin_permission" => "administer topics orphaned content",
+    "admin_permission" => "administer orphaned content",
     "entity_keys" => [
       "id" => "id",
       "label" => "label",

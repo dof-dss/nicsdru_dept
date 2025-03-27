@@ -32,7 +32,7 @@ use Drupal\user\EntityOwnerTrait;
  *     },
  *   },
  *   base_table = "topics_orphaned_content",
- *   admin_permission = "administer topics orphaned content",
+ *   admin_permission = "administer orphaned content",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",

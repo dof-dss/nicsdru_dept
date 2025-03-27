@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - dept_topics
+    - user
 id: orphaned_content
 label: 'Orphaned content'
 module: views
@@ -380,8 +381,9 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: none
-        options: {  }
+        type: perm
+        options:
+          perm: 'administer orphaned content'
       cache:
         type: tag
         options: {  }
@@ -504,6 +506,7 @@ display:
         - url
         - url.query_args
         - url.site
+        - user.permissions
       tags: {  }
   orphaned_by_author:
     id: orphaned_by_author
@@ -854,6 +857,7 @@ display:
         - url
         - url.query_args
         - user
+        - user.permissions
       tags: {  }
   orphaned_overview:
     id: orphaned_overview
@@ -942,4 +946,5 @@ display:
         - url
         - url.query_args
         - url.site
+        - user.permissions
       tags: {  }

@@ -138,6 +138,25 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
     if ($entity->bundle() === 'topic' || $entity->bundle() === 'subopic') {
       // Process orphaned.
+      $child_contents = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
+
+      foreach ($child_contents as $child_id) {
+        $child_node = $this->entityTypeManager->getStorage('node')->load($child_id);
+        $child_topics = $child_node->get('field_site_topics');
+
+        for ($i = 0; $i < $child_topics->count(); $i++) {
+          // @phpstan-ignore-next-line
+          if ($child_topics->get($i)->target_id == $entity->id()) {
+            $child_topics->removeItem($i);
+            $i--;
+          }
+        }
+        $child_node->save();
+
+        if ($child_topics->count() == 0) {
+          $this->orphanManager->addOrphan($child_node, $entity);
+        }
+      }
     }
   }
 

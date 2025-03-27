@@ -371,30 +371,6 @@ function dept_topics_node_insert(NodeInterface $node) {
 function dept_topics_node_delete(NodeInterface $node) {
   if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
     dept_topics_clear_topic_tree_cache($node);
-
-    $topic_content_ids = array_column($node->get('field_topic_content')->getValue(), 'target_id');
-
-    foreach ($topic_content_ids as $child_id) {
-      $child_node = Node::load($child_id);
-
-      if (!empty($child_node)) {
-        $child_topics = $child_node->get('field_site_topics');
-
-        for ($i = 0; $i < $child_topics->count(); $i++) {
-          // @phpstan-ignore-next-line
-          if ($child_topics->get($i)->target_id == $node->id()) {
-            $child_topics->removeItem($i);
-            $i--;
-          }
-        }
-        $child_node->save();
-
-        if ($child_topics->count() == 0) {
-          \Drupal::service('topic.manager')->addOrphanContent($child_node, $node);
-        }
-      }
-    }
-
   }
 }
 
