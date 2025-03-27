@@ -66,7 +66,7 @@ final class OrphanManager {
    * @param \Drupal\node\NodeInterface $parent
    *   The parent node of the orphaned node.
    */
-  protected function addOrphan(NodeInterface $node, NodeInterface $parent): void {
+  public function addOrphan(NodeInterface $node, NodeInterface $parent): void {
     $orphan = $this->orphanEntityStorage->loadByProperties(
       ['orphan' => $node->id()]
     );
@@ -94,7 +94,7 @@ final class OrphanManager {
    * @param \Drupal\node\NodeInterface $node
    *   The node for which the orphan record should be removed.
    */
-  protected function removeOrphan(NodeInterface $node): void {
+  public function removeOrphan(NodeInterface $node): void {
     $orphan = $this->orphanEntityStorage->loadByProperties(
       ['orphan' => $node->id()]
     );

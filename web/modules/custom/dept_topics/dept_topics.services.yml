@@ -19,6 +19,6 @@ services:
 
   dept_topics.entity_event_subscriber:
     class: Drupal\dept_topics\EventSubscriber\TopicsEntityEventSubscriber
-    arguments: ['@topic.manager', '@orphan.manager', '@entity_type.manager']
+    arguments: ['@topic.manager', '@orphan.manager', '@entity_type.manager', '@book.manager']
     tags:
       - { name: event_subscriber }

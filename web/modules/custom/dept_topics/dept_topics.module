@@ -338,62 +338,6 @@ function dept_topics_node_presave(EntityInterface $node) {
 
     dept_topics_clear_topic_tree_cache($node);
 
-    // Add or remove site topic tags to nodes that are added or removed from topic child contents.
-    // @phpstan-ignore-next-line
-    $original = array_column($node->original->get('field_topic_content')->getValue(), 'target_id');
-    // @phpstan-ignore-next-line
-    $updated = array_column($node->get('field_topic_content')->getValue(), 'target_id');
-
-    $removed = array_diff($original, $updated);
-    $added = array_diff($updated, $original);
-
-    if ($removed) {
-      $book_manager = \Drupal::service('book.manager');
-
-      foreach ($removed as $nid) {
-
-        // Do not remove site topics from the node if it is a book page.
-        if ($book_manager->loadBookLink($nid) === TRUE) {
-          continue;
-        }
-
-        $child_node = Node::load($nid);
-
-        if (!empty($child_node)) {
-          $child_topics = $child_node->get('field_site_topics');
-
-          for ($i = 0; $i < $child_topics->count(); $i++) {
-            // @phpstan-ignore-next-line
-            if ($child_topics->get($i)->target_id == $node->id()) {
-              $child_topics->removeItem($i);
-              $i--;
-            }
-          }
-          $child_node->save();
-
-          if ($child_topics->count() == 0) {
-            \Drupal::service('topic.manager')->addOrphanContent($child_node, $node);
-          }
-        }
-      }
-    }
-
-    if ($added) {
-      foreach ($added as $nid) {
-        $child_node = Node::load($nid);
-        if (!empty($child_node)) {
-          $child_topic_tags = array_column($child_node->get('field_site_topics')->getValue(), 'target_id');
-
-          if (!in_array($node->id(), $child_topic_tags)) {
-            $child_node->get('field_site_topics')->appendItem([
-              'target_id' => $node->id()
-            ]);
-            $child_node->save();
-          }
-        }
-      }
-    }
-
     // Clear the cache of the child content nodes (for cases when the thin banner etc. is updated).
     dept_topics_clear_child_caches($node);
   }
