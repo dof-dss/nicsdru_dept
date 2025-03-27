@@ -1,0 +1,38 @@
+<?php
+
+use Drupal\Core\Entity\ContentEntityType;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+
+/**
+ * Create the Orphaned entity type as the module is already installed.
+ */
+function dept_topics_update_8001() {
+  $definition_update_manager = Drupal::entityDefinitionUpdateManager();
+
+  $entity_definition = new ContentEntityType([
+    "id" => "topics_orphaned_content",
+    "label" => new TranslatableMarkup("Orphaned topic content"),
+    "handlers" => [
+      "view_builder" => "Drupal\Core\Entity\EntityViewBuilder",
+      "views_data" => "Drupal\views\EntityViewsData",
+      "route_provider" => [
+        "html" => "Drupal\dept_topics\Routing\OrphanedTopicContentHtmlRouteProvider",
+      ],
+    ],
+    "base_table" => "topics_orphaned_content",
+    "translatable" => FALSE,
+    "admin_permission" => "administer topics orphaned content",
+    "entity_keys" => [
+      "id" => "id",
+      "label" => "label",
+      "uuid" => "uuid",
+      "owner" => "uid",
+    ],
+    "links" => [
+      "canonical" => "/admin/orphaned-content/{topics_orphaned_content}",
+    ],
+  ]);
+
+  $entity_definition->setClass('Drupal\dept_topics\Entity\OrphanedTopicContent');
+  $definition_update_manager->installEntityType($entity_definition);
+}
