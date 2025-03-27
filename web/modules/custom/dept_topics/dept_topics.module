@@ -10,6 +10,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
@@ -42,72 +43,78 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
 
-    $build['actions']['secondary']['info_topic_content'] = [
-      '#theme' => 'moderation_sidebar_info_section',
-      '#text' => 'Manage topic content',
-      '#tag' => 'h2'
-    ];
+    // See also: dept_postprocess_moderation_sidebar_alter()
+    if (\Drupal::currentUser()->hasPermission('edit subtopic content')) {
 
-    $build['actions']['secondary']['manage_existing'] = [
-      '#title' => t('Manage existing content'),
-      '#type' => 'link',
-      '#url' => Url::fromRoute('dept_topics.manage_topic_content.form', ['nid' => $context->id()]),
-      '#attributes' => [
-        'class' => [
-          'moderation-sidebar-link',
-          'button',
-          'button--tertiary',
-          'use-ajax'
-        ],
-        'data-dialog-type' => 'modal',
-        'data-dialog-options' => Json::encode([
-          'title' => t('Manage topic content'),
-          'width' => '1000',
-          'minHeight' => 500,
-          'position' => ['my' => 'center top', 'at' => 'center top'],
-          'draggable' => TRUE,
-          'autoResize' => TRUE,
-        ]),
-      ],
-    ];
+      $build['actions']['secondary']['info_topic_content'] = [
+        '#theme' => 'moderation_sidebar_info_section',
+        '#text' => 'Manage topic content',
+        '#tag' => 'h2'
+      ];
 
-    // Links to create new content for topics, generated from target bundles of the field .
-    $bundle_fields = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions('node', 'topic');
-    $field_definition = $bundle_fields['field_topic_content'];
-    $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
-
-    $build['actions']['secondary']['info_add_new'] = [
-      '#theme' => 'moderation_sidebar_info_section',
-      '#text' => 'Quickly add new...',
-      '#tag' => 'p'
-    ];
-
-    $current_dept = \Drupal::service('department.manager')->getCurrentDepartment();
-
-    foreach ($target_bundles as $bundle => $label) {
-      // Replace hard-coded rule with permissions?
-      if ($current_dept->id() != 'daera' && $bundle === 'protected_area') {
-        continue;
-      }
-
-      $type = NodeType::load($bundle);
-
-      $build['actions']['secondary']['add_' . $bundle] = [
-        '#title' => ucfirst($type->label()),
+      $build['actions']['secondary']['manage_existing'] = [
+        '#title' => t('Manage existing content'),
         '#type' => 'link',
-        '#url' => Url::fromRoute('node.add', ['node_type' => $bundle], ['query' => ['topic' => $context->id()]]),
+        '#url' => Url::fromRoute('dept_topics.manage_topic_content.form', ['nid' => $context->id()]),
         '#attributes' => [
           'class' => [
             'moderation-sidebar-link',
             'button',
-            'button--secondary'
+            'button--tertiary',
+            'use-ajax'
           ],
+          'data-dialog-type' => 'modal',
+          'data-dialog-options' => Json::encode([
+            'title' => t('Manage topic content'),
+            'width' => '1000',
+            'minHeight' => 500,
+            'position' => ['my' => 'center top', 'at' => 'center top'],
+            'draggable' => TRUE,
+            'autoResize' => TRUE,
+          ]),
         ],
       ];
+
+      // Links to create new content for topics, generated from target bundles of the field .
+      $bundle_fields = \Drupal::getContainer()
+        ->get('entity_field.manager')
+        ->getFieldDefinitions('node', 'topic');
+      $field_definition = $bundle_fields['field_topic_content'];
+      $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
+
+      $build['actions']['secondary']['info_add_new'] = [
+        '#theme' => 'moderation_sidebar_info_section',
+        '#text' => 'Quickly add new...',
+        '#tag' => 'p'
+      ];
+
+      $current_dept = \Drupal::service('department.manager')
+        ->getCurrentDepartment();
+
+      foreach ($target_bundles as $bundle => $label) {
+        // Replace hard-coded rule with permissions?
+        if ($current_dept->id() != 'daera' && $bundle === 'protected_area') {
+          continue;
+        }
+
+        $type = NodeType::load($bundle);
+
+        $build['actions']['secondary']['add_' . $bundle] = [
+          '#title' => ucfirst($type->label()),
+          '#type' => 'link',
+          '#url' => Url::fromRoute('node.add', ['node_type' => $bundle], ['query' => ['topic' => $context->id()]]),
+          '#attributes' => [
+            'class' => [
+              'moderation-sidebar-link',
+              'button',
+              'button--secondary'
+            ],
+          ],
+        ];
+      }
+
+      $build['#attached']['library'][] = 'dept_topics/moderation_sidebar';
     }
-
-    $build['#attached']['library'][] = 'dept_topics/moderation_sidebar';
-
   }
 }
 
@@ -536,6 +543,8 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
 function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
   $topic_contents = $form_state->getValue('field_topic_content');
   $topic_manager = \Drupal::service('topic.manager');
+  // @phpstan-ignore-next-line.
+  $parent_node = $form_state->getFormObject()->getEntity();
 
   foreach ($topic_contents as $index => $topic_content) {
     // Ignore if the 'add new' or an empty field is encountered.
@@ -545,11 +554,14 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
     $nid = $topic_content['target_id'];
     $node = Node::load($nid);
     if ($node->bundle() === 'subtopic') {
-      $num_parent_nodes = count($topic_manager->getParentNodes($node->id())) ?? 0;
+      $parent_nodes = $topic_manager->getParentNodes($node->id());
       // Warn the user if the subtopic has an assigned parent topic.
-      if ($num_parent_nodes > 1) {
-        $element = $form['field_topic_content']['widget'][$index];
-        $form_state->setError($element, t('This subtopic is already assigned to a parent topic and cannot be linked to multiple parent topics.'));
+      if (!empty($parent_nodes)) {
+        // If the child node parent ID doesn't match this node, warn the user.
+        if (current($parent_nodes)->nid !== $parent_node->id()) {
+          $element = $form['field_topic_content']['widget'][$index];
+          $form_state->setError($element, t('This subtopic is already assigned to a parent topic and cannot be linked to multiple parent topics.'));
+        }
       }
     }
   }
@@ -667,6 +679,17 @@ function dept_topics_views_query_alter(ViewExecutable $view, QueryPluginBase $qu
         $query->where[0]['conditions'][$index]['value'] = $args;
         $query->where[0]['conditions'][$index]['operator'] = 'in';
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function dept_topics_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
+  if ($bundle === 'topic' || $bundle === 'subtopic') {
+    if (isset($fields['field_topic_content'])) {
+      $fields['field_topic_content']->addConstraint('unique_list_items');
     }
   }
 }

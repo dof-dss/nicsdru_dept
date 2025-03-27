@@ -43,6 +43,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 20
           total_pages: null
           id: 0
@@ -60,7 +61,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 5
-          pagination_heading_level: h4
       exposed_form:
         type: basic
         options:
@@ -79,19 +79,19 @@ display:
         options: {  }
       empty: {  }
       sorts:
-        search_api_relevance:
-          id: search_api_relevance
+        field_published_date_1:
+          id: field_published_date_1
           table: search_api_index_news_index
-          field: search_api_relevance
+          field: field_published_date
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: search_api
           order: DESC
           expose:
-            label: Relevance
-            field_identifier: search_api_relevance
-          exposed: true
+            label: ''
+            field_identifier: ''
+          exposed: false
         field_published_date:
           id: field_published_date
           table: search_api_index_news_index
@@ -105,10 +105,23 @@ display:
             label: 'Publication date'
             field_identifier: field_published_date
           exposed: true
-        field_published_date_1:
-          id: field_published_date_1
+        search_api_relevance:
+          id: search_api_relevance
           table: search_api_index_news_index
-          field: field_published_date
+          field: search_api_relevance
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: Relevance
+            field_identifier: search_api_relevance
+          exposed: true
+        changed:
+          id: changed
+          table: search_api_index_news_index
+          field: changed
           relationship: none
           group_type: group
           admin_label: ''
@@ -1098,7 +1111,7 @@ display:
       display_extenders: {  }
       path: news
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_interface'
         - url
@@ -1108,8 +1121,6 @@ display:
         - url.site
         - 'user.node_grants:view'
       tags:
-        - 'config:facets.facet.news_publication_date'
-        - 'config:facets.facet.news_topic'
         - 'config:search_api.index.news_index'
         - 'search_api_list:news_index'
   press_release_search:
@@ -1336,7 +1347,7 @@ display:
       display_extenders: {  }
       path: press-releases
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_interface'
         - url
@@ -1346,9 +1357,6 @@ display:
         - url.site
         - 'user.node_grants:view'
       tags:
-        - 'config:facets.facet.pr_department'
-        - 'config:facets.facet.pr_publication_date'
-        - 'config:facets.facet.pr_topics'
         - 'config:search_api.index.news_index'
         - 'search_api_list:news_index'
   press_releases_feed:

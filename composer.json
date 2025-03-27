@@ -112,10 +112,10 @@
         "drupal/config_split": "^2.0-beta",
         "drupal/content_lock": "^2.3",
         "drupal/cookie_content_blocker": "^2.0",
-        "drupal/core": "^10.3",
+        "drupal/core": "^10.4",
         "drupal/core-composer-scaffold": "10.3.13",
         "drupal/core-project-message": "10.3.13",
-        "drupal/core-recommended": "10.3.13",
+        "drupal/core-recommended": "^10.4",
         "drupal/csp": "^2.1",
         "drupal/date_facet_drilldown": "^7.0@dev",
         "drupal/datetime_flatpickr": "^3.0",
@@ -163,9 +163,6 @@
         "drupal/media_remote": "^1.9",
         "drupal/metatag": "^2.1",
         "drupal/metatag_async_widget": "^1.2",
-        "drupal/migrate_conditions": "^2.0@beta",
-        "drupal/migrate_plus": "^6",
-        "drupal/migrate_tools": "^6",
         "drupal/moderation_sidebar": "^1.8",
         "drupal/noreferrer": "^2.0",
         "drupal/noreqnewpass": "^1.4",
@@ -222,6 +219,7 @@
         "drupal/devel": "^5.3",
         "drupal/easy_install_d10": "^10.0@dev",
         "drupal/masquerade": "^2.0@beta",
+        "drupal/meaofd": "^1.0",
         "drupal/migrate_devel": "^3.0",
         "drupal/stage_file_proxy": "^3.1",
         "drupal/structure_sync": "^2.0",
@@ -339,7 +337,8 @@
                 "TypeError when adding book page": "https://www.drupal.org/files/issues/2023-10-02/book_typeerror-3391035-1.patch",
                 "Force expiration of node cache tag when book outline changes": "https://gist.githubusercontent.com/johangant/8b97bf93525475ee89d8be246a418777/raw/145c727d1df7403ce38819437bc46989e1a85a2b/expire-book-node-cache-key-on-change.patch",
                 "Submitting a form during an ajax request or before ajax is triggered results in data loss": "https://www.drupal.org/files/issues/2023-09-08/1736308-57.patch",
-                "Content Not reverting in Layout builder section #3204494": "https://git.drupalcode.org/project/drupal/-/merge_requests/6959.diff"
+                "Content Not reverting in Layout builder section #3204494": "https://git.drupalcode.org/project/drupal/-/merge_requests/6959.diff",
+                "Layout builder fails to assign inline block access dependencies for the overrides section storage on entities with pending revisions #3047022": "https://www.drupal.org/files/issues/2025-02-19/drupal-core-3047022-115.patch"
             },
             "drupal/devel": {
                 "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://gitlab.com/-/project/18040690/uploads/7897853cd83cb829ae8d752657e2f497/kint.221-5-3.patch"
@@ -353,6 +352,9 @@
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch",
                 "Make module compatible with PHP 8.2 #3405907": "https://www.drupal.org/files/issues/2023-12-04/3405907-1.patch",
                 "Remove unnecessary User::load from domain_entity_entity_access": "https://www.drupal.org/files/issues/2022-11-17/remove_unnecessary_user_load_from_domain_entity_entity_access-3322113-2.patch"
+            },
+            "drupal/domain_path": {
+                "Warning: Undefined array key \"pathauto\" in Drupal\\domain_path_pathauto\\DomainPathautoHelper #3315752": "https://www.drupal.org/files/issues/2024-10-21/3315752-13.patch"
             },
             "drupal/eu_cookie_compliance": {
                 "Elements with role=\"dialog\" or role=\"alertdialog\" do not have accessible names": "https://www.drupal.org/files/issues/2024-10-11/eu_cookie_compliance.3379830.1.25.0.patch"

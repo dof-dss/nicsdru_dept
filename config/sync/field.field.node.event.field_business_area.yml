@@ -1,0 +1,29 @@
+uuid: 18708111-5efd-45c7-9c72-97f0130841fe
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_business_area
+    - node.type.event
+    - taxonomy.vocabulary.business_area
+id: node.event.field_business_area
+field_name: field_business_area
+entity_type: node
+bundle: event
+label: 'Business area'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:filter_existing_terms'
+  handler_settings:
+    target_bundles:
+      business_area: business_area
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

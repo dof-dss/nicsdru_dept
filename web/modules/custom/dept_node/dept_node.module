@@ -146,7 +146,7 @@ function dept_node_title_guardian(array &$form, FormStateInterface $form_state) 
     $department = \Drupal::service('department.manager')->getCurrentDepartment()->id();
   }
 
-  $title = $form_state->getValue('title')[0]['value'];
+  $title = trim($form_state->getValue('title')[0]['value']);
 
   // @phpstan-ignore-next-line
   $bundle = $form_state->getformObject()->getEntity()->bundle();
@@ -240,7 +240,7 @@ function dept_node_preprocess_node(array &$variables) {
     if (!empty($source_domain)) {
       $domain_path = rtrim($source_domain->getPath(), '/');
 
-      if (!empty($variables['url'])) {
+      if (!empty($variables['url']) && str_starts_with($variables['url'], 'http') === FALSE) {
         $variables['url'] = $domain_path . $variables['url'];
       }
     }
