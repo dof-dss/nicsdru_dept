@@ -387,7 +387,18 @@ display:
       cache:
         type: tag
         options: {  }
-      empty: {  }
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text_custom
+          empty: true
+          content: 'No orphaned content.'
+          tokenize: false
       sorts: {  }
       arguments:
         department:
@@ -799,6 +810,18 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text_custom
+          empty: true
+          content: 'You have no orphaned content.'
+          tokenize: false
       arguments:
         uid:
           id: uid
@@ -841,6 +864,7 @@ display:
         groups:
           1: AND
       defaults:
+        empty: false
         title: false
         pager: false
         fields: false
