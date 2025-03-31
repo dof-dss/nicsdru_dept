@@ -15,7 +15,7 @@ services:
 
   orphan.manager:
     class: Drupal\dept_topics\OrphanManager
-    arguments: ['@entity_type.manager']
+    arguments: ['@entity_type.manager', '@topic.manager']
 
   dept_topics.entity_event_subscriber:
     class: Drupal\dept_topics\EventSubscriber\TopicsEntityEventSubscriber

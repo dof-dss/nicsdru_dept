@@ -23,33 +23,29 @@ final class OrphanManager {
    */
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
+    private readonly TopicManager $topicManager,
   ) {
     $this->orphanEntityStorage = $this->entityTypeManager->getStorage('topics_orphaned_content');
   }
 
   /**
-   * Processes a list of nids that have been added or removed from a topic.
+   * Process a list of nids that have been added or removed from a topic.
    *
    * @param array $nids
    *   Array of topic child content nids to process.
    *
-   * @param \Drupal\dept_topics\TopicContentAction $action
-   *   Indicate if the nids have been added or removed from a topic.
-   *
    * @param \Drupal\node\NodeInterface|null $parent
    *   Optional parent node that the nids are associated with.
    */
-  public function processTopicContents(array $nids, TopicContentAction $action, NodeInterface|Null $parent = NULL): void {
+  public function processTopicContents(array $nids, NodeInterface|Null $parent = NULL): void {
     $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
 
-    if ($action == TopicContentAction::Added) {
-      foreach ($nodes as $node) {
-        $this->removeOrphan($node);
-      }
-    }
-    else {
-      foreach ($nodes as $node) {
+    foreach ($nodes as $node) {
+      if (count($this->topicManager->getParentNodes($node)) < 1) {
         $this->addOrphan($node, $parent);
+      }
+      else {
+        $this->removeOrphan($node);
       }
     }
   }

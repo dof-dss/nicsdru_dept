@@ -42,8 +42,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
         // Remove any orphaned content that is assigned to a new published topic.
         if ($entity->isNew() && $moderation_state === 'published') {
           $topic_content = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
-
-          $this->orphanManager->processTopicContents($topic_content, TopicContentAction::Added);
+          $this->orphanManager->processTopicContents($topic_content);
           return;
         }
 
@@ -124,6 +123,11 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   public function onEntityDelete(EntityEvent $event): void {
     $entity = $event->getEntity();
 
+    // Cleanup in orphan data for this node.
+    if (in_array($entity->bundle(), $this->topicManager->getTopicChildNodeTypes())) {
+      $this->orphanManager->removeOrphan($entity);
+    }
+
     if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
       // Process orphaned.
       $child_contents = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
@@ -145,6 +149,9 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
           $this->orphanManager->addOrphan($child_node, $entity);
         }
       }
+
+      // Cleanup in orphan data for this node.
+      $this->orphanManager->removeOrphan($entity);
     }
   }
 
