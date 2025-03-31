@@ -30,5 +30,6 @@ solr_8_11:
         core: default
 
 redis:
-  type: redis-persistent:7.2
-  disk: 6144
+  type: "redis:7.2"
+  configuration:
+    maxmemory_policy: allkeys-lfu
