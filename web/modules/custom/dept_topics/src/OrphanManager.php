@@ -8,8 +8,13 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
 
+enum ContentAction {
+  case ADDED;
+  case REMOVED;
+}
+
 /**
- * @todo Add class description.
+ * Manages orphaned content.
  */
 final class OrphanManager {
 
@@ -22,38 +27,22 @@ final class OrphanManager {
    * Constructs an OrphanManager object.
    */
   public function __construct(
-    private readonly TopicManager $topicManager,
     private readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
     $this->orphanEntityStorage = $this->entityTypeManager->getStorage('topics_orphaned_content');
   }
 
-  /**
-   * Process a list of child content associated with a topic.
-   *
-   * @param \Drupal\node\NodeInterface $topic
-   *   The parent topic node.
-   * @param array $altered_children
-   *   Array of added or removed children (NID's) from the topic content.
-   */
-  public function process(NodeInterface $topic, array $altered_children): void {
+  public function processTopicContents(array $nids, ContentAction $action, NodeInterface $parent = NULL): void {
+    $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
 
-    if ($topic->bundle() !== 'topic' || $topic->bundle() !== 'subtopic') {
-      return;
+    if ($action == ContentAction::ADDED) {
+      foreach ($nodes as $node) {
+        $this->removeOrphan($node);
+      }
     }
-
-    foreach ($altered_children as $child_id) {
-      $child = $this->entityTypeManager->getStorage('node')->load($child_id);
-
-      if (!empty($child)) {
-        if ($child->hasField('field_site_topics')) {
-          if (count($child->get('field_site_topics')->getValue()) > 0) {
-            $this->removeOrphan($child);
-          }
-          else {
-            $this->addOrphan($child, $topic);
-          }
-        }
+    else {
+      foreach ($nodes as $node) {
+        $this->addOrphan($node, $parent);
       }
     }
   }
@@ -79,7 +68,7 @@ final class OrphanManager {
       'label' => $node->label(),
       'orphan' => $node->id(),
       'orphan_type' => $node->bundle(),
-      'former_parent' => $parent->id(),
+      'former_parent' => empty($parent) ? 'unknown' : $parent->id(),
       'department' => $node->get('field_domain_source')->getValue(),
       'uid' => \Drupal::currentUser()->id(),
       'created' => time(),

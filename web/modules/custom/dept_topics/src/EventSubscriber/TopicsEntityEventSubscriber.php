@@ -6,6 +6,7 @@ namespace Drupal\dept_topics\EventSubscriber;
 
 use Drupal\book\BookManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\dept_topics\ContentAction;
 use Drupal\dept_topics\OrphanManager;
 use Drupal\dept_topics\TopicManager;
 use Drupal\entity_events\EntityEventType;
@@ -33,14 +34,20 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   public function onEntityPresave(EntityEvent $event): void {
     $entity = $event->getEntity();
 
-    if ($entity->isNew()) {
-      return;
-    }
-
-    if ($entity->bundle() === 'topic' || $entity->bundle() === 'subopic') {
+    if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
       $moderation_state = $entity->get('moderation_state')->getString();
 
-      if ($moderation_state == 'published' || $moderation_state == 'archived') {
+      if ($moderation_state === 'published' || $moderation_state === 'archived') {
+
+        // Remove any orphaned content that is assigned to a new published topic.
+        if ($entity->isNew() && $moderation_state === 'published') {
+          $topic_content = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
+
+          $this->orphanManager->processTopicContents($topic_content, ContentAction::ADDED);
+          return;
+        }
+
+
 
         // Add or remove site topic tags to nodes that are added or removed from topic child contents.
         // @phpstan-ignore-next-line
@@ -98,36 +105,19 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
         }
       }
     }
+
   }
 
   /**
    * Entity insert event handler.
    */
   public function onEntityInsert(EntityEvent $event): void {
-    $entity = $event->getEntity();
-
-    if ($entity->bundle() === 'topic' || $entity->bundle() === 'subopic') {
-      $moderation_state = $entity->get('moderation_state')->getString();
-
-      if ($moderation_state == 'published') {
-        // Process orphaned.
-      }
-    }
   }
 
   /**
    * Entity update event handler.
    */
   public function onEntityUpdate(EntityEvent $event): void {
-    $entity = $event->getEntity();
-
-    if ($entity->bundle() === 'topic' || $entity->bundle() === 'subopic') {
-      $moderation_state = $entity->get('moderation_state')->getString();
-
-      if ($moderation_state == 'published') {
-        // Process orphaned.
-      }
-    }
   }
 
   /**
@@ -136,7 +126,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   public function onEntityDelete(EntityEvent $event): void {
     $entity = $event->getEntity();
 
-    if ($entity->bundle() === 'topic' || $entity->bundle() === 'subopic') {
+    if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
       // Process orphaned.
       $child_contents = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
 
