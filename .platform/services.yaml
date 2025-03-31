@@ -30,4 +30,5 @@ solr_8_11:
         core: default
 
 redis:
-  type: redis:6.0
+  type: redis-persistent:7.2
+  disk: 512
