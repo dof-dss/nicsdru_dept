@@ -6,8 +6,8 @@ namespace Drupal\dept_topics\EventSubscriber;
 
 use Drupal\book\BookManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\dept_topics\ContentAction;
 use Drupal\dept_topics\OrphanManager;
+use Drupal\dept_topics\TopicContentAction;
 use Drupal\dept_topics\TopicManager;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
@@ -43,11 +43,9 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
         if ($entity->isNew() && $moderation_state === 'published') {
           $topic_content = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
 
-          $this->orphanManager->processTopicContents($topic_content, ContentAction::ADDED);
+          $this->orphanManager->processTopicContents($topic_content, TopicContentAction::Added);
           return;
         }
-
-
 
         // Add or remove site topic tags to nodes that are added or removed from topic child contents.
         // @phpstan-ignore-next-line

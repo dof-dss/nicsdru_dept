@@ -8,11 +8,6 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
 
-enum ContentAction {
-  case ADDED;
-  case REMOVED;
-}
-
 /**
  * Manages orphaned content.
  */
@@ -32,10 +27,22 @@ final class OrphanManager {
     $this->orphanEntityStorage = $this->entityTypeManager->getStorage('topics_orphaned_content');
   }
 
-  public function processTopicContents(array $nids, ContentAction $action, NodeInterface $parent = NULL): void {
+  /**
+   * Processes a list of nids that have been added or removed from a topic.
+   *
+   * @param array $nids
+   *   Array of topic child content nids to process.
+   *
+   * @param \Drupal\dept_topics\TopicContentAction $action
+   *   Indicate if the nids have been added or removed from a topic.
+   *
+   * @param \Drupal\node\NodeInterface|null $parent
+   *   Optional parent node that the nids are associated with.
+   */
+  public function processTopicContents(array $nids, TopicContentAction $action, NodeInterface|Null $parent = NULL): void {
     $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
 
-    if ($action == ContentAction::ADDED) {
+    if ($action == TopicContentAction::Added) {
       foreach ($nodes as $node) {
         $this->removeOrphan($node);
       }
@@ -52,10 +59,10 @@ final class OrphanManager {
    *
    * @param \Drupal\node\NodeInterface $node
    *   The node for which the orphan record should be created.
-   * @param \Drupal\node\NodeInterface $parent
+   * @param \Drupal\node\NodeInterface|null $parent
    *   The parent node of the orphaned node.
    */
-  public function addOrphan(NodeInterface $node, NodeInterface $parent): void {
+  public function addOrphan(NodeInterface $node, NodeInterface|null $parent = NULL): void {
     $orphan = $this->orphanEntityStorage->loadByProperties(
       ['orphan' => $node->id()]
     );
