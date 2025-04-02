@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.event.body
     - field.field.node.event.field_business_area
+    - field.field.node.event.field_council
     - field.field.node.event.field_domain_access
     - field.field.node.event.field_domain_all_affiliates
     - field.field.node.event.field_domain_source
@@ -14,6 +15,7 @@ dependencies:
     - node.type.event
   module:
     - datetime_range
+    - options
     - smart_trim
     - text
     - user
@@ -41,6 +43,13 @@ content:
       link: true
     third_party_settings: {  }
     weight: 104
+    region: content
+  field_council:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
     region: content
   field_event_datetime:
     type: daterange_default
