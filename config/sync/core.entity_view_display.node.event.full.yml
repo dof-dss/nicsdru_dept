@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.full
     - field.field.node.event.body
     - field.field.node.event.field_business_area
+    - field.field.node.event.field_council
     - field.field.node.event.field_domain_access
     - field.field.node.event.field_domain_all_affiliates
     - field.field.node.event.field_domain_source
@@ -16,6 +17,7 @@ dependencies:
   module:
     - datetime_range
     - layout_builder
+    - options
     - smart_trim
     - text
     - user
@@ -42,6 +44,13 @@ content:
       link: false
     third_party_settings: {  }
     weight: 0
+    region: content
+  field_council:
+    type: list_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
     region: content
   field_event_datetime:
     type: daterange_default

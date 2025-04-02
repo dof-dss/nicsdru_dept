@@ -36,6 +36,9 @@
     {{ content.body }}
 
     <div class="event-metadata">
+    {% if content.field_council %}
+      <strong class="label">Location: </strong>{{ content.field_council }}
+    {% endif %}
     {% if content.field_event_host %}
       <strong class="label">Hosted by:</strong> {{ content.field_event_host | field_value }}
     {% endif %}
@@ -49,7 +52,8 @@
       'field_summary',
       'field_event_datetime',
       'field_event_host',
-      'field_business_area') }}
+      'field_business_area',
+      'field_council') }}
 
   </div>
 
