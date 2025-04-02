@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - dept_topics
+id: topics_orphaned_content_delete_action
+label: 'Delete orphaned topic contents'
+type: topics_orphaned_content
+plugin: entity:delete_action:topics_orphaned_content
+configuration: {  }

@@ -12,3 +12,13 @@ services:
     arguments: ['@topic.manager']
     tags:
       - { name: 'event_subscriber' }
+
+  orphan.manager:
+    class: Drupal\dept_topics\OrphanManager
+    arguments: ['@entity_type.manager', '@topic.manager']
+
+  dept_topics.entity_event_subscriber:
+    class: Drupal\dept_topics\EventSubscriber\TopicsEntityEventSubscriber
+    arguments: ['@topic.manager', '@orphan.manager', '@entity_type.manager', '@book.manager']
+    tags:
+      - { name: event_subscriber }
