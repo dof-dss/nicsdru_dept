@@ -1,0 +1,33 @@
+uuid: c845ab37-04a5-473d-8933-a34b69319ba8
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.events
+  module:
+    - block_visibility_groups
+    - system
+    - views
+  theme:
+    - nicsdru_dept_theme
+id: nicsdru_dept_theme_exposedformeventsevents_search
+theme: nicsdru_dept_theme
+region: sidebar_first
+weight: -29
+provider: null
+plugin: 'views_exposed_filter_block:events-events_search'
+settings:
+  id: 'views_exposed_filter_block:events-events_search'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: /events

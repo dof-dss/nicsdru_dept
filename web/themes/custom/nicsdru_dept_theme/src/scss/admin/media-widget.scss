@@ -1,0 +1,8 @@
+/*
+ * This fixes an issue whereby the 'Edit media item' link within a modal
+ * is displayed as a button but the label is set to visually hidden
+ * which removes the text but keeps the button style background.
+ */
+#layout-builder-modal .js-media-library-edit-link span.visually-hidden {
+  position: inherit !important;
+}

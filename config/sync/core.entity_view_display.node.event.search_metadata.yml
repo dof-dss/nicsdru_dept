@@ -1,0 +1,84 @@
+uuid: ad72c513-c58a-4887-8c91-f6494437fd00
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_metadata
+    - field.field.node.event.body
+    - field.field.node.event.field_business_area
+    - field.field.node.event.field_domain_access
+    - field.field.node.event.field_domain_all_affiliates
+    - field.field.node.event.field_domain_source
+    - field.field.node.event.field_event_datetime
+    - field.field.node.event.field_event_host
+    - field.field.node.event.field_summary
+    - node.type.event
+  module:
+    - datetime_range
+    - smart_trim
+    - user
+id: node.event.search_metadata
+targetEntityType: node
+bundle: event
+mode: search_metadata
+content:
+  field_domain_source:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_event_datetime:
+    type: daterange_default
+    label: visually_hidden
+    settings:
+      timezone_override: ''
+      format_type: medium_date_time
+      from_to: both
+      separator: '-'
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_event_host:
+    type: string
+    label: visually_hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_summary:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 35
+      trim_type: words
+      trim_suffix: ...
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  content_moderation_control: true
+  field_business_area: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

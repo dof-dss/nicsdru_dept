@@ -1,0 +1,57 @@
+{#
+/**
+ * @file
+ * Theme override to display an event node in full display mode.
+#}
+{% set event_start_date = content.field_event_datetime.0.start_date["#attributes"]["datetime"] %}
+{% set event_end_date = content.field_event_datetime.0.end_date["#attributes"]["datetime"] %}
+<article{{ attributes.addClass('ga-main').setAttribute('id', 'main-article').removeAttribute('role') }}>
+  {{ include('@nicsdru_dept_theme/content/node-header.html.twig') }}
+
+  <div class="event-details">
+    <h2>Event information</h2>
+    {% if event_in_progress %}
+      <p>This event has now passed.</p>
+    {% else %}
+      <p><strong class="label">When</strong>
+      {# If the start date and end date day/month match then show the start day, month, year and start/end time. #}
+      {% if event_start_date | date('U') | format_date('custom', 'd M') == event_end_date | date('U') | format_date('custom', 'd M') %}
+        {{ event_start_date | date('U') | format_date('custom', 'd M Y g:i a') }} — {{ event_end_date | date('U') | format_date('custom', 'g:i a') }}
+      {% else %}
+        {# If not matching print out the extra end date info on top of the time. #}
+        {{ event_start_date | date('U') | format_date('custom', 'd M Y g:i a') }} — {{ event_end_date | date('U') | format_date('custom', 'd M Y g:i a') }}
+      {% endif %}
+    </p>
+    <p><strong class="label">Where</strong>{{ content.field_event_host | field_value }}</p>
+    {% endif %}
+  </div>
+
+  <div{{ content_attributes.addClass(['article-content', 'max-body-text-width']) }}>
+
+    <h2>{{ content.field_summary['#title'] }}</h2>
+
+    {{ content.field_summary }}
+
+    <h2>{{ 'Event description'|t }}</h2>
+    {{ content.body }}
+
+    <div class="event-metadata">
+    {% if content.field_event_host %}
+      <strong class="label">Hosted by:</strong> {{ content.field_event_host | field_value }}
+    {% endif %}
+    {% if content.field_business_area[0] %}
+      <strong class="label">Business area: </strong>{{ content.field_business_area | field_value }}
+    {% endif %}
+    </div>
+
+    {{ content | without(
+      'body',
+      'field_summary',
+      'field_event_datetime',
+      'field_event_host',
+      'field_business_area') }}
+
+  </div>
+
+  {{ include('@nicsdru_dept_theme/content/node-footer.html.twig') }}
+</article>

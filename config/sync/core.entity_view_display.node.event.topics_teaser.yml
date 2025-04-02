@@ -1,0 +1,50 @@
+uuid: 3c155cd9-107e-4328-ac04-e4e0db166743
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.topics_teaser
+    - field.field.node.event.body
+    - field.field.node.event.field_business_area
+    - field.field.node.event.field_domain_access
+    - field.field.node.event.field_domain_all_affiliates
+    - field.field.node.event.field_domain_source
+    - field.field.node.event.field_event_datetime
+    - field.field.node.event.field_event_host
+    - field.field.node.event.field_summary
+    - node.type.event
+  module:
+    - text
+    - user
+id: node.event.topics_teaser
+targetEntityType: node
+bundle: event
+mode: topics_teaser
+content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+  field_summary:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  body: true
+  field_business_area: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
+  field_event_datetime: true
+  field_event_host: true
+  langcode: true
+  search_api_excerpt: true

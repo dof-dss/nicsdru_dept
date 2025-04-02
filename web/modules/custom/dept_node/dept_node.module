@@ -5,6 +5,10 @@
  * Departmental Node module for Departmental sites.
  */
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\AppendCommand;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\RemoveCommand;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -108,6 +112,84 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
       \Drupal::logger('dept_node')->error("Domain access ID's not found for entity: @entity", ['@entity' => $form_state->getFormObject()->getEntity()->getEntityTypeId()]);
     }
   }
+
+  // Check the title for duplicates for new content only.
+  if (!str_ends_with($form['#id'], 'edit-form')) {
+    // Checks uniqueness of the node title.
+    $form['title']['widget'][0]['value']['#ajax'] = [
+      'callback' => 'dept_node_title_guardian',
+      'event' => 'change',
+      'wrapper' => 'title-guardian-message',
+      'progress' => [
+        'type' => 'throbber',
+        'message' => t('Checking title...'),
+      ],
+    ];
+
+    $form['title-guardian'] = [
+      '#type' => 'container',
+      '#weight' => $form['title']['#weight'],
+      '#attributes' => [
+        'id' => 'title-guardian-message',
+      ],
+    ];
+  }
+}
+
+/**
+ * Callback for title field ajax call to warn user of existing title.
+ */
+function dept_node_title_guardian(array &$form, FormStateInterface $form_state) {
+  $department = $form_state->getUserInput()['field_domain_source'];
+
+  if (empty($department)) {
+    $department = \Drupal::service('department.manager')->getCurrentDepartment()->id();
+  }
+
+  $title = trim($form_state->getValue('title')[0]['value']);
+
+  // @phpstan-ignore-next-line
+  $bundle = $form_state->getformObject()->getEntity()->bundle();
+
+  // Check for existing titles within the same department and content type.
+  $query = \Drupal::database()->select('node_field_data', 'fd');
+  $query->leftJoin('node__field_domain_source', 'ds', 'fd.nid = ds.entity_id');
+  $query->fields('fd', ['title']);
+  $query->condition('fd.title', $title);
+  $query->condition('ds.field_domain_source_target_id', $department);
+
+  // For topics/subtopics check both content types.
+  if ($bundle === 'topic' || $bundle === 'subtopic') {
+    $query->condition('fd.type', ['topic', 'subtopic'], 'IN');
+  }
+  else {
+    $query->condition('fd.type', $bundle);
+  }
+
+  $result = $query->execute()->fetchCol();
+
+  // Return/remove warning and toggle the node save button.
+  $response = new AjaxResponse();
+  if (count($result) > 0) {
+    $response->addCommand(new InvokeCommand('#title-guardian-message', 'empty'));
+    $response->addCommand(new AppendCommand('#title-guardian-message', '<p class="form-item__error-message">The specified title already exists for this site. Please choose a different title to ensure uniqueness and avoid duplication.</p>'));
+    $response->addCommand(new InvokeCommand('#edit-submit', 'attr', ['disabled', 'disabled']));
+    $response->addCommand(new InvokeCommand('#edit-submit', 'attr', [
+      'title',
+      'Save disabled, title exists. Please choose a different title to ensure uniqueness and avoid duplication.'
+    ]));
+    // Highlight the title field with the core Drupal validator error classes.
+    $response->addCommand(new InvokeCommand('#edit-title-0-value', 'addClass', ['error']));
+    $response->addCommand(new InvokeCommand('label[for="edit-title-0-value"]', 'addClass', ['has-error']));
+  }
+  else {
+    $response->addCommand(new RemoveCommand('#title-guardian-message p'));
+    $response->addCommand(new InvokeCommand('#edit-submit', 'removeAttr', ['disabled title']));
+    $response->addCommand(new InvokeCommand('#edit-title-0-value', 'removeClass', ['error']));
+    $response->addCommand(new InvokeCommand('label[for="edit-title-0-value"]', 'removeClass', ['has-error']));
+  }
+
+  return $response;
 }
 
 /**
@@ -158,7 +240,7 @@ function dept_node_preprocess_node(array &$variables) {
     if (!empty($source_domain)) {
       $domain_path = rtrim($source_domain->getPath(), '/');
 
-      if (!empty($variables['url'])) {
+      if (!empty($variables['url']) && str_starts_with($variables['url'], 'http') === FALSE) {
         $variables['url'] = $domain_path . $variables['url'];
       }
     }

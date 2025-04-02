@@ -11,16 +11,11 @@ db:
   configuration:
     schemas:
       - main
-      - drupal7db
     endpoints:
       dept:
         default_schema: main
         privileges:
           main: admin
-      migration:
-        default_schema: drupal7db
-        privileges:
-          drupal7db: admin
 
 # Fudging the service name forces a full rebuild with any new config.
 solr_8_11:
@@ -35,4 +30,6 @@ solr_8_11:
         core: default
 
 redis:
-  type: redis:6.0
+  type: "redis:7.2"
+  configuration:
+    maxmemory_policy: allkeys-lfu

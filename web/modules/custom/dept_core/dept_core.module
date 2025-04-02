@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -17,6 +18,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\dept_core\Entity\Department;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
@@ -251,6 +253,36 @@ function dept_core_append_dept_info_for_templates(array &$variables) {
 }
 
 /**
+ * Implements hook_entity_insert().
+ */
+function dept_core_entity_insert(EntityInterface $entity) {
+  // When a Domain field is created in a content type, create/update the form
+  // display and set those fields to use a select element which prevents the
+  // WSOD when creating new content of that type because, by default, the form
+  // display will use Chosen, entity reference etc if not explicitly set by the
+  // site-builder.
+  if ($entity instanceof FieldConfig && in_array($entity->getName(), ['field_domain_source', 'field_domain_access'])) {
+    $entity_form_display = EntityFormDisplay::load($entity->getTargetEntityTypeId() . '.' . $entity->getTargetBundle() . '.default');
+
+    if (empty($entity_form_display)) {
+      $entity_form_display = EntityFormDisplay::create([
+        'targetEntityType' => $entity->getTargetEntityTypeId(),
+        'bundle' => $entity->getTargetBundle(),
+        'mode' => 'default',
+        'status' => TRUE,
+      ]);
+    }
+
+    $entity_form_display->setComponent($entity->getName(), [
+      'type' => 'options_select',
+      'region' => 'content',
+    ]);
+
+    $entity_form_display->save();
+  }
+}
+
+/**
  * Implements hook_entity_update().
  */
 function dept_core_entity_update(EntityInterface $entity) {
@@ -415,15 +447,31 @@ function dept_core_department_links(): array {
  * Implements hook_form_alter().
  */
 function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  if ($form_id === 'entity_form_display_edit_form') {
+    // Set the Domain module fields to use the select widget. Setting it to
+    // Chosen, autocomplete, etc. will throw an error when a user tries to add
+    // content using the content type.
+    foreach (['source', 'access'] as $domain_field_id) {
+      $form['fields']['field_domain_' . $domain_field_id]['plugin']['type']['#default_value'] = 'options_select';
+    }
+  }
+
   if ($form_id === 'views_exposed_form') {
     if (!empty($form['dept'])) {
       /** @var \Drupal\dept_core\DepartmentManager $dept_manager */
       $dept_manager = \Drupal::service('department.manager');
       /** @var \Drupal\dept_core\Entity\Department $current_dept */
       $current_dept = $dept_manager->getCurrentDepartment();
+      $current_user = \Drupal::entityTypeManager()->getStorage('user')->load(\Drupal::currentUser()->id());
+
+      if (!$current_user->hasRole('administrator')) {
+        $form['dept']['#value'] = $current_dept->id();
+        hide($form['dept']);
+        return;
+      }
 
       // Fetch current user's assigned domains.
-      $current_user = \Drupal::entityTypeManager()->getStorage('user')->load(\Drupal::currentUser()->id());
       $user_domains = $current_user->get('field_domain_access')->referencedEntities();
 
       // If the user doesn't have top level domain permissions or no assigned domains, hide this filter option.
@@ -625,5 +673,17 @@ function dept_core_entity_view_alter(array &$build, EntityInterface $entity, Ent
     ])) {
       unset($build['#contextual_links']);
     }
+  }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function dept_core_library_info_alter(&$libraries, $extension) {
+  // Remove the Domain Source library as we hide the options from non-admins and
+  // the library script errors when trying to access the removed DOM element.
+  // We cannot remove this on a per-role basis as aggregation would override it.
+  if (array_key_exists('drupal.domain_source', $libraries)) {
+    unset($libraries['drupal.domain_source']);
   }
 }

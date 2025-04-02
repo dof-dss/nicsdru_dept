@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_form_node_form_alter().
@@ -41,5 +42,32 @@ function dept_postprocess_form_node_form_alter(&$form, FormStateInterface $form_
   // permissions on a node form.
   if ($bundle === 'topic' || $bundle === 'subtopic') {
     $form['domain_path'][$current_dept->id()]['pathauto']['#default_value'] = 1;
+  }
+}
+
+/**
+ * Implements hook_moderation_sidebar_alter().
+ */
+function dept_postprocess_moderation_sidebar_alter(&$build, &$context) {
+  if ($context instanceof NodeInterface &&
+    in_array($context->bundle(), ['topic', 'subtopic'])) {
+    if (!\Drupal::currentUser()->hasPermission('edit subtopic content')) {
+      // Remove sidebar actions for topics/subtopic if the user does not have
+      // the edit subtopic permission.
+
+      // Primary actions.
+      foreach (['quick_draft_form', 'draft_of_published', 'archive'] as $action) {
+        if (isset($build['actions']["primary"][$action])) {
+          unset($build['actions']["primary"][$action]);
+        }
+      }
+
+      // Secondary actions.
+      foreach (['version_history', 'entity.node.book_outline_form'] as $action) {
+        if (isset($build['actions']["secondary"][$action])) {
+          unset($build['actions']["secondary"][$action]);
+        }
+      }
+    }
   }
 }
