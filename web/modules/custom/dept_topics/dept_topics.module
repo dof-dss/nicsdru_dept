@@ -272,6 +272,7 @@ function dept_topics_entity_delete(EntityInterface $entity) {
         }
 
         if ($has_child_entry) {
+          $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
           $topic_node->save();
         }
       }

@@ -330,9 +330,13 @@ final class ManageTopicContentForm extends FormBase {
         return;
       }
 
-      if ($this->subtopicHasParent($this->extractNodeIdFromUrl($add_path))) {
-        $form_state->setErrorByName('add_path', 'This subtopic is already assigned to a parent topic and cannot be linked to multiple parent topics.');
-        return;
+      $node_id = $this->extractNodeIdFromUrl($add_path);
+
+      $topic_manager = \Drupal::service('topic.manager');
+      $node = \Drupal::entityTypeManager()->getStorage('node')->load($node_id);
+
+      if (count($topic_manager->getParentNodes($node_id)) > TopicManager::maximumTopicsForType($node->bundle())) {
+        $form_state->setErrorByName('add_path', t('This @type has the maximum number of topics assigned and cannot be added to this content.', ['@type' => $node->bundle()]));
       }
 
       $child_content = $form_state->getValue('child_content');
