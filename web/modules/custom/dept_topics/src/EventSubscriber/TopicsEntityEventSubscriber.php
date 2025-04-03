@@ -159,12 +159,13 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
-    return [
-      EntityEventType::PRESAVE => ['onEntityPresave'],
-      EntityEventType::INSERT => ['onEntityInsert'],
-      EntityEventType::UPDATE => ['onEntityUpdate'],
-      EntityEventType::DELETE => ['onEntityDelete'],
-    ];
+    return [];
+//    return [
+//      EntityEventType::PRESAVE => ['onEntityPresave'],
+//      EntityEventType::INSERT => ['onEntityInsert'],
+//      EntityEventType::UPDATE => ['onEntityUpdate'],
+//      EntityEventType::DELETE => ['onEntityDelete'],
+//    ];
   }
 
 }
