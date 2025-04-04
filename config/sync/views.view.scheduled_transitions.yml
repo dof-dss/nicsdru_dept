@@ -3,7 +3,9 @@ langcode: en
 status: true
 dependencies:
   module:
+    - domain_source
     - dynamic_entity_reference
+    - node
     - scheduled_transitions
     - user
 _core:
@@ -438,6 +440,7 @@ display:
         type: mini
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 50
           total_pages: null
           id: 0
@@ -452,7 +455,6 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          pagination_heading_level: h4
       exposed_form:
         type: basic
         options:
@@ -486,7 +488,47 @@ display:
           tokenize: false
       sorts: {  }
       arguments: {  }
-      filters: {  }
+      filters:
+        field_domain_source_target_id:
+          id: field_domain_source_target_id
+          table: node__field_domain_source
+          field: field_domain_source_target_id
+          relationship: node__entity
+          group_type: group
+          admin_label: ''
+          plugin_id: domain_source
+          operator: in
+          value:
+            _active: _active
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       style:
         type: table
         options:
@@ -558,7 +600,17 @@ display:
           distinct: false
           replica: false
           query_tags: {  }
-      relationships: {  }
+      relationships:
+        node__entity:
+          id: node__entity
+          table: scheduled_transition
+          field: node__entity
+          relationship: none
+          group_type: group
+          admin_label: 'Entity: Content'
+          entity_type: scheduled_transition
+          plugin_id: standard
+          required: false
       header: {  }
       footer: {  }
       display_extenders: {  }
