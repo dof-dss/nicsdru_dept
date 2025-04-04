@@ -1,0 +1,35 @@
+uuid: a2a6e302-0ec8-4cd2-b005-b1c7ba2db9f5
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.orphaned_content
+  module:
+    - block_visibility_groups
+    - system
+    - views
+  theme:
+    - nicsdru_dept_theme
+id: block__orphaned_by_author
+theme: nicsdru_dept_theme
+region: content
+weight: -28
+provider: null
+plugin: 'views_block:orphaned_content-orphaned_by_author'
+settings:
+  id: 'views_block:orphaned_content-orphaned_by_author'
+  label: ''
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  condition_group:
+    id: condition_group
+    negate: false
+    block_visibility_group: ''
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/users/*'

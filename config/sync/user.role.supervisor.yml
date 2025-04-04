@@ -27,7 +27,6 @@ dependencies:
   module:
     - book
     - content_moderation
-    - dept_topics
     - domain_access
     - domain_entity
     - file
@@ -184,6 +183,7 @@ permissions:
   - 'use nics_editorial_workflow transition reject'
   - 'use nics_editorial_workflow transition restore'
   - 'use nics_editorial_workflow transition restore_to_draft'
+  - 'use nics_editorial_workflow transition submit_for_review'
   - 'use nics_editorial_workflow transition submit_for_review'
   - 'use topic tree widget'
   - 'view all media revisions'

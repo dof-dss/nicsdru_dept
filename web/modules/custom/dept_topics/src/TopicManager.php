@@ -65,7 +65,6 @@ final class TopicManager {
    *   Node ID indexed array comprising id, title and type.
    */
   public function getParentNodes($node, &$parents = []) {
-
     if ($node instanceof NodeInterface) {
       $nid = $node->id();
     }
@@ -78,7 +77,8 @@ final class TopicManager {
         ON nfd.nid = n.nid
         LEFT JOIN node__field_topic_content ftc
         ON ftc.entity_id = n.nid
-        WHERE ftc.field_topic_content_target_id = :nid", [':nid' => $nid])->fetchAllAssoc('nid');
+        WHERE ftc.field_topic_content_target_id = :nid", [':nid' => $nid])
+      ->fetchAllAssoc('nid');
 
     if ($nodes === NULL) {
       return $parents;
@@ -154,7 +154,8 @@ final class TopicManager {
       }
 
       // TODO: replace with injected property.
-      \Drupal::cache()->set('dept_topics_' . $department_id, $this->deptTopics, Cache::PERMANENT, [$department_id . '_topics']);
+      \Drupal::cache()
+        ->set('dept_topics_' . $department_id, $this->deptTopics, Cache::PERMANENT, [$department_id . '_topics']);
 
       return $this->deptTopics;
     }
@@ -169,7 +170,6 @@ final class TopicManager {
   public function updateChildDisplayOnTopics(EntityInterface $entity) {
     // @phpstan-ignore-next-line
     if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
-
       // If an entity is a child entry to a book, don't update the
       // 'topic child contents' field to the topics in its site_topics field.
       if ($book_data = $this->bookManager->loadBookLink($entity->id())) {
@@ -183,7 +183,8 @@ final class TopicManager {
 
       $parent_nids = array_keys($this->getParentNodes($entity->id()));
       // @phpstan-ignore-next-line
-      $site_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
+      $site_topics = array_column($entity->get('field_site_topics')
+        ->getValue(), 'target_id');
 
       $site_topics_removed = array_diff($parent_nids, $site_topics);
       $site_topics_new = array_diff($site_topics, $parent_nids);
