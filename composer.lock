@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "87dd6dc735eb4c5902a043c92043761d",
+    "content-hash": "fb261bea0a875921503f5094f48f70ec",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1855,46 +1855,48 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "10.4.9",
+            "version": "dev-10.x-dev",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "f153e5e1674cbb8c3f4e9235e264c83db7470e6e"
+                "reference": "b73f47259d6ea79e9a8b315489060484b4642739"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/f153e5e1674cbb8c3f4e9235e264c83db7470e6e",
-                "reference": "f153e5e1674cbb8c3f4e9235e264c83db7470e6e",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/b73f47259d6ea79e9a8b315489060484b4642739",
+                "reference": "b73f47259d6ea79e9a8b315489060484b4642739",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "^2.0",
                 "drupal/core": "^10"
             },
+            "default-branch": true,
             "type": "drupal-module",
             "license": [
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2025-03-07T12:44:29+00:00"
+            "time": "2025-03-18T13:59:35+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
-            "version": "10.1.6",
+            "version": "dev-10.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dof-dss/nicsdru_origins_theme.git",
-                "reference": "5083b09bf503fcff1fd9283fd8d5561798a19e01"
+                "reference": "f1ec1b3cb64736a10a1e206dfd12bbd7b11ae516"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_theme/zipball/5083b09bf503fcff1fd9283fd8d5561798a19e01",
-                "reference": "5083b09bf503fcff1fd9283fd8d5561798a19e01",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_theme/zipball/f1ec1b3cb64736a10a1e206dfd12bbd7b11ae516",
+                "reference": "f1ec1b3cb64736a10a1e206dfd12bbd7b11ae516",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0"
             },
+            "default-branch": true,
             "type": "drupal-custom-theme",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1913,9 +1915,9 @@
                 "theme"
             ],
             "support": {
-                "source": "https://github.com/dof-dss/nicsdru_origins_theme/tree/10.1.6"
+                "source": "https://github.com/dof-dss/nicsdru_origins_theme/tree/10.x-dev"
             },
-            "time": "2025-01-24T12:20:03+00:00"
+            "time": "2025-01-24T12:18:26+00:00"
         },
         {
             "name": "drupal/a11y_form_helpers",
@@ -22720,6 +22722,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "dof-dss/nicsdru_origins_modules": 20,
+        "dof-dss/nicsdru_origins_theme": 20,
         "drupal/block_field": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
