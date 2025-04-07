@@ -4,6 +4,7 @@ namespace Drupal\dept_topics;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -212,6 +213,7 @@ final class TopicManager {
           $topic_node->get('field_topic_content')->appendItem([
             'target_id' => $entity->id()
           ]);
+          $topic_node->setRevisionLogMessage('Added child: (' . $entity->id() . ') ' . $entity->label());
           $topic_node->save();
         }
       }
@@ -237,6 +239,7 @@ final class TopicManager {
         }
 
         if ($child_removed) {
+          $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
           $topic_node->save();
         }
       }
@@ -266,6 +269,7 @@ final class TopicManager {
           }
         }
 
+        $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
         $topic_node->save();
       }
     }
@@ -305,6 +309,29 @@ final class TopicManager {
   public function getTopicChildren(NodeInterface $topic) {
     $this->getChildTopics($topic);
     return $this->deptTopics;
+  }
+
+  /**
+   * Returns the maximum assignable topics permitted for the given node bundle.
+   *
+   * @param string|ContentEntityInterface $type
+   *   A node type ID or content entity.
+   * @return int
+   *   The maximum amount.
+   */
+  public static function maximumTopicsForType(string|ContentEntityInterface $type) {
+    if (empty($type)) {
+      throw new \Exception('$type must not be empty');
+    }
+
+    if ($type instanceof ContentEntityInterface) {
+      $type = $type->bundle();
+    }
+
+    return match($type) {
+      'subtopic' => 1,
+      default =>  3,
+    };
   }
 
 }
