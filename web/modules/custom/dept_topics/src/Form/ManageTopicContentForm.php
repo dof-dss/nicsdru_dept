@@ -10,6 +10,7 @@ use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\dept_topics\TopicManager;
 use Drupal\path_alias\AliasManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -142,6 +143,12 @@ final class ManageTopicContentForm extends FormBase {
       ],
     ];
 
+    $form['subtopics_info'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => 'Subtopics can only be removed if they are assigned a new site topic. This can be achieved using the edit link which opens in a new window.',
+    ];
+
     $form['child_content'] = [
       '#type' => 'table',
       '#tree' => TRUE,
@@ -203,29 +210,49 @@ final class ManageTopicContentForm extends FormBase {
         ],
       ];
 
-      $form['child_content'][$child_nid]['delete'] = [
-        '#type' => 'submit',
-        '#title' => t('Remove'),
-        '#name' => 'delete_' . $child_nid,
-        '#value' => 'Remove',
-        '#submit' => ['::ajaxSubmit'],
-        '#ajax' => [
-          'callback' => '::childContentCallback',
-          'wrapper' => 'form-wrapper',
-        ],
-        '#attributes' => [
-          'class' => [
-            'button--danger',
-            'link',
-          ]
-        ],
-        '#wrapper_attributes' => [
-          'class' => [
-            'manage-topic-content-remove-cell'
+      if ($child->bundle() === 'subtopic') {
+        $form['child_content'][$child_nid]['edit'] = [
+          '#type' => 'link',
+          '#title' => t('Edit'),
+          '#url' => Url::fromRoute('entity.node.edit_form', ['node' => $child->id()]),
+          '#attributes' => [
+            'class' => ['button--danger', 'link', 'button'],
+            'title' => t('Edit this subtopic to assign a new parent topic'),
+            'target' => '_blank',
           ],
-          'title' => $this->t('Remove this content from the topic.')
-        ],
-      ];
+          '#wrapper_attributes' => [
+            'class' => [
+              'manage-topic-content-remove-cell'
+            ],
+            'title' => $this->t('Edit this subtopic to assign a new parent topic.')
+          ],
+        ];
+      }
+      else {
+        $form['child_content'][$child_nid]['delete'] = [
+          '#type' => 'submit',
+          '#title' => t('Remove'),
+          '#name' => 'delete_' . $child_nid,
+          '#value' => 'Remove',
+          '#submit' => ['::ajaxSubmit'],
+          '#ajax' => [
+            'callback' => '::childContentCallback',
+            'wrapper' => 'form-wrapper',
+          ],
+          '#attributes' => [
+            'class' => [
+              'button--danger',
+              'link',
+            ]
+          ],
+          '#wrapper_attributes' => [
+            'class' => [
+              'manage-topic-content-remove-cell'
+            ],
+            'title' => $this->t('Remove this content from the topic.')
+          ],
+        ];
+      }
     }
 
     $form['actions'] = ['#type' => 'actions'];
@@ -303,9 +330,13 @@ final class ManageTopicContentForm extends FormBase {
         return;
       }
 
-      if ($this->subtopicHasParent($this->extractNodeIdFromUrl($add_path))) {
-        $form_state->setErrorByName('add_path', 'This subtopic is already assigned to a parent topic and cannot be linked to multiple parent topics.');
-        return;
+      $node_id = $this->extractNodeIdFromUrl($add_path);
+
+      $topic_manager = \Drupal::service('topic.manager');
+      $node = \Drupal::entityTypeManager()->getStorage('node')->load($node_id);
+
+      if (count($topic_manager->getParentNodes($node_id)) > TopicManager::maximumTopicsForType($node->bundle())) {
+        $form_state->setErrorByName('add_path', t('This @type has the maximum number of topics assigned and cannot be added to this content.', ['@type' => $node->bundle()]));
       }
 
       $child_content = $form_state->getValue('child_content');

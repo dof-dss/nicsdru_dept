@@ -51,6 +51,13 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
   protected DomainNegotiatorInterface $domainNegotiator;
 
   /**
+   * The bundle displaying this field widget.
+   *
+   * @var string
+   */
+  protected string $bundle;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings) {
@@ -60,6 +67,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $this->required = FALSE;
     $this->multiple = FALSE;
     $this->has_value = FALSE;
+    $this->bundle = $field_definition->getTargetBundle();
   }
 
   /**
@@ -87,7 +95,6 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
   public static function defaultSettings() {
     return [
       'excluded' => TRUE,
-      'limit' => 3,
     ];
   }
 
@@ -102,15 +109,6 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       '#default_value' => $this->getSetting('excluded'),
     ];
 
-    $element['limit'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Selection limit'),
-      '#description' => $this->t('The upper limit for the number of topics that can be selected.'),
-      '#min' => 1,
-      '#max' => 10,
-      '#default_value' => $this->getSetting('limit'),
-    ];
-
     return $element;
   }
 
@@ -120,7 +118,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
   public function settingsSummary() {
     $summary = [];
     $summary[] = $this->t('Excluded: @excluded', ['@excluded' => ($this->getSetting('excluded')) ? 'Yes' : 'No']);
-    $summary[] = $this->t('Selection limit: @limit', ['@limit' => $this->getSetting('limit')]);
+    $summary[] = $this->t('Selection limit: @limit', ['@limit' => TopicManager::maximumTopicsForType($this->bundle)]);
 
     return $summary;
   }
@@ -132,8 +130,6 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $field = $this->fieldDefinition->getName();
     $field_id = Html::getUniqueId($field);
     $default_values = $this->getSelectedOptions($items);
-    // @phpstan-ignore-next-line
-    $entity = $form_state->getFormObject()->getEntity();
     $current_dept = '';
     $options = [];
 
@@ -163,8 +159,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       $options[$nid] = $topic->label();
     }
 
-    // Limit subtopics to 1 topic selection to avoid the issue with navigating parent hierarchies.
-    $selection_limit = ($entity->bundle() === 'subtopic') ? 1 : $this->getSetting('limit');
+    $selection_limit = TopicManager::maximumTopicsForType($this->bundle);
 
     $element = [
       '#type' => 'checkboxes',
