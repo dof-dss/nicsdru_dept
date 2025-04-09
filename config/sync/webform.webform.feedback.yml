@@ -1,11 +1,16 @@
 uuid: 99575b51-79aa-4ca9-8acd-75d2c3491133
 langcode: en
 status: open
-dependencies: {  }
+dependencies:
+  module:
+    - honeypot
+third_party_settings:
+  honeypot:
+    honeypot: true
 weight: 0
 open: null
 close: null
-uid: 1319
+uid: 1
 template: false
 archive: false
 id: feedback
