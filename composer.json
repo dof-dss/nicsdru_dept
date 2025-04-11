@@ -149,6 +149,7 @@
         "drupal/google_map_field": "^1.14",
         "drupal/google_tag": "^2.0",
         "drupal/handy_cache_tags": "^1.5",
+        "drupal/honeypot": "^2.2",
         "drupal/http_cache_control": "^2.4",
         "drupal/interval": "^1.9",
         "drupal/jquery_ui_autocomplete": "^2.0",
@@ -313,8 +314,11 @@
             ]
         },
         "patches": {
+            "drupal/antibot": {
+                "Spam submissions received - No longer protecting": "https://www.drupal.org/files/issues/2024-07-26/3450759-antibot-key-process.patch"
+            },
             "drupal/admin_toolbar": {
-              "Add multi column menu dropdown": "https://www.drupal.org/files/issues/2024-08-05/admin_toolbar-added_multi_column_menu_dropdown-2917168-54.patch"
+                "Add multi column menu dropdown": "https://www.drupal.org/files/issues/2024-08-05/admin_toolbar-added_multi_column_menu_dropdown-2917168-54.patch"
             },
             "drupal/block_visibility_groups": {
                 "Visibility incorrectly returns false on OR logic when context missing from a different condition #3503194": "https://www.drupal.org/files/issues/2025-02-07/or-logic-when-context-missing--3503194-5.patch"
