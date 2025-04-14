@@ -27,12 +27,8 @@
   </div>
 
   <div{{ content_attributes.addClass(['article-content', 'max-body-text-width']) }}>
-
-    <h2>{{ content.field_summary['#title'] }}</h2>
-
+    
     {{ content.field_summary }}
-
-    <h2>{{ 'Event description'|t }}</h2>
     {{ content.body }}
 
     <div class="event-metadata">
