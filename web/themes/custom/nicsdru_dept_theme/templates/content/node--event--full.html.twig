@@ -22,12 +22,12 @@
         {{ event_start_date | date('U') | format_date('custom', 'd M Y g:i a') }} — {{ event_end_date | date('U') | format_date('custom', 'd M Y g:i a') }}
       {% endif %}
     </p>
-    <p><strong class="label">Where</strong>{{ content.field_event_host | field_value }}</p>
+    <p><strong class="label">Where</strong>{{ content.field_council }}</p>
     {% endif %}
   </div>
 
   <div{{ content_attributes.addClass(['article-content', 'max-body-text-width']) }}>
-    
+
     {{ content.field_summary }}
     {{ content.body }}
 
@@ -37,9 +37,6 @@
     {% endif %}
     {% if content.field_event_host %}
       <strong class="label">Hosted by:</strong> {{ content.field_event_host | field_value }}
-    {% endif %}
-    {% if content.field_business_area[0] %}
-      <strong class="label">Business area: </strong>{{ content.field_business_area | field_value }}
     {% endif %}
     </div>
 
