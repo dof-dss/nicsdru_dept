@@ -305,16 +305,6 @@ function dept_topics_node_presave(EntityInterface $node) {
 function dept_topics_node_insert(NodeInterface $node) {
   // For new Topics add as a site topic to the child nodes.
   if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
-    $child_contents = array_column($node->get('field_topic_content')->getValue(), 'target_id');
-
-    foreach ($child_contents as $nid) {
-      $child_node = Node::load($nid);
-      $child_node->get('field_site_topics')->appendItem([
-        'target_id' => $node->id()
-      ]);
-      $child_node->save();
-    }
-
     // Clear the cache of the child content nodes (for cases when the thin banner etc. is added).
     dept_topics_clear_child_caches($node);
     dept_topics_clear_topic_tree_cache($node);
