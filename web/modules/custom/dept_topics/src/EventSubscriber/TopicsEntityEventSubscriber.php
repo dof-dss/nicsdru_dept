@@ -11,6 +11,7 @@ use Drupal\dept_topics\TopicContentAction;
 use Drupal\dept_topics\TopicManager;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
+use Drupal\node\NodeInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -27,6 +28,18 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly BookManagerInterface $bookManager,
   ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getSubscribedEvents(): array {
+    return [
+      EntityEventType::PRESAVE => ['onEntityPresave'],
+      EntityEventType::INSERT => ['onEntityInsert'],
+      EntityEventType::UPDATE => ['onEntityUpdate'],
+      EntityEventType::DELETE => ['onEntityDelete'],
+    ];
+  }
 
   /**
    * Entity presave event handler.
@@ -118,24 +131,30 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Entity delete event handler.
+   * Handles deletion of topic and topic child content nodes.
    */
   public function onEntityDelete(EntityEvent $event): void {
     $entity = $event->getEntity();
 
-    // Cleanup in orphan data for this node.
-    if (in_array($entity->bundle(), $this->topicManager->getTopicChildNodeTypes())) {
-      $this->orphanManager->removeOrphan($entity);
+    // Only process node entities.
+    if (!$entity instanceof NodeInterface) {
+      return;
     }
 
+    /* PROCESS TOPIC/SUBTOPIC
+     *
+     * If we delete a topic we must iterate each child node and remove the topic
+     * from field_site_topics and save the node. If the child node has no
+     * entries in the site topics field we will record it as orphaned.
+     */
     if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
-      // Process orphaned.
-      $child_contents = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
+      $child_nids = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
+      $child_nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($child_nids);
 
-      foreach ($child_contents as $child_id) {
-        $child_node = $this->entityTypeManager->getStorage('node')->load($child_id);
+      foreach ($child_nodes as $child_node) {
         $child_topics = $child_node->get('field_site_topics');
 
+        // Remove the topic entry from field_site_topics.
         for ($i = 0; $i < $child_topics->count(); $i++) {
           // @phpstan-ignore-next-line
           if ($child_topics->get($i)->target_id == $entity->id()) {
@@ -145,26 +164,54 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
         }
         $child_node->save();
 
+        // If the child doesn't have any topics assigned, orphan it.
         if ($child_topics->count() == 0) {
           $this->orphanManager->addOrphan($child_node, $entity);
         }
       }
 
-      // Cleanup in orphan data for this node.
+      // Cleanup any orphan content entry for this topic.
       $this->orphanManager->removeOrphan($entity);
     }
-  }
 
-  /**
-   * {@inheritdoc}
-   */
-  public static function getSubscribedEvents(): array {
-    return [
-      EntityEventType::PRESAVE => ['onEntityPresave'],
-      EntityEventType::INSERT => ['onEntityInsert'],
-      EntityEventType::UPDATE => ['onEntityUpdate'],
-      EntityEventType::DELETE => ['onEntityDelete'],
-    ];
+    /* PROCESS TOPIC CHILD CONTENT NODES
+     *
+     * If we delete a topic child node type we need to remove the child node
+     * entry in the field_topic_content field of its parent topics/subtopics
+     * and save those topics.
+     */
+    if (in_array($entity->bundle(), $this->topicManager->getTopicChildNodeTypes())) {
+      $parents = $this->topicManager->getParentNodes($entity->id());
+
+      // Iterate this nodes parents and remove any references to it.
+      foreach ($parents as $parent => $data) {
+        $topic_node = $this->entityTypeManager->getStorage('node')->load($parent);
+
+        // Flag to prevent us creating a revision for topics that don't
+        // reference this content.
+        $has_child_entry = FALSE;
+
+        $child_refs = $topic_node->get('field_topic_content');
+
+        for ($i = 0; $i < $child_refs->count(); $i++) {
+          // @phpstan-ignore-next-line
+          if ($child_refs->get($i)->target_id == $entity->id()) {
+            $child_refs->removeItem($i);
+            $has_child_entry = TRUE;
+            $i--;
+          }
+        }
+
+        // Save the topic with the updated child content reference list.
+        if ($has_child_entry) {
+          $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
+          $topic_node->save();
+        }
+      }
+
+      // Cleanup any orphan content entry for this topic child content type.
+      $this->orphanManager->removeOrphan($entity);
+    }
   }
 
 }

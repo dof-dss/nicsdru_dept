@@ -237,51 +237,6 @@ function dept_topics_form_node_form_alter(&$form, $form_state) {
 }
 
 /**
- * Implements hook_entity_delete().
- */
-function dept_topics_entity_delete(EntityInterface $entity) {
-
-  // Removes the node from a topic/subtopic child content entity reference
-  // list when that node is deleted.
-  if ($entity instanceof NodeInterface) {
-    /** @var \Drupal\dept_topics\TopicManager $topic_manager */
-    $topic_manager = \Drupal::service('topic.manager');
-
-    $bundle = $entity->bundle();
-    $child_bundles = $topic_manager->getTopicChildNodeTypes();
-
-    if (in_array($bundle, $child_bundles)) {
-      $parents = $topic_manager->getParentNodes($entity->id());
-      $node_manager = \Drupal::entityTypeManager()->getStorage('node');
-
-      // Remove all topic content references for this node in topic/subtopic nodes.
-      foreach ($parents as $parent => $data) {
-        $topic_node = $node_manager->load($parent);
-        $child_refs = $topic_node->get('field_topic_content');
-
-        // Allows us to only save Topic nodes that have an entry for this content.
-        $has_child_entry = FALSE;
-
-        for ($i = 0; $i < $child_refs->count(); $i++) {
-          // @phpstan-ignore-next-line
-          if ($child_refs->get($i)->target_id == $entity->id()) {
-            $child_refs->removeItem($i);
-            $has_child_entry = TRUE;
-            $i--;
-          }
-        }
-
-        if ($has_child_entry) {
-          $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
-          $topic_node->save();
-        }
-      }
-    }
-  }
-
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function dept_topics_form_moderation_sidebar_quick_transition_form_alter(&$form, FormStateInterface $form_state, $form_id) {
