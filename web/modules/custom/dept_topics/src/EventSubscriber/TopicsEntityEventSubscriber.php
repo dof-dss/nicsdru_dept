@@ -37,8 +37,8 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     return [
       EntityEventType::PRESAVE => ['onEntityPresave'],
       EntityEventType::INSERT => ['onEntityInsert'],
-      EntityEventType::UPDATE => ['onEntityUpdate'],
-      EntityEventType::DELETE => ['onEntityDelete'],
+      EntityEventType::UPDATE => ['onEntityUpdate'], ['purgeTopicCaches'],
+      EntityEventType::DELETE => ['onEntityDelete'], ['purgeTopicCaches'],
     ];
   }
 
@@ -55,26 +55,12 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
     // PROCESS TOPIC/SUBTOPIC.
     if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
-      $moderation_state = $entity->get('moderation_state')->getString();
 
-      // For new published topics we must iterate each child node adding the
-      // topic to the field_site_topics field and then save each node.
-      if ($entity->isNew() && $moderation_state === 'published') {
-        $child_nids = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
-        $child_nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($child_nids);
-
-        foreach ($child_nodes as $child) {
-          $child->get('field_site_topics')->appendItem([
-            'target_id' => $entity->id()
-          ]);
-          $child->setRevisionLogMessage('Added site topic: (' . $entity->id() . ') ' . $entity->label());
-          $child->save();
-        }
-
-        // Cleanup any orphaned entries for child nodes added to this topic.
-        $this->orphanManager->processTopicContents($child_nodes);
+      if ($entity->isNew()) {
         return;
       }
+
+      $moderation_state = $entity->get('moderation_state')->getString();
 
       // When a topic is updated we must process any child content that has been
       // added or removed to update their field_site_topics field and process
@@ -155,6 +141,37 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
    * Entity insert event handler.
    */
   public function onEntityInsert(EntityEvent $event): void {
+    $entity = $event->getEntity();
+
+    // Only process node entities.
+    if (!$entity instanceof NodeInterface) {
+      return;
+    }
+
+    if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
+      $moderation_state = $entity->get('moderation_state')->getString();
+
+      // For new published topics we must iterate each child node adding the
+      // topic to the field_site_topics field and then save each node.
+      if ($moderation_state === 'published') {
+        $child_nids = array_column($entity->get('field_topic_content')
+          ->getValue(), 'target_id');
+        $child_nodes = $this->entityTypeManager->getStorage('node')
+          ->loadMultiple($child_nids);
+
+        foreach ($child_nodes as $child) {
+          $child->get('field_site_topics')->appendItem([
+            'target_id' => $entity->id()
+          ]);
+          $child->setRevisionLogMessage('Added site topic: (' . $entity->id() . ') ' . $entity->label());
+          $child->save();
+        }
+
+        // Cleanup any orphaned entries for child nodes added to this topic.
+        $this->orphanManager->processTopicContents($child_nids);
+        return;
+      }
+    }
   }
 
   /**
@@ -242,6 +259,39 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
       // Cleanup any orphan content entry for this topic child content type.
       $this->orphanManager->removeOrphan($entity);
+    }
+  }
+
+  /**
+   * Clears caches for topic child contents and topic hierarchy.
+   *
+   * @param \Drupal\entity_events\Event\EntityEvent $event
+   *   The entity event object.
+   */
+  public function purgeTopicCaches(EntityEvent $event) {
+    $entity = $event->getEntity();
+
+    // Only process node entities.
+    if (!$entity instanceof NodeInterface) {
+      return;
+    }
+
+    if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
+      // Clear the node cache for all the child nodes belonging to a topic.
+      $cache_tags = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
+
+      // Prepend the core 'node:' cache tag to each child nid.
+      array_walk($cache_tags, function(&$value, $key) {
+        $value = 'node:' . $value;
+      });
+
+      // Clear the topic hierarchy cache entries for the department.
+      // See: topicManager->getTopicsForDepartment().
+      $domain_source = $entity->get('field_domain_source')->getValue();
+      $department_id = $domain_source[0]['target_id'];
+      $cache_tags[] = $department_id . '_topics';
+
+      Cache::invalidateTags($cache_tags);
     }
   }
 
