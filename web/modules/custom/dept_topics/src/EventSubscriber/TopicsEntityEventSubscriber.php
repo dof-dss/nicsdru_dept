@@ -281,7 +281,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       $cache_tags = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
 
       // Prepend the core 'node:' cache tag to each child nid.
-      array_walk($cache_tags, function(&$value, $key) {
+      array_walk($cache_tags, function (&$value, $key) {
         $value = 'node:' . $value;
       });
 

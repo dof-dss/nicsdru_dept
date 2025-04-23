@@ -107,8 +107,10 @@ function dept_topics_enable_domain_path($form, FormStateInterface $form_state) {
  * Implements hook_entity_type_build().
  */
 function dept_topics_entity_type_build(array &$entity_types) {
-  // Set the default Core node form for our custom Form mode as
+  // Set the default Core node form class for our custom Form mode as
   // we don't need a custom class to override anything.
+  // We use this custom form display mode (node.subtopic.child_order)
+  // to list the topic contents only and hide the other form fields.
   $entity_types['node']->setFormClass('child_order', 'Drupal\node\NodeForm');
 }
 
@@ -238,6 +240,7 @@ function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_stat
 function dept_topics_preprocess_field(&$variables, $hook) {
   $element = $variables['element'];
 
+  // Add a moderation status label to each.
   if ($element['#field_name'] === 'field_topic_content') {
     foreach ($variables['items'] as $index => ['content' => $item]) {
       if (!empty($item['#entity']) && !$item['#entity']->isPublished()) {
@@ -296,6 +299,8 @@ function dept_topics_preprocess_views_view_field(&$variables) {
   $view = $variables['view'];
   $field = $variables['field'];
 
+  // Replace the parent field nid value with a title link to the parent if
+  // the parent exists.
   if ($view->storage->id() == 'orphaned_content' && $field->field == 'former_parent') {
     $parent_id = $variables["row"]->_entity->get('former_parent')->getString();
     $parent = Node::load($parent_id);
@@ -310,8 +315,8 @@ function dept_topics_preprocess_views_view_field(&$variables) {
     $variables['output'] = $output;
   }
 
+  // Add custom operations to the dropbutton field.
   if ($view->storage->id() == 'orphaned_content' && $field->field == 'dropbutton') {
-
     $variables['output'] = [
       '#type' => 'operations',
       '#links' => [

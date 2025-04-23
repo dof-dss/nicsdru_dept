@@ -110,7 +110,8 @@ final class TopicManager {
   }
 
   /**
-   * Return true or false if the provided type is enabled as a topic child content option.
+   * Return true or false if the provided type is enabled as a topic child
+   * content option.
    *
    * @param mixed $type
    *   A node entity or bundle name.
@@ -163,7 +164,8 @@ final class TopicManager {
   }
 
   /**
-   * Add and remove an entity to topic child content lists based on the Site Topic field values.
+   * Add and remove an entity to topic child content lists based on the Site
+   * Topic field values.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to use as a child reference.
@@ -211,7 +213,7 @@ final class TopicManager {
 
         if (!$ref_exists) {
           $topic_node->get('field_topic_content')->appendItem([
-            'target_id' => $entity->id()
+            'target_id' => $entity->id(),
           ]);
           $topic_node->setRevisionLogMessage('Added child: (' . $entity->id() . ') ' . $entity->label());
           $topic_node->save();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\dept_topics;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
@@ -53,12 +54,12 @@ final class OrphanManager {
   /**
    * Creates an orphan entity record for a given node.
    *
-   * @param \Drupal\node\NodeInterface $node
+   * @param \Drupal\Core\Entity\EntityInterface $node
    *   The node for which the orphan record should be created.
-   * @param \Drupal\node\NodeInterface|null $parent
+   * @param \Drupal\Core\Entity\EntityInterface|null $parent
    *   The parent node of the orphaned node.
    */
-  public function addOrphan(NodeInterface $node, NodeInterface|null $parent = NULL): void {
+  public function addOrphan(EntityInterface $node, EntityInterface|null $parent = NULL): void {
     $orphan = $this->orphanEntityStorage->loadByProperties(
       ['orphan' => $node->id()]
     );
@@ -72,6 +73,7 @@ final class OrphanManager {
       'orphan' => $node->id(),
       'orphan_type' => $node->bundle(),
       'former_parent' => empty($parent) ? 'unknown' : $parent->id(),
+      // @phpstan-ignore-next-line
       'department' => $node->get('field_domain_source')->getValue(),
       'uid' => \Drupal::currentUser()->id(),
       'created' => time(),
@@ -83,10 +85,10 @@ final class OrphanManager {
   /**
    * Removes the orphan entity record for a given node.
    *
-   * @param \Drupal\node\NodeInterface $node
+   * @param \Drupal\Core\Entity\EntityInterface $node
    *   The node for which the orphan record should be removed.
    */
-  public function removeOrphan(NodeInterface $node): void {
+  public function removeOrphan(EntityInterface $node): void {
     $orphan = $this->orphanEntityStorage->loadByProperties(
       ['orphan' => $node->id()]
     );

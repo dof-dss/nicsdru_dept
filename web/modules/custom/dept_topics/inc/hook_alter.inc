@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * HOOK_ALTER() hooks for departmental topics.
+ */
+
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -25,6 +30,7 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
         '#tag' => 'h2'
       ];
 
+      // Link to pop modal to manage the topic contents.
       $build['actions']['secondary']['manage_existing'] = [
         '#title' => t('Manage existing content'),
         '#type' => 'link',
@@ -48,7 +54,8 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
         ],
       ];
 
-      // Links to create new content for topics, generated from target bundles of the field .
+      // Links to create new content for topics, generated from allowed target
+      // bundles configuration for the field_topic_content field.
       $bundle_fields = \Drupal::getContainer()
         ->get('entity_field.manager')
         ->getFieldDefinitions('node', 'topic');
@@ -112,7 +119,7 @@ function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
         }
       }
 
-      // Create a new article tag for each parent node.
+      // Create a new article metatag for each parent node.
       $tag_index++;
       foreach ($parents as $parent) {
         $metatag_attachments['#attached']['html_head'][] =
@@ -148,8 +155,9 @@ function dept_topics_form_node_form_alter(&$form, $form_state) {
     }
   }
 
+  // Populate the field_site_topics form element if the topic_id was present in
+  // the querystring (Used by the 'quick add' feature in the moderation sidebar)
   if (!empty($topic_id)) {
-    // Select the site topic passed by the querystring parameter (coming from the moderation sidebar).
     if (array_key_exists('field_site_topics', $form)) {
       $form['field_site_topics']['widget']['#default_value'] = [$topic_id];
     }
