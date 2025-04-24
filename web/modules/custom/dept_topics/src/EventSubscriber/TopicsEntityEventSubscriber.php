@@ -22,8 +22,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
-  private readonly RevisionableStorageInterface $nodeStorage;
-
   /**
    * Constructs a TopicsEntityCrudSubscriber object.
    */
@@ -33,7 +31,6 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly BookManagerInterface $bookManager,
   ) {
-    $this->nodeStorage  = $this->entityTypeManager->getStorage('node');
   }
 
   /**
@@ -115,8 +112,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
           $child = $this->entityTypeManager->getStorage('node')->load($child_nid);
           if (!empty($child)) {
-            $child_topic_tags = array_column($child->get('field_site_topics')
-              ->getValue(), 'target_id');
+            $child_topic_tags = $child->get('field_site_topics');
 
             for ($i = 0; $i < $child_topic_tags->count(); $i++) {
               // @phpstan-ignore-next-line
@@ -128,7 +124,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
             $child->setRevisionLogMessage('Removed from topic: (' . $entity->id() . ') ' . $entity->label());
             $child->save();
 
-            if ($child->count() == 0) {
+            if ($child_topic_tags->count() == 0) {
               $this->orphanManager->addOrphan($child, $entity);
             }
           }
