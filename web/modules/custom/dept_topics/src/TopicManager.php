@@ -314,6 +314,22 @@ final class TopicManager {
   }
 
   /**
+   * Returns list of node ids that have a site_topic field reference to the
+   * given topic.
+   *
+   * @param \Drupal\node\NodeInterface $topic
+   *   The topic/subtopic node fetch references for.
+   */
+  public function getNodesReferencingTopic(NodeInterface $topic) {
+    $results = $this->connection->select('node__field_site_topics', 'site_topics')
+      ->fields('site_topics', ['entity_id'])
+      ->condition('field_site_topics_target_id', $topic->id())
+      ->execute()->fetchCol();
+
+    return $results;
+  }
+
+  /**
    * Returns the maximum assignable topics permitted for the given node bundle.
    *
    * @param string|ContentEntityInterface $type

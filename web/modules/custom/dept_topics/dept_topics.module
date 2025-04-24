@@ -212,7 +212,7 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
 }
 
 /**
- * Update the Linkit profile for topic content.
+ * Update Linkit profile for topic content to use the configured field target types.
  */
 function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_state) {
   $values = $form_state->getValues();
