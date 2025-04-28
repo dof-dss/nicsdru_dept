@@ -163,10 +163,6 @@ function dept_topics_form_node_form_alter(&$form, $form_state) {
     }
   }
 
-  if (\Drupal::service('topic.manager')->isValidTopicChild($bundle)) {
-    $form['actions']['submit']['#submit'][] = 'dept_topics_process_topic_child_contents';
-  }
-
   if ($bundle === 'topic' || $bundle === 'subtopic') {
     $form['actions']['submit']['#submit'][] = 'dept_topics_enable_domain_path';
   }

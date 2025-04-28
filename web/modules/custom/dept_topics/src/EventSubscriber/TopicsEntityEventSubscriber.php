@@ -7,14 +7,12 @@ namespace Drupal\dept_topics\EventSubscriber;
 use Drupal\book\BookManagerInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\RevisionableStorageInterface;
 use Drupal\dept_topics\OrphanManager;
 use Drupal\dept_topics\TopicContentAction;
 use Drupal\dept_topics\TopicManager;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
 use Drupal\node\NodeInterface;
-use Drupal\node\NodeStorage;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -38,7 +36,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      EntityEventType::INSERT => ['onEntityInsert'],
+      EntityEventType::INSERT => ['onEntityInsert'], ['purgeTopicCaches'],
       EntityEventType::UPDATE => ['onEntityUpdate'], ['purgeTopicCaches'],
       EntityEventType::DELETE => ['onEntityDelete'], ['purgeTopicCaches'],
     ];
@@ -172,7 +170,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     }
 
     // PROCESS CHILD TYPES TO TOPICS.
-    if (in_array($entity->bundle(), $this->topicManager->getTopicChildNodeTypes())){
+    if (in_array($entity->bundle(), $this->topicManager->getTopicChildNodeTypes())) {
       $moderation_state = $entity->get('moderation_state')->getString();
 
       // When a topic is updated we must process any child content that has been
