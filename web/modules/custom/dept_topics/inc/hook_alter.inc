@@ -169,22 +169,11 @@ function dept_topics_form_node_form_alter(&$form, $form_state) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
- */
-function dept_topics_form_moderation_sidebar_quick_transition_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $entity = $form_state->get('entity');
-
-  if ($entity instanceof NodeInterface) {
-    if (\Drupal::service('topic.manager')->isValidTopicChild($entity->bundle())) {
-      $form['#submit'][] = 'dept_topics_process_topic_child_contents';
-    }
-  }
-}
-
-/**
  * Implements hook_form_alter().
  */
 function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Update Linkit profile target bundles when the subtopic field_child_content
+  // configuration is updated.
   if ($form_id === 'field_config_edit_form' && !empty($form['#entity'])) {
     if ($form['#entity']->bundle() === 'subtopic') {
       $form['actions']['submit']['#submit'][] = 'dept_topics_update_linkit_targets';

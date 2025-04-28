@@ -53,6 +53,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
+    // PROCESS TOPIC/SUBTOPIC.
     if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
       $moderation_state = $entity->get('moderation_state')->getString();
 
@@ -74,7 +75,32 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
         // Cleanup any orphaned entries for child nodes added to this topic.
         $this->orphanManager->processTopicContents($child_nids);
-        return;
+
+      }
+    }
+
+    // PROCESS CHILD TYPES TO TOPICS.
+    if (in_array($entity->bundle(), $this->topicManager->getTopicChildNodeTypes())) {
+      $moderation_state = $entity->get('moderation_state')->getString();
+
+      // When a topic child content node is created we load each topic selected
+      // in the field_site_topics field and add the node to that topic's
+      // field_child_content field.
+      if ($moderation_state === 'published') {
+        $site_topic_ids = array_column($entity->get('field_site_topics')
+          ->getValue(), 'target_id');
+
+        foreach ($site_topic_ids as $site_topic_nid) {
+          $topic = $this->entityTypeManager->getStorage('node')->load($site_topic_nid);
+          if (!empty($topic)) {
+            $topic->get('field_topic_content')->appendItem([
+              'target_id' => $entity->id(),
+            ]);
+
+            $topic->setRevisionLogMessage('Added content: (' . $entity->id() . ') ' . $entity->label());
+            $topic->save();
+          }
+        }
       }
     }
   }
