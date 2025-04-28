@@ -38,7 +38,6 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      EntityEventType::PRESAVE => ['onEntityPresave'],
       EntityEventType::INSERT => ['onEntityInsert'],
       EntityEventType::UPDATE => ['onEntityUpdate'], ['purgeTopicCaches'],
       EntityEventType::DELETE => ['onEntityDelete'], ['purgeTopicCaches'],
@@ -46,9 +45,46 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Entity presave event handler.
+   * Entity insert event handler.
    */
-  public function onEntityPresave(EntityEvent $event): void {
+  public function onEntityInsert(EntityEvent $event): void {
+    $entity = $event->getEntity();
+
+    // Only process node entities.
+    if (!$entity instanceof NodeInterface) {
+      return;
+    }
+
+    if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
+      $moderation_state = $entity->get('moderation_state')->getString();
+
+      // For new published topics we must iterate each child node adding the
+      // topic to the field_site_topics field and then save each node.
+      if ($moderation_state === 'published') {
+        $child_nids = array_column($entity->get('field_topic_content')
+          ->getValue(), 'target_id');
+        $child_nodes = $this->entityTypeManager->getStorage('node')
+          ->loadMultiple($child_nids);
+
+        foreach ($child_nodes as $child) {
+          $child->get('field_site_topics')->appendItem([
+            'target_id' => $entity->id()
+          ]);
+          $child->setRevisionLogMessage('Added site topic: (' . $entity->id() . ') ' . $entity->label());
+          $child->save();
+        }
+
+        // Cleanup any orphaned entries for child nodes added to this topic.
+        $this->orphanManager->processTopicContents($child_nids);
+        return;
+      }
+    }
+  }
+
+  /**
+   * Entity update event handler.
+   */
+  public function onEntityUpdate(EntityEvent $event): void {
     $entity = $event->getEntity();
 
     // Only process node entities.
@@ -130,50 +166,69 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
           }
         }
       }
-    }
-  }
-
-  /**
-   * Entity insert event handler.
-   */
-  public function onEntityInsert(EntityEvent $event): void {
-    $entity = $event->getEntity();
-
-    // Only process node entities.
-    if (!$entity instanceof NodeInterface) {
+      // We don't want the 'PROCESS CHILD TYPES' to process any subtopics (a child type)
+      // from this point on.
       return;
     }
 
-    if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
+    // PROCESS CHILD TYPES TO TOPICS.
+    if (in_array($entity->bundle(), $this->topicManager->getTopicChildNodeTypes())){
       $moderation_state = $entity->get('moderation_state')->getString();
 
-      // For new published topics we must iterate each child node adding the
-      // topic to the field_site_topics field and then save each node.
+      // When a topic is updated we must process any child content that has been
+      // added or removed to update their field_site_topics field and process
+      // any orphaned status.
       if ($moderation_state === 'published') {
-        $child_nids = array_column($entity->get('field_topic_content')
+        $site_topic_ids = array_column($entity->get('field_site_topics')
           ->getValue(), 'target_id');
-        $child_nodes = $this->entityTypeManager->getStorage('node')
-          ->loadMultiple($child_nids);
+        $parent_ids = array_keys($this->topicManager->getParentNodes($entity));
 
-        foreach ($child_nodes as $child) {
-          $child->get('field_site_topics')->appendItem([
-            'target_id' => $entity->id()
-          ]);
-          $child->setRevisionLogMessage('Added site topic: (' . $entity->id() . ') ' . $entity->label());
-          $child->save();
+        $added = array_diff($site_topic_ids, $parent_ids);
+        $removed = array_diff($parent_ids, $site_topic_ids);
+
+        // ADDED TOPIC ENTRIES.
+        //
+        // Add this node to the field_topic_contents field of each new site
+        // topic entry.
+        foreach ($added as $site_topic_nid) {
+          $topic = $this->entityTypeManager->getStorage('node')->load($site_topic_nid);
+          if (!empty($topic)) {
+            $topic_child_contents_ids = array_column($topic->get('field_topic_content')
+              ->getValue(), 'target_id');
+
+            if (!in_array($site_topic_nid, $topic_child_contents_ids)) {
+              $topic->get('field_topic_content')->appendItem([
+                'target_id' => $entity->id(),
+              ]);
+              $topic->setRevisionLogMessage('Added content: (' . $entity->id() . ') ' . $entity->label());
+              $topic->save();
+            }
+          }
         }
 
-        // Cleanup any orphaned entries for child nodes added to this topic.
-        $this->orphanManager->processTopicContents($child_nids);
-        return;
+        // REMOVED TOPIC ENTRIES.
+        //
+        // Remove this node to the field_topic_contents field of each removed
+        // site topic entry.
+        foreach ($removed as $site_topic_nid) {
+          $topic = $this->entityTypeManager->getStorage('node')->load($site_topic_nid);
+          if (!empty($topic)) {
+            $topic_child_contents = $topic->get('field_topic_content');
+
+            for ($i = 0; $i < $topic_child_contents->count(); $i++) {
+              // @phpstan-ignore-next-line
+              if ($topic_child_contents->get($i)->target_id == $entity->id()) {
+                $topic_child_contents->removeItem($i);
+                $topic->setRevisionLogMessage('Removed content: (' . $entity->id() . ') ' . $entity->label());
+                $topic->save();
+                break;
+              }
+            }
+          }
+        }
       }
     }
-  }
 
-  /**
-   * Entity update event handler.
-   */
-  public function onEntityUpdate(EntityEvent $event): void {
   }
 
   /**
