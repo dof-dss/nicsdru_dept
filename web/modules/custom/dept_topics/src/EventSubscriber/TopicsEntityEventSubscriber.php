@@ -36,9 +36,9 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      EntityEventType::INSERT => ['onEntityInsert'], ['purgeTopicCaches'],
-      EntityEventType::UPDATE => ['onEntityUpdate'], ['purgeTopicCaches'],
-      EntityEventType::DELETE => ['onEntityDelete'], ['purgeTopicCaches'],
+      EntityEventType::INSERT => ['onEntityInsert', 10], ['purgeTopicCaches', 0],
+      EntityEventType::UPDATE => ['onEntityUpdate', 10], ['purgeTopicCaches', 0],
+      EntityEventType::DELETE => ['onEntityDelete', 10], ['purgeTopicCaches', 0],
     ];
   }
 
