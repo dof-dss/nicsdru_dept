@@ -36,3 +36,30 @@ function dept_topics_update_8001() {
   $entity_definition->setClass('Drupal\dept_topics\Entity\OrphanedTopicContent');
   $definition_update_manager->installEntityType($entity_definition);
 }
+/**
+ * Fix subtopic site_topics field to match the parent topic.
+ */
+function dept_topics_update_8002() {
+    $db = \Drupal::database();
+    $nm = \Drupal::entityTypeManager()->getStorage('node');
+
+    $topics = $nm->loadByProperties(['type' => 'subtopic']);
+
+    foreach ($topics as $topic) {
+      $children_ids = array_column($topic->get('field_topic_content')->getValue(), 'target_id');
+      $children = $nm->loadMultiple($children_ids);
+
+      foreach ($children as $child) {
+        if ($child->bundle() === 'subtopic') {
+          $site_topic_ids = array_column($child->get('field_site_topics')->getValue(), 'target_id');
+          if (!in_array($topic->id(), $site_topic_ids)) {
+            $db->update('node__field_site_topics')
+              ->fields(['field_site_topics_target_id' => $topic->id()])
+              ->condition('entity_id', $child->id())
+              ->execute();
+          }
+        }
+
+      }
+    }
+}
