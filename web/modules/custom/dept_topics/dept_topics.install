@@ -53,13 +53,14 @@ function dept_topics_update_8002() {
         if ($child->bundle() === 'subtopic') {
           $site_topic_ids = array_column($child->get('field_site_topics')->getValue(), 'target_id');
           if (!in_array($topic->id(), $site_topic_ids)) {
-            $db->update('node__field_site_topics')
-              ->fields(['field_site_topics_target_id' => $topic->id()])
-              ->condition('entity_id', $child->id())
-              ->execute();
+            if (count($site_topic_ids) === 1) {
+              $db->update('node__field_site_topics')
+                ->fields(['field_site_topics_target_id' => $topic->id()])
+                ->condition('entity_id', $child->id())
+                ->execute();
+            }
           }
         }
-
       }
     }
 }
