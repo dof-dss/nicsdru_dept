@@ -68,7 +68,6 @@ class TopicTagsFormatter extends FormatterBase {
 
     $nodes = array_merge(array_reverse($sub_topics), $parent_topics);
 
-    /** @var $node \Drupal\Node\NodeInterface */
     foreach ($nodes as $node) {
       $element[$node->id()] = [
         '#type' => 'link',
