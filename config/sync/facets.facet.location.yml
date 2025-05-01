@@ -1,4 +1,4 @@
-uuid: 5f84b342-b23b-4d04-8daa-fba8428040ab
+uuid: 50f1a043-dd07-4aec-9893-e0e7663d9bc6
 langcode: en
 status: true
 dependencies:
@@ -7,16 +7,16 @@ dependencies:
     - views.view.events
   module:
     - search_api
-id: event_datetime
-name: 'Event date and time'
+id: location
+name: Location
 weight: 0
 min_count: 1
 missing: false
 missing_label: others
-url_alias: date
+url_alias: location
 facet_source_id: 'search_api:views_page__events__events_search'
-field_identifier: field_event_datetime
-query_operator: and
+field_identifier: field_council
+query_operator: or
 hard_limit: 0
 exclude: false
 use_hierarchy: false
@@ -49,31 +49,22 @@ processor_configs:
       sort: 20
     settings:
       sort: ASC
-  date_facet_drilldown:
-    processor_id: date_facet_drilldown
+  display_value_widget_order:
+    processor_id: display_value_widget_order
     weights:
-      build: 1
-    settings: {  }
-  date_item:
-    processor_id: date_item
-    weights:
-      build: 35
+      sort: 40
     settings:
-      date_display: actual_date
-      granularity: 6
-      date_format: ''
-      hierarchy: false
+      sort: ASC
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
       build: 100
     settings: {  }
-  raw_value_widget_order:
-    processor_id: raw_value_widget_order
+  list_item:
+    processor_id: list_item
     weights:
-      sort: 50
-    settings:
-      sort: ASC
+      build: 5
+    settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:

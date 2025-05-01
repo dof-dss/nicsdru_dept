@@ -21,4 +21,4 @@ dept_topics.manage_topic_content.form:
     _title: 'Manage topic content'
     _form: 'Drupal\dept_topics\Form\ManageTopicContentForm'
   requirements:
-    _role: 'topic_supervisor+administrator'
+    _permission: 'manage order of topic content'

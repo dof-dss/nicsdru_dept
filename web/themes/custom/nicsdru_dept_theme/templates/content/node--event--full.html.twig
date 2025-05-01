@@ -10,7 +10,7 @@
 
   <div class="event-details">
     <h2>Event information</h2>
-    {% if event_in_progress %}
+    {% if event_passed %}
       <p>This event has now passed.</p>
     {% else %}
       <p><strong class="label">When</strong>
@@ -22,28 +22,23 @@
         {{ event_start_date | date('U') | format_date('custom', 'd M Y g:i a') }} — {{ event_end_date | date('U') | format_date('custom', 'd M Y g:i a') }}
       {% endif %}
     </p>
-    <p><strong class="label">Where</strong>{{ content.field_event_host | field_value }}</p>
+    <p><strong class="label">Where</strong>{{ content.field_council | field_value }}</p>
     {% endif %}
   </div>
 
   <div{{ content_attributes.addClass(['article-content', 'max-body-text-width']) }}>
 
-    <h2>{{ content.field_summary['#title'] }}</h2>
-
     {{ content.field_summary }}
-
-    <h2>{{ 'Event description'|t }}</h2>
     {{ content.body }}
 
     <div class="event-metadata">
     {% if content.field_council %}
-      <strong class="label">Location: </strong>{{ content.field_council }}
+      <h2>Location</h2>
+      {{ content.field_council | field_value }}
     {% endif %}
     {% if content.field_event_host %}
-      <strong class="label">Hosted by:</strong> {{ content.field_event_host | field_value }}
-    {% endif %}
-    {% if content.field_business_area[0] %}
-      <strong class="label">Business area: </strong>{{ content.field_business_area | field_value }}
+      <h2>Hosted by</h2>
+      {{ content.field_event_host | field_value }}
     {% endif %}
     </div>
 
