@@ -123,7 +123,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
       $moderation_state = $entity->get('moderation_state')->getString();
 
-      // When a topic is updated we must process any child content that has been
+      // When a topic is updaCompare ted we must process any child content that has been
       // added or removed to update their field_site_topics field and process
       // any orphaned status.
       if ($moderation_state === 'published') {
