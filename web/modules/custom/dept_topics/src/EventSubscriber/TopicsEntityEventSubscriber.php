@@ -35,11 +35,22 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
-    return [
-      EntityEventType::INSERT => ['onEntityInsert', 10], ['purgeTopicCaches', 0],
-      EntityEventType::UPDATE => ['onEntityUpdate', 10], ['purgeTopicCaches', 0],
-      EntityEventType::DELETE => ['onEntityDelete', 10], ['purgeTopicCaches', 0],
+    $events[EntityEventType::INSERT] = [
+      ['onEntityInsert', 10],
+      ['purgeTopicCaches'],
     ];
+
+    $events[EntityEventType::UPDATE] = [
+      ['onEntityUpdate', 10],
+      ['purgeTopicCaches'],
+    ];
+
+    $events[EntityEventType::DELETE] = [
+      ['onEntityDelete', 10],
+      ['purgeTopicCaches'],
+    ];
+    return $events;
+
   }
 
   /**
@@ -123,7 +134,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
       $moderation_state = $entity->get('moderation_state')->getString();
 
-      // When a topic is updaCompare ted we must process any child content that has been
+      // When a topic is updated we must process any child content that has been
       // added or removed to update their field_site_topics field and process
       // any orphaned status.
       if ($moderation_state === 'published') {
@@ -248,6 +259,10 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
             }
           }
         }
+      }
+
+      if (!empty($site_topic_ids)) {
+        $this->orphanManager->removeOrphan($entity);
       }
     }
   }

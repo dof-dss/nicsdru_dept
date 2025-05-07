@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\dept_topics;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -80,6 +81,7 @@ final class OrphanManager {
     ]);
 
     $this->orphanEntityStorage->save($orphan);
+    Cache::invalidateTags(['node' . $node->id()]);
   }
 
   /**
@@ -98,6 +100,7 @@ final class OrphanManager {
     }
 
     $this->orphanEntityStorage->delete($orphan);
+    Cache::invalidateTags(['node' . $node->id()]);
   }
 
 }
