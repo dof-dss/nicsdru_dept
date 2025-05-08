@@ -315,7 +315,7 @@ final class TopicManager {
 
   /**
    * Returns list of node ids that have a site_topic field reference to the
-   * given topic.
+   * given topic for those types that can be added to field_topic_content.
    *
    * @param \Drupal\node\NodeInterface $topic
    *   The topic/subtopic node fetch references for.
@@ -324,6 +324,7 @@ final class TopicManager {
     $results = $this->connection->select('node__field_site_topics', 'site_topics')
       ->fields('site_topics', ['entity_id'])
       ->condition('field_site_topics_target_id', $topic->id())
+      ->condition('bundle', ['application', 'article', 'subtopic'], 'IN')
       ->execute()->fetchCol();
 
     return $results;
