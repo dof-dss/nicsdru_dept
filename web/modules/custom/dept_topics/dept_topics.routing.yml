@@ -22,3 +22,11 @@ dept_topics.manage_topic_content.form:
     _form: 'Drupal\dept_topics\Form\ManageTopicContentForm'
   requirements:
     _permission: 'manage order of topic content'
+
+dept_topics.broken_topic_mapping:
+  path: '/admin/content/broken-topic-mapping'
+  defaults:
+    _title: 'Broken Topic Mapping'
+    _controller: '\Drupal\dept_topics\Controller\BrokenTopicMappingController'
+  requirements:
+    _permission: 'administer nodes'
