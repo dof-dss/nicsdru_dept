@@ -205,13 +205,15 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
     // PROCESS CHILD TYPES TO TOPICS.
     if (in_array($entity->bundle(), $this->topicManager->getTopicChildNodeTypes())) {
-      // When a topic is updated we must process any child content that has been
-      // added or removed to update their field_site_topics field and process
-      // any orphaned status.
+      $moderation_state = $entity->get('moderation_state')->getString();
+      // When a topic content node is updated we must process any site topics
+      // that been added or removed to process the topics contents for each.
       $site_topic_ids = array_column($entity->get('field_site_topics')
         ->getValue(), 'target_id');
+
+      // List of topic nids that have an entry for this node in their
+      // field_topic_content field.
       $parent_ids = array_keys($this->topicManager->getParentNodes($entity));
-      $moderation_state = $entity->get('moderation_state')->getString();
 
       $added = array_diff($site_topic_ids, $parent_ids);
       $removed = array_diff($parent_ids, $site_topic_ids);

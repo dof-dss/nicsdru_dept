@@ -5,28 +5,30 @@ declare(strict_types=1);
 namespace Drupal\dept_topics\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 
 /**
- * Returns responses for Departmental sites: topics routes.
+ * Management page for nodes missing from topic content.
  */
 final class BrokenTopicMappingController extends ControllerBase {
 
   /**
-   * Builds the response.
+   * Displays problematic content.
    */
   public function __invoke(): array {
     $output = [];
     $topic_total = 0;
     $db = \Drupal::database();
 
+    $department = \Drupal::service('department.manager')->getCurrentDepartment();
+
     $subtopics_query = $db->select('node__field_domain_source', 'ds');
     $subtopics_query->join('node_field_data', 'nfd', 'ds.entity_id = nfd.nid');
     $subtopics_query->fields('ds', ['entity_id'])
       ->fields('nfd', ['title'])
       ->condition('ds.bundle', 'subtopic')
-      ->condition('ds.field_domain_source_target_id', 'finance');
+      ->condition('ds.field_domain_source_target_id', $department->id());
 
     $subtopics = $subtopics_query->execute()->fetchAll();
 
@@ -63,9 +65,15 @@ final class BrokenTopicMappingController extends ControllerBase {
           ['data' => [
             '#type' => 'link',
             '#title' => $site_topic_nodes[$missed]->title,
-            '#url' => Url::fromRoute('entity.node.canonical', ['node' => $missed])
-            ]
-          ]
+            '#url' => Url::fromRoute('entity.node.canonical', ['node' => $missed]),
+            ],
+          ],
+          ['data' => [
+            '#type' => 'link',
+            '#title' => $this->t('Add to topic content'),
+            '#url' => Url::fromRoute('dept_topics.broken_topic_mapping.add_node_to_topic', ['nid' => $missed]),
+          ],
+          ],
         ];
       }
 
@@ -83,17 +91,44 @@ final class BrokenTopicMappingController extends ControllerBase {
 
         $output[$subtopic->entity_id]['missing']['table'] = [
           '#type' => 'table',
-          '#rows' => $rows
+          '#header' => ['Title', 'Operations'],
+          '#rows' => $rows,
         ];
       }
     }
 
     $build['intro'] = [
-      '#markup' => '<h3>Possible Subtopics with content issues: ' . $topic_total . '</h3>'
+      '#markup' => '<h3>Possible Subtopics with content issues: ' . $topic_total . '</h3>',
     ];
     $build['content'] = $output;
 
     return $build;
   }
 
+  public function addNodesToTopicContent(int $nid) {
+    $node = Node::load($nid);
+    $added_log = [];
+
+    $site_topic_ids = array_column($node->get('field_site_topics')
+      ->getValue(), 'target_id');
+
+    $topic_nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($site_topic_ids);
+
+    foreach ($topic_nodes as $topic) {
+      $topic_child_contents_ids = array_column($topic->get('field_topic_content')
+        ->getValue(), 'target_id');
+
+      if (!in_array($node->id(), $topic_child_contents_ids)) {
+        $topic->get('field_topic_content')->appendItem([
+          'target_id' => $node->id(),
+        ]);
+        $topic->setRevisionLogMessage('Added content: (' . $node->id() . ') ' . $node->label());
+        $topic->save();
+        $added_log[] = $topic->label();
+      }
+    }
+
+    \Drupal::messenger()->addMessage($node->label() . ' added to the following topics: ' . implode(', ', $added_log));
+    $this->redirect('dept_topics.broken_topic_mapping');
+  }
 }
