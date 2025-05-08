@@ -31,10 +31,10 @@ dept_topics.broken_topic_mapping:
   requirements:
     _permission: 'administer nodes'
 
-dept_topics.broken_topic_mapping.add_node_to_topic:
-  path: '/admin/content/broken-topic-mapping/add-node-to-topic/{nid}'
+dept_topics.broken_topic_mapping.fix_topic_content:
+  path: '/admin/content/broken-topic-mapping/fix-topic-content/{nid}'
   defaults:
     _title: 'Add Node to Topic'
-    _controller: '\Drupal\dept_topics\Controller\BrokenTopicMappingController::addNodeToTopicContent'
+    _controller: '\Drupal\dept_topics\Controller\BrokenTopicMappingController::addNodesToTopicContent'
   requirements:
     _permission: 'administer nodes'

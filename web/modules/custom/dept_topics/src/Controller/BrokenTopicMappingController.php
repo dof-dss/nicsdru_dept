@@ -68,17 +68,12 @@ final class BrokenTopicMappingController extends ControllerBase {
             '#url' => Url::fromRoute('entity.node.canonical', ['node' => $missed]),
             ],
           ],
-          ['data' => [
-            '#type' => 'link',
-            '#title' => $this->t('Add to topic content'),
-            '#url' => Url::fromRoute('dept_topics.broken_topic_mapping.add_node_to_topic', ['nid' => $missed]),
-          ],
-          ],
         ];
       }
 
       if (!empty($rows)) {
         $topic_total++;
+
         $output[$subtopic->entity_id]['topic'] = [
           '#markup' => '<a href="' . Url::fromRoute('entity.node.canonical', ['node' => $subtopic->entity_id])->toString() . '"><h4>' . $subtopic->title . '</h4></a>',
         ];
@@ -91,8 +86,17 @@ final class BrokenTopicMappingController extends ControllerBase {
 
         $output[$subtopic->entity_id]['missing']['table'] = [
           '#type' => 'table',
-          '#header' => ['Title', 'Operations'],
           '#rows' => $rows,
+        ];
+
+        $output[$subtopic->entity_id]['fixlink'] = [
+          '#type' => 'link',
+          '#title' => $this->t('Fix content'),
+          '#url' => Url::fromRoute('dept_topics.broken_topic_mapping.fix_topic_content', ['nid' => $subtopic->entity_id]),
+          '#attributes' => [
+            'class' => ['button', 'button--primary'],
+          ],
+          '#suffix' => '<hr>'
         ];
       }
     }
@@ -106,29 +110,39 @@ final class BrokenTopicMappingController extends ControllerBase {
   }
 
   public function addNodesToTopicContent(int $nid) {
-    $node = Node::load($nid);
-    $added_log = [];
+    $db = \Drupal::database();
+    $topic = Node::load($nid);
 
-    $site_topic_ids = array_column($node->get('field_site_topics')
-      ->getValue(), 'target_id');
+    $topic_contents = $db->select('node__field_topic_content', 'tc')
+      ->fields('tc', ['field_topic_content_target_id'])
+      ->condition('entity_id', $topic->id())
+      ->execute()
+      ->fetchCol();
 
-    $topic_nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($site_topic_ids);
+    $site_topic_nodes_query = $db->select('node__field_site_topics', 'st');
+    $site_topic_nodes_query->join('node_field_data', 'nfd', 'st.entity_id = nfd.nid');
+    $site_topic_nodes_query->fields('st', ['entity_id'])
+      ->fields('nfd', ['title'])
+      ->condition('st.field_site_topics_target_id', $topic->id())
+      ->condition('bundle', ['application', 'article', 'subtopic'], 'IN')
+      ->condition('nfd.status', '1');
 
-    foreach ($topic_nodes as $topic) {
-      $topic_child_contents_ids = array_column($topic->get('field_topic_content')
-        ->getValue(), 'target_id');
+    $site_topic_nodes = $site_topic_nodes_query->execute()->fetchAllAssoc('entity_id');
 
-      if (!in_array($node->id(), $topic_child_contents_ids)) {
-        $topic->get('field_topic_content')->appendItem([
-          'target_id' => $node->id(),
-        ]);
-        $topic->setRevisionLogMessage('Added content: (' . $node->id() . ') ' . $node->label());
-        $topic->save();
-        $added_log[] = $topic->label();
-      }
+    $missing = array_values(array_diff(array_keys($site_topic_nodes), $topic_contents));
+
+    foreach ($missing as $missed) {
+      $topic->get('field_topic_content')->appendItem([
+        'target_id' => $missed,
+      ]);
     }
 
-    \Drupal::messenger()->addMessage($node->label() . ' added to the following topics: ' . implode(', ', $added_log));
-    $this->redirect('dept_topics.broken_topic_mapping');
+    $message = 'Added missing topic content, ' . count($missing) . ' nodes.';
+    $topic->setRevisionLogMessage($message);
+    $topic->save();
+
+    \Drupal::messenger()->addMessage($message);
+
+    return $this->redirect('dept_topics.broken_topic_mapping');
   }
 }
