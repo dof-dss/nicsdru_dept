@@ -16,22 +16,6 @@ targetEntityType: media
 bundle: remote_video
 mode: default
 content:
-  field_domain_access:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  field_domain_source:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 2
-    region: content
   field_media_oembed_video:
     type: oembed
     label: hidden
@@ -45,6 +29,8 @@ content:
     region: content
 hidden:
   created: true
+  field_domain_access: true
+  field_domain_source: true
   langcode: true
   name: true
   search_api_excerpt: true
