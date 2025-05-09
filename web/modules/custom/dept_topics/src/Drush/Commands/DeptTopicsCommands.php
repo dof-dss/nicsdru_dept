@@ -44,61 +44,56 @@ final class DeptTopicsCommands extends DrushCommands {
    * Synchronises Topic content fields with Site Topics fields.
    */
   #[CLI\Command(name: 'topics:syncTopicContentSiteTopics', aliases: ['syncTopicContent'])]
-  public function syncTopicContentSiteTopics() {
+  #[CLI\Argument(name: 'department', description: 'Department id.')]
+  public function syncTopicContentSiteTopics(string $department) {
+    $this->output()->writeln(' ' . $department);
 
-    $departments = $this->departmentManager->getAllDepartments();
+    $subtopics_ids = $this->db->select('node__field_domain_source', 'ds')
+      ->fields('ds', ['entity_id'])
+      ->condition('ds.bundle', 'subtopic')
+      ->condition('ds.field_domain_source_target_id', $department)
+      ->execute()->fetchCol();
 
-    foreach ($departments as $department) {
+    $subtopics = $this->entityTypeManager->getStorage('node')
+      ->loadMultiple($subtopics_ids);
 
-      $this->output()->writeln(' ' . $department->label());
+    $progress_bar = new ProgressBar($this->output(), count($subtopics));
+    $progress_bar->start();
 
-      $subtopics_ids = $this->db->select('node__field_domain_source', 'ds')
-        ->fields('ds', ['entity_id'])
-        ->condition('ds.bundle', 'subtopic')
-        ->condition('ds.field_domain_source_target_id', $department->id())
-        ->execute()->fetchCol();
+    foreach ($subtopics as $subtopic) {
+      $topic_contents = $this->db->select('node__field_topic_content', 'tc')
+        ->fields('tc', ['field_topic_content_target_id'])
+        ->condition('entity_id', $subtopic->id())
+        ->execute()
+        ->fetchCol();
 
-      $subtopics = $this->entityTypeManager->getStorage('node')->loadMultiple($subtopics_ids);
+      $site_topic_nodes_query = $this->db->select('node__field_site_topics', 'st');
+      $site_topic_nodes_query->join('node_field_data', 'nfd', 'st.entity_id = nfd.nid');
+      $site_topic_nodes_query->fields('st', ['entity_id'])
+        ->fields('nfd', ['title'])
+        ->condition('st.field_site_topics_target_id', $subtopic->id())
+        ->condition('bundle', ['application', 'article', 'subtopic'], 'IN')
+        ->condition('nfd.status', '1');
 
-      $progress_bar = new ProgressBar($this->output(), count($subtopics));
-      $progress_bar->start();
+      $site_topic_nodes = $site_topic_nodes_query->execute()
+        ->fetchAllAssoc('entity_id');
 
-      foreach ($subtopics as $subtopic) {
+      $missing = array_values(array_diff(array_keys($site_topic_nodes), $topic_contents));
 
-        $topic_contents = $this->db->select('node__field_topic_content', 'tc')
-          ->fields('tc', ['field_topic_content_target_id'])
-          ->condition('entity_id', $subtopic->id())
-          ->execute()
-          ->fetchCol();
-
-        $site_topic_nodes_query = $this->db->select('node__field_site_topics', 'st');
-        $site_topic_nodes_query->join('node_field_data', 'nfd', 'st.entity_id = nfd.nid');
-        $site_topic_nodes_query->fields('st', ['entity_id'])
-          ->fields('nfd', ['title'])
-          ->condition('st.field_site_topics_target_id', $subtopic->id())
-          ->condition('bundle', ['application', 'article', 'subtopic'], 'IN')
-          ->condition('nfd.status', '1');
-
-        $site_topic_nodes = $site_topic_nodes_query->execute()->fetchAllAssoc('entity_id');
-
-        $missing = array_values(array_diff(array_keys($site_topic_nodes), $topic_contents));
-
-        foreach ($missing as $missed) {
-          $subtopic->get('field_topic_content')->appendItem([
-            'target_id' => $missed,
-          ]);
-        }
-
-        $message = 'Added missing topic content, ' . count($missing) . ' nodes.';
-        $subtopic->setRevisionLogMessage($message);
-        $subtopic->save();
-
-        $progress_bar->advance();
+      foreach ($missing as $missed) {
+        $subtopic->get('field_topic_content')->appendItem([
+          'target_id' => $missed,
+        ]);
       }
 
-      $progress_bar->finish();
+      $message = 'Added missing topic content, ' . count($missing) . ' nodes.';
+      $subtopic->setRevisionLogMessage($message);
+      $subtopic->save();
 
+      $progress_bar->advance();
     }
+
+    $progress_bar->finish();
   }
 
   /**
