@@ -34,7 +34,7 @@ final class BrokenTopicMappingController extends ControllerBase {
 
     foreach ($subtopics as $subtopic) {
 
-      // Topic nodes field_contents
+      // Topic nodes field_contents.
       $topic_contents = $db->select('node__field_topic_content', 'tc')
         ->fields('tc', ['field_topic_content_target_id'])
         ->condition('entity_id', $subtopic->entity_id)
@@ -62,10 +62,11 @@ final class BrokenTopicMappingController extends ControllerBase {
 
       foreach ($missing as $missed) {
         $rows[$missed] = [
-          ['data' => [
-            '#type' => 'link',
-            '#title' => $site_topic_nodes[$missed]->title,
-            '#url' => Url::fromRoute('entity.node.canonical', ['node' => $missed]),
+          [
+            'data' => [
+              '#type' => 'link',
+              '#title' => $site_topic_nodes[$missed]->title,
+              '#url' => Url::fromRoute('entity.node.canonical', ['node' => $missed]),
             ],
           ],
         ];
@@ -109,6 +110,11 @@ final class BrokenTopicMappingController extends ControllerBase {
     return $build;
   }
 
+  /**
+   *
+   * @param int $nid
+   *   The topic node to add content to.
+   */
   public function addNodesToTopicContent(int $nid) {
     $db = \Drupal::database();
     $topic = Node::load($nid);
@@ -145,4 +151,5 @@ final class BrokenTopicMappingController extends ControllerBase {
 
     return $this->redirect('dept_topics.broken_topic_mapping');
   }
+
 }
