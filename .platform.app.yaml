@@ -21,7 +21,6 @@ variables:
     display_startup_errors: "off"
     date.timezone: "Europe/Dublin"
     realpath_cache_ttl: 3600
-    realpath_cache_size: 512k
 dependencies:
   php:
     composer/composer: '^2'
