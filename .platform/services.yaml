@@ -30,6 +30,7 @@ solr_9_6:
         core: default
 
 redis:
-  type: "redis:7.2"
+  type: "redis-persistent:7.2"
+  disk: 0
   configuration:
     maxmemory_policy: allkeys-lfu
