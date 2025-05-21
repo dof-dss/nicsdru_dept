@@ -14,5 +14,12 @@ recommendations:
   # Needs further investigation to work on PSH. See https://www.drupal.org/project/preloader/issues/3274758
   php.php_preloading:
     enabled: false
-
-
+  # Really unhelpful heuristic from Blackfire here. We want to avoid someone suggesting crunching many
+  # modules into one single mega-module just to greenlight this check point.
+  php.drupal8.too_many_contrib_modules:
+    enabled: false
+  # Sigh. Yes, and if my Grandmother had wheels she would have been a bike. Most of the SQL comes from core
+  # and supporting contrib modules. We can optimise some of the more complex queries but most are supporting
+  # by Drupal's internal query and render caches.
+  php.too_many_sqls:
+    enabled: false
