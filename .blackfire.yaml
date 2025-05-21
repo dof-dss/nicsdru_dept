@@ -23,3 +23,8 @@ recommendations:
   # by Drupal's internal query and render caches.
   php.too_many_sqls:
     enabled: false
+  # Platform.sh's build flavor set to 'composer' will run `composer install --no-dev --optimize-autoloader --classmap-authoritative`
+  # and dump the classmap into vendor/composer/autoload_classmap.php file on disk which is also shared/loaded
+  # into the apcu opcode cache for faster usage.
+  php.dump_composer_autoloader_classmap:
+    enabled: false
