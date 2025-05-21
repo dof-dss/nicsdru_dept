@@ -12,6 +12,7 @@ type: 'php:8.3'
 variables:
   php:
     memory_limit: "256M"
+    apc.shm_size: "64M"
     opcache.interned_strings_buffer: "32"
     opcache.max_accelerated_files: "10000"
     opcache.memory_consumption: "256"
