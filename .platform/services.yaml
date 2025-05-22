@@ -7,7 +7,7 @@ db:
   # the CLI will return an error.
   type: mariadb:10.4
   # The disk attribute is the size of the persistent disk (in MB) allocated to the service.
-  disk: 15120
+  disk: 7168
   configuration:
     schemas:
       - main
@@ -30,6 +30,7 @@ solr_9_6:
         core: default
 
 redis:
-  type: "redis:7.2"
+  type: "redis-persistent:7.2"
+  disk: 2048
   configuration:
     maxmemory_policy: allkeys-lfu
