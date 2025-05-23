@@ -383,6 +383,48 @@ function nicsdru_dept_theme_preprocess_node(array &$variables) {
     if ($current_time > $event_datetime->getTimestamp()) {
       $variables['event_passed'] = TRUE;
     }
+
+    // Preprocess list of council values into the now titled 'Regions' area.
+    if ($node->hasField('field_council') && !$node->get('field_council')->isEmpty()) {
+      $field = $node->get('field_council');
+      $keys = array_column($field->getValue(), 'value');
+
+      // Get allowed values (key => label) for this field.
+      $allowed_values = $field->getFieldDefinition()->getSetting('allowed_values');
+
+      $region_labels = [];
+      $region_links = [];
+
+      foreach ($keys as $key) {
+        $label = $allowed_values[$key] ?? $key;
+        $region_labels[] = $label;
+
+        // Generate URL to the 'events' view with a facet-style filter.
+        $url = Url::fromRoute('view.events.events_search', [], [
+          'query' => ['f[0]' => 'region:' . $key],
+        ]);
+
+        $region_links[] = [
+          '#type' => 'link',
+          '#title' => $label,
+          '#url' => $url,
+          '#attributes' => [
+            'aria-label' => $label,
+          ],
+          '#wrapper_attributes' => [
+            'class' => ['regions--item']
+          ],
+        ];
+      }
+
+      $variables['event_regions'] = $region_labels;
+
+      $variables['content']['region_links'] = [
+        '#theme' => 'item_list',
+        '#items' => $region_links,
+        '#attributes' => ['class' => ['regions--list']],
+      ];
+    }
   }
 
   if (!empty($node->book)) {
