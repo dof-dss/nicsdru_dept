@@ -13,7 +13,6 @@ dependencies:
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
     - field.field.node.event.field_summary
-    - field.field.node.event.field_venue
     - node.type.event
   module:
     - smart_trim
@@ -66,6 +65,5 @@ hidden:
   field_domain_source: true
   field_event_datetime: true
   field_event_host: true
-  field_venue: true
   langcode: true
   search_api_excerpt: true

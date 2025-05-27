@@ -13,7 +13,6 @@ dependencies:
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
     - field.field.node.event.field_summary
-    - field.field.node.event.field_venue
     - node.type.event
   module:
     - datetime_range
@@ -82,7 +81,6 @@ hidden:
   field_council: true
   field_domain_access: true
   field_domain_all_affiliates: true
-  field_venue: true
   langcode: true
   links: true
   search_api_excerpt: true

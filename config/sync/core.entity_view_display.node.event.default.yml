@@ -12,7 +12,6 @@ dependencies:
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
     - field.field.node.event.field_summary
-    - field.field.node.event.field_venue
     - node.type.event
   module:
     - datetime_range
@@ -91,14 +90,6 @@ content:
       trim_options: {  }
     third_party_settings: {  }
     weight: 1
-    region: content
-  field_venue:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 105
     region: content
   links:
     settings: {  }
