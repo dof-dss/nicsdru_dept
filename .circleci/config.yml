@@ -155,7 +155,7 @@ commands:
     steps:
       - run:
           name: Add jq package to assist in parsing JSON (not bundled with this docker image)
-          command: sudo add-apt-repository universe && sudo apt update && sudo apt install jq -y
+          command: sudo apt install software-properties-common && sudo add-apt-repository universe && sudo apt update && sudo apt install jq -y
       - run:
           name: Check composer lock file is compliant with DoF package constraints
           command: |
