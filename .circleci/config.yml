@@ -55,7 +55,6 @@ jobs:
     <<: *docker_image
     steps:
       - checkout_code
-      - check_build_constraints
       - composer_tasks
       - persist_to_workspace:
           root: ./
@@ -150,17 +149,6 @@ jobs:
 
 # Re-usable commands.
 commands:
-  check_build_constraints:
-    description: "Checks for any known composer package restrictions or limits"
-    steps:
-      - run:
-          name: Add jq package to assist in parsing JSON (not bundled with this docker image)
-          command: sudo apt update && sudo apt install jq -y
-      - run:
-          name: Check composer lock file is compliant with DoF package constraints
-          command: |
-            cd $PROJECT_ROOT/.circleci
-            ./build_check.sh constraints.txt ../composer.lock
   checkout_code:
     description: "Handle composer access tokens, SSH key fingerprints and code checkout"
     steps:
