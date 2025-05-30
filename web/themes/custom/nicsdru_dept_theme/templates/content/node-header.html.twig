@@ -4,6 +4,11 @@
 {% if show_title %}
   {{ include('@nicsdru_dept_theme/content/page-title.html.twig') }}
   {{ content.field_site_topics }}
+  {% if content.region_links %}
+    <div class="regions">
+    <div class="regions--label">Regions: </div> {{ content.region_links }}
+    </div>
+  {% endif %}
 {% endif %}
 
 {{ content.field_published_date }}
