@@ -134,7 +134,7 @@
         "drupal/entity_embed": "^1.7",
         "drupal/entity_events": "^2.0",
         "drupal/entity_reference_tree": "^2.2",
-        "drupal/eu_cookie_compliance": "^1.14",
+        "drupal/eu_cookie_compliance": "^1.26",
         "drupal/facets": "^2.0",
         "drupal/facets_pretty_paths": "^2.0",
         "drupal/fastly": "^4.0",
@@ -354,9 +354,6 @@
             },
             "drupal/domain_path": {
                 "Warning: Undefined array key \"pathauto\" in Drupal\\domain_path_pathauto\\DomainPathautoHelper #3315752": "https://www.drupal.org/files/issues/2024-10-21/3315752-13.patch"
-            },
-            "drupal/eu_cookie_compliance": {
-                "Elements with role=\"dialog\" or role=\"alertdialog\" do not have accessible names": "https://www.drupal.org/files/issues/2024-10-11/eu_cookie_compliance.3379830.1.25.0.patch"
             },
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
