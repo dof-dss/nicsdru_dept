@@ -98,6 +98,7 @@
         "drupal/autoban": "^1.10",
         "drupal/block_field": "^1.0@RC",
         "drupal/block_visibility_groups": "^2.0",
+        "drupal/charts": "^5.1",
         "drupal/chosen": "^5.0",
         "drupal/ckeditor": "^1.0",
         "drupal/ckeditor5_allowed_html": "^1.2-dev",
@@ -318,6 +319,9 @@
             },
             "drupal/block_visibility_groups": {
                 "Visibility incorrectly returns false on OR logic when context missing from a different condition #3503194": "https://www.drupal.org/files/issues/2025-02-07/or-logic-when-context-missing--3503194-5.patch"
+            },
+            "drupal/charts": {
+                "TypeError: array_unshift(): Argument #1 ($array) must be of type array": "https://www.drupal.org/files/issues/2025-02-21/3466734-array-unshift-argument-must-be-of-type-array.patch"
             },
             "drupal/cookie_content_blocker": {
                 "Disable XSS for tag settings to allow HTML output": "https://gist.githubusercontent.com/omahm/eb99bc8278b57798a7d82bf06c27b8d1/raw/d9d75e06300a102b072dd8166f82ec381f211b9d/cookie_content_blocker_disable_xss"

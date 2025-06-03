@@ -1,0 +1,26 @@
+uuid: e2431b47-d734-4fff-88cd-40bdddc55f0d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_domain_source
+    - media.type.chart
+id: media.chart.field_domain_source
+field_name: field_domain_source
+entity_type: media
+bundle: chart
+label: 'Domain Source'
+description: 'Select the canonical domain for this entity.'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: domain_entity_field_default_domains
+settings:
+  handler: 'default:domain'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: weight
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

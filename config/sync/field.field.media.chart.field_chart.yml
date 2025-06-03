@@ -1,0 +1,21 @@
+uuid: c6faa65f-6c4d-4673-a080-c93f3881e622
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_chart
+    - media.type.chart
+  module:
+    - charts
+id: media.chart.field_chart
+field_name: field_chart
+entity_type: media
+bundle: chart
+label: Chart
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: chart_config

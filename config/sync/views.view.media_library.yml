@@ -8,6 +8,7 @@ dependencies:
     - image.style.media_library
     - image.style.thumbnail
     - media.type.audio
+    - media.type.chart
     - media.type.document
     - media.type.image
     - media.type.remote_document
@@ -409,6 +410,7 @@ display:
           operator: in
           value:
             audio: audio
+            chart: chart
             document: document
             image: image
             remote_document: remote_document
@@ -436,6 +438,7 @@ display:
               author: '0'
               supervisor: '0'
               homepage_supervisor: '0'
+              rss_supervisor: '0'
               stats_author: '0'
               stats_supervisor: '0'
               topic_layout_supervisor: '0'

@@ -1,0 +1,11 @@
+uuid: 68e05f57-b522-4473-94dc-3cfbc56939b6
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.chart
+id: media.chart
+target_entity_type_id: media
+target_bundle: chart
+default_langcode: site_default
+language_alterable: false

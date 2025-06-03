@@ -1,0 +1,40 @@
+uuid: b3f47826-55e9-467f-94fe-ecc2cdace0c9
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.embed
+    - field.field.media.chart.field_chart
+    - field.field.media.chart.field_domain_access
+    - field.field.media.chart.field_domain_source
+    - field.field.media.chart.field_media_file
+    - media.type.chart
+  module:
+    - charts
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: media.chart.embed
+targetEntityType: media
+bundle: chart
+mode: embed
+content:
+  field_chart:
+    type: chart_config_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_domain_access: true
+  field_domain_source: true
+  field_media_file: true
+  langcode: true
+  name: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

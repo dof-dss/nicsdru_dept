@@ -1,0 +1,36 @@
+uuid: 65dc7741-f0a6-484c-8ae0-d913a2465a4a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.media.media_library
+    - field.field.media.chart.field_chart
+    - field.field.media.chart.field_domain_access
+    - field.field.media.chart.field_domain_source
+    - field.field.media.chart.field_media_file
+    - media.type.chart
+id: media.chart.media_library
+targetEntityType: media
+bundle: chart
+mode: media_library
+content:
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_chart: true
+  field_domain_access: true
+  field_domain_source: true
+  field_media_file: true
+  langcode: true
+  path: true
+  publish_on: true
+  status: true
+  uid: true
+  unpublish_on: true

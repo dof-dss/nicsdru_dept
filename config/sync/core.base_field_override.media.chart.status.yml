@@ -1,0 +1,22 @@
+uuid: 3d851e6c-80ca-4711-8406-b5aa5a11dadd
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.chart
+id: media.chart.status
+field_name: status
+entity_type: media
+bundle: chart
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
