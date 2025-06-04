@@ -7,36 +7,40 @@ dependencies:
     - field.field.media.chart.field_domain_access
     - field.field.media.chart.field_domain_source
     - field.field.media.chart.field_media_file
+    - image.style.media_library
     - media.type.chart
   module:
-    - charts
-    - file
+    - image
 id: media.chart.default
 targetEntityType: media
 bundle: chart
 mode: default
 content:
-  field_chart:
-    type: chart_config_default
-    label: above
-    settings: {  }
+  name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
     weight: 0
     region: content
-  field_media_file:
-    type: file_default
-    label: visually_hidden
+  thumbnail:
+    type: image
+    label: hidden
     settings:
-      use_description_as_link_text: true
+      image_link: ''
+      image_style: media_library
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
     weight: 1
     region: content
 hidden:
   created: true
+  field_chart: true
   field_domain_access: true
   field_domain_source: true
+  field_media_file: true
   langcode: true
-  name: true
   search_api_excerpt: true
-  thumbnail: true
   uid: true

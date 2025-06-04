@@ -10,7 +10,7 @@ dependencies:
     - field.field.media.chart.field_media_file
     - media.type.chart
   module:
-    - charts
+    - image
     - layout_builder
 third_party_settings:
   layout_builder:
@@ -21,20 +21,31 @@ targetEntityType: media
 bundle: chart
 mode: embed
 content:
-  field_chart:
-    type: chart_config_default
+  name:
+    type: string
     label: hidden
-    settings: {  }
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
     weight: 0
     region: content
+  thumbnail:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
   created: true
+  field_chart: true
   field_domain_access: true
   field_domain_source: true
   field_media_file: true
   langcode: true
-  name: true
   search_api_excerpt: true
-  thumbnail: true
   uid: true
