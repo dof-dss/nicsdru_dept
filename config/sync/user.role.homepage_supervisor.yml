@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - node.type.featured_content_list
+    - taxonomy.vocabulary.business_area
     - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
@@ -11,6 +12,9 @@ dependencies:
     - domain_access
     - draggableviews
     - node
+    - taxonomy
+    - taxonomy_access_fix
+    - taxonomy_manager
     - users_export
 id: homepage_supervisor
 label: 'Homepage supervisor (Add-on role)'
@@ -19,10 +23,25 @@ is_admin: null
 permissions:
   - 'access content overview'
   - 'access draggableviews'
+  - 'access taxonomy manager list'
+  - 'access taxonomy overview'
   - 'administer department'
+  - 'create terms in business_area'
+  - 'edit terms in business_area'
+  - 'reorder terms in business_area'
+  - 'reset business_area'
   - 'revert featured_content_list revisions'
+  - 'revert term revisions in business_area'
+  - 'select terms in business_area'
+  - 'select unpublished terms in business_area'
   - 'update department'
   - 'update featured_content_list content on assigned domains'
   - 'use nics_editorial_workflow transition quick_publish'
   - 'users export access export page'
   - 'view featured_content_list revisions'
+  - 'view term names in business_area'
+  - 'view term revisions in business_area'
+  - 'view terms in business_area'
+  - 'view unpublished term names in business_area'
+  - 'view unpublished terms in business_area'
+  - 'view vocabulary name of business_area'
