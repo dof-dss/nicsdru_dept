@@ -688,7 +688,3 @@ function nicsdru_dept_theme_preprocess_region(&$variables) {
     }
   }
 }
-
-function nicsdru_dept_theme_preprocess_item_list(&$variables) {
-  dump($variables);
-}
