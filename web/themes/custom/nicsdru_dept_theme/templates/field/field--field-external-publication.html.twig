@@ -53,7 +53,7 @@
   <div{{ attributes.addClass('content-field--label').setAttribute('role', 'presentation') }}>
     <h2{{ title_attributes.addClass(title_classes) }}>{{ 'External documents'|t }}</h2>
     <div class="content-field__value">
-      <ul class="list">
+      <ul class="list--no-bullet">
         {% for item in items %}
           <li{{ item.attributes.addClass('list-item') }}>{{ item.content }}</li>
         {% endfor %}
