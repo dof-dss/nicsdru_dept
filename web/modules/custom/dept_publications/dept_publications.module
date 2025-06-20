@@ -406,6 +406,9 @@ function dept_publications_preprocess_fieldset__media_library_widget(&$variables
   $variables['#attached']['library'][] = 'dept_publications/media_widget_styles';
 }
 
+/**
+ * Implements hook_preprocess_node().
+ */
 function dept_publications_preprocess_node(&$variables) {
   /* @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
