@@ -8,10 +8,10 @@
 use Drupal\Core\Access\AccessResultForbidden;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\Core\Url;
+use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
@@ -425,7 +425,10 @@ function dept_publications_preprocess_node(&$variables) {
       $title = $link_item->title ?? $link_item->uri;
       $url = Url::fromUri($link_item->uri);
 
-      $items[] = dept_publications_build_publication_link($url, $title, 'html');
+      $items[] = dept_publications_build_publication_link($url, $title, [
+        'file_extension' => 'html',
+        'file_type' => 'html',
+      ]);
     }
   }
 
@@ -435,18 +438,14 @@ function dept_publications_preprocess_node(&$variables) {
       $title = $media->label();
       $url = $media->toUrl();
 
-      $file_extension = 'file';
+      $file_info = [];
 
       if ($media->hasField('field_media_file') && !$media->get('field_media_file')->isEmpty()) {
         $file = $media->get('field_media_file')->entity;
-
-        if ($file) {
-          $filename = $file->getFilename();
-          $file_extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-        }
+        $file_info = dept_publications_map_filetypes_to_document_types($file);
       }
 
-      $items[] = dept_publications_build_publication_link($url, $title, $file_extension);
+      $items[] = dept_publications_build_publication_link($url, $title, $file_info);
     }
   }
 
@@ -456,18 +455,14 @@ function dept_publications_preprocess_node(&$variables) {
       $title = $media->label();
       $url = $media->toUrl();
 
-      $file_extension = 'file';
+      $file_info = [];
 
       if ($media->hasField('field_media_file') && !$media->get('field_media_file')->isEmpty()) {
         $file = $media->get('field_media_file')->entity;
-
-        if ($file) {
-          $filename = $file->getFilename();
-          $file_extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-        }
+        $file_info = dept_publications_map_filetypes_to_document_types($file);
       }
 
-      $items[] = dept_publications_build_publication_link($url, $title, $file_extension);
+      $items[] = dept_publications_build_publication_link($url, $title, $file_info);
     }
   }
 
@@ -489,28 +484,61 @@ function dept_publications_preprocess_node(&$variables) {
  *   The URL object.
  * @param string $title
  *   The text to display for the link.
- * @param string $media_type
- *   Type of file (e.g. 'pdf', 'docx', 'html') for CSS classes.
+ * @param array $file_info
+ *   Type of file (e.g. 'pdf', 'docx', 'html') for CSS classes as well as filesize.
  *
  * @return array
- *   A renderable array representing the link.
+ *   A renderable array.
  */
-function dept_publications_build_publication_link(Url $url, string $title, string $media_type = ''): array {
-  // Create the base Link object.
-  $link = Link::fromTextAndUrl($title, $url);
-  $render_array = $link->toRenderable();
-
-  // Add attributes to the link element.
-  $render_array['#attributes'] = [
-    'class' => [
-      'file-link',
-      'file--ico',
-      "file--ico__{$media_type}",
-    ],
-    'rel' => ['noopener', 'noreferrer'],
-    'target' => '_blank',
-    'data-once' => 'elink',
+function dept_publications_build_publication_link(Url $url, string $title, array $file_info): array {
+  $link_text = [
+    '#markup' => $title,
   ];
 
-  return $render_array;
+  // Append the metadata span if provided.
+  if (!empty($file_info['file_type']) && !empty($file_info['file_size'])) {
+    $link_text[] = [
+      '#markup' => '<span class="meta">' . $file_info['file_type'] . ' (' . $file_info['file_size'] . ')</span>',
+    ];
+  }
+
+  return [
+    '#type' => 'link',
+    '#title' => $link_text,
+    '#url' => $url,
+    '#attributes' => [
+      'lang' => 'en',
+      'class' => [
+        'file-link',
+        'file--ico',
+        "file--ico__{$file_info['file_extension']}",
+      ],
+      'rel' => ['noopener', 'noreferrer'],
+      'target' => '_blank',
+      'data-once' => 'elink',
+    ],
+  ];
+}
+
+/**
+ * Helper function to map file mimetypes to user friendly document types.
+ */
+function dept_publications_map_filetypes_to_document_types(FileInterface $file) {
+  $pretty_mimes = \Drupal::service('origins_media.pretty_mime_types')->getMimeTypes();
+
+  $file_info = [];
+  $file_info['file_size'] = ByteSizeMarkup::create($file->getSize(), \Drupal::languageManager()->getCurrentLanguage()->getId());
+
+  $file_info['file_url'] = $file->createFileUrl();
+  $file_info['file_extension'] = strtolower(pathinfo($file_info['file_url'], PATHINFO_EXTENSION));
+
+  $file_mimetype = $file->getMimeType();
+  if (array_key_exists($file->getMimeType(), $pretty_mimes)) {
+    $file_info['file_type'] = $pretty_mimes[$file_mimetype];
+  }
+  else {
+    $file_info['file_type'] = strtoupper(preg_replace('/^application\/(\w+)$/', '\1', $file_mimetype));
+  }
+
+  return $file_info;
 }
