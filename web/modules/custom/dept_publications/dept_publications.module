@@ -8,6 +8,7 @@
 use Drupal\Core\Access\AccessResultForbidden;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\Core\Url;
@@ -403,4 +404,110 @@ function dept_publications_get_remote_file_metadata(string $file_url) {
 function dept_publications_preprocess_fieldset__media_library_widget(&$variables) {
   // Add custom style overrides to the media library field widget.
   $variables['#attached']['library'][] = 'dept_publications/media_widget_styles';
+}
+
+function dept_publications_preprocess_node(&$variables) {
+  /* @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+
+  if ($node->bundle() != 'publication') {
+    return;
+  }
+
+  $items = [];
+
+  // 1. field_external_publication (Link field)
+  if (!$node->get('field_external_publication')->isEmpty()) {
+    foreach ($node->get('field_external_publication') as $link_item) {
+      $title = $link_item->title ?? $link_item->uri;
+      $url = Url::fromUri($link_item->uri);
+
+      $items[] = dept_publications_build_publication_link($url, $title, 'html');
+    }
+  }
+
+  // 2. field_publication_files (Media reference)
+  if (!$node->get('field_publication_files')->isEmpty()) {
+    foreach ($node->get('field_publication_files')->referencedEntities() as $media) {
+      $title = $media->label();
+      $url = $media->toUrl();
+
+      $file_extension = 'file';
+
+      if ($media->hasField('field_media_file') && !$media->get('field_media_file')->isEmpty()) {
+        $file = $media->get('field_media_file')->entity;
+
+        if ($file) {
+          $filename = $file->getFilename();
+          $file_extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        }
+      }
+
+      $items[] = dept_publications_build_publication_link($url, $title, $file_extension);
+    }
+  }
+
+  // 3. field_publication_secure_files (Media reference)
+  if (!$node->get('field_publication_secure_files')->isEmpty()) {
+    foreach ($node->get('field_publication_secure_files')->referencedEntities() as $media) {
+      $title = $media->label();
+      $url = $media->toUrl();
+
+      $file_extension = 'file';
+
+      if ($media->hasField('field_media_file') && !$media->get('field_media_file')->isEmpty()) {
+        $file = $media->get('field_media_file')->entity;
+
+        if ($file) {
+          $filename = $file->getFilename();
+          $file_extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        }
+      }
+
+      $items[] = dept_publications_build_publication_link($url, $title, $file_extension);
+    }
+  }
+
+  // Wrap in an item list.
+  $rendered = [
+    '#theme' => 'item_list',
+    '#items' => $items,
+    '#attributes' => ['class' => ['list--no-bullet']],
+  ];
+
+  // Make available in template.
+  $variables['aggregated_publications'] = $rendered;
+}
+
+/**
+ * Helper function to build render array for a publication item.
+ *
+ * @param \Drupal\Core\Url $url
+ *   The URL object.
+ * @param string $title
+ *   The text to display for the link.
+ * @param string $media_type
+ *   Type of file (e.g. 'pdf', 'docx', 'html') for CSS classes.
+ *
+ * @return array
+ *   A renderable array representing the link.
+ */
+function dept_publications_build_publication_link(Url $url, string $title, string $media_type = ''): array {
+  // Create the base Link object.
+  $link = Link::fromTextAndUrl($title, $url);
+  $render_array = $link->toRenderable();
+
+  // Add attributes to the link element.
+  $render_array['#attributes'] = [
+    'class' => [
+      'file-link',
+      'file--ico',
+      "file--ico__{$media_type}",
+    ],
+    'rel' => ['noopener', 'noreferrer'],
+    'target' => '_blank',
+    'data-once' => 'elink',
+  ];
+
+  return $render_array;
 }
