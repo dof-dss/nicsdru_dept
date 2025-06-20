@@ -11,6 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\Core\Url;
+use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
@@ -403,4 +404,141 @@ function dept_publications_get_remote_file_metadata(string $file_url) {
 function dept_publications_preprocess_fieldset__media_library_widget(&$variables) {
   // Add custom style overrides to the media library field widget.
   $variables['#attached']['library'][] = 'dept_publications/media_widget_styles';
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function dept_publications_preprocess_node(&$variables) {
+  /* @var \Drupal\node\NodeInterface $node */
+  $node = $variables['node'];
+
+  if ($node->bundle() != 'publication') {
+    return;
+  }
+
+  $items = [];
+
+  // 1. field_external_publication (Link field)
+  if (!$node->get('field_external_publication')->isEmpty()) {
+    foreach ($node->get('field_external_publication') as $link_item) {
+      $title = $link_item->title ?? $link_item->uri;
+      $url = Url::fromUri($link_item->uri);
+
+      $items[] = dept_publications_build_publication_link($url, $title, [
+        'file_extension' => 'html',
+        'file_type' => 'html',
+      ]);
+    }
+  }
+
+  // 2. field_publication_files (Media reference)
+  if (!$node->get('field_publication_files')->isEmpty()) {
+    foreach ($node->get('field_publication_files')->referencedEntities() as $media) {
+      $title = $media->label();
+      $url = $media->toUrl();
+
+      $file_info = [];
+
+      if ($media->hasField('field_media_file') && !$media->get('field_media_file')->isEmpty()) {
+        $file = $media->get('field_media_file')->entity;
+        $file_info = dept_publications_map_filetypes_to_document_types($file);
+      }
+
+      $items[] = dept_publications_build_publication_link($url, $title, $file_info);
+    }
+  }
+
+  // 3. field_publication_secure_files (Media reference)
+  if (!$node->get('field_publication_secure_files')->isEmpty()) {
+    foreach ($node->get('field_publication_secure_files')->referencedEntities() as $media) {
+      $title = $media->label();
+      $url = $media->toUrl();
+
+      $file_info = [];
+
+      if ($media->hasField('field_media_file') && !$media->get('field_media_file')->isEmpty()) {
+        $file = $media->get('field_media_file')->entity;
+        $file_info = dept_publications_map_filetypes_to_document_types($file);
+      }
+
+      $items[] = dept_publications_build_publication_link($url, $title, $file_info);
+    }
+  }
+
+  // Wrap in an item list.
+  $rendered = [
+    '#theme' => 'item_list',
+    '#items' => $items,
+    '#attributes' => ['class' => ['list--no-bullet']],
+  ];
+
+  // Make available in template.
+  $variables['aggregated_publications'] = $rendered;
+}
+
+/**
+ * Helper function to build render array for a publication item.
+ *
+ * @param \Drupal\Core\Url $url
+ *   The URL object.
+ * @param string $title
+ *   The text to display for the link.
+ * @param array $file_info
+ *   Type of file (e.g. 'pdf', 'docx', 'html') for CSS classes as well as filesize.
+ *
+ * @return array
+ *   A renderable array.
+ */
+function dept_publications_build_publication_link(Url $url, string $title, array $file_info): array {
+  $link_text = [
+    '#markup' => $title,
+  ];
+
+  // Append the metadata span if provided.
+  if (!empty($file_info['file_type']) && !empty($file_info['file_size'])) {
+    $link_text[] = [
+      '#markup' => '<span class="meta">' . $file_info['file_type'] . ' (' . $file_info['file_size'] . ')</span>',
+    ];
+  }
+
+  return [
+    '#type' => 'link',
+    '#title' => $link_text,
+    '#url' => $url,
+    '#attributes' => [
+      'lang' => 'en',
+      'class' => [
+        'file-link',
+        'file--ico',
+        "file--ico__{$file_info['file_extension']}",
+      ],
+      'rel' => ['noopener', 'noreferrer'],
+      'target' => '_blank',
+      'data-once' => 'elink',
+    ],
+  ];
+}
+
+/**
+ * Helper function to map file mimetypes to user friendly document types.
+ */
+function dept_publications_map_filetypes_to_document_types(FileInterface $file) {
+  $pretty_mimes = \Drupal::service('origins_media.pretty_mime_types')->getMimeTypes();
+
+  $file_info = [];
+  $file_info['file_size'] = ByteSizeMarkup::create($file->getSize(), \Drupal::languageManager()->getCurrentLanguage()->getId());
+
+  $file_info['file_url'] = $file->createFileUrl();
+  $file_info['file_extension'] = strtolower(pathinfo($file_info['file_url'], PATHINFO_EXTENSION));
+
+  $file_mimetype = $file->getMimeType();
+  if (array_key_exists($file->getMimeType(), $pretty_mimes)) {
+    $file_info['file_type'] = $pretty_mimes[$file_mimetype];
+  }
+  else {
+    $file_info['file_type'] = strtoupper(preg_replace('/^application\/(\w+)$/', '\1', $file_mimetype));
+  }
+
+  return $file_info;
 }
