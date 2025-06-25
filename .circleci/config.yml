@@ -18,13 +18,9 @@ jobs:
       - image: cimg/base:stable
     steps:
       - run:
-          name: Install CircleCI CLI (manual download)
+          name: Install CircleCI CLI
           command: |
-            mkdir -p ~/.local/bin
-            curl -Lo ~/.local/bin/circleci https://github.com/CircleCI-Public/circleci-cli/releases/latest/download/circleci-linux-amd64
-            chmod +x ~/.local/bin/circleci
-            echo 'export PATH="$HOME/.local/bin:$PATH"' >> $BASH_ENV
-            source $BASH_ENV
+            curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/main/install.sh | sudo bash
       - run:
           name: Download shared config and continue
           command: |
