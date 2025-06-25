@@ -18,6 +18,12 @@ jobs:
       - image: cimg/base:stable
     steps:
       - run:
+          name: Install latest CircleCI CLI
+          command: |
+            curl -fLSs https://circle.ci/cli | bash
+            echo 'export PATH="$HOME/.circleci-cli/bin:$PATH"' >> $BASH_ENV
+            source $BASH_ENV
+      - run:
           name: Download shared config and continue
           command: |
             curl -fsSL https://raw.githubusercontent.com/johangant/ci-config/refs/heads/DEPT-1217--shared-config/shared-config.yml -o /tmp/continuation.yml
