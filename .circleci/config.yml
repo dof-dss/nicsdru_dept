@@ -1,39 +1,57 @@
 version: 2.1
-setup: true
+setup: true  # Required for dynamic config
 
+# Project-level defaults (override shared-config.yml)
 parameters:
+  shared_config_url:
+    type: string
+    default: "https://raw.githubusercontent.com/johangant/ci-config/DEPT-1217--shared-config/shared-config.yml"
   php_version:
     type: string
-    default: "8.3"
-  node_version:
-    type: string
-    default: "14.21.3"
+    default: "8.3"  # Project prefers PHP 8.3 unless overridden
   drupal_core_version:
     type: string
-    default: "10.4"
+    default: "10.4" # Project prefers Drupal 10.4
 
 jobs:
-  continue_config:
+  generate_config:
     docker:
       - image: cimg/base:stable
     steps:
       - run:
-          name: Install CircleCI CLI
+          name: Fetch and customize shared config
           command: |
-            curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/main/install.sh | sudo bash
-      - run:
-          name: Download shared config and continue
-          command: |
-            curl -fsSL https://raw.githubusercontent.com/johangant/ci-config/refs/heads/DEPT-1217--shared-config/shared-config.yml -o /tmp/continuation.yml
-            circleci pipeline continue \
-              -c /tmp/continuation.yml \
-              -p '{
-                "php_version": "<< pipeline.parameters.php_version >>",
-                "node_version": "<< pipeline.parameters.node_version >>",
-                "drupal_core_version": "<< pipeline.parameters.drupal_core_version >>"
-              }'
+            # Download shared config
+            curl -s << pipeline.parameters.shared_config_url >> > /tmp/shared-config.yml
+
+            # Apply parameter hierarchy:
+            # 1. Pipeline parameters (highest priority)
+            # 2. Project defaults (config.yml)
+            # 3. Shared defaults (shared-config.yml)
+            PHP_VERSION="${CIRCLE_PHP_VERSION:-<< pipeline.parameters.php_version >>}"
+            DRUPAL_VERSION="${CIRCLE_DRUPAL_VERSION:-<< pipeline.parameters.drupal_core_version >>}"
+
+            # Inject values into shared config
+            sed -i \
+              -e "s/{{PHP_VERSION}}/$PHP_VERSION/g" \
+              -e "s/{{DRUPAL_VERSION}}/$DRUPAL_VERSION/g" \
+              /tmp/shared-config.yml
+
+            # Validate and save for continuation
+            circleci config validate /tmp/shared-config.yml
+            mkdir -p /tmp/workspace
+            cp /tmp/shared-config.yml /tmp/workspace/continuation.yml
+    outputs:
+      config:
+        path: /tmp/workspace/continuation.yml
 
 workflows:
   setup:
     jobs:
-      - continue_config
+      - generate_config
+    on_success:
+      - run:
+          name: Execute with generated config
+          command: |
+            circleci config process /tmp/workspace/continuation.yml > processed.yml
+            circleci local execute -c processed.yml --job build_test
