@@ -46,10 +46,10 @@ commands:
             PLATFORM_REGION="${CIRCLE_PLATFORM_REGION:-<< pipeline.parameters.platform_region >>}"
 
             sed -i \
-              -e "s/{{PHP_VERSION}}/$PHP_VERSION/g" \
-              -e "s/{{DRUPAL_VERSION}}/$DRUPAL_VERSION/g" \
-              -e "s/{{DOCKER_IMAGE}}/$DOCKER_IMAGE/g" \
-              -e "s/{{PLATFORM_REGION}}/$PLATFORM_REGION/g" \
+              -e "s|{{PHP_VERSION}}|$PHP_VERSION|g" \
+              -e "s|{{DRUPAL_VERSION}}|$DRUPAL_VERSION|g" \
+              -e "s|{{DOCKER_IMAGE}}|$DOCKER_IMAGE|g" \
+              -e "s|{{PLATFORM_REGION}}|$PLATFORM_REGION|g" \
               /tmp/shared-config.yml
 
             circleci config validate /tmp/shared-config.yml
