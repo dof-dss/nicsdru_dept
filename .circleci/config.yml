@@ -44,7 +44,7 @@ jobs:
     steps:
       - run:
           name: Install CircleCI CLI
-          command: sudo curl -fLSs https://circle.ci/cli | bash
+          command: curl -fLSs https://circle.ci/cli | sudo bash
       - generate_config:
           config_output_path: "/tmp/workspace/continuation.yml"
       - run:
