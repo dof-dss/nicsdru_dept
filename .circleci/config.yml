@@ -8,9 +8,24 @@ parameters:
   php_version:
     type: string
     default: "8.3"
-  drupal_core_version:
-    type: string
-    default: "10.4"
+    docker_image:
+      type: string
+      default: "thecodingmachine/php"
+    node_version:
+      type: string
+      default: "14.21.3"
+    drupal_core_version:
+      type: string
+      default: "10.4"
+    platform_region:
+      type: string
+      default: "uk-1"
+    edge_git_committer_name:
+      type: string
+      default: "circleci@localhost"
+    edge_git_author_name:
+      type: string
+      default: "Circle CI"
 
 commands:
   generate_config:
