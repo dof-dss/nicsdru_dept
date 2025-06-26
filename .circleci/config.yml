@@ -1,78 +1,26 @@
 version: 2.1
+
 setup: true
 
-parameters:
-  shared_config_url:
-    type: string
-    default: "https://raw.githubusercontent.com/johangant/ci-config/DEPT-1217--shared-config/shared-config.yml"
-  php_version:
-    type: string
-    default: "8.3"
-  docker_image:
-    type: string
-    default: "thecodingmachine/php"
-  node_version:
-    type: string
-    default: "14.21.3"
-  drupal_core_version:
-    type: string
-    default: "10.4"
-  platform_region:
-    type: string
-    default: "uk-1"
-  edge_git_committer_name:
-    type: string
-    default: "circleci@localhost"
-  edge_git_author_name:
-    type: string
-    default: "Circle CI"
+orbs:
+  continuation: circleci/continuation@0.3.1
 
-commands:
-  generate_config:
-    description: "Generate dynamic configuration"
-    parameters:
-      config_output_path:
-        type: string
-        default: "/tmp/workspace/continuation.yml"
-    steps:
-      - run:
-          name: Fetch and customize shared config
-          command: |
-            curl -s << pipeline.parameters.shared_config_url >> > /tmp/shared-config.yml
-
-            PHP_VERSION="${CIRCLE_PHP_VERSION:-<< pipeline.parameters.php_version >>}"
-            DRUPAL_VERSION="${CIRCLE_DRUPAL_VERSION:-<< pipeline.parameters.drupal_core_version >>}"
-            DOCKER_IMAGE="${CIRCLE_DOCKER_IMAGE:-<< pipeline.parameters.docker_image >>}"
-            PLATFORM_REGION="${CIRCLE_PLATFORM_REGION:-<< pipeline.parameters.platform_region >>}"
-
-            sed -i \
-              -e "s|{{PHP_VERSION}}|$PHP_VERSION|g" \
-              -e "s|{{DRUPAL_VERSION}}|$DRUPAL_VERSION|g" \
-              -e "s|{{DOCKER_IMAGE}}|$DOCKER_IMAGE|g" \
-              -e "s|{{PLATFORM_REGION}}|$PLATFORM_REGION|g" \
-              /tmp/shared-config.yml
-
-            circleci config validate /tmp/shared-config.yml
-            mkdir -p $(dirname << parameters.config_output_path >>)
-            cp /tmp/shared-config.yml << parameters.config_output_path >>
+workflows:
+  setup-config:
+    jobs:
+      - continuation/continue:
+          configuration_path: .circleci/continue-config.yml
+          parameters:
+            repo: << pipeline.project.git_url >>
+            branch: << pipeline.git.branch >>
 
 jobs:
-  process_config:
+  validate-config:
     docker:
       - image: cimg/base:stable
     steps:
       - run:
-          name: Install CircleCI CLI
-          command: curl -fLSs https://circle.ci/cli | sudo bash
-      - generate_config:
-          config_output_path: "/tmp/workspace/continuation.yml"
-      - run:
-          name: Execute workflow
+          name: Validate config
           command: |
-            circleci config process /tmp/workspace/continuation.yml > processed.yml
-            circleci local execute -c processed.yml --job build_test
-
-workflows:
-  setup:
-    jobs:
-      - process_config
+            echo "Config validation would happen here"
+            echo "Could check for required files, etc."
