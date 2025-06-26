@@ -42,6 +42,9 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - run:
+          name: Install CircleCI CLI
+          command: sudo curl -fLSs https://circle.ci/cli | bash
       - generate_config:
           config_output_path: "/tmp/workspace/continuation.yml"
       - run:
