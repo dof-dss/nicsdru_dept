@@ -42,10 +42,14 @@ commands:
 
             PHP_VERSION="${CIRCLE_PHP_VERSION:-<< pipeline.parameters.php_version >>}"
             DRUPAL_VERSION="${CIRCLE_DRUPAL_VERSION:-<< pipeline.parameters.drupal_core_version >>}"
+            DOCKER_IMAGE="${CIRCLE_DOCKER_IMAGE:-<< pipeline.parameters.docker_image >>}"
+            PLATFORM_REGION="${CIRCLE_PLATFORM_REGION:-<< pipeline.parameters.platform_region >>}"
 
             sed -i \
               -e "s/{{PHP_VERSION}}/$PHP_VERSION/g" \
               -e "s/{{DRUPAL_VERSION}}/$DRUPAL_VERSION/g" \
+              -e "s/{{DOCKER_IMAGE}}/$DOCKER_IMAGE/g" \
+              -e "s/{{PLATFORM_REGION}}/$PLATFORM_REGION/g" \
               /tmp/shared-config.yml
 
             circleci config validate /tmp/shared-config.yml
