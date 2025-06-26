@@ -10,6 +10,8 @@ workflows:
     jobs:
       - continuation/continue:
           configuration_path: .circleci/continue-config.yml
-          parameters:  # Pass parameters as individual key-value pairs
-            repo: << pipeline.project.git_url >>
-            branch: << pipeline.git.branch >>
+          parameters:  |
+            {
+              "repo": "<< pipeline.project.git_url >>",
+              "branch": "<< pipeline.git.branch >>"
+            }
