@@ -10,17 +10,6 @@ workflows:
     jobs:
       - continuation/continue:
           configuration_path: .circleci/continue-config.yml
-          parameters:
+          parameters:  # Pass parameters as individual key-value pairs
             repo: << pipeline.project.git_url >>
             branch: << pipeline.git.branch >>
-
-jobs:
-  validate-config:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - run:
-          name: Validate config
-          command: |
-            echo "Config validation would happen here"
-            echo "Could check for required files, etc."
