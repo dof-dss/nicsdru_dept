@@ -16,8 +16,9 @@ jobs:
       - image: cimg/base:stable
     steps:
       - run:
-          name: Clone shared CI config
+          name: Fetch shared CI config
           command: |
-            git clone https://github.com/johangant/ci-config.git
+            cd $HOME
+            wget https://raw.githubusercontent.com/johangant/ci-config/DEPT-1217--shared-config/shared-config.yml
       - continuation/continue:
-          configuration_path: ci-config/shared-config.yml
+          configuration_path: $HOME/shared-config.yml
