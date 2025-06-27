@@ -3,15 +3,23 @@ version: 2.1
 setup: true
 
 orbs:
-  continuation: circleci/continuation@0.3.1
+  continuation: circleci/continuation@0.1.2
 
 workflows:
-  setup-config:
+  setup:
     jobs:
-      - continuation/continue:
-          configuration_path: .circleci/continue-config.yml
-          parameters:  |
-            {
-              "repo": "<< pipeline.project.git_url >>",
-              "branch": "<< pipeline.git.branch >>"
-            }
+      - setup-and-dispatch
+
+jobs:
+  setup-and-dispatch:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - run:
+          name: Clone shared CI config
+          command: |
+            git clone https://github.com/johangant/ci-config.git
+      - run:
+          name: Continue with shared config
+          command: |
+            circleci pipeline continue --config ci-config/shared-config.yml
