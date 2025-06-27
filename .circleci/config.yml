@@ -19,7 +19,5 @@ jobs:
           name: Clone shared CI config
           command: |
             git clone https://github.com/johangant/ci-config.git
-      - run:
-          name: Continue with shared config
-          command: |
-            circleci pipeline continue --config ci-config/shared-config.yml
+      - continuation/continue:
+          configuration_path: ci-config/shared-config.yml
