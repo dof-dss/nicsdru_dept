@@ -436,12 +436,12 @@ function dept_publications_preprocess_node(&$variables) {
   if (!$node->get('field_publication_files')->isEmpty()) {
     foreach ($node->get('field_publication_files')->referencedEntities() as $media) {
       $title = $media->label();
-      $url = $media->toUrl();
-
       $file_info = [];
 
       if ($media->hasField('field_media_file') && !$media->get('field_media_file')->isEmpty()) {
         $file = $media->get('field_media_file')->entity;
+        $url = Url::fromUri(\Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri()));
+
         $file_info = dept_publications_map_filetypes_to_document_types($file);
       }
 
@@ -453,12 +453,12 @@ function dept_publications_preprocess_node(&$variables) {
   if (!$node->get('field_publication_secure_files')->isEmpty()) {
     foreach ($node->get('field_publication_secure_files')->referencedEntities() as $media) {
       $title = $media->label();
-      $url = $media->toUrl();
-
       $file_info = [];
 
-      if ($media->hasField('field_media_file') && !$media->get('field_media_file')->isEmpty()) {
-        $file = $media->get('field_media_file')->entity;
+      if ($media->hasField('field_media_file_1') && !$media->get('field_media_file_1')->isEmpty()) {
+        $file = $media->get('field_media_file_1')->entity;
+        $url = Url::fromUri(\Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri()));
+
         $file_info = dept_publications_map_filetypes_to_document_types($file);
       }
 
