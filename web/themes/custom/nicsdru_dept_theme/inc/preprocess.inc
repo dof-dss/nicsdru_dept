@@ -539,6 +539,29 @@ function nicsdru_dept_theme_preprocess_field(&$variables) {
   $element_bundle = $variables['element']['#bundle'] ?? '';
   $field_type = $variables['element']['#field_type'] ?? '';
 
+  if ($field_name === 'field_external_publication') {
+    foreach ($variables['element']['#items'] as $key => $item) {
+      $url = $item->getUrl();
+      // Skip if not a valid URL.
+      if (!$url instanceof Url) {
+        continue;
+      }
+
+      // Build link render array manually.
+      $link = Link::fromTextAndUrl($item->title ?? $url->toString(), $url)
+        ->toRenderable();
+
+      // So we can add a custom class to the <a> tag.
+      $link['#attributes']['class'] = [
+        'file-link',
+        'file--ico',
+        'file--ico__html',
+      ];
+
+      $variables['items'][$key]['content'] = $link;
+    }
+  }
+
   if ($field_name === 'field_link' && $element_bundle === 'application') {
     foreach ($variables['items'] as $key => $item) {
       $icon = '<svg aria-hidden="true" class="ico ico-arrow-right"><use xlink:href="#arrow"></use></svg>';

@@ -77,10 +77,6 @@
 
   <div{{ content_attributes.addClass(['article-content', 'max-body-text-width']) }}>
     {{- content|without('field_published_date', 'field_last_updated', 'field_site_topics', 'field_summary') -}}
-    {% if aggregated_publications %}
-      <h2 class="content-field__label">Documents</h2>
-      {{ aggregated_publications }}
-    {% endif %}
   </div>
 
   {{ include('@nicsdru_dept_theme/content/node-footer.html.twig') }}
