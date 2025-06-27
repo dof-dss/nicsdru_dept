@@ -437,6 +437,7 @@ function dept_publications_preprocess_node(&$variables) {
     foreach ($node->get('field_publication_files')->referencedEntities() as $media) {
       $title = $media->label();
       $file_info = [];
+      $url = '';
 
       if ($media->hasField('field_media_file') && !$media->get('field_media_file')->isEmpty()) {
         $file = $media->get('field_media_file')->entity;
@@ -454,6 +455,7 @@ function dept_publications_preprocess_node(&$variables) {
     foreach ($node->get('field_publication_secure_files')->referencedEntities() as $media) {
       $title = $media->label();
       $file_info = [];
+      $url = '';
 
       if ($media->hasField('field_media_file_1') && !$media->get('field_media_file_1')->isEmpty()) {
         $file = $media->get('field_media_file_1')->entity;
