@@ -21,4 +21,4 @@ jobs:
             cd $HOME
             wget https://raw.githubusercontent.com/johangant/ci-config/DEPT-1217--shared-config/shared-config.yml
       - continuation/continue:
-          configuration_path: $HOME/shared-config.yml
+          configuration_path: shared-config.yml
