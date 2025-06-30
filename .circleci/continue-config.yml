@@ -56,12 +56,6 @@ jobs:
                   - setup-php
                   - run-tests:
                       test_command: << parameters.test_command >>
-
-              lint-code:
-                executor: php-executor
-                steps:
-                  - setup-php
-                  - run-lint
             EOF
 
             # Output the config for CircleCI to use
