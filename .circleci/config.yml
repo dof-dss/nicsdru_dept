@@ -24,5 +24,9 @@ jobs:
           parameters: |
             {
               "php_version": "8.3",
-              "drupal_core_version": "10.4"
+              "drupal_core_version": "10.4",
+              "coding_standards_dirs": "${PROJECT_ROOT}/web/modules/custom ${PROJECT_ROOT}/web/modules/origins ${PROJECT_ROOT}/web/themes/custom",
+              "deprecated_code_dirs": "${PROJECT_ROOT}/web/modules/custom ${PROJECT_ROOT}/web/modules/origins ${PROJECT_ROOT}/web/themes/custom",
+              "ssh_fingerprint": "65:4e:c7:ca:9f:c0:40:f7:16:2c:da:33:63:1d:90:12"
             }
+
