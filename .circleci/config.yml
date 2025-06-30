@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Fetch shared CI config
           command: |
-            wget https://raw.githubusercontent.com/johangant/ci-config/DEPT-1217--shared-config/shared-config.yml -O shared-config.yml
+            wget https://raw.githubusercontent.com/dof-dss/webdev-ci/refs/heads/main/shared-config.yml -O shared-config.yml
       - continuation/continue:
           configuration_path: shared-config.yml
           parameters: |
