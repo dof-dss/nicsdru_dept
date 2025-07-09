@@ -30,12 +30,5 @@ jobs:
               "edge_branch": "DEPT-edge",
               "edge_build_dofdss_packages": "dof-dss/nicsdru_origins_theme:dev-10.x-dev dof-dss/nicsdru_origins_modules:dev-10.x-dev",
               "ssh_fingerprint": "65:4e:c7:ca:9f:c0:40:f7:16:2c:da:33:63:1d:90:12",
-              "edge_schedule": {
-                "cron": "0 2 * * 1-5",
-                "filters": {
-                  "branches": {
-                    "only": ["development"]
-                  }
-                }
-              }
+              "edge_schedule": "{\"cron\": \"0 2 * * 1-5\", \"filters\": {\"branches\": {\"only\": [\"development\"]}}}"
             }
