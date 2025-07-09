@@ -12,8 +12,8 @@ workflows:
   build-edge:
     triggers:
       - schedule:
-          # At 02:00 every Mon-Fri
-          cron: "0 2 * * 1-5"
+          # At 02:05 every Mon-Fri
+          cron: "5 2 * * 1-5"
           filters:
             branches:
               only:
