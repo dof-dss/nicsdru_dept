@@ -9,17 +9,6 @@ workflows:
   setup:
     jobs:
       - setup-and-dispatch
-  build-edge:
-    triggers:
-      - schedule:
-          # At 02:05 every Mon-Fri
-          cron: "5 2 * * 1-5"
-          filters:
-            branches:
-              only:
-                - development
-    jobs:
-      - build_edge
 
 jobs:
   setup-and-dispatch:
