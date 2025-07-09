@@ -16,7 +16,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - run:
-          name: Fetch shared CI config
+          name: Fetch shared CI config.
           command: |
             wget https://raw.githubusercontent.com/dof-dss/webdev-ci/refs/heads/development/shared-config.yml -O shared-config.yml
       - continuation/continue:
