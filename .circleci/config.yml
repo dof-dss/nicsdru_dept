@@ -20,17 +20,12 @@ jobs:
           command: wget https://raw.githubusercontent.com/dof-dss/webdev-ci/development/shared-config.yml -O shared-config.yml
 
       - run:
-          name: Pack local workflows config
-          command: |
-            circleci config pack .circleci/workflows > packed-workflows.yml
-
-      - run:
           name: Combine shared jobs and local workflows
           command: |
-            # Remove the version line from packed-workflows.yml to avoid duplicate version lines
-            tail -n +2 packed-workflows.yml > workflows.yml
-            # Merge shared jobs and local workflows into full config.
-            cat shared-config.yml workflows.yml > full-config.yml
+            # Remove the 'version: 2.1' from workflows config (since it's in shared config)
+            tail -n +2 .circleci/workflows/config.yml > workflows-only.yml
+            # Concatenate shared jobs+commands with repo workflows
+            cat shared-config.yml workflows-only.yml > full-config.yml
 
       - continuation/continue:
           configuration_path: full-config.yml
