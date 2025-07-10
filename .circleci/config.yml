@@ -35,6 +35,7 @@ jobs:
               "php_version": "8.3",
               "drupal_core_version": "10.4",
               "coding_standards_dirs": "${PROJECT_ROOT}/web/modules/custom ${PROJECT_ROOT}/web/modules/origins ${PROJECT_ROOT}/web/themes/custom",
+              "custom_code_dirs": "${PROJECT_ROOT}/web/modules/custom ${PROJECT_ROOT}/web/modules/origins",
               "deprecated_code_dirs": "${PROJECT_ROOT}/web/modules/custom ${PROJECT_ROOT}/web/modules/origins ${PROJECT_ROOT}/web/themes/custom",
               "edge_branch": "DEPT-edge",
               "edge_build_dofdss_packages": "dof-dss/package1:dev-development dof-dss/package2:dev-development",
