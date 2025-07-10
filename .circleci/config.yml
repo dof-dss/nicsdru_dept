@@ -3,24 +3,37 @@ version: 2.1
 setup: true
 
 orbs:
-  continuation: circleci/continuation@0.1.2
+  continuation: circleci/continuation@0.4.0
 
 workflows:
   setup:
     jobs:
-      - setup-and-dispatch
+      - fetch-and-continue
 
 jobs:
-  setup-and-dispatch:
+  fetch-and-continue:
     docker:
       - image: cimg/base:stable
     steps:
       - run:
-          name: Fetch shared CI config.
+          name: Download shared config
+          command: wget https://raw.githubusercontent.com/your-org/webdev-ci/development/shared-config.yml -O shared-config.yml
+
+      - run:
+          name: Pack local workflows config
           command: |
-            wget https://raw.githubusercontent.com/dof-dss/webdev-ci/refs/heads/development/shared-config.yml -O shared-config.yml
+            circleci config pack .circleci/workflows > packed-workflows.yml
+
+      - run:
+          name: Combine shared jobs and local workflows
+          command: |
+            # Remove the version line from packed-workflows.yml to avoid duplicate version lines
+            tail -n +2 packed-workflows.yml > workflows.yml
+            # Merge shared jobs and local workflows into full config.
+            cat shared-config.yml workflows.yml > full-config.yml
+
       - continuation/continue:
-          configuration_path: shared-config.yml
+          configuration_path: full-config.yml
           parameters: |
             {
               "php_version": "8.3",
@@ -28,7 +41,6 @@ jobs:
               "coding_standards_dirs": "${PROJECT_ROOT}/web/modules/custom ${PROJECT_ROOT}/web/modules/origins ${PROJECT_ROOT}/web/themes/custom",
               "deprecated_code_dirs": "${PROJECT_ROOT}/web/modules/custom ${PROJECT_ROOT}/web/modules/origins ${PROJECT_ROOT}/web/themes/custom",
               "edge_branch": "DEPT-edge",
-              "edge_build_dofdss_packages": "dof-dss/nicsdru_origins_theme:dev-10.x-dev dof-dss/nicsdru_origins_modules:dev-10.x-dev",
-              "ssh_fingerprint": "65:4e:c7:ca:9f:c0:40:f7:16:2c:da:33:63:1d:90:12",
-              "edge_schedule": "{\"cron\": \"0 2 * * 1-5\", \"filters\": {\"branches\": {\"only\": [\"development\"]}}}"
+              "edge_build_dofdss_packages": "dof-dss/package1:dev-development dof-dss/package2:dev-development",
+              "ssh_fingerprint": "65:4e:c7:ca:9f:c0:40:f7:16:2c:da:33:63:1d:90:12"
             }
