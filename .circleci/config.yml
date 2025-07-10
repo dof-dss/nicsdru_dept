@@ -15,6 +15,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - checkout
       - run:
           name: Download shared config
           command: wget https://raw.githubusercontent.com/dof-dss/webdev-ci/development/shared-config.yml -O shared-config.yml
