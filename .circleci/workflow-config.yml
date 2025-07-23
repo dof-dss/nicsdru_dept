@@ -32,12 +32,25 @@ workflows:
           php_version: << pipeline.parameters.php_version >>
           edge_branch: << pipeline.parameters.edge_branch >>
           edge_build_dofdss_packages: << pipeline.parameters.edge_build_dofdss_packages >>
-    build-edge-finalise:
-      when:
-        and:
-          - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-          - equal: [ edge_build_finalise, << pipeline.schedule.name >> ]
-      jobs:
-        - sync_data:
-            php_version: << pipeline.parameters.php_version >>
-            edge_branch: << pipeline.parameters.edge_branch >>
+  build-edge-finalise:
+    when:
+      and:
+        - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - equal: [ edge_build_finalise, << pipeline.schedule.name >> ]
+    jobs:
+      - sync_data:
+          php_version: << pipeline.parameters.php_version >>
+          edge_branch: << pipeline.parameters.edge_branch >>
+  manual-edge-build:
+    when:
+      equal: [ web_ui, << pipeline.trigger_source >> ]
+    jobs:
+      - build_edge:
+          php_version: << pipeline.parameters.php_version >>
+          edge_branch: << pipeline.parameters.edge_branch >>
+          edge_build_dofdss_packages: << pipeline.parameters.edge_build_dofdss_packages >>
+      - build_edge_finalise:
+          requires:
+            - build_edge
+          php_version: << pipeline.parameters.php_version >>
+          edge_branch: << pipeline.parameters.edge_branch >>
