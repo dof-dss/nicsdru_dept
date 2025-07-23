@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Drupal\dept_topics\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\node\NodeInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Returns responses for Departmental sites: topics routes.
@@ -17,6 +19,22 @@ final class TopicStructureReportController extends ControllerBase {
    * @var array
    */
   protected $topics = [];
+
+  /**
+   * The controller constructor.
+   */
+  public function __construct(
+    private readonly RendererInterface $renderer,
+  ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new self(
+      $container->get('renderer'),
+    );
+  }
 
   /**
    * Main report method.
@@ -84,7 +102,7 @@ final class TopicStructureReportController extends ControllerBase {
       // Add children render array to branch.
       if (!empty($item['children'])) {
         $children = $this->renderTree($item['children']);
-        $branch['#suffix'] = \Drupal::service('renderer')->renderRoot($children);
+        $branch['#suffix'] = $this->renderer->renderRoot($children);
       }
       $items[] = $branch;
     }
