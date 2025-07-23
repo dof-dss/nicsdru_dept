@@ -5,7 +5,6 @@ workflows:
     when:
       and:
         - equal: [ pull-request, << pipeline.trigger_source >> ]
-        - equal: [ development, << pipeline.git.branch >> ]
     jobs:
       - build:
           php_version: << pipeline.parameters.php_version >>
