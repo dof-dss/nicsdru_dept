@@ -32,7 +32,7 @@ workflows:
     when:
       and:
         - equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
-        - equal: [ DEPT-1217--bugfix-scheduler, << pipeline.schedule.name >> ]
+        - equal: [ edge_build, << pipeline.schedule.name >> ]
     jobs:
       - build_edge:
           edge_branch: << pipeline.parameters.edge_branch >>
