@@ -49,7 +49,9 @@ workflows:
           php_version: << pipeline.parameters.php_version >>
   manual-edge-build:
     when:
-      equal: [ web_ui, << pipeline.trigger_source >> ]
+      and:
+        - equal: [ api, << pipeline.trigger_source >> ]
+        - equal: [ DEPT-edge, << pipeline.git.branch >> ]
     jobs:
       - build_edge:
           php_version: << pipeline.parameters.php_version >>
