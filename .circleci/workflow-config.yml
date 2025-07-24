@@ -8,6 +8,8 @@ workflows:
             equal: [ development, << pipeline.git.branch >> ]
         - not:
             equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
+        - not:
+            equal: [ api, << pipeline.trigger_source >> ]
     jobs:
       - build:
           php_version: << pipeline.parameters.php_version >>
