@@ -11,6 +11,7 @@ no_patching: false
 storage: folder
 folder: ../config/production
 module:
+  flood_control: 0
   fastly: 0
 theme: {  }
 complete_list: {  }
