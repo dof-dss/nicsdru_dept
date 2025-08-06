@@ -38,3 +38,19 @@ dept_topics.broken_topic_mapping.fix_topic_content:
     _controller: '\Drupal\dept_topics\Controller\BrokenTopicMappingController::addNodesToTopicContent'
   requirements:
     _permission: 'administer nodes'
+
+dept_topics.topic_structure_report:
+  path: '/admin/topics/topic-structure-report/{node}'
+  defaults:
+    _title: 'Topic Structure Report'
+    _controller: '\Drupal\dept_topics\Controller\TopicStructureReportController::report'
+  requirements:
+    _permission: 'view topics structure report'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+        bundle:
+          - topic
+          - subtopic

@@ -1,223 +1,49 @@
 version: 2.1
 
-# Default docker image. (excludes functional_tests)
-default_docker_image: &docker_image
-  docker:
-    - image: thecodingmachine/php:8.3-v4-fpm
-      environment:
-        PLATFORM_REGION: "uk-1.platform.sh"
-        PROJECT_ROOT: "/home/docker/project"
-        PHP_EXTENSION_GD: 1
-        PHP_INI_MEMORY_LIMIT: 1g
+setup: true
+
+orbs:
+  continuation: circleci/continuation@0.4.0
 
 workflows:
-  version: 2
-  build-test:
+  setup:
     jobs:
-      - build
-      - coding_standards:
-          requires:
-            - build
-      - deprecated_code:
-          requires:
-            - build
-      - disallowed_functions:
-          requires:
-            - build
-  build-edge:
-    triggers:
-      - schedule:
-          # At 02:00 every Mon-Fri
-          cron: "0 2 * * 1-5"
-          filters:
-            branches:
-              only:
-                - development
-    jobs:
-      - build_edge
-
-  # A separate scheduled workflow to sync the data after the edge build completes.
-  build-edge-finalise:
-    triggers:
-      - schedule:
-          # At 02:30 on every day-of-week from Monday through Friday
-          cron: "30 2 * * 1-5"
-          filters:
-            branches:
-              only:
-                - DEPT-edge
-    jobs:
-      - sync_data
+      - fetch-and-continue
 
 jobs:
-  # Tests the integrity of the build, stores the results in a workspace for re-use in later jobs.
-  build:
-    <<: *docker_image
+  fetch-and-continue:
+    docker:
+      - image: cimg/base:stable
     steps:
-      - checkout_code
-      - check_build_constraints
-      - composer_tasks
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - ./
-  # Test for coding standards - will inherit the workspace/filesystem changes from build step, above.
-  coding_standards:
-    <<: *docker_image
-    steps:
-      - attach_workspace:
-          at: ./
-      - run:
-          name: PHPCS analysis
-          command: |
-            CHECK_DIRS="${PROJECT_ROOT}/web/modules/custom"
-            CHECK_DIRS="${CHECK_DIRS} ${PROJECT_ROOT}/web/modules/origins"
-            CHECK_DIRS="${CHECK_DIRS} ${PROJECT_ROOT}/web/themes/custom"
-            ~/project/phpcs.sh ${PROJECT_ROOT} $CHECK_DIRS
-
-  deprecated_code:
-    <<: *docker_image
-    steps:
-      - attach_workspace:
-          at: ./
-      - run:
-          name: Deprecated code check
-          command: |
-            cd $PROJECT_ROOT
-            CHECK_DIRS="${PROJECT_ROOT}/web/modules/custom"
-            CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/modules/origins"
-            CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/themes/custom"
-            vendor/bin/drupal-check $CHECK_DIRS
-
-  disallowed_functions:
-    <<: *docker_image
-    steps:
-      - attach_workspace:
-          at: ./
-      - run:
-          name: Check for disallowed function calls
-          command: |
-            CHECK_DIRS="${PROJECT_ROOT}/web/modules/custom"
-            CHECK_DIRS="$CHECK_DIRS ${PROJECT_ROOT}/web/modules/origins"
-            vendor/bin/phpstan analyse $CHECK_DIRS -c .circleci/phpstan.neon
-
-  # Task to build the edge site.
-  build_edge:
-    <<: *docker_image
-    environment:
-      # git variables to avoid empty committer identity errors
-      EMAIL: "circleci@localhost"
-      GIT_COMMITTER_NAME: "Circle CI"
-      GIT_AUTHOR_NAME: "Circle CI"
-      EDGE_BUILD_BRANCH: "DEPT-edge"
-    steps:
-      - hosts_keyscan
-      - checkout_code
-      - install_psh_cli
-      - run:
-          name: Switch to edge branch
-          # -b flag is important; this checkout won't have a local branch of that name
-          # (although origin/$EDGE_BUILD_BRANCH does exist) so this always works and
-          # lets us push -f to include everything at th end. If we use a plain checkout
-          # command we miss any recent config commits and only end up bumping the
-          # composer package versions after this step.
-          command: git checkout -b $EDGE_BUILD_BRANCH
-      - composer_tasks__edge_packages
-      - run:
-          name: Re-point dof-dss packages to use latest development code and push.
-          command: |
-            git add composer.*
-            git commit -m "Set dof-dss packages to HEAD development for build"
-      - run:
-          name: Push changes back to GitHub
-          command: |
-            git push -f origin $EDGE_BUILD_BRANCH
-  # Separate task to allow us to sync data on PSH environments, without pauses in other jobs.
-  sync_data:
-    <<: *docker_image
-    environment:
-      EDGE_BUILD_BRANCH: "DEPT-edge"
-      PLATFORM_SOLR_HOST: "solr.internal:8080"
-    steps:
-      - hosts_keyscan
-      - checkout_code
-      - install_psh_cli
-      - run:
-          # This task triggers a drush cim from the .platform.app.yaml build/deploy steps.
-          name: Trigger a data sync from production environment to an edge build.
-          command: |
-            platform sync data -p $PLATFORM_PROJECT -e $EDGE_BUILD_BRANCH -y
-
-# Re-usable commands.
-commands:
-  check_build_constraints:
-    description: "Checks for any known composer package restrictions or limits"
-    steps:
-      - run:
-          name: Add jq package to assist in parsing JSON (not bundled with this docker image)
-          command: sudo apt update && sudo apt install jq -y
-      - run:
-          name: Check composer lock file is compliant with DoF package constraints
-          command: |
-            cd $PROJECT_ROOT/.circleci
-            ./build_check.sh constraints.txt ../composer.lock
-  checkout_code:
-    description: "Handle composer access tokens, SSH key fingerprints and code checkout"
-    steps:
-      # Add SSH user key so we can access related repositories as part of our initial clone + composer install command.
-      # 65:4e >> GitHub user key fingerprint.
-      - add_ssh_keys:
-          fingerprints:
-            - "65:4e:c7:ca:9f:c0:40:f7:16:2c:da:33:63:1d:90:12"
       - checkout
-  composer_tasks:
-    description: "Validate and install dependencies using composer"
-    steps:
       - run:
-          name: Validate composer.json and composer.lock file for consistency
-          command: composer validate --no-check-all --strict
-      - restore_cache:
-          keys:
-            - composer-{{ checksum "composer.lock" }}
-      - run:
-          name: Fetch dependencies with composer
-          command: composer install --no-interaction --optimize-autoloader
-      - save_cache:
-          key: composer-{{ checksum "composer.lock" }}
-          paths:
-            - $HOME/.composer/cache
-  composer_tasks__no_cache:
-    description: "Validate and install dependencies using composer"
-    steps:
-      - run:
-          name: Validate composer.json and composer.lock file for consistency
-          command: composer validate --no-check-all --strict
-      - run:
-          name: Fetch dependencies with composer
-          command: composer install --no-interaction --optimize-autoloader
-  composer_tasks__edge_packages:
-    description: "Switch dof-dss packages to HEAD on development branch"
-    steps:
-      - run:
-          name: Switch dof-dss packages to HEAD on dev branches
+          name: Download shared config
           command: |
-            composer require dof-dss/nicsdru_origins_theme:dev-10.x-dev \
-              dof-dss/nicsdru_origins_modules:dev-10.x-dev
-  hosts_keyscan:
-    description: "Keyscan for hosts that require SSH access"
-    steps:
+            wget \
+              --header="Cache-Control: no-cache" \
+              --header="Pragma: no-cache" \
+              "https://raw.githubusercontent.com/dof-dss/webdev-ci/development/shared-config.yml?nocache=$(date +%s)" \
+              -O shared-config.yml
+
       - run:
-          name: Keyscan for hosts that require SSH access
+          name: Combine shared jobs and local workflows
           command: |
-            mkdir -p ~/.ssh
-            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-            ssh-keyscan -H ssh.$PLATFORM_REGION >> ~/.ssh/known_hosts
-  install_psh_cli:
-    description: "Install the Platform.sh CLI tool"
-    steps:
-      - run:
-          name: Install the Platform.sh CLI tool
-          command: curl -sS https://platform.sh/cli/installer | php
-      - run:
-          name: Add platform cli tool to $PATH
-          command: echo 'export PATH="$HOME/"'.platformsh/bin':"$PATH"' >> $BASH_ENV
+            # Remove the 'version: 2.1' from workflows config (since it's in shared config)
+            tail -n +2 .circleci/workflow-config.yml > workflows-only.yml
+            # Concatenate shared jobs+commands with repo workflows
+            cat shared-config.yml workflows-only.yml > full-config.yml
+
+      - continuation/continue:
+          configuration_path: full-config.yml
+          parameters: |
+            {
+              "php_version": "8.3",
+              "drupal_core_version": "10.4",
+              "coding_standards_dirs": "${PROJECT_ROOT}/web/modules/custom ${PROJECT_ROOT}/web/modules/origins ${PROJECT_ROOT}/web/themes/custom",
+              "custom_code_dirs": "${PROJECT_ROOT}/web/modules/custom ${PROJECT_ROOT}/web/modules/origins",
+              "deprecated_code_dirs": "${PROJECT_ROOT}/web/modules/custom ${PROJECT_ROOT}/web/modules/origins ${PROJECT_ROOT}/web/themes/custom",
+              "edge_branch": "DEPT-edge",
+              "edge_build_dofdss_packages": "dof-dss/nicsdru_origins_theme:dev-10.x-dev dof-dss/nicsdru_origins_modules:dev-10.x-dev",
+              "ignore_dirs": "/web/themes/origins/node_modules,/web/themes/custom/nicsdru_dept_theme/node_modules",
+              "ssh_fingerprint": "65:4e:c7:ca:9f:c0:40:f7:16:2c:da:33:63:1d:90:12"
+            }

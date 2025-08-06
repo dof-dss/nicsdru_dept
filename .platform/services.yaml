@@ -7,7 +7,7 @@ db:
   # the CLI will return an error.
   type: mariadb:10.4
   # The disk attribute is the size of the persistent disk (in MB) allocated to the service.
-  disk: 15120
+  disk: 7168
   configuration:
     schemas:
       - main
@@ -18,18 +18,18 @@ db:
           main: admin
 
 # Fudging the service name forces a full rebuild with any new config.
-solr_8_11:
-  type: solr:8.11
+solr_9_6:
+  type: solr:9.6
   disk: 1024
   configuration:
     cores:
       default:
-        conf_dir: !archive "solr_config/"
+        conf_dir: !archive "solr_9.x_config/"
     endpoints:
       solr:
         core: default
 
 redis:
-  type: "redis:7.2"
+  type: "redis:8.0"
   configuration:
     maxmemory_policy: allkeys-lfu
