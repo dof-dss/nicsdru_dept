@@ -81,6 +81,8 @@
     ],
     "require": {
         "ext-pdo": "*",
+        "aws/aws-sdk-php": "^3.352",
+        "caxy/php-htmldiff": "^0.1.17",
         "composer/installers": "^2.0",
         "cweagans/composer-patches": "^1.7",
         "deaemth/easychart": "^3.1",
@@ -214,9 +216,11 @@
         "drupal/webprofiler": "10.1.x-dev@dev",
         "drupal/whatlinkshere": "^2.1",
         "drush/drush": "^12.5",
+        "firebase/php-jwt": "^6.11",
         "harvesthq/chosen": "^1.8",
         "highcharts/highcharts": "^10",
         "noli42/chosen": "3.0.0",
+        "openai-php/client": "^0.15.0",
         "php-kit/ext-pdo": "^1.1",
         "platformsh/config-reader": "^2.4",
         "wikimedia/composer-merge-plugin": "^2.1"
