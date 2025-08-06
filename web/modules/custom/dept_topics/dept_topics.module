@@ -43,8 +43,10 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
 
+    $user = Drupal::currentUser();
+
     // See also: dept_postprocess_moderation_sidebar_alter()
-    if (\Drupal::currentUser()->hasPermission('edit subtopic content')) {
+    if ($user->hasPermission('manage order of topic content')) {
 
       $build['actions']['secondary']['info_topic_content'] = [
         '#theme' => 'moderation_sidebar_info_section',
@@ -115,6 +117,21 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
 
       $build['#attached']['library'][] = 'dept_topics/moderation_sidebar';
     }
+
+    if ($user->hasPermission('view topics structure report')) {
+      $build['actions']['primary']['topic_structure_report'] = [
+        '#title' => t('Topic structure report'),
+        '#type' => 'link',
+        '#url' => Url::fromRoute('dept_topics.topic_structure_report', ['node' => $context->id()]),
+        '#attributes' => [
+          'class' => [
+            'moderation-sidebar-link',
+            'button',
+          ],
+        ],
+      ];
+    }
+
   }
 }
 
@@ -272,6 +289,7 @@ function dept_topics_entity_delete(EntityInterface $entity) {
         }
 
         if ($has_child_entry) {
+          $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
           $topic_node->save();
         }
       }
@@ -326,62 +344,17 @@ function dept_topics_enable_domain_path($form, FormStateInterface $form_state) {
 function dept_topics_node_presave(EntityInterface $node) {
   if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
 
-    dept_topics_clear_topic_tree_cache($node);
-
     if ($node->isNew()) {
       // Ignore new as we don't have a node ID for the topic.
       return;
     }
 
-    // Add or remove site topic tags to nodes that are added or removed from topic child contents.
     // @phpstan-ignore-next-line
-    $original = array_column($node->original->get('field_topic_content')->getValue(), 'target_id');
-    // @phpstan-ignore-next-line
-    $updated = array_column($node->get('field_topic_content')->getValue(), 'target_id');
-
-    if (count($original) > count($updated)) {
-      $removed = array_diff($original, $updated);
-      $book_manager = \Drupal::service('book.manager');
-
-      foreach ($removed as $nid) {
-        // Do not remove site topics from the node if it is a book page.
-        if ($book_manager->loadBookLink($nid) === FALSE) {
-          continue;
-        }
-
-        $child_node = Node::load($nid);
-
-        if (!empty($child_node)) {
-          $child_topics = $child_node->get('field_site_topics');
-
-          for ($i = 0; $i < $child_topics->count(); $i++) {
-            // @phpstan-ignore-next-line
-            if ($child_topics->get($i)->target_id == $node->id()) {
-              $child_topics->removeItem($i);
-              $i--;
-            }
-          }
-          $child_node->save();
-        }
-      }
+    if ($node->get('moderation_state')->getString() !== 'published') {
+      return;
     }
-    else {
-      $added = array_diff($updated, $original);
 
-      foreach ($added as $nid) {
-        $child_node = Node::load($nid);
-        if (!empty($child_node)) {
-          $child_topic_tags = array_column($child_node->get('field_site_topics')->getValue(), 'target_id');
-
-          if (!in_array($node->id(), $child_topic_tags)) {
-            $child_node->get('field_site_topics')->appendItem([
-              'target_id' => $node->id()
-            ]);
-            $child_node->save();
-          }
-        }
-      }
-    }
+    dept_topics_clear_topic_tree_cache($node);
 
     // Clear the cache of the child content nodes (for cases when the thin banner etc. is updated).
     dept_topics_clear_child_caches($node);
@@ -553,6 +526,11 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
     }
     $nid = $topic_content['target_id'];
     $node = Node::load($nid);
+
+    if (empty($node)) {
+      continue;
+    }
+
     if ($node->bundle() === 'subtopic') {
       $parent_nodes = $topic_manager->getParentNodes($node->id());
       // Warn the user if the subtopic has an assigned parent topic.
@@ -691,5 +669,44 @@ function dept_topics_entity_bundle_field_info_alter(&$fields, EntityTypeInterfac
     if (isset($fields['field_topic_content'])) {
       $fields['field_topic_content']->addConstraint('unique_list_items');
     }
+  }
+}
+
+/**
+ * Implements hook_preprocess_views_view_field().
+ */
+function dept_topics_preprocess_views_view_field(&$variables) {
+  $view = $variables['view'];
+  $field = $variables['field'];
+
+  if ($view->storage->id() == 'orphaned_content' && $field->field == 'former_parent') {
+    $parent_id = $variables["row"]->_entity->get('former_parent')->getString();
+    $parent = Node::load($parent_id);
+
+    if ($parent) {
+      $output = $parent->toLink($parent->label());
+    }
+    else {
+      $output = $parent_id;
+    }
+
+    $variables['output'] = $output;
+  }
+
+  if ($view->storage->id() == 'orphaned_content' && $field->field == 'dropbutton') {
+
+    $variables['output'] = [
+      '#type' => 'operations',
+      '#links' => [
+        'edit' => [
+          'title' => t('Edit orphan'),
+          'url' => Url::fromRoute('entity.node.edit_form', ['node' => $variables["row"]->_entity->get('orphan')->getString()]),
+        ],
+      ],
+      '#attached' => [
+        'library' => ['core/drupal.dialog.ajax'],
+      ],
+    ];
+
   }
 }

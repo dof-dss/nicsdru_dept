@@ -30,9 +30,11 @@
       color: inherit;
       font-weight: bold;
       @include responsive-typo-map($medium-text);
+      margin-bottom: var(--rhythm-spacing-xs);
     }
 
-    .event-host {
+    .event-host,
+    .event-venue {
       @include responsive-typo-map($small-text);
       margin: 1.8rem 0 .7rem;
       @include breakpoint($tab) {
@@ -54,17 +56,6 @@
       };
     }
 
-  }
-
-  .event-metadata {
-    color: #666;
-    font-size: 1.6rem;
-
-    .label {
-      display: inline-block;
-      width: 100%;
-      margin-top: 0.5em;
-    }
   }
 
 }

@@ -6,14 +6,17 @@ dependencies:
     - core.entity_view_mode.node.diff
     - field.field.node.event.body
     - field.field.node.event.field_business_area
+    - field.field.node.event.field_council
     - field.field.node.event.field_domain_access
     - field.field.node.event.field_domain_all_affiliates
     - field.field.node.event.field_domain_source
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
     - field.field.node.event.field_summary
+    - field.field.node.event.field_venue
     - node.type.event
   module:
+    - options
     - text
     - user
 id: node.event.diff
@@ -25,6 +28,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: -20
+    region: content
+  field_council:
+    type: list_default
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
     region: content
   field_summary:
     type: text_default
@@ -46,5 +56,6 @@ hidden:
   field_domain_source: true
   field_event_datetime: true
   field_event_host: true
+  field_venue: true
   langcode: true
   search_api_excerpt: true

@@ -185,6 +185,7 @@ permissions:
   - 'use nics_editorial_workflow transition restore'
   - 'use nics_editorial_workflow transition restore_to_draft'
   - 'use nics_editorial_workflow transition submit_for_review'
+  - 'use nics_editorial_workflow transition submit_for_review'
   - 'use topic tree widget'
   - 'view all media revisions'
   - 'view all revisions'
@@ -231,4 +232,5 @@ permissions:
   - 'view scheduled transitions node protected_area'
   - 'view scheduled transitions node publication'
   - 'view scheduled transitions node ual'
+  - 'view topics structure report'
   - 'view ual revisions'

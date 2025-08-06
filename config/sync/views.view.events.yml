@@ -171,7 +171,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: search_api
-          order: DESC
+          order: ASC
           expose:
             label: ''
             field_identifier: ''
@@ -343,10 +343,10 @@ display:
           parse_mode: sloppy_terms
           min_length: null
           fields: {  }
-        field_event_datetime:
-          id: field_event_datetime
+        field_event_datetime_end_value:
+          id: field_event_datetime_end_value
           table: search_api_index_default_content
-          field: field_event_datetime
+          field: field_event_datetime_end_value
           relationship: none
           group_type: group
           admin_label: ''

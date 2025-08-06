@@ -12,6 +12,7 @@ type: 'php:8.3'
 variables:
   php:
     memory_limit: "256M"
+    apc.shm_size: "64M"
     opcache.interned_strings_buffer: "32"
     opcache.max_accelerated_files: "10000"
     opcache.memory_consumption: "256"
@@ -21,7 +22,6 @@ variables:
     display_startup_errors: "off"
     date.timezone: "Europe/Dublin"
     realpath_cache_ttl: 3600
-    realpath_cache_size: 512k
 dependencies:
   php:
     composer/composer: '^2'
@@ -41,13 +41,13 @@ runtime:
 # to the application in the PLATFORM_RELATIONSHIPS variable. The right-hand
 # side is in the form `:`.
 relationships:
-  solr: 'solr_8_11:solr'
+  solr: 'solr_9_6:solr'
   redis: "redis:redis"
   #  For MariaDB, the endpoint does not change whether you used the mysql or mariadb service type.
   database: 'db:dept'
 
 # The size of the persistent disk of the application (in MB).
-disk: 137216
+disk: 143360
 
 # The 'mounts' describe writable, persistent filesystem mounts in the application.
 mounts:

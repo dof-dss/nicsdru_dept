@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - dept_topics
+id: topics_orphaned_content_save_action
+label: 'Save orphaned topic contents'
+type: topics_orphaned_content
+plugin: entity:save_action:topics_orphaned_content
+configuration: {  }

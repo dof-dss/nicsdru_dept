@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\Core\Url;
+use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\views\Render\ViewsRenderPipelineMarkup;
 use GuzzleHttp\Exception\RequestException as GuzzleRequestException;
@@ -25,7 +26,6 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
   // Toggle the display/availability of fields depending on the required
   // attachment type.
   if ($node->bundle() === 'publication') {
-
     if ($node->isNew() === FALSE) {
       $form['field_embargoed']['#disabled'] = TRUE;
     }
@@ -33,7 +33,6 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
     $current_user = \Drupal::currentUser();
     // Allow the selection of 'Public' or 'Secure' publications.
     if ($current_user->hasPermission('create embargoed publication') || in_array('administrator', $current_user->getRoles())) {
-
       $form['field_publication_files']['#states'] = [
         'invisible' => [
           ':input[id="edit-field-embargoed-value"]' => ['checked' => TRUE],
@@ -53,7 +52,6 @@ function dept_publications_form_node_form_alter(&$form, FormStateInterface $form
           ':input[id="edit-field-embargoed-value"]' => ['checked' => TRUE],
         ],
       ];
-
     }
     else {
       // Set the publication type to 'public' and prevent access to the
@@ -108,7 +106,6 @@ function dept_publications_file_download($uri) {
 function dept_publications_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if (str_starts_with($form['#id'], 'views-exposed-form-media-library') &&
     \Drupal::currentUser()->hasPermission('view any embargoed publication')) {
-
     // Permit secure files in exposed filter. Dovetails with
     // dept_publications_views_query_alter above.
     $form['type']['#options']['secure_file'] = t('Secure file');
@@ -140,7 +137,8 @@ function dept_publications_preprocess_views_view_field(&$variables) {
       $media = $variables['row']->_entity;
 
       if ($media instanceof MediaInterface && $media->bundle() === 'remote_document') {
-        $pretty_mimes = \Drupal::service('origins_media.pretty_mime_types')->getMimeTypes();
+        $pretty_mimes = \Drupal::service('origins_media.pretty_mime_types')
+          ->getMimeTypes();
         $file_url = $media->get('field_media_media_remote')->getString();
         $file_headers = dept_publications_get_remote_file_metadata($file_url);
 
@@ -217,7 +215,8 @@ function dept_publications_preprocess_media(&$variables) {
     $variables['file_extension'] = $file_extension;
 
     // Map file mimetypes to user friendly document types.
-    $pretty_mimes = \Drupal::service('origins_media.pretty_mime_types')->getMimeTypes();
+    $pretty_mimes = \Drupal::service('origins_media.pretty_mime_types')
+      ->getMimeTypes();
     if ($file_mimetype && !empty($pretty_mimes[$file_mimetype])) {
       $variables['pretty_mimetype'] = $pretty_mimes[$file_mimetype];
     }
@@ -274,10 +273,10 @@ function dept_publications_preprocess_fieldset__media_library_widget(&$variables
 }
 
 /**
+ * <<<<<<< HEAD
  * Implements hook_node_grants().
  */
 function dept_publications_node_grants(AccountInterface $account, $op) {
-
   /** @var array $grants_cache */
   $grants_cache = &drupal_static(__FUNCTION__, []);
   if (isset($grants_cache[$account->id()][$op])) {
@@ -369,4 +368,148 @@ function dept_publications_node_access_records_alter(&$grants, $node) {
       ];
     }
   }
+
+  /**
+   * Implements hook_preprocess_node().
+   */
+  function dept_publications_preprocess_node(&$variables) {
+    /* @var \Drupal\node\NodeInterface $node */
+    $node = $variables['node'];
+
+    if ($node->bundle() != 'publication') {
+      return;
+    }
+
+    $items = [];
+
+    // 1. field_external_publication (Link field)
+    if (!$node->get('field_external_publication')->isEmpty()) {
+      foreach ($node->get('field_external_publication') as $link_item) {
+        $title = $link_item->title ?? $link_item->uri;
+        $url = Url::fromUri($link_item->uri);
+
+        $items[] = dept_publications_build_publication_link($url, $title, [
+          'file_extension' => 'html',
+          'file_type' => 'html',
+        ]);
+      }
+    }
+
+    // 2. field_publication_files (Media reference)
+    if (!$node->get('field_publication_files')->isEmpty()) {
+      foreach ($node->get('field_publication_files')
+        ->referencedEntities() as $media) {
+        $title = $media->label();
+        $file_info = [];
+        $url = '';
+
+        if ($media->hasField('field_media_file') && !$media->get('field_media_file')->isEmpty()) {
+          $file = $media->get('field_media_file')->entity;
+          $url = Url::fromUri(\Drupal::service('file_url_generator')
+            ->generateAbsoluteString($file->getFileUri()));
+
+          $file_info = dept_publications_map_filetypes_to_document_types($file);
+        }
+
+        $items[] = dept_publications_build_publication_link($url, $title, $file_info);
+      }
+    }
+
+    // 3. field_publication_secure_files (Media reference)
+    if (!$node->get('field_publication_secure_files')->isEmpty()) {
+      foreach ($node->get('field_publication_secure_files')
+        ->referencedEntities() as $media) {
+        $title = $media->label();
+        $file_info = [];
+        $url = '';
+
+        if ($media->hasField('field_media_file_1') && !$media->get('field_media_file_1')->isEmpty()) {
+          $file = $media->get('field_media_file_1')->entity;
+          $url = Url::fromUri(\Drupal::service('file_url_generator')
+            ->generateAbsoluteString($file->getFileUri()));
+
+          $file_info = dept_publications_map_filetypes_to_document_types($file);
+        }
+
+        $items[] = dept_publications_build_publication_link($url, $title, $file_info);
+      }
+    }
+
+    // Wrap in an item list.
+    $rendered = [
+      '#theme' => 'item_list',
+      '#items' => $items,
+      '#attributes' => ['class' => ['list--no-bullet']],
+    ];
+
+    // Make available in template.
+    $variables['aggregated_publications'] = $rendered;
+  }
+
+}
+
+/**
+ * Helper function to build render array for a publication item.
+ *
+ * @param \Drupal\Core\Url $url
+ *   The URL object.
+ * @param string $title
+ *   The text to display for the link.
+ * @param array $file_info
+ *   Type of file (e.g. 'pdf', 'docx', 'html') for CSS classes as well as filesize.
+ *
+ * @return array
+ *   A renderable array.
+ */
+function dept_publications_build_publication_link(Url $url, string $title, array $file_info): array {
+  $link_text = [
+    '#markup' => $title,
+  ];
+
+  // Append the metadata span if provided.
+  if (!empty($file_info['file_type']) && !empty($file_info['file_size'])) {
+    $link_text[] = [
+      '#markup' => '<span class="meta">' . $file_info['file_type'] . ' (' . $file_info['file_size'] . ')</span>',
+    ];
+  }
+
+  return [
+    '#type' => 'link',
+    '#title' => $link_text,
+    '#url' => $url,
+    '#attributes' => [
+      'lang' => 'en',
+      'class' => [
+        'file-link',
+        'file--ico',
+        "file--ico__{$file_info['file_extension']}",
+      ],
+      'rel' => ['noopener', 'noreferrer'],
+      'target' => '_blank',
+      'data-once' => 'elink',
+    ],
+  ];
+}
+
+/**
+ * Helper function to map file mimetypes to user friendly document types.
+ */
+function dept_publications_map_filetypes_to_document_types(FileInterface $file) {
+  $pretty_mimes = \Drupal::service('origins_media.pretty_mime_types')->getMimeTypes();
+
+  $file_info = [];
+  $file_info['file_size'] = ByteSizeMarkup::create($file->getSize(), \Drupal::languageManager()->getCurrentLanguage()->getId());
+
+  $file_info['file_url'] = $file->createFileUrl();
+  $file_info['file_extension'] = strtolower(pathinfo($file_info['file_url'], PATHINFO_EXTENSION));
+
+  $file_mimetype = $file->getMimeType();
+  if (array_key_exists($file->getMimeType(), $pretty_mimes)) {
+    $file_info['file_type'] = $pretty_mimes[$file_mimetype];
+  }
+  else {
+    $file_info['file_type'] = strtoupper(preg_replace('/^application\/(\w+)$/', '\1', $file_mimetype));
+  }
+
+  return $file_info;
 }

@@ -8,6 +8,7 @@ dependencies:
     - workflows.workflow.nics_editorial_workflow
   module:
     - content_moderation
+    - dept_topics
     - domain_access
     - flag
     - node
@@ -21,11 +22,13 @@ permissions:
   - 'add scheduled transitions node subtopic'
   - 'add scheduled transitions node topic'
   - 'administer nodes'
+  - 'administer orphaned content'
   - 'create subtopic content on assigned domains'
   - 'create topic content on assigned domains'
   - 'delete subtopic content on assigned domains'
   - 'delete topic content on assigned domains'
   - 'flag hide_listing'
+  - 'manage order of topic content'
   - 'publish to any assigned domain'
   - 'reschedule scheduled transitions node subtopic'
   - 'reschedule scheduled transitions node topic'
@@ -41,4 +44,5 @@ permissions:
   - 'view scheduled transitions node topic'
   - 'view subtopic revisions'
   - 'view topic revisions'
+  - 'view topics structure report'
   - 'view unpublished domain content'

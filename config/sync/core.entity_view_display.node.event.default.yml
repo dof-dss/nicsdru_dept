@@ -5,15 +5,18 @@ dependencies:
   config:
     - field.field.node.event.body
     - field.field.node.event.field_business_area
+    - field.field.node.event.field_council
     - field.field.node.event.field_domain_access
     - field.field.node.event.field_domain_all_affiliates
     - field.field.node.event.field_domain_source
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
     - field.field.node.event.field_summary
+    - field.field.node.event.field_venue
     - node.type.event
   module:
     - datetime_range
+    - options
     - smart_trim
     - text
     - user
@@ -41,6 +44,13 @@ content:
       link: true
     third_party_settings: {  }
     weight: 104
+    region: content
+  field_council:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
     region: content
   field_event_datetime:
     type: daterange_default
@@ -81,6 +91,14 @@ content:
       trim_options: {  }
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_venue:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 105
     region: content
   links:
     settings: {  }

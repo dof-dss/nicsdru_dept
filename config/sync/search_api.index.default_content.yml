@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.body
     - field.storage.node.field_business_area
+    - field.storage.node.field_council
     - field.storage.node.field_county
     - field.storage.node.field_domain_access
     - field.storage.node.field_domain_source
@@ -102,6 +103,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_business_area
+  field_council:
+    label: Region
+    datasource_id: 'entity:node'
+    property_path: field_council
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_council
   field_county:
     label: County
     datasource_id: 'entity:node'
@@ -130,6 +139,14 @@ field_settings:
     label: 'Event date and time'
     datasource_id: 'entity:node'
     property_path: field_event_datetime
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_event_datetime
+  field_event_datetime_end_value:
+    label: 'Event date and time » End date value'
+    datasource_id: 'entity:node'
+    property_path: 'field_event_datetime:end_value'
     type: date
     dependencies:
       config:

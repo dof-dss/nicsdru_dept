@@ -6,12 +6,14 @@ dependencies:
     - core.entity_view_mode.node.search_metadata
     - field.field.node.event.body
     - field.field.node.event.field_business_area
+    - field.field.node.event.field_council
     - field.field.node.event.field_domain_access
     - field.field.node.event.field_domain_all_affiliates
     - field.field.node.event.field_domain_source
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
     - field.field.node.event.field_summary
+    - field.field.node.event.field_venue
     - node.type.event
   module:
     - datetime_range
@@ -41,14 +43,6 @@ content:
     third_party_settings: {  }
     weight: 3
     region: content
-  field_event_host:
-    type: string
-    label: visually_hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 2
-    region: content
   field_summary:
     type: smart_trim
     label: hidden
@@ -73,12 +67,22 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  field_venue:
+    type: string
+    label: visually_hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
 hidden:
   body: true
   content_moderation_control: true
   field_business_area: true
+  field_council: true
   field_domain_access: true
   field_domain_all_affiliates: true
+  field_event_host: true
   langcode: true
   links: true
   search_api_excerpt: true

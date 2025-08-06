@@ -21,6 +21,7 @@ dependencies:
   module:
     - block_content
     - contextual
+    - dept_topics
     - domain_access
     - domain_entity
     - filter
@@ -86,3 +87,4 @@ permissions:
   - 'revert any video block content revisions'
   - 'revert any video_and_caption block content revisions'
   - 'use text format layout_builder_html'
+  - 'view topics structure report'

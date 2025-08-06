@@ -1,26 +1,22 @@
 adding:
-  dependencies:
-    config:
-      - search_api_solr.solr_field_type.text_edge_und_6_0_0
-      - search_api_solr.solr_field_type.text_en_6_0_0
-      - search_api_solr.solr_field_type.text_ngram_und_6_0_0
-      - search_api_solr.solr_field_type.text_und_6_0_0
   backend_config:
+    connector: solr_cloud_basic_auth
     connector_config:
       host: solr
       port: 8983
-      core: dev
+      skip_schema_check: true
       solr_install_dir: /opt/solr
+      checkpoints_collection: ''
+      stats_cache: org.apache.solr.search.stats.LRUStatsCache
+      distrib: true
+      context: solr
+      username: solr
+      password: SolrRocks
 removing:
-  dependencies:
-    config:
-      - search_api_solr.solr_field_type.text_edge_und_7_0_0
-      - search_api_solr.solr_field_type.text_en_7_0_0
-      - search_api_solr.solr_field_type.text_ngram_und_7_0_0
-      - search_api_solr.solr_field_type.text_und_7_0_0
   backend_config:
+    connector: standard
     connector_config:
       host: solr.internal
       port: 8080
-      core: default
+      skip_schema_check: false
       solr_install_dir: ''
