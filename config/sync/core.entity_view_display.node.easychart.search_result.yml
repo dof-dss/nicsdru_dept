@@ -1,0 +1,47 @@
+uuid: 9bef8b7b-5432-4c14-a1e5-e03308b9cd5b
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_result
+    - field.field.node.easychart.body
+    - field.field.node.easychart.easychart
+    - field.field.node.easychart.field_domain_access
+    - field.field.node.easychart.field_domain_all_affiliates
+    - field.field.node.easychart.field_domain_source
+    - node.type.easychart
+  module:
+    - easychart
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+_core:
+  default_config_hash: fxc9VzsJHVXJGsT-X1GYXMAGlmlaRbRJkIwIa4udAvU
+id: node.easychart.search_result
+targetEntityType: node
+bundle: easychart
+mode: search_result
+content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+  easychart:
+    type: easychart_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  body: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
+  langcode: true
+  links: true
+  search_api_excerpt: true
