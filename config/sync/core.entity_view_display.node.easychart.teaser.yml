@@ -1,0 +1,35 @@
+uuid: d1a220fd-40b5-48f9-bd8a-18c558cbf31e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.easychart.body
+    - field.field.node.easychart.easychart
+    - field.field.node.easychart.field_domain_access
+    - field.field.node.easychart.field_domain_all_affiliates
+    - field.field.node.easychart.field_domain_source
+    - node.type.easychart
+  module:
+    - user
+_core:
+  default_config_hash: FWYk7O0JG28VJPEUqte0NN5KZ5fK2jyyBPz6Ugs1YdI
+id: node.easychart.teaser
+targetEntityType: node
+bundle: easychart
+mode: teaser
+content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
+hidden:
+  body: true
+  easychart: true
+  field_domain_access: true
+  field_domain_all_affiliates: true
+  field_domain_source: true
+  langcode: true
+  links: true
+  search_api_excerpt: true

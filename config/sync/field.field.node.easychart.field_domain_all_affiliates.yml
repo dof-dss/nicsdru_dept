@@ -1,0 +1,21 @@
+uuid: 390a9f60-32b4-4848-9baf-ceabed70cbe0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_domain_all_affiliates
+    - node.type.easychart
+id: node.easychart.field_domain_all_affiliates
+field_name: field_domain_all_affiliates
+entity_type: node
+bundle: easychart
+label: 'Send to all affiliates'
+description: 'Make this content available on all domains.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
