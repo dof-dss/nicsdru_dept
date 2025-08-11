@@ -34,6 +34,14 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   public function onEntityPresave(EntityEvent $event): void {
     $entity = $event->getEntity();
 
+    // Removed updated Topic child from the orphan list if it has site topics.
+    if ($this->topicManager->isValidTopicChild($entity) && !$entity->isNew()) {
+      $topics = $entity->get('field_site_topics')->getValue();
+      if (count($topics) > 0) {
+        $this->orphanManager->removeOrphan($entity);
+      }
+    }
+
     if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
       $moderation_state = $entity->get('moderation_state')->getString();
 
