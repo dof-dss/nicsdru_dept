@@ -98,6 +98,9 @@ hooks:
     cp -f robots_custom.txt web/robots.txt
     echo "Add AI bots to robots.txt"
     bash /app/platformsh-tools/add_ai_bots_to_robots_txt.sh
+  # Create Google Application Credentials file
+    echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" > /tmp/google_application_credentials.json
+    export GOOGLE_APPLICATION_CREDENTIALS="/tmp/google_application_credentials.json"
   # The deploy hook runs after your application has been deployed and started.
   deploy: |
     set -e
