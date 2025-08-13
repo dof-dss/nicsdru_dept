@@ -98,7 +98,7 @@ hooks:
     cp -f robots_custom.txt web/robots.txt
     echo "Add AI bots to robots.txt"
     bash /app/platformsh-tools/add_ai_bots_to_robots_txt.sh
-    source <(curl -fsSL https://gist.githubusercontent.com/omahm/f30bddf582ef190d200c58dbea8f6e7e/raw/b181da326cfb726ac522b9c4e177348b3c8203bd/dof-dss-create-gac-json.sh)
+    . web/modules/custom/origins_cloud_tasks/create-gac-json.sh
   # The deploy hook runs after your application has been deployed and started.
   deploy: |
     set -e
