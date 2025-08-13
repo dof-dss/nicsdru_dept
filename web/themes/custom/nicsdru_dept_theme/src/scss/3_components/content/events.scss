@@ -33,7 +33,8 @@
       margin-bottom: var(--rhythm-spacing-xs);
     }
 
-    .event-host {
+    .event-host,
+    .event-venue {
       @include responsive-typo-map($small-text);
       margin: 1.8rem 0 .7rem;
       @include breakpoint($tab) {

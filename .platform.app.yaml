@@ -131,6 +131,9 @@ hooks:
 
     ../vendor/bin/drush password_qa_accounts
 
+    # Generate QA staff accounts.
+    ../vendor/bin/drush create_qa_staff_accounts
+
     # Temp fix as the config is not always updated on Edge.
     ../vendor/bin/drush cim -y
 

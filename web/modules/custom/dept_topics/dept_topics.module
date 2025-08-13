@@ -43,8 +43,10 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
 
+    $user = Drupal::currentUser();
+
     // See also: dept_postprocess_moderation_sidebar_alter()
-    if (\Drupal::currentUser()->hasPermission('manage order of topic content')) {
+    if ($user->hasPermission('manage order of topic content')) {
 
       $build['actions']['secondary']['info_topic_content'] = [
         '#theme' => 'moderation_sidebar_info_section',
@@ -115,6 +117,21 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
 
       $build['#attached']['library'][] = 'dept_topics/moderation_sidebar';
     }
+
+    if ($user->hasPermission('view topics structure report')) {
+      $build['actions']['primary']['topic_structure_report'] = [
+        '#title' => t('Topic structure report'),
+        '#type' => 'link',
+        '#url' => Url::fromRoute('dept_topics.topic_structure_report', ['node' => $context->id()]),
+        '#attributes' => [
+          'class' => [
+            'moderation-sidebar-link',
+            'button',
+          ],
+        ],
+      ];
+    }
+
   }
 }
 

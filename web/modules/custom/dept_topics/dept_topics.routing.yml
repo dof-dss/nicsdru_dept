@@ -22,3 +22,19 @@ dept_topics.manage_topic_content.form:
     _form: 'Drupal\dept_topics\Form\ManageTopicContentForm'
   requirements:
     _permission: 'manage order of topic content'
+
+dept_topics.topic_structure_report:
+  path: '/admin/topics/topic-structure-report/{node}'
+  defaults:
+    _title: 'Topic Structure Report'
+    _controller: '\Drupal\dept_topics\Controller\TopicStructureReportController::report'
+  requirements:
+    _permission: 'view topics structure report'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+        bundle:
+          - topic
+          - subtopic

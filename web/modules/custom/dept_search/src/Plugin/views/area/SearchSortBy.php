@@ -110,12 +110,19 @@ class SearchSortBy extends AreaPluginBase {
       ],
     ];
 
+    // If it's the events route then tweak the title to reflect this.
+    $date_sort_title = t('date published');
+
+    if ($routeName === 'view.events.events_search') {
+      $date_sort_title = t('date of event');
+    }
+
     // Set a sort label that describes how results
     // are sorted.
     $sort_options['sort_label'] = [
       '#type' => 'html_tag',
       '#tag' => 'span',
-      '#value' => t('sorted by date published'),
+      '#value' => t('sorted by ') . $date_sort_title,
       '#attributes' => [
         'class' => ['label-inline'],
       ],
@@ -144,7 +151,7 @@ class SearchSortBy extends AreaPluginBase {
         // Link to switch back to publication date sort order.
         $sort_options['sort_link'] = [
           '#type' => 'link',
-          '#title' => 'sort by date published',
+          '#title' => 'sort by ' . $date_sort_title,
           '#url' => Url::fromRoute($routeName, $routeParams, $date_options),
           '#attributes' => [
             'data-self-ref' => ['false'],
