@@ -49,8 +49,8 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       ['onEntityDelete'],
       ['purgeTopicCaches', -10],
     ];
-    return $events;
 
+    return $events;
   }
 
   /**
@@ -267,6 +267,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
         $this->orphanManager->removeOrphan($entity);
       }
     }
+
   }
 
   /**
