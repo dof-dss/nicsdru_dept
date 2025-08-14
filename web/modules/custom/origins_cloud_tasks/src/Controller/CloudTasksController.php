@@ -17,6 +17,9 @@ final class CloudTasksController extends ControllerBase {
    * Display current Cloud Tasks in the Queue.
    */
   public function displayTasks(): array {
+
+    putenv('GOOGLE_APPLICATION_CREDENTIALS=/app/google_application_credentials.json');
+
     $project_id = getenv('PLATFORM_APPLICATION_NAME');
     $location = 'europe-west2-a';
     $queue_id = $project_id . '-origins-cloud-tasks';
