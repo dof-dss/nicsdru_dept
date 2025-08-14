@@ -22,6 +22,13 @@ final class TopicManager {
    */
   protected $nodeStorage;
 
+
+  /**
+   * List of topics for a department.
+   * @var array
+   */
+  protected $topics = [];
+
   /**
    * Constructs a TopicManager object.
    *
@@ -110,7 +117,8 @@ final class TopicManager {
   }
 
   /**
-   * Return true or false if the provided type is enabled as a topic child content option.
+   * Return true or false if the provided type is enabled as a topic child
+   * content option.
    *
    * @param mixed $type
    *   A node entity or bundle name.
@@ -163,7 +171,8 @@ final class TopicManager {
   }
 
   /**
-   * Add and remove an entity to topic child content lists based on the Site Topic field values.
+   * Add and remove an entity to topic child content lists based on the Site
+   * Topic field values.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to use as a child reference.
@@ -211,7 +220,7 @@ final class TopicManager {
 
         if (!$ref_exists) {
           $topic_node->get('field_topic_content')->appendItem([
-            'target_id' => $entity->id()
+            'target_id' => $entity->id(),
           ]);
           $topic_node->setRevisionLogMessage('Added child: (' . $entity->id() . ') ' . $entity->label());
           $topic_node->save();
@@ -312,6 +321,23 @@ final class TopicManager {
   }
 
   /**
+   * Returns list of node ids that have a site_topic field reference to the
+   * given topic for those types that can be added to field_topic_content.
+   *
+   * @param \Drupal\node\NodeInterface $topic
+   *   The topic/subtopic node fetch references for.
+   */
+  public function getNodesReferencingTopic(NodeInterface $topic) {
+    $results = $this->connection->select('node__field_site_topics', 'site_topics')
+      ->fields('site_topics', ['entity_id'])
+      ->condition('field_site_topics_target_id', $topic->id())
+      ->condition('bundle', ['application', 'article', 'subtopic'], 'IN')
+      ->execute()->fetchCol();
+
+    return $results;
+  }
+
+  /**
    * Returns the maximum assignable topics permitted for the given node bundle.
    *
    * @param string|ContentEntityInterface $type
@@ -332,6 +358,49 @@ final class TopicManager {
       'subtopic' => 1,
       default =>  3,
     };
+  }
+
+  /**
+   * Returns a tree structure of topics for the given department.
+   */
+  public function getTopicsTree($department) {
+    $root_topics = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
+      'type' => 'topic',
+      'field_domain_access' => $department
+    ]);
+
+    foreach ($root_topics as $topic) {
+      $this->topics[] = [
+        'nid' => $topic->id(),
+        'label' => $topic->label(),
+        'parent' => 0,
+      ];
+
+      $this->subtopics($topic);
+    }
+
+    return $this->topics;
+  }
+
+  /**
+   * Extracts child subtopics for a given topic/subtopic node.
+   *
+   * @param \Drupal\node\NodeInterface $parent
+   *   Parent topic to extract child content from.
+   */
+  public function subtopics(NodeInterface $parent) {
+    $child_content = $parent->get('field_topic_content')->referencedEntities();
+
+    foreach ($child_content as $child) {
+      if ($child->bundle() === 'subtopic') {
+        $this->topics[] = [
+          'nid' => $child->id(),
+          'label' => $child->label(),
+          'parent' => $parent->id(),
+        ];
+        $this->subtopics($child);
+      }
+    }
   }
 
 }

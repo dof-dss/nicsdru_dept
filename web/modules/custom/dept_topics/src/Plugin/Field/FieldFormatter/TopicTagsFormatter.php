@@ -30,18 +30,32 @@ class TopicTagsFormatter extends FormatterBase {
     $sub_topics = [];
     $topic_manager = \Drupal::service('topic.manager');
     $entities = $items->referencedEntities();
+    $current_user = \Drupal::currentUser();
 
     foreach ($entities as $entity) {
       if ($entity->bundle() === 'topic') {
-        $parent_topics[] = $entity;
+        if ($current_user->isAnonymous()) {
+          if ($entity->isPublished()) {
+            $parent_topics[] = $entity;
+          }
+        }
+        else {
+          $parent_topics[] = $entity;
+        }
       }
       elseif ($entity->bundle() === 'subtopic') {
         $sub_topics[] = $entity;
         $parents = $topic_manager->getParentNodes($entity);
+        $parent_nodes = Node::loadMultiple(array_keys($parents));
 
-        foreach ($parents as $parent) {
-          if ($parent->type === 'topic') {
-            $parent_topics[] = Node::load($parent->nid);
+        foreach ($parent_nodes as $parent) {
+          if ($current_user->isAnonymous()) {
+            if ($parent->isPublished()) {
+              $parent_topics[] = $parent;
+            }
+          }
+          else {
+            $parent_topics[] = $parent;
           }
         }
       }
@@ -58,11 +72,15 @@ class TopicTagsFormatter extends FormatterBase {
       $element[$node->id()] = [
         '#type' => 'link',
         '#title' => $node->label(),
-        '#url' => Url::fromRoute('entity.node.canonical', ['node' => $node->id()]),
+        '#url' => $node->toUrl(),
         '#attributes' => [
           'aria-label' => $node->label() . ' topic',
         ],
-        '#cache' => ['tags' => ['node:' . $node->id()]],
+        '#cache' =>
+          [
+            'tags' => ['node:' . $node->id()],
+            'contexts' => ['user.roles:anonymous'],
+          ],
       ];
     }
 

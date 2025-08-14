@@ -2,11 +2,6 @@ services:
   topic.manager:
     class: Drupal\dept_topics\TopicManager
     arguments: ['@entity_type.manager', '@database', '@entity_field.manager', '@entity_display.repository', '@book.manager']
-#  topic.moderation_state_change_subscriber:
-#    class: Drupal\dept_topics\EventSubscriber\ModerationStateChangeSubscriber
-#    arguments: ['@topic.manager']
-#    tags:
-#      - { name: event_subscriber }
   topic.solr_query_alter:
     class: Drupal\dept_topics\EventSubscriber\SolrQueryAlterEventSubscriber
     arguments: ['@topic.manager']

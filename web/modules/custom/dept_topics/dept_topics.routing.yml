@@ -23,6 +23,22 @@ dept_topics.manage_topic_content.form:
   requirements:
     _permission: 'manage order of topic content'
 
+dept_topics.broken_topic_mapping:
+  path: '/admin/content/broken-topic-mapping'
+  defaults:
+    _title: 'Broken Topic Mapping'
+    _controller: '\Drupal\dept_topics\Controller\BrokenTopicMappingController'
+  requirements:
+    _permission: 'administer nodes'
+
+dept_topics.broken_topic_mapping.fix_topic_content:
+  path: '/admin/content/broken-topic-mapping/fix-topic-content/{nid}'
+  defaults:
+    _title: 'Add Node to Topic'
+    _controller: '\Drupal\dept_topics\Controller\BrokenTopicMappingController::addNodesToTopicContent'
+  requirements:
+    _permission: 'administer nodes'
+
 dept_topics.topic_structure_report:
   path: '/admin/topics/topic-structure-report/{node}'
   defaults:
