@@ -19,6 +19,14 @@ final class CloudTasksController extends ControllerBase {
    */
   public function displayTasks(): array {
 
+    $path = getenv('GOOGLE_APPLICATION_CREDENTIALS');
+
+    $jsonKey = file_get_contents($path);
+
+    $json_data =  json_decode((string) $jsonKey, true);
+
+    ksm($jsonKey, $json_data);
+
 //    putenv('GOOGLE_APPLICATION_CREDENTIALS=/app/google_application_credentials.json');
     $config = \Drupal::config('origins_cloud_tasks.settings');
     $project_id = $config->get('project_id');
