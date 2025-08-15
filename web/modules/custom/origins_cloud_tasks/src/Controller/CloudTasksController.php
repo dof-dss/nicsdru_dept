@@ -14,24 +14,28 @@ use Google\Cloud\Tasks\V2\ListTasksRequest;
  */
 final class CloudTasksController extends ControllerBase {
 
-  /**
-   * Display current Cloud Tasks in the Queue.
-   */
-  public function displayTasks(): array {
-
+  public function displayAuth(): array {
     $path = getenv('GOOGLE_APPLICATION_CREDENTIALS');
 
     $jsonKey = file_get_contents($path);
 
     $json_data =  json_decode((string) $jsonKey, true);
 
-    ksm($jsonKey, $json_data);
+    ksm($path, $jsonKey, $json_data);
 
-    return [
-      '#markup' => '<p>test.</p>',
+    $build['data'] = [
+      '#markup' => 'test',
     ];
 
-//    putenv('GOOGLE_APPLICATION_CREDENTIALS=/app/google_application_credentials.json');
+    return $build;
+  }
+
+  /**
+   * Display current Cloud Tasks in the Queue.
+   */
+  public function displayTasks(): array {
+
+    putenv('GOOGLE_APPLICATION_CREDENTIALS=/app/google_application_credentials.json');
     $config = \Drupal::config('origins_cloud_tasks.settings');
     $project_id = $config->get('project_id');
     $queue_id = $config->get('queue_id');
