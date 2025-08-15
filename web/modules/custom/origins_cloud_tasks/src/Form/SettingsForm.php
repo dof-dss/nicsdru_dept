@@ -33,6 +33,38 @@ final class SettingsForm extends ConfigFormBase {
 
     $offset_value = $this->config('origins_cloud_tasks.settings')->get('callback_offset') ?? '5';
 
+    $form['project_id'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Project ID'),
+      '#description' => $this->t('Google Cloud project ID. (available in the GC dashboard)'),
+      '#default_value' => $this->config('origins_cloud_tasks.settings')->get('project_id'),
+      '#size' => 20,
+      '#required' => TRUE,
+    ];
+
+    $form['queue_id'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Queue ID'),
+      '#description' => $this->t('Google Cloud Tasks queue ID. (available in the tasks dashboard)'),
+      '#default_value' => $this->config('origins_cloud_tasks.settings')->get('queue_id'),
+      '#required' => TRUE,
+    ];
+
+    $form['region'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Region'),
+      '#description' => $this->t('Google Cloud region '),
+      '#default_value' => $this->config('origins_cloud_tasks.settings')->get('region') ?? 'europe-west2',
+      '#options' => [
+        'europe-west2' => 'United Kingdom',
+        'europe-west4' => 'Netherlands',
+        'europe-west1' => 'Belgium',
+        'europe-west9' => 'France',
+        'europe-west3' => 'Germany',
+      ],
+      '#required' => TRUE,
+    ];
+
     $form['callback_offset'] = [
       '#type' => 'range',
       '#title' => $this->t('Callback offset'),
@@ -53,9 +85,15 @@ final class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $this->config('origins_cloud_tasks.settings')
-      ->set('callback_offset', $form_state->getValue('callback_offset'))
-      ->save();
+    $values = $form_state->getValues();
+
+    $config = $this->config('origins_cloud_tasks.settings');
+    $config->set('project_id', $values['project_id']);
+    $config->set('queue_id', $values['queue_id']);
+    $config->set('region', $values['region']);
+    $config->set('callback_offset', $values['callback_offset']);
+    $config->save();
+
     parent::submitForm($form, $form_state);
   }
 
