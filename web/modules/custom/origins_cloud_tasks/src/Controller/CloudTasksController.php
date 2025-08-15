@@ -16,6 +16,11 @@ final class CloudTasksController extends ControllerBase {
 
   public function displayAuth(): array {
     $path = getenv('GOOGLE_APPLICATION_CREDENTIALS');
+    $gac_string = getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON');
+
+    $json_data = json_encode($gac_string);
+
+    file_put_contents($path, $json_data);
 
     $jsonKey = file_get_contents($path);
 
