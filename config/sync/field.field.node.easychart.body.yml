@@ -1,0 +1,26 @@
+uuid: 23c09f9b-e085-40dc-be87-580264e1825a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.easychart
+  module:
+    - text
+_core:
+  default_config_hash: zzhepAm1tkSXk8_Cm0UoW06DZofXrubNTOxF_hw9Bk4
+id: node.easychart.body
+field_name: body
+entity_type: node
+bundle: easychart
+label: Body
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: false
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary
