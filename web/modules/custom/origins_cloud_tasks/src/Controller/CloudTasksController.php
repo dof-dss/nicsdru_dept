@@ -26,7 +26,7 @@ final class CloudTasksController extends ControllerBase {
 
     $json_data =  json_decode((string) $jsonKey, true);
 
-    ksm($path, $jsonKey, $json_data);
+    ksm($path, $jsonKey, $json_data, json_last_error());
 
     $build['data'] = [
       '#markup' => 'test',
