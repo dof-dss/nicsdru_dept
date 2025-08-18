@@ -315,7 +315,7 @@
         },
         "patches": {
             "drupal/admin_toolbar": {
-              "Add multi column menu dropdown": "https://www.drupal.org/files/issues/2024-08-05/admin_toolbar-added_multi_column_menu_dropdown-2917168-54.patch"
+              "Add multi column menu dropdown": "https://www.drupal.org/files/issues/2025-08-05/2917168-mr150.patch"
             },
             "drupal/block_visibility_groups": {
                 "Visibility incorrectly returns false on OR logic when context missing from a different condition #3503194": "https://www.drupal.org/files/issues/2025-02-07/or-logic-when-context-missing--3503194-5.patch"
@@ -343,19 +343,12 @@
                 "DateList and date range inline form errors are repeated": "https://www.drupal.org/files/issues/2020-01-30/2827034-35.patch",
                 "The link on the Image tag is redirecting to an undefined page from the node preview screen #3308432": "https://www.drupal.org/files/issues/2025-06-09/3308432-42.patch"
             },
-            "drupal/devel": {
-                "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://gitlab.com/-/project/18040690/uploads/7897853cd83cb829ae8d752657e2f497/kint.221-5-3.patch"
-            },
             "drupal/domain": {
                 "Migration path for domain": "https://www.drupal.org/files/issues/2020-02-27/domain-migration-path-for-domain-2882837-13.patch",
-                "Fix Undefined array key #3478122": "https://www.drupal.org/files/issues/2024-10-01/domain_3478122.patch",
-                "Using Domain Config UI creates *.yml files with duplicate UUIDs": "https://www.drupal.org/files/issues/2024-08-25/3222413--domain_config_ui--duplicate-uuid--31.patch"
+                "Using Domain Config UI creates *.yml files with duplicate UUIDs": "https://www.drupal.org/files/issues/2025-08-15/3222413-compatible-with-beta2-47.patch"
             },
             "drupal/domain_entity": {
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch"
-            },
-            "drupal/domain_path": {
-                "Warning: Undefined array key \"pathauto\" in Drupal\\domain_path_pathauto\\DomainPathautoHelper #3315752": "https://www.drupal.org/files/issues/2024-10-21/3315752-13.patch"
             },
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
