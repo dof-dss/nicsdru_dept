@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.easychart.field_domain_source
     - node.type.easychart
   module:
+    - text
     - user
 _core:
   default_config_hash: FWYk7O0JG28VJPEUqte0NN5KZ5fK2jyyBPz6Ugs1YdI
@@ -19,13 +20,15 @@ targetEntityType: node
 bundle: easychart
 mode: teaser
 content:
-  content_moderation_control:
+  body:
+    type: text_default
+    label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: -20
+    weight: 0
     region: content
 hidden:
-  body: true
+  content_moderation_control: true
   easychart: true
   field_domain_access: true
   field_domain_all_affiliates: true

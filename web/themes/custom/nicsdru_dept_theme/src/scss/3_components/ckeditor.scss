@@ -5,3 +5,16 @@
 $base-font-size: 16px;
 
 @include ckeditor-base(16px);
+
+.drupal-entity.ck-widget .embedded-entity {
+  background: #d0d0d0 url('/themes/custom/nicsdru_dept_theme/images/placeholder.png') center no-repeat;
+  height: 15rem;
+  position: relative;
+}
+
+.drupal-entity.ck-widget .embedded-entity::before {
+  content: 'This is a placeholder for the embedded chart';
+  position: absolute;
+  bottom: 10px;
+  right: 39%;
+}
