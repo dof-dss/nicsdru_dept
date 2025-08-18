@@ -7,7 +7,20 @@ JSON_FILE="$PLATFORM_APP_DIR/google_application_credentials.json"
 
 if [ -n "${GOOGLE_APPLICATION_CREDENTIALS_JSON}" ]; then
   # Take the JSON in the env var, clean the string and save as a file
-  echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" | tr -d '\000-\010\013\014\016-\037\177' | jq . > "$JSON_FILE"
+
+  # Step 1: Validate JSON first
+  tmp=$(mktemp)
+  echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" | jq '.' > "$tmp" || {
+    echo "Error: GOOGLE_APPLICATION_CREDENTIALS_JSON does not contain valid JSON." >&2
+    rm -f "$tmp"
+    exit 1
+  }
+
+  # Step 2: Expand '\n' in the private_key into real newlines
+  jq '.private_key |= gsub("\\n"; "\n")' "$tmp" > "$JSON_FILE"
+
+  rm -f "$tmp"
+
   export GOOGLE_APPLICATION_CREDENTIALS="$JSON_FILE"
   echo "GAC JSON file created."
 else
