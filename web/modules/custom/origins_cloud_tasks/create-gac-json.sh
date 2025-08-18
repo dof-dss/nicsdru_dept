@@ -10,11 +10,7 @@ if [ -n "${GOOGLE_APPLICATION_CREDENTIALS_JSON}" ]; then
 
   # Step 1: Validate JSON first
   tmp=$(mktemp)
-  echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" | jq '.' > "$tmp" || {
-    echo "Error: GOOGLE_APPLICATION_CREDENTIALS_JSON does not contain valid JSON." >&2
-    rm -f "$tmp"
-    exit 1
-  }
+  echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" | jq '.' > "$tmp"
 
   # Step 2: Expand '\n' in the private_key into real newlines
   jq '.private_key |= gsub("\\n"; "\n")' "$tmp" > "$JSON_FILE"
