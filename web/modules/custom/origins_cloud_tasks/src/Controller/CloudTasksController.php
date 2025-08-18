@@ -24,6 +24,7 @@ final class CloudTasksController extends ControllerBase {
 
     $jsonKey = file_get_contents($path);
 
+    $jsonKey = preg_replace('/[[:cntrl:]]/', '', $jsonKey);
     $json_data =  json_decode((string) $jsonKey, true);
 
     ksm($path, $jsonKey, $json_data, json_last_error());
