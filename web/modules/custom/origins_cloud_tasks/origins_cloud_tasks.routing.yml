@@ -14,10 +14,10 @@ origins_cloud_tasks.cloud_tasks:
   requirements:
     _permission: 'access cloud tasks'
 
-origins_cloud_tasks.display_auth:
-  path: '/admin/config/origins/cloud-tasks/auth'
+origins_cloud_tasks.display_auth_check:
+  path: '/admin/config/origins/cloud-tasks/auth-check'
   defaults:
-    _title: 'Cloud Tasks auth'
-    _controller: '\Drupal\origins_cloud_tasks\Controller\CloudTasksController::displayAuth'
+    _title: 'Cloud Tasks auth checker'
+    _controller: '\Drupal\origins_cloud_tasks\Controller\CloudTasksController::displayAuthCheck'
   requirements:
     _permission: 'access cloud tasks'
