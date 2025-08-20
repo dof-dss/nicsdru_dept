@@ -270,10 +270,12 @@ display:
         options:
           view_modes:
             'entity:node':
+              ':default': default
               application: search_result
               article: search_result
               consultation: search_result
               contact: search_result
+              event: search_result
               heritage_site: search_result
               news: search_result
               page: search_result
