@@ -10,9 +10,9 @@ use Google\Cloud\Tasks\V2\Task;
 use Google\Protobuf\Timestamp;
 
 /**
- * Helper to create a Cloud Task to call the site's cronjob.
+ * Helper to create a Cloud Task to call A URL.
  */
-class CronTask implements CloudTaskInterface {
+class UrlTask implements CloudTaskInterface {
 
   /**
    * Task identifier.
@@ -63,20 +63,19 @@ class CronTask implements CloudTaskInterface {
   }
 
   /**
-   * Constructs a new cron job callback task.
+   * Constructs a new URL callback task.
    *
    * @param string $id
    *   The task identifier.
    * @param string $schedule
    *   Timestamp for when the task callback should execute.
+   * @param string $url
+   *   The URL the callback should call.
    */
-  public function __construct(string $id, string $schedule) {
-    $state = \Drupal::service('state');
+  public function __construct(string $id, string $schedule, string $url) {
     $this->task = new Task();
     $this->id = $id;
     $this->schedule = $schedule + \Drupal::config('origins_cloud_tasks.settings')->get('callback_offset') ?? 5;
-
-    $url = Url::fromRoute('system.cron', ['key' => $state->get('system.cron_key')], ['absolute' => TRUE])->toString();
 
     $httpRequest = new HttpRequest();
     $httpRequest->setUrl($url);

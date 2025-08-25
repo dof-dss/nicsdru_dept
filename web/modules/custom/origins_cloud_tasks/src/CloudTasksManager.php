@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\origins_cloud_tasks;
 
+use DateTime;
 use Drupal\Core\Config\ConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Google\Cloud\Tasks\V2\Client\CloudTasksClient;
 use Google\Cloud\Tasks\V2\CreateTaskRequest;
+use Google\Cloud\Tasks\V2\DeleteTaskRequest;
 use Google\Cloud\Tasks\V2\ListTasksRequest;
 
 /**
@@ -21,10 +23,21 @@ final class CloudTasksManager {
    * @var \Google\Cloud\Tasks\V2\Client\CloudTasksClient
    */
   protected $cloudClient;
-  protected $projectId;
-  protected $queueId;
 
-  protected $location;
+  /**
+   * Google Cloud project identifier.
+   */
+  protected string $projectId;
+
+  /**
+   * Google Cloud queue identifier.
+   */
+  protected string $queueId;
+
+  /**
+   * Google Cloud region/location.
+   */
+  protected string $location;
 
   /**
    * Constructs a Cloud Tasks manager object.
@@ -32,21 +45,44 @@ final class CloudTasksManager {
   public function __construct(
     private readonly ConfigManagerInterface $configManager,
     private readonly EntityTypeManagerInterface $entityTypeManager,
-  ) {
-    $adc_path = getenv('FILE_PRIVATE_PATH') . '/google_application_credentials.json';
+  ) {}
 
-    if (file_exists($adc_path)) {
-      putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $adc_path);
+  /**
+   * Returns the ADC file path.
+   *
+   * @return string
+   *   Absolute system filepath.
+   */
+  public static function adcPath() {
+    return getenv('FILE_PRIVATE_PATH') . '/google_application_credentials.json';
+  }
 
+  /**
+   * Populate config and instantiate Cloud Task client.
+   */
+  private function ready() {
+    if (empty($this->cloudClient)) {
+
+      if (!file_exists(self::adcPath())) {
+        throw new \Exception('google_application_credentials.json file does not exist.');
+      }
+
+      $config = $this->configManager->getConfigFactory()->get('origins_cloud_tasks.settings')->get();
+
+      if (empty($config)) {
+        throw new \Exception('Origins Cloud Tasks settings are missing or incomplete.');
+      }
+
+      $this->projectId = $config['project_id'];
+      $this->queueId = $config['queue_id'];
+      $this->location = $config['region'];
+
+      if (empty($this->projectId) || empty($this->queueId) || empty($this->location)) {
+        throw new \Exception('Origins Cloud Tasks settings are missing or incomplete.');
+      }
+
+      putenv('GOOGLE_APPLICATION_CREDENTIALS=' . self::adcPath());
       $this->cloudClient = new CloudTasksClient();
-
-      $config = $this->configManager->getConfigFactory()->get('origins_cloud_tasks.settings');
-      $this->projectId = $config->get('project_id');
-      $this->queueId = $config->get('queue_id');
-      $this->location = $config->get('region');
-    }
-    else {
-      \Drupal::logger('origins_cloud_tasks')->error('Google Application Credentials file not found.');
     }
   }
 
@@ -54,13 +90,16 @@ final class CloudTasksManager {
    * Get the current Cloud Tasks.
    */
   public function getTasks() {
+    $this->ready();
     $request = (new ListTasksRequest())->setParent($this->getQueueName());
 
     try {
       return $this->cloudClient->listTasks($request);
-    } catch (\Exception $ex) {
+    }
+    catch (\Exception $ex) {
       return $ex;
-    } finally {
+    }
+    finally {
       $this->cloudClient->close();
     }
   }
@@ -69,19 +108,66 @@ final class CloudTasksManager {
    * Create a new Cloud Task.
    */
   public function createTask(CloudTaskInterface $task) {
+    $this->ready();
+
     $task_name = CloudTasksClient::taskName($this->projectId, $this->location, $this->queueId, $task->id());
     $task->name($task_name);
 
-    $request = (new CreateTaskRequest())
+    $today = new DateTime('today');
+    $scheduled = $task->task()->getScheduleTime()->toDateTime();
+    $interval = $today->diff($scheduled);
+    $message = NULL;
+
+    if (!$interval->invert && $interval->days >= 30) {
+      $database = \Drupal::database();
+
+      try {
+        $result = $database->insert('origins_cloud_tasks')
+          ->fields([
+            'name' => $task_name,
+            'schedule_timestamp' => $scheduled->getTimestamp(),
+            'url' => $task->task()->getHttpRequest()->getUrl(),
+          ])
+          ->execute();
+      } catch (\Exception $ex) {
+        \Drupal::messenger()->addError('Unable to save Cloud task to Database. Please contact your site administrator.');
+        \Drupal::logger('origins_cloud_tasks')->error('Unable to save task to db: @id. @message', ['@id' => $task->id(), '@message' => $message]);
+      }
+    }
+    else {
+      $request = (new CreateTaskRequest())
         ->setParent($this->getQueueName())
         ->setTask($task->task());
 
+      try {
+        $response = $this->cloudClient->createTask($request);
+      }
+      catch (\Exception $ex) {
+        return $ex;
+      }
+      finally {
+        $this->cloudClient->close();
+      }
+    }
+  }
+
+  /**
+   * Delete a Cloud Task.
+   */
+  public function deleteTask($task_id) {
+    $this->ready();
+    $task_name = CloudTasksClient::taskName($this->projectId, $this->location, $this->queueId, $task_id);
+
+    $request = (new DeleteTaskRequest())
+      ->setName($task_name);
+
     try {
-      $response = $this->cloudClient->createTask($request);
+      $this->cloudClient->deleteTask($request);
     }
     catch (\Exception $ex) {
       return $ex;
-    } finally {
+    }
+    finally {
       $this->cloudClient->close();
     }
   }
@@ -90,6 +176,7 @@ final class CloudTasksManager {
    * Return the Task Queue based in the stored config.
    */
   protected function getQueueName() {
+    $this->ready();
     return CloudTasksClient::queueName($this->projectId, $this->location, $this->queueId);
   }
 
