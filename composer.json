@@ -368,6 +368,9 @@
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch",
                 "Deprecations PHP 8.4": "https://git.drupalcode.org/project/facets/-/commit/4274f4a80c7c7cfd36bf7fc4fbbe68dde3a8fe2a.patch"
             },
+            "drupal/flag_search_api": {
+                "Explicitly declare nullable parameters for PHP 8.4": "https://git.drupalcode.org/project/flag_search_api/-/merge_requests/12.patch"
+            },
             "drupal/flood_control": {
                 "Add Redis support": "https://git.drupalcode.org/project/flood_control/-/merge_requests/53.diff"
             },
