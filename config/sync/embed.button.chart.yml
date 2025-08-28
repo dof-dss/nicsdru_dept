@@ -1,0 +1,27 @@
+uuid: a3b3c292-2d4b-4380-b54a-3ff7b26b2f1f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.easychart
+    - node.type.easychart
+  module:
+    - entity_embed
+    - node
+_core:
+  default_config_hash: 2okplW-aWgAXa88UZQ3PLqLUoidQ6-_IqY9xqjqwHL0
+label: Chart
+id: chart
+type_id: entity
+type_settings:
+  entity_type: node
+  bundles:
+    - easychart
+  display_plugins:
+    - 'view_mode:node.easychart'
+  entity_browser: ''
+  entity_browser_settings: {  }
+icon:
+  uri: 'public://embed_buttons/chart.svg'
+  data: PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0ndXRmLTgnPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDIwIDIwIj48aW1hZ2UgaHJlZj0iZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFCUUFBQUFVQ0FZQUFBQ05pUjBOQUFBQXEwbEVRVlI0bk8yVVRRckNNQkNGdjByOVdaV2V3WjBuOGw0OWdqZndITjVBY05VVHRDZ29ndFBOR3hwY0pCQ0NkT0hBa01tODVDWHpocVF5TTByYXFpZ2JnSm1oVy9iQVU5NERUUTVQSGVRYVlCdkVXVmE4NURxQ2ViZGE0S1BEWFpMSXJsbkRRU1NtR09BWXpBM29Vanlwa2pjYVhkTmRZbjE1RFhNSlQ4QU51QUJYNE94QXJDa3hPd0I3T2NEYWdjV1UvQ2Y4RWVFSXZPU2pjdThBZy9rZFA3N3lkeWVwRnY5alQvS1VPNkkxdUVJTkFBQUFBRWxGVGtTdVFtQ0MiIHg9IjAiIHk9IjAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgLz48L3N2Zz4=
+icon_uuid: a8ed530f-7c16-4dc8-93c0-23ff25d6e7b9

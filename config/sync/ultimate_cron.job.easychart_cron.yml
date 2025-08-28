@@ -1,0 +1,17 @@
+uuid: 29e8b9b5-f5c6-478a-9da6-766dfbd4079a
+langcode: en
+status: true
+dependencies:
+  module:
+    - easychart
+title: 'Default cron handler'
+id: easychart_cron
+weight: 0
+module: easychart
+callback: 'easychart#cron'
+scheduler:
+  id: simple
+launcher:
+  id: serial
+logger:
+  id: database
