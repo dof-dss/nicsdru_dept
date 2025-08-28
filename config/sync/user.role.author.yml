@@ -12,7 +12,6 @@ dependencies:
     - node.type.article
     - node.type.consultation
     - node.type.contact
-    - node.type.easychart
     - node.type.event
     - node.type.gallery
     - node.type.heritage_site
@@ -27,7 +26,6 @@ dependencies:
     - dept_topics
     - domain_access
     - domain_entity
-    - easychart
     - media
     - node
     - scheduled_transitions
@@ -40,7 +38,6 @@ weight: -6
 is_admin: null
 permissions:
   - 'access content overview'
-  - 'access full easychart configuration'
   - 'access media overview'
   - 'add scheduled transitions node application'
   - 'add scheduled transitions node article'
@@ -60,7 +57,6 @@ permissions:
   - 'create consultation content on assigned domains'
   - 'create contact content on assigned domains'
   - 'create document media content on assigned domains'
-  - 'create easychart content on assigned domains'
   - 'create event content on assigned domains'
   - 'create event node content on assigned domains'
   - 'create gallery content on assigned domains'
@@ -80,7 +76,6 @@ permissions:
   - 'delete article revisions'
   - 'delete consultation revisions'
   - 'delete contact revisions'
-  - 'delete easychart revisions'
   - 'delete event revisions'
   - 'delete gallery revisions'
   - 'delete heritage_site revisions'
@@ -92,7 +87,6 @@ permissions:
   - 'delete own consultation content'
   - 'delete own contact content'
   - 'delete own document media'
-  - 'delete own easychart content'
   - 'delete own event content'
   - 'delete own gallery content'
   - 'delete own heritage_site content'
@@ -128,7 +122,6 @@ permissions:
   - 'revert article revisions'
   - 'revert consultation revisions'
   - 'revert contact revisions'
-  - 'revert easychart revisions'
   - 'revert event revisions'
   - 'revert gallery revisions'
   - 'revert heritage_site revisions'
@@ -143,7 +136,6 @@ permissions:
   - 'update consultation content on assigned domains'
   - 'update contact content on assigned domains'
   - 'update document media content on assigned domains'
-  - 'update easychart content on assigned domains'
   - 'update event content on assigned domains'
   - 'update event node content on assigned domains'
   - 'update gallery content on assigned domains'
@@ -169,7 +161,6 @@ permissions:
   - 'view any unpublished consultation content'
   - 'view any unpublished contact content'
   - 'view any unpublished content'
-  - 'view any unpublished easychart content'
   - 'view any unpublished event content'
   - 'view any unpublished gallery content'
   - 'view any unpublished heritage_site content'
@@ -182,7 +173,6 @@ permissions:
   - 'view article revisions'
   - 'view consultation revisions'
   - 'view contact revisions'
-  - 'view easychart revisions'
   - 'view event revisions'
   - 'view gallery revisions'
   - 'view heritage_site revisions'
