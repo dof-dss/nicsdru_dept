@@ -51,7 +51,7 @@ function dept_postprocess_form_node_form_alter(&$form, FormStateInterface $form_
 function dept_postprocess_moderation_sidebar_alter(&$build, &$context) {
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
-    if (!\Drupal::currentUser()->hasPermission('create subtopic content on assigned domains')) {
+    if (!\Drupal::currentUser()->hasPermission('create subtopic content on assigned domains') || ) {
       // Remove sidebar actions for topics/subtopic if the user does not have
       // the edit subtopic permission.
 
