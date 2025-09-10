@@ -39,6 +39,13 @@ class TopicTreeDataController {
     ]);
 
     foreach ($root_topics as $topic) {
+
+      $mod_state = $topic->get('moderation_state')->getString();
+
+      if ($mod_state === 'archived') {
+        continue;
+      }
+
       // See 'Alternative JSON' format at https://www.jstree.com/docs/json/
       $this->topics[] = [
         'id' => $topic->id(),
@@ -63,6 +70,13 @@ class TopicTreeDataController {
 
     foreach ($child_content as $child) {
       if ($child->bundle() === 'subtopic') {
+
+        $mod_state = $child->get('moderation_state')->getString();
+
+        if ($mod_state === 'archived') {
+          continue;
+        }
+
         $this->topics[] = [
           'id' => $child->id(),
           'text' => $child->label(),
