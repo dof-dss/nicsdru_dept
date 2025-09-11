@@ -924,6 +924,8 @@ display:
             encoding: utf8
             utf8_bom: '0'
             use_serializer_encode_only: false
+          xml_settings:
+            encoding: ''
       row:
         type: data_field
         options:

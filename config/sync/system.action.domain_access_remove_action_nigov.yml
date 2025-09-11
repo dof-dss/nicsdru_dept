@@ -1,0 +1,15 @@
+uuid: a5e73a0e-6037-45ac-9162-56fd73ed2017
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.nigov
+  module:
+    - domain_access
+id: domain_access_remove_action_nigov
+label: 'Remove selected content from the NI Government domain'
+type: node
+plugin: domain_access_remove_action
+configuration:
+  domain_id:
+    - nigov
