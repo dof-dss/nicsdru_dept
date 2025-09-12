@@ -13,6 +13,7 @@ dependencies:
     - node.type.book
     - node.type.consultation
     - node.type.contact
+    - node.type.easychart
     - node.type.event
     - node.type.gallery
     - node.type.heritage_site
@@ -30,6 +31,7 @@ dependencies:
     - dept_topics
     - domain_access
     - domain_entity
+    - easychart
     - file
     - media
     - node
@@ -45,6 +47,7 @@ weight: -5
 is_admin: null
 permissions:
   - 'access content overview'
+  - 'access full easychart configuration'
   - 'access media overview'
   - 'add content to books'
   - 'add scheduled transitions node application'
@@ -67,6 +70,7 @@ permissions:
   - 'create consultation content on assigned domains'
   - 'create contact content on assigned domains'
   - 'create document media content on assigned domains'
+  - 'create easychart content on assigned domains'
   - 'create event content on assigned domains'
   - 'create event node content on assigned domains'
   - 'create heritage_site content on assigned domains'
@@ -95,6 +99,8 @@ permissions:
   - 'delete contact content on assigned domains'
   - 'delete contact revisions'
   - 'delete document media content on assigned domains'
+  - 'delete easychart content on assigned domains'
+  - 'delete easychart revisions'
   - 'delete event content on assigned domains'
   - 'delete event node content on assigned domains'
   - 'delete event revisions'
@@ -146,6 +152,7 @@ permissions:
   - 'revert book revisions'
   - 'revert consultation revisions'
   - 'revert contact revisions'
+  - 'revert easychart revisions'
   - 'revert event revisions'
   - 'revert gallery revisions'
   - 'revert heritage_site revisions'
@@ -161,6 +168,7 @@ permissions:
   - 'update consultation content on assigned domains'
   - 'update contact content on assigned domains'
   - 'update document media content on assigned domains'
+  - 'update easychart content on assigned domains'
   - 'update event content on assigned domains'
   - 'update event node content on assigned domains'
   - 'update gallery content on assigned domains'
@@ -196,6 +204,7 @@ permissions:
   - 'view any unpublished consultation content'
   - 'view any unpublished contact content'
   - 'view any unpublished content'
+  - 'view any unpublished easychart content'
   - 'view any unpublished event content'
   - 'view any unpublished gallery content'
   - 'view any unpublished heritage_site content'
@@ -211,6 +220,7 @@ permissions:
   - 'view book revisions'
   - 'view consultation revisions'
   - 'view contact revisions'
+  - 'view easychart revisions'
   - 'view event revisions'
   - 'view gallery revisions'
   - 'view heritage_site revisions'
