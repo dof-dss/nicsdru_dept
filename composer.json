@@ -215,6 +215,7 @@
         "wikimedia/composer-merge-plugin": "^2.1"
     },
     "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.1",
         "drupal/coder": "^8.3",
         "drupal/core-dev": "^10",
         "drupal/devel": "^5.3",
@@ -230,6 +231,7 @@
         "phpspec/prophecy-phpunit": "^2",
         "phpstan/extension-installer": "^1.3",
         "previousnext/phpunit-finder": "^2.0",
+        "slevomat/coding-standard": "^8.16",
         "spaze/phpstan-disallowed-calls": "^3.1"
     },
     "replace": {

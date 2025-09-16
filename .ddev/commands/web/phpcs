@@ -1,18 +1,29 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 ## Description: Execute local PHPCS static analysis checks.
 ## Usage: phpcs [directory]
 ## Example: "ddev phpcs" or "ddev phpcs web/modules/custom"
 ## HostWorkingDir: true
 
-DRUPAL_DEPLOY_PATH="/var/www/html"
-IGNORE="/web/themes/origins/node_modules,/web/themes/custom/nicsdru_dept_theme/node_modules"
+# Path inside the container where the repo is mounted
+DRUPAL_DEPLOY_PATH="${DRUPAL_DEPLOY_PATH:-/var/www/html}"
 
-# If an argument is provided, use it; otherwise, use the current working directory
-if [ -n "$1" ]; then
-  PHPCS_CHECK_DIR="$1"
+# Default ignore list (RELATIVE paths; let phpcs.sh turn them into absolutes)
+DEFAULT_IGNORE_CSV="web/themes/origins/node_modules,web/themes/custom/nicsdru_dept_theme/node_modules"
+
+# Allow callers to add/override extra ignores via PHPCS_IGNORE env var (CSV)
+EXTRA_IGNORE_CSV="${PHPCS_IGNORE:-}"
+
+# Merge default + extra into a single CSV (no duplicate filtering needed)
+if [ -n "${EXTRA_IGNORE_CSV}" ]; then
+  IGNORE="${DEFAULT_IGNORE_CSV},${EXTRA_IGNORE_CSV}"
 else
-  PHPCS_CHECK_DIR="."
+  IGNORE="${DEFAULT_IGNORE_CSV}"
 fi
 
-${DRUPAL_DEPLOY_PATH}/phpcs.sh "${DRUPAL_DEPLOY_PATH}" "${PHPCS_CHECK_DIR}" "${IGNORE}"
+# Directory to check (default: current working dir in container, which maps to host)
+PHPCS_CHECK_DIR="${1:-.}"
+
+# Hand off to the refined script (which resolves paths, sets installed_paths, and runs the 3 passes)
+"${DRUPAL_DEPLOY_PATH}/phpcs.sh" "${DRUPAL_DEPLOY_PATH}" "${PHPCS_CHECK_DIR}" "${IGNORE}"
