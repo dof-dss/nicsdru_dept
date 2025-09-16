@@ -8,8 +8,8 @@ parameters:
   drupal:
   		entityMapping:
   			simple_sitemap:
-          class: Drupal\simple_sitemap\Entity\SimpleSitemap
-          storage: Drupal\simple_sitemap\Entity\SimpleSitemapStorage
+  			  class: Drupal\simple_sitemap\Entity\SimpleSitemap
+  			  storage: Drupal\simple_sitemap\Entity\SimpleSitemapStorage
 
   # FROM mglaman/drupal-check/phpstan/base_config.neon
   reportUnmatchedIgnoredErrors: false
