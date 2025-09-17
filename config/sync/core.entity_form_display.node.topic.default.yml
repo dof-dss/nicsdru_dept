@@ -16,7 +16,9 @@ dependencies:
     - field.field.node.topic.field_topic_content
     - field.field.node.topic.layout_builder__layout
     - node.type.topic
+    - workflows.workflow.nics_editorial_workflow
   module:
+    - bert
     - content_moderation
     - field_group
     - media_library
@@ -91,7 +93,7 @@ content:
       media_library_edit:
         show_edit: '1'
   field_domain_access:
-    type: options_buttons
+    type: options_select
     weight: 20
     region: content
     settings: {  }
@@ -133,14 +135,17 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_topic_content:
-    type: entity_reference_autocomplete
+    type: bert
     weight: 5
     region: content
     settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
+      list: title_with_edit_link
+      add: none
+      add_placeholder: 'Select an entity'
+      disable_duplicate_selection: '1'
+      disable_remove: '1'
+      wrapper: '1'
+      disable_drag_and_drop: 0
     third_party_settings: {  }
   flag:
     weight: 9

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59f61c9fb981dff80d2237ddaae7f2c0",
+    "content-hash": "a338444f551506edb8331f262226b177",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2381,6 +2381,58 @@
             "homepage": "https://www.drupal.org/project/autoban",
             "support": {
                 "source": "https://git.drupalcode.org/project/autoban"
+            }
+        },
+        {
+            "name": "drupal/bert",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/bert.git",
+                "reference": "2.0.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/bert-2.0.3.zip",
+                "reference": "2.0.3",
+                "shasum": "07d95b2a450aad66adc3897aeab7d69c6e356a45"
+            },
+            "require": {
+                "drupal/core": "^8.6 || ^9.0 || ^10 || ^11",
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "composer-runtime-api": "^2.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.3",
+                    "datestamp": "1756996825",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "dieterholvoet",
+                    "homepage": "https://www.drupal.org/user/3567222"
+                },
+                {
+                    "name": "robin.houtevelts",
+                    "homepage": "https://www.drupal.org/user/3500121"
+                }
+            ],
+            "description": "A user friendly and customizable entity reference list field widget.",
+            "homepage": "https://www.drupal.org/project/bert",
+            "support": {
+                "source": "https://git.drupalcode.org/project/bert"
             }
         },
         {
