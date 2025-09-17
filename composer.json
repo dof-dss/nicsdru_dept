@@ -341,6 +341,9 @@
             "drupal/domain_path": {
                 "Remove unused constructor from DomainPathAliasManager class": "https://www.drupal.org/files/issues/2025-05-23/3526307-3.patch"
             },
+            "drupal/domain_path_redirect": {
+                "The entity type domain_path_redirect does not have a published entity key": "https://www.drupal.org/files/issues/2025-09-12/3544249-domain_path_redirect-patch.diff"
+            },
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
             },
@@ -354,7 +357,6 @@
             "drupal/migrate_plus": {
                 "Source plugin to only pull in certain URL aliases": "https://www.drupal.org/files/issues/2022-02-18/migrate_plus-n3063778-15.patch"
             },
-
             "drupal/moderation_sidebar": {
                 "Can't preview a new node #3264639": "https://www.drupal.org/files/issues/2022-02-16/preview-new-node-3264639-2.patch",
                 "'Draft available' text still appears after deleting a forward revision": "https://www.drupal.org/files/issues/2020-02-24/3115474-3.patch",
@@ -362,6 +364,9 @@
             },
             "drupal/permissions_filter": {
                 "Allow uninstall of obsolete module": "https://gist.githubusercontent.com/johangant/6b493abcacdafe437e68638f7bb6e845/raw/1e74d6830ead9e0410a754db040738892b995da4/fdgfdg.patch"
+            },
+            "drupal/redirect": {
+                "Add a 'URL Redirects' tab to the taxonomy term edit form": "https://www.drupal.org/files/issues/2025-09-17/3205896-5.patch"
             },
             "drupal/simple_gmap": {
                 "Add support for address module": "https://www.drupal.org/files/issues/2025-03-19/simple_gmap-add-support-for-address-module-2863979-68.patch"
