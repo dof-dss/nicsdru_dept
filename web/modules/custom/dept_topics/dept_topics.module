@@ -365,20 +365,7 @@ function dept_topics_node_presave(EntityInterface $node) {
  * Implements hook_ENTITY_TYPE_insert().
  */
 function dept_topics_node_insert(NodeInterface $node) {
-  // For new Topics add as a site topic to the child nodes.
   if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
-    $child_contents = array_column($node->get('field_topic_content')->getValue(), 'target_id');
-
-    foreach ($child_contents as $nid) {
-      $child_node = Node::load($nid);
-      $child_node->get('field_site_topics')->appendItem([
-        'target_id' => $node->id()
-      ]);
-      $child_node->save();
-    }
-
-    // Clear the cache of the child content nodes (for cases when the thin banner etc. is added).
-    dept_topics_clear_child_caches($node);
     dept_topics_clear_topic_tree_cache($node);
   }
 }
@@ -388,6 +375,7 @@ function dept_topics_node_insert(NodeInterface $node) {
  */
 function dept_topics_node_delete(NodeInterface $node) {
   if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
+    dept_topics_clear_child_caches($node);
     dept_topics_clear_topic_tree_cache($node);
   }
 }
@@ -585,33 +573,6 @@ function dept_topics_preprocess_field(&$variables, $hook) {
 }
 
 /**
- * Implements hook_preprocess_field_multiple_value_form().
- */
-function dept_topics_preprocess_field_multiple_value_form(&$variables) {
-  if (!\Drupal::request()->isXmlHttpRequest()) {
-    if ($variables["element"]["#field_name"] === 'field_topic_content') {
-      // Add a moderation state label to each node in the entity reference form list.
-      foreach ($variables["table"]["#rows"] as $delta => $row) {
-        if (!empty($variables["element"][$delta]["target_id"]["#default_value"])) {
-          if ($variables["element"][$delta]["target_id"]["#default_value"] instanceof NodeInterface) {
-            $node = $variables["element"][$delta]["target_id"]["#default_value"];
-          }
-          else {
-            $node = $variables["element"][$delta]["target_id"]["#default_value"][0];
-          }
-
-          $state = $node->get('moderation_state')->getString();
-
-          if (!$node->isPublished()) {
-            $variables["table"]["#rows"][$delta]['data'][1]['data']['#suffix'] = ' <span title="Moderation status" class="moderation-state moderation-state--' . str_replace('_', '-', $state) . '">' . ucfirst(str_replace('_', ' ', $state)) . '</span>';
-          }
-        }
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_theme().
  */
 function dept_topics_theme() {
@@ -657,17 +618,6 @@ function dept_topics_views_query_alter(ViewExecutable $view, QueryPluginBase $qu
         $query->where[0]['conditions'][$index]['value'] = $args;
         $query->where[0]['conditions'][$index]['operator'] = 'in';
       }
-    }
-  }
-}
-
-/**
- * Implements hook_entity_bundle_field_info_alter().
- */
-function dept_topics_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
-  if ($bundle === 'topic' || $bundle === 'subtopic') {
-    if (isset($fields['field_topic_content'])) {
-      $fields['field_topic_content']->addConstraint('unique_list_items');
     }
   }
 }
