@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a338444f551506edb8331f262226b177",
+    "content-hash": "5990b8f5f971c5c9f50fb3719cd8d50b",
     "packages": [
         {
             "name": "asm89/stack-cors",
-            "version": "v2.2.0",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/asm89/stack-cors.git",
-                "reference": "50f57105bad3d97a43ec4a485eb57daf347eafea"
+                "reference": "acf3142e6c5eafa378dc8ef3c069ab4558993f70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/asm89/stack-cors/zipball/50f57105bad3d97a43ec4a485eb57daf347eafea",
-                "reference": "50f57105bad3d97a43ec4a485eb57daf347eafea",
+                "url": "https://api.github.com/repos/asm89/stack-cors/zipball/acf3142e6c5eafa378dc8ef3c069ab4558993f70",
+                "reference": "acf3142e6c5eafa378dc8ef3c069ab4558993f70",
                 "shasum": ""
             },
             "require": {
@@ -58,9 +58,9 @@
             ],
             "support": {
                 "issues": "https://github.com/asm89/stack-cors/issues",
-                "source": "https://github.com/asm89/stack-cors/tree/v2.2.0"
+                "source": "https://github.com/asm89/stack-cors/tree/v2.3.0"
             },
-            "time": "2023-11-14T13:51:46+00:00"
+            "time": "2025-03-13T08:50:04+00:00"
         },
         {
             "name": "aws/aws-crt-php",
@@ -118,16 +118,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.342.34",
+            "version": "3.352.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "dfb7a1677143f7245289c7ad7e7915dbeab05c89"
+                "reference": "695daa607b6770e426613453f04f4a82f1555887"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/dfb7a1677143f7245289c7ad7e7915dbeab05c89",
-                "reference": "dfb7a1677143f7245289c7ad7e7915dbeab05c89",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/695daa607b6770e426613453f04f4a82f1555887",
+                "reference": "695daa607b6770e426613453f04f4a82f1555887",
                 "shasum": ""
             },
             "require": {
@@ -209,22 +209,22 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.342.34"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.352.2"
             },
-            "time": "2025-04-24T18:07:33+00:00"
+            "time": "2025-08-05T18:15:51+00:00"
         },
         {
             "name": "caxy/php-htmldiff",
-            "version": "v0.1.16",
+            "version": "v0.1.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/caxy/php-htmldiff.git",
-                "reference": "5c580b4f09285c078f0c5cb261573412a736a8cb"
+                "reference": "194feb154e32f585dd2ca8ae6929a53abfcebf9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/caxy/php-htmldiff/zipball/5c580b4f09285c078f0c5cb261573412a736a8cb",
-                "reference": "5c580b4f09285c078f0c5cb261573412a736a8cb",
+                "url": "https://api.github.com/repos/caxy/php-htmldiff/zipball/194feb154e32f585dd2ca8ae6929a53abfcebf9e",
+                "reference": "194feb154e32f585dd2ca8ae6929a53abfcebf9e",
                 "shasum": ""
             },
             "require": {
@@ -270,9 +270,9 @@
             ],
             "support": {
                 "issues": "https://github.com/caxy/php-htmldiff/issues",
-                "source": "https://github.com/caxy/php-htmldiff/tree/v0.1.16"
+                "source": "https://github.com/caxy/php-htmldiff/tree/v0.1.17"
             },
-            "time": "2025-01-22T17:03:45+00:00"
+            "time": "2025-05-16T17:04:33+00:00"
         },
         {
             "name": "chi-teck/drupal-code-generator",
@@ -2228,33 +2228,31 @@
         },
         {
             "name": "drupal/anchor_link",
-            "version": "3.0.0-beta1",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/anchor_link.git",
-                "reference": "3.0.0-beta1"
+                "reference": "3.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/anchor_link-3.0.0-beta1.zip",
-                "reference": "3.0.0-beta1",
-                "shasum": "a05fafd3b9f2e808b67d07f396ba80d30f748afc"
+                "url": "https://ftp.drupal.org/files/projects/anchor_link-3.0.3.zip",
+                "reference": "3.0.3",
+                "shasum": "5c88ff3167894808158eb707107e93f5aa554254"
             },
             "require": {
-                "drupal/core": "^9 || ^10 || ^11"
+                "drupal/core": "^9 || ^10 || ^11",
+                "vardot/ckeditor5-anchor-drupal": "^1.0.3 || ^2.0.3"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.0-beta1",
-                    "datestamp": "1718879208",
+                    "version": "3.0.3",
+                    "datestamp": "1751670353",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "branch-alias": {
-                    "dev-3.0.x": "3.0.x-dev"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2273,7 +2271,7 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "Rajab Natshah",
+                    "name": "rajab natshah",
                     "homepage": "https://www.drupal.org/user/1414312"
                 }
             ],
@@ -2876,37 +2874,39 @@
         },
         {
             "name": "drupal/ckeditor5_premium_features",
-            "version": "1.4.1",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ckeditor5_premium_features.git",
-                "reference": "1.4.1"
+                "reference": "1.5.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ckeditor5_premium_features-1.4.1.zip",
-                "reference": "1.4.1",
-                "shasum": "95a075af1421ad75659d05fa1bbc7dbe1649eec6"
+                "url": "https://ftp.drupal.org/files/projects/ckeditor5_premium_features-1.5.0.zip",
+                "reference": "1.5.0",
+                "shasum": "63c3650eaad369e1d0dc2fa6cf13551bcee97b6e"
             },
             "require": {
-                "aws/aws-sdk-php": "^3.296",
-                "caxy/php-htmldiff": "~0.1.14",
                 "drupal/core": "^10.0 || ^11.0",
                 "ext-dom": "*",
                 "ext-libxml": "*",
-                "firebase/php-jwt": "^6.0",
-                "openai-php/client": "^0.4.0 || ^0.10.0",
                 "php": "^8.0"
             },
             "require-dev": {
                 "drupal/ckeditor5-ckeditor5": "*",
                 "drupal/ckeditor5_premium_features_mentions": "*"
             },
+            "suggest": {
+                "aws/aws-sdk-php": "Required for AWS Bedrock provider for the AI Assistant.",
+                "caxy/php-htmldiff": "Required for asynchronous collaboration and notifications.",
+                "firebase/php-jwt": "Required for Real-time collaboration and document converters.",
+                "openai-php/client": "Required for OpenAI an AzureAI providers for the AI Assistant."
+            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.4.1",
-                    "datestamp": "1742472690",
+                    "version": "1.5.0",
+                    "datestamp": "1751451620",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3520,20 +3520,20 @@
         },
         {
             "name": "drupal/core",
-            "version": "10.4.5",
+            "version": "10.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "5247dbaa65b42b601058555f4a8b2bd541f5611f"
+                "reference": "551442fec1db69cf6eedb1601a348d8a6268060f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/5247dbaa65b42b601058555f4a8b2bd541f5611f",
-                "reference": "5247dbaa65b42b601058555f4a8b2bd541f5611f",
+                "url": "https://api.github.com/repos/drupal/core/zipball/551442fec1db69cf6eedb1601a348d8a6268060f",
+                "reference": "551442fec1db69cf6eedb1601a348d8a6268060f",
                 "shasum": ""
             },
             "require": {
-                "asm89/stack-cors": "^2.1",
+                "asm89/stack-cors": "^2.3",
                 "composer-runtime-api": "^2.1",
                 "composer/semver": "^3.3",
                 "doctrine/annotations": "^1.14",
@@ -3678,22 +3678,22 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "support": {
-                "source": "https://github.com/drupal/core/tree/10.4.5"
+                "source": "https://github.com/drupal/core/tree/10.5.1"
             },
-            "time": "2025-03-19T15:53:40+00:00"
+            "time": "2025-06-26T14:05:15+00:00"
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "10.3.13",
+            "version": "10.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
-                "reference": "f58ab5c0d02d275c5aa226c4505b457e41b161cc"
+                "reference": "db17b59620ce1c142a34dc017d9e696ce4771e55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/f58ab5c0d02d275c5aa226c4505b457e41b161cc",
-                "reference": "f58ab5c0d02d275c5aa226c4505b457e41b161cc",
+                "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/db17b59620ce1c142a34dc017d9e696ce4771e55",
+                "reference": "db17b59620ce1c142a34dc017d9e696ce4771e55",
                 "shasum": ""
             },
             "require": {
@@ -3728,13 +3728,13 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/10.3.13"
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/10.5.1"
             },
-            "time": "2024-08-22T14:31:34+00:00"
+            "time": "2024-08-22T14:31:30+00:00"
         },
         {
             "name": "drupal/core-project-message",
-            "version": "10.3.13",
+            "version": "10.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-project-message.git",
@@ -3769,37 +3769,37 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-project-message/tree/11.1.3"
+                "source": "https://github.com/drupal/core-project-message/tree/11.1.8"
             },
             "time": "2023-07-24T07:55:25+00:00"
         },
         {
             "name": "drupal/core-recommended",
-            "version": "10.4.5",
+            "version": "10.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-recommended.git",
-                "reference": "4e5e7c47ec91012327a8a9e9bfcdbf51f6f115cc"
+                "reference": "60b76ba11c2ae9088283a1e6963b929ca976f4fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-recommended/zipball/4e5e7c47ec91012327a8a9e9bfcdbf51f6f115cc",
-                "reference": "4e5e7c47ec91012327a8a9e9bfcdbf51f6f115cc",
+                "url": "https://api.github.com/repos/drupal/core-recommended/zipball/60b76ba11c2ae9088283a1e6963b929ca976f4fc",
+                "reference": "60b76ba11c2ae9088283a1e6963b929ca976f4fc",
                 "shasum": ""
             },
             "require": {
-                "asm89/stack-cors": "~v2.2.0",
+                "asm89/stack-cors": "~v2.3.0",
                 "composer/semver": "~3.4.3",
                 "doctrine/annotations": "~1.14.4",
-                "doctrine/deprecations": "~1.1.3",
+                "doctrine/deprecations": "~1.1.5",
                 "doctrine/lexer": "~2.1.1",
-                "drupal/core": "10.4.5",
-                "egulias/email-validator": "~4.0.2",
-                "guzzlehttp/guzzle": "~7.9.2",
-                "guzzlehttp/promises": "~2.0.4",
-                "guzzlehttp/psr7": "~2.7.0",
+                "drupal/core": "10.5.1",
+                "egulias/email-validator": "~4.0.4",
+                "guzzlehttp/guzzle": "~7.9.3",
+                "guzzlehttp/promises": "~2.2.0",
+                "guzzlehttp/psr7": "~2.7.1",
                 "masterminds/html5": "~2.9.0",
-                "mck89/peast": "~v1.16.3",
+                "mck89/peast": "~v1.17.0",
                 "pear/archive_tar": "~1.5.0",
                 "pear/console_getopt": "~v1.4.3",
                 "pear/pear-core-minimal": "~v1.10.16",
@@ -3812,18 +3812,18 @@
                 "psr/log": "~3.0.2",
                 "ralouphie/getallheaders": "~3.0.3",
                 "sebastian/diff": "~4.0.6",
-                "symfony/console": "~v6.4.15",
-                "symfony/dependency-injection": "~v6.4.16",
+                "symfony/console": "~v6.4.21",
+                "symfony/dependency-injection": "~v6.4.20",
                 "symfony/deprecation-contracts": "~v3.5.1",
-                "symfony/error-handler": "~v6.4.14",
+                "symfony/error-handler": "~v6.4.20",
                 "symfony/event-dispatcher": "~v6.4.13",
                 "symfony/event-dispatcher-contracts": "~v3.5.1",
                 "symfony/filesystem": "~v6.4.13",
-                "symfony/finder": "~v6.4.13",
-                "symfony/http-foundation": "~v6.4.16",
-                "symfony/http-kernel": "~v6.4.16",
-                "symfony/mailer": "~v6.4.13",
-                "symfony/mime": "~v6.4.13",
+                "symfony/finder": "~v6.4.17",
+                "symfony/http-foundation": "~v6.4.21",
+                "symfony/http-kernel": "~v6.4.21",
+                "symfony/mailer": "~v6.4.21",
+                "symfony/mime": "~v6.4.21",
                 "symfony/polyfill-ctype": "~v1.31.0",
                 "symfony/polyfill-iconv": "~v1.31.0",
                 "symfony/polyfill-intl-grapheme": "~v1.31.0",
@@ -3831,18 +3831,18 @@
                 "symfony/polyfill-intl-normalizer": "~v1.31.0",
                 "symfony/polyfill-mbstring": "~v1.31.0",
                 "symfony/polyfill-php83": "~v1.31.0",
-                "symfony/process": "~v6.4.15",
+                "symfony/process": "~v6.4.20",
                 "symfony/psr-http-message-bridge": "~v6.4.13",
-                "symfony/routing": "~v6.4.16",
-                "symfony/serializer": "~v6.4.15",
+                "symfony/routing": "~v6.4.18",
+                "symfony/serializer": "~v6.4.21",
                 "symfony/service-contracts": "~v3.5.1",
-                "symfony/string": "~v6.4.15",
+                "symfony/string": "~v6.4.21",
                 "symfony/translation-contracts": "~v3.5.1",
-                "symfony/validator": "~v6.4.16",
-                "symfony/var-dumper": "~v6.4.15",
-                "symfony/var-exporter": "~v6.4.13",
-                "symfony/yaml": "~v6.4.13",
-                "twig/twig": "~v3.19.0"
+                "symfony/validator": "~v6.4.21",
+                "symfony/var-dumper": "~v6.4.21",
+                "symfony/var-exporter": "~v6.4.21",
+                "symfony/yaml": "~v6.4.21",
+                "twig/twig": "~v3.20.0"
             },
             "conflict": {
                 "webflo/drupal-core-strict": "*"
@@ -3854,9 +3854,9 @@
             ],
             "description": "Core and its dependencies with known-compatible minor versions. Require this project INSTEAD OF drupal/core.",
             "support": {
-                "source": "https://github.com/drupal/core-recommended/tree/10.4.5"
+                "source": "https://github.com/drupal/core-recommended/tree/10.5.1"
             },
-            "time": "2025-03-19T15:53:40+00:00"
+            "time": "2025-06-26T14:05:15+00:00"
         },
         {
             "name": "drupal/csp",
@@ -10899,16 +10899,16 @@
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "2.0.4",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "f9c436286ab2892c7db7be8c8da4ef61ccf7b455"
+                "reference": "7c69f28996b0a6920945dd20b3857e499d9ca96c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/f9c436286ab2892c7db7be8c8da4ef61ccf7b455",
-                "reference": "f9c436286ab2892c7db7be8c8da4ef61ccf7b455",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/7c69f28996b0a6920945dd20b3857e499d9ca96c",
+                "reference": "7c69f28996b0a6920945dd20b3857e499d9ca96c",
                 "shasum": ""
             },
             "require": {
@@ -10962,7 +10962,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/2.0.4"
+                "source": "https://github.com/guzzle/promises/tree/2.2.0"
             },
             "funding": [
                 {
@@ -10978,7 +10978,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-17T10:06:22+00:00"
+            "time": "2025-03-27T13:27:01+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -11787,16 +11787,16 @@
         },
         {
             "name": "mck89/peast",
-            "version": "v1.16.3",
+            "version": "v1.17.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mck89/peast.git",
-                "reference": "645ec21b650bc2aced18285c85f220d22afc1430"
+                "reference": "465810689c477fbba17f4f949b75e4d0bdab13ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mck89/peast/zipball/645ec21b650bc2aced18285c85f220d22afc1430",
-                "reference": "645ec21b650bc2aced18285c85f220d22afc1430",
+                "url": "https://api.github.com/repos/mck89/peast/zipball/465810689c477fbba17f4f949b75e4d0bdab13ea",
+                "reference": "465810689c477fbba17f4f949b75e4d0bdab13ea",
                 "shasum": ""
             },
             "require": {
@@ -11809,7 +11809,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.16.3-dev"
+                    "dev-master": "1.17.2-dev"
                 }
             },
             "autoload": {
@@ -11830,9 +11830,9 @@
             "description": "Peast is PHP library that generates AST for JavaScript code",
             "support": {
                 "issues": "https://github.com/mck89/peast/issues",
-                "source": "https://github.com/mck89/peast/tree/v1.16.3"
+                "source": "https://github.com/mck89/peast/tree/v1.17.2"
             },
-            "time": "2024-07-23T14:00:32+00:00"
+            "time": "2025-07-01T09:30:45+00:00"
         },
         {
             "name": "mkalkbrenner/php-htmldiff-advanced",
@@ -12157,30 +12157,21 @@
             "type": "drupal-library"
         },
         {
-            "name": "northernco/ckeditor5-anchor-drupal",
-            "version": "0.5.0",
-            "dist": {
-                "type": "tar",
-                "url": "https://registry.npmjs.org/@northernco/ckeditor5-anchor-drupal/-/ckeditor5-anchor-drupal-0.5.0.tgz"
-            },
-            "type": "drupal-library"
-        },
-        {
             "name": "openai-php/client",
-            "version": "v0.10.3",
+            "version": "v0.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openai-php/client.git",
-                "reference": "4a565d145e0fb3ea1baba8fffe39d86c56b6dc2c"
+                "reference": "4db080738104be6a1144fa9f203c428ea4e58128"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openai-php/client/zipball/4a565d145e0fb3ea1baba8fffe39d86c56b6dc2c",
-                "reference": "4a565d145e0fb3ea1baba8fffe39d86c56b6dc2c",
+                "url": "https://api.github.com/repos/openai-php/client/zipball/4db080738104be6a1144fa9f203c428ea4e58128",
+                "reference": "4db080738104be6a1144fa9f203c428ea4e58128",
                 "shasum": ""
             },
             "require": {
-                "php": "^8.1.0",
+                "php": "^8.2.0",
                 "php-http/discovery": "^1.20.0",
                 "php-http/multipart-stream-builder": "^1.4.2",
                 "psr/http-client": "^1.0.3",
@@ -12189,16 +12180,16 @@
                 "psr/http-message": "^1.1.0|^2.0.0"
             },
             "require-dev": {
-                "guzzlehttp/guzzle": "^7.9.2",
-                "guzzlehttp/psr7": "^2.7.0",
-                "laravel/pint": "^1.18.1",
+                "guzzlehttp/guzzle": "^7.9.3",
+                "guzzlehttp/psr7": "^2.7.1",
+                "laravel/pint": "^1.24.0",
                 "mockery/mockery": "^1.6.12",
-                "nunomaduro/collision": "^7.11.0|^8.5.0",
-                "pestphp/pest": "^2.36.0|^3.5.0",
-                "pestphp/pest-plugin-arch": "^2.7|^3.0",
-                "pestphp/pest-plugin-type-coverage": "^2.8.7|^3.1.0",
-                "phpstan/phpstan": "^1.12.7",
-                "symfony/var-dumper": "^6.4.11|^7.1.5"
+                "nunomaduro/collision": "^8.8.0",
+                "pestphp/pest": "^3.8.2|^4.0.0",
+                "pestphp/pest-plugin-arch": "^3.1.1|^4.0.0",
+                "pestphp/pest-plugin-type-coverage": "^3.5.1|^4.0.0",
+                "phpstan/phpstan": "^1.12.25",
+                "symfony/var-dumper": "^7.2.6"
             },
             "type": "library",
             "autoload": {
@@ -12238,7 +12229,7 @@
             ],
             "support": {
                 "issues": "https://github.com/openai-php/client/issues",
-                "source": "https://github.com/openai-php/client/tree/v0.10.3"
+                "source": "https://github.com/openai-php/client/tree/v0.15.0"
             },
             "funding": [
                 {
@@ -12254,7 +12245,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-12T20:51:16+00:00"
+            "time": "2025-08-04T17:44:21+00:00"
         },
         {
             "name": "pear/archive_tar",
@@ -16276,24 +16267,23 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.19.0",
+            "version": "v3.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "d4f8c2b86374f08efc859323dbcd95c590f7124e"
+                "reference": "3468920399451a384bef53cf7996965f7cd40183"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/d4f8c2b86374f08efc859323dbcd95c590f7124e",
-                "reference": "d4f8c2b86374f08efc859323dbcd95c590f7124e",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3468920399451a384bef53cf7996965f7cd40183",
+                "reference": "3468920399451a384bef53cf7996965f7cd40183",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.2",
+                "php": ">=8.1.0",
                 "symfony/deprecation-contracts": "^2.5|^3",
                 "symfony/polyfill-ctype": "^1.8",
-                "symfony/polyfill-mbstring": "^1.3",
-                "symfony/polyfill-php81": "^1.29"
+                "symfony/polyfill-mbstring": "^1.3"
             },
             "require-dev": {
                 "phpstan/phpstan": "^2.0",
@@ -16340,7 +16330,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.19.0"
+                "source": "https://github.com/twigphp/Twig/tree/v3.20.0"
             },
             "funding": [
                 {
@@ -16352,7 +16342,49 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-29T07:06:14+00:00"
+            "time": "2025-02-13T08:34:43+00:00"
+        },
+        {
+            "name": "vardot/ckeditor5-anchor-drupal",
+            "version": "2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Vardot/ckeditor5-anchor-drupal.git",
+                "reference": "a98f89091be465c914ce26777734807cf5c902e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Vardot/ckeditor5-anchor-drupal/zipball/a98f89091be465c914ce26777734807cf5c902e8",
+                "reference": "a98f89091be465c914ce26777734807cf5c902e8",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/core": ">=10.5 || >=11.2"
+            },
+            "type": "drupal-library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vardot",
+                    "homepage": "https://github.com/vardot",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Anchor feature for CKEditor 5, adapted for Drupal",
+            "homepage": "https://github.com/vardot/ckeditor5-anchor-drupal",
+            "keywords": [
+                "ckeditor5",
+                "drupal",
+                "plugin"
+            ],
+            "support": {
+                "issues": "http://drupal.org/project/issues/anchor_link",
+                "source": "http://cgit.drupalcode.org/anchor_link"
+            },
+            "time": "2025-07-04T22:36:19+00:00"
         },
         {
             "name": "webflo/drupal-finder",
@@ -18104,16 +18136,16 @@
         },
         {
             "name": "jean85/pretty-package-versions",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Jean85/pretty-package-versions.git",
-                "reference": "3c4e5f62ba8d7de1734312e4fff32f67a8daaf10"
+                "reference": "4d7aa5dab42e2a76d99559706022885de0e18e1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Jean85/pretty-package-versions/zipball/3c4e5f62ba8d7de1734312e4fff32f67a8daaf10",
-                "reference": "3c4e5f62ba8d7de1734312e4fff32f67a8daaf10",
+                "url": "https://api.github.com/repos/Jean85/pretty-package-versions/zipball/4d7aa5dab42e2a76d99559706022885de0e18e1a",
+                "reference": "4d7aa5dab42e2a76d99559706022885de0e18e1a",
                 "shasum": ""
             },
             "require": {
@@ -18123,8 +18155,9 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.2",
                 "jean85/composer-provided-replaced-stub-package": "^1.0",
-                "phpstan/phpstan": "^1.4",
+                "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^7.5|^8.5|^9.6",
+                "rector/rector": "^2.0",
                 "vimeo/psalm": "^4.3 || ^5.0"
             },
             "type": "library",
@@ -18157,9 +18190,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Jean85/pretty-package-versions/issues",
-                "source": "https://github.com/Jean85/pretty-package-versions/tree/2.1.0"
+                "source": "https://github.com/Jean85/pretty-package-versions/tree/2.1.1"
             },
-            "time": "2024-11-18T16:19:46+00:00"
+            "time": "2025-03-19T14:43:43+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
