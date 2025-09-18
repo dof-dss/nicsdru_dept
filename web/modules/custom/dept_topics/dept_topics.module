@@ -55,7 +55,7 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
       ];
 
       $build['actions']['secondary']['manage_existing'] = [
-        '#title' => t('Manage existing content'),
+        '#title' => t('Manage content ordering'),
         '#type' => 'link',
         '#url' => Url::fromRoute('dept_topics.manage_topic_content.form', ['nid' => $context->id()]),
         '#attributes' => [
@@ -67,7 +67,7 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
           ],
           'data-dialog-type' => 'modal',
           'data-dialog-options' => Json::encode([
-            'title' => t('Manage topic content'),
+            'title' => t('Manage content ordering'),
             'width' => '1000',
             'minHeight' => 500,
             'position' => ['my' => 'center top', 'at' => 'center top'],
