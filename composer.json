@@ -139,6 +139,7 @@
         "drupal/facets_pretty_paths": "^2.0",
         "drupal/fastly": "^4.0",
         "drupal/field_group": "^3.2",
+        "drupal/filelog": "^2.1",
         "drupal/filter_perms": "^2.0",
         "drupal/flag": "^4.0@beta",
         "drupal/flag_search_api": "^2.0",
@@ -349,6 +350,10 @@
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
             },
+            "drupal/filelog": {
+                "Automated Drupal 11 compatibility fixes for filelog": "https://git.drupalcode.org/project/filelog/-/merge_requests/6.diff",
+                "Circular reference detected for service": "https://www.drupal.org/files/issues/2024-08-01/3416342-12.patch"
+            },
             "drupal/flood_control": {
                 "Add Redis support": "https://git.drupalcode.org/project/flood_control/-/merge_requests/53.diff"
             },
@@ -378,10 +383,7 @@
             }
         },
         "drupal-lenient": {
-            "allowed-list": [
-                "drupal/content_lock",
-                "drupal/date_facet_drilldown"
-            ]
+            "allowed-list": ["drupal/content_lock", "drupal/date_facet_drilldown", "drupal/filelog"]
         }
     }
 }
