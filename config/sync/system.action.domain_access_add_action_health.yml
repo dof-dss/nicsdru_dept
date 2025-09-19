@@ -1,0 +1,15 @@
+uuid: b3f57eb4-5232-49db-a429-e603f89c3ce6
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.health
+  module:
+    - domain_access
+id: domain_access_add_action_health
+label: 'Add selected content to the Department for Health domain'
+type: node
+plugin: domain_access_add_action
+configuration:
+  domain_id:
+    - health
