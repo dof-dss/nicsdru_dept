@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12e606f843488aaedc63339299a2f18f",
+    "content-hash": "57f11711f994197169d9598a43254929",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2284,30 +2284,30 @@
         },
         {
             "name": "drupal/book",
-            "version": "2.0.2",
+            "version": "3.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/book.git",
-                "reference": "2.0.2"
+                "reference": "3.0.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/book-2.0.2.zip",
-                "reference": "2.0.2",
-                "shasum": "32a2c216de59d901cfefdaec264ab7bcd908a174"
+                "url": "https://ftp.drupal.org/files/projects/book-3.0.0-beta1.zip",
+                "reference": "3.0.0-beta1",
+                "shasum": "ba087fdbd8303597a3d95da97fa76c19ee038b39"
             },
             "require": {
-                "drupal/core": "^10.3 || ^11",
+                "drupal/core": "^11.2",
                 "ext-pdo": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.2",
-                    "datestamp": "1750804798",
+                    "version": "3.0.0-beta1",
+                    "datestamp": "1754246923",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -22641,6 +22641,7 @@
         "dof-dss/nicsdru_origins_modules": 20,
         "dof-dss/nicsdru_origins_theme": 20,
         "drupal/block_field": 5,
+        "drupal/book": 10,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
         "drupal/content_lock": 15,
