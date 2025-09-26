@@ -40,6 +40,7 @@ class Anonymous403Fast404Subscriber implements EventSubscriberInterface {
 
   /**
    * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
+   *   The exception event object.
    */
   public function onException(ExceptionEvent $event) {
     $exception = $event->getThrowable();
