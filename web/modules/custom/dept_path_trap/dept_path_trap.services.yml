@@ -1,0 +1,9 @@
+services:
+  dept_path_trap.subpath_guard:
+    class: Drupal\dept_path_trap\EventSubscriber\PathTrap404Subscriber
+    arguments:
+      - '@path_alias.manager'
+      - '@language_manager'
+      - '@router.route_provider'
+    tags:
+      - { name: event_subscriber }

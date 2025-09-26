@@ -1,0 +1,9 @@
+name: 'DEPT: Path Trap'
+type: module
+description: 'Mediates paths/routes where views paths and existing content alias patterns overlap.'
+package: 'NICS: Departmental'
+core_version_requirement: ^10 || ^11
+
+dependencies:
+  - drupal:path
+  - drupal:views
