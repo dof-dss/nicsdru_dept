@@ -10,21 +10,28 @@ use Symfony\Component\HttpFoundation\Response;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
+/**
+ * EventSubscriber to handle anonymous 403s and convert them to
+ * return a fast_404. This reduces the overhead of returning a themed
+ * 403 page on high traffic sites.
+ */
 class Anonymous403Fast404Subscriber implements EventSubscriberInterface {
 
   /**
-   * @var AccountProxyInterface
+   * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected AccountProxyInterface $currentUser;
 
   /**
-   * @var ConfigFactoryInterface
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected ConfigFactoryInterface $configFactory;
 
   /**
-   * @param AccountProxyInterface $current_user
-   * @param ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   *   The current user account.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory interface.
    */
   public function __construct(AccountProxyInterface $current_user, ConfigFactoryInterface $config_factory) {
     $this->currentUser = $current_user;
@@ -32,8 +39,7 @@ class Anonymous403Fast404Subscriber implements EventSubscriberInterface {
   }
 
   /**
-   * @param ExceptionEvent $event
-   * @return void
+   * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
    */
   public function onException(ExceptionEvent $event) {
     $exception = $event->getThrowable();
@@ -72,12 +78,12 @@ HTML;
   }
 
   /**
-   * @return array[]
+   * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
     return [
       KernelEvents::EXCEPTION => ['onException', 100],
     ];
   }
-  
+
 }
