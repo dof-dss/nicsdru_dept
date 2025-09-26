@@ -19,6 +19,11 @@ services:
     class: Drupal\dept_core\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+  anon_403_to_fast_404:
+    class: Drupal\dept_core\EventSubscriber\Anonymous403Fast404Subscriber
+    arguments: [ '@current_user', '@config.factory' ]
+    tags:
+      - { name: event_subscriber }
 parameters:
   topic_route_patterns:
     - /publications/(topic)/(\d+)
