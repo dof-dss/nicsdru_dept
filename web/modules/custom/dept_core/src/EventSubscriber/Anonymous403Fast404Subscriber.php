@@ -12,15 +12,29 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 
 class Anonymous403Fast404Subscriber implements EventSubscriberInterface {
 
+  /**
+   * @var AccountProxyInterface
+   */
   protected AccountProxyInterface $currentUser;
 
+  /**
+   * @var ConfigFactoryInterface
+   */
   protected ConfigFactoryInterface $configFactory;
 
+  /**
+   * @param AccountProxyInterface $current_user
+   * @param ConfigFactoryInterface $config_factory
+   */
   public function __construct(AccountProxyInterface $current_user, ConfigFactoryInterface $config_factory) {
     $this->currentUser = $current_user;
     $this->configFactory = $config_factory;
   }
 
+  /**
+   * @param ExceptionEvent $event
+   * @return void
+   */
   public function onException(ExceptionEvent $event) {
     $exception = $event->getThrowable();
 
@@ -57,9 +71,13 @@ HTML;
     }
   }
 
+  /**
+   * @return array[]
+   */
   public static function getSubscribedEvents() {
     return [
       KernelEvents::EXCEPTION => ['onException', 100],
     ];
   }
+  
 }
