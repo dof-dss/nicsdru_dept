@@ -22,6 +22,8 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\media\MediaInterface;
 use Drupal\node\NodeInterface;
 use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
+use Drupal\views\ViewExecutable;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Implements hook_entity_access().
@@ -685,5 +687,56 @@ function dept_core_library_info_alter(&$libraries, $extension) {
   // We cannot remove this on a per-role basis as aggregation would override it.
   if (array_key_exists('drupal.domain_source', $libraries)) {
     unset($libraries['drupal.domain_source']);
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function dept_core_views_pre_render(ViewExecutable $view) {
+  // Only act on page displays and non-admin routes.
+  if ($view->display_handler->getPluginId() !== 'page'
+    || \Drupal::service('router.admin_context')->isAdminRoute()) {
+    return;
+  }
+
+  // Don’t interfere with AJAX (exposed filters, infinite scroll, etc.).
+  if (\Drupal::request()->isXmlHttpRequest()) {
+    return;
+  }
+
+  // Only enforce when a first contextual argument is provided.
+  if (empty($view->args)) {
+    return;
+  }
+
+  $first_arg = strtolower((string) $view->args[0]);
+
+  $account = \Drupal::currentUser();
+  $is_admin = $account->hasPermission('administer domains');
+
+  if ($is_admin) {
+    // Admins: argument must be a valid domain id.
+    /** @var \Drupal\Core\Entity\EntityStorageInterface $storage */
+    $storage = \Drupal::entityTypeManager()->getStorage('domain');
+    $domains = $storage->loadMultiple();
+    $valid_ids = array_map('strtolower', array_keys($domains));
+
+    // This allows us to permit/deny based on the usual views keyword 'all'.
+    // But default to FALSE until we need a reason to otherwise.
+    $allow_all = FALSE;
+
+    if (empty($first_arg) || (!in_array($first_arg, $valid_ids, TRUE) && !($allow_all && $first_arg === 'all'))) {
+      throw new NotFoundHttpException();
+    }
+  }
+  else {
+    // Non-admins: argument must match the active domain id.
+    $active = \Drupal::service('domain.negotiator')->getActiveDomain();
+    $active_id = $active ? strtolower($active->id()) : '';
+
+    if (empty($first_arg) || $first_arg !== $active_id) {
+      throw new NotFoundHttpException();
+    }
   }
 }
