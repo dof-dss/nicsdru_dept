@@ -706,11 +706,10 @@ function dept_core_views_pre_render(ViewExecutable $view) {
   }
 
   // Split current request path and the view display's base path into segments.
-  // e.g. '/news/foo'
-  $current_path  = \Drupal::service('path.current')->getPath();
-  $req_segments  = array_values(array_filter(explode('/', trim($current_path, '/')), 'strlen'));
+  $current_path = \Drupal::service('path.current')->getPath();
+  $req_segments = array_values(array_filter(explode('/', trim($current_path, '/')), 'strlen'));
 
-  $display_path  = (string) $view->display_handler->getOption('path');
+  $display_path = (string) $view->display_handler->getOption('path');
   $base_segments = array_values(array_filter(explode('/', trim($display_path, '/')), 'strlen'));
 
   // If the request doesn't start with the display path, we can let it go.
@@ -751,11 +750,10 @@ function dept_core_views_pre_render(ViewExecutable $view) {
   // Domain checks (only if the Domain module is installed & services exist).
   $module_has_domain = \Drupal::moduleHandler()->moduleExists('domain');
   $has_negotiator = \Drupal::hasService('domain.negotiator');
-  $has_domain_storage= \Drupal::entityTypeManager()->hasDefinition('domain');
+  $has_domain_storage = \Drupal::entityTypeManager()->hasDefinition('domain');
 
   if ($module_has_domain && $has_negotiator && $has_domain_storage) {
-    // Only enforce domain semantics if at least one tail segment exists
-    // (i.e., URL provided something after the base path).
+    // Only enforce domain semantics if at least one tail segment exists.
     if ($tail_count >= 1) {
       $first_url_arg = strtolower($tail_segments[0]);
 
