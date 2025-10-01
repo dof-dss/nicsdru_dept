@@ -694,49 +694,97 @@ function dept_core_library_info_alter(&$libraries, $extension) {
  * Implements hook_views_pre_render().
  */
 function dept_core_views_pre_render(ViewExecutable $view) {
-  // Only act on page displays and non-admin routes.
+  // Only page displays, not admin routes.
   if ($view->display_handler->getPluginId() !== 'page'
     || \Drupal::service('router.admin_context')->isAdminRoute()) {
     return;
   }
 
-  // Don’t interfere with AJAX (exposed filters, infinite scroll, etc.).
+  // Skip AJAX requests (exposed filters, etc.).
   if (\Drupal::request()->isXmlHttpRequest()) {
     return;
   }
 
-  // Only enforce when a first contextual argument is provided.
-  if (empty($view->args)) {
-    return;
-  }
+  // Split current request path and the view display's base path into segments.
+  // e.g. '/news/foo'
+  $current_path  = \Drupal::service('path.current')->getPath();
+  $req_segments  = array_values(array_filter(explode('/', trim($current_path, '/')), 'strlen'));
 
-  $first_arg = strtolower((string) $view->args[0]);
+  $display_path  = (string) $view->display_handler->getOption('path');
+  $base_segments = array_values(array_filter(explode('/', trim($display_path, '/')), 'strlen'));
 
-  $account = \Drupal::currentUser();
-  $is_admin = $account->hasPermission('administer domains');
-
-  if ($is_admin) {
-    // Admins: argument must be a valid domain id.
-    /** @var \Drupal\Core\Entity\EntityStorageInterface $storage */
-    $storage = \Drupal::entityTypeManager()->getStorage('domain');
-    $domains = $storage->loadMultiple();
-    $valid_ids = array_map('strtolower', array_keys($domains));
-
-    // This allows us to permit/deny based on the usual views keyword 'all'.
-    // But default to FALSE until we need a reason to otherwise.
-    $allow_all = FALSE;
-
-    if (empty($first_arg) || (!in_array($first_arg, $valid_ids, TRUE) && !($allow_all && $first_arg === 'all'))) {
-      throw new NotFoundHttpException();
+  // If the request doesn't start with the display path, we can let it go.
+  for ($i = 0, $b = count($base_segments); $i < $b; $i++) {
+    if (empty($req_segments[$i]) || $req_segments[$i] !== $base_segments[$i]) {
+      return;
     }
   }
-  else {
-    // Non-admins: argument must match the active domain id.
-    $active = \Drupal::service('domain.negotiator')->getActiveDomain();
-    $active_id = $active ? strtolower($active->id()) : '';
 
-    if (empty($first_arg) || $first_arg !== $active_id) {
-      throw new NotFoundHttpException();
+  // Tail after the display path = actual URL segments provided.
+  $tail_segments = array_slice($req_segments, count($base_segments));
+
+  // Optionally drop pager tails like /page/2.
+  if (!empty($tail_segments) && $tail_segments[0] === 'page') {
+    array_shift($tail_segments);
+
+    if (!empty($tail_segments) && is_int($tail_segments[0])) {
+      array_shift($tail_segments);
+    }
+  }
+
+  $tail_count = count($tail_segments);
+
+  // How many contextual filters are configured on this display?
+  $configured_args = $view->display_handler->getHandlers('argument');
+  $expected_count  = count($configured_args);
+
+  // If the display has no contextual filters, any tail following it is junk.
+  if ($expected_count === 0 && $tail_count > 0) {
+    throw new NotFoundHttpException();
+  }
+
+  // If too many tail segments for this display, consider it junk too.
+  if ($tail_count > $expected_count) {
+    throw new NotFoundHttpException();
+  }
+
+  // Domain checks (only if the Domain module is installed & services exist).
+  $module_has_domain = \Drupal::moduleHandler()->moduleExists('domain');
+  $has_negotiator = \Drupal::hasService('domain.negotiator');
+  $has_domain_storage= \Drupal::entityTypeManager()->hasDefinition('domain');
+
+  if ($module_has_domain && $has_negotiator && $has_domain_storage) {
+    // Only enforce domain semantics if at least one tail segment exists
+    // (i.e., URL provided something after the base path).
+    if ($tail_count >= 1) {
+      $first_url_arg = strtolower($tail_segments[0]);
+
+      $account  = \Drupal::currentUser();
+      $is_admin = $account->hasPermission('bypass node access');
+
+      if ($is_admin) {
+        // Admins: first URL arg must be one of the configured domain IDs.
+        $storage = \Drupal::entityTypeManager()->getStorage('domain');
+        // Cache this list per-request to avoid repeated loads.
+        static $valid_ids = NULL;
+
+        if ($valid_ids === NULL) {
+          $valid_ids = array_map('strtolower', array_keys($storage->loadMultiple()));
+        }
+
+        if (!in_array($first_url_arg, $valid_ids, TRUE)) {
+          throw new NotFoundHttpException();
+        }
+      }
+      else {
+        // Non-admins: first URL arg must equal the ACTIVE domain id.
+        $active = \Drupal::service('domain.negotiator')->getActiveDomain();
+        $active_id = $active ? strtolower($active->id()) : '';
+
+        if ($first_url_arg !== $active_id) {
+          throw new NotFoundHttpException();
+        }
+      }
     }
   }
 }
