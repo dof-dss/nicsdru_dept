@@ -6,3 +6,66 @@
 function dept_node_update_8001() {
   module_set_weight('dept_node', 10);
 }
+
+/**
+ * Set field_site_topics on event nodes to use node 409896 (Finding Employment)
+ * and clear field_business_area on event nodes to allow field deletion at
+ * a later point.
+ */
+function dept_node_update_9002(array &$sandbox) {
+  // Ensure the target node exists.
+  /** @var \Drupal\node\NodeInterface|null $target */
+  $target = \Drupal::entityTypeManager()->getStorage('node')->load(409896);
+  if (empty($target)) {
+    throw new UpdateException(new TranslatableMarkup('Topic node with ID 409896 was not found.'));
+  }
+
+  // Initialize sandbox.
+  if (empty($sandbox['initialized'])) {
+    $nids = \Drupal::entityQuery('node')
+      ->condition('type', 'event')
+      ->accessCheck(FALSE)
+      ->execute();
+
+    $sandbox['nids'] = array_values($nids);
+    $sandbox['total'] = count($sandbox['nids']);
+    $sandbox['processed'] = 0;
+    $sandbox['initialized'] = TRUE;
+
+    if ($sandbox['total'] === 0) {
+      return t('No event nodes found to update.');
+    }
+  }
+
+  // Process in chunks to avoid timeouts.
+  $limit = 50;
+  $chunk = array_splice($sandbox['nids'], 0, $limit);
+
+  if ($chunk) {
+    /** @var \Drupal\node\NodeStorageInterface $storage */
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    /** @var \Drupal\node\NodeInterface[] $nodes */
+    $nodes = $storage->loadMultiple($chunk);
+
+    foreach ($nodes as $node) {
+      // Set field value to single reference for node 409896.
+      $node->set('field_site_topics', [['target_id' => 409896]]);
+      // Clear all values from field_business_area.
+      $node->set('field_business_area', []);
+
+      // Not interested in creating new revisions for this change.
+      $node->setNewRevision(FALSE);
+      $node->save();
+
+      $sandbox['processed']++;
+    }
+  }
+
+  // Progress indicator for the updater.
+  $sandbox['#finished'] = $sandbox['total'] ? ($sandbox['processed'] / $sandbox['total']) : 1;
+
+  return t('Processed @done of @total event nodes.', [
+    '@done' => $sandbox['processed'],
+    '@total' => $sandbox['total'],
+  ]);
+}
