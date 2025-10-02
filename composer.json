@@ -258,10 +258,14 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php -r \"copy('robots_custom.txt', 'web/robots.txt');\""
+            "@remove-robots-txt"
         ],
         "post-update-cmd": [
-            "php -r \"copy('robots_custom.txt', 'web/robots.txt');\""
+            "@remove-robots-txt"
+        ],
+        "remove-robots-txt": [
+            "echo 'Removing default robots.txt...'",
+            "rm -f web/robots.txt"
         ]
     },
     "extra": {
