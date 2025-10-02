@@ -17,7 +17,7 @@ function dept_node_update_9002(array &$sandbox) {
   /** @var \Drupal\node\NodeInterface|null $target */
   $target = \Drupal::entityTypeManager()->getStorage('node')->load(409896);
   if (empty($target)) {
-    throw new UpdateException(new TranslatableMarkup('Topic node with ID 409896 was not found.'));
+    throw new UpdateException('Topic node with ID 409896 was not found.');
   }
 
   // Initialize sandbox.
