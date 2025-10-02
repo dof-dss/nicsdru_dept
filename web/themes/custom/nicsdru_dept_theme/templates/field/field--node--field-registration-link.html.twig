@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Theme override for registration link field.
+#}
+
+{% for item in items %}
+  <div{{ attributes.addClass(classes, 'field__item') }}>
+    <a href="{{ item.content['#url'] }}" target="_blank" rel="noopener noreferrer" class="call-to-action">{{ 'Register'|t }}
+      <svg aria-hidden="true" class="ico ico-arrow-right"><use xlink:href="#arrow"></use></svg>
+    </a>
+  </div>
+{% endfor %}
