@@ -786,3 +786,23 @@ function dept_core_views_pre_render(ViewExecutable $view) {
     }
   }
 }
+
+/**
+ * Implements hook_robotstxt().
+ */
+function dept_core_robotstxt() {
+
+  // Additional lines to add to robots.txt.
+  $additional = [];
+
+  // Add sitemap directive for active domain.
+  $domain = \Drupal::service('domain.negotiator')->getActiveDomain();
+
+  if ($domain) {
+    $domain_path = $domain->getPath();
+    $sitemap_url = $domain_path . 'sitemap.xml';
+    $additional[] = 'Sitemap: ' . $sitemap_url;
+  }
+
+  return $additional;
+}
