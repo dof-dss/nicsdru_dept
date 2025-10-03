@@ -1,17 +1,17 @@
-uuid: 45898f94-b0ea-4042-854b-9d3445bdaa91
+uuid: eb27e2a0-936a-4907-bb99-9c9ff86a2008
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_respond_online
-    - node.type.consultation
+    - field.storage.node.field_registration_link
+    - node.type.event
   module:
     - link
-id: node.consultation.field_respond_online
-field_name: field_respond_online
+id: node.event.field_registration_link
+field_name: field_registration_link
 entity_type: node
-bundle: consultation
-label: 'Respond Online'
+bundle: event
+label: 'Registration link'
 description: 'Paste in the URL for online responses. Remember to include https://'
 required: false
 translatable: false
