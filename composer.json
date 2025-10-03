@@ -116,13 +116,13 @@
         "drupal/core-project-message": "^11",
         "drupal/core-recommended": "^11",
         "drupal/csp": "^2.1",
-        "drupal/date_facet_drilldown": "dev-11.x",
+        "drupal/date_facet_drilldown": "^12.0",
         "drupal/datetime_flatpickr": "^3.0",
         "drupal/diff": "^1.8",
         "drupal/domain": "^2.0@beta",
         "drupal/domain_entity": "^1.0@RC",
         "drupal/domain_path": "^1.5",
-        "drupal/domain_path_redirect": "^1.6",
+        "drupal/domain_path_redirect": "^1.8",
         "drupal/domain_simple_sitemap": "^3.0@beta",
         "drupal/domain_site_settings": "^1.6",
         "drupal/draggableviews": "^2.1",
@@ -139,7 +139,7 @@
         "drupal/facets_pretty_paths": "^2.0",
         "drupal/fastly": "^4.0",
         "drupal/field_group": "^3.2",
-        "drupal/filelog": "^2.1",
+        "drupal/filelog": "3.0.x-dev@dev",
         "drupal/filter_perms": "^2.0",
         "drupal/flag": "^4.0@beta",
         "drupal/flag_search_api": "^2.0",
@@ -172,6 +172,7 @@
         "drupal/purge_users": "^4.0@RC",
         "drupal/redirect": "^1.12",
         "drupal/redis": "^1.9",
+        "drupal/robotstxt": "^1.6",
         "drupal/scheduled_transitions": "^2.7",
         "drupal/scheduler": "^2.2",
         "drupal/schema_metatag": "^3.0",
@@ -258,10 +259,14 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "php -r \"copy('robots_custom.txt', 'web/robots.txt');\""
+            "@remove-robots-txt"
         ],
         "post-update-cmd": [
-            "php -r \"copy('robots_custom.txt', 'web/robots.txt');\""
+            "@remove-robots-txt"
+        ],
+        "remove-robots-txt": [
+            "echo 'Removing default robots.txt...'",
+            "rm -f web/robots.txt"
         ]
     },
     "extra": {
@@ -344,15 +349,8 @@
             "drupal/domain_path": {
                 "Remove unused constructor from DomainPathAliasManager class": "https://www.drupal.org/files/issues/2025-05-23/3526307-3.patch"
             },
-            "drupal/domain_path_redirect": {
-                "The entity type domain_path_redirect does not have a published entity key": "https://www.drupal.org/files/issues/2025-09-12/3544249-domain_path_redirect-patch.diff"
-            },
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
-            },
-            "drupal/filelog": {
-                "Automated Drupal 11 compatibility fixes for filelog": "https://git.drupalcode.org/project/filelog/-/merge_requests/6.diff",
-                "Circular reference detected for service": "https://www.drupal.org/files/issues/2024-08-01/3416342-12.patch"
             },
             "drupal/flood_control": {
                 "Add Redis support": "https://git.drupalcode.org/project/flood_control/-/merge_requests/53.diff"
@@ -374,6 +372,9 @@
             },
             "drupal/redirect": {
                 "Add a 'URL Redirects' tab to the taxonomy term edit form": "https://www.drupal.org/files/issues/2025-09-17/3205896-5.patch"
+            },
+            "drupal/robotstxt": {
+                "Add cache context url.site to robots.txt response": "https://www.drupal.org/files/issues/2022-06-02/3283753-3.patch"
             },
             "drupal/simple_gmap": {
                 "Add support for address module": "https://www.drupal.org/files/issues/2025-03-19/simple_gmap-add-support-for-address-module-2863979-68.patch"
