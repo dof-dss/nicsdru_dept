@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.event.field_domain_source
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
+    - field.field.node.event.field_site_topics
     - field.field.node.event.field_summary
     - field.field.node.event.field_venue
     - node.type.event
@@ -83,6 +84,7 @@ hidden:
   field_domain_access: true
   field_domain_all_affiliates: true
   field_event_host: true
+  field_site_topics: true
   langcode: true
   links: true
   search_api_excerpt: true
