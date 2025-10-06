@@ -281,25 +281,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              author_user: '0'
-              site_editor: '0'
-              stats_author_user: '0'
-              landing_page_author_user: '0'
-              site_moderator: '0'
-              site_admin: '0'
-              supervisor_user: '0'
-              rss_user: '0'
-              pfg_supervisor_user: '0'
-              brexit_supervisor_user: '0'
-              stats_supervisor_user: '0'
-              landing_page_supervisor_user: '0'
-              domain_admin_user: '0'
-              niexec_admin_user: '0'
-              editor_user: '0'
-              admin_user: '0'
-              user_manager: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -700,25 +681,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              author_user: '0'
-              site_editor: '0'
-              stats_author_user: '0'
-              landing_page_author_user: '0'
-              site_moderator: '0'
-              site_admin: '0'
-              supervisor_user: '0'
-              rss_user: '0'
-              pfg_supervisor_user: '0'
-              brexit_supervisor_user: '0'
-              stats_supervisor_user: '0'
-              landing_page_supervisor_user: '0'
-              domain_admin_user: '0'
-              niexec_admin_user: '0'
-              editor_user: '0'
-              admin_user: '0'
-              user_manager: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -788,6 +750,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
         options:
@@ -2067,6 +2030,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
         options:
@@ -2494,6 +2458,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
         options:
@@ -2921,6 +2886,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
         options:

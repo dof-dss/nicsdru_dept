@@ -1,0 +1,14 @@
+uuid: 459e3e33-4de6-4152-9c49-fa91e7d16bf3
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.justice
+  module:
+    - domain_source
+id: domain_source_set_action.justice
+label: 'Set content domain source value to the Department of Justice domain'
+type: node
+plugin: domain_source_set_action
+configuration:
+  domain_id: justice
