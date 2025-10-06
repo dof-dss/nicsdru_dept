@@ -244,88 +244,9 @@ function dept_topics_form_node_form_alter(&$form, $form_state) {
     }
   }
 
-  if (\Drupal::service('topic.manager')->isValidTopicChild($bundle)) {
-    $form['actions']['submit']['#submit'][] = 'dept_topics_process_topic_child_contents';
-  }
-
   if ($bundle === 'topic' || $bundle === 'subtopic') {
     $form['actions']['submit']['#submit'][] = 'dept_topics_enable_domain_path';
   }
-}
-
-/**
- * Implements hook_entity_delete().
- */
-function dept_topics_entity_delete(EntityInterface $entity) {
-
-  // Removes the node from a topic/subtopic child content entity reference
-  // list when that node is deleted.
-  if ($entity instanceof NodeInterface) {
-    /** @var \Drupal\dept_topics\TopicManager $topic_manager */
-    $topic_manager = \Drupal::service('topic.manager');
-
-    $bundle = $entity->bundle();
-    $child_bundles = $topic_manager->getTopicChildNodeTypes();
-
-    if (in_array($bundle, $child_bundles)) {
-      $parents = $topic_manager->getParentNodes($entity->id());
-      $node_manager = \Drupal::entityTypeManager()->getStorage('node');
-
-      // Remove all topic content references for this node in topic/subtopic nodes.
-      foreach ($parents as $parent => $data) {
-        $topic_node = $node_manager->load($parent);
-        $child_refs = $topic_node->get('field_topic_content');
-
-        // Allows us to only save Topic nodes that have an entry for this content.
-        $has_child_entry = FALSE;
-
-        for ($i = 0; $i < $child_refs->count(); $i++) {
-          // @phpstan-ignore-next-line
-          if ($child_refs->get($i)->target_id == $entity->id()) {
-            $child_refs->removeItem($i);
-            $has_child_entry = TRUE;
-            $i--;
-          }
-        }
-
-        if ($has_child_entry) {
-          $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
-          $topic_node->save();
-        }
-      }
-    }
-  }
-
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function dept_topics_form_moderation_sidebar_quick_transition_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $entity = $form_state->get('entity');
-
-  if ($entity instanceof NodeInterface) {
-    if (\Drupal::service('topic.manager')->isValidTopicChild($entity->bundle())) {
-      $form['#submit'][] = 'dept_topics_process_topic_child_contents';
-    }
-  }
-}
-
-/**
- * Submit callback for Moderation Sidebar Quick Transition form.
- */
-function dept_topics_process_topic_child_contents($form, FormStateInterface $form_state) {
-  $entity = $form_state->get('entity');
-  $op = $form_state->getValue('op');
-  $mod_state = $form_state->getValue('moderation_state');
-
-  if (empty($entity)) {
-    $nid = $form_state->getValue('nid');
-    $entity = Node::load($nid);
-  }
-
-  // Update topic entries from Node form or Moderation sidebar.
-  \Drupal::service('topic.manager')->updateChildDisplayOnTopics($entity);
 }
 
 /**
@@ -355,57 +276,6 @@ function dept_topics_node_presave(EntityInterface $node) {
     }
 
     dept_topics_clear_topic_tree_cache($node);
-
-    // Clear the cache of the child content nodes (for cases when the thin banner etc. is updated).
-    dept_topics_clear_child_caches($node);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function dept_topics_node_insert(NodeInterface $node) {
-  // For new Topics add as a site topic to the child nodes.
-  if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
-    $child_contents = array_column($node->get('field_topic_content')->getValue(), 'target_id');
-
-    foreach ($child_contents as $nid) {
-      $child_node = Node::load($nid);
-      $child_node->get('field_site_topics')->appendItem([
-        'target_id' => $node->id()
-      ]);
-      $child_node->save();
-    }
-
-    // Clear the cache of the child content nodes (for cases when the thin banner etc. is added).
-    dept_topics_clear_child_caches($node);
-    dept_topics_clear_topic_tree_cache($node);
-  }
-}
-
-/**
- * Implements hook_node_delete().
- */
-function dept_topics_node_delete(NodeInterface $node) {
-  if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
-    dept_topics_clear_topic_tree_cache($node);
-  }
-}
-
-/**
- * Clears the node cache for all the child nodes belonging to a node.
- *
- * @param \Drupal\node\NodeInterface $node
- *   A Topic/Subtopic node to clear child content caches.
- */
-function dept_topics_clear_child_caches($node) {
-  if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
-    $child_cache_tags = array_column($node->get('field_topic_content')->getValue(), 'target_id');
-    array_walk($child_cache_tags, function (&$value, $key) {
-      $value = 'node:' . $value;
-    });
-
-    Cache::invalidateTags($child_cache_tags);
   }
 }
 
@@ -582,6 +452,10 @@ function dept_topics_preprocess_field(&$variables, $hook) {
       }
     }
   }
+}
+
+function dept_topics_clear_child_caches() {
+
 }
 
 /**
