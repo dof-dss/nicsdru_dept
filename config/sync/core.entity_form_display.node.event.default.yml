@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.event.field_domain_source
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
+    - field.field.node.event.field_registration_link
     - field.field.node.event.field_site_topics
     - field.field.node.event.field_summary
     - field.field.node.event.field_venue
@@ -20,6 +21,7 @@ dependencies:
     - content_moderation
     - datetime_range
     - dept_topics
+    - link
     - path
     - text
 id: node.event.default
@@ -81,6 +83,14 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_registration_link:
+    type: link_default
+    weight: 21
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
   field_site_topics:
     type: dept_topic_tree_widget
