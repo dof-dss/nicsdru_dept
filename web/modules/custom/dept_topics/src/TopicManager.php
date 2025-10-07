@@ -224,16 +224,9 @@ final class TopicManager {
   /**
    * Adds a child node to a topic node.
    *
-   * @param \Drupal\node\NodeInterface $child
-   *  The child node to add to a topic.
-   * @param \Drupal\node\NodeInterface $topic
-   *  The topic to which the child should be added.
-   *
-   * @return void
-   * @throws \Exception
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
+   *   The child node to add to a topic.
    */
-
-
   public function processChild(ContentEntityInterface $child) {
     if (!$this->isValidTopicChild($child)) {
       return;
@@ -272,6 +265,12 @@ final class TopicManager {
     }
   }
 
+  /**
+   * Removes all topic contents reference records for the given child.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
+   *   The child to archive.
+   */
   public function archiveChild(ContentEntityInterface $child) {
     $topics = $child->get('field_site_topics')->referencedEntities();
 
@@ -296,7 +295,7 @@ final class TopicManager {
       ->condition('entity_id', $topic->id())
       ->orderBy('delta', 'ASC')
       ->execute()
-      ->fetchAllKeyed(1,0);
+      ->fetchAllKeyed(1, 0);
 
     if (!array_key_exists($child->id(), $children)) {
       $delta = (empty($children)) ? 0 : end($children) + 1;
@@ -346,6 +345,20 @@ final class TopicManager {
     $this->clearCache($child, $topic);
   }
 
+  /**
+   * Inserts an entity reference value for a given child and topic
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
+   *   The child node (target) to add.
+   * @param \Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic node to add the entity reference to.
+   * @param string $table
+   *   The entity reference database table.
+   * @param string|int $revision_id
+   *   The revision ID to inert the reference for.
+   * @param int $delta
+   *   The position in the entity reference list.
+   */
   protected function addChildDatabaseEntry(ContentEntityInterface $child, ContentEntityInterface $topic, string $table, string|int $revision_id, int $delta = 0) {
     $this->connection->insert($table)
       ->fields([
@@ -360,9 +373,16 @@ final class TopicManager {
       ->execute();
   }
 
-
-  protected function clearCache($child, $topic) {
-
+  /**
+   *
+   * Clear the cache for given child and topic nodes.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
+   *   The child node to clear cache.
+   * @param \Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic node to clear cache.
+   */
+  protected function clearCache(ContentEntityInterface $child, ContentEntityInterface $topic) {
     $tags = ['node:' . $topic->id()];
 
     if (empty($child->id())) {

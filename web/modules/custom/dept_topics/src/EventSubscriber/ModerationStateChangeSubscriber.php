@@ -51,7 +51,7 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
     /* @var $entity ContentEntityInterface */
     $entity = $event->getEntity();
 
-    if (!$this->topicManager->isValidTopicChild($entity)){
+    if (!$this->topicManager->isValidTopicChild($entity)) {
       return;
     }
 

@@ -419,10 +419,6 @@ function dept_topics_preprocess_field(&$variables, $hook) {
   }
 }
 
-function dept_topics_clear_child_caches() {
-
-}
-
 /**
  * Implements hook_theme().
  */

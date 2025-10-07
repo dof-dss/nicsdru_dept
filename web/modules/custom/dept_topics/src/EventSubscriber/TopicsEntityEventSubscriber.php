@@ -61,7 +61,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
    * Entity update event handler.
    */
   public function onEntityUpdate(EntityEvent $event): void {
-    /** @var ContentEntityInterface $entity */
+    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
     $entity = $event->getEntity();
 
     if ($this->topicManager->isValidTopicChild($entity)) {
