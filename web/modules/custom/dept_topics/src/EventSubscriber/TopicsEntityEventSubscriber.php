@@ -7,6 +7,7 @@ namespace Drupal\dept_topics\EventSubscriber;
 use Drupal\book\BookManagerInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\dept_topics\OrphanManager;
 use Drupal\dept_topics\TopicContentAction;
@@ -34,17 +35,24 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
    * Entity insert event handler.
    */
   public function onEntityInsert(EntityEvent $event): void {
-    /* @var ContentEntityInterface $child */
-    $child = $event->getEntity();
-    if (!$this->topicManager->isValidTopicChild($child)) {
-      return;
+    /* @var ContentEntityInterface $entity */
+    $entity = $event->getEntity();
+
+    if ($entity instanceof ContentEntityInterface && in_array($entity->bundle(), ['topic', 'subtopic'])) {
+      // Resolves an issue that prevented the 'Topics' field from including a
+      // newly created topic when adding child content via the moderation sidebar.
+      $domain_source = $entity->get('field_domain_source')->getValue();
+      $dept_id = $domain_source[0]['target_id'];
+      Cache::invalidateTags([$dept_id . '_topics']);
     }
 
-    if ($child->get('moderation_state')->getString() == 'published') {
-      $topics = $child->get('field_site_topics')->referencedEntities();
+    if ($this->topicManager->isValidTopicChild($entity)) {
+      if ($entity->get('moderation_state')->getString() == 'published') {
+        $topics = $entity->get('field_site_topics')->referencedEntities();
 
-      foreach ($topics as $topic) {
-        $this->topicManager->addChild($child, $topic);
+        foreach ($topics as $topic) {
+          $this->topicManager->addChild($entity, $topic);
+        }
       }
     }
   }
@@ -53,18 +61,17 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
    * Entity update event handler.
    */
   public function onEntityUpdate(EntityEvent $event): void {
-    $child = $event->getEntity();
+    /** @var ContentEntityInterface $entity */
+    $entity = $event->getEntity();
 
-    if (!$this->topicManager->isValidTopicChild($child)) {
-      return;
-    }
+    if ($this->topicManager->isValidTopicChild($entity)) {
+      if ($entity->get('moderation_state')->getString() == 'published') {
+        $this->topicManager->processChild($entity);
+      }
 
-    if ($child->get('moderation_state')->getString() == 'published') {
-      $this->topicManager->processChild($child);
-    }
-
-    if ($child->get('moderation_state')->getString() == 'archived') {
-      $this->topicManager->archiveChild($child);
+      if ($entity->get('moderation_state')->getString() == 'archived') {
+        $this->topicManager->archiveChild($entity);
+      }
     }
   }
 
