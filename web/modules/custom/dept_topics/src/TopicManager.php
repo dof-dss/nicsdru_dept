@@ -163,119 +163,6 @@ final class TopicManager {
   }
 
   /**
-   * Add and remove an entity to topic child content lists based on the Site Topic field values.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity to use as a child reference.
-   */
-//  public function updateChildDisplayOnTopics(EntityInterface $entity) {
-//    // @phpstan-ignore-next-line
-//    if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
-//      // If an entity is a child entry to a book, don't update the
-//      // 'topic child contents' field to the topics in its site_topics field.
-//      if ($book_data = $this->bookManager->loadBookLink($entity->id())) {
-//        // Is this node the actual book node.
-//        $is_book = $book_data['bid'] === $entity->id();
-//
-//        if (($book_data['pid'] !== $entity->id()) && $is_book === FALSE) {
-//          return;
-//        }
-//      }
-//
-//      $parent_nids = array_keys($this->getParentNodes($entity->id()));
-//      // @phpstan-ignore-next-line
-//      $site_topics = array_column($entity->get('field_site_topics')
-//        ->getValue(), 'target_id');
-//
-//      $site_topics_removed = array_diff($parent_nids, $site_topics);
-//      $site_topics_new = array_diff($site_topics, $parent_nids);
-//
-//      // Add topic content references.
-//      foreach ($site_topics_new as $new) {
-//        $topic_node = $this->nodeStorage->load($new);
-//
-//        if (empty($topic_node)) {
-//          continue;
-//        }
-//
-//        $child_refs = $topic_node->get('field_topic_content');
-//        $ref_exists = FALSE;
-//
-//        // Check if an entry exists to prevent duplicates.
-//        foreach ($child_refs as $ref) {
-//          // @phpstan-ignore-next-line
-//          if ($ref->target_id == $entity->id()) {
-//            $ref_exists = TRUE;
-//          }
-//        }
-//
-//        if (!$ref_exists) {
-//          $topic_node->get('field_topic_content')->appendItem([
-//            'target_id' => $entity->id()
-//          ]);
-//          $topic_node->setRevisionLogMessage('Added child: (' . $entity->id() . ') ' . $entity->label());
-//          $topic_node->save();
-//        }
-//      }
-//
-//      // Remove any topic content references.
-//      foreach ($site_topics_removed as $remove) {
-//        $topic_node = $this->nodeStorage->load($remove);
-//        $child_removed = FALSE;
-//
-//        if (empty($topic_node)) {
-//          continue;
-//        }
-//
-//        $child_refs = $topic_node->get('field_topic_content');
-//
-//        for ($i = 0; $i < $child_refs->count(); $i++) {
-//          // @phpstan-ignore-next-line
-//          if ($child_refs->get($i)->target_id == $entity->id()) {
-//            $child_refs->removeItem($i);
-//            $child_removed = TRUE;
-//            $i--;
-//          }
-//        }
-//
-//        if ($child_removed) {
-//          $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
-//          $topic_node->save();
-//        }
-//      }
-//    }
-//  }
-
-  /**
-   * Remove all topic child references for the given entity.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity to remove all references for.
-   */
-//  public function removeChildDisplayFromTopics(EntityInterface $entity) {
-//    // @phpstan-ignore-next-line
-//    if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
-//      $parent_nids = array_keys($this->getParentNodes($entity->id()));
-//
-//      foreach ($parent_nids as $parent) {
-//        $topic_node = $this->nodeStorage->load($parent);
-//        $child_refs = $topic_node->get('field_topic_content');
-//
-//        for ($i = 0; $i < $child_refs->count(); $i++) {
-//          // @phpstan-ignore-next-line
-//          if ($child_refs->get($i)->target_id == $entity->id()) {
-//            $child_refs->removeItem($i);
-//            $i--;
-//          }
-//        }
-//
-//        $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
-//        $topic_node->save();
-//      }
-//    }
-//  }
-
-  /**
    * Update the topics property with a list of child nodes.
    *
    * @param \Drupal\node\NodeInterface $topic
@@ -354,8 +241,6 @@ final class TopicManager {
 
     $topic_nids = $child->get('field_site_topics')->getValue();
     $topic_nids = array_column($topic_nids, 'target_id');
-    $topic_vids = $this->entityTypeManager->getStorage('node')->revisionIds($child);
-
 
     $existing_topics = $this->connection->select('node__field_topic_content', 'tc')
       ->fields('tc', ['entity_id'])
