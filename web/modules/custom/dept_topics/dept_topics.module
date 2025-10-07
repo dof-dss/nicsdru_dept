@@ -55,7 +55,7 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
       ];
 
       $build['actions']['secondary']['manage_existing'] = [
-        '#title' => t('Manage existing content'),
+        '#title' => t('Manage content ordering'),
         '#type' => 'link',
         '#url' => Url::fromRoute('dept_topics.manage_topic_content.form', ['nid' => $context->id()]),
         '#attributes' => [
@@ -67,7 +67,7 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
           ],
           'data-dialog-type' => 'modal',
           'data-dialog-options' => Json::encode([
-            'title' => t('Manage topic content'),
+            'title' => t('Manage content ordering'),
             'width' => '1000',
             'minHeight' => 500,
             'position' => ['my' => 'center top', 'at' => 'center top'],
@@ -260,41 +260,6 @@ function dept_topics_enable_domain_path($form, FormStateInterface $form_state) {
 }
 
 /**
- * Implements hook_node_presave().
- */
-function dept_topics_node_presave(EntityInterface $node) {
-  if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
-
-    if ($node->isNew()) {
-      // Ignore new as we don't have a node ID for the topic.
-      return;
-    }
-
-    // @phpstan-ignore-next-line
-    if ($node->get('moderation_state')->getString() !== 'published') {
-      return;
-    }
-
-    dept_topics_clear_topic_tree_cache($node);
-  }
-}
-
-/**
- * Function to invalidate the topic tree cache structure
- * whenever a topic or subtopic node is changed, removed or created.
- */
-function dept_topics_clear_topic_tree_cache(NodeInterface $node) {
-  if (!in_array($node->bundle(), ['topic', 'subtopic'])) {
-    return;
-  }
-
-  // Clear topic manager stored cache entries for the topic hierarchy.
-  $domain_source = $node->get('field_domain_source')->getValue();
-  $dept_id = $domain_source[0]['target_id'];
-  Cache::invalidateTags([$dept_id . '_topics']);
-}
-
-/**
  * Implements hook_entity_type_build().
  */
 function dept_topics_entity_type_build(array &$entity_types) {
@@ -456,33 +421,6 @@ function dept_topics_preprocess_field(&$variables, $hook) {
 
 function dept_topics_clear_child_caches() {
 
-}
-
-/**
- * Implements hook_preprocess_field_multiple_value_form().
- */
-function dept_topics_preprocess_field_multiple_value_form(&$variables) {
-  if (!\Drupal::request()->isXmlHttpRequest()) {
-    if ($variables["element"]["#field_name"] === 'field_topic_content') {
-      // Add a moderation state label to each node in the entity reference form list.
-      foreach ($variables["table"]["#rows"] as $delta => $row) {
-        if (!empty($variables["element"][$delta]["target_id"]["#default_value"])) {
-          if ($variables["element"][$delta]["target_id"]["#default_value"] instanceof NodeInterface) {
-            $node = $variables["element"][$delta]["target_id"]["#default_value"];
-          }
-          else {
-            $node = $variables["element"][$delta]["target_id"]["#default_value"][0];
-          }
-
-          $state = $node->get('moderation_state')->getString();
-
-          if (!$node->isPublished()) {
-            $variables["table"]["#rows"][$delta]['data'][1]['data']['#suffix'] = ' <span title="Moderation status" class="moderation-state moderation-state--' . str_replace('_', '-', $state) . '">' . ucfirst(str_replace('_', ' ', $state)) . '</span>';
-          }
-        }
-      }
-    }
-  }
 }
 
 /**
