@@ -168,83 +168,83 @@ final class TopicManager {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to use as a child reference.
    */
-  public function updateChildDisplayOnTopics(EntityInterface $entity) {
-    // @phpstan-ignore-next-line
-    if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
-      // If an entity is a child entry to a book, don't update the
-      // 'topic child contents' field to the topics in its site_topics field.
-      if ($book_data = $this->bookManager->loadBookLink($entity->id())) {
-        // Is this node the actual book node.
-        $is_book = $book_data['bid'] === $entity->id();
-
-        if (($book_data['pid'] !== $entity->id()) && $is_book === FALSE) {
-          return;
-        }
-      }
-
-      $parent_nids = array_keys($this->getParentNodes($entity->id()));
-      // @phpstan-ignore-next-line
-      $site_topics = array_column($entity->get('field_site_topics')
-        ->getValue(), 'target_id');
-
-      $site_topics_removed = array_diff($parent_nids, $site_topics);
-      $site_topics_new = array_diff($site_topics, $parent_nids);
-
-      // Add topic content references.
-      foreach ($site_topics_new as $new) {
-        $topic_node = $this->nodeStorage->load($new);
-
-        if (empty($topic_node)) {
-          continue;
-        }
-
-        $child_refs = $topic_node->get('field_topic_content');
-        $ref_exists = FALSE;
-
-        // Check if an entry exists to prevent duplicates.
-        foreach ($child_refs as $ref) {
-          // @phpstan-ignore-next-line
-          if ($ref->target_id == $entity->id()) {
-            $ref_exists = TRUE;
-          }
-        }
-
-        if (!$ref_exists) {
-          $topic_node->get('field_topic_content')->appendItem([
-            'target_id' => $entity->id()
-          ]);
-          $topic_node->setRevisionLogMessage('Added child: (' . $entity->id() . ') ' . $entity->label());
-          $topic_node->save();
-        }
-      }
-
-      // Remove any topic content references.
-      foreach ($site_topics_removed as $remove) {
-        $topic_node = $this->nodeStorage->load($remove);
-        $child_removed = FALSE;
-
-        if (empty($topic_node)) {
-          continue;
-        }
-
-        $child_refs = $topic_node->get('field_topic_content');
-
-        for ($i = 0; $i < $child_refs->count(); $i++) {
-          // @phpstan-ignore-next-line
-          if ($child_refs->get($i)->target_id == $entity->id()) {
-            $child_refs->removeItem($i);
-            $child_removed = TRUE;
-            $i--;
-          }
-        }
-
-        if ($child_removed) {
-          $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
-          $topic_node->save();
-        }
-      }
-    }
-  }
+//  public function updateChildDisplayOnTopics(EntityInterface $entity) {
+//    // @phpstan-ignore-next-line
+//    if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
+//      // If an entity is a child entry to a book, don't update the
+//      // 'topic child contents' field to the topics in its site_topics field.
+//      if ($book_data = $this->bookManager->loadBookLink($entity->id())) {
+//        // Is this node the actual book node.
+//        $is_book = $book_data['bid'] === $entity->id();
+//
+//        if (($book_data['pid'] !== $entity->id()) && $is_book === FALSE) {
+//          return;
+//        }
+//      }
+//
+//      $parent_nids = array_keys($this->getParentNodes($entity->id()));
+//      // @phpstan-ignore-next-line
+//      $site_topics = array_column($entity->get('field_site_topics')
+//        ->getValue(), 'target_id');
+//
+//      $site_topics_removed = array_diff($parent_nids, $site_topics);
+//      $site_topics_new = array_diff($site_topics, $parent_nids);
+//
+//      // Add topic content references.
+//      foreach ($site_topics_new as $new) {
+//        $topic_node = $this->nodeStorage->load($new);
+//
+//        if (empty($topic_node)) {
+//          continue;
+//        }
+//
+//        $child_refs = $topic_node->get('field_topic_content');
+//        $ref_exists = FALSE;
+//
+//        // Check if an entry exists to prevent duplicates.
+//        foreach ($child_refs as $ref) {
+//          // @phpstan-ignore-next-line
+//          if ($ref->target_id == $entity->id()) {
+//            $ref_exists = TRUE;
+//          }
+//        }
+//
+//        if (!$ref_exists) {
+//          $topic_node->get('field_topic_content')->appendItem([
+//            'target_id' => $entity->id()
+//          ]);
+//          $topic_node->setRevisionLogMessage('Added child: (' . $entity->id() . ') ' . $entity->label());
+//          $topic_node->save();
+//        }
+//      }
+//
+//      // Remove any topic content references.
+//      foreach ($site_topics_removed as $remove) {
+//        $topic_node = $this->nodeStorage->load($remove);
+//        $child_removed = FALSE;
+//
+//        if (empty($topic_node)) {
+//          continue;
+//        }
+//
+//        $child_refs = $topic_node->get('field_topic_content');
+//
+//        for ($i = 0; $i < $child_refs->count(); $i++) {
+//          // @phpstan-ignore-next-line
+//          if ($child_refs->get($i)->target_id == $entity->id()) {
+//            $child_refs->removeItem($i);
+//            $child_removed = TRUE;
+//            $i--;
+//          }
+//        }
+//
+//        if ($child_removed) {
+//          $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
+//          $topic_node->save();
+//        }
+//      }
+//    }
+//  }
 
   /**
    * Remove all topic child references for the given entity.
@@ -252,28 +252,28 @@ final class TopicManager {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to remove all references for.
    */
-  public function removeChildDisplayFromTopics(EntityInterface $entity) {
-    // @phpstan-ignore-next-line
-    if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
-      $parent_nids = array_keys($this->getParentNodes($entity->id()));
-
-      foreach ($parent_nids as $parent) {
-        $topic_node = $this->nodeStorage->load($parent);
-        $child_refs = $topic_node->get('field_topic_content');
-
-        for ($i = 0; $i < $child_refs->count(); $i++) {
-          // @phpstan-ignore-next-line
-          if ($child_refs->get($i)->target_id == $entity->id()) {
-            $child_refs->removeItem($i);
-            $i--;
-          }
-        }
-
-        $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
-        $topic_node->save();
-      }
-    }
-  }
+//  public function removeChildDisplayFromTopics(EntityInterface $entity) {
+//    // @phpstan-ignore-next-line
+//    if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
+//      $parent_nids = array_keys($this->getParentNodes($entity->id()));
+//
+//      foreach ($parent_nids as $parent) {
+//        $topic_node = $this->nodeStorage->load($parent);
+//        $child_refs = $topic_node->get('field_topic_content');
+//
+//        for ($i = 0; $i < $child_refs->count(); $i++) {
+//          // @phpstan-ignore-next-line
+//          if ($child_refs->get($i)->target_id == $entity->id()) {
+//            $child_refs->removeItem($i);
+//            $i--;
+//          }
+//        }
+//
+//        $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
+//        $topic_node->save();
+//      }
+//    }
+//  }
 
   /**
    * Update the topics property with a list of child nodes.
@@ -333,5 +333,142 @@ final class TopicManager {
       default =>  3,
     };
   }
+
+  /**
+   * Adds a child node to a topic node.
+   *
+   * @param \Drupal\node\NodeInterface $child
+   *  The child node to add to a topic.
+   * @param \Drupal\node\NodeInterface $topic
+   *  The topic to which the child should be added.
+   *
+   * @return void
+   * @throws \Exception
+   */
+
+
+  public function processChild(ContentEntityInterface $child) {
+    if (!$this->isValidTopicChild($child)) {
+      return;
+    }
+
+    $topic_nids = $child->get('field_site_topics')->getValue();
+    $topic_nids = array_column($topic_nids, 'target_id');
+
+
+    $existing_topics = $this->connection->select('node__field_topic_content', 'tc')
+      ->fields('tc', ['entity_id'])
+      ->condition('field_topic_content_target_id', $child->id())
+      ->distinct()
+      ->execute()
+      ->fetchCol();
+
+    $existing_topics_revisions = $this->connection->select('node_revision__field_topic_content', 'tc')
+      ->fields('tc', ['entity_id'])
+      ->condition('field_topic_content_target_id', $child->id())
+      ->distinct()
+      ->execute()
+      ->fetchCol();
+
+    $existing_nids = array_unique(array_merge($existing_topics, $existing_topics_revisions));
+
+    $topics_added_ids = array_diff($topic_nids, $existing_nids);
+    $topics_removed_ids = array_diff($existing_nids, $topic_nids);
+
+    foreach ($topics_added_ids as $topic_id) {
+      $topic = $this->entityTypeManager->getStorage('node')->load($topic_id);
+      $this->addChildToTopic($child, $topic);
+    }
+
+    foreach ($topics_removed_ids as $topic_id) {
+      $topic = $this->entityTypeManager->getStorage('node')->load($topic_id);
+      $this->removeChildFromTopic($child, $topic);
+    }
+  }
+
+  public function addChildToTopic(ContentEntityInterface $child, ContentEntityInterface $topic) {
+
+    // Topic published.
+    $children = $this->connection->select('node__field_topic_content', 'tc')
+      ->fields('tc', ['delta', 'field_topic_content_target_id'])
+      ->condition('entity_id', $topic->id())
+      ->orderBy('delta', 'ASC')
+      ->execute()
+      ->fetchAllKeyed(1,0);
+
+    if (!array_key_exists($child->id(), $children)) {
+      $delta = (empty($children)) ? 0 : end($children) + 1;
+      $this->addChildDatabaseEntry($child, $topic, 'node__field_topic_content', $topic->getRevisionId(), $delta);
+    }
+
+    // Topic Revisions.
+    $topic_revisions = $this->connection->select('node_revision__field_topic_content', 'tr')
+      ->fields('tr', ['revision_id'])
+      ->condition('entity_id', $topic->id())
+      ->distinct()
+      ->execute()
+      ->fetchCol();
+
+    foreach ($topic_revisions as $revision_id) {
+      $revision_children = $this->connection->select('node_revision__field_topic_content', 'rtc')
+        ->fields('rtc', ['revision_id', 'delta', 'field_topic_content_target_id'])
+        ->condition('entity_id', $topic->id())
+        ->condition('revision_id', $revision_id)
+        ->orderBy('delta', 'ASC')
+        ->execute()
+        ->fetchAll();
+
+      if (!array_key_exists($child->id(), $revision_children)) {
+        $delta = (empty($revision_children)) ? 0 : end($revision_children)->delta + 1;
+        $this->addChildDatabaseEntry($child, $topic, 'node_revision__field_topic_content', $revision_id, $delta);
+      }
+    }
+
+    $this->clearTopicsCache($child, $topic);
+  }
+
+  public function removeChildFromTopic(ContentEntityInterface $child, ContentEntityInterface $topic) {
+    $this->connection->delete('node__field_topic_content')
+      ->condition('field_topic_content_target_id', $child->id())
+      ->condition('entity_id', $topic->id())
+      ->execute();
+
+    $this->connection->delete('node_revision__field_topic_content')
+      ->condition('field_topic_content_target_id', $child->id())
+      ->condition('entity_id', $topic->id())
+      ->execute();
+
+    $this->clearTopicsCache($child, $topic);
+  }
+
+  protected function addChildDatabaseEntry(ContentEntityInterface $child, ContentEntityInterface $topic, string $table, string|int $revision_id, int $delta = 0) {
+    $this->connection->insert($table)
+      ->fields([
+        'bundle' => $topic->bundle(),
+        'deleted' => 0,
+        'entity_id' => $topic->id(),
+        'revision_id' => $revision_id,
+        'langcode' => 'en',
+        'delta' => $delta,
+        'field_topic_content_target_id' => $child->id(),
+      ])
+      ->execute();
+  }
+
+
+  protected function clearTopicsCache($child, $topic) {
+
+    $tags = ['node:' . $topic->id()];
+
+    if (empty($child->id())) {
+      $tags[] = 'node:' . $child->id();
+    }
+
+    // We need to reset the cache for new child content to display on cached topics.
+    // It is not enough to just invalidate the topic node tag.
+    $this->entityTypeManager->getStorage('node')->resetCache([$topic->id()]);
+    Cache::invalidateTags($tags);
+  }
+
 
 }

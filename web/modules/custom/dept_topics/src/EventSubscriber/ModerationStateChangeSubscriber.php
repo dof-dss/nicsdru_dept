@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_topics\EventSubscriber;
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\dept_topics\TopicManager;
 use Drupal\origins_workflow\Event\ModerationStateChangeEvent;
 use Drupal\scheduled_transitions\Event\ScheduledTransitionsEvents;
@@ -47,11 +48,12 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
    *   The Origins Workflow moderation change event.
    */
   public function onModerationStateChange(ModerationStateChangeEvent $event) {
-    if ($event->isPublished()) {
-      $this->topicManager->updateChildDisplayOnTopics($event->getEntity());
-    }
-    elseif ($event->isArchived()) {
-      $this->topicManager->removeChildDisplayFromTopics($event->getEntity());
+    /* @var $entity ContentEntityInterface */
+    $entity = $event->getEntity();
+    $state = $event->getState();
+
+    if ($this->topicManager->isValidTopicChild($entity) && $state == 'published') {
+      $this->topicManager->processChild($entity);
     }
   }
 
@@ -62,15 +64,13 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
    *   Scheduled Transition event.
    */
   public function newRevision(ScheduledTransitionsNewRevisionEvent $event) {
+    /* @var $entity ContentEntityInterface */
     $scheduledTransition = $event->getScheduledTransition();
     $state = $scheduledTransition->getState();
+    $entity = $scheduledTransition->getEntity();
 
-    if ($state == 'published') {
-      $this->topicManager->updateChildDisplayOnTopics($scheduledTransition->getEntity());
-    }
-
-    if ($state == 'archived') {
-      $this->topicManager->removeChildDisplayFromTopics($scheduledTransition->getEntity());
+    if ($this->topicManager->isValidTopicChild($entity) && $state == 'published') {
+      $this->topicManager->processChild($entity);
     }
   }
 

@@ -31,21 +31,6 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   ) {}
 
   /**
-   * Entity presave event handler.
-   */
-  public function onEntityPresave(EntityEvent $event): void {
-    $entity = $event->getEntity();
-
-    if (!$this->topicManager->isValidTopicChild($entity)) {
-      return;
-    }
-
-
-
-
-  }
-
-  /**
    * Entity insert event handler.
    */
   public function onEntityInsert(EntityEvent $event): void {
@@ -74,32 +59,9 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $original = $child->original;
-
-    if (!$child->get('moderation_state')->getString() == 'published') {
+    if ($child->get('moderation_state')->getString() == 'published') {
+      $this->topicManager->processChild($child);
     }
-
-    $existing_topics = array_column($original->get('field_site_topics')->getValue(), 'target_id');
-    $updated_topics = array_column($child->get('field_site_topics')->getValue(), 'target_id');
-
-    $topics_added_ids = array_diff($updated_topics, $existing_topics);
-    $topics_removed_ids = array_diff($existing_topics, $updated_topics);
-
-    if (!empty($topics_removed_ids) || !empty($topics_added_ids)) {
-      $node_store = $topic = $this->entityTypeManager->getStorage('node');
-    }
-
-    foreach ($topics_added_ids as $topic_id) {
-      $topic = $node_store->load($topic_id);
-      $this->topicManager->addChildToTopic($child, $topic);
-    }
-
-    foreach ($topics_removed_ids as $topic_id) {
-      $topic = $node_store->load($topic_id);
-      $this->topicManager->removeChildFromTopic($child, $topic);
-    }
-
-
   }
 
   /**
@@ -123,7 +85,6 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      EntityEventType::PRESAVE => ['onEntityPresave'],
       EntityEventType::INSERT => ['onEntityInsert'],
       EntityEventType::UPDATE => ['onEntityUpdate'],
       EntityEventType::DELETE => ['onEntityDelete'],
