@@ -44,7 +44,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       $topics = $child->get('field_site_topics')->referencedEntities();
 
       foreach ($topics as $topic) {
-        $this->topicManager->addChildToTopic($child, $topic);
+        $this->topicManager->addChild($child, $topic);
       }
     }
   }
@@ -80,7 +80,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     $topics = $child->get('field_site_topics')->referencedEntities();
 
     foreach ($topics as $topic) {
-      $this->topicManager->removeChildFromTopic($child, $topic);
+      $this->topicManager->removeChild($child, $topic);
     }
   }
 

@@ -28,7 +28,7 @@ With a child node the selected values for topics/subtopics (field_site_topics) w
 
 The mechanisms to update or remove child references are from 2 methods within the Topic Manager class
 * updateChildOnTopics() - Adds or removes a child from topics.
-* removeChildFromTopics() - Removes all references of the child from topics.
+* archiveChild() - Removes all references of the child from topics.
 
 # WiP
 

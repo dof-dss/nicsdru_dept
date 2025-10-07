@@ -50,9 +50,14 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
   public function onModerationStateChange(ModerationStateChangeEvent $event) {
     /* @var $entity ContentEntityInterface */
     $entity = $event->getEntity();
+
+    if (!$this->topicManager->isValidTopicChild($entity)){
+      return;
+    }
+
     $state = $event->getState();
 
-    if ($this->topicManager->isValidTopicChild($entity) && $state == 'published') {
+    if ($state == 'published') {
       $this->topicManager->processChild($entity);
     }
 
@@ -70,10 +75,15 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
   public function newRevision(ScheduledTransitionsNewRevisionEvent $event) {
     /* @var $entity ContentEntityInterface */
     $scheduledTransition = $event->getScheduledTransition();
-    $state = $scheduledTransition->getState();
     $entity = $scheduledTransition->getEntity();
 
-    if ($this->topicManager->isValidTopicChild($entity) && $state == 'published') {
+    if (!$this->topicManager->isValidTopicChild($entity)) {
+      return;
+    }
+
+    $state = $scheduledTransition->getState();
+
+    if ($state == 'published') {
       $this->topicManager->processChild($entity);
     }
 

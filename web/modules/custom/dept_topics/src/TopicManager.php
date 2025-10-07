@@ -354,6 +354,7 @@ final class TopicManager {
 
     $topic_nids = $child->get('field_site_topics')->getValue();
     $topic_nids = array_column($topic_nids, 'target_id');
+    $topic_vids = $this->entityTypeManager->getStorage('node')->revisionIds($child);
 
 
     $existing_topics = $this->connection->select('node__field_topic_content', 'tc')
@@ -377,12 +378,12 @@ final class TopicManager {
 
     foreach ($topics_added_ids as $topic_id) {
       $topic = $this->entityTypeManager->getStorage('node')->load($topic_id);
-      $this->addChildToTopic($child, $topic);
+      $this->addChild($child, $topic);
     }
 
     foreach ($topics_removed_ids as $topic_id) {
       $topic = $this->entityTypeManager->getStorage('node')->load($topic_id);
-      $this->removeChildFromTopic($child, $topic);
+      $this->removeChild($child, $topic);
     }
   }
 
@@ -394,9 +395,17 @@ final class TopicManager {
     }
   }
 
+  /**
+   * Adds a child node to the topic contents field of a topic.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
+   *   The child to add to the topic.
+   * @param \Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic the child will be added to.
+   */
   public function addChild(ContentEntityInterface $child, ContentEntityInterface $topic) {
 
-    // Topic published.
+    // Published topic node contents.
     $children = $this->connection->select('node__field_topic_content', 'tc')
       ->fields('tc', ['delta', 'field_topic_content_target_id'])
       ->condition('entity_id', $topic->id())
@@ -409,14 +418,9 @@ final class TopicManager {
       $this->addChildDatabaseEntry($child, $topic, 'node__field_topic_content', $topic->getRevisionId(), $delta);
     }
 
-    // Topic Revisions.
-    $topic_revisions = $this->connection->select('node_revision__field_topic_content', 'tr')
-      ->fields('tr', ['revision_id'])
-      ->condition('entity_id', $topic->id())
-      ->distinct()
-      ->execute()
-      ->fetchCol();
+    $topic_revisions = $this->entityTypeManager->getStorage('node')->revisionIds($topic);
 
+    // Topic Revisions.
     foreach ($topic_revisions as $revision_id) {
       $revision_children = $this->connection->select('node_revision__field_topic_content', 'rtc')
         ->fields('rtc', ['revision_id', 'delta', 'field_topic_content_target_id'])
@@ -432,10 +436,18 @@ final class TopicManager {
       }
     }
 
-    $this->clearTopicsCache($child, $topic);
+    $this->clearCache($child, $topic);
   }
 
-  public function removeChildFromTopic(ContentEntityInterface $child, ContentEntityInterface $topic) {
+  /**
+   * Remove a child node from the topic contents field of a topic.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
+   *   The child to remove.
+   * @param \Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic the child is removed from.
+   */
+  public function removeChild(ContentEntityInterface $child, ContentEntityInterface $topic) {
     $this->connection->delete('node__field_topic_content')
       ->condition('field_topic_content_target_id', $child->id())
       ->condition('entity_id', $topic->id())
@@ -446,7 +458,7 @@ final class TopicManager {
       ->condition('entity_id', $topic->id())
       ->execute();
 
-    $this->clearTopicsCache($child, $topic);
+    $this->clearCache($child, $topic);
   }
 
   protected function addChildDatabaseEntry(ContentEntityInterface $child, ContentEntityInterface $topic, string $table, string|int $revision_id, int $delta = 0) {
@@ -464,7 +476,7 @@ final class TopicManager {
   }
 
 
-  protected function clearTopicsCache($child, $topic) {
+  protected function clearCache($child, $topic) {
 
     $tags = ['node:' . $topic->id()];
 
@@ -477,6 +489,5 @@ final class TopicManager {
     $this->entityTypeManager->getStorage('node')->resetCache([$topic->id()]);
     Cache::invalidateTags($tags);
   }
-
 
 }
