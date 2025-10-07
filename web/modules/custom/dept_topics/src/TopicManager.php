@@ -386,7 +386,15 @@ final class TopicManager {
     }
   }
 
-  public function addChildToTopic(ContentEntityInterface $child, ContentEntityInterface $topic) {
+  public function archiveChild(ContentEntityInterface $child) {
+    $topics = $child->get('field_site_topics')->referencedEntities();
+
+    foreach ($topics as $topic) {
+      $this->removeChild($child, $topic);
+    }
+  }
+
+  public function addChild(ContentEntityInterface $child, ContentEntityInterface $topic) {
 
     // Topic published.
     $children = $this->connection->select('node__field_topic_content', 'tc')

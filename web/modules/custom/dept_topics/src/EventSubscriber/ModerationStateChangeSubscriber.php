@@ -55,6 +55,10 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
     if ($this->topicManager->isValidTopicChild($entity) && $state == 'published') {
       $this->topicManager->processChild($entity);
     }
+
+    if ($state == 'archived') {
+      $this->topicManager->archiveChild($entity);
+    }
   }
 
   /**
@@ -71,6 +75,10 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
 
     if ($this->topicManager->isValidTopicChild($entity) && $state == 'published') {
       $this->topicManager->processChild($entity);
+    }
+
+    if ($state == 'archived') {
+      $this->topicManager->archiveChild($entity);
     }
   }
 
