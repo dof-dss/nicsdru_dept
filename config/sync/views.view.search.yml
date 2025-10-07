@@ -219,28 +219,22 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
+              admin: '0'
               administrator: '0'
-              author_user: '0'
-              site_editor: '0'
-              stats_author_user: '0'
-              landing_page_author_user: '0'
-              site_moderator: '0'
-              site_admin: '0'
-              supervisor_user: '0'
-              rss_user: '0'
-              pfg_supervisor_user: '0'
-              brexit_supervisor_user: '0'
-              stats_supervisor_user: '0'
-              landing_page_supervisor_user: '0'
-              domain_admin_user: '0'
-              niexec_admin_user: '0'
-              editor_user: '0'
-              admin_user: '0'
-              user_manager: '0'
+              anonymous: '0'
+              author: '0'
+              supervisor: '0'
+              homepage_supervisor: '0'
+              rss_supervisor: '0'
+              stats_author: '0'
+              stats_supervisor: '0'
+              topic_layout_supervisor: '0'
+              topic_supervisor: '0'
+              qa: '0'
             expose_fields: false
             placeholder: 'Search this site...'
             searched_fields_id: search_api_fulltext_searched_fields
+            value_maxlength: 128
           is_grouped: false
           group_info:
             label: ''
@@ -253,7 +247,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          parse_mode: sloppy_terms
+          parse_mode: fuzzy_terms
           min_length: 2
           fields:
             - body
@@ -270,10 +264,12 @@ display:
         options:
           view_modes:
             'entity:node':
+              ':default': default
               application: search_result
               article: search_result
               consultation: search_result
               contact: search_result
+              event: search_result
               heritage_site: search_result
               news: search_result
               page: search_result

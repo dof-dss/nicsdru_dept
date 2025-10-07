@@ -49,3 +49,6 @@ web/modules/*/package-lock.json
 
 # Ignore local cron log.
 cron-log.txt
+
+# Ignore DDEV CI cache
+.ddev/cache

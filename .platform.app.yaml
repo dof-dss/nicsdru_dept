@@ -94,10 +94,6 @@ hooks:
     rm -rf ckeditor4-fix-widget-dnd
     echo ">>> Install Platform CLI tool"
     curl -fsSL https://raw.githubusercontent.com/platformsh/cli/main/installer.sh | bash
-    echo "Update robots.txt with customisations"
-    cp -f robots_custom.txt web/robots.txt
-    echo "Add AI bots to robots.txt"
-    bash /app/platformsh-tools/add_ai_bots_to_robots_txt.sh
   # The deploy hook runs after your application has been deployed and started.
   deploy: |
     set -e
@@ -130,6 +126,9 @@ hooks:
     cd /app/web
 
     ../vendor/bin/drush password_qa_accounts
+
+    # Generate QA staff accounts.
+    ../vendor/bin/drush create_qa_staff_accounts
 
     # Temp fix as the config is not always updated on Edge.
     ../vendor/bin/drush cim -y
@@ -171,7 +170,7 @@ web:
           allow: true
         '^/sitemap\.xml$':
           allow: true
-        '^\/themes\/custom\/.+\/favicons\/.+\.webmanifest$':
+        '^\/themes\/custom\/.+\/favicons\/manifest-.+\.json$':
           allow: true
           expires: 2w
         '^/\.well-known/security\.txt$':

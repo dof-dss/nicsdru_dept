@@ -8,6 +8,7 @@ dependencies:
     - node.type.book
     - node.type.consultation
     - node.type.contact
+    - node.type.easychart
     - node.type.event
     - node.type.featured_content_list
     - node.type.gallery
@@ -34,6 +35,7 @@ dependencies:
     - domain_access
     - domain_entity
     - draggableviews
+    - easychart
     - field_ui
     - file
     - filter
@@ -65,6 +67,7 @@ permissions:
   - 'access content overview'
   - 'access draggableviews'
   - 'access files overview'
+  - 'access full easychart configuration'
   - 'access help pages'
   - 'access media overview'
   - 'access printer-friendly version'
@@ -122,6 +125,7 @@ permissions:
   - 'create consultation content on assigned domains'
   - 'create contact content on assigned domains'
   - 'create document media content on assigned domains'
+  - 'create easychart content on assigned domains'
   - 'create event content on assigned domains'
   - 'create event node content on assigned domains'
   - 'create featured_content_list content on assigned domains'
@@ -156,6 +160,7 @@ permissions:
   - 'delete contact content on assigned domains'
   - 'delete document media content on assigned domains'
   - 'delete domain content'
+  - 'delete easychart content on assigned domains'
   - 'delete event content on assigned domains'
   - 'delete event node content on assigned domains'
   - 'delete featured_content_list content on assigned domains'
@@ -202,6 +207,7 @@ permissions:
   - 'revert book revisions'
   - 'revert consultation revisions'
   - 'revert contact revisions'
+  - 'revert easychart revisions'
   - 'revert event revisions'
   - 'revert featured_content_list revisions'
   - 'revert gallery revisions'
@@ -225,6 +231,7 @@ permissions:
   - 'update consultation content on assigned domains'
   - 'update contact content on assigned domains'
   - 'update document media content on assigned domains'
+  - 'update easychart content on assigned domains'
   - 'update event content on assigned domains'
   - 'update event node content on assigned domains'
   - 'update featured_content_list content on assigned domains'
@@ -266,6 +273,7 @@ permissions:
   - 'view any unpublished consultation content'
   - 'view any unpublished contact content'
   - 'view any unpublished content'
+  - 'view any unpublished easychart content'
   - 'view any unpublished event content'
   - 'view any unpublished gallery content'
   - 'view any unpublished global_page content'
@@ -285,6 +293,7 @@ permissions:
   - 'view book revisions'
   - 'view consultation revisions'
   - 'view contact revisions'
+  - 'view easychart revisions'
   - 'view event revisions'
   - 'view featured_content_list revisions'
   - 'view gallery revisions'
