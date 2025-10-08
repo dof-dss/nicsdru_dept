@@ -24,7 +24,7 @@
               data.instance.select_node($(this).val());
             });
             // Disable any topic that the current node ID to prevent self referencing.
-            data.instance.disable_checkbox(drupalSettings['topic_tree.current_nid']);
+            data.instance.disable_node(drupalSettings['topic_tree.current_nid']);
           })
           .on("select_node.jstree", function(e, data) {
             // Deselect all parents.
