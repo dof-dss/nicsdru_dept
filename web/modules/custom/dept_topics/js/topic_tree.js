@@ -9,7 +9,7 @@
 
       $(once('topic-tree', '#topic-tree-wrapper', context)).each(function () {
 
-        let select_field = "#" + drupalSettings["topic_tree.field"];
+        const select_field = "#" + drupalSettings["topic_tree.field"];
 
         $(this)
           .on('changed.jstree', function (e, data) {
@@ -23,6 +23,8 @@
             $(select_field + " input:checked").each(function () {
               data.instance.select_node($(this).val());
             });
+            // Disable any topic that the current node ID to prevent self referencing.
+            data.instance.disable_checkbox(drupalSettings['topic_tree.current_nid']);
           })
           .on("select_node.jstree", function(e, data) {
             // Deselect all parents.
@@ -93,4 +95,3 @@
     });
   };
 })(jQuery);
-

@@ -22975,21 +22975,21 @@
         "drupal/domain": 10,
         "drupal/domain_entity": 5,
         "drupal/domain_simple_sitemap": 10,
+        "drupal/easy_install_d10": 20,
         "drupal/file_delete_ui": 10,
         "drupal/filelog": 20,
         "drupal/flag": 10,
+        "drupal/masquerade": 10,
         "drupal/purge_users": 5,
         "drupal/ultimate_cron": 10,
         "drupal/views_tree": 15,
-        "drupal/webprofiler": 20,
-        "drupal/easy_install_d10": 20,
-        "drupal/masquerade": 10
+        "drupal/webprofiler": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "ext-pdo": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
