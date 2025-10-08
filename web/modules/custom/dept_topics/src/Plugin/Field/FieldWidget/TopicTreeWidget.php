@@ -13,6 +13,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
 use Drupal\dept_topics\TopicManager;
 use Drupal\domain\DomainNegotiatorInterface;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -131,7 +132,15 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $field_id = Html::getUniqueId($field);
     $default_values = $this->getSelectedOptions($items);
     $current_dept = '';
+    $current_nid = '';
     $options = [];
+
+    $node = \Drupal::routeMatch()->getParameter('node');
+
+    // If updating a node fetch the ID to disable this entry in the topic tree.
+    if ($node instanceof NodeInterface) {
+      $current_nid = $node->id();
+    }
 
     // Get current department from the domain_access field.
     if (!empty($form['field_domain_access']['widget']['#default_value'])) {
@@ -193,6 +202,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
         'field' => $field_id,
         'limit' => $selection_limit,
         'selected' => is_array($default_values) ? implode('+', $default_values) : '',
+        'nid' => $current_nid,
       ]),
       '#disabled' => TRUE,
       '#attributes' => [
