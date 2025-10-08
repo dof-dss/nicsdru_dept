@@ -23,7 +23,8 @@
             $(select_field + " input:checked").each(function () {
               data.instance.select_node($(this).val());
             });
-            // Disable any topic that the current node ID to prevent self referencing.
+            // Disable any tree-node with an ID that matches the current
+            // Drupal-node to prevent self referencing issues.
             data.instance.disable_node(drupalSettings['topic_tree.current_nid']);
           })
           .on("select_node.jstree", function(e, data) {
