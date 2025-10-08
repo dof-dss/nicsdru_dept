@@ -7,6 +7,7 @@ use Drupal\Core\Ajax\CloseDialogCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Provides a Topic tree form.
@@ -23,7 +24,7 @@ final class TopicTreeForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL, $limit = NULL, $selected = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, $department = NULL, $field = NULL, $limit = NULL, $selected = NULL, $nid = NULL): array {
 
     $form['#title'] = $this->t('Select topic');
 
@@ -89,6 +90,7 @@ final class TopicTreeForm extends FormBase {
       'topic_tree.field' => $field,
       'topic_tree.selected' => $selected,
       'topic_tree.limit' => $limit,
+      'topic_tree.current_nid' => $nid,
     ];
 
     return $form;
