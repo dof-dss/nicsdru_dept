@@ -30,64 +30,84 @@ function dept_sitemap_cron() {
   // We need to load the dept from the simple_sitemap column value,
   // otherwise we have no context of the dept from running via drush
   // or relying on existing URL strings in the XML which is a bit flaky.
-  $depts = \Drupal::database()->query("SELECT DISTINCT `type` FROM {simple_sitemap} WHERE delta=0")->fetchCol(0);
+//  $depts = \Drupal::database()->query("SELECT DISTINCT `type` FROM {simple_sitemap} WHERE delta=0")->fetchCol(0);
+//
+//  foreach ($depts as $dept_id) {
+//    $dept = \Drupal::service('department.manager')->getDepartment($dept_id);
+//
+//    if ($dept instanceof Department === FALSE) {
+//      continue;
+//    }
+//
+//    $dept_url_bits = parse_url($dept->url());
+//    $dept_prefix = explode('.', $dept_url_bits['host'])[0];
+//
+//    if (empty($dept_prefix)) {
+//      continue;
+//    }
+//
+//    if (!empty(getenv('PLATFORM_ENVIRONMENT'))) {
+//      $replace = sprintf("https://%s.%s-%s.uk-1.platformsh.site",
+//        $dept_prefix,
+//        getenv('PLATFORM_ENVIRONMENT') ?? '',
+//        getenv('PLATFORM_PROJECT') ?? '');
+//    }
+//
+//    // Local dev override.
+//    $split_manager = \Drupal::service('config_split.manager');
+//    $splits = $split_manager->loadMultiple($split_manager->listAll());
+//
+//    if ($splits['config_split.config_split.local']->get('status') === TRUE) {
+//      $replace = "https://{$dept_prefix}.ddev.site";
+//    }
+//
+//    if (empty($replace)) {
+//      continue;
+//    }
+//
+//    // Use dynamic query for update - see advice on d.o for complex expression queries.
+//    // https://www.drupal.org/docs/8/api/database-api/dynamic-queries/introduction-to-dynamic-queries.
+//    $query = \Drupal::database()->update('simple_sitemap')
+//      ->expression('sitemap_string', "REGEXP_REPLACE(sitemap_string, :find_expression, :replace)", [
+//        ':find_expression' => 'http(?:s?):\/\/.*?([^\.\/]+?\.[^\.]+?)(?:\/|$)',
+//        ':replace' => $replace . '/',
+//      ])
+//      ->condition('type', $dept_id)
+//      ->condition('sitemap_string', "%{$replace}%", 'NOT LIKE')
+//      ->execute();
+//
+//    // REGEX_REPLACE will break the <sitemapindex namespace URL, so patch it up here.
+//    $query = \Drupal::database()->update('simple_sitemap')
+//      ->expression('sitemap_string', "REPLACE(sitemap_string, :incorrect_xmlns, :correct_xmlns)", [
+//        ':incorrect_xmlns' => "<sitemapindex xmlns=\"{$replace}/schemas/sitemap/0.9\">",
+//        ':correct_xmlns' => '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+//      ])->execute();
+//
+//    // Ditto for the <urlset namespace links.
+//    $query = \Drupal::database()->update('simple_sitemap')
+//      ->expression('sitemap_string', "REPLACE(sitemap_string, :incorrect_urlset, :correct_urlset)", [
+//        ':incorrect_urlset' => "<urlset xmlns=\"{$replace}/schemas/sitemap/0.9\" xmlns:xhtml=\"$replace/1999/xhtml\" xmlns:image=\"{$replace}/schemas/sitemap-image/1.1\">",
+//        ':correct_urlset' => '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
+//      ])->execute();
+//  }
+}
 
-  foreach ($depts as $dept_id) {
-    $dept = \Drupal::service('department.manager')->getDepartment($dept_id);
+/**
+ * Implements hook_simple_sitemap_links_alter().
+ */
+function dept_sitemap_simple_sitemap_links_alter(array &$links, SimpleSitemapInterface $sitemap) {
+  if ($sitemap->id() != 'nigov') {
+    return;
+  }
 
-    if ($dept instanceof Department === FALSE) {
-      continue;
+  foreach ($links as $key => $link) {
+    $entity_info = $link['meta']["entity_info"];
+    $entity = \Drupal::entityTypeManager()->getStorage($entity_info['entity_type'])->load($entity_info['id']);
+
+    if (method_exists($entity, 'hasField') && $entity->hasField('field_domain_source')) {
+      if ($entity->get('field_domain_source')->getString() != 'nigov') {
+        unset($links[$key]);
+      }
     }
-
-    $dept_url_bits = parse_url($dept->url());
-    $dept_prefix = explode('.', $dept_url_bits['host'])[0];
-
-    if (empty($dept_prefix)) {
-      continue;
-    }
-
-    if (!empty(getenv('PLATFORM_ENVIRONMENT'))) {
-      $replace = sprintf("https://%s.%s-%s.uk-1.platformsh.site",
-        $dept_prefix,
-        getenv('PLATFORM_ENVIRONMENT') ?? '',
-        getenv('PLATFORM_PROJECT') ?? '');
-    }
-
-    // Local dev override.
-    $split_manager = \Drupal::service('config_split.manager');
-    $splits = $split_manager->loadMultiple($split_manager->listAll());
-
-    if ($splits['config_split.config_split.local']->get('status') === TRUE) {
-      $replace = "https://{$dept_prefix}.ddev.site";
-    }
-
-    if (empty($replace)) {
-      continue;
-    }
-
-    // Use dynamic query for update - see advice on d.o for complex expression queries.
-    // https://www.drupal.org/docs/8/api/database-api/dynamic-queries/introduction-to-dynamic-queries.
-    $query = \Drupal::database()->update('simple_sitemap')
-      ->expression('sitemap_string', "REGEXP_REPLACE(sitemap_string, :find_expression, :replace)", [
-        ':find_expression' => 'http(?:s?):\/\/.*?([^\.\/]+?\.[^\.]+?)(?:\/|$)',
-        ':replace' => $replace . '/',
-      ])
-      ->condition('type', $dept_id)
-      ->condition('sitemap_string', "%{$replace}%", 'NOT LIKE')
-      ->execute();
-
-    // REGEX_REPLACE will break the <sitemapindex namespace URL, so patch it up here.
-    $query = \Drupal::database()->update('simple_sitemap')
-      ->expression('sitemap_string', "REPLACE(sitemap_string, :incorrect_xmlns, :correct_xmlns)", [
-        ':incorrect_xmlns' => "<sitemapindex xmlns=\"{$replace}/schemas/sitemap/0.9\">",
-        ':correct_xmlns' => '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-      ])->execute();
-
-    // Ditto for the <urlset namespace links.
-    $query = \Drupal::database()->update('simple_sitemap')
-      ->expression('sitemap_string', "REPLACE(sitemap_string, :incorrect_urlset, :correct_urlset)", [
-        ':incorrect_urlset' => "<urlset xmlns=\"{$replace}/schemas/sitemap/0.9\" xmlns:xhtml=\"$replace/1999/xhtml\" xmlns:image=\"{$replace}/schemas/sitemap-image/1.1\">",
-        ':correct_urlset' => '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
-      ])->execute();
   }
 }
