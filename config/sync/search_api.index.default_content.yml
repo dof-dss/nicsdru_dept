@@ -13,6 +13,7 @@ dependencies:
     - field.storage.node.field_event_host
     - field.storage.node.field_protected_area_feature
     - field.storage.node.field_protected_area_type
+    - field.storage.node.field_site_topics
     - field.storage.node.field_summary
     - search_api.server.default
   module:
@@ -175,6 +176,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_protected_area_type
+  field_site_topics:
+    label: Topics
+    datasource_id: 'entity:node'
+    property_path: field_site_topics
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_site_topics
   field_summary:
     label: 'Introductory paragraph'
     datasource_id: 'entity:node'
