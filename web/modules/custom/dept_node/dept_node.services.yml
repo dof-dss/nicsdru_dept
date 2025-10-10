@@ -1,0 +1,6 @@
+services:
+  dept_node.event_subscriber:
+    class: Drupal\dept_node\EventSubscriber\DeptNodeViewSubscriber
+    arguments: ['@department.manager', '@current_route_match']
+    tags:
+      - { name: event_subscriber }

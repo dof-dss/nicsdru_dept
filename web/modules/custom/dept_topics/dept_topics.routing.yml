@@ -7,12 +7,12 @@ dept_topics.topic_tree.json:
     _permission: 'use topic tree widget'
 
 dept_topics.topic_tree.form:
-  path: '/admin/topics/topic_tree/{department}/{field}/{limit}/{selected}/{nid}'
+  path: '/admin/topics/topic_tree/{department}/{field}/{limit}/{nid}/{selected}'
   defaults:
     _title: 'Topic tree widget form'
     _form: 'Drupal\dept_topics\Form\TopicTreeForm'
-    selected: ''
     nid: ''
+    selected: ''
   requirements:
     _permission: 'use topic tree widget'
 
