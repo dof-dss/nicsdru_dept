@@ -8,6 +8,7 @@
 #
 # Internally, this calls the central script with:
 #   phpcs.sh <DRUPAL_DEPLOY_PATH> <PHPCS_CHECK_DIR> <IGNORE>
+## HostWorkingDir: true
 
 set -euo pipefail
 
