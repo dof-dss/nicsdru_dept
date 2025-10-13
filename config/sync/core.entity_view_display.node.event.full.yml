@@ -12,12 +12,14 @@ dependencies:
     - field.field.node.event.field_domain_source
     - field.field.node.event.field_event_datetime
     - field.field.node.event.field_event_host
+    - field.field.node.event.field_site_topics
     - field.field.node.event.field_summary
     - field.field.node.event.field_venue
     - node.type.event
   module:
     - datetime_range
     - layout_builder
+    - link
     - options
     - smart_trim
     - text
@@ -36,22 +38,14 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 4
-    region: content
-  field_business_area:
-    type: entity_reference_label
-    label: hidden
-    settings:
-      link: false
-    third_party_settings: {  }
-    weight: 0
+    weight: 3
     region: content
   field_council:
     type: list_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 5
+    weight: 4
     region: content
   field_event_datetime:
     type: daterange_default
@@ -62,7 +56,7 @@ content:
       from_to: both
       separator: '-'
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
   field_event_host:
     type: string
@@ -70,7 +64,19 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 2
+    weight: 1
+    region: content
+  field_registration_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: '0'
+      target: '0'
+    third_party_settings: {  }
+    weight: 6
     region: content
   field_summary:
     type: smart_trim
@@ -91,7 +97,7 @@ content:
       summary_handler: full
       trim_options: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 2
     region: content
   field_venue:
     type: string
@@ -99,13 +105,15 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 6
+    weight: 5
     region: content
 hidden:
   content_moderation_control: true
+  field_business_area: true
   field_domain_access: true
   field_domain_all_affiliates: true
   field_domain_source: true
+  field_site_topics: true
   langcode: true
   links: true
   search_api_excerpt: true
