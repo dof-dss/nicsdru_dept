@@ -342,6 +342,7 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
 
   if (in_array($form_id, ['node_topic_form', 'node_topic_edit_form', 'node_subtopic_form', 'node_subtopic_edit_form'])) {
     $form['#validate'][] = 'dept_topics_validate_topics';
+    $form['#attached']['library'][] = 'dept_topics/topic_admin';
   }
 }
 
