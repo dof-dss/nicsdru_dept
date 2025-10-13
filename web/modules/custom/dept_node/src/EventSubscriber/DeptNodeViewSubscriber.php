@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\dept_node\EventSubscriber;
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\dept_core\DepartmentManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
@@ -22,6 +23,7 @@ final class DeptNodeViewSubscriber implements EventSubscriberInterface {
   public function __construct(
     private readonly DepartmentManager $departmentManager,
     private readonly RouteMatchInterface $currentRouteMatch,
+    private readonly AccountInterface $currentUser,
   ) {}
 
   /**
@@ -42,7 +44,9 @@ final class DeptNodeViewSubscriber implements EventSubscriberInterface {
     if (!empty($node) && $node->hasField('field_domain_source')) {
       // For nodes with a domain source other than 'nigov', display Drupal’s 404 page.
       if (!$node->get('field_domain_source')->isEmpty() && $node->get('field_domain_source')->getString() !== 'nigov') {
-        throw new NotFoundHttpException();
+        if ($this->currentUser->isAnonymous()) {
+          throw new NotFoundHttpException();
+        }
       }
     }
   }
