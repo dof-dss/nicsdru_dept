@@ -30,6 +30,9 @@ final class DeptNodeViewSubscriber implements EventSubscriberInterface {
    * Handle nodes viewed on NIGov.
    */
   public function niGovNodeHandler(ControllerEvent $event) {
+    // TODO: remove before flight (after testing by QA)
+    return;
+
     if ($this->departmentManager->getCurrentDepartment()->id() !== 'nigov') {
       return;
     }
