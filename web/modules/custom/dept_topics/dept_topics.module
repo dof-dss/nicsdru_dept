@@ -8,9 +8,6 @@
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
@@ -133,51 +130,6 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
     }
 
   }
-}
-
-/**
- * Implements hook_cron().
- */
-function dept_topics_cron() {
-  $dbConn = \Drupal::database();
-
-  // Fetch the parent node ID's of referenced topic content nodes that no
-  // longer exist.
-  $nids = $dbConn->query("
-    SELECT nftc.entity_id FROM node__field_topic_content nftc
-    LEFT JOIN node n
-    ON nftc.field_topic_content_target_id = n.nid
-    WHERE n.nid IS NULL;
-  ")->fetchCol(0);
-
-  if (empty($nids)) {
-    return;
-  }
-
-  // Remove duplicate parent nids and create a list of node cache tags.
-  $cids = array_map(function ($nid) {
-    return 'values:node:' . $nid;
-  }, array_unique($nids));
-  // Remove any topic content reference field entries that point to deleted
-  // nodes.
-  $dbConn->query("
-    DELETE nftc FROM node__field_topic_content nftc
-    LEFT JOIN node n
-    ON nftc.field_topic_content_target_id = n.nid
-    WHERE n.nid IS NULL;
-  ")->execute();
-
-  $dbConn->query("
-    DELETE nrftc FROM node_revision__field_topic_content nrftc
-    LEFT JOIN node n
-    ON nrftc.field_topic_content_target_id = n.nid
-    WHERE n.nid IS NULL;
-  ")->execute();
-
-  // Check the caching of the entity info to update the topic content reference
-  // field on the node edit form.
-  $cache_entity = \Drupal::service('cache.entity');
-  $cache_entity->deleteMultiple($cids);
 }
 
 /**
@@ -347,6 +299,29 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
 }
 
 /**
+ * Update the Linkit profile for topic content.
+ */
+function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+  $field_bundles = NestedArray::getValue($values, ['settings', 'handler_settings', 'target_bundles'], $key_exists);
+
+  if ($key_exists) {
+    $file_storage = \Drupal::service('config.storage.sync');
+    $active_storage = \Drupal::service('config.storage');
+
+    $linkit_data = $active_storage->read('linkit.linkit_profile.topic_child_content');
+    // Update the Linkit profile matcher bundles to that of the topic content field target bundles.
+    $linkit_data['matchers'][array_key_first($linkit_data['matchers'])]['settings']['bundles'] = $field_bundles;
+
+    // Save to both active and file config stores.
+    $active_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
+    $file_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
+
+    \Drupal::messenger()->addMessage('Linkit profile (topic_child_content) updated, please ensure you export this configuration. ');
+  }
+}
+
+/**
  * Topic/Subtopic node edit form validation callback.
  */
 function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
@@ -394,34 +369,12 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
 }
 
 /**
- * Update the Linkit profile for topic content.
- */
-function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_state) {
-  $values = $form_state->getValues();
-  $field_bundles = NestedArray::getValue($values, ['settings', 'handler_settings', 'target_bundles'], $key_exists);
-
-  if ($key_exists) {
-    $file_storage = \Drupal::service('config.storage.sync');
-    $active_storage = \Drupal::service('config.storage');
-
-    $linkit_data = $active_storage->read('linkit.linkit_profile.topic_child_content');
-    // Update the Linkit profile matcher bundles to that of the topic content field target bundles.
-    $linkit_data['matchers'][array_key_first($linkit_data['matchers'])]['settings']['bundles'] = $field_bundles;
-
-    // Save to both active and file config stores.
-    $active_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
-    $file_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
-
-    \Drupal::messenger()->addMessage('Linkit profile (topic_child_content) updated, please ensure you export this configuration. ');
-  }
-}
-
-/**
  * Implements hook_preprocess_field().
  */
 function dept_topics_preprocess_field(&$variables, $hook) {
   $element = $variables['element'];
 
+  // Display the moderation state of topic content.
   if ($element['#field_name'] === 'field_topic_content') {
     foreach ($variables['items'] as $index => ['content' => $item]) {
       if (!empty($item['#entity']) && !$item['#entity']->isPublished()) {
@@ -489,6 +442,8 @@ function dept_topics_preprocess_views_view_field(&$variables) {
   $view = $variables['view'];
   $field = $variables['field'];
 
+  // Display a link using the parent title, or if the parent was deleted,
+  // the old node ID for the parent.
   if ($view->storage->id() == 'orphaned_content' && $field->field == 'former_parent') {
     $parent_id = $variables["row"]->_entity->get('former_parent')->getString();
     $parent = Node::load($parent_id);
@@ -503,8 +458,8 @@ function dept_topics_preprocess_views_view_field(&$variables) {
     $variables['output'] = $output;
   }
 
+  // Add operations button to orphaned content display.
   if ($view->storage->id() == 'orphaned_content' && $field->field == 'dropbutton') {
-
     $variables['output'] = [
       '#type' => 'operations',
       '#links' => [

@@ -68,8 +68,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       if ($entity->get('moderation_state')->getString() == 'published') {
         $this->topicManager->processChild($entity);
       }
-
-      if ($entity->get('moderation_state')->getString() == 'archived') {
+      elseif ($entity->get('moderation_state')->getString() == 'archived') {
         $this->topicManager->archiveChild($entity);
       }
     }

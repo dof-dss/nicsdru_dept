@@ -48,22 +48,7 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
    *   The Origins Workflow moderation change event.
    */
   public function onModerationStateChange(ModerationStateChangeEvent $event) {
-    /* @var $entity ContentEntityInterface */
-    $entity = $event->getEntity();
-
-    if (!$this->topicManager->isValidTopicChild($entity)) {
-      return;
-    }
-
-    $state = $event->getState();
-
-    if ($state == 'published') {
-      $this->topicManager->processChild($entity);
-    }
-
-    if ($state == 'archived') {
-      $this->topicManager->archiveChild($entity);
-    }
+    $this->processModerationState($event->getEntity(), $event->getState());
   }
 
   /**
@@ -73,22 +58,26 @@ class ModerationStateChangeSubscriber implements EventSubscriberInterface {
    *   Scheduled Transition event.
    */
   public function newRevision(ScheduledTransitionsNewRevisionEvent $event) {
-    /* @var $entity ContentEntityInterface */
     $scheduledTransition = $event->getScheduledTransition();
-    $entity = $scheduledTransition->getEntity();
+    $this->processModerationState($scheduledTransition->getEntity(), $scheduledTransition->getState());
+  }
 
-    if (!$this->topicManager->isValidTopicChild($entity)) {
-      return;
-    }
-
-    $state = $scheduledTransition->getState();
-
-    if ($state == 'published') {
-      $this->topicManager->processChild($entity);
-    }
-
-    if ($state == 'archived') {
-      $this->topicManager->archiveChild($entity);
+  /**
+   * Process an entity depending on the moderation state.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to process.
+   * @param string $state
+   *   The moderation state of the entity.
+   */
+  protected function processModerationState($entity, $state) {
+    if ($this->topicManager->isValidTopicChild($entity)) {
+      if ($state == 'published') {
+        $this->topicManager->processChild($entity);
+      }
+      elseif ($state == 'archived') {
+        $this->topicManager->archiveChild($entity);
+      }
     }
   }
 

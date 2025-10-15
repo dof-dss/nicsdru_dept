@@ -237,7 +237,7 @@ final class TopicManager {
   }
 
   /**
-   * Adds a child node to a topic node.
+   * Adds or removes a child node from a topic node.
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $child
    *   The child node to add to a topic.
