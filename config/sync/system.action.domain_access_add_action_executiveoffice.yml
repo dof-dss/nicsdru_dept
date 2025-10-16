@@ -1,0 +1,15 @@
+uuid: 5699f8b9-5f15-45c5-ba02-a13f833bf9bc
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.executiveoffice
+  module:
+    - domain_access
+id: domain_access_add_action_executiveoffice
+label: 'Add selected content to the Executive Office domain'
+type: node
+plugin: domain_access_add_action
+configuration:
+  domain_id:
+    - executiveoffice

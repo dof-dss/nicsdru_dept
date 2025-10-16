@@ -1,0 +1,14 @@
+uuid: 5195f485-f334-4f88-9636-e86d7d970774
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.infrastructure
+  module:
+    - domain_source
+id: domain_source_set_action.infrastructure
+label: 'Set content domain source value to the Department for Infrastructure domain'
+type: node
+plugin: domain_source_set_action
+configuration:
+  domain_id: infrastructure

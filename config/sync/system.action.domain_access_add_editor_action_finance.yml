@@ -1,0 +1,15 @@
+uuid: 7f4989a7-e9a7-4e8d-8d01-7fbab9f834d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.finance
+  module:
+    - domain_access
+id: domain_access_add_editor_action_finance
+label: 'Add editors to the Department of Finance domain'
+type: user
+plugin: domain_access_add_editor_action
+configuration:
+  domain_id:
+    - finance

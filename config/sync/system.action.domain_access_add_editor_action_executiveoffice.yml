@@ -1,0 +1,15 @@
+uuid: 792cdb4b-ad50-4178-a05c-002e8c839fc6
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.executiveoffice
+  module:
+    - domain_access
+id: domain_access_add_editor_action_executiveoffice
+label: 'Add editors to the Executive Office domain'
+type: user
+plugin: domain_access_add_editor_action
+configuration:
+  domain_id:
+    - executiveoffice
