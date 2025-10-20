@@ -59,6 +59,7 @@ workflows:
           php_version: << pipeline.parameters.php_version >>
           edge_branch: << pipeline.parameters.edge_branch >>
           edge_build_dofdss_packages: << pipeline.parameters.edge_build_dofdss_packages >>
+          manual_trigger: << pipeline.parameters.manual_trigger >>
       - sync_data:
           requires:
             - build_edge
