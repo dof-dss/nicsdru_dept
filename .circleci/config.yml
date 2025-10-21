@@ -45,5 +45,6 @@ jobs:
               "edge_branch": "DEPT-edge",
               "edge_build_dofdss_packages": "dof-dss/nicsdru_origins_theme:dev-10.x-dev dof-dss/nicsdru_origins_modules:dev-10.x-dev",
               "ignore_dirs": "/web/themes/origins/node_modules,/web/themes/custom/nicsdru_dept_theme/node_modules",
+              "manual_trigger": << pipeline.parameters.manual_trigger >>
               "ssh_fingerprint": "65:4e:c7:ca:9f:c0:40:f7:16:2c:da:33:63:1d:90:12"
             }
