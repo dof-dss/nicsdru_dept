@@ -121,6 +121,7 @@
         "drupal/core-recommended": "^10.4",
         "drupal/csp": "^2.1",
         "drupal/date_facet_drilldown": "^12.0",
+        "drupal/date_filter": "^1.0",
         "drupal/datetime_flatpickr": "^3.0",
         "drupal/diff": "^1.8",
         "drupal/domain": "^2.0@beta",
@@ -138,6 +139,8 @@
         "drupal/entity_embed": "^1.7",
         "drupal/entity_events": "^2.0",
         "drupal/entity_reference_tree": "^2.2",
+        "drupal/entity_usage": "2.x-dev@dev",
+        "drupal/entity_usage_views_field": "^3.0",
         "drupal/eu_cookie_compliance": "^1.26",
         "drupal/facets": "^2.0",
         "drupal/facets_pretty_paths": "^2.0",
@@ -161,10 +164,12 @@
         "drupal/layout_builder_restrictions": "^3.0",
         "drupal/linkit": "^6.1",
         "drupal/maxlength": "^3.1",
+        "drupal/media_duplicate_check": "^1.0",
         "drupal/media_duplicates": "^2.0",
         "drupal/media_file_delete": "^1.3",
         "drupal/media_library_edit": "^3.0",
         "drupal/media_remote": "^1.9",
+        "drupal/media_views_filter": "^1.0@RC",
         "drupal/metatag": "^2.1",
         "drupal/metatag_async_widget": "^1.2",
         "drupal/moderation_sidebar": "^1.8",
@@ -206,6 +211,7 @@
         "drupal/views_conditional": "^1.4",
         "drupal/views_contextual_filters_or": "^1.5",
         "drupal/views_custom_cache_tag": "^1.4",
+        "drupal/views_data_export": "^1.6",
         "drupal/views_tree": "^2.0@alpha",
         "drupal/webform": "^6.2",
         "drupal/webprofiler": "10.1.x-dev@dev",
@@ -378,10 +384,12 @@
                 "Show URL alias after autocomplete selection instead of internal route (e.g., /node/123)": "https://www.drupal.org/files/issues/2023-10-03/linkit-2877535-62.patch",
                 "Unpublished nodes not included even when option is selected": "https://www.drupal.org/files/issues/2023-11-09/linkit-unpublished-nodes-not-included-3049946-34.patch"
             },
+            "drupal/media_duplicates": {
+                "Add error handling/logging for missing files #3521185": "https://git.drupalcode.org/project/media_duplicates/-/merge_requests/18.diff"
+            },
             "drupal/migrate_plus": {
                 "Source plugin to only pull in certain URL aliases": "https://www.drupal.org/files/issues/2022-02-18/migrate_plus-n3063778-15.patch"
             },
-
             "drupal/moderation_sidebar": {
                 "Can't preview a new node #3264639": "https://www.drupal.org/files/issues/2022-02-16/preview-new-node-3264639-2.patch",
                 "'Draft available' text still appears after deleting a forward revision": "https://www.drupal.org/files/issues/2020-02-24/3115474-3.patch",
@@ -398,6 +406,9 @@
             },
             "drupal/simple_gmap": {
                 "Add support for address module": "https://www.drupal.org/files/issues/2023-09-21/drupal.org_files_issues_2022-09-29_simple_gmap-address-formatter-2863979-54.patch"
+            },
+            "drupal/views_data_export": {
+                "Does not work with data aggregation + paging": "https://git.drupalcode.org/project/views_data_export/-/merge_requests/69.diff"
             },
             "drupal/whatlinkshere": {
                 "Fix disappearing 'Scheduled transitions' link #": "patches/what_links_here_3481289.patch"

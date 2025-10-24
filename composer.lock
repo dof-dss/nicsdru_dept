@@ -4013,6 +4013,55 @@
             }
         },
         {
+            "name": "drupal/date_filter",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/date_filter.git",
+                "reference": "1.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/date_filter-1.0.2.zip",
+                "reference": "1.0.2",
+                "shasum": "83c14d27df0d561e412d401b88a59e2cae681414"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.2",
+                    "datestamp": "1732103275",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Marcin Grabias",
+                    "homepage": "https://www.drupal.org/u/graber"
+                },
+                {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
+                }
+            ],
+            "description": "Plug and play module replacing core date filters",
+            "homepage": "http://drupal.org/project/date_filter",
+            "support": {
+                "source": "https://git.drupalcode.org/project/date_filter",
+                "issues": "https://drupal.org/project/issues/date_filter"
+            }
+        },
+        {
             "name": "drupal/datetime_flatpickr",
             "version": "3.0.4",
             "source": {
@@ -5397,6 +5446,130 @@
             "homepage": "https://www.drupal.org/project/entity_reference_tree",
             "support": {
                 "source": "https://git.drupalcode.org/project/entity_reference_tree"
+            }
+        },
+        {
+            "name": "drupal/entity_usage",
+            "version": "dev-2.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/entity_usage.git",
+                "reference": "8ee8c49289af10b8bbb28d9e578d9465a7a785db"
+            },
+            "require": {
+                "drupal/core": "^10.2 || ^11"
+            },
+            "require-dev": {
+                "drupal/block_field": "~1.0",
+                "drupal/dynamic_entity_reference": "^3.0",
+                "drupal/entity_browser": "~2.0",
+                "drupal/entity_browser_block": "~1.0 || ^2.0",
+                "drupal/entity_embed": "^1.7",
+                "drupal/entity_reference_revisions": "~1.0",
+                "drupal/inline_entity_form": "^1.0@RC || ^3.0@RC",
+                "drupal/paragraphs": "~1.0",
+                "drupal/redirect": "^1.11",
+                "drupal/webform": "^6.0.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-2.0-beta24+6-dev",
+                    "datestamp": "1761143840",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9 || ^10 || ^11"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "alexpott",
+                    "homepage": "https://www.drupal.org/user/157725"
+                },
+                {
+                    "name": "lullabot",
+                    "homepage": "https://www.drupal.org/user/3815489"
+                },
+                {
+                    "name": "marcoscano",
+                    "homepage": "https://www.drupal.org/user/1288796"
+                },
+                {
+                    "name": "seanb",
+                    "homepage": "https://www.drupal.org/user/545912"
+                }
+            ],
+            "description": "Track usage of entities referenced by other entities",
+            "homepage": "https://www.drupal.org/project/entity_usage",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/entity_usage",
+                "issues": "http://drupal.org/project/issues/entity_usage"
+            }
+        },
+        {
+            "name": "drupal/entity_usage_views_field",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/entity_usage_views_field.git",
+                "reference": "3.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/entity_usage_views_field-3.0.0.zip",
+                "reference": "3.0.0",
+                "shasum": "2f70c6acce2204332aab9d9f7fd780ec752968c4"
+            },
+            "require": {
+                "drupal/core": ">=10.0",
+                "drupal/entity_usage": "*",
+                "php": ">=8.1"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "3.0.0",
+                    "datestamp": "1695282297",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "dpi",
+                    "homepage": "https://www.drupal.org/user/81431"
+                }
+            ],
+            "description": "Entity Usage Views Field",
+            "homepage": "https://www.drupal.org/project/entity_usage_views_field",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/entity_usage_views_field",
+                "issues": "https://www.drupal.org/project/issues/entity_usage_views_field"
             }
         },
         {
@@ -7032,6 +7205,58 @@
             }
         },
         {
+            "name": "drupal/media_duplicate_check",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/media_duplicate_check.git",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/media_duplicate_check-1.0.0.zip",
+                "reference": "1.0.0",
+                "shasum": "1f8490086e3df807582d2941aab594068e171d84"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0",
+                    "datestamp": "1758008921",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "hosisam",
+                    "homepage": "https://www.drupal.org/user/3449435"
+                }
+            ],
+            "description": "Prevents duplicate media uploads by checking filenames and showing existing media for user confirmation.",
+            "homepage": "https://www.drupal.org/project/media_duplicate_check",
+            "keywords": [
+                "drupal",
+                "duplicate",
+                "file",
+                "media",
+                "upload"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/media_duplicate_check",
+                "issues": "https://www.drupal.org/project/issues/media_duplicate_check"
+            }
+        },
+        {
             "name": "drupal/media_duplicates",
             "version": "2.0.3",
             "source": {
@@ -7239,6 +7464,54 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/media_remote",
                 "issues": "http://drupal.org/project/issues/media_remote"
+            }
+        },
+        {
+            "name": "drupal/media_views_filter",
+            "version": "1.0.0-rc1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/media_views_filter.git",
+                "reference": "1.0.0-rc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/media_views_filter-1.0.0-rc1.zip",
+                "reference": "1.0.0-rc1",
+                "shasum": "2898cbdbf015b2729603204fa35875263915f702"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-rc1",
+                    "datestamp": "1742845508",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "jnicola",
+                    "homepage": "https://www.drupal.org/user/224754"
+                },
+                {
+                    "name": "maskedjellybean",
+                    "homepage": "https://www.drupal.org/user/2402554"
+                }
+            ],
+            "description": "Provides views filter and fields to improve filtering of media in views.",
+            "homepage": "https://www.drupal.org/project/media_views_filter",
+            "support": {
+                "source": "https://git.drupalcode.org/project/media_views_filter"
             }
         },
         {
@@ -9890,21 +10163,22 @@
         },
         {
             "name": "drupal/views_data_export",
-            "version": "1.5.0",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_data_export.git",
-                "reference": "8.x-1.5"
+                "reference": "8.x-1.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_data_export-8.x-1.5.zip",
-                "reference": "8.x-1.5",
-                "shasum": "2664bd52dd47b068dec60eecd3c6fc73f2d6c1b8"
+                "url": "https://ftp.drupal.org/files/projects/views_data_export-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "7031e3fc2232c891a5c1a8ec917a850614fd8f62"
             },
             "require": {
                 "drupal/core": "^9 || ^10 || ^11",
-                "drupal/csv_serialization": "~1.4 || ~2.0 || ~3 || ~4"
+                "drupal/csv_serialization": "~1.4 || ~2.0 || ~3 || ~4",
+                "php": ">=8.0"
             },
             "conflict": {
                 "phpoffice/phpspreadsheet": "<1.23.0"
@@ -9916,8 +10190,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.5",
-                    "datestamp": "1732280381",
+                    "version": "8.x-1.6",
+                    "datestamp": "1749820793",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -23070,10 +23344,12 @@
         "drupal/domain_entity": 5,
         "drupal/domain_simple_sitemap": 10,
         "drupal/easy_install_d10": 20,
+        "drupal/entity_usage": 20,
         "drupal/file_delete_ui": 10,
         "drupal/filelog": 20,
         "drupal/flag": 10,
         "drupal/masquerade": 10,
+        "drupal/media_views_filter": 5,
         "drupal/purge_users": 5,
         "drupal/ultimate_cron": 10,
         "drupal/views_tree": 15,
