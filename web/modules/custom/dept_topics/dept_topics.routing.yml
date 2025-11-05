@@ -39,3 +39,11 @@ dept_topics.topic_structure_report:
         bundle:
           - topic
           - subtopic
+
+dept_topics.dbapi_dashboard:
+  path: '/admin/topics/dbapi-dashboard'
+  defaults:
+    _title: 'DB API Dashboard'
+    _controller: '\Drupal\dept_topics\Controller\TopicsDbApiDashboard'
+  requirements:
+    _permission: 'access content'
