@@ -86,13 +86,18 @@ WHERE t1.entity_id IS NULL;
     $parent_item = 0;
     $parent_count = 0;
     $dept_count = [];
+    $result_count = 1;
 
     foreach ($results as $result) {
       $parent = $this->entityTypeManager()->getStorage('node')->load($result->entity_id);
       $child = $this->entityTypeManager()->getStorage('node')->load($result->field_topic_content_target_id);
       $rows[] = [
         'data' => [
-          $result->source_table,
+          $result_count,
+          [
+            'data' => $result->source_table,
+            'style' => $result->source_table === 'current' ? 'color: #65a30d;' : 'color: #ef4444;',
+          ],
           $parent->id() === $parent_item ? '' : '(' . $parent->get('field_domain_source')->getString() . ' - ' . $parent->bundle() . ') ' . $parent->getOwner()->getDisplayName(),
           $parent->id() === $parent_item ? '' : $parent->toLink($parent->label())->toString(),
           '(' . $child->bundle() . ') ' . $child->getOwner()->getDisplayName(),
@@ -102,8 +107,8 @@ WHERE t1.entity_id IS NULL;
             '@revision_id' => $result->revision_id,
             '@target_id' => $result->field_topic_content_target_id,
           ]),
-        ]
-
+        ],
+        'style' => $parent->id() !== $parent_item ? 'background-color: #cbd5e1;' : ''
       ];
 
       if ($parent->id() !== $parent_item) {
@@ -117,6 +122,7 @@ WHERE t1.entity_id IS NULL;
       }
 
       $parent_item = $parent->id();
+      $result_count++;
     }
 
     $summary = 'Affected topics by dept: ';
@@ -133,12 +139,16 @@ WHERE t1.entity_id IS NULL;
     $build['content'] = [
       '#type' => 'table',
       '#header' => [
+        '#',
         'Change',
         'Details',
         'Parent',
         'Details',
         'Child',
-        'Data'
+        [
+          'data' => 'Data',
+          'style' => 'width: 500px'
+        ],
       ],
       '#rows' => $rows,
     ];
