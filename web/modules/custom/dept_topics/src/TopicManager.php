@@ -250,6 +250,30 @@ final class TopicManager {
     $topic_nids = $child->get('field_site_topics')->getValue();
     $topic_nids = array_column($topic_nids, 'target_id');
 
+    $existing_nids = $this->fetchTopicsReferencingChild($child);
+
+    // Compare the child's selected topics to our list of topic_content nids.
+    $topics_added_ids = array_diff($topic_nids, $existing_nids);
+    $topics_removed_ids = array_diff($existing_nids, $topic_nids);
+
+    foreach ($topics_added_ids as $topic_id) {
+      $topic = $this->entityTypeManager->getStorage('node')->load($topic_id);
+
+      if (!empty($topic)) {
+        $this->addChild($child, $topic);
+      }
+    }
+
+    foreach ($topics_removed_ids as $topic_id) {
+      $topic = $this->entityTypeManager->getStorage('node')->load($topic_id);
+
+      if (!empty($topic)) {
+        $this->removeChild($child, $topic);
+      }
+    }
+  }
+
+  protected function fetchTopicsReferencingChild(NodeInterface $child) {
     $existing_topics = $this->connection->select('node__field_topic_content', 'tc')
       ->fields('tc', ['entity_id'])
       ->condition('field_topic_content_target_id', $child->id())
@@ -264,20 +288,8 @@ final class TopicManager {
       ->execute()
       ->fetchCol();
 
-    $existing_nids = array_unique(array_merge($existing_topics, $existing_topics_revisions));
-
-    $topics_added_ids = array_diff($topic_nids, $existing_nids);
-    $topics_removed_ids = array_diff($existing_nids, $topic_nids);
-
-    foreach ($topics_added_ids as $topic_id) {
-      $topic = $this->entityTypeManager->getStorage('node')->load($topic_id);
-      $this->addChild($child, $topic);
-    }
-
-    foreach ($topics_removed_ids as $topic_id) {
-      $topic = $this->entityTypeManager->getStorage('node')->load($topic_id);
-      $this->removeChild($child, $topic);
-    }
+    // Create a list of all topic nids (active and revisions) for this child from the results of both the topic_contents tables.
+    return array_unique(array_merge($existing_topics, $existing_topics_revisions));
   }
 
   /**

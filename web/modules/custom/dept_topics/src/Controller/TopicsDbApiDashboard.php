@@ -102,7 +102,7 @@ WHERE t1.entity_id IS NULL;
           $parent->id() === $parent_item ? '' : $parent->toLink($parent->label())->toString(),
           '(' . $child->bundle() . ') ' . $child->getOwner()->getDisplayName(),
           $child->toLink($child->label())->toString(),
-          'data' =>  new FormattableMarkup('<ul><li>Entity ID: @entity_id</li> <li>Revision ID: @revision_id</li><li>Target ID: @target_id</li></ul>', [
+          'data' => new FormattableMarkup('<ul><li>Entity ID: @entity_id</li> <li>Revision ID: @revision_id</li><li>Target ID: @target_id</li></ul>', [
             '@entity_id' => $result->entity_id,
             '@revision_id' => $result->revision_id,
             '@target_id' => $result->field_topic_content_target_id,
@@ -116,7 +116,8 @@ WHERE t1.entity_id IS NULL;
         $dept_source = $parent->get('field_domain_source')->getString();
         if (array_key_exists($dept_source, $dept_count)) {
           $dept_count[$dept_source]++;
-        } else {
+        }
+        else {
           $dept_count[$dept_source] = 1;
         }
       }
@@ -131,9 +132,8 @@ WHERE t1.entity_id IS NULL;
       $summary .= '<strong>' . $dept . '</strong> (' . $count . ') - ';
     }
 
-
     $build['summary'] = [
-      '#markup' => 'Totals: ' . $parent_count  . ' topics, ' . count($results) . ' children. <br>' . rtrim($summary, ' -'),
+      '#markup' => 'Totals: ' . $parent_count . ' topics, ' . count($results) . ' children. <br>' . rtrim($summary, ' -'),
     ];
 
     $build['content'] = [

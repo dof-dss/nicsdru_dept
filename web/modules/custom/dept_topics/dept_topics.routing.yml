@@ -46,4 +46,4 @@ dept_topics.dbapi_dashboard:
     _title: 'DB API Dashboard'
     _controller: '\Drupal\dept_topics\Controller\TopicsDbApiDashboard'
   requirements:
-    _permission: 'access content'
+    _permission: 'administer content'
