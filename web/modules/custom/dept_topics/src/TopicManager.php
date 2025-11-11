@@ -273,6 +273,15 @@ final class TopicManager {
     }
   }
 
+  /**
+   * Returns a list of topics/subtopic that reference the given child node.
+   *
+   * @param \Drupal\node\NodeInterface $child
+   *   The child node to fetch the references for.
+   *
+   * @return array
+   *   List of entity ID's.
+   */
   protected function fetchTopicsReferencingChild(NodeInterface $child) {
     $existing_topics = $this->connection->select('node__field_topic_content', 'tc')
       ->fields('tc', ['entity_id'])

@@ -7,6 +7,8 @@ namespace Drupal\dept_topics\Controller;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -98,15 +100,33 @@ WHERE t1.entity_id IS NULL;
             'data' => $result->source_table,
             'style' => $result->source_table === 'current' ? 'color: #65a30d;' : 'color: #ef4444;',
           ],
-          $parent->id() === $parent_item ? '' : '(' . $parent->get('field_domain_source')->getString() . ' - ' . $parent->bundle() . ') ' . $parent->getOwner()->getDisplayName(),
+          ($parent->id() === $parent_item) ? '' : $parent->get('field_domain_source')->getString(),
+          [
+          'data' => $parent->id() === $parent_item ? '' : new FormattableMarkup('@author<br/> @bundle (@status)', [
+            '@bundle' => ucfirst($parent->bundle()),
+            '@author' => $parent->getOwner()->toLink()->toString(),
+            '@status' => ucfirst($parent->get('moderation_state')->getString()),
+          ])
+          ],
           $parent->id() === $parent_item ? '' : $parent->toLink($parent->label())->toString(),
-          '(' . $child->bundle() . ') ' . $child->getOwner()->getDisplayName(),
+          [
+            'data' => new FormattableMarkup('@author<br/> @bundle (@status)', [
+              '@bundle' => ucfirst($child->bundle()),
+              '@author' => $child->getOwner()->toLink()->toString(),
+              '@status' => ucfirst($child->get('moderation_state')->getString()),
+            ])
+          ],
           $child->toLink($child->label())->toString(),
+          [
           'data' => new FormattableMarkup('<ul><li>Entity ID: @entity_id</li> <li>Revision ID: @revision_id</li><li>Target ID: @target_id</li></ul>', [
             '@entity_id' => $result->entity_id,
             '@revision_id' => $result->revision_id,
             '@target_id' => $result->field_topic_content_target_id,
-          ]),
+          ])
+          ],
+          [
+            'data' => Link::fromTextAndUrl('Archive child', Url::fromRoute('origins_workflow.moderation_state_controller_change_state', ['nid' => $child->id(), 'new_state' => 'archived'], ['query' => ['destination' => \Drupal::request()->getRequestUri()]])),
+          ],
         ],
         'style' => $parent->id() !== $parent_item ? 'background-color: #cbd5e1;' : ''
       ];
@@ -141,13 +161,18 @@ WHERE t1.entity_id IS NULL;
       '#header' => [
         '#',
         'Change',
-        'Details',
+        'Department',
+        'Parent details',
         'Parent',
-        'Details',
+        'Child details',
         'Child',
         [
           'data' => 'Data',
-          'style' => 'width: 500px'
+          'style' => 'width: 250px'
+        ],
+        [
+          'data' => 'Operations',
+          'style' => 'width: 200px'
         ],
       ],
       '#rows' => $rows,

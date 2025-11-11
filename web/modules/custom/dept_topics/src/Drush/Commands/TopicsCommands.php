@@ -3,9 +3,11 @@
 namespace Drupal\dept_topics\Drush\Commands;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Utility\Token;
 use Drupal\dept_topics\TopicManager;
+use Drupal\node\NodeInterface;
 use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -15,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 final class TopicsCommands extends DrushCommands {
 
-  const DB_TOPIC_CONTENT_TABLES= [
+  const DB_TOPIC_CONTENT_TABLES = [
     'node__field_topic_content',
     'node_revision__field_topic_content',
   ];
@@ -99,11 +101,18 @@ final class TopicsCommands extends DrushCommands {
     foreach ($log as $entry) {
       $this->io()->writeln('Topic: ' . $entry['topic'] . ' -- Child: ' . $entry['child'] . ' -- ' . $entry['action']);
     }
-
-
   }
 
-  protected function siteTopicsSanitise($child, $node_storage) {
+  /**
+   * Removes any site topics that are a parent of the chosen topics.
+   *
+   * @param \Drupal\node\NodeInterface $child
+   *   The child node to sanitise.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $node_storage
+   *   Drupal core node storage repository.
+   *
+   */
+  protected function siteTopicsSanitise(NodeInterface $child, EntityStorageInterface $node_storage) {
     $updated_site_topics = FALSE;
 
     $topic_ids = array_column($child->get('field_site_topics')->getValue(), 'target_id');
@@ -128,4 +137,5 @@ final class TopicsCommands extends DrushCommands {
 
     return $child;
   }
+
 }
