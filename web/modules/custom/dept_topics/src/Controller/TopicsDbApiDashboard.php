@@ -88,7 +88,7 @@ WHERE t1.entity_id IS NULL;
     $parent_item = 0;
     $parent_count = 0;
     $dept_count = [];
-    $result_count = 1;
+    $row_counter = 1;
 
     foreach ($results as $result) {
       $parent = $this->entityTypeManager()->getStorage('node')->load($result->entity_id);
@@ -102,7 +102,11 @@ WHERE t1.entity_id IS NULL;
 
       $rows[] = [
         'data' => [
-          $result_count,
+          [
+            'data' => new FormattableMarkup('<a id="row-@counter"></a>@counter', [
+              '@counter' => $row_counter,
+            ])
+          ],
           [
             'data' => $result->source_table,
             'style' => $result->source_table === 'current' ? 'color: #65a30d;' : 'color: #ef4444;',
@@ -117,10 +121,12 @@ WHERE t1.entity_id IS NULL;
           ],
           $parent->id() === $parent_item ? '' : $parent->toLink($parent->label())->toString(),
           [
-            'data' => new FormattableMarkup('@author<br/> @bundle (@status)', [
+            'data' => new FormattableMarkup('@author<br/> @bundle (@status) @created :: @updated', [
               '@bundle' => ucfirst($child->bundle()),
               '@author' => $child->getOwner()->toLink()->toString(),
               '@status' => ucfirst($child->get('moderation_state')->getString()),
+              '@created' => date('d/m/Y', (int) $child->getCreatedTime()),
+              '@updated' => date('d/m/Y', (int) $child->getChangedTime()),
             ])
           ],
           $child->toLink($child->label())->toString(),
@@ -140,8 +146,9 @@ WHERE t1.entity_id IS NULL;
               ],
                 [
                   'query' => [
-                    'destination' => \Drupal::request()->getRequestUri()
-                  ]
+                    'destination' => \Drupal::request()->getRequestUri(),
+                  ],
+                  'fragment' => 'row-' . $row_counter,
                 ]
               )),
           ],
@@ -161,7 +168,7 @@ WHERE t1.entity_id IS NULL;
       }
 
       $parent_item = $parent->id();
-      $result_count++;
+      $row_counter++;
     }
 
     $summary = 'Affected topics by dept: ';
