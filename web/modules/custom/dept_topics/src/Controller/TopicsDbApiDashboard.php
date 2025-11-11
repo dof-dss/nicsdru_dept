@@ -44,6 +44,7 @@ final class TopicsDbApiDashboard extends ControllerBase {
       $build['content'] = [
         '#markup' => $this->t('Original tables not found.'),
       ];
+      return $build;
     }
 
     $results = $this->connection->query("
@@ -113,15 +114,16 @@ WHERE t1.entity_id IS NULL;
           ],
           ($parent->id() === $parent_item) ? '' : $parent->get('field_domain_source')->getString(),
           [
-          'data' => $parent->id() === $parent_item ? '' : new FormattableMarkup('@author<br/> @bundle (@status)', [
+          'data' => $parent->id() === $parent_item ? '' : new FormattableMarkup('<span style="font-size: 1.15em;">@link</span><br>@status @bundle by @author', [
+            '@link' => $parent->toLink($parent->label())->toString(),
             '@bundle' => ucfirst($parent->bundle()),
             '@author' => $parent->getOwner()->toLink()->toString(),
             '@status' => ucfirst($parent->get('moderation_state')->getString()),
           ])
           ],
-          $parent->id() === $parent_item ? '' : $parent->toLink($parent->label())->toString(),
           [
-            'data' => new FormattableMarkup('@author<br/> @bundle (@status) @created :: @updated', [
+            'data' => new FormattableMarkup('<span style="font-size: 1.15em;">@link</span><br/>@status @bundle by @author<br><small>Created: @created -- Updated: @updated</small>', [
+              '@link' => $child->toLink($child->label())->toString(),
               '@bundle' => ucfirst($child->bundle()),
               '@author' => $child->getOwner()->toLink()->toString(),
               '@status' => ucfirst($child->get('moderation_state')->getString()),
@@ -129,7 +131,7 @@ WHERE t1.entity_id IS NULL;
               '@updated' => date('d/m/Y', (int) $child->getChangedTime()),
             ])
           ],
-          $child->toLink($child->label())->toString(),
+
           [
           'data' => new FormattableMarkup('<ul><li>Entity ID: @entity_id</li> <li>Revision ID: @revision_id</li><li>Target ID: @target_id</li></ul>', [
             '@entity_id' => $result->entity_id,
@@ -187,9 +189,7 @@ WHERE t1.entity_id IS NULL;
         '#',
         'Change',
         'Department',
-        'Parent details',
         'Parent',
-        'Child details',
         'Child',
         [
           'data' => 'Data',
