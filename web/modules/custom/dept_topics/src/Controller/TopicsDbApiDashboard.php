@@ -93,6 +93,13 @@ WHERE t1.entity_id IS NULL;
     foreach ($results as $result) {
       $parent = $this->entityTypeManager()->getStorage('node')->load($result->entity_id);
       $child = $this->entityTypeManager()->getStorage('node')->load($result->field_topic_content_target_id);
+
+      $new_state = match($child->get('moderation_state')->getString()) {
+        'published' => ['label' => 'Archive', 'state' => 'archived'],
+        'archived' =>  ['label' => 'Publish', 'state' => 'published'],
+        default => NULL,
+      };
+
       $rows[] = [
         'data' => [
           $result_count,
@@ -125,7 +132,18 @@ WHERE t1.entity_id IS NULL;
           ])
           ],
           [
-            'data' => Link::fromTextAndUrl('Archive child', Url::fromRoute('origins_workflow.moderation_state_controller_change_state', ['nid' => $child->id(), 'new_state' => 'archived'], ['query' => ['destination' => \Drupal::request()->getRequestUri()]])),
+            'data' => (is_null($new_state)) ? '' : Link::fromTextAndUrl(
+              $new_state['label'] . ' child',
+              Url::fromRoute('origins_workflow.moderation_state_controller_change_state', [
+                'nid' => $child->id(),
+                'new_state' => $new_state['state']
+              ],
+                [
+                  'query' => [
+                    'destination' => \Drupal::request()->getRequestUri()
+                  ]
+                ]
+              )),
           ],
         ],
         'style' => $parent->id() !== $parent_item ? 'background-color: #cbd5e1;' : ''
