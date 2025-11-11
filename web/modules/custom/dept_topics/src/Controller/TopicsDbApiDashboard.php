@@ -8,6 +8,7 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Link;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -21,6 +22,7 @@ final class TopicsDbApiDashboard extends ControllerBase {
    */
   public function __construct(
     private readonly Connection $connection,
+    private readonly RendererInterface $renderer,
   ) {}
 
   /**
@@ -29,6 +31,7 @@ final class TopicsDbApiDashboard extends ControllerBase {
   public static function create(ContainerInterface $container): self {
     return new self(
       $container->get('database'),
+      $container->get('renderer'),
     );
   }
 
@@ -101,6 +104,17 @@ WHERE t1.entity_id IS NULL;
         default => NULL,
       };
 
+      $child_site_topics = [];
+      $site_topic_entities = $child->get('field_site_topics')->referencedEntities();
+
+      foreach ($site_topic_entities as $site_topic_entity) {
+        $child_site_topics[] = $site_topic_entity->toLink()->toString();
+      }
+
+      $child_site_topics_markup = [
+        '#markup' => implode(', ', $child_site_topics),
+      ];
+
       $rows[] = [
         'data' => [
           [
@@ -122,13 +136,14 @@ WHERE t1.entity_id IS NULL;
           ])
           ],
           [
-            'data' => new FormattableMarkup('<span style="font-size: 1.15em;">@link</span><br/>@status @bundle by @author<br><small>Created: @created -- Updated: @updated</small>', [
+            'data' => new FormattableMarkup('<span style="font-size: 1.15em;">@link</span><br/>@status @bundle by @author<br><small>Created: @created -- Updated: @updated<br/>Topics: @topics</small>', [
               '@link' => $child->toLink($child->label())->toString(),
               '@bundle' => ucfirst($child->bundle()),
               '@author' => $child->getOwner()->toLink()->toString(),
               '@status' => ucfirst($child->get('moderation_state')->getString()),
               '@created' => date('d/m/Y', (int) $child->getCreatedTime()),
               '@updated' => date('d/m/Y', (int) $child->getChangedTime()),
+              '@topics' => $this->renderer->render($child_site_topics_markup),
             ])
           ],
 
