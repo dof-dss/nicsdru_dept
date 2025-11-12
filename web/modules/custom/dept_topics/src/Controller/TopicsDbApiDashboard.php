@@ -93,6 +93,7 @@ WHERE t1.entity_id IS NULL;
     $parent_count = 0;
     $dept_count = [];
     $row_counter = 1;
+    $dashboard_url = Url::fromRoute('dept_topics.dbapi_dashboard', [], ['absolute' => TRUE])->toString();
 
     foreach ($results as $result) {
       $parent = $this->entityTypeManager()->getStorage('node')->load($result->entity_id);
@@ -114,6 +115,24 @@ WHERE t1.entity_id IS NULL;
       $child_site_topics_markup = [
         '#markup' => implode(', ', $child_site_topics),
       ];
+
+      $change_state_url = '';
+
+      // We want to change the node state on production before updating to the
+      // new topics system.
+      if (!empty($new_state)) {
+        $change_state_url = Url::fromUri('https://www.nidirect.gov.uk/' . ltrim(Url::fromRoute('origins_workflow.moderation_state_controller_change_state', [
+            'nid' => $child->id(),
+            'new_state' => $new_state['state']
+          ],
+            [
+              'query' => [
+                'destination' => $dashboard_url,
+              ],
+              'fragment' => 'row-' . $row_counter,
+            ]
+          )->toString(), '/'));
+      }
 
       $rows[] = [
         'data' => [
@@ -155,19 +174,9 @@ WHERE t1.entity_id IS NULL;
           ])
           ],
           [
-            'data' => (is_null($new_state)) ? '' : Link::fromTextAndUrl(
-              $new_state['label'] . ' child',
-              Url::fromRoute('origins_workflow.moderation_state_controller_change_state', [
-                'nid' => $child->id(),
-                'new_state' => $new_state['state']
-              ],
-                [
-                  'query' => [
-                    'destination' => \Drupal::request()->getRequestUri(),
-                  ],
-                  'fragment' => 'row-' . $row_counter,
-                ]
-              )),
+            'data' => (empty($change_state_url)) ? '' : Link::fromTextAndUrl(
+              $new_state['label'] . ' child (Production)',
+              $change_state_url),
           ],
         ],
         'style' => $parent->id() !== $parent_item ? 'background-color: #cbd5e1;' : ''
@@ -196,6 +205,10 @@ WHERE t1.entity_id IS NULL;
 
     $build['summary'] = [
       '#markup' => 'Totals: ' . $parent_count . ' topics, ' . count($results) . ' children. <br>' . rtrim($summary, ' -'),
+    ];
+
+    $build['notice'] = [
+      '#markup' => '<h6>IMPORTANT: To change a child state on production you must be authenticated on <a href="https://www.nidirect.gov.uk" target="_blank">https://www.nidirect.gov.uk</a></h6>',
     ];
 
     $build['content'] = [
