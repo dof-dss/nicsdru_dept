@@ -105,6 +105,20 @@ WHERE t1.entity_id IS NULL;
         default => NULL,
       };
 
+      $production_url = match($child->get('field_domain_source')->getString()) {
+        'nigov' => 'https://www.northernireland.gov.uk/',
+        'executiveoffice' => 'https://www.executiveoffice-ni.gov.uk/',
+        'daera' => 'https://www.daera-ni.gov.uk/',
+        'communities' => 'https://www.communities-ni.gov.uk/',
+        'education' => 'https://www.education-ni.gov.uk/',
+        'economy' => 'https://www.economy-ni.gov.uk/',
+        'finance' => 'https://www.finance-ni.gov.uk/',
+        'infrastructure' => 'https://www.infrastructure-ni.gov.uk/',
+        'health' => 'https://www.health-ni.gov.uk/',
+        'justice' => 'https://www.justice-ni.gov.uk/',
+        default => NULL,
+      };
+
       $child_site_topics = [];
       $site_topic_entities = $child->get('field_site_topics')->referencedEntities();
 
@@ -119,19 +133,23 @@ WHERE t1.entity_id IS NULL;
       $change_state_url = '';
 
       // We want to change the node state on production before updating to the
-      // new topics system.
-      if (!empty($new_state)) {
-        $change_state_url = Url::fromUri('https://www.nidirect.gov.uk/' . ltrim(Url::fromRoute('origins_workflow.moderation_state_controller_change_state', [
+      // new topics system. The link opens the moderation state change url on
+      // the correct department and once the status is changed, redirects to
+      // the changed node.
+      if (!empty($new_state) && !empty($production_url)) {
+        $change_state_url = Url::fromUri($production_url . ltrim(Url::fromRoute('origins_workflow.moderation_state_controller_change_state', [
             'nid' => $child->id(),
             'new_state' => $new_state['state']
           ],
             [
               'query' => [
-                'destination' => $dashboard_url,
+                'destination' => $child->toUrl()->toString(),
               ],
-              'fragment' => 'row-' . $row_counter,
-            ]
-          )->toString(), '/'));
+            ],
+          )->toString(), '/'),
+          [
+            'attributes' => ['target' => '_blank']
+          ]);
       }
 
       $rows[] = [
@@ -208,7 +226,7 @@ WHERE t1.entity_id IS NULL;
     ];
 
     $build['notice'] = [
-      '#markup' => '<h6>IMPORTANT: To change a child state on production you must be authenticated on <a href="https://www.nidirect.gov.uk" target="_blank">https://www.nidirect.gov.uk</a></h6>',
+      '#markup' => '<h6>IMPORTANT: To change a child state on production you must be authenticated on each live department site.</h6>',
     ];
 
     $build['content'] = [
