@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "065ef92e1aed6eb6768a13b556ceb3cd",
+    "content-hash": "f3b0a387e275fdd14d1b402a0df566ac",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -10080,11 +10080,17 @@
         },
         {
             "name": "drupal/webprofiler",
-            "version": "dev-10.1.x",
+            "version": "10.3.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/webprofiler.git",
-                "reference": "8bbc15ea23955bded3823854e2349a88925dcf1d"
+                "reference": "10.3.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/webprofiler-10.3.1.zip",
+                "reference": "10.3.1",
+                "shasum": "e934387176b624972da7d2952c27c0d5438ab5f7"
             },
             "require": {
                 "drupal/core": ">=10.1.2, <11",
@@ -10112,15 +10118,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-10.1.x": "10.1.x-dev"
-                },
                 "drupal": {
-                    "version": "10.1.10+2-dev",
-                    "datestamp": "1735649085",
+                    "version": "10.3.1",
+                    "datestamp": "1748345232",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -23020,8 +23023,7 @@
         "drupal/masquerade": 10,
         "drupal/purge_users": 5,
         "drupal/ultimate_cron": 10,
-        "drupal/views_tree": 15,
-        "drupal/webprofiler": 20
+        "drupal/views_tree": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
