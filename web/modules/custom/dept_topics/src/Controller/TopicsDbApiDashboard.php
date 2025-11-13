@@ -13,7 +13,7 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Returns responses for Departmental sites: topics routes.
+ * Displays a dashboard of topics and content that are not in sync.
  */
 final class TopicsDbApiDashboard extends ControllerBase {
 
@@ -36,10 +36,9 @@ final class TopicsDbApiDashboard extends ControllerBase {
   }
 
   /**
-   * Builds the response.
+   * Builds the dashboard.
    */
   public function __invoke(): array {
-
     $content_original = $this->connection->schema()->tableExists('node__field_topic_content_original');
     $revision_original = $this->connection->schema()->tableExists('node_revision__field_topic_content_original');
 
@@ -50,6 +49,8 @@ final class TopicsDbApiDashboard extends ControllerBase {
       return $build;
     }
 
+    // Select all entities with mismatched topic references.
+    // Compares the previous values to the new updated references for each node.
     $results = $this->connection->query("
       SELECT
     t1.entity_id,
@@ -93,18 +94,20 @@ WHERE t1.entity_id IS NULL;
     $parent_count = 0;
     $dept_count = [];
     $row_counter = 1;
-    $dashboard_url = Url::fromRoute('dept_topics.dbapi_dashboard', [], ['absolute' => TRUE])->toString();
 
     foreach ($results as $result) {
       $parent = $this->entityTypeManager()->getStorage('node')->load($result->entity_id);
       $child = $this->entityTypeManager()->getStorage('node')->load($result->field_topic_content_target_id);
+      $child_site_topics = [];
 
+      // Mapping for our change status links.
       $new_state = match($child->get('moderation_state')->getString()) {
         'published' => ['label' => 'Archive', 'state' => 'archived'],
         'archived' =>  ['label' => 'Publish', 'state' => 'published'],
         default => NULL,
       };
 
+      // Map domains to production URL's for the 'change state' links.
       $production_url = match($child->get('field_domain_source')->getString()) {
         'nigov' => 'https://www.northernireland.gov.uk/',
         'executiveoffice' => 'https://www.executiveoffice-ni.gov.uk/',
@@ -119,7 +122,7 @@ WHERE t1.entity_id IS NULL;
         default => NULL,
       };
 
-      $child_site_topics = [];
+      // Generate an inline list of site topics for the node.
       $site_topic_entities = $child->get('field_site_topics')->referencedEntities();
 
       foreach ($site_topic_entities as $site_topic_entity) {
@@ -130,26 +133,36 @@ WHERE t1.entity_id IS NULL;
         '#markup' => implode(', ', $child_site_topics),
       ];
 
-      $change_state_url = '';
-
-      // We want to change the node state on production before updating to the
-      // new topics system. The link opens the moderation state change url on
-      // the correct department and once the status is changed, redirects to
-      // the changed node.
-      if (!empty($new_state) && !empty($production_url)) {
-        $change_state_url = Url::fromUri($production_url . ltrim(Url::fromRoute('origins_workflow.moderation_state_controller_change_state', [
-            'nid' => $child->id(),
-            'new_state' => $new_state['state']
+      // Create production site links.
+      if (!empty($production_url)) {
+        $child_links = [
+          '#theme' => 'item_list',
+          '#items' => [
+            Link::fromTextAndUrl('View child', Url::fromUri($production_url . ltrim($child->toUrl()->toString(), '/'), [
+              'attributes' => ['target' => '_blank']
+            ])),
           ],
-            [
-              'query' => [
-                'destination' => $child->toUrl()->toString(),
-              ],
+        ];
+
+        // We want to change the node state on production before updating to the
+        // new topics system. This link opens the moderation state change url on
+        // the correct department and once the status is changed, redirects to
+        // the changed node.
+        if (!empty($new_state)) {
+          $child_links['#items'][] = Link::fromTextAndUrl($new_state['label'] . ' child', Url::fromUri($production_url . ltrim(Url::fromRoute('origins_workflow.moderation_state_controller_change_state', [
+              'nid' => $child->id(),
+              'new_state' => $new_state['state']
             ],
-          )->toString(), '/'),
-          [
-            'attributes' => ['target' => '_blank']
-          ]);
+              [
+                'query' => [
+                  'destination' => $child->toUrl()->toString(),
+                ],
+              ],
+            )->toString(), '/'),
+            [
+              'attributes' => ['target' => '_blank']
+            ]));
+        }
       }
 
       $rows[] = [
@@ -192,14 +205,13 @@ WHERE t1.entity_id IS NULL;
           ])
           ],
           [
-            'data' => (empty($change_state_url)) ? '' : Link::fromTextAndUrl(
-              $new_state['label'] . ' child (Production)',
-              $change_state_url),
+            'data' => $this->renderer->render($child_links)
           ],
         ],
         'style' => $parent->id() !== $parent_item ? 'background-color: #cbd5e1;' : ''
       ];
 
+      // Update our stats.
       if ($parent->id() !== $parent_item) {
         $parent_count++;
         $dept_source = $parent->get('field_domain_source')->getString();
@@ -242,7 +254,7 @@ WHERE t1.entity_id IS NULL;
           'style' => 'width: 250px'
         ],
         [
-          'data' => 'Operations',
+          'data' => 'Operations (PRODUCTION)',
           'style' => 'width: 200px'
         ],
       ],
