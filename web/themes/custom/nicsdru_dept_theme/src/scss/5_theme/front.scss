@@ -204,6 +204,10 @@
         &[href*='linkedin.com/'] {
           background-image: url('/themes/custom/nicsdru_dept_theme/images/linkedin.svg');
         }
+
+        &[href*='bsky.app/'] {
+          background-image: url('/themes/custom/nicsdru_dept_theme/images/bluesky.svg');
+        }
       }
     }
   }
