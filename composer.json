@@ -92,7 +92,7 @@
         "drupal/address": "^2.0",
         "drupal/admin_toolbar": "^3.5",
         "drupal/adminimal_theme": "^1.7",
-        "drupal/advban": "^1.7",
+        "drupal/advban": "^1.9",
         "drupal/anchor_link": "~3.0",
         "drupal/antibot": "^2.0",
         "drupal/autoban": "^1.10",
@@ -107,7 +107,7 @@
         "drupal/config_delete": "^2.0",
         "drupal/config_filter": "^2.7",
         "drupal/config_ignore": "^3.2",
-        "drupal/config_override_warn": "^1.4",
+        "drupal/config_override_warn": "^1.5",
         "drupal/config_readonly": "^1.0@beta",
         "drupal/config_split": "^2.0-beta",
         "drupal/content_lock": "^2.3",
@@ -120,11 +120,11 @@
         "drupal/date_facet_drilldown": "^12.0",
         "drupal/date_filter": "^1.0",
         "drupal/datetime_flatpickr": "^3.0",
-        "drupal/diff": "^1.8",
+        "drupal/diff": "^1.9",
         "drupal/domain": "^2.0@beta",
         "drupal/domain_entity": "^1.0@RC",
-        "drupal/domain_path": "^1.4",
-        "drupal/domain_path_redirect": "^1.5",
+        "drupal/domain_path": "^1.5",
+        "drupal/domain_path_redirect": "^1.7",
         "drupal/domain_simple_sitemap": "^3.0@beta",
         "drupal/domain_site_settings": "^1.6",
         "drupal/draggableviews": "^2.1",
@@ -132,21 +132,21 @@
         "drupal/easychart": "^4.0",
         "drupal/embed": "^1.10",
         "drupal/entity": "^1.4",
-        "drupal/entity_browser": "^2.12",
+        "drupal/entity_browser": "^2.15",
         "drupal/entity_embed": "^1.7",
         "drupal/entity_events": "^2.0",
         "drupal/entity_reference_tree": "^2.2",
         "drupal/entity_usage": "2.x-dev@dev",
         "drupal/entity_usage_views_field": "^3.0",
-        "drupal/eu_cookie_compliance": "^1.26",
+        "drupal/eu_cookie_compliance": "^1.29",
         "drupal/facets": "^2.0",
         "drupal/facets_pretty_paths": "^2.0",
         "drupal/fastly": "^4.0",
-        "drupal/field_group": "^3.2",
+        "drupal/field_group": "^4.0",
         "drupal/file_delete_ui": "^1.0@beta",
         "drupal/filelog": "3.0.x-dev@dev",
         "drupal/filter_perms": "^2.0",
-        "drupal/flag": "^4.0@beta",
+        "drupal/flag": "^5.0",
         "drupal/flag_search_api": "^2.0",
         "drupal/flood_control": "^3.0",
         "drupal/fpa": "^4.0",
@@ -157,38 +157,38 @@
         "drupal/interval": "^1.9",
         "drupal/jquery_ui_autocomplete": "^2.0",
         "drupal/jquery_ui_menu": "^2.0",
-        "drupal/layout_builder_modal": "^1.3",
+        "drupal/layout_builder_modal": "^2.0",
         "drupal/layout_builder_restrictions": "^3.0",
-        "drupal/linkit": "^6.1",
+        "drupal/linkit": "^7.0",
         "drupal/maxlength": "^3.1",
         "drupal/media_duplicate_check": "^1.0",
         "drupal/media_duplicates": "^2.0",
         "drupal/media_file_delete": "^1.3",
         "drupal/media_library_edit": "^3.0",
-        "drupal/media_remote": "^1.9",
+        "drupal/media_remote": "^1.10",
         "drupal/media_views_filter": "^1.0@RC",
-        "drupal/metatag": "^2.1",
+        "drupal/metatag": "^2.2",
         "drupal/metatag_async_widget": "^1.2",
         "drupal/moderation_sidebar": "^1.8",
         "drupal/noreferrer": "^2.0",
         "drupal/noreqnewpass": "^1.4",
         "drupal/paragraphs": "^1.15",
-        "drupal/pathauto": "^1.12",
+        "drupal/pathauto": "^1.14",
         "drupal/photoswipe": "^5.0",
         "drupal/published_state_indicator": "^1.0",
-        "drupal/purge_users": "^4.0@RC",
-        "drupal/redirect": "^1.11",
-        "drupal/redis": "^1.9",
+        "drupal/purge_users": "^4.0",
+        "drupal/redirect": "^1.12",
+        "drupal/redis": "^1.11",
         "drupal/robotstxt": "^1.6",
         "drupal/scheduled_transitions": "^2.7",
         "drupal/scheduler": "^2.2",
         "drupal/schema_metatag": "^3.0",
-        "drupal/search_api": "^1.37",
-        "drupal/search_api_autocomplete": "^1.8",
-        "drupal/search_api_block": "^1.1",
+        "drupal/search_api": "^1.40",
+        "drupal/search_api_autocomplete": "^1.11",
+        "drupal/search_api_block": "^1.2",
         "drupal/search_api_solr": "^4.3",
         "drupal/search_api_spellcheck": "^4",
-        "drupal/simple_gmap": "3.1.0",
+        "drupal/simple_gmap": "^4.0",
         "drupal/simple_sitemap": "^4.2",
         "drupal/simplei": "^1.2",
         "drupal/smart_trim": "^2.0",
@@ -196,10 +196,10 @@
         "drupal/taxonomy_access_fix": "^4.0",
         "drupal/taxonomy_manager": "^2.0",
         "drupal/telephone_plus": "^9.1",
-        "drupal/token": "^1.9",
+        "drupal/token": "^1.16",
         "drupal/token_filter": "^2.0",
         "drupal/twig_field_value": "^2.0",
-        "drupal/twig_tweak": "^3.1",
+        "drupal/twig_tweak": "^3.4",
         "drupal/ultimate_cron": "^2.0@beta",
         "drupal/users_export": "^3.0",
         "drupal/variationcache": "^1.2",
@@ -208,8 +208,8 @@
         "drupal/views_conditional": "^1.4",
         "drupal/views_contextual_filters_or": "^1.5",
         "drupal/views_custom_cache_tag": "^1.4",
-        "drupal/views_data_export": "^1.6",
-        "drupal/views_tree": "^2.0@alpha",
+        "drupal/views_data_export": "^1.8",
+        "drupal/views_tree": "^3.0",
         "drupal/webform": "^6.2",
         "drupal/webprofiler": "10.1.x-dev@dev",
         "drupal/whatlinkshere": "^2.1",
@@ -224,10 +224,11 @@
     "require-dev": {
         "drupal/coder": "^8.3",
         "drupal/core-dev": "^10",
-        "drupal/devel": "^5.3",
+        "drupal/devel": "^5.4",
         "drupal/easy_install_d10": "^10.0@dev",
+        "drupal/kint-kint": "^2.2",
         "drupal/masquerade": "^2.0@beta",
-        "drupal/meaofd": "^1.0",
+        "drupal/meaofd": "^1.1",
         "drupal/migrate_devel": "^3.0",
         "drupal/stage_file_proxy": "^3.1",
         "drupal/structure_sync": "^2.0",
@@ -326,7 +327,7 @@
         },
         "patches": {
             "drupal/admin_toolbar": {
-              "Add multi column menu dropdown": "https://www.drupal.org/files/issues/2024-08-05/admin_toolbar-added_multi_column_menu_dropdown-2917168-54.patch"
+                "Add multi column menu dropdown": "https://www.drupal.org/files/issues/2025-08-05/2917168-mr150.patch"
             },
             "drupal/block_visibility_groups": {
                 "Visibility incorrectly returns false on OR logic when context missing from a different condition #3503194": "https://www.drupal.org/files/issues/2025-02-07/or-logic-when-context-missing--3503194-5.patch"
@@ -355,19 +356,11 @@
                 "Add error to wrapper on date range when required": "patches/daterangevalidate.patch",
                 "The link on the Image tag is redirecting to an undefined page from the node preview screen #3308432": "https://www.drupal.org/files/issues/2025-06-09/3308432-42.patch"
             },
-            "drupal/devel": {
-                "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://gitlab.com/-/project/18040690/uploads/7897853cd83cb829ae8d752657e2f497/kint.221-5-3.patch"
-            },
-            "drupal/domain": {
-                "Migration path for domain": "https://www.drupal.org/files/issues/2020-02-27/domain-migration-path-for-domain-2882837-13.patch",
-                "Fix Undefined array key #3478122": "https://www.drupal.org/files/issues/2024-10-01/domain_3478122.patch",
-                "Using Domain Config UI creates *.yml files with duplicate UUIDs": "https://www.drupal.org/files/issues/2024-08-25/3222413--domain_config_ui--duplicate-uuid--31.patch"
-            },
             "drupal/domain_entity": {
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch"
             },
-            "drupal/domain_path": {
-                "Warning: Undefined array key \"pathauto\" in Drupal\\domain_path_pathauto\\DomainPathautoHelper #3315752": "https://www.drupal.org/files/issues/2024-10-21/3315752-13.patch"
+            "drupal/redirect": {
+                "Add a 'URL Redirects' tab to ALL applicable content entity edit forms (only nodes supported yet) #3245137": "https://www.drupal.org/files/issues/2025-09-23/3245137-34.patch"
             },
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
@@ -393,17 +386,11 @@
             "drupal/permissions_filter": {
                 "Allow uninstall of obsolete module": "https://gist.githubusercontent.com/johangant/6b493abcacdafe437e68638f7bb6e845/raw/1e74d6830ead9e0410a754db040738892b995da4/fdgfdg.patch"
             },
-            "drupal/redirect": {
-                "Add URL Redirects tab to taxonomy term edit form": "https://www.drupal.org/files/issues/2021-03-26/redirect_provide_redirect_tab_on_taxonomy_terms_3205896.patch"
-            },
             "drupal/robotstxt": {
                 "Add cache context url.site to robots.txt response": "https://www.drupal.org/files/issues/2022-06-02/3283753-3.patch"
             },
             "drupal/simple_gmap": {
-                "Add support for address module": "https://www.drupal.org/files/issues/2023-09-21/drupal.org_files_issues_2022-09-29_simple_gmap-address-formatter-2863979-54.patch"
-            },
-            "drupal/views_data_export": {
-                "Does not work with data aggregation + paging": "https://git.drupalcode.org/project/views_data_export/-/merge_requests/69.diff"
+                "Add support for address module": "https://www.drupal.org/files/issues/2025-03-19/simple_gmap-add-support-for-address-module-2863979-68.patch"
             },
             "drupal/whatlinkshere": {
                 "Fix disappearing 'Scheduled transitions' link #": "patches/what_links_here_3481289.patch"
