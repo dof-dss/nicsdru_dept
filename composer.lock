@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b637e9bae73cd87a2e76b3da7cf891c",
+    "content-hash": "f0e9aaad6dec92345e96cd07dd1eb8ee",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2953,80 +2953,6 @@
             "homepage": "https://www.drupal.org/project/content_lock",
             "support": {
                 "source": "https://git.drupalcode.org/project/content_lock"
-            }
-        },
-        {
-            "name": "drupal/cookie_content_blocker",
-            "version": "2.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/cookie_content_blocker.git",
-                "reference": "2.6.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/cookie_content_blocker-2.6.0.zip",
-                "reference": "2.6.0",
-                "shasum": "49515dde7c8665235354473163e41e92e4c4e09b"
-            },
-            "require": {
-                "drupal/core": "^9.4 || ^10 || ^11",
-                "drupal/js_cookie": "^1.0",
-                "ext-json": "*",
-                "php": "^8.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.6.0",
-                    "datestamp": "1762870978",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Steven Buteneers",
-                    "homepage": "https://www.drupal.org/u/steven-buteneers",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Daniël Smidt",
-                    "homepage": "https://www.drupal.org/u/dmsmidt",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Marc Janson",
-                    "homepage": "https://www.drupal.org/u/scorpid",
-                    "role": "Developer"
-                },
-                {
-                    "name": "sjerdo",
-                    "homepage": "https://www.drupal.org/user/3495403"
-                },
-                {
-                    "name": "steven buteneers",
-                    "homepage": "https://www.drupal.org/user/3301055"
-                }
-            ],
-            "description": "Prevent loading of content with a privacy impact until consent is given. This module needs a separate cookie consent manager.",
-            "homepage": "https://www.drupal.org/project/cookie_content_blocker",
-            "keywords": [
-                "Content",
-                "Content Access Control",
-                "Content Display",
-                "Drupal",
-                "Spam Prevention"
-            ],
-            "support": {
-                "source": "http://cgit.drupalcode.org/cookie_content_blocker",
-                "issues": "https://www.drupal.org/project/issues/cookie_content_blocker?version=8.x"
             }
         },
         {
@@ -6171,62 +6097,6 @@
             "homepage": "https://www.drupal.org/project/jquery_ui_menu",
             "support": {
                 "source": "https://git.drupalcode.org/project/jquery_ui_menu"
-            }
-        },
-        {
-            "name": "drupal/js_cookie",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/js_cookie.git",
-                "reference": "1.0.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/js_cookie-1.0.2.zip",
-                "reference": "1.0.2",
-                "shasum": "effcbee68083efc866aca2a1bfa3fc6e14fe0c2f"
-            },
-            "require": {
-                "drupal/core": "^9 || ^10 || ^11"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.2",
-                    "datestamp": "1762168962",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "anybody",
-                    "homepage": "https://www.drupal.org/user/291091"
-                },
-                {
-                    "name": "dave reid",
-                    "homepage": "https://www.drupal.org/user/53892"
-                },
-                {
-                    "name": "grevil",
-                    "homepage": "https://www.drupal.org/user/3668491"
-                },
-                {
-                    "name": "jan kellermann",
-                    "homepage": "https://www.drupal.org/user/371731"
-                }
-            ],
-            "description": "Provides the js-cookie library as a dependency.",
-            "homepage": "https://www.drupal.org/project/js_cookie",
-            "support": {
-                "source": "https://git.drupalcode.org/project/js_cookie"
             }
         },
         {
@@ -22410,5 +22280,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
