@@ -221,6 +221,7 @@
         "openai-php/client": "^0.15.0",
         "php-kit/ext-pdo": "^1.1",
         "platformsh/config-reader": "^2.4",
+        "vardot/ckeditor5-anchor-drupal": "^2.0",
         "wikimedia/composer-merge-plugin": "^2.1"
     },
     "require-dev": {
@@ -357,19 +358,8 @@
                 "Add error to wrapper on date range when required": "patches/daterangevalidate.patch",
                 "The link on the Image tag is redirecting to an undefined page from the node preview screen #3308432": "https://www.drupal.org/files/issues/2025-06-09/3308432-42.patch"
             },
-            "drupal/devel": {
-                "Brings back the Available Methods & Properties tabs for Kint dumps — Issue #221": "https://gitlab.com/-/project/18040690/uploads/7897853cd83cb829ae8d752657e2f497/kint.221-5-3.patch"
-            },
-            "drupal/domain": {
-                "Migration path for domain": "https://www.drupal.org/files/issues/2020-02-27/domain-migration-path-for-domain-2882837-13.patch",
-                "Fix Undefined array key #3478122": "https://www.drupal.org/files/issues/2024-10-01/domain_3478122.patch",
-                "Using Domain Config UI creates *.yml files with duplicate UUIDs": "https://www.drupal.org/files/issues/2024-08-25/3222413--domain_config_ui--duplicate-uuid--31.patch"
-            },
             "drupal/domain_entity": {
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch"
-            },
-            "drupal/domain_path": {
-                "Warning: Undefined array key \"pathauto\" in Drupal\\domain_path_pathauto\\DomainPathautoHelper #3315752": "https://www.drupal.org/files/issues/2024-10-21/3315752-13.patch"
             },
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
