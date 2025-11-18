@@ -1,0 +1,15 @@
+uuid: 9515b723-53b3-4119-85c8-9cf3d9659183
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.infrastructure
+  module:
+    - domain_access
+id: domain_access_add_editor_action_infrastructure
+label: 'Add editors to the Department for Infrastructure domain'
+type: user
+plugin: domain_access_add_editor_action
+configuration:
+  domain_id:
+    - infrastructure

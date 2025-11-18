@@ -1,0 +1,15 @@
+uuid: 244ce6c2-5e90-4254-8256-304934b9eaf6
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.infrastructure
+  module:
+    - domain_access
+id: domain_access_remove_editor_action_infrastructure
+label: 'Remove editors from the Department for Infrastructure domain'
+type: user
+plugin: domain_access_remove_editor_action
+configuration:
+  domain_id:
+    - infrastructure

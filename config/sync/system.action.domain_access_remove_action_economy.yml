@@ -1,0 +1,15 @@
+uuid: 5754e7dd-51f9-4fce-a122-b5e56f67d652
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.economy
+  module:
+    - domain_access
+id: domain_access_remove_action_economy
+label: 'Remove selected content from the Department for the Economy domain'
+type: node
+plugin: domain_access_remove_action
+configuration:
+  domain_id:
+    - economy

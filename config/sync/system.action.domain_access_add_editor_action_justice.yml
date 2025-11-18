@@ -1,0 +1,15 @@
+uuid: e6170f07-fecb-4b22-b8f5-7017c20fb66c
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.justice
+  module:
+    - domain_access
+id: domain_access_add_editor_action_justice
+label: 'Add editors to the Department of Justice domain'
+type: user
+plugin: domain_access_add_editor_action
+configuration:
+  domain_id:
+    - justice

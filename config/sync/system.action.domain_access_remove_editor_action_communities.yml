@@ -1,0 +1,15 @@
+uuid: 5255cdb9-ffc8-4ac6-9449-31003a2b1529
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.communities
+  module:
+    - domain_access
+id: domain_access_remove_editor_action_communities
+label: 'Remove editors from the Department for Communities domain'
+type: user
+plugin: domain_access_remove_editor_action
+configuration:
+  domain_id:
+    - communities

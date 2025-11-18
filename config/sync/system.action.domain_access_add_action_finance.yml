@@ -1,0 +1,15 @@
+uuid: 6fc04fbd-dab7-49d4-beda-3a79b8862668
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.finance
+  module:
+    - domain_access
+id: domain_access_add_action_finance
+label: 'Add selected content to the Department of Finance domain'
+type: node
+plugin: domain_access_add_action
+configuration:
+  domain_id:
+    - finance

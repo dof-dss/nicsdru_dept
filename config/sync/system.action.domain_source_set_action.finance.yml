@@ -1,0 +1,14 @@
+uuid: c8504282-d3ba-4f21-bd25-1a49b47e2150
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.finance
+  module:
+    - domain_source
+id: domain_source_set_action.finance
+label: 'Set content domain source value to the Department of Finance domain'
+type: node
+plugin: domain_source_set_action
+configuration:
+  domain_id: finance

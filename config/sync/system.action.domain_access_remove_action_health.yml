@@ -1,0 +1,15 @@
+uuid: c7160240-1572-44c0-8ec1-23ddfadc743a
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.health
+  module:
+    - domain_access
+id: domain_access_remove_action_health
+label: 'Remove selected content from the Department for Health domain'
+type: node
+plugin: domain_access_remove_action
+configuration:
+  domain_id:
+    - health
