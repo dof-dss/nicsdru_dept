@@ -1,0 +1,14 @@
+uuid: 25ee91e3-793a-4d4b-b802-983b0f4db532
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.communities
+  module:
+    - domain_source
+id: domain_source_set_action.communities
+label: 'Set content domain source value to the Department for Communities domain'
+type: node
+plugin: domain_source_set_action
+configuration:
+  domain_id: communities

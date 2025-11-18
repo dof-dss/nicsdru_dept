@@ -1,0 +1,15 @@
+uuid: 7b7b469d-fdab-484a-851d-5d8f02d72e75
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.economy
+  module:
+    - domain_access
+id: domain_access_add_editor_action_economy
+label: 'Add editors to the Department for the Economy domain'
+type: user
+plugin: domain_access_add_editor_action
+configuration:
+  domain_id:
+    - economy

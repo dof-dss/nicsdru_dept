@@ -1,0 +1,14 @@
+uuid: ece6bf10-fdc2-4188-b77f-7ca8b487cbd7
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.daera
+  module:
+    - domain_source
+id: domain_source_set_action.daera
+label: 'Set content domain source value to the Department of Agriculture, Environment and Rural Affairs domain'
+type: node
+plugin: domain_source_set_action
+configuration:
+  domain_id: daera

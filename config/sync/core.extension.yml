@@ -60,7 +60,6 @@ module:
   dept_user: 0
   diff: 0
   domain: 0
-  domain_access: 0
   domain_alias: 0
   domain_config: 0
   domain_entity: 0
@@ -68,7 +67,6 @@ module:
   domain_path_pathauto: 0
   domain_path_redirect: 0
   domain_simple_sitemap: 0
-  domain_source: 0
   draggableviews: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
@@ -203,6 +201,8 @@ module:
   origins_workflow: 2
   views: 10
   paragraphs: 11
+  domain_access: 20
+  domain_source: 30
   minimal: 1000
   eu_cookie_compliance: 1001
   dept_postprocess: 1111

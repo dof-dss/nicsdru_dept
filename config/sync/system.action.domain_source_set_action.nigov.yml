@@ -1,0 +1,14 @@
+uuid: ad1f7dc9-c830-4f63-88e6-585d3dba0cc9
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.nigov
+  module:
+    - domain_source
+id: domain_source_set_action.nigov
+label: 'Set content domain source value to the The Northern Ireland Executive domain'
+type: node
+plugin: domain_source_set_action
+configuration:
+  domain_id: nigov
