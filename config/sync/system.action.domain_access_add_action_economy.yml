@@ -1,0 +1,15 @@
+uuid: 85581b36-b48a-4f6d-ae47-b2cb74e40ed4
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.economy
+  module:
+    - domain_access
+id: domain_access_add_action_economy
+label: 'Add selected content to the Department for the Economy domain'
+type: node
+plugin: domain_access_add_action
+configuration:
+  domain_id:
+    - economy

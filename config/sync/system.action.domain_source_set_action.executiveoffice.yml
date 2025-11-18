@@ -1,0 +1,14 @@
+uuid: bc4dcf75-03cf-4aa3-a43b-fcaf268b0733
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.executiveoffice
+  module:
+    - domain_source
+id: domain_source_set_action.executiveoffice
+label: 'Set content domain source value to the The Executive Office domain'
+type: node
+plugin: domain_source_set_action
+configuration:
+  domain_id: executiveoffice

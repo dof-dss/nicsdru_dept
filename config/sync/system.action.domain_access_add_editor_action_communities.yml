@@ -1,0 +1,15 @@
+uuid: f23021d9-2ad9-49bb-a453-b951cdee64d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.communities
+  module:
+    - domain_access
+id: domain_access_add_editor_action_communities
+label: 'Add editors to the Department for Communities domain'
+type: user
+plugin: domain_access_add_editor_action
+configuration:
+  domain_id:
+    - communities
