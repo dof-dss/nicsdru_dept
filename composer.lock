@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "16aeec0e62bee3565f6cf44cd3095e33",
+    "content-hash": "b34b3cfbd01fdc50af281801c2bada16",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3238,83 +3238,6 @@
             }
         },
         {
-            "name": "drupal/cookie_content_blocker",
-            "version": "2.4.2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/cookie_content_blocker.git",
-                "reference": "2.4.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/cookie_content_blocker-2.4.2.zip",
-                "reference": "2.4.2",
-                "shasum": "3c2a9e6954443e59ffd05c012bff2bd9f95395dd"
-            },
-            "require": {
-                "drupal/core": "^9.4 || ^10",
-                "ext-json": "*",
-                "php": "^8.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.4.2",
-                    "datestamp": "1737536092",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Steven Buteneers",
-                    "homepage": "https://www.drupal.org/u/steven-buteneers",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Daniël Smidt",
-                    "homepage": "https://www.drupal.org/u/dmsmidt",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Marc Janson",
-                    "homepage": "https://www.drupal.org/u/scorpid",
-                    "role": "Developer"
-                },
-                {
-                    "name": "sebastian.wegerer",
-                    "homepage": "https://www.drupal.org/user/3768762"
-                },
-                {
-                    "name": "steven buteneers",
-                    "homepage": "https://www.drupal.org/user/3301055"
-                },
-                {
-                    "name": "thomasdik",
-                    "homepage": "https://www.drupal.org/user/1718070"
-                }
-            ],
-            "description": "Prevent loading of content with a privacy impact until consent is given. This module needs a separate cookie consent manager.",
-            "homepage": "https://www.drupal.org/project/cookie_content_blocker",
-            "keywords": [
-                "Content",
-                "Content Access Control",
-                "Content Display",
-                "Drupal",
-                "Spam Prevention"
-            ],
-            "support": {
-                "source": "http://cgit.drupalcode.org/cookie_content_blocker",
-                "issues": "https://www.drupal.org/project/issues/cookie_content_blocker?version=8.x"
-            }
-        },
-        {
             "name": "drupal/core",
             "version": "10.4.5",
             "source": {
@@ -5216,50 +5139,6 @@
             }
         },
         {
-            "name": "drupal/entity_reference_tree",
-            "version": "2.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/entity_reference_tree.git",
-                "reference": "2.4.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity_reference_tree-2.4.0.zip",
-                "reference": "2.4.0",
-                "shasum": "d8afa6078e471de49240ff248da87610798720de"
-            },
-            "require": {
-                "drupal/core": "^9.2.0 || ^10 || ^11"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.4.0",
-                    "datestamp": "1722751673",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "mingsong",
-                    "homepage": "https://www.drupal.org/user/2986445"
-                }
-            ],
-            "description": "A field widget for entity reference tree",
-            "homepage": "https://www.drupal.org/project/entity_reference_tree",
-            "support": {
-                "source": "https://git.drupalcode.org/project/entity_reference_tree"
-            }
-        },
-        {
             "name": "drupal/entity_usage",
             "version": "dev-2.x",
             "source": {
@@ -5853,71 +5732,6 @@
             }
         },
         {
-            "name": "drupal/filter_perms",
-            "version": "2.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/filter_perms.git",
-                "reference": "2.0.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/filter_perms-2.0.1.zip",
-                "reference": "2.0.1",
-                "shasum": "76949486b0a730c1fdfd9a8d773a3a96d2e0de7b"
-            },
-            "require": {
-                "drupal/core": "^9.0 || ^10.0 || ^11"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.0.1",
-                    "datestamp": "1722444219",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "cyu",
-                    "homepage": "https://www.drupal.org/user/202205"
-                },
-                {
-                    "name": "deekayen",
-                    "homepage": "https://www.drupal.org/user/972"
-                },
-                {
-                    "name": "ivavictoria",
-                    "homepage": "https://www.drupal.org/user/3061533"
-                },
-                {
-                    "name": "justcaldwell",
-                    "homepage": "https://www.drupal.org/user/290069"
-                },
-                {
-                    "name": "mgbellaire",
-                    "homepage": "https://www.drupal.org/user/1831932"
-                },
-                {
-                    "name": "willzyx",
-                    "homepage": "https://www.drupal.org/user/1043862"
-                }
-            ],
-            "description": "Provides role and module filters to simplify the user permissions page.",
-            "homepage": "https://www.drupal.org/project/filter_perms",
-            "support": {
-                "source": "http://cgit.drupalcode.org/filter_perms",
-                "issues": "https://www.drupal.org/project/issues/filter_perms?categories=All"
-            }
-        },
-        {
             "name": "drupal/flag",
             "version": "5.0.3",
             "source": {
@@ -6110,63 +5924,6 @@
             "homepage": "https://www.drupal.org/project/flood_control",
             "support": {
                 "source": "https://git.drupalcode.org/project/flood_control"
-            }
-        },
-        {
-            "name": "drupal/fpa",
-            "version": "4.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/fpa.git",
-                "reference": "4.0.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/fpa-4.0.1.zip",
-                "reference": "4.0.1",
-                "shasum": "7281a1009d3cf426dabc32e4722c967ad723f2c7"
-            },
-            "require": {
-                "drupal/core": "^9.4 | ^10.3 | ^11",
-                "drupal/js_cookie": "^1.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "4.0.1",
-                    "datestamp": "1734622935",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "azovsky",
-                    "homepage": "https://www.drupal.org/user/330533"
-                },
-                {
-                    "name": "corey.aufang",
-                    "homepage": "https://www.drupal.org/user/163737"
-                },
-                {
-                    "name": "HakS",
-                    "homepage": "https://www.drupal.org/user/1815198"
-                },
-                {
-                    "name": "vladimiraus",
-                    "homepage": "https://www.drupal.org/user/673120"
-                }
-            ],
-            "description": "Fast filtering on permissions administration form.",
-            "homepage": "https://www.drupal.org/project/fpa",
-            "support": {
-                "source": "https://git.drupalcode.org/project/fpa"
             }
         },
         {
@@ -6677,50 +6434,6 @@
             "homepage": "https://www.drupal.org/project/jquery_ui_menu",
             "support": {
                 "source": "https://git.drupalcode.org/project/jquery_ui_menu"
-            }
-        },
-        {
-            "name": "drupal/js_cookie",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/js_cookie.git",
-                "reference": "1.0.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/js_cookie-1.0.1.zip",
-                "reference": "1.0.1",
-                "shasum": "e010b3de64a0d57eef9c1773c4dd7e3d9bd9118c"
-            },
-            "require": {
-                "drupal/core": "^9 || ^10 || ^11"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.1",
-                    "datestamp": "1693951097",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Dave Reid",
-                    "homepage": "https://www.drupal.org/user/53892"
-                }
-            ],
-            "description": "Provides the js-cookie library as a dependency.",
-            "homepage": "https://www.drupal.org/project/js_cookie",
-            "support": {
-                "source": "https://git.drupalcode.org/project/js_cookie"
             }
         },
         {
@@ -7550,64 +7263,6 @@
                     "url": "https://www.patreon.com/mfb"
                 }
             ]
-        },
-        {
-            "name": "drupal/noreqnewpass",
-            "version": "1.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/noreqnewpass.git",
-                "reference": "8.x-1.4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/noreqnewpass-8.x-1.4.zip",
-                "reference": "8.x-1.4",
-                "shasum": "b3fd5499d8a371ff1c259e371284c48602b9dbc3"
-            },
-            "require": {
-                "drupal/core": "^8 || ^9 || ^10 || ^11"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.4",
-                    "datestamp": "1727698112",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Neslee Canil Pinto",
-                    "homepage": "https://www.drupal.org/u/neslee-canil-pinto",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "neslee canil pinto",
-                    "homepage": "https://www.drupal.org/user/3580850"
-                },
-                {
-                    "name": "pedrofaria",
-                    "homepage": "https://www.drupal.org/user/27805"
-                },
-                {
-                    "name": "University of Colorado Boulder",
-                    "homepage": "https://www.drupal.org/user/3299791"
-                }
-            ],
-            "description": "Disable link to request a new password.",
-            "homepage": "https://www.drupal.org/project/noreqnewpass",
-            "support": {
-                "source": "https://git.drupalcode.org/project/noreqnewpass",
-                "issues": "https://www.drupal.org/project/issues/noreqnewpass"
-            }
         },
         {
             "name": "drupal/paragraphs",
@@ -17582,75 +17237,6 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/meaofd",
                 "issues": "http://drupal.org/project/issues/meaofd"
-            }
-        },
-        {
-            "name": "drupal/migrate_devel",
-            "version": "3.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/migrate_devel.git",
-                "reference": "3.0.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/migrate_devel-3.0.0.zip",
-                "reference": "3.0.0",
-                "shasum": "3a30c9bc3934f05627fa228b77c0e18fc1005229"
-            },
-            "require": {
-                "drupal/core": "^9.5 || ^10 || ^11"
-            },
-            "conflict": {
-                "drush/drush": "<9"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "3.0.0",
-                    "datestamp": "1725055513",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^9"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "aczietlow",
-                    "homepage": "https://www.drupal.org/user/1616656"
-                },
-                {
-                    "name": "andrewmacpherson",
-                    "homepage": "https://www.drupal.org/user/265648"
-                },
-                {
-                    "name": "batigolix",
-                    "homepage": "https://www.drupal.org/user/22175"
-                },
-                {
-                    "name": "Derimagia",
-                    "homepage": "https://www.drupal.org/user/819640"
-                },
-                {
-                    "name": "fabianderijk",
-                    "homepage": "https://www.drupal.org/user/278745"
-                }
-            ],
-            "description": "Migrate Development Tools",
-            "homepage": "https://www.drupal.org/project/migrate_devel",
-            "support": {
-                "source": "https://git.drupalcode.org/project/migrate_devel",
-                "issues": "https://www.drupal.org/project/issues/migrate_devel"
             }
         },
         {
