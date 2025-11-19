@@ -11,9 +11,11 @@ track_enabled_source_entity_types:
   - paragraph
   - taxonomy_term
 track_enabled_target_entity_types:
+  - block
   - block_content
   - media
   - node
+  - paragraph
 track_enabled_plugins:
   - block_field
   - ckeditor_image
