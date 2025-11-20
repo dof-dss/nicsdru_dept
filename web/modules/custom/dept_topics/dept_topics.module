@@ -296,6 +296,28 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
     $form['#validate'][] = 'dept_topics_validate_topics';
     $form['#attached']['library'][] = 'dept_topics/topic_admin';
   }
+
+  // Prevent deletion of Topics or Subtopics if they have active child content.
+  if (in_array($form_id, ['node_topic_delete_form', 'node_subtopic_delete_form'])) {
+    // @phpstan-ignore-next-line.
+    $node = $form_state->getFormObject()->getEntity();
+
+    $children = $node->get('field_topic_content')->referencedEntities();
+
+    foreach ($children as $child) {
+      if ($child->get('moderation_state')->getString() !== 'archived') {
+        $form['description'] = [
+          '#type' => 'html_tag',
+          '#tag' => 'p',
+          '#value' => t('This @bundle cannot be deleted because it has active (published or draft) child content. Click \'Cancel\' to return.', [
+            '@bundle' => $node->bundle(),
+          ]),
+        ];
+
+        $form['actions']['submit']['#disabled'] = TRUE;
+      }
+    }
+  }
 }
 
 /**

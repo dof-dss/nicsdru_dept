@@ -42,7 +42,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       // newly created topic when adding child content via the moderation sidebar.
       $domain_source = $entity->get('field_domain_source')->getValue();
       $dept_id = $domain_source[0]['target_id'];
-      Cache::invalidateTags(['topics_field:'  . $dept_id]);
+      Cache::invalidateTags(['topics_field:' . $dept_id]);
     }
 
     if ($this->topicManager->isValidTopicChild($entity)) {
