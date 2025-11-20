@@ -7,7 +7,6 @@ namespace Drupal\dept_topics\EventSubscriber;
 use Drupal\book\BookManagerInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\dept_topics\OrphanManager;
 use Drupal\dept_topics\TopicContentAction;
@@ -43,7 +42,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       // newly created topic when adding child content via the moderation sidebar.
       $domain_source = $entity->get('field_domain_source')->getValue();
       $dept_id = $domain_source[0]['target_id'];
-      Cache::invalidateTags([$dept_id . '_topics']);
+      Cache::invalidateTags(['topics_field:'  . $dept_id]);
     }
 
     if ($this->topicManager->isValidTopicChild($entity)) {
