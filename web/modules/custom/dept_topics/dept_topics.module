@@ -309,8 +309,9 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
         $form['description'] = [
           '#type' => 'html_tag',
           '#tag' => 'p',
-          '#value' => t('This @bundle cannot be deleted because it has active (published or draft) child content. Click \'Cancel\' to return.', [
+          '#value' => t("This @bundle (@id) cannot be deleted because it has active (published or draft) child content. Click 'Cancel' to return.", [
             '@bundle' => $node->bundle(),
+            '@id' => $node->id(),
           ]),
         ];
 

@@ -13,6 +13,7 @@ use Drupal\dept_topics\TopicContentAction;
 use Drupal\dept_topics\TopicManager;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
+use Drupal\facets\Exception\Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -78,15 +79,32 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
    * Entity delete event handler.
    */
   public function onEntityDelete(EntityEvent $event): void {
-    $child = $event->getEntity();
-    if (!$this->topicManager->isValidTopicChild($child)) {
-      return;
+    $entity = $event->getEntity();
+
+    // Remove deleted child from topic references.
+    if ($this->topicManager->isValidTopicChild($entity)) {
+      $topics = $entity->get('field_site_topics')->referencedEntities();
+
+      foreach ($topics as $topic) {
+        $this->topicManager->removeChild($entity, $topic);
+      }
     }
 
-    $topics = $child->get('field_site_topics')->referencedEntities();
+    // Prevent deletion of topics if it has any active child content.
+    // Adding this in addition to the frontend warning to provide coverage
+    // when using the CLI (drush) etc.
+    if (in_array($entity->bundle(), ['topic', 'subtopic'])) {
+      $children = $entity->get('field_topic_content')->referencedEntities();
 
-    foreach ($topics as $topic) {
-      $this->topicManager->removeChild($child, $topic);
+      foreach ($children as $child) {
+        if ($child->get('moderation_state')->getString() != 'archived') {
+          throw new Exception(t('This @bundle (@id) cannot be deleted because it has active (published or draft) child content',
+          [
+            '@bundle' => $entity->bundle(),
+            '@id' => $entity->id(),
+          ])->render());
+        }
+      }
     }
   }
 
@@ -97,7 +115,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     return [
       EntityEventType::INSERT => ['onEntityInsert'],
       EntityEventType::UPDATE => ['onEntityUpdate'],
-      EntityEventType::DELETE => ['onEntityDelete'],
+      EntityEventType::DELETE => ['onEntityDelete', 100],
     ];
   }
 
