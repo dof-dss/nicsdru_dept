@@ -132,7 +132,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $field_id = Html::getUniqueId($field);
     $default_values = $this->getSelectedOptions($items);
     $current_dept = '';
-    $current_nid = '';
+    $current_nid = 0;
     $options = [];
 
     $node = \Drupal::routeMatch()->getParameter('node');
