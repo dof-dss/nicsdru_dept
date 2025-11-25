@@ -47,9 +47,8 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     }
 
     if ($this->topicManager->isValidTopicChild($entity)) {
-      if ($entity->get('moderation_state')->getString() == 'published') {
+      if ($entity->get('moderation_state')->getString() !== 'archived') {
         $topics = $entity->get('field_site_topics')->referencedEntities();
-
         foreach ($topics as $topic) {
           $this->topicManager->addChild($entity, $topic);
         }
@@ -65,12 +64,15 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     $entity = $event->getEntity();
 
     if ($this->topicManager->isValidTopicChild($entity)) {
-      if ($entity->get('moderation_state')->getString() == 'published') {
-        $this->topicManager->processChild($entity);
-      }
+      $moderation_state = $entity->get('moderation_state')->getString();
 
-      if ($entity->get('moderation_state')->getString() == 'archived') {
-        $this->topicManager->archiveChild($entity);
+      switch ($moderation_state) {
+        case 'archived':
+          $this->topicManager->archiveChild($entity);
+          break;
+        default:
+          $this->topicManager->processChild($entity);
+          break;
       }
     }
   }
