@@ -44,6 +44,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       $domain_source = $entity->get('field_domain_source')->getValue();
       $dept_id = $domain_source[0]['target_id'];
       Cache::invalidateTags(['topics_field:' . $dept_id]);
+      Cache::invalidateTags([$dept_id . '_topics']);
     }
 
     if ($this->topicManager->isValidTopicChild($entity)) {
@@ -62,6 +63,13 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   public function onEntityUpdate(EntityEvent $event): void {
     /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
     $entity = $event->getEntity();
+
+    if ($entity instanceof ContentEntityInterface && in_array($entity->bundle(), ['topic', 'subtopic'])) {
+      $domain_source = $entity->get('field_domain_source')->getValue();
+      $dept_id = $domain_source[0]['target_id'];
+      Cache::invalidateTags(['topics_field:' . $dept_id]);
+      Cache::invalidateTags([$dept_id . '_topics']);
+    }
 
     if ($this->topicManager->isValidTopicChild($entity)) {
       $moderation_state = $entity->get('moderation_state')->getString();
