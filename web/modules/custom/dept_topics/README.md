@@ -30,7 +30,5 @@ The mechanisms to update or remove child references are from 2 methods within th
 * updateChildOnTopics() - Adds or removes a child from topics.
 * archiveChild() - Removes all references of the child from topics.
 
-# WiP
-
 
 

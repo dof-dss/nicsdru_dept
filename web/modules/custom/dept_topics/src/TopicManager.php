@@ -265,6 +265,7 @@ final class TopicManager {
       $published_child = $this->entityTypeManager->getStorage('node')->loadRevision($revision_id);
 
       if ($published_child) {
+        // @phpstan-ignore-next-line
         $published_topic_nids = array_column($published_child->get('field_site_topics')->getValue(), 'target_id');
         $topics_removed_ids = array_diff($topics_removed_ids, $published_topic_nids);
       }

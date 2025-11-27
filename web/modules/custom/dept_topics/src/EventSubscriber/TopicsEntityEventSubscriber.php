@@ -17,7 +17,7 @@ use Drupal\facets\Exception\Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Entity event subscriber for processing topic and topic child entities.
+ * Entity event subscriber for processing topic entities.
  */
 final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
@@ -34,89 +34,60 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   /**
    * Entity insert event handler.
    */
-  public function onEntityInsert(EntityEvent $event): void {
+  public function onEntityInsertOrUpdate(EntityEvent $event): void {
     /* @var ContentEntityInterface $entity */
     $entity = $event->getEntity();
 
-    if ($entity instanceof ContentEntityInterface && in_array($entity->bundle(), ['topic', 'subtopic'])) {
-      // Resolves an issue that prevented the 'Topics' field from including a
-      // newly created topic when adding child content via the moderation sidebar.
-      $domain_source = $entity->get('field_domain_source')->getValue();
-      $dept_id = $domain_source[0]['target_id'];
-      Cache::invalidateTags(['topics_field:' . $dept_id]);
-      Cache::invalidateTags([$dept_id . '_topics']);
+    if (!$this->isTopic($entity)) {
+      return;
     }
 
-    if ($this->topicManager->isValidTopicChild($entity)) {
-      if ($entity->get('moderation_state')->getString() !== 'archived') {
-        $topics = $entity->get('field_site_topics')->referencedEntities();
-        foreach ($topics as $topic) {
-          $this->topicManager->addChild($entity, $topic);
-        }
-      }
-    }
-  }
-
-  /**
-   * Entity update event handler.
-   */
-  public function onEntityUpdate(EntityEvent $event): void {
-    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
-    $entity = $event->getEntity();
-
-    if ($entity instanceof ContentEntityInterface && in_array($entity->bundle(), ['topic', 'subtopic'])) {
-      $domain_source = $entity->get('field_domain_source')->getValue();
-      $dept_id = $domain_source[0]['target_id'];
-      Cache::invalidateTags(['topics_field:' . $dept_id]);
-      Cache::invalidateTags([$dept_id . '_topics']);
-    }
-
-    if ($this->topicManager->isValidTopicChild($entity)) {
-      $moderation_state = $entity->get('moderation_state')->getString();
-
-      switch ($moderation_state) {
-        case 'archived':
-          $this->topicManager->archiveChild($entity);
-          break;
-
-        default:
-          $this->topicManager->processChild($entity);
-          break;
-      }
-    }
+    // Resolves an issue that prevented the 'Topics' field from including a
+    // newly created topic when adding child content via the moderation sidebar.
+    $domain_source = $entity->get('field_domain_source')->getValue();
+    $dept_id = $domain_source[0]['target_id'];
+    Cache::invalidateTags(['topics_field:' . $dept_id]);
+    Cache::invalidateTags([$dept_id . '_topics']);
   }
 
   /**
    * Entity delete event handler.
    */
   public function onEntityDelete(EntityEvent $event): void {
+    /* @var ContentEntityInterface $entity */
     $entity = $event->getEntity();
 
-    // Remove deleted child from topic references.
-    if ($this->topicManager->isValidTopicChild($entity)) {
-      $topics = $entity->get('field_site_topics')->referencedEntities();
-
-      foreach ($topics as $topic) {
-        $this->topicManager->removeChild($entity, $topic);
-      }
+    if (!$this->isTopic($entity)) {
+      return;
     }
 
     // Prevent deletion of topics if it has any active child content.
     // Adding this in addition to the frontend warning to provide coverage
     // when using the CLI (drush) etc.
-    if (in_array($entity->bundle(), ['topic', 'subtopic'])) {
-      $children = $entity->get('field_topic_content')->referencedEntities();
+    $children = $entity->get('field_topic_content')->referencedEntities();
 
-      foreach ($children as $child) {
-        if ($child->get('moderation_state')->getString() != 'archived') {
-          throw new Exception(t('This @bundle (@id) cannot be deleted because it has active (published or draft) child content',
+    foreach ($children as $child) {
+      if ($child->get('moderation_state')->getString() != 'archived') {
+        throw new Exception(t('This @bundle (@id) cannot be deleted because it has active (published or draft) child content',
           [
             '@bundle' => $entity->bundle(),
             '@id' => $entity->id(),
           ])->render());
-        }
       }
     }
+  }
+
+  /**
+   * Determine if an entity is a valid Topic type based on bundle ID.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The entity to check.
+   *
+   * @return bool
+   *   True if valid topic bundle, otherwise false.
+   */
+  protected function isTopic(ContentEntityInterface $entity): bool {
+    return in_array($entity->bundle(), ['topic', 'subtopic']);
   }
 
   /**
@@ -124,8 +95,8 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      EntityEventType::INSERT => ['onEntityInsert'],
-      EntityEventType::UPDATE => ['onEntityUpdate'],
+      EntityEventType::INSERT => ['onEntityInsertOrUpdate'],
+      EntityEventType::UPDATE => ['onEntityInsertOrUpdate'],
       EntityEventType::DELETE => ['onEntityDelete', 100],
     ];
   }

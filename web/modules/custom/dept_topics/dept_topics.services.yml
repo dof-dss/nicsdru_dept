@@ -24,8 +24,14 @@ services:
     class: Drupal\dept_topics\OrphanManager
     arguments: ['@entity_type.manager', '@topic.manager']
 
-  dept_topics.entity_event_subscriber:
+  dept_topics.topic_entity_event_subscriber:
     class: Drupal\dept_topics\EventSubscriber\TopicsEntityEventSubscriber
     arguments: ['@topic.manager', '@orphan.manager', '@entity_type.manager', '@book.manager']
+    tags:
+      - { name: event_subscriber }
+
+  dept_topics.topic_child_entity_event_subscriber:
+    class: Drupal\dept_topics\EventSubscriber\TopicsChildEntityEventSubscriber
+    arguments: ['@topic.manager']
     tags:
       - { name: event_subscriber }
