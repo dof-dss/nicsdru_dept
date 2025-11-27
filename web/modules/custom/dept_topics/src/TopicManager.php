@@ -2,12 +2,12 @@
 
 namespace Drupal\dept_topics;
 
+use Drupal\content_moderation\ModerationInformationInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\book\BookManagerInterface;
 use Drupal\node\NodeInterface;
@@ -36,6 +36,8 @@ final class TopicManager {
    *   The Entity Display Repository service.
    * @param \Drupal\book\BookManagerInterface $bookManager
    *   The Book manager service.
+   * @param \Drupal\content_moderation\ModerationInformationInterface $moderationInformation
+   *   The Book manager service.
    * @param array $targetBundles
    *   Array of target bundles.
    * @param array $deptTopics
@@ -48,6 +50,7 @@ final class TopicManager {
     protected EntityFieldManagerInterface $entityFieldManager,
     protected EntityDisplayRepository $entityDisplayRepository,
     protected BookManagerInterface $bookManager,
+    protected ModerationInformationInterface $moderationInformation,
     protected array $targetBundles = [],
     protected array $deptTopics = [],
   ) {
@@ -255,6 +258,17 @@ final class TopicManager {
     // Compare the child's selected topics to our list of topic_content nids.
     $topics_added_ids = array_diff($topic_nids, $existing_nids);
     $topics_removed_ids = array_diff($existing_nids, $topic_nids);
+
+    if ($this->moderationInformation->isDefaultRevisionPublished($child)) {
+      $revision_id = $this->moderationInformation->getDefaultRevisionId($child->getEntityTypeId(), $child->id());
+
+      $published_child = $this->entityTypeManager->getStorage('node')->loadRevision($revision_id);
+
+      if ($published_child) {
+        $published_topic_nids = array_column($published_child->get('field_site_topics')->getValue(), 'target_id');
+        $topics_removed_ids = array_diff($topics_removed_ids, $published_topic_nids);
+      }
+    }
 
     foreach ($topics_added_ids as $topic_id) {
       $topic = $this->entityTypeManager->getStorage('node')->load($topic_id);

@@ -78,6 +78,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
         case 'archived':
           $this->topicManager->archiveChild($entity);
           break;
+
         default:
           $this->topicManager->processChild($entity);
           break;
