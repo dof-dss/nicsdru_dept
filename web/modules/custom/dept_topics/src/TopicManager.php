@@ -4,6 +4,7 @@ namespace Drupal\dept_topics;
 
 use Drupal\content_moderation\ModerationInformationInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityDisplayRepository;
@@ -38,6 +39,8 @@ final class TopicManager {
    *   The Book manager service.
    * @param \Drupal\content_moderation\ModerationInformationInterface $moderationInformation
    *   The Book manager service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   The Book manager service.
    * @param array $targetBundles
    *   Array of target bundles.
    * @param array $deptTopics
@@ -51,6 +54,7 @@ final class TopicManager {
     protected EntityDisplayRepository $entityDisplayRepository,
     protected BookManagerInterface $bookManager,
     protected ModerationInformationInterface $moderationInformation,
+    protected CacheBackendInterface $cache,
     protected array $targetBundles = [],
     protected array $deptTopics = [],
   ) {
@@ -147,8 +151,7 @@ final class TopicManager {
    *   Array of Topic/Subtopic nodes, indexed by node ID.
    */
   public function getTopicsForDepartment(string $department_id) {
-    // TODO: replace with injected property.
-    $dept_topics = \Drupal::cache()->get('dept_topics_' . $department_id);
+    $dept_topics = $this->cache->get('dept_topics_' . $department_id);
 
     if (!empty($dept_topics)) {
       return $dept_topics->data;
@@ -165,9 +168,7 @@ final class TopicManager {
         $this->getChildTopics($parent);
       }
 
-      // TODO: replace with injected property.
-      \Drupal::cache()
-        ->set('dept_topics_' . $department_id, $this->deptTopics, Cache::PERMANENT, [$department_id . '_topics']);
+      $this->cache->set('dept_topics_' . $department_id, $this->deptTopics, Cache::PERMANENT, [$department_id . '_topics']);
 
       return $this->deptTopics;
     }
