@@ -7,9 +7,8 @@ namespace Drupal\dept_topics\EventSubscriber;
 use Drupal\book\BookManagerInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\dept_topics\OrphanManager;
-use Drupal\dept_topics\TopicContentAction;
 use Drupal\dept_topics\TopicManager;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
@@ -22,17 +21,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
   /**
-   * Constructs a TopicsEntityCrudSubscriber object.
+   * Constructs a TopicsEntityEventSubscriber object.
    */
   public function __construct(
     private readonly TopicManager $topicManager,
-    private readonly OrphanManager $orphanManager,
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly BookManagerInterface $bookManager,
   ) {}
 
   /**
-   * Entity insert event handler.
+   * Entity insert and update event handler.
    */
   public function onEntityInsertOrUpdate(EntityEvent $event): void {
     /* @var ContentEntityInterface $entity */
@@ -78,19 +76,6 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Determine if an entity is a valid Topic type based on bundle ID.
-   *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
-   *   The entity to check.
-   *
-   * @return bool
-   *   True if valid topic bundle, otherwise false.
-   */
-  protected function isTopic(ContentEntityInterface $entity): bool {
-    return in_array($entity->bundle(), ['topic', 'subtopic']);
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
@@ -99,6 +84,19 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       EntityEventType::UPDATE => ['onEntityInsertOrUpdate'],
       EntityEventType::DELETE => ['onEntityDelete', 100],
     ];
+  }
+
+  /**
+   * Determine if an entity is a valid Topic type based on bundle ID.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The entity to check.
+   *
+   * @return bool
+   *   True if valid topic bundle, otherwise false.
+   */
+  protected function isTopic(EntityInterface $entity): bool {
+    return $entity instanceof ContentEntityInterface && in_array($entity->bundle(), ['topic', 'subtopic']);
   }
 
 }

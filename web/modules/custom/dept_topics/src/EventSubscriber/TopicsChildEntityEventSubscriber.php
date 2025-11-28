@@ -11,7 +11,7 @@ use Drupal\entity_events\Event\EntityEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Entity event subscriber for processing topic entities.
+ * Entity event subscriber for processing topic child entities.
  */
 final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface {
 

@@ -251,26 +251,18 @@ final class TopicManager {
       return;
     }
 
-    $topic_nids = $child->get('field_site_topics')->getValue();
-    $topic_nids = array_column($topic_nids, 'target_id');
+    // Fetch the chosen site topics for this child revision.
+    $current_child_topic_nids = array_column($child->get('field_site_topics')->getValue(), 'target_id');
+    // Fetch chosen site topics from all revisions of the child.
+    $existing_child_topic_nids = $this->fetchAllSiteTopicsForChild($child);
+
+    $topic_nids = array_merge($current_child_topic_nids, $existing_child_topic_nids);
 
     $existing_nids = $this->fetchTopicsReferencingChild($child);
 
     // Compare the child's selected topics to our list of topic_content nids.
-    $topics_added_ids = array_diff($topic_nids, $existing_nids);
-    $topics_removed_ids = array_diff($existing_nids, $topic_nids);
-
-    if ($this->moderationInformation->isDefaultRevisionPublished($child)) {
-      $revision_id = $this->moderationInformation->getDefaultRevisionId($child->getEntityTypeId(), $child->id());
-
-      $published_child = $this->entityTypeManager->getStorage('node')->loadRevision($revision_id);
-
-      if ($published_child) {
-        // @phpstan-ignore-next-line
-        $published_topic_nids = array_column($published_child->get('field_site_topics')->getValue(), 'target_id');
-        $topics_removed_ids = array_diff($topics_removed_ids, $published_topic_nids);
-      }
-    }
+    $topics_added_ids = array_unique(array_diff($topic_nids, $existing_nids));
+    $topics_removed_ids = array_unique(array_diff($existing_nids, $topic_nids));
 
     foreach ($topics_added_ids as $topic_id) {
       $topic = $this->entityTypeManager->getStorage('node')->load($topic_id);
@@ -287,6 +279,34 @@ final class TopicManager {
         $this->removeChild($child, $topic);
       }
     }
+  }
+
+  /**
+   * Returns all chosen site topics across all revisions of a child node.
+   *
+   * @param \Drupal\node\NodeInterface $child
+   *   The child node to return site topics for.
+   *
+   * @return array
+   *   List of topic node ID's.
+   */
+  protected function fetchAllSiteTopicsForChild(NodeInterface $child) {
+    $existing_site_topics = $this->connection->select('node__field_site_topics', 'st')
+      ->fields('st', ['field_site_topics_target_id'])
+      ->condition('entity_id', $child->id())
+      ->distinct()
+      ->execute()
+      ->fetchCol();
+
+    $existing_site_topics = $this->connection->select('node_revision__field_site_topics', 'st')
+      ->fields('st', ['field_site_topics_target_id'])
+      ->condition('entity_id', $child->id())
+      ->distinct()
+      ->execute()
+      ->fetchCol();
+
+    // Create a list of all site topic nids (active and revisions) for this child from the results of both the field_site_topics tables.
+    return array_unique(array_merge($existing_site_topics, $existing_site_topics));
   }
 
   /**
