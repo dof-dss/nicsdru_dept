@@ -70,7 +70,7 @@
  *   in different view modes.
  */
 #}
-<article class="card">
+<article {{ attributes.addClass('card') }}>
   <h2{{ title_attributes.addClass('card__title') }}>
     <a href="{{ url }}">{{ label }}</a>
   </h2>
@@ -95,3 +95,10 @@
     {% endif %}
   </div>
 </article>
+
+{% for moderation_state in moderation_states %}
+  <li>{{ moderation_state }}</li>
+{% endfor %}
+
+
+{#{{ kint() }}#}

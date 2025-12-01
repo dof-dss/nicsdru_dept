@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\dept_topics\Plugin\Field\FieldFormatter;
 
+
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceEntityFormatter;
-use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
 
 /**
  * Plugin implementation of the 'Topic Contents' formatter.
@@ -18,7 +18,13 @@ use Drupal\Core\Form\FormStateInterface;
  *   field_types = {"entity_reference"},
  * )
  */
-final class TopicContentsFormatter extends EntityReferenceEntityFormatter {
+final class TopicContentsFormatter extends EntityReferenceEntityFormatter implements TrustedCallbackInterface {
+
+  public static function trustedCallbacks() {
+    return [
+      'alterNodeRender',
+    ];
+  }
 
   /**
    * {@inheritdoc}
@@ -43,6 +49,20 @@ final class TopicContentsFormatter extends EntityReferenceEntityFormatter {
 
       if ($user_is_anonymous && !in_array($topic->id(), $child_current_topics, TRUE)) {
         continue;
+      }
+
+      $moderation_states = [];
+
+      if (!$user_is_anonymous) {
+        $db = \Drupal::database();
+
+        $query = $db->select('content_moderation_state_field_revision', 'modstate');
+        $query->join('node_revision__field_site_topics', 'revtopics', 'revtopics.entity_id = modstate.content_entity_id AND revtopics.revision_id = modstate.content_entity_revision_id');
+        $query->fields('modstate', ['moderation_state']);
+        $query->condition('revtopics.entity_id', $entity->id());
+        $query->condition('revtopics.field_site_topics_target_id', $topic->id());
+
+        $moderation_states = $query->execute()->fetchCol();
       }
 
       // Due to render caching and delayed calls, the viewElements() method
@@ -82,6 +102,12 @@ final class TopicContentsFormatter extends EntityReferenceEntityFormatter {
       $view_builder = $this->entityTypeManager->getViewBuilder($entity->getEntityTypeId());
       $elements[$delta] = $view_builder->view($entity, $view_mode, $entity->language()->getId());
 
+      if (!empty($moderation_states))  {
+        $elements[$delta]['#moderation_states'] = $moderation_states;
+        $elements[$delta]['#pre_render'][] = [get_class($this), 'alterNodeRender'];
+      }
+
+
       // Add a resource attribute to set the mapping property's value to the
       // entity's URL. Since we don't know what the markup of the entity will
       // be, we shouldn't rely on it for structured data.
@@ -91,6 +117,17 @@ final class TopicContentsFormatter extends EntityReferenceEntityFormatter {
     }
 
     return $elements;
+  }
+
+  public static function alterNodeRender(array $element) {
+
+    if (\Drupal::currentUser()->isAuthenticated() && array_key_exists('#moderation_states', $element)) {
+      foreach ($element['#moderation_states'] as $moderation_state) {
+        $element['#attributes']['class'][] = 'ms-' . str_replace(' ', '-', $moderation_state); ;
+      }
+    }
+
+    return $element;
   }
 
 }
