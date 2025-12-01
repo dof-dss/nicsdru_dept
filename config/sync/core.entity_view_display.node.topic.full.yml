@@ -93,7 +93,7 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: entity_reference_entity_view
+                type: dept_topics_topic_contents
                 label: hidden
                 settings:
                   view_mode: topics_teaser
@@ -127,7 +127,6 @@ third_party_settings:
       - Views
       - Webform
       - core
-      - mdash
     entity_view_mode_restriction:
       allowed_layouts:
         - layout_onecol
@@ -184,7 +183,6 @@ third_party_settings:
         - Views
         - Webform
         - core
-        - mdash
     entity_view_mode_restriction_by_region:
       allowed_layouts:
         - layout_onecol

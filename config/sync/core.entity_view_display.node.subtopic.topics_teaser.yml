@@ -18,9 +18,9 @@ dependencies:
     - field.field.node.subtopic.layout_builder__layout
     - node.type.subtopic
   module:
+    - dept_topics
     - layout_builder
     - metatag
-    - published_state_indicator
     - smart_trim
     - user
 third_party_settings:
@@ -64,11 +64,10 @@ content:
     weight: 0
     region: content
   field_topic_content:
-    type: published_state_indicator
+    type: dept_topics_topic_contents
     label: hidden
     settings:
-      link: true
-      display_published_label: false
+      foo: bar
     third_party_settings: {  }
     weight: 1
     region: content

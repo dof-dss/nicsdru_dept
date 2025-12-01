@@ -18,7 +18,7 @@ dependencies:
     - field.field.node.topic.layout_builder__layout
     - node.type.topic
   module:
-    - published_state_indicator
+    - dept_topics
     - smart_trim
     - user
 id: node.topic.teaser
@@ -51,11 +51,10 @@ content:
     weight: 0
     region: content
   field_topic_content:
-    type: published_state_indicator
+    type: dept_topics_topic_contents
     label: hidden
     settings:
-      link: true
-      display_published_label: false
+      foo: bar
     third_party_settings: {  }
     weight: 1
     region: content
