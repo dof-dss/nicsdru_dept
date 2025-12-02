@@ -5,6 +5,13 @@ dependencies:
   config:
     - field.storage.media.field_domain_source
     - image.style.thumbnail
+    - media.type.audio
+    - media.type.document
+    - media.type.image
+    - media.type.remote_document
+    - media.type.remote_video
+    - media.type.secure_file
+    - media.type.video
     - system.menu.admin
     - user.role.administrator
   module:
@@ -338,7 +345,7 @@ display:
           entity_type: media
           entity_field: created
           plugin_id: field
-          label: 'Authored on'
+          label: Created
           exclude: false
           alter:
             alter_text: false
@@ -603,7 +610,7 @@ display:
         options:
           offset: 0
           pagination_heading_level: h4
-          items_per_page: 50
+          items_per_page: 100
           total_pages: null
           id: 0
           tags:
@@ -621,7 +628,7 @@ display:
             offset_label: Offset
           quantity: 9
       exposed_form:
-        type: input_required
+        type: basic
         options:
           submit_button: Apply
           reset_button: false
@@ -630,8 +637,6 @@ display:
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
-          text_input_required: 'Select any filter and click on Apply to see results'
-          text_input_required_format: basic_html
       access:
         type: role
         options:
@@ -656,7 +661,7 @@ display:
           value:
             min: ''
             max: ''
-            value: '1'
+            value: '0'
           group: 1
           exposed: false
           expose:
@@ -707,7 +712,7 @@ display:
           exposed: true
           expose:
             operator_id: created_op
-            label: 'Authored on'
+            label: Created
             description: ''
             use_operator: false
             operator: created_op
@@ -817,7 +822,15 @@ display:
           entity_field: bundle
           plugin_id: bundle
           operator: in
-          value: {  }
+          value:
+            all: all
+            audio: audio
+            document: document
+            image: image
+            remote_document: remote_document
+            remote_video: remote_video
+            secure_file: secure_file
+            video: video
           group: 1
           exposed: true
           expose:
@@ -911,6 +924,85 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        field_domain_source_target_id:
+          id: field_domain_source_target_id
+          table: media__field_domain_source
+          field: field_domain_source_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: string
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_domain_source_target_id_op
+            label: 'Domain Source (field_domain_source)'
+            description: null
+            use_operator: false
+            operator: field_domain_source_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_domain_source_target_id
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            placeholder: null
+          is_grouped: true
+          group_info:
+            label: Department
+            description: ''
+            identifier: field_domain_source_target_id
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items:
+              1:
+                title: 'The Northern Ireland Executive'
+                operator: '='
+                value: nigov
+              2:
+                title: 'The Executive Office'
+                operator: '='
+                value: executiveoffice
+              3:
+                title: DAERA
+                operator: '='
+                value: daera
+              4:
+                title: Communities
+                operator: '='
+                value: communities
+              5:
+                title: Education
+                operator: '='
+                value: education
+              6:
+                title: Economy
+                operator: '='
+                value: economy
+              7:
+                title: Finance
+                operator: '='
+                value: finance
+              8:
+                title: Infrastructure
+                operator: '='
+                value: infrastructure
+              9:
+                title: Health
+                operator: '='
+                value: health
+              10:
+                title: Justice
+                operator: '='
+                value: justice
       filter_groups:
         operator: AND
         groups:
@@ -922,14 +1014,22 @@ display:
           row_class: ''
           default_row_class: true
           columns:
+            media_bulk_form: media_bulk_form
             thumbnail__target_id: thumbnail__target_id
             name: name
-            count: count
             bundle: bundle
+            field_domain_source: field_domain_source
             created: created
             changed: changed
-          default: '-1'
+            uid: uid
+            operations: operations
+          default: created
           info:
+            media_bulk_form:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
             thumbnail__target_id:
               sortable: false
               default_sort_order: asc
@@ -944,14 +1044,14 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            count:
-              sortable: false
+            bundle:
+              sortable: true
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
-            bundle:
+            field_domain_source:
               sortable: true
               default_sort_order: asc
               align: ''
@@ -968,6 +1068,18 @@ display:
             changed:
               sortable: true
               default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            uid:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            operations:
               align: ''
               separator: ''
               empty_column: false
