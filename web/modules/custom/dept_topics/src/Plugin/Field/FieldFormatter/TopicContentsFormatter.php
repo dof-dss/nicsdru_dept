@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\dept_topics\Plugin\Field\FieldFormatter;
 
-
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceEntityFormatter;
 use Drupal\Core\Security\TrustedCallbackInterface;
@@ -20,9 +19,12 @@ use Drupal\Core\Security\TrustedCallbackInterface;
  */
 final class TopicContentsFormatter extends EntityReferenceEntityFormatter implements TrustedCallbackInterface {
 
+  /**
+   * {@inheritdoc}
+   */
   public static function trustedCallbacks() {
     return [
-      'alterNodeRender',
+      'renderChildModerationStatus',
     ];
   }
 
@@ -41,28 +43,26 @@ final class TopicContentsFormatter extends EntityReferenceEntityFormatter implem
 
       $is_published = $moderation_service->isDefaultRevisionPublished($entity);
 
+
       if (!$is_published && $user_is_anonymous) {
         continue;
       };
 
+      // @phpstan-ignore-next-line
       $child_current_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
 
-      if ($user_is_anonymous && !in_array($topic->id(), $child_current_topics, TRUE)) {
+      if ($user_is_anonymous && !in_array($topic->id(), $child_current_topics)) {
         continue;
       }
 
       $moderation_states = [];
 
-      if (!$user_is_anonymous) {
-        $db = \Drupal::database();
+      if (!$is_published && in_array($topic->id(), $child_current_topics)) {
+        $moderation_states = $this->lookupChildRevisions($entity, $topic);
+      }
 
-        $query = $db->select('content_moderation_state_field_revision', 'modstate');
-        $query->join('node_revision__field_site_topics', 'revtopics', 'revtopics.entity_id = modstate.content_entity_id AND revtopics.revision_id = modstate.content_entity_revision_id');
-        $query->fields('modstate', ['moderation_state']);
-        $query->condition('revtopics.entity_id', $entity->id());
-        $query->condition('revtopics.field_site_topics_target_id', $topic->id());
-
-        $moderation_states = $query->execute()->fetchCol();
+      if (!$user_is_anonymous && !in_array($topic->id(), $child_current_topics)) {
+        $moderation_states = $this->lookupChildRevisions($entity, $topic);
       }
 
       // Due to render caching and delayed calls, the viewElements() method
@@ -102,11 +102,10 @@ final class TopicContentsFormatter extends EntityReferenceEntityFormatter implem
       $view_builder = $this->entityTypeManager->getViewBuilder($entity->getEntityTypeId());
       $elements[$delta] = $view_builder->view($entity, $view_mode, $entity->language()->getId());
 
-      if (!empty($moderation_states))  {
+      if (!empty($moderation_states)) {
         $elements[$delta]['#moderation_states'] = $moderation_states;
-        $elements[$delta]['#pre_render'][] = [get_class($this), 'alterNodeRender'];
+        $elements[$delta]['#pre_render'][] = [get_class($this), 'renderChildModerationStatus'];
       }
-
 
       // Add a resource attribute to set the mapping property's value to the
       // entity's URL. Since we don't know what the markup of the entity will
@@ -119,11 +118,45 @@ final class TopicContentsFormatter extends EntityReferenceEntityFormatter implem
     return $elements;
   }
 
-  public static function alterNodeRender(array $element) {
+  /**
+   *  Return revisions states for a child referencing a given topic.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $child
+   *   The node to lookup revision states.
+   * @param \Drupal\Core\Entity\EntityInterface $topic
+   *   The topic a child node references.
+   *
+   * @return array
+   *   List of revision states for the given child and topic.
+   */
+  protected function lookupChildRevisions($child, $topic) {
+    $db = \Drupal::database();
+
+    $query = $db->select('content_moderation_state_field_revision', 'modstate');
+    $query->join('node_revision__field_site_topics', 'revtopics', 'revtopics.entity_id = modstate.content_entity_id AND revtopics.revision_id = modstate.content_entity_revision_id');
+    $query->fields('modstate', ['moderation_state']);
+    $query->condition('revtopics.entity_id', $child->id());
+    $query->condition('revtopics.field_site_topics_target_id', $topic->id());
+    $query->condition('modstate.moderation_state', ['draft', 'needs_review'], 'IN');
+    $query->orderBy('revtopics.revision_id', 'DESC');
+
+    return $query->execute()->fetchCol();
+  }
+
+  /**
+   * Render callback to add child node moderation status for the rendered topic.
+   *
+   * @param array $element
+   *   The child render array element.
+   *
+   * @return array
+   *   Child node render array.
+   */
+  public static function renderChildModerationStatus(array $element) {
 
     if (\Drupal::currentUser()->isAuthenticated() && array_key_exists('#moderation_states', $element)) {
       foreach ($element['#moderation_states'] as $moderation_state) {
-        $element['#attributes']['class'][] = 'ms-' . str_replace(' ', '-', $moderation_state); ;
+        $element['#attributes']['class'][] = 'ms-' . str_replace(' ', '-', $moderation_state);
       }
     }
 
