@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\dept_topics\Plugin\Field\FieldFormatter;
 
-use Drupal;
 use Drupal\content_moderation\ModerationInformationInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
@@ -13,6 +12,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceEntityFormatter;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Security\TrustedCallbackInterface;
@@ -122,8 +122,73 @@ final class TopicContentsFormatter extends EntityReferenceEntityFormatter implem
   /**
    * {@inheritdoc}
    */
+  public static function defaultSettings() {
+    return [
+      'display_type' => 'node_view',
+      'view_mode' => 'default',
+    ] + parent::defaultSettings();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsForm(array $form, FormStateInterface $form_state) {
+    $elements['display_type'] = [
+      '#title' => t('Display type'),
+      '#type' => 'select',
+      '#description' => $this->t('Select how each element should be displayed.'),
+      '#options' => [
+        'node_view' => t('Node view (Display)'),
+        'link_label' => t('Link label'),
+      ],
+      '#default_value' => $this->getSetting('display_type'),
+    ];
+
+    $elements['view_mode'] = [
+      '#type' => 'select',
+      '#options' => $this->entityDisplayRepository->getViewModeOptions($this->getFieldSetting('target_type')),
+      '#title' => $this->t('View mode'),
+      '#default_value' => $this->getSetting('view_mode'),
+      '#required' => TRUE,
+      '#states' => [
+        'visible' => [
+          ':input[name="settings[formatter][settings][display_type]"]' => [
+            'value' => 'node_view',
+          ],
+        ],
+      ]
+    ];
+
+    return $elements;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsSummary() {
+    $summary = [];
+
+    if ($this->getSetting('display_type') === 'node_view') {
+      $summary[] = t('Node view: @view_mode', ['@view_mode' => $this->getSetting('view_mode')]);
+    }
+    else {
+      $summary[] = t('Link label');
+    }
+    return $summary;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function viewElements(FieldItemListInterface $items, $langcode): array {
-    $view_mode = $this->getSetting('view_mode');
+
+    $display_type = $this->getSetting('display_type');
+    $view_mode = 'default';
+
+    if ($display_type === 'node_view') {
+      $view_mode = $this->getSetting('view_mode') ?? 'default';
+    }
+
     $elements = [];
     $topic = $items->getEntity();
 
@@ -171,57 +236,97 @@ final class TopicContentsFormatter extends EntityReferenceEntityFormatter implem
           continue;
         }
       }
-      // END 1/2: Departmental custom code.
 
-      // Due to render caching and delayed calls, the viewElements() method
-      // will be called later in the rendering process through a '#pre_render'
-      // callback, so we need to generate a counter that takes into account
-      // all the relevant information about this field and the referenced
-      // entity that is being rendered.
-      $recursive_render_id = $items->getFieldDefinition()->getTargetEntityTypeId()
-        . $items->getFieldDefinition()->getTargetBundle()
-        . $items->getName()
-        // We include the referencing entity, so we can render default images
-        // without hitting recursive protections.
-        . $items->getEntity()->id()
-        . $entity->getEntityTypeId()
-        . $entity->id();
+      if ($display_type === 'node_view') {
 
-      if (isset(static::$recursiveRenderDepth[$recursive_render_id])) {
-        static::$recursiveRenderDepth[$recursive_render_id]++;
+        // END 1/2: Departmental custom code.
+        // START CORE EntityReferenceEntityFormatter code.
+
+        // Due to render caching and delayed calls, the viewElements() method
+        // will be called later in the rendering process through a '#pre_render'
+        // callback, so we need to generate a counter that takes into account
+        // all the relevant information about this field and the referenced
+        // entity that is being rendered.
+        $recursive_render_id = $items->getFieldDefinition()->getTargetEntityTypeId()
+          . $items->getFieldDefinition()->getTargetBundle()
+          . $items->getName()
+          // We include the referencing entity, so we can render default images
+          // without hitting recursive protections.
+          . $items->getEntity()->id()
+          . $entity->getEntityTypeId()
+          . $entity->id();
+
+        if (isset(static::$recursiveRenderDepth[$recursive_render_id])) {
+          static::$recursiveRenderDepth[$recursive_render_id]++;
+        }
+        else {
+          static::$recursiveRenderDepth[$recursive_render_id] = 1;
+        }
+
+        // Protect ourselves from recursive rendering.
+        if (static::$recursiveRenderDepth[$recursive_render_id] > static::RECURSIVE_RENDER_LIMIT) {
+          $this->loggerFactory->get('entity')->error('Recursive rendering detected when rendering entity %entity_type: %entity_id, using the %field_name field on the %parent_entity_type:%parent_bundle %parent_entity_id entity. Aborting rendering.', [
+            '%entity_type' => $entity->getEntityTypeId(),
+            '%entity_id' => $entity->id(),
+            '%field_name' => $items->getName(),
+            '%parent_entity_type' => $items->getFieldDefinition()->getTargetEntityTypeId(),
+            '%parent_bundle' => $items->getFieldDefinition()->getTargetBundle(),
+            '%parent_entity_id' => $items->getEntity()->id(),
+          ]);
+          return $elements;
+        }
+
+        $view_builder = $this->entityTypeManager->getViewBuilder($entity->getEntityTypeId());
+        $elements[$delta] = $view_builder->view($entity, $view_mode, $entity->language()->getId());
+
+        // START 2/2: Departmental custom code.
+        if (!empty($moderation_states)) {
+          $elements[$delta]['#moderation_states'] = $moderation_states;
+          $elements[$delta]['#pre_render'][] = [static::class, 'renderChildModerationStatus'];
+        }
+        // END 2/2: Departmental custom code.
+
+        // Add a resource attribute to set the mapping property's value to the
+        // entity's URL. Since we don't know what the markup of the entity will
+        // be, we shouldn't rely on it for structured data.
+        if (!empty($items[$delta]->_attributes) && !$entity->isNew() && $entity->hasLinkTemplate('canonical')) {
+          $items[$delta]->_attributes += ['resource' => $entity->toUrl()->toString()];
+        }
+
+        if (!empty($items[$delta]->_attributes)) {
+          $elements[$delta]['#options'] += ['attributes' => []];
+          $elements[$delta]['#options']['attributes'] += $items[$delta]->_attributes;
+          // Unset field item attributes since they have been included in the
+          // formatter output and shouldn't be rendered in the field template.
+          unset($items[$delta]->_attributes);
+        }
+
+        $elements[$delta]['#entity'] = $entity;
+        $elements[$delta]['#cache']['tags'] = $entity->getCacheTags();
+        // END CORE EntityReferenceEntityFormatter code.
       }
       else {
-        static::$recursiveRenderDepth[$recursive_render_id] = 1;
-      }
+        $label = $entity->label();
+        $uri = $entity->toUrl();
 
-      // Protect ourselves from recursive rendering.
-      if (static::$recursiveRenderDepth[$recursive_render_id] > static::RECURSIVE_RENDER_LIMIT) {
-        $this->loggerFactory->get('entity')->error('Recursive rendering detected when rendering entity %entity_type: %entity_id, using the %field_name field on the %parent_entity_type:%parent_bundle %parent_entity_id entity. Aborting rendering.', [
-          '%entity_type' => $entity->getEntityTypeId(),
-          '%entity_id' => $entity->id(),
-          '%field_name' => $items->getName(),
-          '%parent_entity_type' => $items->getFieldDefinition()->getTargetEntityTypeId(),
-          '%parent_bundle' => $items->getFieldDefinition()->getTargetBundle(),
-          '%parent_entity_id' => $items->getEntity()->id(),
-        ]);
-        return $elements;
-      }
+        if (!$entity->isNew()) {
+          $elements[$delta] = [
+            '#type' => 'link',
+            '#title' => $label,
+            '#url' => $uri,
+            '#options' => $uri->getOptions(),
+          ];
 
-      $view_builder = $this->entityTypeManager->getViewBuilder($entity->getEntityTypeId());
-      $elements[$delta] = $view_builder->view($entity, $view_mode, $entity->language()->getId());
-
-      // START 2/2: Departmental custom code.
-      if (!empty($moderation_states)) {
-        $elements[$delta]['#moderation_states'] = $moderation_states;
-        $elements[$delta]['#pre_render'][] = [get_class($this), 'renderChildModerationStatus'];
-      }
-      // END 2/2: Departmental custom code.
-
-      // Add a resource attribute to set the mapping property's value to the
-      // entity's URL. Since we don't know what the markup of the entity will
-      // be, we shouldn't rely on it for structured data.
-      if (!empty($items[$delta]->_attributes) && !$entity->isNew() && $entity->hasLinkTemplate('canonical')) {
-        $items[$delta]->_attributes += ['resource' => $entity->toUrl()->toString()];
+          if (!empty($moderation_states)) {
+            $elements[$delta]['#moderation_states'] = $moderation_states;
+            // We have to add the Core link pre_render callback or the markup
+            // will not be generated.
+            $elements[$delta]['#pre_render'] = [
+              [static::class, 'renderChildModerationStatus'],
+              ['Drupal\Core\Render\Element\Link', 'preRenderLink'],
+            ];
+          }
+        }
       }
     }
 
@@ -269,7 +374,7 @@ final class TopicContentsFormatter extends EntityReferenceEntityFormatter implem
    *   Child node render array.
    */
   public static function renderChildModerationStatus(array $element) {
-    if (Drupal::currentUser()->isAuthenticated() && array_key_exists('#moderation_states', $element)) {
+    if (\Drupal::currentUser()->isAuthenticated() && array_key_exists('#moderation_states', $element)) {
       foreach ($element['#moderation_states'] as $moderation_state) {
         $element['#attributes']['class'][] = 'ms__' . $moderation_state;
       }
