@@ -21,6 +21,7 @@ dependencies:
   module:
     - datetime
     - metatag
+    - simple_gmap
     - text
     - user
 id: node.news.default
@@ -68,9 +69,23 @@ content:
     weight: 0
     region: content
   field_summary:
-    type: text_default
+    type: simple_gmap
     label: hidden
-    settings: {  }
+    settings:
+      include_map: true
+      include_static_map: false
+      include_link: false
+      include_text: false
+      iframe_height: '200'
+      iframe_width: '200'
+      iframe_title: ''
+      static_scale: 1
+      zoom_level: 14
+      link_text: 'View larger map'
+      map_type: m
+      langcode: en
+      apikey: ''
+      alt_text: 'Map location: %address'
     third_party_settings: {  }
     weight: 1
     region: content

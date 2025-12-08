@@ -67,7 +67,9 @@ content:
     type: dept_topics_topic_contents
     label: hidden
     settings:
-      foo: bar
+      display_type: link_label
+      view_mode: default
+      link: false
     third_party_settings: {  }
     weight: 1
     region: content
