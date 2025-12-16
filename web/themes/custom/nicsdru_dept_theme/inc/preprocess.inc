@@ -104,6 +104,14 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
           ->setAttribute('aria-roledescription', t('search events'));
         break;
 
+      case "foi_eir_disclosure_log":
+        $variables['main_content_attr']->addClass(LayoutClasses::SIDE_MAIN);
+        $variables['sidebar_first_attr']
+          ->addClass('ga-aside')
+          ->setAttribute('role', 'search')
+          ->setAttribute('aria-roledescription', t('search FOI/EIR disclosure log publications'));
+        break;
+
       case "publications_search":
         $variables['main_content_attr']->addClass(LayoutClasses::SIDE_MAIN);
         $variables['sidebar_first_attr']
@@ -614,6 +622,7 @@ function nicsdru_dept_theme_preprocess_form(array &$variables) {
     case "views-exposed-form-news-search-news-search":
     case "views-exposed-form-news-search-press-release-search":
     case "views-exposed-form-events-events-search":
+    case "views-exposed-form-foi-eir-disclosure-log-disclosure-log-page":
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('search-form');
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('search-form--page');
       break;
