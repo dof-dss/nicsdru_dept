@@ -137,6 +137,19 @@ display:
         options: {  }
       empty: {  }
       sorts:
+        search_api_relevance:
+          id: search_api_relevance
+          table: search_api_index_publications_index
+          field: search_api_relevance
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: Relevance
+            field_identifier: search_api_relevance
+          exposed: true
         field_published_date:
           id: field_published_date
           table: search_api_index_publications_index
@@ -147,9 +160,9 @@ display:
           plugin_id: search_api
           order: DESC
           expose:
-            label: ''
-            field_identifier: ''
-          exposed: false
+            label: 'Published date'
+            field_identifier: field_published_date
+          exposed: true
       arguments:
         field_domain_access:
           id: field_domain_access
@@ -370,6 +383,8 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
         - url.site
         - 'user.node_grants:view'
       tags:
@@ -382,23 +397,25 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      cache:
-        type: search_api_none
       defaults:
-        cache: false
+        cache: true
       exposed_block: true
       display_extenders: {  }
       path: foi-eir-disclosure-log
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
         - url.site
         - 'user.node_grants:view'
       tags:
+        - 'config:facets.facet.foi_publication_topics'
+        - 'config:facets.facet.foi_publications_published_date'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.publications_index'
         - 'search_api_list:publications_index'
