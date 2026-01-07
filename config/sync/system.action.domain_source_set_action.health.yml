@@ -1,0 +1,14 @@
+uuid: 20d09ed1-8b08-4c00-bdcc-a169e481b2a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.health
+  module:
+    - domain_source
+id: domain_source_set_action.health
+label: 'Set content domain source value to the Department for Health domain'
+type: node
+plugin: domain_source_set_action
+configuration:
+  domain_id: health

@@ -1,0 +1,15 @@
+uuid: f124c8ca-853d-4b05-a0c3-4c6ef8c76440
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.daera
+  module:
+    - domain_access
+id: domain_access_remove_editor_action_daera
+label: 'Remove editors from the DAERA domain'
+type: user
+plugin: domain_access_remove_editor_action
+configuration:
+  domain_id:
+    - daera

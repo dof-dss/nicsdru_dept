@@ -12,7 +12,7 @@ field_name: body
 entity_type: node
 bundle: consultation
 label: Body
-description: 'Use this field for optional additional information. Use ‘Normal’ format, no headings required.'
+description: 'Use this field for additional information. Use ‘Normal’ format, no headings required.'
 required: true
 translatable: false
 default_value: {  }
@@ -20,4 +20,5 @@ default_value_callback: ''
 settings:
   display_summary: false
   required_summary: false
+  allowed_formats: {  }
 field_type: text_with_summary

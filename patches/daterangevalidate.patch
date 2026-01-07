@@ -1,0 +1,14 @@
+diff --git a/core/modules/datetime_range/src/Plugin/Field/FieldWidget/DateRangeWidgetBase.php b/core/modules/datetime_range/src/Plugin/Field/FieldWidget/DateRangeWidgetBase.php
+index b0f3ea7be7..891db62d69 100644
+--- a/core/modules/datetime_range/src/Plugin/Field/FieldWidget/DateRangeWidgetBase.php
++++ b/core/modules/datetime_range/src/Plugin/Field/FieldWidget/DateRangeWidgetBase.php
+@@ -126,4 +126,9 @@ public function validateStartEnd(array &$element, FormStateInterface $form
+       }
+     }
++    else {
++      if ($element['#required']) {
++        $form_state->setError($element, $this->t('The @title date is required.', ['@title' => $element['#title']]));
++      }
++    }
+   }
+ }
