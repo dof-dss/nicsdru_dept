@@ -1,0 +1,14 @@
+uuid: 361aa8ae-52c8-4cdb-83aa-f6c74b302ee6
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.economy
+  module:
+    - domain_source
+id: domain_source_set_action.economy
+label: 'Set content domain source value to the Department for the Economy domain'
+type: node
+plugin: domain_source_set_action
+configuration:
+  domain_id: economy

@@ -1,0 +1,15 @@
+uuid: 5622af09-8797-460a-b80a-499960585595
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.daera
+  module:
+    - domain_access
+id: domain_access_remove_action_daera
+label: 'Remove selected content from the DAERA domain'
+type: node
+plugin: domain_access_remove_action
+configuration:
+  domain_id:
+    - daera

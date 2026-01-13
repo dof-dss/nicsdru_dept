@@ -1,0 +1,7 @@
+<p class="help-viewing-documents">
+  {% if department.id == 'nigov' %}
+    <a href="{{ path('entity.node.canonical', {'node': '207066'}) }}">{{ 'Help viewing documents'|t }}</a>
+  {% else %}
+    <a href="/articles/help-viewing-documents-{{ department.id }}">{{ 'Help viewing documents'|t }}</a>
+  {% endif %}
+</p>

@@ -441,7 +441,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: domain_access_filter
-          operator: in
+          operator: or
           value: {  }
           group: 1
           exposed: true
