@@ -2,7 +2,6 @@
 
 namespace Drupal\dept_topics\Plugin\Field\FieldWidget;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -193,37 +192,24 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       ],
     ];
 
-    // Affix the topic tree link to the field.
+    $modal_url = Url::fromRoute('dept_topics.topic_tree.form', [
+      'department' => $current_dept,
+      'field' => $field_id,
+      'limit' => $selection_limit,
+      'selected' => is_array($default_values) ? implode('+', $default_values) : '',
+      'nid' => $current_nid,
+    ])->toString();
+
     $element['#field_prefix'] = [
-      '#title' => $this->t('Select @label', ['@label' => $this->fieldDefinition->getLabel()]),
-      '#type' => 'link',
-      '#url' => Url::fromRoute('dept_topics.topic_tree.form', [
-        'department' => $current_dept,
-        'field' => $field_id,
-        'limit' => $selection_limit,
-        'selected' => is_array($default_values) ? implode('+', $default_values) : '',
-        'nid' => $current_nid,
-      ]),
-      '#disabled' => TRUE,
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#value' => $this->t('Select @label', ['@label' => $this->fieldDefinition->getLabel()]),
       '#attributes' => [
-        'title' => $this->t('Please wait for the page to fully load'),
-        'class' => [
-          'button',
-          'use-ajax',
-          'topic-tree-button',
-          'link-button-disable'
-        ],
-        'data-dialog-type' => 'modal',
-        'data-dialog-options' => Json::encode([
-          'title' => $this->t('Select @label', ['@label' => $this->fieldDefinition->getLabel()]),
-          'width' => 800,
-          'minHeight' => 500,
-          'position' => ['my' => 'center top', 'at' => 'center top'],
-          'draggable' => TRUE,
-          'autoResize' => FALSE,
-          'dialogClass' => 'topic-widget-modal'
-        ]),
-      ],
+        'id' => 'site-topics-tree-open-button',
+        'data-topic-modal-url' => $modal_url,
+        'data-topic-modal-title' => $this->t('Select @label', ['@label' => $this->fieldDefinition->getLabel()]),
+        'class' => ['button', 'topic-tree-button', 'link-button-disable'],
+      ]
     ];
 
     $element['#attached']['library'][] = 'dept_topics/topic_tree_widget';
