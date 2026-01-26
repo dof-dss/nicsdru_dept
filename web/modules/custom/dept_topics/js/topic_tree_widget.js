@@ -37,7 +37,9 @@
           };
           const topicModal = Drupal.ajax(ajaxSettings);
           topicModal.execute();
-        })
+        });
+        // Adding Playwright test id after event handler has been attached to button.
+        $(this).attr( "data-testid", 'site-topics-tree-open-button' );
       });
     }
   }
