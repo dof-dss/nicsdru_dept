@@ -2,7 +2,7 @@ name: 'Departmental sites: node'
 type: module
 description: 'Provides node based functionality and overrides'
 package: 'NICS: Departmental'
-core_version_requirement: ^8 || ^9 || ^10 || ^10
+core_version_requirement: ^8 || ^9 || ^10 || ^11
 dependencies:
   - drupal:node
   - drupal:user
