@@ -1,7 +1,18 @@
 services:
+  cache.dept_topics:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    factory: ['@cache_factory', 'get']
+    arguments: ['dept_topics']
   topic.manager:
     class: Drupal\dept_topics\TopicManager
-    arguments: ['@entity_type.manager', '@database', '@entity_field.manager', '@entity_display.repository', '@book.manager']
+    arguments:
+      - '@entity_type.manager'
+      - '@database'
+      - '@entity_field.manager'
+      - '@entity_display.repository'
+      - '@book.manager'
+      - '@cache.dept_topics'
+
 #  topic.moderation_state_change_subscriber:
 #    class: Drupal\dept_topics\EventSubscriber\ModerationStateChangeSubscriber
 #    arguments: ['@topic.manager']
@@ -15,7 +26,10 @@ services:
 
   orphan.manager:
     class: Drupal\dept_topics\OrphanManager
-    arguments: ['@entity_type.manager', '@topic.manager']
+    arguments:
+      - '@entity_type.manager'
+      - '@topic.manager'
+      - '@current_user'
 
   dept_topics.entity_event_subscriber:
     class: Drupal\dept_topics\EventSubscriber\TopicsEntityEventSubscriber

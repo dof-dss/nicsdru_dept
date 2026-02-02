@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * destined for the face, and ensure that our blocks can render in the regions
  * without being bothered.
  */
-class HomepageController extends ControllerBase {
+final class HomepageController extends ControllerBase {
 
   /**
    * @var \Drupal\dept_core\DepartmentManager

@@ -55,9 +55,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
         }
 
         // Add or remove site topic tags to nodes that are added or removed from topic child contents.
-        // @phpstan-ignore-next-line
         $original = array_column($entity->original->get('field_topic_content')->getValue(), 'target_id');
-        // @phpstan-ignore-next-line
         $updated = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
 
         $removed = array_diff($original, $updated);
@@ -77,7 +75,6 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
               $child_topics = $child_node->get('field_site_topics');
 
               for ($i = 0; $i < $child_topics->count(); $i++) {
-                // @phpstan-ignore-next-line
                 if ($child_topics->get($i)->target_id == $entity->id()) {
                   $child_topics->removeItem($i);
                   $i--;
@@ -145,7 +142,6 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
         $child_topics = $child_node->get('field_site_topics');
 
         for ($i = 0; $i < $child_topics->count(); $i++) {
-          // @phpstan-ignore-next-line
           if ($child_topics->get($i)->target_id == $entity->id()) {
             $child_topics->removeItem($i);
             $i--;

@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   category = @Translation("Development")
  * )
  */
-class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginInterface {
+final class Drupal7NodeLinkBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * The database connection.
