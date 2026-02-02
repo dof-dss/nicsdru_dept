@@ -141,7 +141,6 @@ function dept_book_process_topics(array $form, FormStateInterface $form_state) {
   // content field for each topic in the entity's site topics values.
   // TL:DR; Hide child pages from topic/subtopic pages.
   if ($values['book']['nid'] !== $values['book']['bid']) {
-    // @phpstan-ignore-next-line
     $entity = $form_state->getFormObject()->getEntity();
     if ($entity->hasField('field_site_topics')) {
       $topic_manager = \Drupal::service('topic.manager');

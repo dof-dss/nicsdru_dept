@@ -143,7 +143,6 @@ function dept_core_preprocess_menu(&$variables) {
     // accessibility statement defined in the group field value.
     $dept = \Drupal::service('department.manager')->getCurrentDepartment();
 
-    // @phpstan-ignore-next-line
     if (empty($dept)) {
       return;
     }
@@ -294,7 +293,6 @@ function dept_core_entity_update(EntityInterface $entity) {
     $department = \Drupal::entityTypeManager()->getStorage('department')->load($entity->id());
 
     if (!empty($department) && $department->label() !== $entity->label()) {
-      // @phpstan-ignore-next-line
       $department->set('label', $entity->label());
       $department->save();
     }
@@ -437,7 +435,6 @@ function dept_core_department_links(): array {
 
     $links[] = [
       '#wrapper_attributes' => ['class' => implode(' ', $classes)],
-      // @phpstan-ignore-next-line
       Link::fromTextAndUrl($department->label(), Url::fromUri($department->url()))->toRenderable()
     ];
     $classes = [];

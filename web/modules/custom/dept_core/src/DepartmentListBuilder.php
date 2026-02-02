@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a list controller for the department entity type.
  */
-class DepartmentListBuilder extends EntityListBuilder {
+final class DepartmentListBuilder extends EntityListBuilder {
 
   /**
    * The date formatter service.
