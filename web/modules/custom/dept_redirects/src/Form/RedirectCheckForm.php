@@ -17,39 +17,45 @@ use Drupal\Core\Url;
 use GuzzleHttp\ClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Provides a form to batch-check redirects and list flagged results.
+ */
 final class RedirectCheckForm extends FormBase {
 
-  protected EntityTypeManagerInterface $entityTypeManager;
-  protected UrlGeneratorInterface $urlGenerator;
-  protected PagerManagerInterface $pagerManager;
-  protected PagerParametersInterface $pagerParameters;
-  protected Connection $dbConn;
-  protected DateFormatterInterface $dateFormatter;
-
-  protected ClientInterface $httpClient;
-  protected TimeInterface $time;
-
+  /**
+   * Constructs a RedirectCheckForm.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
+   * @param \Drupal\Core\Routing\UrlGeneratorInterface $urlGenerator
+   *   The URL generator.
+   * @param \Drupal\Core\Pager\PagerManagerInterface $pagerManager
+   *   The pager manager.
+   * @param \Drupal\Core\Pager\PagerParametersInterface $pagerParameters
+   *   The pager parameters.
+   * @param \Drupal\Core\Database\Connection $dbConn
+   *   The database connection.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
+   *   The date formatter.
+   * @param \GuzzleHttp\ClientInterface $httpClient
+   *   The HTTP client.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
+   */
   public function __construct(
-    EntityTypeManagerInterface $entity_type_manager,
-    UrlGeneratorInterface $url_generator,
-    PagerManagerInterface $pager_manager,
-    PagerParametersInterface $pager_params,
-    Connection $connection,
-    DateFormatterInterface $date_formatter,
-    ClientInterface $http_client,
-    TimeInterface $time,
-  ) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->urlGenerator = $url_generator;
-    $this->pagerManager = $pager_manager;
-    $this->pagerParameters = $pager_params;
-    $this->dbConn = $connection;
-    $this->dateFormatter = $date_formatter;
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected UrlGeneratorInterface $urlGenerator,
+    protected PagerManagerInterface $pagerManager,
+    protected PagerParametersInterface $pagerParameters,
+    protected Connection $dbConn,
+    protected DateFormatterInterface $dateFormatter,
+    protected ClientInterface $httpClient,
+    protected TimeInterface $time,
+  ) {}
 
-    $this->httpClient = $http_client;
-    $this->time = $time;
-  }
-
+  /**
+   * {@inheritdoc}
+   */
   public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('entity_type.manager'),
@@ -63,10 +69,16 @@ final class RedirectCheckForm extends FormBase {
     );
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getFormId(): string {
     return 'dept_redirects_check_form';
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $config = $this->config('dept_redirects.settings');
     $batch_size = $config->get('batch_size') ?? 50;
@@ -83,7 +95,6 @@ final class RedirectCheckForm extends FormBase {
       ->execute()
       ->fetchField();
 
-    // Use FormBase messenger() (no static call, no property override).
     $this->messenger()->addMessage($this->t(
       'Flagged @processed out of @total redirects with a non-valid HTTP response code.',
       ['@processed' => $processed_redirects, '@total' => $total_redirects]
@@ -131,6 +142,9 @@ final class RedirectCheckForm extends FormBase {
     return $form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $batch_size = (int) ($form_state->getValue('batch_size') ?? 50);
 
@@ -149,10 +163,23 @@ final class RedirectCheckForm extends FormBase {
     $form_state->setRedirect('dept_redirects.check_redirects');
   }
 
+  /**
+   * Clears all existing results from the results table.
+   */
   protected function clearResultsTable(): void {
     $this->dbConn->truncate('dept_redirects_results')->execute();
   }
 
+  /**
+   * Batch operation callback to process redirects in chunks.
+   *
+   * @param int $offset
+   *   The starting offset for this batch chunk.
+   * @param int $batch_size
+   *   The maximum number of redirects to process in this chunk.
+   * @param array $context
+   *   Batch context information.
+   */
   public function processRedirects($offset, $batch_size, array &$context): void {
     if (!isset($context['sandbox']['progress'])) {
       $context['sandbox']['progress'] = 0;
@@ -251,6 +278,15 @@ final class RedirectCheckForm extends FormBase {
     }
   }
 
+  /**
+   * Builds the results table and pager.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   *
+   * @return array
+   *   A render array containing the results table and pager.
+   */
   protected function buildResultsTable(FormStateInterface $form_state): array {
     $header = [
       ['data' => $this->t('Redirect ID')],
@@ -284,7 +320,6 @@ final class RedirectCheckForm extends FormBase {
 
     $this->pagerManager->createPager($total_items, $num_per_page);
 
-    // Replace \Drupal::request() with FormBase::getRequest().
     $current_path = $this->getRequest()->getRequestUri();
 
     $rows = [];
@@ -318,10 +353,28 @@ final class RedirectCheckForm extends FormBase {
     ];
   }
 
+  /**
+   * Submit handler to rebuild the form with the current filter values.
+   *
+   * @param array $form
+   *   The form render array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
   public function filterResults(array &$form, FormStateInterface $form_state): void {
     $form_state->setRebuild(TRUE);
   }
 
+  /**
+   * Batch finished callback.
+   *
+   * @param bool $success
+   *   Whether the batch completed successfully.
+   * @param array $results
+   *   An array of results (unused).
+   * @param array $operations
+   *   An array of operations that remained after processing (unused).
+   */
   public function finishBatch($success, array $results, array $operations): void {
     if ($success) {
       $this->messenger()->addStatus($this->t('Redirect check completed successfully.'));

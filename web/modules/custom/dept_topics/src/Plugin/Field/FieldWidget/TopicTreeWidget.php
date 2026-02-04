@@ -99,9 +99,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
    * {@inheritdoc}
    */
   public static function defaultSettings(): array {
-    return [
-        'excluded' => TRUE,
-      ] + parent::defaultSettings();
+    return ['excluded' => TRUE] + parent::defaultSettings();
   }
 
   /**

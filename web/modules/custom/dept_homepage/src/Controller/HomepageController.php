@@ -3,7 +3,6 @@
 namespace Drupal\dept_homepage\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\node\NodeStorageInterface;
@@ -14,6 +13,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 final class HomepageController extends ControllerBase {
 
+  /**
+   * @var \Drupal\node\NodeStorageInterface
+   *   The node storage service object.
+   */
   protected NodeStorageInterface $nodeStorage;
 
   public function __construct(

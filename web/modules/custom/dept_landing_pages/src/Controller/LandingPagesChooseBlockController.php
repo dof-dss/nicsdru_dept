@@ -40,6 +40,8 @@ final class LandingPagesChooseBlockController implements ContainerInjectionInter
    *   Module handler service object.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   File system service object.
+   * @param \Drupal\layout_builder_restrictions\Plugin\LayoutBuilderRestrictionInterface $builderRestriction
+   *   The layout builder restriction service object.
    */
   public function __construct(
     protected BlockManagerInterface $blockManager,
