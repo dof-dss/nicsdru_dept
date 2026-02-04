@@ -182,7 +182,3 @@ foreach ($platformsh->variables() as $name => $value) {
       break;
   }
 }
-
-if (getenv('PLATFORM_ENVIRONMENT_TYPE') === 'development') {
-  $settings['session']['cookie_domain'] = '.platformsh.site';
-}
