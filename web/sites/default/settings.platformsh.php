@@ -4,8 +4,6 @@
  * Platform.sh settings.
  */
 
-use Drupal\Core\Installer\InstallerKernel;
-
 $platformsh = new \Platformsh\ConfigReader\Config();
 
 // Configure the database.
@@ -183,4 +181,8 @@ foreach ($platformsh->variables() as $name => $value) {
       }
       break;
   }
+}
+
+if (getenv('PLATFORM_ENVIRONMENT_TYPE') === 'development') {
+  $settings['session']['cookie_domain'] = '.platformsh.site';
 }
