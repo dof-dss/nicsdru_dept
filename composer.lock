@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6f71dc2f7bd06ca33e266def2704f522",
+    "content-hash": "debe1813b0be71d501112d19adc2f9d7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3554,17 +3554,17 @@
         },
         {
             "name": "drupal/domain",
-            "version": "2.0.0-rc1",
+            "version": "2.0.0-rc2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/domain.git",
-                "reference": "2.0.0-rc1"
+                "reference": "2.0.0-rc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/domain-2.0.0-rc1.zip",
-                "reference": "2.0.0-rc1",
-                "shasum": "a6be3a46dca2c797b2d8555b94d4bcce8fda641d"
+                "url": "https://ftp.drupal.org/files/projects/domain-2.0.0-rc2.zip",
+                "reference": "2.0.0-rc2",
+                "shasum": "c4d8bb66cbf01752fb572679e17cdd83575d67f0"
             },
             "require": {
                 "drupal/core": "^10.2 || ^11"
@@ -3576,8 +3576,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-rc1",
-                    "datestamp": "1767689080",
+                    "version": "2.0.0-rc2",
+                    "datestamp": "1770210885",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -3776,17 +3776,17 @@
         },
         {
             "name": "drupal/domain_path",
-            "version": "2.0.0-alpha4",
+            "version": "2.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/domain_path.git",
-                "reference": "2.0.0-alpha4"
+                "reference": "2.0.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/domain_path-2.0.0-alpha4.zip",
-                "reference": "2.0.0-alpha4",
-                "shasum": "9c164df67e71821262b6b31d04fcbe21a03f1b75"
+                "url": "https://ftp.drupal.org/files/projects/domain_path-2.0.0-beta1.zip",
+                "reference": "2.0.0-beta1",
+                "shasum": "a2ee6d2965efa5a99199441d279cf1852b821021"
             },
             "require": {
                 "drupal/core": "^10.3 || ^11",
@@ -3802,11 +3802,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha4",
-                    "datestamp": "1767877608",
+                    "version": "2.0.0-beta1",
+                    "datestamp": "1770210467",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -22269,7 +22269,7 @@
         "drupal/config_readonly": 10,
         "drupal/domain": 10,
         "drupal/domain_entity": 5,
-        "drupal/domain_path": 15,
+        "drupal/domain_path": 10,
         "drupal/domain_simple_sitemap": 10,
         "drupal/entity_usage": 20,
         "drupal/file_delete_ui": 20,
