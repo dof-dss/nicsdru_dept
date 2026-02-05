@@ -9,9 +9,12 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityType;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\book\BookManagerInterface;
 use Drupal\node\NodeInterface;
+use function PHPUnit\Framework\isInstanceOf;
 
 /**
  * Provides methods for managing Sub/Topic referenced (child) content.
@@ -116,7 +119,7 @@ final class TopicManager {
    * Return true if the provided type is enabled as a topic child content option.
    */
   public function isValidTopicChild(mixed $type): bool {
-    if ($type instanceof NodeInterface) {
+    if ($type instanceof EntityInterface) {
       return in_array($type->bundle(), $this->getTopicChildNodeTypes(), TRUE);
     }
 
