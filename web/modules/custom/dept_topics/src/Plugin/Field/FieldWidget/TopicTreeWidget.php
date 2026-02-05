@@ -136,9 +136,16 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
 
     $node = \Drupal::routeMatch()->getParameter('node');
 
+    if (empty($node)) {
+      // @phpstan-ignore-next-line
+      $node = $form_state->getFormObject()->getEntity();
+    }
+
     // If updating a node fetch the ID to disable this entry in the topic tree.
     if ($node instanceof NodeInterface) {
-      $current_nid = $node->id();
+      // Set to 0 to prevent InvalidParameterException, typically when returning
+      // from a node preview.
+      $current_nid = $node->id() ?? 0;
     }
 
     // Get current department from the domain_access field.
