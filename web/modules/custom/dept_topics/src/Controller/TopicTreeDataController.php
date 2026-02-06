@@ -3,6 +3,7 @@
 namespace Drupal\dept_topics\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
@@ -12,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * Returns dataset responses for topic tree field widget.
  */
-final class TopicTreeDataController {
+final class TopicTreeDataController implements ContainerInjectionInterface {
 
   /**
    * Node storage.
