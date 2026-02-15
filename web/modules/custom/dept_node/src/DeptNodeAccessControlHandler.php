@@ -3,39 +3,42 @@
 namespace Drupal\dept_node;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\node\NodeAccessControlHandler;
 use Drupal\node\NodeGrantDatabaseStorageInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Extends the core node access handler for Departmental sites.
  */
-class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
+final class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
 
   /**
-   *  The Department Manager service.
-   *
-   * @var \Drupal\dept_core\DepartmentManager
+   * {@inheritdoc}
    */
-  protected DepartmentManager $departmentManager;
-
-  /**
-   * Constructs a NodeAccessControlHandler object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *   The entity type definition.
-   * @param \Drupal\node\NodeGrantDatabaseStorageInterface $grant_storage
-   *   The node grant storage.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   */
-  public function __construct(EntityTypeInterface $entity_type, NodeGrantDatabaseStorageInterface $grant_storage, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    EntityTypeInterface $entity_type,
+    NodeGrantDatabaseStorageInterface $grant_storage,
+    EntityTypeManagerInterface $entity_type_manager,
+    protected DepartmentManager $departmentManager,
+  ) {
     parent::__construct($entity_type, $grant_storage, $entity_type_manager);
+  }
 
-    $this->departmentManager = \Drupal::service('department.manager');
+  /**
+   * Entity handler factory used by EntityTypeManager.
+   */
+  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type): static {
+    return new static(
+      $entity_type,
+      $container->get('node.grant_storage'),
+      $container->get('entity_type.manager'),
+      $container->get('department.manager'),
+    );
   }
 
   /**

@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_redirects\Form;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Datetime\DateFormatterInterface;
@@ -13,141 +14,104 @@ use Drupal\Core\Pager\PagerManagerInterface;
 use Drupal\Core\Pager\PagerParametersInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\Core\Url;
-use Drupal\redirect\Entity\Redirect;
+use GuzzleHttp\ClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class RedirectCheckForm extends FormBase {
+/**
+ * Provides a form to batch-check redirects and list flagged results.
+ */
+final class RedirectCheckForm extends FormBase {
 
   /**
-   * The entity type manager.
+   * Constructs a RedirectCheckForm.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The URL generator service.
-   *
-   * @var \Drupal\Core\Routing\UrlGeneratorInterface
-   */
-  protected $urlGenerator;
-
-  /**
-   * Drupal\Core\Pager\PagerManagerInterface definition.
-   *
-   * @var \Drupal\Core\Pager\PagerManagerInterface
-   */
-  protected $pagerManager;
-
-  /**
-   * Drupal\Core\Pager\PagerParametersInterface definition.
-   *
-   * @var \Drupal\Core\Pager\PagerParametersInterface
-   */
-  protected $pagerParameters;
-
-  /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $dbConn;
-
-  /**
-   * Date formatter service object.
-   *
-   * @var \Drupal\Core\Datetime\DateFormatterInterface
-   */
-  protected $dateFormatter;
-
-  /**
-   * Constructs a new RedirectCheckForm object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
-   * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
-   *   The URL generator service.
-   * @param \Drupal\Core\Pager\PagerManagerInterface $pager_manager
-   *   The pager manager service.
-   * @param \Drupal\Core\Pager\PagerParametersInterface $pager_params
-   *   The pager parameters service.
-   * @param \Drupal\Core\Database\Connection $connection
+   * @param \Drupal\Core\Routing\UrlGeneratorInterface $urlGenerator
+   *   The URL generator.
+   * @param \Drupal\Core\Pager\PagerManagerInterface $pagerManager
+   *   The pager manager.
+   * @param \Drupal\Core\Pager\PagerParametersInterface $pagerParameters
+   *   The pager parameters.
+   * @param \Drupal\Core\Database\Connection $dbConn
    *   The database connection.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
-   *   The date formatter service.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
+   *   The date formatter.
+   * @param \GuzzleHttp\ClientInterface $httpClient
+   *   The HTTP client.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, UrlGeneratorInterface $url_generator, PagerManagerInterface $pager_manager, PagerParametersInterface $pager_params, Connection $connection, DateFormatterInterface $date_formatter) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->urlGenerator = $url_generator;
-    $this->pagerManager = $pager_manager;
-    $this->pagerParameters = $pager_params;
-    $this->dbConn = $connection;
-    $this->dateFormatter = $date_formatter;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected UrlGeneratorInterface $urlGenerator,
+    protected PagerManagerInterface $pagerManager,
+    protected PagerParametersInterface $pagerParameters,
+    protected Connection $dbConn,
+    protected DateFormatterInterface $dateFormatter,
+    protected ClientInterface $httpClient,
+    protected TimeInterface $time,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('url_generator'),
       $container->get('pager.manager'),
       $container->get('pager.parameters'),
       $container->get('database'),
-      $container->get('date.formatter')
+      $container->get('date.formatter'),
+      $container->get('http_client'),
+      $container->get('datetime.time'),
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'dept_redirects_check_form';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state): array {
     $config = $this->config('dept_redirects.settings');
     $batch_size = $config->get('batch_size') ?? 50;
 
-    // Get the total number of redirects and the number of processed redirects.
     $total_redirects = $this->entityTypeManager->getStorage('redirect')
       ->getQuery()
       ->count()
       ->accessCheck(TRUE)
       ->execute();
-    $processed_redirects = $this->dbConn->select('dept_redirects_results', 'd')
+
+    $processed_redirects = (int) $this->dbConn->select('dept_redirects_results', 'd')
       ->countQuery()
       ->distinct()
       ->execute()
       ->fetchField();
 
-    // Display the number of redirects processed and the total so far.
-    \Drupal::messenger()->addMessage($this->t('Flagged @processed out of @total redirects with a non-valid HTTP response code.', [
-      '@processed' => $processed_redirects,
-      '@total' => $total_redirects,
-    ]));
+    $this->messenger()->addMessage($this->t(
+      'Flagged @processed out of @total redirects with a non-valid HTTP response code.',
+      ['@processed' => $processed_redirects, '@total' => $total_redirects]
+    ));
 
-    // Add the start batch process button.
     $form['batch_size'] = [
       '#type' => 'hidden',
       '#value' => $batch_size,
     ];
 
-    $form['actions'] = [
-      '#type' => 'actions',
-    ];
-
+    $form['actions'] = ['#type' => 'actions'];
     $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Start Redirect Check'),
       '#button_type' => 'primary',
     ];
 
-    // Add the exposed filter form.
     $form['filter'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Filter Results'),
@@ -173,7 +137,6 @@ class RedirectCheckForm extends FormBase {
       ],
     ];
 
-    // Add the results table with pager.
     $form['results'] = $this->buildResultsTable($form_state);
 
     return $form;
@@ -182,49 +145,42 @@ class RedirectCheckForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    $batch_size = $form_state->getValue('batch_size') ?? 50;
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
+    $batch_size = (int) ($form_state->getValue('batch_size') ?? 50);
 
-    // Clear the results table.
     $this->clearResultsTable();
 
-    // Initialize batch builder.
-    $batch_builder = new BatchBuilder();
-    $batch_builder->setTitle($this->t('Checking redirects'))
+    $batch_builder = (new BatchBuilder())
+      ->setTitle($this->t('Checking redirects'))
       ->setInitMessage($this->t('Redirect check is starting...'))
       ->setProgressMessage($this->t('@current items out of @total.'))
       ->setErrorMessage($this->t('Redirect check has encountered an error.'))
       ->setFinishCallback([$this, 'finishBatch']);
 
-    // Add the first batch operation to start processing redirects.
     $batch_builder->addOperation([$this, 'processRedirects'], [0, $batch_size]);
 
-    // Set the batch.
     batch_set($batch_builder->toArray());
-
-    // Redirect to batch processing page.
     $form_state->setRedirect('dept_redirects.check_redirects');
   }
 
   /**
-   * Clears the results table.
+   * Clears all existing results from the results table.
    */
-  protected function clearResultsTable() {
+  protected function clearResultsTable(): void {
     $this->dbConn->truncate('dept_redirects_results')->execute();
   }
 
   /**
-   * Process a chunk of redirects.
+   * Batch operation callback to process redirects in chunks.
    *
    * @param int $offset
-   *   The offset to start processing.
+   *   The starting offset for this batch chunk.
    * @param int $batch_size
-   *   The number of redirects to process in each batch.
+   *   The maximum number of redirects to process in this chunk.
    * @param array $context
-   *   The batch context array.
+   *   Batch context information.
    */
-  public function processRedirects($offset, $batch_size, array &$context) {
-    // Initialize sandbox properties if not set.
+  public function processRedirects($offset, $batch_size, array &$context): void {
     if (!isset($context['sandbox']['progress'])) {
       $context['sandbox']['progress'] = 0;
     }
@@ -239,28 +195,26 @@ class RedirectCheckForm extends FormBase {
       $context['sandbox']['offset'] = 0;
     }
     if (!isset($context['sandbox']['batch_size'])) {
-      $context['sandbox']['batch_size'] = $batch_size;
+      $context['sandbox']['batch_size'] = (int) $batch_size;
     }
 
-    $query = \Drupal::entityQuery('redirect')
+    $redirect_ids = $this->entityTypeManager->getStorage('redirect')
+      ->getQuery()
       ->accessCheck(TRUE)
       ->sort('rid', 'ASC')
-      ->range($context['sandbox']['offset'], $batch_size);
-
-    $redirect_ids = $query->execute();
+      ->range($context['sandbox']['offset'], (int) $batch_size)
+      ->execute();
 
     if (empty($redirect_ids)) {
-      // No more redirects to process.
       return;
     }
 
-    /** @var \Drupal\redirect\Entity\Redirect[] $redirects */
-    $redirects = Redirect::loadMultiple($redirect_ids);
+    $redirects = $this->entityTypeManager->getStorage('redirect')->loadMultiple($redirect_ids);
 
     foreach ($redirects as $redirect) {
+      /** @var \Drupal\redirect\Entity\Redirect $redirect */
       $destination_path = $redirect->getRedirectUrl()->toString();
 
-      // Determine if the destination is an absolute or external URL.
       if (str_starts_with($destination_path, 'www')) {
         $destination_path = 'https://' . $destination_path;
       }
@@ -269,84 +223,71 @@ class RedirectCheckForm extends FormBase {
         $destination = $destination_path;
       }
       else {
-        // Get the base URL.
         $base_url = $this->urlGenerator->generateFromRoute('<front>', [], ['absolute' => TRUE]);
-        // Construct the full URL.
         $destination = Url::fromUri($base_url . substr($destination_path, 1))->toString();
       }
 
+      $checked = $this->time->getRequestTime();
+
       try {
-        $response = \Drupal::httpClient()->head($destination, ['http_errors' => FALSE]);
+        $response = $this->httpClient->head($destination, ['http_errors' => FALSE]);
         $status_code = $response->getStatusCode();
-        $current_time = \Drupal::time()->getRequestTime();
 
-        // Check if the status code is not in the 200 or 300 range.
         if ($status_code < 200 || $status_code >= 400) {
-          $context['results'][] = [
-            'rid' => $redirect->id(),
-            'source' => $redirect->getSourceUrl(),
-            'destination' => $destination_path,
-            'status' => $status_code,
-            'checked' => $current_time,
-          ];
-        }
-      }
-      catch (\Exception $e) {
-        $context['results'][] = [
-          'rid' => $redirect->id(),
-          'source' => $redirect->getSourceUrl(),
-          'destination' => $destination_path,
-          'status' => 'Error: ' . $e->getMessage(),
-          'checked' => \Drupal::time()->getRequestTime(),
-        ];
-      }
-
-      // Store results in the database table.
-      if (!empty($context['results'])) {
-        foreach ($context['results'] as $result) {
           $this->dbConn->insert('dept_redirects_results')
             ->fields([
-              'rid' => $result['rid'],
-              'source' => $result['source'],
-              'destination' => $result['destination'],
-              'status' => $result['status'],
-              'checked' => $result['checked'],
+              'rid' => $redirect->id(),
+              'source' => $redirect->getSourceUrl(),
+              'destination' => $destination_path,
+              'status' => $status_code,
+              'checked' => $checked,
             ])
             ->execute();
         }
-        // Clear results after inserting into the database.
-        $context['results'] = [];
+      }
+      catch (\Throwable $e) {
+        $this->dbConn->insert('dept_redirects_results')
+          ->fields([
+            'rid' => $redirect->id(),
+            'source' => $redirect->getSourceUrl(),
+            'destination' => $destination_path,
+            'status' => 'Error: ' . $e->getMessage(),
+            'checked' => $checked,
+          ])
+          ->execute();
       }
     }
 
-    // Update the sandbox progress and offset.
     $context['sandbox']['progress'] += count($redirect_ids);
-    $context['sandbox']['offset'] += $batch_size;
-    $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['total'];
+    $context['sandbox']['offset'] += (int) $batch_size;
+
+    $total = (int) $context['sandbox']['total'];
+    $progress = (int) $context['sandbox']['progress'];
+
+    $context['finished'] = $total > 0 ? $progress / $total : 1;
     $context['message'] = $this->t('Processed @current items out of @total.', [
-      '@current' => $context['sandbox']['progress'],
-      '@total' => $context['sandbox']['total'],
+      '@current' => $progress,
+      '@total' => $total,
     ]);
 
-    // Schedule the next batch operation if there are more redirects to process.
-    if ($context['sandbox']['offset'] < $context['sandbox']['total']) {
+    if ($context['sandbox']['offset'] < $total) {
       $context['batch']['operations'][] = [
         [$this, 'processRedirects'],
-        [$context['sandbox']['offset'], $context['sandbox']['batch_size']]
+        [$context['sandbox']['offset'], $context['sandbox']['batch_size']],
       ];
     }
   }
 
   /**
-   * Build the results table.
+   * Builds the results table and pager.
    *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    *
    * @return array
-   *   The render array for the results table.
+   *   A render array containing the results table and pager.
    */
-  protected function buildResultsTable(FormStateInterface $form_state) {
+  protected function buildResultsTable(FormStateInterface $form_state): array {
     $header = [
       ['data' => $this->t('Redirect ID')],
       ['data' => $this->t('Source')],
@@ -359,7 +300,6 @@ class RedirectCheckForm extends FormBase {
     $query = $this->dbConn->select('dept_redirects_results', 'd')
       ->fields('d', ['rid', 'source', 'destination', 'status', 'checked']);
 
-    // Apply filters if provided.
     if ($source_filter = $form_state->getValue('source', '')) {
       $query->condition('d.source', '%' . $this->dbConn->escapeLike($source_filter) . '%', 'LIKE');
     }
@@ -370,19 +310,17 @@ class RedirectCheckForm extends FormBase {
       $query->condition('d.status', '%' . $this->dbConn->escapeLike($response_text_filter) . '%', 'LIKE');
     }
 
-    // Pager init.
-    $page = $this->pagerParameters->findPage();
-    $total_items = $query->countQuery()->execute()->fetchField() ?? 0;
+    $total_items = (int) ($query->countQuery()->execute()->fetchField() ?? 0);
     $num_per_page = 25;
 
-    // @phpstan-ignore-next-line
-    $results = $query->extend('Drupal\Core\Database\Query\PagerSelectExtender')->limit($num_per_page)->execute();
+    $results = $query
+      ->extend('Drupal\Core\Database\Query\PagerSelectExtender')
+      ->limit($num_per_page)
+      ->execute();
 
-    // Now that we have the total number of results, initialize the pager.
     $this->pagerManager->createPager($total_items, $num_per_page);
 
-    // Get the current path including query parameters.
-    $current_path = \Drupal::request()->getRequestUri();
+    $current_path = $this->getRequest()->getRequestUri();
 
     $rows = [];
     foreach ($results as $result) {
@@ -392,8 +330,9 @@ class RedirectCheckForm extends FormBase {
           $result->source,
           $result->destination,
           $result->status,
-          $this->dateFormatter->format($result->checked, 'custom', 'd M Y H:i'),
-          Link::createFromRoute($this->t('Edit'),
+          $this->dateFormatter->format((int) $result->checked, 'custom', 'd M Y H:i'),
+          Link::createFromRoute(
+            $this->t('Edit'),
             'entity.redirect.edit_form',
             ['redirect' => $result->rid, 'destination' => $current_path]
           ),
@@ -401,49 +340,47 @@ class RedirectCheckForm extends FormBase {
       ];
     }
 
-    $build['table'] = [
-      '#type' => 'table',
-      '#header' => $header,
-      '#rows' => $rows,
-      '#empty' => $this->t('No redirects found.'),
-      '#prefix' => '<div id="redirect-results-table">',
-      '#suffix' => '</div>',
+    return [
+      'table' => [
+        '#type' => 'table',
+        '#header' => $header,
+        '#rows' => $rows,
+        '#empty' => $this->t('No redirects found.'),
+        '#prefix' => '<div id="redirect-results-table">',
+        '#suffix' => '</div>',
+      ],
+      'pager' => ['#type' => 'pager'],
     ];
-
-    $build['pager'] = ['#type' => 'pager'];
-
-    return $build;
   }
 
   /**
-   * Filter results submission handler.
+   * Submit handler to rebuild the form with the current filter values.
    *
    * @param array $form
-   *   The form array.
+   *   The form render array.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
-  public function filterResults(array &$form, FormStateInterface $form_state) {
-    // Rebuild the form to apply filters.
+  public function filterResults(array &$form, FormStateInterface $form_state): void {
     $form_state->setRebuild(TRUE);
   }
 
   /**
-   * Finish callback for the batch.
+   * Batch finished callback.
    *
    * @param bool $success
-   *   Whether the batch process was successful.
+   *   Whether the batch completed successfully.
    * @param array $results
-   *   The results of the batch process.
+   *   An array of results (unused).
    * @param array $operations
-   *   Any remaining operations.
+   *   An array of operations that remained after processing (unused).
    */
-  public function finishBatch($success, array $results, array $operations) {
+  public function finishBatch($success, array $results, array $operations): void {
     if ($success) {
-      \Drupal::messenger()->addStatus($this->t('Redirect check completed successfully.'));
+      $this->messenger()->addStatus($this->t('Redirect check completed successfully.'));
     }
     else {
-      \Drupal::messenger()->addError($this->t('Redirect check encountered an error.'));
+      $this->messenger()->addError($this->t('Redirect check encountered an error.'));
     }
   }
 

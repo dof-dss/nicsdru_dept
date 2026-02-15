@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Handles permissions callbacks for changing moderation state on
  * secure publication nodes.
  */
-class SecurePublicationsPermissionController extends ControllerBase implements ContainerInjectionInterface {
+final class SecurePublicationsPermissionController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
    * The entity type manager.

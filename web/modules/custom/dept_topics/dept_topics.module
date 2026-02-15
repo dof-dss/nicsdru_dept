@@ -280,7 +280,6 @@ function dept_topics_entity_delete(EntityInterface $entity) {
         $has_child_entry = FALSE;
 
         for ($i = 0; $i < $child_refs->count(); $i++) {
-          // @phpstan-ignore-next-line
           if ($child_refs->get($i)->target_id == $entity->id()) {
             $child_refs->removeItem($i);
             $has_child_entry = TRUE;
@@ -349,7 +348,6 @@ function dept_topics_node_presave(EntityInterface $node) {
       return;
     }
 
-    // @phpstan-ignore-next-line
     if ($node->get('moderation_state')->getString() !== 'published') {
       return;
     }
@@ -514,7 +512,6 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
  * Topic/Subtopic node edit form validation callback.
  */
 function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
-  // @phpstan-ignore-next-line.
   $entity = $form_state->getFormObject()->getEntity();
 
   // Warn the user if they self reference a subtopic.
@@ -528,7 +525,6 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
 
   $topic_contents = $form_state->getValue('field_topic_content');
   $topic_manager = \Drupal::service('topic.manager');
-  // @phpstan-ignore-next-line.
   $parent_node = $form_state->getFormObject()->getEntity();
 
   foreach ($topic_contents as $index => $topic_content) {
@@ -642,7 +638,6 @@ function dept_topics_theme() {
  */
 function dept_topics_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
   if ($view->id() === 'content_by_site_subtopic') {
-    // @phpstan-ignore-next-line
     foreach ($query->where[0]['conditions'] as $index => $condition) {
       if (str_starts_with($condition['field'], 'node__field_site_topics')) {
         // Fetch current topic node id.
@@ -664,7 +659,6 @@ function dept_topics_views_query_alter(ViewExecutable $view, QueryPluginBase $qu
 
         $args = array_merge($args, $subtopics);
 
-        // @phpstan-ignore-next-line
         $query->where[0]['conditions'][$index]['field'] = 'node__field_site_topics.field_site_topics_target_id';
         $query->where[0]['conditions'][$index]['value'] = $args;
         $query->where[0]['conditions'][$index]['operator'] = 'in';

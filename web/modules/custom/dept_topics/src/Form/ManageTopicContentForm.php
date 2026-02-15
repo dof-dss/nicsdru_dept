@@ -7,6 +7,7 @@ namespace Drupal\dept_topics\Form;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -21,46 +22,27 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class ManageTopicContentForm extends FormBase {
 
   /**
-   * The Topic manager service.
+   * Node storage.
    *
-   * @var \Drupal\dept_topics\TopicManager
+   * @var \Drupal\Core\Entity\EntityStorageInterface
    */
-  protected $topicManager;
-
-  /**
-   * The Alias manager service.
-   *
-   * @var \Drupal\path_alias\AliasManagerInterface
-   */
-  protected $aliasManager;
-
-  /**
-   * The Entity Type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
+  private EntityStorageInterface $nodeStorage;
 
   /**
    * Constructor.
-   *
-   * @param \Drupal\dept_topics\TopicManager $topic_manager
-   *   The Topic manager service.
-   * @param \Drupal\path_alias\AliasManagerInterface $alias_manager
-   *   The Alias manager.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The Entity Type manager.
    */
-  public function __construct(TopicManager $topic_manager, AliasManagerInterface $alias_manager, EntityTypeManagerInterface $entity_type_manager) {
-    $this->topicManager = $topic_manager;
-    $this->aliasManager = $alias_manager;
-    $this->entityTypeManager = $entity_type_manager;
+  public function __construct(
+    private readonly TopicManager $topicManager,
+    private readonly AliasManagerInterface $aliasManager,
+    private readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {
+    $this->nodeStorage = $this->entityTypeManager->getStorage('node');
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): static {
     return new static(
       $container->get('topic.manager'),
       $container->get('path_alias.manager'),
@@ -78,9 +60,10 @@ final class ManageTopicContentForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state): array {
     $nid = $this->getRequest()->query->get('nid');
-    $node = $this->entityTypeManager->getStorage('node')->load($nid);
+    $node = $nid ? $this->nodeStorage->load($nid) : NULL;
+
     $form['#attached']['library'][] = 'dept_topics/manage_topic_content';
 
     $form['#prefix'] = '<div id="form-wrapper">';
@@ -91,7 +74,7 @@ final class ManageTopicContentForm extends FormBase {
       '#title' => $this->t('Add existing content'),
       '#attributes' => [
         'class' => ['container-inline'],
-      ]
+      ],
     ];
 
     // Use the Linkit profile to restrict which content can be added.
@@ -117,9 +100,7 @@ final class ManageTopicContentForm extends FormBase {
         'wrapper' => 'form-wrapper',
       ],
       '#attributes' => [
-        'class' => [
-          'button--primary',
-        ],
+        'class' => ['button--primary'],
       ],
     ];
 
@@ -128,7 +109,7 @@ final class ManageTopicContentForm extends FormBase {
       '#value' => $form_state->getValue('topic_nid') ?? $nid,
     ];
 
-    // Stores the list of nids that are to be removed when the child content table is recreated.
+    // Stores the list of nids that are to be removed when the table is recreated.
     $form['removed_children'] = [
       '#type' => 'hidden',
       '#value' => $form_state->getValue('removed_children') ?? '',
@@ -146,7 +127,7 @@ final class ManageTopicContentForm extends FormBase {
     $form['subtopics_info'] = [
       '#type' => 'html_tag',
       '#tag' => 'div',
-      '#value' => 'Subtopics can only be removed if they are assigned a new site topic. This can be achieved using the edit link which opens in a new window.',
+      '#value' => $this->t('Subtopics can only be removed if they are assigned a new site topic. This can be achieved using the edit link which opens in a new window.'),
     ];
 
     $form['child_content'] = [
@@ -158,19 +139,21 @@ final class ManageTopicContentForm extends FormBase {
           'action' => 'order',
           'relationship' => 'sibling',
           'group' => 'table-sort-weight',
-        ]
-      ]
+        ],
+      ],
     ];
 
-    // If this is the first instantiation of the form, load the child contents from the field.
+    // If first instantiation, load child contents from the field.
     if (empty($form_state->getValue('child_content'))) {
-      $child_contents = $node->get('field_topic_content')->referencedEntities();
+      $child_contents = ($node && $node->hasField('field_topic_content'))
+        ? $node->get('field_topic_content')->referencedEntities()
+        : [];
     }
     else {
-      // Form state only holds the nids, so we load the nodes to access the title.
+      // Form state holds nids, so load nodes to access labels.
       $child_contents = $form_state->getValue('child_content');
       if (is_array($child_contents)) {
-        $child_contents = $this->entityTypeManager->getStorage('node')->loadMultiple(array_keys($child_contents));
+        $child_contents = $this->nodeStorage->loadMultiple(array_keys($child_contents));
       }
     }
 
@@ -178,7 +161,7 @@ final class ManageTopicContentForm extends FormBase {
 
       // Don't add removed child content from the table.
       if (!empty($form['removed_children']['#value'])) {
-        if (in_array($child->id(), explode(',', $form['removed_children']['#value']))) {
+        if (in_array($child->id(), explode(',', (string) $form['removed_children']['#value']), TRUE)) {
           continue;
         }
       }
@@ -193,9 +176,12 @@ final class ManageTopicContentForm extends FormBase {
         '#value' => $child->label(),
       ];
 
-      if (!$child->isPublished()) {
+      if (method_exists($child, 'isPublished') && !$child->isPublished() && $child->hasField('moderation_state')) {
         $state = $child->get('moderation_state')->getString();
-        $form['child_content'][$child_nid]['title']['#suffix'] = ' <span title="Moderation status" class="moderation-state--' . str_replace('_', '-', $state) . '">' . ucfirst(str_replace('_', ' ', $state)) . '</span>';
+        $form['child_content'][$child_nid]['title']['#suffix'] =
+          ' <span title="Moderation status" class="moderation-state--' . str_replace('_', '-', $state) . '">' .
+          ucfirst(str_replace('_', ' ', $state)) .
+          '</span>';
       }
 
       $form['child_content'][$child_nid]['weight'] = [
@@ -204,52 +190,43 @@ final class ManageTopicContentForm extends FormBase {
         '#title_display' => 'invisible',
         '#default_value' => $weight,
         '#attributes' => [
-          'class' => [
-            'table-sort-weight',
-          ],
+          'class' => ['table-sort-weight'],
         ],
       ];
 
       if ($child->bundle() === 'subtopic') {
         $form['child_content'][$child_nid]['edit'] = [
           '#type' => 'link',
-          '#title' => t('Edit'),
+          '#title' => $this->t('Edit'),
           '#url' => Url::fromRoute('entity.node.edit_form', ['node' => $child->id()]),
           '#attributes' => [
             'class' => ['button--danger', 'link', 'button'],
-            'title' => t('Edit this subtopic to assign a new parent topic'),
+            'title' => $this->t('Edit this subtopic to assign a new parent topic'),
             'target' => '_blank',
           ],
           '#wrapper_attributes' => [
-            'class' => [
-              'manage-topic-content-remove-cell'
-            ],
-            'title' => $this->t('Edit this subtopic to assign a new parent topic.')
+            'class' => ['manage-topic-content-remove-cell'],
+            'title' => $this->t('Edit this subtopic to assign a new parent topic.'),
           ],
         ];
       }
       else {
         $form['child_content'][$child_nid]['delete'] = [
           '#type' => 'submit',
-          '#title' => t('Remove'),
+          '#title' => $this->t('Remove'),
           '#name' => 'delete_' . $child_nid,
-          '#value' => 'Remove',
+          '#value' => $this->t('Remove'),
           '#submit' => ['::ajaxSubmit'],
           '#ajax' => [
             'callback' => '::childContentCallback',
             'wrapper' => 'form-wrapper',
           ],
           '#attributes' => [
-            'class' => [
-              'button--danger',
-              'link',
-            ]
+            'class' => ['button--danger', 'link'],
           ],
           '#wrapper_attributes' => [
-            'class' => [
-              'manage-topic-content-remove-cell'
-            ],
-            'title' => $this->t('Remove this content from the topic.')
+            'class' => ['manage-topic-content-remove-cell'],
+            'title' => $this->t('Remove this content from the topic.'),
           ],
         ];
       }
@@ -261,9 +238,7 @@ final class ManageTopicContentForm extends FormBase {
       '#type' => 'submit',
       '#value' => $this->t('Save'),
       '#attributes' => [
-        'class' => [
-          'button--primary',
-        ],
+        'class' => ['button--primary'],
       ],
     ];
 
@@ -273,11 +248,7 @@ final class ManageTopicContentForm extends FormBase {
       '#submit' => ['::cancel'],
       '#limit_validation_errors' => [],
       '#attributes' => [
-        'class' => [
-          'manage-topic-content-cancel',
-          'button--danger',
-          'use-ajax'
-        ],
+        'class' => ['manage-topic-content-cancel', 'button--danger', 'use-ajax'],
       ],
       '#ajax' => [
         'callback' => [$this, 'closeModalAjax'],
@@ -291,63 +262,60 @@ final class ManageTopicContentForm extends FormBase {
   /**
    * Callback to return the child content render array.
    */
-  public function childContentCallback(array &$form, FormStateInterface $form_state) {
+  public function childContentCallback(array &$form, FormStateInterface $form_state): array {
     // Remove Linkit entry after adding new content.
     $form['add_existing']['add_path']['#value'] = $form_state->getValue('add_path');
-
     return $form;
   }
 
   /**
    * Ajax callback to close the modal.
    */
-  public function closeModalAjax() {
-    $command = new CloseModalDialogCommand();
+  public function closeModalAjax(): AjaxResponse {
     $response = new AjaxResponse();
-    $response->addCommand($command);
-
+    $response->addCommand(new CloseModalDialogCommand());
     return $response;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
     $parents = $form_state->getTriggeringElement()['#parents'];
 
     // Append call.
-    if ($parents[0] === 'add') {
-      $add_path = $form_state->getValue('add_path');
+    if (($parents[0] ?? '') === 'add') {
+      $add_path = (string) $form_state->getValue('add_path');
 
-      if (empty($add_path)) {
-        $form_state->setErrorByName('add_path', 'You must provide a URL.');
+      if ($add_path === '') {
+        $form_state->setErrorByName('add_path', $this->t('You must provide a URL.'));
         return;
       }
 
       // We only want valid url paths and not the typed text.
       if (!str_starts_with($add_path, '/node/')) {
-        $form_state->setErrorByName('add_path', 'Path must be a valid URL');
+        $form_state->setErrorByName('add_path', $this->t('Path must be a valid URL'));
         return;
       }
 
       $node_id = $this->extractNodeIdFromUrl($add_path);
+      $node = $this->nodeStorage->load($node_id);
 
-      $topic_manager = \Drupal::service('topic.manager');
-      $node = \Drupal::entityTypeManager()->getStorage('node')->load($node_id);
-
-      if (count($topic_manager->getParentNodes($node_id)) > TopicManager::maximumTopicsForType($node->bundle())) {
-        $form_state->setErrorByName('add_path', t('This @type has the maximum number of topics assigned and cannot be added to this content.', ['@type' => $node->bundle()]));
+      if ($node) {
+        if (count($this->topicManager->getParentNodes($node_id)) > TopicManager::maximumTopicsForType($node->bundle())) {
+          $form_state->setErrorByName(
+            'add_path',
+            $this->t('This @type has the maximum number of topics assigned and cannot be added to this content.', ['@type' => $node->bundle()])
+          );
+        }
       }
 
       $child_content = $form_state->getValue('child_content');
-      $new_content_nid = $this->extractNodeIdFromUrl($add_path);
+      $new_content_nid = $node_id;
 
-      if (is_array($child_content)) {
-        // Check if there is already an entry for this node.
-        if (array_key_exists($new_content_nid, $child_content)) {
-          $form_state->setErrorByName('add_path', 'Child content entry already exists for this URL.');
-          return;
-        }
+      if (is_array($child_content) && array_key_exists($new_content_nid, $child_content)) {
+        $form_state->setErrorByName('add_path', $this->t('Child content entry already exists for this URL.'));
+        return;
       }
     }
 
@@ -357,22 +325,20 @@ final class ManageTopicContentForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function ajaxSubmit(array &$form, FormStateInterface $form_state) {
+  public function ajaxSubmit(array &$form, FormStateInterface $form_state): void {
     $parents = $form_state->getTriggeringElement()['#parents'];
-    $removed_children = $form_state->getValue('removed_children');
+    $removed_children = (string) $form_state->getValue('removed_children');
 
     // Append call.
-    if ($parents[0] === 'add') {
-      $add_path = $form_state->getValue('add_path');
+    if (($parents[0] ?? '') === 'add') {
+      $add_path = (string) $form_state->getValue('add_path');
 
-      $child_content = empty($form_state->getValue('child_content')) ? [] : $form_state->getValue('child_content');
+      $child_content = $form_state->getValue('child_content') ?: [];
       $new_content_nid = $this->extractNodeIdFromUrl($add_path);
 
       $weight = 0;
-
       if (is_array($child_content) && !empty($child_content)) {
-        $weight = $child_content[array_key_last($child_content)]['weight'];
-        $weight++;
+        $weight = $child_content[array_key_last($child_content)]['weight'] + 1;
       }
 
       $child_content[$new_content_nid] = [
@@ -387,17 +353,10 @@ final class ManageTopicContentForm extends FormBase {
 
     // Deleted call.
     if (!empty($parents[2]) && $parents[2] === 'delete') {
-      if (!empty($removed_children)) {
-        $removed_children = explode(',', $removed_children);
-        $removed_children[] = $parents[1];
-      }
-      else {
-        $removed_children = [$parents[1]];
-      }
+      $removed = $removed_children !== '' ? explode(',', $removed_children) : [];
+      $removed[] = $parents[1];
 
-      if (count($removed_children) > 0) {
-        $form_state->setValue('removed_children', implode(',', $removed_children));
-      }
+      $form_state->setValue('removed_children', implode(',', array_unique($removed)));
     }
 
     $form_state->setRebuild(TRUE);
@@ -406,16 +365,20 @@ final class ManageTopicContentForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $child_content = $form_state->getValue('child_content');
-    $topic_nid = $form_state->getValue('topic_nid');
+    $topic_nid = (int) $form_state->getValue('topic_nid');
 
-    $topic = $this->entityTypeManager->getStorage('node')->load($topic_nid);
+    $topic = $this->nodeStorage->load($topic_nid);
+
+    if (!$topic) {
+      $this->messenger()->addError($this->t('Topic could not be loaded.'));
+      return;
+    }
 
     // TODO: Do a diff on the arrays and only update the field if different.
     $field_topic_content_updated = [];
 
-    // Build our entity reference array and overwrite the existing value.
     if (is_array($child_content)) {
       foreach (array_keys($child_content) as $nid) {
         $field_topic_content_updated[] = ['target_id' => $nid];
@@ -423,46 +386,39 @@ final class ManageTopicContentForm extends FormBase {
     }
 
     $topic->get('field_topic_content')->setValue($field_topic_content_updated);
-
     $topic->save();
+
     $form_state->setRedirect('entity.node.canonical', ['node' => $topic_nid]);
   }
 
   /**
    * Form cancel handler.
    */
-  public function cancel(array $form, FormStateInterface $form_state) {
+  public function cancel(array $form, FormStateInterface $form_state): void {
     $form_state->setRedirect('entity.node.canonical', ['node' => $form_state->getValue('topic_nid')]);
   }
 
   /**
    * Return the node ID for the given path.
    */
-  protected function extractNodeIdFromUrl(string $url):int {
+  protected function extractNodeIdFromUrl(string $url): int {
     // Strip the host and match the alias to a node id.
     if (UrlHelper::isExternal($url)) {
       $host = $this->getRequest()->getSchemeAndHttpHost();
       $alias = substr($url, strlen($host));
       $path = $this->aliasManager->getPathByAlias($alias);
-      $nid = (int) substr($path, 6);
-    }
-    else {
-      // Canonical URL. Trim to extract the node id parameter.
-      $nid = (int) substr($url, 6);
+      return (int) substr($path, 6);
     }
 
-    return $nid;
+    // Canonical URL. Trim to extract the node id parameter.
+    return (int) substr($url, 6);
   }
 
   /**
-   * @param int $nid
-   *   The node id to check.
-   *
-   * @return bool
-   *   True if the node has parents, otherwise false.
+   * True if the node has parents, otherwise false.
    */
-  protected function subtopicHasParent($nid) {
-    $node = $this->entityTypeManager->getStorage('node')->load($nid);
+  protected function subtopicHasParent(int $nid): bool {
+    $node = $this->nodeStorage->load($nid);
     if ($node && $node->bundle() === 'subtopic') {
       return !empty($this->topicManager->getParentNodes($node));
     }

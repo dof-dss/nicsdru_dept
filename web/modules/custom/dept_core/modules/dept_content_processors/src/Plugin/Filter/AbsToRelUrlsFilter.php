@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_REVERSIBLE,
  * )
  */
-class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInterface {
+final class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInterface {
 
   /**
    * The Department manager.

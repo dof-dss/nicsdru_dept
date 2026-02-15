@@ -237,16 +237,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              author: '0'
-              stats_author: '0'
-              supervisor: '0'
-              stats_supervisor: '0'
-              topic_layout_supervisor: '0'
-              homepage_supervisor: '0'
-              topic_supervisor: '0'
-              admin: '0'
             expose_fields: false
             placeholder: keywords
             searched_fields_id: search_api_fulltext_searched_fields

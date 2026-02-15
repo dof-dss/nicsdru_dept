@@ -180,7 +180,6 @@ function dept_search_preprocess_node(array &$variables) {
   if ($view_mode === 'search_autocomplete') {
     $dept = \Drupal::service('department.manager')->getCurrentDepartment();
 
-    // @phpstan-ignore-next-line
     if (empty($dept)) {
       return;
     }
