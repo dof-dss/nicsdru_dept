@@ -407,8 +407,7 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
         case 'contact-email':
           $contact_email = \Drupal::service('department.manager')->getCurrentDepartment()->contactEmail();
 
-          if  (!empty($contact_email)) {
-            // look at rendering as string?
+          if (!empty($contact_email)) {
             $replacements[$original] = $contact_email;
           }
       }
