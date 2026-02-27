@@ -321,6 +321,11 @@ function dept_core_token_info() {
     'description' => t("Displays a list of related and departmental sites"),
   ];
 
+  $tokens['contact-email'] = [
+    'name' => t("Correspondence email address"),
+    'description' => t("Department correspondence email address"),
+  ];
+
   return [
     'types' => $types,
     'tokens' => [
@@ -398,6 +403,14 @@ function dept_core_tokens($type, $tokens, array $data, array $options, $bubbleab
           $replacements[$original] = \Drupal::service('renderer')->render($link_list);
 
           break;
+
+        case 'contact-email':
+          $contact_email = \Drupal::service('department.manager')->getCurrentDepartment()->contactEmail();
+
+          if  (!empty($contact_email)) {
+            // look at rendering as string?
+            $replacements[$original] = $contact_email;
+          }
       }
     }
   }

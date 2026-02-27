@@ -359,4 +359,15 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
     return $this->get('field_dept_footer_links')->view();
   }
 
+  /**
+   * Contact email address.
+   *
+   * @DepartmentField(label="Contact email address")
+   *
+   * @return string
+   */
+  public function contactEmail():  string {
+    return $this->get('field_dept_correspondence_email')->value;
+  }
+
 }
