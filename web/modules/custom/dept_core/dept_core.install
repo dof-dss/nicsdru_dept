@@ -52,12 +52,8 @@ function  dept_core_update_8003() {
     'justice' => 'DoJ.info@justice-ni.gov.uk'
   ];
 
-  foreach ($emails as $dept => $email) {
-    $department = $departments[$dept];
-
-    if ($department) {
-      $department->set('field_dept_correspondence_email', $email);
-      $department->save();
-    }
+  foreach ($departments as $department) {
+    $department->set('field_dept_correspondence_email', $emails[$department->id()]);
+    $department->save();
   }
 }
