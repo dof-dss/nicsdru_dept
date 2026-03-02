@@ -35,3 +35,25 @@ function dept_core_update_8002() {
     }
   }
 }
+
+function  dept_core_update_8003() {
+  $departments = \Drupal::service('department.manager')->getAllDepartments();
+
+  $emails = [
+    'nigov' => 'info@executiveoffice-ni.gov.uk',
+    'executiveoffice' => 'info@executiveoffice-executive.gov.uk',
+    'daera' => 'daerawebsite-admin@daera-ni.gov.uk',
+    'communities'  => 'CorporateCommunications@communities-ni.gov.uk',
+    'education' => 'Press.Office@education-ni.gov.uk',
+    'economy' => 'DFEMail@economy-ni.gov.uk',
+    'finance' => 'dof.enquiries@finance-ni.gov.uk',
+    'infrastructure' => 'info@infrastructure-ni.gov.uk',
+    'health' => 'webmaster@health-ni.gov.uk',
+    'justice' => 'DoJ.info@justice-ni.gov.uk'
+  ];
+
+  foreach ($departments as $department) {
+    $department->set('field_dept_correspondence_email', $emails[$department->id()]);
+    $department->save();
+  }
+}

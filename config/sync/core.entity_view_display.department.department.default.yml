@@ -6,6 +6,7 @@ dependencies:
     - field.field.department.department.field_dept_access_to_info
     - field.field.department.department.field_dept_accessibility
     - field.field.department.department.field_dept_contact_info
+    - field.field.department.department.field_dept_correspondence_email
     - field.field.department.department.field_dept_footer_links
     - field.field.department.department.field_dept_location
     - field.field.department.department.field_dept_management_structure
@@ -68,6 +69,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 7
+    region: content
+  field_dept_correspondence_email:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 26
     region: content
   field_dept_footer_links:
     type: link
