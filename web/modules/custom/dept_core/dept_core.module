@@ -800,6 +800,30 @@ function dept_core_views_pre_render(ViewExecutable $view) {
 }
 
 /**
+ * Implements hook_views_pre_view().
+ */
+function dept_core_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() === 'media_orphans') {
+    $fields = $view->display_handler->getOption('fields');
+
+    // Add the department (domain source) for each media item.
+    $department['field_department'] = [
+      'id' => 'field_department',
+      'table' => 'media__field_domain_source',
+      'field' => 'field_domain_source',
+      'plugin_id' => 'field',
+      'relationship' => 'none',
+      'label' => 'Department',
+    ];
+
+    // Inject the field before the operations column.
+    array_splice($fields, 7, 0, $department);
+
+    $view->display_handler->overrideOption('fields', $fields);
+  }
+}
+
+/**
  * Implements hook_robotstxt().
  */
 function dept_core_robotstxt() {
