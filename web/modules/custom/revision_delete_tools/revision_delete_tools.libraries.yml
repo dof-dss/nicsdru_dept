@@ -1,0 +1,6 @@
+bulk_actions:
+  js:
+    js/revision_delete_tools.bulk_actions.js: {}
+  dependencies:
+    - core/jquery
+    - core/once

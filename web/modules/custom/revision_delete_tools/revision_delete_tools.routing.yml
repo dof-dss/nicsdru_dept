@@ -1,0 +1,21 @@
+revision_delete_tools.configuration:
+  path: '/admin/config/content/revision-delete-tools'
+  defaults:
+    _title: 'Revision Delete Tools Configuration'
+    _form: 'Drupal\revision_delete_tools\Form\ConfigurationForm'
+  requirements:
+    _permission: 'administer nodes'
+revision_delete_tools.bulk_delete_confirmation:
+  path: 'node/revisions/bulk-delete/{node}/{action}'
+  defaults:
+    _title: 'Bulk Delete Confirm'
+    _form: 'Drupal\revision_delete_tools\Form\BulkDeleteConfirmForm'
+  options:
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: entity:node
+      action:
+        type: string
+  requirements:
+    _permission: 'bulk delete newer revisions+bulk delete older revisions'
