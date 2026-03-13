@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a2899f707186272861958394afd98ada",
+    "content-hash": "da49a3073b4ac2caf9a3cb308369a921",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1427,28 +1427,29 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "10.6.3",
+            "version": "dev-10.x-dev",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "9e6f7f600845faffed32bbed7410272de0b43fa5"
+                "reference": "1d9e8da741999d07ec32eea52a3eabc48305e5ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/9e6f7f600845faffed32bbed7410272de0b43fa5",
-                "reference": "9e6f7f600845faffed32bbed7410272de0b43fa5",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/1d9e8da741999d07ec32eea52a3eabc48305e5ed",
+                "reference": "1d9e8da741999d07ec32eea52a3eabc48305e5ed",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "^2.0",
                 "drupal/core": "^10"
             },
+            "default-branch": true,
             "type": "drupal-module",
             "license": [
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2025-12-30T10:39:44+00:00"
+            "time": "2026-03-13T11:46:41+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
@@ -7377,6 +7378,61 @@
             }
         },
         {
+            "name": "drupal/revision_manager",
+            "version": "1.0.0-beta5",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/revision_manager.git",
+                "reference": "1.0.0-beta5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/revision_manager-1.0.0-beta5.zip",
+                "reference": "1.0.0-beta5",
+                "shasum": "c989a7114d480ceabc6c968bc3bc616a4cdcf4aa"
+            },
+            "require": {
+                "drupal/core": "^10.3 || ^11"
+            },
+            "require-dev": {
+                "drupal/group": "^2 || ^3 || ^4"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-beta5",
+                    "datestamp": "1769100613",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jordan Barnes (j-barnes)",
+                    "homepage": "https://www.drupal.org/u/j-barnes",
+                    "email": "jb8893@gmail.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Track and prune entity revisions.",
+            "homepage": "https://www.drupal.org/project/revision_manager",
+            "keywords": [
+                "Drupal",
+                "Entity",
+                "Revisions"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/revision_manager",
+                "issues": "https://www.drupal.org/project/issues/revision_manager"
+            }
+        },
+        {
             "name": "drupal/robotstxt",
             "version": "1.6.0",
             "source": {
@@ -10496,15 +10552,6 @@
                 "source": "https://github.com/harvesthq/chosen-package/tree/v1.8.7"
             },
             "time": "2018-06-28T20:32:51+00:00"
-        },
-        {
-            "name": "highcharts/highcharts",
-            "version": "10.0.0",
-            "dist": {
-                "type": "zip",
-                "url": "https://code.highcharts.com/zips/Highcharts-10.0.0.zip"
-            },
-            "type": "drupal-library"
         },
         {
             "name": "laminas/laminas-stdlib",
@@ -22270,6 +22317,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "dof-dss/nicsdru_origins_modules": 20,
         "drupal/block_field": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
@@ -22282,6 +22330,7 @@
         "drupal/filelog": 20,
         "drupal/masquerade": 10,
         "drupal/media_views_filter": 5,
+        "drupal/revision_manager": 10,
         "drupal/ultimate_cron": 10
     },
     "prefer-stable": true,
@@ -22290,5 +22339,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
