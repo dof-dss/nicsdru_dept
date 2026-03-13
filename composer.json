@@ -91,7 +91,7 @@
         "drupal/ckeditor": "^1.0",
         "drupal/ckeditor5_allowed_html": "^1.2-dev",
         "drupal/ckeditor5_paste_filter": "^1.0",
-        "drupal/ckeditor5_premium_features": "^1.6",
+        "drupal/ckeditor5_premium_features": "^1.8",
         "drupal/clientside_validation": "^4.1",
         "drupal/config_delete": "^2.0",
         "drupal/config_filter": "^2.7",
@@ -126,7 +126,7 @@
         "drupal/entity_usage": "2.x-dev@dev",
         "drupal/entity_usage_views_field": "^3.0",
         "drupal/eu_cookie_compliance": "^1.29",
-        "drupal/facets": "^2.0",
+        "drupal/facets": "^3.0",
         "drupal/facets_pretty_paths": "^2.0",
         "drupal/fastly": "^4.0",
         "drupal/field_group": "^4.0",
@@ -194,7 +194,7 @@
         "drupal/views_custom_cache_tag": "^1.4",
         "drupal/views_data_export": "^1.8",
         "drupal/views_tree": "^3.0",
-        "drupal/webform": "^6.2",
+        "drupal/webform": "^6.3@beta",
         "drupal/whatlinkshere": "^2.1",
         "drush/drush": "^12.5",
         "harvesthq/chosen": "^1.8",
@@ -314,9 +314,6 @@
                 "Visibility incorrectly returns false on OR logic when context missing from a different condition #3503194": "https://www.drupal.org/files/issues/2025-02-07/or-logic-when-context-missing--3503194-5.patch",
                 "Nullable types must be explicit": "https://git.drupalcode.org/project/block_visibility_groups/-/merge_requests/27.diff"
             },
-            "drupal/ckeditor5_premium_features": {
-                "PHP 8.4 compatibility": "https://git.drupalcode.org/project/ckeditor5_premium_features/-/merge_requests/31.diff"
-            },
             "drupal/config_ignore": {
                 "PHPunit tests are failing on Drupal 11": "https://git.drupalcode.org/project/config_ignore/-/merge_requests/36.diff"
             },
@@ -353,9 +350,11 @@
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch",
                 "Implicitly nullable parameters are deprecated in PHP 8.4": "https://git.drupalcode.org/project/domain_entity/-/merge_requests/27.diff"
             },
+            "drupal/easychart": {
+                "PHP 8.4: fix implicit nullable deprecations": "https://git.drupalcode.org/project/easychart/-/merge_requests/11.diff"
+            },
             "drupal/facets": {
-                "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch",
-                "Deprecations PHP 8.4": "https://git.drupalcode.org/project/facets/-/commit/4274f4a80c7c7cfd36bf7fc4fbbe68dde3a8fe2a.patch"
+                "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
             },
             "drupal/flag_search_api": {
                 "Explicitly declare nullable parameters for PHP 8.4": "https://git.drupalcode.org/project/flag_search_api/-/merge_requests/12.patch"
@@ -377,9 +376,6 @@
                 "Can't preview a new node #3264639": "https://www.drupal.org/files/issues/2022-02-16/preview-new-node-3264639-2.patch",
                 "'Draft available' text still appears after deleting a forward revision": "https://www.drupal.org/files/issues/2020-02-24/3115474-3.patch",
                 "Clicking \"Tasks | Published\" to close the sidebar tray redirects to AJAX page": "https://git.drupalcode.org/project/moderation_sidebar/-/merge_requests/25.diff"
-            },
-            "drupal/pathauto": {
-                "fix implicit nullable deprecations": "https://git.drupalcode.org/project/pathauto/-/merge_requests/91.patch"
             },
             "drupal/permissions_filter": {
                 "Allow uninstall of obsolete module": "https://gist.githubusercontent.com/johangant/6b493abcacdafe437e68638f7bb6e845/raw/1e74d6830ead9e0410a754db040738892b995da4/fdgfdg.patch"
