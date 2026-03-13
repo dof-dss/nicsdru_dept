@@ -1,0 +1,14 @@
+uuid: 73b030ff-e9bd-43a0-839e-3fd53f02669c
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.education
+  module:
+    - domain_source
+id: domain_source_set_action.education
+label: 'Set content domain source value to the Department for Education domain'
+type: node
+plugin: domain_source_set_action
+configuration:
+  domain_id: education

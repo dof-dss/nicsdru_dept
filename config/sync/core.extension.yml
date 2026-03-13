@@ -41,6 +41,7 @@ module:
   csp: 0
   csv_serialization: 0
   date_facet_drilldown: 0
+  date_filter: 0
   datetime: 0
   datetime_range: 0
   dblog: 0
@@ -54,11 +55,11 @@ module:
   dept_publications: 0
   dept_redirects: 0
   dept_search: 0
+  dept_sitemap: 0
   dept_topics: 0
   dept_user: 0
   diff: 0
   domain: 0
-  domain_access: 0
   domain_alias: 0
   domain_config: 0
   domain_entity: 0
@@ -66,8 +67,6 @@ module:
   domain_path_pathauto: 0
   domain_path_redirect: 0
   domain_simple_sitemap: 0
-  domain_site_settings: 0
-  domain_source: 0
   draggableviews: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
@@ -79,8 +78,9 @@ module:
   entity_embed: 0
   entity_events: 0
   entity_reference_revisions: 0
+  entity_usage: 0
+  entity_usage_views_field: 0
   facets: 0
-  facets_pretty_paths: 0
   facets_summary: 0
   field: 0
   field_group: 0
@@ -113,11 +113,11 @@ module:
   linkit: 0
   maxlength: 0
   media: 0
-  media_duplicates: 0
   media_file_delete: 0
   media_library: 0
   media_library_edit: 0
   media_remote: 0
+  media_views_filter: 0
   menu_link_content: 0
   menu_ui: 0
   metatag: 0
@@ -154,6 +154,7 @@ module:
   redis: 0
   responsive_image: 0
   rest: 0
+  robotstxt: 0
   scheduled_transitions: 0
   scheduler: 0
   search_api: 0
@@ -200,6 +201,8 @@ module:
   origins_workflow: 2
   views: 10
   paragraphs: 11
+  domain_access: 20
+  domain_source: 30
   minimal: 1000
   eu_cookie_compliance: 1001
   dept_postprocess: 1111

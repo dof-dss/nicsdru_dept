@@ -416,6 +416,10 @@ function dept_publications_preprocess_node(&$variables) {
   if ($node->bundle() != 'publication') {
     return;
   }
+  // Only aggregate publication links on full display mode.
+  if ($variables['view_mode'] != 'full') {
+    return;
+  }
 
   $items = [];
 

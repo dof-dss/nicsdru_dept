@@ -1,18 +1,69 @@
 #!/usr/bin/env bash
-
-## Description: Execute local PHPCS static analysis checks.
-## Usage: phpcs [directory]
-## Example: "ddev phpcs" or "ddev phpcs web/modules/custom"
+# ddev custom command: phpcs
+# Usage:
+#   ddev phpcs <CHECK_DIR> [<IGNORE>]
+# Examples:
+#   ddev phpcs web/modules/custom
+#   PHPCS_IGNORE="web/themes/custom/*/node_modules,web/modules/custom/*/tests" ddev phpcs web/modules/custom
+#
+# Internally, this calls the central script with:
+#   phpcs.sh <DRUPAL_DEPLOY_PATH> <PHPCS_CHECK_DIR> <IGNORE>
 ## HostWorkingDir: true
 
-DRUPAL_DEPLOY_PATH="/var/www/html"
-IGNORE="/web/themes/origins/node_modules,/web/themes/custom/nicsdru_dept_theme/node_modules"
+set -euo pipefail
 
-# If an argument is provided, use it; otherwise, use the current working directory
-if [ -n "$1" ]; then
-  PHPCS_CHECK_DIR="$1"
-else
-  PHPCS_CHECK_DIR="."
+# --- Configurable options -------------------------------------------------------
+: "${PHPCS_SCRIPT_REF:=main}"   # branch/tag/commit of webdev-ci to use
+: "${PHPCS_UPDATE:=0}"          # set to 1 to force re-download
+: "${PHPCS_SCRIPT_SHA256:=}"    # optional integrity check
+
+# The deploy path expected by the central script. In DDEV web containers
+# the project root is /var/www/html, which works with 'web/...'
+APPROOT="${DDEV_APPROOT:-/var/www/html}"
+DRUPAL_DEPLOY_PATH="${DRUPAL_DEPLOY_PATH:-$APPROOT}"
+
+# --- Args --------------------------------------------------------------------
+if [[ $# -lt 1 ]]; then
+  echo "Usage: ddev phpcs <CHECK_DIR> [<IGNORE>]" >&2
+  echo "  CHECK_DIR: e.g. web/modules/custom" >&2
+  echo "  IGNORE (optional): comma-separated paths to ignore (relative to DRUPAL_DEPLOY_PATH or absolute)" >&2
+  exit 2
 fi
 
-${DRUPAL_DEPLOY_PATH}/phpcs.sh "${DRUPAL_DEPLOY_PATH}" "${PHPCS_CHECK_DIR}" "${IGNORE}"
+PHPCS_CHECK_DIR="$1"
+# Allow IGNORE via 2nd arg or env var PHPCS_IGNORE
+IGNORE="${2:-${PHPCS_IGNORE:-}}"
+
+# --- Fetch central script with cache -----------------------------------------
+CACHE_DIR="${APPROOT}/.ddev/cache/webdev-ci"
+mkdir -p "$CACHE_DIR"
+RAW_URL="https://raw.githubusercontent.com/dof-dss/webdev-ci/${PHPCS_SCRIPT_REF}/phpcs.sh"
+CACHE_PATH="${CACHE_DIR}/phpcs-${PHPCS_SCRIPT_REF}.sh"
+
+if [[ ! -f "$CACHE_PATH" || "$PHPCS_UPDATE" == "1" ]]; then
+  # mktemp replaces XXXXXX with a random string to ensure uniqueness.
+  # expanded, it looks like /var/www/html/.ddev/cache/webdev-ci/.phpcs.KJ29sD
+  tmp="$(mktemp "${CACHE_DIR}/.phpcs.XXXXXX")"
+  curl -fsSL "$RAW_URL" -o "$tmp"
+  chmod +x "$tmp"
+
+  if [[ -n "$PHPCS_SCRIPT_SHA256" ]]; then
+    if command -v sha256sum >/dev/null 2>&1; then
+      actual="$(sha256sum "$tmp" | awk '{print $1}')"
+    else
+      actual="$(shasum -a 256 "$tmp" | awk '{print $1}')"
+    fi
+    if [[ "$actual" != "$PHPCS_SCRIPT_SHA256" ]]; then
+      echo "ERROR: SHA256 mismatch for downloaded phpcs.sh" >&2
+      echo "Expected: $PHPCS_SCRIPT_SHA256" >&2
+      echo "Actual:   $actual" >&2
+      rm -f "$tmp"
+      exit 1
+    fi
+  fi
+
+  mv "$tmp" "$CACHE_PATH"
+fi
+
+# --- Run central script -------------------------------------------------------
+exec "$CACHE_PATH" "$DRUPAL_DEPLOY_PATH" "$PHPCS_CHECK_DIR" "$IGNORE"

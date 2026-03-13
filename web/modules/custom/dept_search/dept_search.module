@@ -148,6 +148,7 @@ function dept_search_form_alter(&$form, &$form_state, &$form_id) {
     case 'views-exposed-form-news-search-news-search':
     case 'views-exposed-form-news-search-press-release-search':
     case 'views-exposed-form-publications-search-publications-search':
+    case 'views-exposed-form-foi-eir-disclosure-log-disclosure-log-page':
       $form['sort_by']['#type'] = 'hidden';
       $form['sort_order']['#type'] = 'hidden';
       break;

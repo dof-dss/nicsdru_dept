@@ -38,6 +38,13 @@
       <h2>Hosted by</h2>
       {{ content.field_event_host | field_value }}
     {% endif %}
+
+    {# Check node. object for presence of value as render array
+       in content. will always contain something and it's much harder
+       to assess whether it's actually empty or not #}
+    {% if node.field_registration_link.0.url %}
+      <p>{{ content.field_registration_link }}</p>
+    {% endif %}
     </div>
 
     {{ content | without(
@@ -45,9 +52,11 @@
       'field_summary',
       'field_event_datetime',
       'field_event_host',
+      'field_registration_link',
       'field_business_area',
       'field_council',
-      'field_venue') }}
+      'field_venue',
+      'region_links') }}
 
   </div>
 

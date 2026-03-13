@@ -16,6 +16,7 @@ use Drupal\node\NodeInterface;
  * Provides methods for managing Sub/Topic referenced (child) content.
  */
 final class TopicManager {
+  const int MAX_TRAVERSAL_DEPTH = 20;
 
   /**
    * @var \Drupal\node\NodeStorageInterface
@@ -61,11 +62,18 @@ final class TopicManager {
    *
    * @param array $parents
    *   Array of existing parent nodes.
+   * @param int $depth
+   *   The current traversal depth.
    *
    * @return array|mixed
    *   Node ID indexed array comprising id, title and type.
    */
-  public function getParentNodes($node, &$parents = []) {
+  public function getParentNodes($node, &$parents = [], int $depth = 0) {
+
+    if ($depth >= self::MAX_TRAVERSAL_DEPTH) {
+      return $parents;
+    }
+
     if ($node instanceof NodeInterface) {
       $nid = $node->id();
     }
@@ -87,7 +95,7 @@ final class TopicManager {
 
     foreach ($nodes as $node) {
       $parents[$node->nid] = $node;
-      $this->getParentNodes($node->nid, $parents);
+      $this->getParentNodes($node->nid, $parents, ++$depth);
     }
 
     return $parents;
@@ -280,14 +288,21 @@ final class TopicManager {
    *
    * @param \Drupal\node\NodeInterface $topic
    *   The topic/subtopic node to extract child subtopics from.
+   * @param int $depth
+   *   The current traversal depth.
+   *
    */
-  private function getChildTopics(NodeInterface $topic) {
+  private function getChildTopics(NodeInterface $topic, int $depth = 0) {
+    if ($depth >= self::MAX_TRAVERSAL_DEPTH) {
+      return;
+    }
+
     $child_content = $topic->get('field_topic_content')->referencedEntities();
 
     foreach ($child_content as $child) {
       if ($child->bundle() === 'subtopic') {
         $this->deptTopics[$child->id()] = $child;
-        $this->getChildTopics($child);
+        $this->getChildTopics($child, ++$depth);
       }
     }
   }

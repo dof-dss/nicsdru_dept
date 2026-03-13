@@ -10,7 +10,9 @@
 /web/profiles/contrib/
 /web/profiles/custom/
 /web/profiles/origins/
-/web/libraries/
+/web/libraries/*
+# Exception for local version of highcharts
+!/web/libraries/highcharts
 console/
 
 # Ignore sensitive information or local config.
@@ -49,3 +51,6 @@ web/modules/*/package-lock.json
 
 # Ignore local cron log.
 cron-log.txt
+
+# Ignore DDEV CI cache
+.ddev/cache

@@ -1,0 +1,15 @@
+uuid: 6b96329d-bed3-4519-9b40-f4a3908ee4ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - domain.record.health
+  module:
+    - domain_access
+id: domain_access_remove_editor_action_health
+label: 'Remove editors from the Department for Health domain'
+type: user
+plugin: domain_access_remove_editor_action
+configuration:
+  domain_id:
+    - health

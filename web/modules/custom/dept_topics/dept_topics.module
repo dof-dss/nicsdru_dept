@@ -514,6 +514,18 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
  * Topic/Subtopic node edit form validation callback.
  */
 function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
+  // @phpstan-ignore-next-line.
+  $entity = $form_state->getFormObject()->getEntity();
+
+  // Warn the user if they self reference a subtopic.
+  if (!empty($entity) && $entity->bundle() === 'subtopic' && !$entity->isNew()) {
+    $selected_topic = current(array_filter($form_state->getValue('field_site_topics')));
+
+    if ($selected_topic == $entity->id()) {
+      $form_state->setErrorByName('field_site_topics', t('A subtopic cannot reference itself. Please select a different topic or subtopic.'));
+    }
+  }
+
   $topic_contents = $form_state->getValue('field_topic_content');
   $topic_manager = \Drupal::service('topic.manager');
   // @phpstan-ignore-next-line.
