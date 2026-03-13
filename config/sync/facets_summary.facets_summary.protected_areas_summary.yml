@@ -3,19 +3,15 @@ langcode: en
 status: true
 dependencies:
   config:
+    - facets.facet.protected_area_county
+    - facets.facet.protected_area_feature
+    - facets.facet.protected_area_type
     - search_api.index.default_content
     - views.view.protected_areas
   module:
     - search_api
 id: protected_areas_summary
 name: 'Protected areas summary'
-facet_source_id: 'search_api:views_page__protected_areas__protected_area_search'
-processor_configs:
-  hide_when_not_rendered:
-    processor_id: hide_when_not_rendered
-    weights:
-      build: '45'
-    settings: {  }
 facets:
   protected_area_county:
     checked: true
@@ -35,3 +31,6 @@ facets:
     separator: ', '
     show_count: false
     weight: 0
+facet_source_id: 'search_api:views_page__protected_areas__protected_area_search'
+only_visible_when_facet_source_is_visible: true
+processor_configs: {  }
