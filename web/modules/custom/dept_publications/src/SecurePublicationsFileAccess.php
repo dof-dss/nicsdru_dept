@@ -32,6 +32,11 @@ class SecurePublicationsFileAccess {
   protected $entityTypeManager;
 
   /**
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * @param string $file_uri
    *   The URI of a file.
    * @param \Drupal\Core\Session\AccountInterface $user
