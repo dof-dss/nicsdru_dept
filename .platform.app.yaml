@@ -100,12 +100,8 @@ hooks:
     php ./drush/platformsh_generate_drush_yml.php
     cd web
     # Rebuild caches, run db-updates and import config.
-    ../vendor/bin/drush -y cache-rebuild
-    ../vendor/bin/drush -y updatedb
-    # General config import
-    ../vendor/bin/drush -y config-import
-    # Final cache rebuild.
-    ../vendor/bin/drush -y cache-rebuild
+    # Drush deploy docs: https://www.drush.org/12.x/deploycommand
+    ../vendor/bin/drush -y deploy
   post_deploy: |
     set -e
     echo "***** Creating QA accounts ******"
