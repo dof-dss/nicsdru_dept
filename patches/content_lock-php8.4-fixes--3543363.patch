@@ -1,0 +1,13 @@
+diff --git a/src/Form/EntityBreakLockForm.php b/src/Form/EntityBreakLockForm.php
+index 9776779..b57330e 100644
+--- a/src/Form/EntityBreakLockForm.php
++++ b/src/Form/EntityBreakLockForm.php
+@@ -106,7 +106,7 @@ class EntityBreakLockForm extends FormBase {
+   /**
+    * {@inheritdoc}
+    */
+-  public function buildForm(array $form, FormStateInterface $form_state, ContentEntityInterface $entity = NULL, $langcode = NULL, $form_op = NULL) {
++  public function buildForm(array $form, FormStateInterface $form_state, ?ContentEntityInterface $entity = NULL, $langcode = NULL, $form_op = NULL) {
+     // Save langcode of lock, before checking if translation lock is enabled.
+     // This is needed to generate the correct entity URL for the given language.
+     $form_state->set('langcode_entity', $langcode);

@@ -35,7 +35,7 @@ hooks:
     - exec: "drush create-sprocs"
 name: dept
 nodejs_version: 20
-php_version: "8.3"
+php_version: "8.4"
 timezone: Europe/Dublin
 type: drupal
 webimage_extra_packages: ["libjpeg-dev", "make", "python3", "g++", "dh-autoreconf"]
