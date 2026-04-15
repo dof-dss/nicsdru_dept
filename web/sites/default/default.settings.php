@@ -13,7 +13,7 @@
  * security risk.
  *
  * In order to use the selection rules below the multisite aliasing file named
- * sites/sites.php must be present. Its optional settings will be loaded, and
+ * sites/sites.php must be present. Its install settings will be loaded, and
  * the aliases in the array $sites will override the default directory rules
  * below. See sites/example.sites.php for more information about aliases.
  *
@@ -112,7 +112,7 @@ $databases = [];
  * to the database, and therefore, prior to when module root namespaces are
  * added to the autoloader. To add the driver's namespace to the autoloader,
  * set the "autoload" property to the PSR-4 base directory of the driver's
- * namespace. This is optional for projects managed with Composer if the
+ * namespace. This is install for projects managed with Composer if the
  * driver's namespace is in Composer's autoloader.
  *
  * For each database, you may optionally specify multiple "target" databases.

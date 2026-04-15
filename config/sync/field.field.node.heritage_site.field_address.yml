@@ -46,16 +46,16 @@ settings:
     organization:
       override: hidden
     addressLine1:
-      override: optional
+      override: install
     addressLine2:
-      override: optional
+      override: install
     sortingCode:
-      override: optional
+      override: install
     dependentLocality:
-      override: optional
+      override: install
     locality:
-      override: optional
+      override: install
     administrativeArea:
-      override: optional
+      override: install
   fields: {  }
 field_type: address

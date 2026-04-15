@@ -1,8 +1,0 @@
-services:
-  revision_delete_tools.remove_revisions_service:
-    class: Drupal\revision_delete_tools\Services\RemoveRevisionsService
-    autowire: true
-  revision_delete_tools.route_subscriber:
-    class: Drupal\revision_delete_tools\Routing\RouteSubscriber
-    tags:
-      - { name: event_subscriber }

@@ -1,8 +1,0 @@
-# Schema for the configuration files of the Revision Delete Tools module.
-revision_delete_tools.configuration:
-  type: config_object
-  label: 'Revision Delete Tools configuration'
-  mapping:
-    bulk_delete:
-      type: boolean
-      label: 'Enable bulk deletion of node revisions.'

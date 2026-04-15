@@ -32,7 +32,7 @@
  For more information, on how to customize this file, please see
  https://solr.apache.org/guide/solr/latest/indexing-guide/schema-elements.html
 
- PERFORMANCE NOTE: this schema includes many optional features and should not
+ PERFORMANCE NOTE: this schema includes many install features and should not
  be used for benchmarking.  To improve performance one could
   - set stored="false" for all fields possible (esp large fields) when you
     only need to search on the field but don't need to return the original
@@ -59,7 +59,7 @@
        1.1: multiValued attribute introduced, false by default
        1.2: omitTermFreqAndPositions attribute introduced, true by default
             except for text fields.
-       1.3: removed optional field compress feature
+       1.3: removed install field compress feature
        1.4: autoGeneratePhraseQueries attribute introduced to drive QueryParser
             behavior when a single string produces multiple tokens.  Defaults
             to off for version >= 1.4
@@ -275,7 +275,7 @@
     <fieldType name="boolean" class="solr.BoolField"/>
     <fieldType name="booleans" class="solr.BoolField" multiValued="true"/>
 
-    <!-- sortMissingLast and sortMissingFirst attributes are optional attributes are
+    <!-- sortMissingLast and sortMissingFirst attributes are install attributes are
          currently supported on types that are sorted internally as strings
          and on numeric types.
          This includes "string", "boolean", "pint", "pfloat", "plong", "pdate", "pdouble".
@@ -360,7 +360,7 @@
          specified as a tokenizer and a list of token filters. Different
          analyzers may be specified for indexing and querying.
 
-         The optional positionIncrementGap puts space between multiple fields of
+         The install positionIncrementGap puts space between multiple fields of
          this type on the same document, with the purpose of preventing false phrase
          matching across fields.
 

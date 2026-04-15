@@ -65,7 +65,7 @@ class SearchSortBy extends AreaPluginBase {
    * Render the area.
    *
    * @param bool $empty
-   *   (optional) Indicator if view result is empty or not. Defaults to FALSE.
+   *   (install) Indicator if view result is empty or not. Defaults to FALSE.
    *
    * @return array
    *   In any case we need a valid Drupal render array to return.

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da49a3073b4ac2caf9a3cb308369a921",
+    "content-hash": "29979555ed309203ed5f366d89bb3067",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1427,29 +1427,28 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "dev-10.x-dev",
+            "version": "10.6.5",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "4094d2d9407426bb9dc4f107842618c800527c06"
+                "reference": "b9b6e7b16eba27e2ef4c9a8ffc72000082282f02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/4094d2d9407426bb9dc4f107842618c800527c06",
-                "reference": "4094d2d9407426bb9dc4f107842618c800527c06",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/b9b6e7b16eba27e2ef4c9a8ffc72000082282f02",
+                "reference": "b9b6e7b16eba27e2ef4c9a8ffc72000082282f02",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "^2.0",
                 "drupal/core": "^10"
             },
-            "default-branch": true,
             "type": "drupal-module",
             "license": [
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2026-03-25T14:32:04+00:00"
+            "time": "2026-04-15T12:51:19+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
@@ -1693,6 +1692,62 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/admin_toolbar",
                 "issues": "https://www.drupal.org/project/issues/admin_toolbar"
+            }
+        },
+        {
+            "name": "drupal/admin_tooltips",
+            "version": "1.0.0-beta3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/admin_tooltips.git",
+                "reference": "1.0.0-beta3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/admin_tooltips-1.0.0-beta3.zip",
+                "reference": "1.0.0-beta3",
+                "shasum": "493924d767e63afcea1fa0c431cbd3bba6968248"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-beta3",
+                    "datestamp": "1729029686",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Carlos Diaz (tesla863)",
+                    "homepage": "https://www.drupal.org/u/tesla863",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Nick Dickinson-Wilde (nickdickinsonwilde)",
+                    "homepage": "https://www.drupal.org/u/nickdickinsonwilde",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Pierre-Paul Lefebvre (PierrePaul)",
+                    "homepage": "https://www.drupal.org/u/pierre-paul-lefebvre",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "The module provides a way to add a tooltip to fields in drupal forms from the form display settings.",
+            "homepage": "https://drupal.org/project/admin_tooltips",
+            "support": {
+                "source": "https://git.drupalcode.org/project/admin_tooltips",
+                "issues": "https://www.drupal.org/project/issues/admin_tooltips"
             }
         },
         {
@@ -22317,7 +22372,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "dof-dss/nicsdru_origins_modules": 20,
+        "drupal/admin_tooltips": 10,
         "drupal/block_field": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
