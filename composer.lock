@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "40bbf7b5cd47c36b8e7ba6aeba3640e7",
+    "content-hash": "5850e0a174cafdc5242a6598ed8f1c8e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1427,16 +1427,16 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "10.6.3",
+            "version": "10.6.5",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "9e6f7f600845faffed32bbed7410272de0b43fa5"
+                "reference": "b9b6e7b16eba27e2ef4c9a8ffc72000082282f02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/9e6f7f600845faffed32bbed7410272de0b43fa5",
-                "reference": "9e6f7f600845faffed32bbed7410272de0b43fa5",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/b9b6e7b16eba27e2ef4c9a8ffc72000082282f02",
+                "reference": "b9b6e7b16eba27e2ef4c9a8ffc72000082282f02",
                 "shasum": ""
             },
             "require": {
@@ -1448,7 +1448,7 @@
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2025-12-30T10:39:44+00:00"
+            "time": "2026-04-15T12:51:19+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
@@ -7399,6 +7399,61 @@
             "homepage": "https://www.drupal.org/project/redis",
             "support": {
                 "source": "https://git.drupalcode.org/project/redis"
+            }
+        },
+        {
+            "name": "drupal/revision_manager",
+            "version": "1.0.0-beta5",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/revision_manager.git",
+                "reference": "1.0.0-beta5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/revision_manager-1.0.0-beta5.zip",
+                "reference": "1.0.0-beta5",
+                "shasum": "c989a7114d480ceabc6c968bc3bc616a4cdcf4aa"
+            },
+            "require": {
+                "drupal/core": "^10.3 || ^11"
+            },
+            "require-dev": {
+                "drupal/group": "^2 || ^3 || ^4"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-beta5",
+                    "datestamp": "1769100613",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jordan Barnes (j-barnes)",
+                    "homepage": "https://www.drupal.org/u/j-barnes",
+                    "email": "jb8893@gmail.com",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Track and prune entity revisions.",
+            "homepage": "https://www.drupal.org/project/revision_manager",
+            "keywords": [
+                "Drupal",
+                "Entity",
+                "Revisions"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/revision_manager",
+                "issues": "https://www.drupal.org/project/issues/revision_manager"
             }
         },
         {
@@ -22306,6 +22361,7 @@
         "drupal/filelog": 20,
         "drupal/masquerade": 10,
         "drupal/media_views_filter": 5,
+        "drupal/revision_manager": 10,
         "drupal/ultimate_cron": 10
     },
     "prefer-stable": true,
@@ -22314,5 +22370,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
