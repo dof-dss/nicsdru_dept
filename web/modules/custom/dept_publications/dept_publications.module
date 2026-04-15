@@ -155,9 +155,27 @@ function dept_publications_entity_operation_alter(array &$operations, EntityInte
  * Implements hook_file_download().
  */
 function dept_publications_file_download($uri) {
-  // Return -1 which is then later converted to AccessDeniedHttpException response.
-  if (\Drupal::service('secure_publications_file_access')->canAccessSecureFileAttachment($uri) === FALSE) {
-    return -1;
+
+  $access_service = \Drupal::service('secure_publications_file_access');
+
+  // Only apply to secure publication files in private storage.
+  if (str_starts_with($uri, 'private://') && $access_service->isSecurePublicationFile($uri)) {
+
+    // Prevent download if file embargoed.
+    if (!$access_service->canAccessSecureFileAttachment($uri)) {
+      // Return -1 which is then later converted to
+      // AccessDeniedHttpException response.
+      return -1;
+    }
+
+    // Ensure secure file download is cacheable by Fastly. This is
+    // necessary because files served from private:// are usually
+    // not cacheable.
+    return [
+      'Surrogate-Control' => 'public, max-age=604800, stale-while-revalidate=86400',
+      'Surrogate-Key' => 'secure-publication-file',
+    ];
+
   }
 }
 
