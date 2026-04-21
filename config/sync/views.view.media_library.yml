@@ -16,6 +16,7 @@ dependencies:
     - media.type.video
   module:
     - csv_serialization
+    - domain_access
     - file
     - image
     - media
@@ -312,8 +313,8 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: string
-          operator: '='
-          value: ''
+          operator: or
+          value: {  }
           group: 1
           exposed: true
           expose:
@@ -330,17 +331,20 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
+              admin: '0'
               administrator: '0'
+              anonymous: '0'
               author: '0'
-              stats_author: '0'
               supervisor: '0'
+              homepage_supervisor: '0'
+              rss_supervisor: '0'
+              stats_author: '0'
               stats_supervisor: '0'
               topic_layout_supervisor: '0'
-              homepage_supervisor: '0'
               topic_supervisor: '0'
-              admin: '0'
+              qa: '0'
             placeholder: ''
+            reduce: 0
           is_grouped: false
           group_info:
             label: ''
@@ -353,6 +357,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: 0
         status:
           id: status
           table: media_field_data
@@ -1270,8 +1275,8 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: string
-          operator: '='
-          value: ''
+          operator: or
+          value: {  }
           group: 1
           exposed: true
           expose:
@@ -1288,17 +1293,20 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
+              admin: '0'
               administrator: '0'
+              anonymous: '0'
               author: '0'
-              stats_author: '0'
               supervisor: '0'
+              homepage_supervisor: '0'
+              rss_supervisor: '0'
+              stats_author: '0'
               stats_supervisor: '0'
               topic_layout_supervisor: '0'
-              homepage_supervisor: '0'
               topic_supervisor: '0'
-              admin: '0'
+              qa: '0'
             placeholder: ''
+            reduce: 0
           is_grouped: false
           group_info:
             label: ''
@@ -1311,6 +1319,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: 0
         status:
           id: status
           table: media_field_data
@@ -2290,8 +2299,8 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: string
-          operator: '='
-          value: ''
+          operator: or
+          value: {  }
           group: 1
           exposed: true
           expose:
@@ -2308,17 +2317,20 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
+              admin: '0'
               administrator: '0'
+              anonymous: '0'
               author: '0'
-              stats_author: '0'
               supervisor: '0'
+              homepage_supervisor: '0'
+              rss_supervisor: '0'
+              stats_author: '0'
               stats_supervisor: '0'
               topic_layout_supervisor: '0'
-              homepage_supervisor: '0'
               topic_supervisor: '0'
-              admin: '0'
+              qa: '0'
             placeholder: ''
+            reduce: 0
           is_grouped: false
           group_info:
             label: ''
@@ -2331,6 +2343,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: 0
         status:
           id: status
           table: media_field_data
@@ -3224,8 +3237,8 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: string
-          operator: '='
-          value: ''
+          operator: or
+          value: {  }
           group: 1
           exposed: true
           expose:
@@ -3242,17 +3255,20 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
+              admin: '0'
               administrator: '0'
+              anonymous: '0'
               author: '0'
-              stats_author: '0'
               supervisor: '0'
+              homepage_supervisor: '0'
+              rss_supervisor: '0'
+              stats_author: '0'
               stats_supervisor: '0'
               topic_layout_supervisor: '0'
-              homepage_supervisor: '0'
               topic_supervisor: '0'
-              admin: '0'
+              qa: '0'
             placeholder: ''
+            reduce: 0
           is_grouped: false
           group_info:
             label: ''
@@ -3265,6 +3281,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: 0
       filter_groups:
         operator: AND
         groups:
@@ -3612,8 +3629,8 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: string
-          operator: '='
-          value: ''
+          operator: or
+          value: {  }
           group: 1
           exposed: true
           expose:
@@ -3630,17 +3647,20 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
+              admin: '0'
               administrator: '0'
+              anonymous: '0'
               author: '0'
-              stats_author: '0'
               supervisor: '0'
+              homepage_supervisor: '0'
+              rss_supervisor: '0'
+              stats_author: '0'
               stats_supervisor: '0'
               topic_layout_supervisor: '0'
-              homepage_supervisor: '0'
               topic_supervisor: '0'
-              admin: '0'
+              qa: '0'
             placeholder: ''
+            reduce: 0
           is_grouped: false
           group_info:
             label: ''
@@ -3653,6 +3673,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: 0
       filter_groups:
         operator: AND
         groups:

@@ -1,0 +1,101 @@
+_core:
+  default_config_hash: 3U6sHS0xqnEGwbTJo7bLZCYbYwWFqKiNVhuE6FDgcN8
+enabled_entities:
+  block_content: false
+  department: false
+  media: false
+  menu_link_content: false
+  node: true
+  taxonomy_term: false
+disable_automatic_queueing: false
+verbose_log: false
+defaults:
+  block_content:
+    age:
+      id: age
+      status: false
+      settings:
+        age: 6
+    amount:
+      id: amount
+      status: false
+      settings:
+        amount: 3
+    origins_default:
+      id: origins_default
+      status: false
+      settings:
+        age: '6'
+        all_revisions_nodes: ''
+  department:
+    age: {  }
+    amount: {  }
+    origins_default: {  }
+  media:
+    age:
+      id: age
+      status: false
+      settings:
+        age: 6
+    amount:
+      id: amount
+      status: false
+      settings:
+        amount: 3
+    origins_default:
+      id: origins_default
+      status: false
+      settings:
+        age: '6'
+        all_revisions_nodes: ''
+  menu_link_content:
+    age:
+      id: age
+      status: false
+      settings:
+        age: 6
+    amount:
+      id: amount
+      status: false
+      settings:
+        amount: 3
+    origins_default:
+      id: origins_default
+      status: false
+      settings:
+        age: '6'
+        all_revisions_nodes: ''
+  node:
+    age:
+      id: age
+      status: false
+      settings:
+        age: 6
+    amount:
+      id: amount
+      status: false
+      settings:
+        amount: 3
+    origins_default:
+      id: origins_default
+      status: true
+      settings:
+        age: '6'
+        all_revisions_nodes: '371922 377448 403159 203754 203742 203737 417237'
+  taxonomy_term:
+    age:
+      id: age
+      status: false
+      settings:
+        age: 6
+    amount:
+      id: amount
+      status: false
+      settings:
+        amount: 3
+    origins_default:
+      id: origins_default
+      status: false
+      settings:
+        age: '6'
+        all_revisions_nodes: ''
