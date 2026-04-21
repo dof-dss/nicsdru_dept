@@ -115,7 +115,7 @@ function dept_fs_views_data() {
     'title' => t('File path'),
     'help' => t('The path on the system to the file.'),
     'field' => [
-      'id' => 'standard',
+      'id' => 'dup_file_link',
     ],
     'sort' => [
       'id' => 'standard',

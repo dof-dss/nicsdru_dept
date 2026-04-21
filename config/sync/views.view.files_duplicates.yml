@@ -88,7 +88,7 @@ display:
             alter_text: false
             text: ''
             make_link: false
-            path: ''
+            path: '{{ filepath }} '
             absolute: false
             external: false
             replace_spaces: false
@@ -99,7 +99,7 @@ display:
             link_class: ''
             prefix: ''
             suffix: ''
-            target: ''
+            target: _blank
             nl2br: false
             max_length: 0
             word_boundary: true
