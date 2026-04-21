@@ -1,0 +1,147 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Origins File System module.
+ */
+
+
+/**
+ * Implements hook_views_data().
+ */
+function dept_fs_views_data() {
+  $data = [];
+
+  $data['dupscan_files'] = [];
+
+  $data['dupscan_files']['table']['group'] = t('Duplicate Scan');
+  $data['dupscan_files']['table']['base'] = [
+    // Identifier (primary) field in this table for Views.
+    'field' => 'id',
+    // Label in the UI.
+    'title' => t('Duplicate files (dupscan)'),
+    // Longer description in the UI. Required.
+    'help' => t('Example table contains example content and can be related to nodes.'),
+    'weight' => -10,
+  ];
+
+  // Fields.
+  $data['dupscan_files']['id'] = [
+    'title' => t('ID'),
+    'help' => t('Duplciate ID'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'numeric',
+    ],
+    'argument' => [
+      'id' => 'numeric',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+  ];
+
+  $data['dupscan_files']['group_id'] = [
+    'title' => t('Group ID'),
+    'help' => t('The duplicate group the file belongs to.'),
+    'field' => [
+      'id' => 'numeric',
+    ],
+    'filter' => [
+      'id' => 'numeric',
+    ],
+    'argument' => [
+      'id' => 'numeric',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+  ];
+
+  $data['dupscan_files']['hash'] = [
+    'title' => t('Hash'),
+    'help' => t('the hash string for the file.'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['dupscan_files']['file_extension'] = [
+    'title' => t('File type'),
+    'help' => t('The file extension.'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['dupscan_files']['size_bytes'] = [
+    'title' => t('Filesize'),
+    'help' => t('The file\'s size, in bytes.'),
+    'field' => [
+      'id' => 'numeric',
+    ],
+    'filter' => [
+      'id' => 'numeric',
+    ],
+    'argument' => [
+      'id' => 'numeric',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+  ];
+
+  $data['dupscan_files']['filepath'] = [
+    'title' => t('File path'),
+    'help' => t('The path on the system to the file.'),
+    'field' => [
+      'id' => 'standard',
+    ],
+    'sort' => [
+      'id' => 'standard',
+    ],
+    'filter' => [
+      'id' => 'string',
+    ],
+    'argument' => [
+      'id' => 'string',
+    ],
+  ];
+
+  $data['dupscan_files']['scanned_at'] = [
+    'title' => t('Scanned'),
+    'help' => t('The date the file was scanned.'),
+    'field' => [
+      'id' => 'date',
+    ],
+    'sort' => [
+      'id' => 'date',
+    ],
+    'filter' => [
+      'id' => 'date',
+    ],
+  ];
+
+
+  return $data;
+}
