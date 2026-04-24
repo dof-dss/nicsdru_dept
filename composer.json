@@ -183,6 +183,8 @@
         "drupal/telephone_plus": "^9.1",
         "drupal/token": "^1.16",
         "drupal/token_filter": "^2.0",
+        "drupal/tour": "^2.0",
+        "drupal/tour_extras": "^1.0",
         "drupal/twig_field_value": "^2.0",
         "drupal/twig_tweak": "^3.4",
         "drupal/ultimate_cron": "^2.0@beta",
@@ -352,9 +354,6 @@
             "drupal/linkit": {
                 "Show URL alias after autocomplete selection instead of internal route (e.g., /node/123)": "https://www.drupal.org/files/issues/2023-10-03/linkit-2877535-62.patch",
                 "Unpublished nodes not included even when option is selected": "https://www.drupal.org/files/issues/2023-11-09/linkit-unpublished-nodes-not-included-3049946-34.patch"
-            },
-            "drupal/media_duplicates": {
-                "Add error handling/logging for missing files #3521185": "https://git.drupalcode.org/project/media_duplicates/-/merge_requests/18.diff"
             },
             "drupal/migrate_plus": {
                 "Source plugin to only pull in certain URL aliases": "https://www.drupal.org/files/issues/2022-02-18/migrate_plus-n3063778-15.patch"
