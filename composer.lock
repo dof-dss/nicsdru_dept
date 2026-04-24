@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ce8963139b977dbb7822cb90bdf6a0fa",
+    "content-hash": "6b5da4e50cfeb9e11b84bea9627f6cda",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7462,6 +7462,70 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/revision_manager",
                 "issues": "https://www.drupal.org/project/issues/revision_manager"
+            }
+        },
+        {
+            "name": "drupal/revisions_bulk_operations",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/revisions_bulk_operations.git",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/revisions_bulk_operations-1.0.0.zip",
+                "reference": "1.0.0",
+                "shasum": "e3df5f03918cc89f1f1ae2950fa8559331f7dd20"
+            },
+            "require": {
+                "drupal/core": "^10.3 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0",
+                    "datestamp": "1776364952",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "anybody",
+                    "homepage": "https://www.drupal.org/user/291091"
+                },
+                {
+                    "name": "grevil",
+                    "homepage": "https://www.drupal.org/user/3668491"
+                },
+                {
+                    "name": "j-barnes",
+                    "homepage": "https://www.drupal.org/user/3542106"
+                },
+                {
+                    "name": "lrwebks",
+                    "homepage": "https://www.drupal.org/user/3771806"
+                },
+                {
+                    "name": "omahm",
+                    "homepage": "https://www.drupal.org/user/540058"
+                },
+                {
+                    "name": "thomas.frobieter",
+                    "homepage": "https://www.drupal.org/user/409335"
+                }
+            ],
+            "description": "Allows multiple selection and deletion of revisions for nodes.",
+            "homepage": "https://www.drupal.org/project/revisions_bulk_operations",
+            "support": {
+                "source": "https://git.drupalcode.org/project/revisions_bulk_operations"
             }
         },
         {
