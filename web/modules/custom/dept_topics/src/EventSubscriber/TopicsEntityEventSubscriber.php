@@ -83,6 +83,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
                   $i--;
                 }
               }
+              $child_node->setRevisionTranslationAffected(TRUE);
               $child_node->save();
 
               if ($child_topics->count() == 0) {
@@ -102,6 +103,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
                 $child_node->get('field_site_topics')->appendItem([
                   'target_id' => $entity->id()
                 ]);
+                $child_node->setRevisionTranslationAffected(TRUE);
                 $child_node->save();
                 $this->orphanManager->removeOrphan($child_node);
               }
@@ -151,6 +153,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
             $i--;
           }
         }
+        $child_node->setRevisionTranslationAffected(TRUE);
         $child_node->save();
 
         if ($child_topics->count() == 0) {
