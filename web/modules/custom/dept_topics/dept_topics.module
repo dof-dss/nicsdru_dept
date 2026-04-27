@@ -290,6 +290,9 @@ function dept_topics_entity_delete(EntityInterface $entity) {
 
         if ($has_child_entry) {
           $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
+          $topic_node->setRevisionTranslationAffected(TRUE);
+          $topic_node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
+          $topic_node->setRevisionUserId(\Drupal::currentUser()->id());
           $topic_node->save();
         }
       }
@@ -374,6 +377,9 @@ function dept_topics_node_insert(NodeInterface $node) {
       $child_node->get('field_site_topics')->appendItem([
         'target_id' => $node->id()
       ]);
+      $child_node->setRevisionTranslationAffected(TRUE);
+      $child_node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
+      $child_node->setRevisionUserId(\Drupal::currentUser()->id());
       $child_node->save();
     }
 
