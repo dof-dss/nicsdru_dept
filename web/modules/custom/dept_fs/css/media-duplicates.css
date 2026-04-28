@@ -1,0 +1,58 @@
+#views-exposed-form-media-duplicates-media-duplicates-page {
+
+  #edit-name-wrapper {
+    margin: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  .fieldset__label {
+    padding-bottom: 7px;
+  }
+
+  .form-item--name-op, .form-item--name {
+    display: inline-block;
+    margin: 0;
+  }
+
+}
+
+.view-media-duplicates {
+
+
+  .views-field-field-media-image {
+    width: 10%;
+  }
+
+  .views-field-name {
+    width: 40%;
+  }
+
+  .views-field-bundle {
+    width: 10%;
+  }
+
+  .views-field-nothing {
+    width: 10%;
+  }
+
+  .views-field-field-domain-source {
+    width: 15%;
+  }
+
+  .views-field-entity-usage-views-field {
+    width: 5%;
+  }
+
+  .views-field-operations {
+    width: 10%;
+  }
+
+  td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+
+}

@@ -5,6 +5,8 @@
  * Primary module hooks for Origins File System module.
  */
 
+use Drupal\views\ViewExecutable;
+
 /**
  * Implements hook_views_data().
  */
@@ -69,4 +71,13 @@ function dept_fs_views_data() {
   ];
 
   return $data;
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function dept_fs_views_pre_render(ViewExecutable $view) {
+  if ($view->id() === 'media_duplicates') {
+    $view->element['#attached']['library'][] = 'dept_fs/media-duplicates';
+  }
 }
