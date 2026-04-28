@@ -5,63 +5,40 @@
  * Primary module hooks for Origins File System module.
  */
 
-
 /**
  * Implements hook_views_data().
  */
 function dept_fs_views_data() {
   $data = [];
 
-  $data['media_duplicates'] = [];
-
+  // We don't define our own data source for Views with a join to media as this
+  // presents an issue when trying to use Views filters against the media entity.
   $data['media_duplicates']['table']['group'] = t('Media Duplicates');
-  $data['media_duplicates']['table']['base'] = [
-    'field' => 'id',
-    'title' => t('Media Duplicates'),
-    'help' => t('Media file duplicated based on filehashes.'),
-    'weight' => -10,
-  ];
+  $data['media_duplicates']['table']['provider'] = 'dept_fs';
 
-  // Fields.
-  $data['media_duplicates']['id'] = [
-    'title' => t('ID'),
-    'help' => t('Duplicate ID'),
-    'field' => [
-      'id' => 'standard',
-    ],
-    'filter' => [
-      'id' => 'numeric',
-    ],
-    'argument' => [
-      'id' => 'numeric',
-    ],
-    'sort' => [
-      'id' => 'standard',
-    ],
-  ];
-
-  $data['media_duplicates']['group_id'] = [
-    'title' => t('Group ID'),
-    'help' => t('The duplicate group the file belongs to.'),
-    'field' => [
-      'id' => 'numeric',
-    ],
-    'filter' => [
-      'id' => 'numeric',
-    ],
-    'argument' => [
-      'id' => 'numeric',
-    ],
-    'sort' => [
-      'id' => 'standard',
+  // User inner join so we avoid mid mis-matches.
+  $data['media_duplicates']['table']['join'] = [
+    'media_field_data' => [
+      'left_field' => 'mid',
+      'field'      => 'mid',
+      'type'       => 'INNER',
     ],
   ];
 
   $data['media_duplicates']['mid'] = [
-    'title' => t('Media ID'),
-    'help' => t('the Media entity ID'),
+    'title'    => t('Media ID'),
+    'help'     => t('The Media entity ID.'),
+    'field'    => ['id' => 'numeric'],
+    'filter'   => ['id' => 'numeric'],
+    'sort'     => ['id' => 'standard'],
+    'argument' => ['id' => 'numeric'],
+  ];
+
+  $data['media_duplicates']['group_id'] = [
+    'title' => t('Group ID'),
+    'help' => t('The duplicate group the media entity belongs to.'),
     'field' => [
-      'id' => 'standard',
+      'id' => 'numeric',
     ],
     'filter' => [
       'id' => 'numeric',
@@ -69,46 +46,27 @@ function dept_fs_views_data() {
     'argument' => [
       'id' => 'numeric',
     ],
-    'relationship' => [
-      'title' => t('Media entity'),
-      'help' => t('The Media entity.'),
-      'base' => 'media_field_data',
-      'base field' => 'mid',
+    'sort' => [
       'id' => 'standard',
     ],
   ];
 
   $data['media_duplicates']['checksum'] = [
     'title' => t('Checksum'),
-    'help' => t('The Media entity file checksum'),
+    'help' => t('The file checksum.'),
     'field' => [
-      'id' => 'standard',
-    ],
-    'sort' => [
-      'id' => 'standard',
+      'id' => 'numeric',
     ],
     'filter' => [
-      'id' => 'string',
+      'id' => 'numeric',
     ],
     'argument' => [
-      'id' => 'string',
-    ],
-  ];
-
-  $data['media_duplicates']['created'] = [
-    'title' => t('Created'),
-    'help' => t('The date of the duplicate analysis.'),
-    'field' => [
-      'id' => 'date',
+      'id' => 'numeric',
     ],
     'sort' => [
-      'id' => 'date',
-    ],
-    'filter' => [
-      'id' => 'date',
+      'id' => 'standard',
     ],
   ];
-
 
   return $data;
 }
