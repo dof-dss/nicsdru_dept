@@ -5,6 +5,7 @@
  * Primary module hooks for Origins File System module.
  */
 
+use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -80,4 +81,33 @@ function dept_fs_views_pre_render(ViewExecutable $view) {
   if ($view->id() === 'media_duplicates') {
     $view->element['#attached']['library'][] = 'dept_fs/media-duplicates';
   }
+}
+
+function dept_fs_media_duplicates_checksum_info_alter(array &$providers) {
+  unset($providers['file']);
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function dept_fs_views_query_alter(ViewExecutable $view, $query) {
+  if ($view->id() === 'media_duplicates') {
+    $query->addTag('media_duplicates_group_filter');
+  }
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function dept_fs_query_media_duplicates_group_filter_alter(AlterableInterface $query) {
+  $database = \Drupal::database();
+
+  $query->isNotNull('media_field_data.duplicates_checksum');
+
+  $subquery = $database->select('media_field_data', 'mfd_sub')
+    ->fields('mfd_sub', ['duplicates_checksum'])
+    ->groupBy('mfd_sub.duplicates_checksum')
+    ->having('COUNT(mfd_sub.duplicates_checksum) >= 2');
+
+  $query->condition('media_field_data.duplicates_checksum', $subquery, 'IN');
 }

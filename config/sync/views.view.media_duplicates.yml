@@ -1,4 +1,4 @@
-uuid: ae530ff0-54bf-460b-b191-cd34d8254a68
+uuid: b66a5632-7cc6-4326-acce-a0ead69c0ecf
 langcode: en
 status: true
 dependencies:
@@ -9,7 +9,6 @@ dependencies:
     - system.menu.admin
     - user.role.administrator
   module:
-    - dept_fs
     - entity_usage_views_field
     - file
     - image
@@ -29,250 +28,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Media duplicates'
       fields:
-        mid:
-          id: mid
-          table: media_duplicates
-          field: mid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: numeric
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          set_precision: false
-          precision: 0
-          decimal: .
-          separator: ''
-          format_plural: false
-          format_plural_string: !!binary MQNAY291bnQ=
-          prefix: ''
-          suffix: ''
-        group_id:
-          id: group_id
-          table: media_duplicates
-          field: group_id
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: numeric
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          set_precision: false
-          precision: 0
-          decimal: .
-          separator: ''
-          format_plural: false
-          format_plural_string: !!binary MQNAY291bnQ=
-          prefix: ''
-          suffix: ''
-        filesize:
-          id: filesize
-          table: file_managed
-          field: filesize
-          relationship: field_media_file_target_id
-          group_type: group
-          admin_label: ''
-          entity_type: file
-          entity_field: filesize
-          plugin_id: field
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: true
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: file_size
-          settings: {  }
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        filesize_1:
-          id: filesize_1
-          table: file_managed
-          field: filesize
-          relationship: field_media_image_target_id
-          group_type: group
-          admin_label: ''
-          entity_type: file
-          entity_field: filesize
-          plugin_id: field
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: true
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: file_size
-          settings: {  }
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
         field_media_image:
           id: field_media_image
           table: media__field_media_image
@@ -281,7 +37,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: field
-          label: ''
+          label: Image
           exclude: false
           alter:
             alter_text: false
@@ -314,11 +70,11 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: false
+          element_label_colon: true
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
-          empty: 'NO IMAGE'
+          empty: ''
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
@@ -349,34 +105,16 @@ display:
           entity_type: media
           entity_field: media
           plugin_id: field
-          label: 'Media title'
+          label: ''
           exclude: false
           alter:
             alter_text: false
-            text: ''
             make_link: false
-            path: ''
             absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
             word_boundary: false
             ellipsis: false
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
             strip_tags: false
             trim: false
-            preserve_tags: ''
             html: false
           element_type: ''
           element_class: ''
@@ -404,6 +142,71 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        duplicates_checksum:
+          id: duplicates_checksum
+          table: media_field_data
+          field: duplicates_checksum
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: media
+          entity_field: duplicates_checksum
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
         bundle:
           id: bundle
           table: media_field_data
@@ -414,7 +217,7 @@ display:
           entity_type: media
           entity_field: bundle
           plugin_id: field
-          label: Type
+          label: 'Media type'
           exclude: false
           alter:
             alter_text: false
@@ -458,7 +261,7 @@ display:
           click_sort_column: target_id
           type: entity_reference_label
           settings:
-            link: false
+            link: true
           group_column: target_id
           group_columns: {  }
           group_rows: true
@@ -469,19 +272,21 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        nothing:
-          id: nothing
-          table: views
-          field: nothing
-          relationship: none
+        filesize:
+          id: filesize
+          table: file_managed
+          field: filesize
+          relationship: field_media_file_target_id
           group_type: group
           admin_label: ''
-          plugin_id: custom
-          label: Filesize
+          entity_type: file
+          entity_field: filesize
+          plugin_id: field
+          label: 'File size'
           exclude: false
           alter:
-            alter_text: true
-            text: '{{ filesize }}{{ filesize_1 }}'
+            alter_text: false
+            text: ''
             make_link: false
             path: ''
             absolute: false
@@ -517,9 +322,80 @@ display:
           empty: ''
           hide_empty: false
           empty_zero: false
-          hide_alter_empty: false
-        field_domain_source:
-          id: field_domain_source
+          hide_alter_empty: true
+          click_sort_column: value
+          type: file_size
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        entity_usage_views_field:
+          id: entity_usage_views_field
+          table: media_field_data
+          field: entity_usage_views_field
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: media
+          plugin_id: entity_usage_views_field
+          label: 'Entity usage'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          set_precision: false
+          precision: 0
+          decimal: .
+          separator: ','
+          format_plural: false
+          format_plural_string: !!binary MQNAY291bnQ=
+          prefix: ''
+          suffix: ''
+        field_domain_source_1:
+          id: field_domain_source_1
           table: media__field_domain_source
           field: field_domain_source
           relationship: none
@@ -580,64 +456,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        entity_usage_views_field:
-          id: entity_usage_views_field
-          table: media_field_data
-          field: entity_usage_views_field
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: media
-          plugin_id: entity_usage_views_field
-          label: 'Usage count'
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          set_precision: false
-          precision: 0
-          decimal: .
-          separator: ','
-          format_plural: false
-          format_plural_string: !!binary MQNAY291bnQ=
-          prefix: ''
-          suffix: ''
         operations:
           id: operations
           table: media
@@ -727,7 +545,7 @@ display:
           role:
             administrator: administrator
       cache:
-        type: none
+        type: tag
         options: {  }
       empty: {  }
       sorts: {  }
@@ -744,59 +562,6 @@ display:
           group: 1
           expose:
             operator: ''
-        name:
-          id: name
-          table: media_field_data
-          field: name
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: media
-          entity_field: name
-          plugin_id: string
-          operator: '='
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: name_op
-            label: Filename
-            description: ''
-            use_operator: true
-            operator: name_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: name
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              admin: '0'
-              administrator: '0'
-              anonymous: '0'
-              author: '0'
-              supervisor: '0'
-              homepage_supervisor: '0'
-              rss_supervisor: '0'
-              stats_author: '0'
-              stats_supervisor: '0'
-              topic_layout_supervisor: '0'
-              topic_supervisor: '0'
-              qa: '0'
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
         bundle:
           id: bundle
           table: media_field_data
@@ -850,27 +615,29 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        field_domain_source_target_id:
-          id: field_domain_source_target_id
-          table: media__field_domain_source
-          field: field_domain_source_target_id
+        name:
+          id: name
+          table: media_field_data
+          field: name
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: media
+          entity_field: name
           plugin_id: string
           operator: '='
           value: ''
           group: 1
           exposed: true
           expose:
-            operator_id: field_domain_source_target_id_op
-            label: Department
+            operator_id: name_op
+            label: Name
             description: ''
-            use_operator: false
-            operator: field_domain_source_target_id_op
+            use_operator: true
+            operator: name_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: field_domain_source_target_id
+            identifier: name
             required: false
             remember: false
             multiple: false
@@ -891,37 +658,29 @@ display:
             placeholder: ''
           is_grouped: false
           group_info:
-            label: 'Domain Source (field_domain_source)'
-            description: null
-            identifier: field_domain_source_target_id
+            label: ''
+            description: ''
+            identifier: ''
             optional: true
             widget: select
             multiple: false
             remember: false
             default_group: All
             default_group_multiple: {  }
-            group_items:
-              1: {  }
-              2: {  }
-              3: {  }
-      filter_groups:
-        operator: AND
-        groups:
-          1: AND
+            group_items: {  }
       style:
         type: table
         options:
           grouping:
             -
-              field: group_id
+              field: duplicates_checksum
               rendered: true
               rendered_strip: false
           row_class: ''
           default_row_class: true
           columns:
             name: name
-            mid: mid
-            group_id: group_id
+            duplicates_checksum: duplicates_checksum
           default: '-1'
           info:
             name:
@@ -931,14 +690,7 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            mid:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            group_id:
+            duplicates_checksum:
               sortable: false
               default_sort_order: asc
               align: ''
@@ -977,16 +729,6 @@ display:
           admin_label: 'file from field_media_file'
           plugin_id: standard
           required: false
-        reverse_field_media_image_media:
-          id: reverse_field_media_image_media
-          table: file_managed
-          field: reverse_field_media_image_media
-          relationship: field_media_file_target_id
-          group_type: group
-          admin_label: field_media_image
-          entity_type: file
-          plugin_id: entity_reverse
-          required: false
         field_media_image_target_id:
           id: field_media_image_target_id
           table: media__field_media_image
@@ -994,6 +736,17 @@ display:
           relationship: none
           group_type: group
           admin_label: 'image from field_media_image'
+          plugin_id: standard
+          required: false
+        fid:
+          id: fid
+          table: file_managed
+          field: fid
+          relationship: field_media_file_target_id
+          group_type: group
+          admin_label: 'File usage'
+          entity_type: file
+          entity_field: fid
           plugin_id: standard
           required: false
       header: {  }
@@ -1012,11 +765,10 @@ display:
         - 'config:field.storage.media.field_media_image'
   media_duplicates_page:
     id: media_duplicates_page
-    display_title: 'Media duplicates'
+    display_title: Page
     display_plugin: page
     position: 1
     display_options:
-      display_description: 'Displays duplicates using media_duplicates and media db tables'
       display_extenders: {  }
       path: admin/content/media/duplicates
       menu:
