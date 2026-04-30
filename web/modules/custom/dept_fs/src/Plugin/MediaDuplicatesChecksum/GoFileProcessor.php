@@ -51,7 +51,7 @@ class GoFileProcessor extends MediaDuplicatesChecksumBase {
     if (getenv('IS_DDEV_PROJECT')) {
       $exe_path = '/var/www/html/bin/filehash';
     } else {
-      $exe_path = 'app/bin/filehash';
+      $exe_path = '/app/bin/filehash';
     }
 
 
