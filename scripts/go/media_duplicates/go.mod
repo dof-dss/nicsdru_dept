@@ -1,4 +1,4 @@
-module gotests
+module mediaduplicates
 
 go 1.22
 

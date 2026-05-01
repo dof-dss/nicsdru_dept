@@ -83,7 +83,11 @@ function dept_fs_views_pre_render(ViewExecutable $view) {
   }
 }
 
+/**
+ * Implements hook_media_duplicates_checksum_info_alter().
+ */
 function dept_fs_media_duplicates_checksum_info_alter(array &$providers) {
+  // Remove the default file processor as we replace it with our GoFileProcessor.
   unset($providers['file']);
 }
 
@@ -102,12 +106,14 @@ function dept_fs_views_query_alter(ViewExecutable $view, $query) {
 function dept_fs_query_media_duplicates_group_filter_alter(AlterableInterface $query) {
   $database = \Drupal::database();
 
+  // We only want to return rows that have at least more than 1 matching
+  // checksum and ignore rows that don't have a checksum value.
+  $checksum_query = $database->select('media_field_data', 'mfd')
+    ->fields('mfd', ['duplicates_checksum'])
+    ->isNotNull('mfd.duplicates_checksum')
+    ->groupBy('mfd.duplicates_checksum')
+    ->having('COUNT(mfd.mid) > 1');
+
+  $query->condition('media_field_data.duplicates_checksum', $checksum_query, 'IN');
   $query->isNotNull('media_field_data.duplicates_checksum');
-
-  $subquery = $database->select('media_field_data', 'mfd_sub')
-    ->fields('mfd_sub', ['duplicates_checksum'])
-    ->groupBy('mfd_sub.duplicates_checksum')
-    ->having('COUNT(mfd_sub.duplicates_checksum) >= 2');
-
-  $query->condition('media_field_data.duplicates_checksum', $subquery, 'IN');
 }
