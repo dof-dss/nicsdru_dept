@@ -79,6 +79,7 @@ function dept_fs_views_data() {
  */
 function dept_fs_views_pre_render(ViewExecutable $view) {
   if ($view->id() === 'media_duplicates') {
+
     $view->element['#attached']['library'][] = 'dept_fs/media-duplicates';
   }
 }

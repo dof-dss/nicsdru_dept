@@ -29,6 +29,253 @@ display:
     position: 0
     display_options:
       fields:
+        mid:
+          id: mid
+          table: media_field_data
+          field: mid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: media
+          entity_field: mid
+          plugin_id: field
+          label: ID
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: number_integer
+          settings:
+            thousand_separator: ''
+            prefix_suffix: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        filesize_1:
+          id: filesize_1
+          table: file_managed
+          field: filesize
+          relationship: field_media_image_target_id
+          group_type: group
+          admin_label: 'Image Filesize'
+          entity_type: file
+          entity_field: filesize
+          plugin_id: field
+          label: 'File size'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: true
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: file_size
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        filesize_2:
+          id: filesize_2
+          table: file_managed
+          field: filesize
+          relationship: field_media_file_target_id
+          group_type: group
+          admin_label: 'Document Filesize'
+          entity_type: file
+          entity_field: filesize
+          plugin_id: field
+          label: 'File size'
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: true
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: file_size
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        media_bulk_form:
+          id: media_bulk_form
+          table: media
+          field: media_bulk_form
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: media
+          plugin_id: bulk_form
+          label: 'Bulk update'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          action_title: Action
+          include_exclude: exclude
+          selected_actions: {  }
         field_media_image:
           id: field_media_image
           table: media__field_media_image
@@ -207,21 +454,19 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        filesize:
-          id: filesize
-          table: file_managed
-          field: filesize
-          relationship: field_media_image_target_id
+        nothing:
+          id: nothing
+          table: views
+          field: nothing
+          relationship: none
           group_type: group
           admin_label: ''
-          entity_type: file
-          entity_field: filesize
-          plugin_id: field
+          plugin_id: custom
           label: 'File size'
           exclude: false
           alter:
-            alter_text: false
-            text: ''
+            alter_text: true
+            text: '{{ filesize_1 }}{{ filesize_2 }}'
             make_link: false
             path: ''
             absolute: false
@@ -257,20 +502,7 @@ display:
           empty: ''
           hide_empty: false
           empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: file_size
-          settings: {  }
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
+          hide_alter_empty: false
         entity_usage_views_field:
           id: entity_usage_views_field
           table: media_field_data
@@ -285,8 +517,8 @@ display:
           alter:
             alter_text: false
             text: ''
-            make_link: false
-            path: ''
+            make_link: true
+            path: '/media/{{ mid }}/edit/usage'
             absolute: false
             external: false
             replace_spaces: false
@@ -297,7 +529,7 @@ display:
             link_class: ''
             prefix: ''
             suffix: ''
-            target: ''
+            target: _blank
             nl2br: false
             max_length: 0
             word_boundary: true
@@ -441,7 +673,7 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          destination: false
+          destination: true
         duplicates_checksum:
           id: duplicates_checksum
           table: media_field_data
@@ -818,11 +1050,20 @@ display:
           admin_label: 'image from field_media_image'
           plugin_id: standard
           required: false
+        field_media_file_target_id:
+          id: field_media_file_target_id
+          table: media__field_media_file
+          field: field_media_file_target_id
+          relationship: none
+          group_type: group
+          admin_label: 'file from field_media_file'
+          plugin_id: standard
+          required: false
       header: {  }
       footer: {  }
       display_extenders: {  }
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -850,7 +1091,7 @@ display:
         parent: 'admin_toolbar_tools.extra_links:media_page'
         context: '0'
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
