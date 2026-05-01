@@ -32,33 +32,29 @@ class GoFileProcessor extends MediaDuplicatesChecksumBase {
   }
 
   /**
-   * Get a hash of the file.
+   * Create a hash for a given file URI.
    *
-   * This is a duplicate of Crypt::hashBase64() but using the file handling.
+   * @param string $fileUri
+   *   The URI of the file to hash.
    *
-   * @param string $filename
-   *   The file to hash.
-   *
-   * @return string
-   *   The hash of the file.
+   * @return string|null
+   *   The hash of the file or NULL.
    */
   protected function goHash($fileUri) {
     $absolute_path = \Drupal::service('file_system')->realpath($fileUri);
+    $output = NULL;
+    $result = NULL;
 
-    $output=null;
-    $result=null;
+    // Path to the Go based filehasher (See: /scripts/go/file_hash).
+    $exe_path = (getenv('IS_DDEV_PROJECT')) ? '/var/www/html/bin/filehash' : '/app/bin/filehash';
 
-    if (getenv('IS_DDEV_PROJECT')) {
-      $exe_path = '/var/www/html/bin/filehash';
-    } else {
-      $exe_path = '/app/bin/filehash';
-    }
-
-
-    exec($exe_path . ' "' . $absolute_path . '"' , $output, $result);
+    exec($exe_path . ' ' . escapeshellarg($absolute_path), $output, $result);
 
     if ($result == 0 && !empty($output)) {
-      return str_replace(['+', '/', '='], ['-', '_', ''], $output[0]);
+      return $output[0];
+    }
+    else {
+      return NULL;
     }
   }
 
