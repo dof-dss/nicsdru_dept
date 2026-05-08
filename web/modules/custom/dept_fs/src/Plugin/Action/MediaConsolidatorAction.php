@@ -8,7 +8,9 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Action to consolidate duplicate media items.
@@ -47,13 +49,27 @@ class MediaConsolidatorAction extends ActionBase implements ContainerFactoryPlug
    * {@inheritdoc}
    */
   public function executeMultiple(array $objects): void {
-    // Collect IDs from the selected media entity objects.
-    $ids = array_map(static fn($entity) => $entity->id(), $objects);
+    $entities = [];
+
+    foreach ($objects as $entity) {
+      $entities[$entity->id()] = $entity->get('duplicates_checksum')->value;
+    }
+
+    // Ensure the selected Media entities all duplicates of the same type.
+    if (!$this->areMatchingDuplicates(array_values($entities))) {
+      $this->messenger->addWarning($this->t('The selected Media items are not matching duplicates.'));
+    }
 
     // Store in private temp store so the confirmation form can retrieve them.
     $this->tempStoreFactory
       ->get('media_consolidator')
-      ->set('selected_media', array_values($ids));
+      ->set('selected_media', array_keys($entities));
+
+    // Get the current page URL as destination for the confirm form cancel button.
+    $destination = \Drupal::destination()->get();
+    $url = Url::fromRoute('dept_fs.media_consolidator_confirm', [], ['query' => ['destination' => $destination]]);
+    $redirect = new RedirectResponse($url->toString());
+    $redirect->send();
   }
 
   /**
@@ -70,6 +86,19 @@ class MediaConsolidatorAction extends ActionBase implements ContainerFactoryPlug
    */
   public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE): bool {
     return in_array('administrator', $account->getRoles());
+  }
+
+  /**
+   * Determine if the supplied checksums match
+   *
+   * @param array $array
+   *   List of checksums to check.
+   *
+   * @return bool
+   *   True if all match, else false.
+   */
+  private function areMatchingDuplicates($array) {
+    return count(array_unique($array)) === 1;
   }
 
 }
