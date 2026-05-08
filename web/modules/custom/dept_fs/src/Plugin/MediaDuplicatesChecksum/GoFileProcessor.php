@@ -45,10 +45,7 @@ class GoFileProcessor extends MediaDuplicatesChecksumBase {
     $output = NULL;
     $result = NULL;
 
-    // Path to the Go based filehasher (See: /scripts/go/file_hash).
-    $exe_path = (getenv('IS_DDEV_PROJECT')) ? '/var/www/html/bin/filehash' : '/app/bin/filehash';
-
-    exec($exe_path . ' ' . escapeshellarg($absolute_path), $output, $result);
+    exec('dof-dss-filehash ' . escapeshellarg($absolute_path), $output, $result);
 
     if ($result == 0 && !empty($output)) {
       return $output[0];
