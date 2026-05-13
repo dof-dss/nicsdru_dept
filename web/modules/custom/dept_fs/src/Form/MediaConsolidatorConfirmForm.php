@@ -2,12 +2,15 @@
 
 namespace Drupal\dept_fs\Form;
 
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\ConfirmFormHelper;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\entity_usage\EntityUsageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -19,7 +22,8 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     protected readonly PrivateTempStoreFactory $tempStoreFactory,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly AccountProxyInterface $currentUser,
-  ) {}
+    protected readonly Connection $database,
+    protected readonly EntityUsageInterface $entityUsage,) {}
 
   /**
    * {@inheritdoc}
@@ -29,7 +33,8 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
       $container->get('tempstore.private'),
       $container->get('entity_type.manager'),
       $container->get('current_user'),
-    );
+      $container->get('database'),
+      $container->get('entity_usage.usage'),);
   }
 
   /**
@@ -45,10 +50,11 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $store = $this->tempStoreFactory->get('media_consolidator');
     $mids = $store->get('selected_media') ?? [];
-//    $store->delete('selected_media');
+    //    $store->delete('selected_media');
 
     /** @var \Drupal\media\MediaInterface[] $entities */
-    $entities = $this->entityTypeManager->getStorage('media')->loadMultiple($mids);
+    $entities = $this->entityTypeManager->getStorage('media')
+      ->loadMultiple($mids);
 
     $form['#title'] = $this->t('Consolidate Media');
     $form['mids'] = [
@@ -58,15 +64,11 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
 
     $options = [];
     foreach ($entities as $media) {
-
-      $options[$media->id()] = $this->t(
-        '@name (@bundle, ID: @id)',
-        [
+      $options[$media->id()] = $this->t('@name (@bundle, ID: @id)', [
           '@name' => $media->label(),
           '@bundle' => $media->bundle(),
           '@id' => $media->id(),
-        ]
-      );
+        ]);
     }
 
     $form['media_original'] = [
@@ -83,7 +85,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
       '#value' => $this->getConfirmText(),
       '#button_type' => 'primary',
       '#submit' => [
-        function (array &$form, FormStateInterface $form_state): void {
+        function(array &$form, FormStateInterface $form_state): void {
           $this->submitForm($form, $form_state);
         },
       ],
@@ -102,67 +104,95 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $media_storage = \Drupal::entityTypeManager()->getStorage('media');
-    $database = \Drupal::database();
     $original_mid = $form_state->getValue('media_original');
     $mids = explode(',', $form_state->getValue('mids'));
     $mids = array_diff($mids, [$original_mid]);
     $entities = $media_storage->loadMultiple($mids);
-    $entity_usage = \Drupal::service('entity_usage.usage');
-    $sources = [];
+    $cache_tags = [];
+    $sources_map = [];
 
-    foreach ($entities as $entity) {
-      $usage = $entity_usage->listSources($entity);
+    foreach ($entities as $media) {
+      $content_sources = $this->entityUsage->listSources($media);
 
-      foreach ($usage as $entity_type => $ids) {
-        if (!array_key_exists($entity_type, $sources)) {
-          $sources[$entity_type] = [];
-        }
-
-        foreach ($ids as $id => $items) {
-          foreach ($items as $item) {
-            $field_name = $item['field_name'];
-            if (!array_key_exists($field_name, $sources[$entity_type])) {
-              $sources[$entity_type][$field_name] = [];
-            }
-
-            if (!in_array($entity->id(), $sources[$entity_type][$field_name])) {
-              array_push($sources[$entity_type][$field_name], $entity->id());
-            }
-
+      foreach ($content_sources as $content_type => $content_data) {
+        foreach ($content_data as $content_id => $usage_indexes) {
+          foreach ($usage_indexes as $usage_index) {
+            $this->updateUsage([
+              'content_type' => $content_type,
+              'content_id' => $content_id,
+              'usage' => $usage_index,
+              'media' => $media,
+              'original_mid' => $original_mid,
+            ]);
           }
         }
+        // TODO: cleanup entity usage records by calling bulkDeleteTargets()
+
       }
 
-      foreach($sources as $entity_type => $fields) {
-        foreach ($fields as $field => $data) {
-          $table = $entity_type . "__" . $field;
-          $target_column = $field . "_target_id";
-
-          $database->update($table)
-            ->fields([$target_column => $original_mid])
-            ->condition($target_column, $mids, 'IN')
-            ->execute();
-
-          // Update revisions
-          $table = $entity_type . "_revision__" . $field;
-
-          $database->update($table)
-            ->fields([$target_column => $original_mid])
-            ->condition($target_column, $mids, 'IN')
-            ->execute();
-
-        }
-      }
-
-
-
-      // TODO: update target for usage place
-      // TODO: cleaup entity usage records by calling bulkDeleteTargets()
-
+      $this->entityUsage->deleteByTargetEntity($media->id(), 'media');
     }
 
-    ksm($sources);
+    Cache::invalidateTags($cache_tags);
   }
+
+  protected function updateUsage($update_data) {
+    match($update_data['usage']['method']) {
+      'entity_reference' => $this->processEntityReference($update_data),
+      'media_embed' =>  $this->processMediaEmbed($update_data),
+      'layout_builder' =>  $this->processLayoutBuilder($update_data),
+      'block_field' =>  $this->processBlockField($update_data),
+    };
+  }
+
+  protected function processEntityReference($update_data) {
+    extract($update_data);
+    $table = $content_type . "__" . $usage['field_name'];
+    $target_column = $usage['field_name'] . "_target_id";
+
+    $this->database->update($table)
+      ->fields([$target_column => $original_mid])
+      ->condition($target_column, $media->id())
+      ->execute();
+
+    $table = $content_type . "_revision__" . $usage['field_name'];
+
+    if ($this->database->schema()->tableExists($table)) {
+      $this->database->update($table)
+        ->fields([$target_column => $original_mid])
+        ->condition($target_column, $media->id())
+        ->execute();
+    }
+
+    $this->entityUsage->registerUsage(
+      $original_mid,
+      'media',
+      $content_id,
+      $content_type,
+      $usage['source_langcode'],
+      $usage['source_vid'],
+      $usage['method'],
+      $usage['field_name'],
+      1);
+  }
+
+  protected function processMediaEmbed($update_data) {
+
+
+
+    ksm("processMediaEmbed", $update_data);
+  }
+
+  protected function processLayoutBuilder($update_data) {
+    ksm("processLayoutBuilder", $update_data);
+  }
+
+  protected function processBlockField($update_data) {
+    ksm("processBlockField", $update_data);
+  }
+
+
+
 
   /**
    * {@inheritdoc}
@@ -190,5 +220,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
   public function getCancelUrl() {
 
   }
+
+
 
 }
