@@ -108,6 +108,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     $mids = explode(',', $form_state->getValue('mids'));
     $mids = array_diff($mids, [$original_mid]);
     $entities = $media_storage->loadMultiple($mids);
+    $original_media = $media_storage->load($original_mid);
     $cache_tags = [];
     $sources_map = [];
 
@@ -122,7 +123,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
               'content_id' => $content_id,
               'usage' => $usage_index,
               'media' => $media,
-              'original_mid' => $original_mid,
+              'original_media' => $original_media,
             ]);
           }
         }
@@ -151,7 +152,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     $target_column = $usage['field_name'] . "_target_id";
 
     $this->database->update($table)
-      ->fields([$target_column => $original_mid])
+      ->fields([$target_column => $original_media->id()])
       ->condition($target_column, $media->id())
       ->execute();
 
@@ -159,13 +160,13 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
 
     if ($this->database->schema()->tableExists($table)) {
       $this->database->update($table)
-        ->fields([$target_column => $original_mid])
+        ->fields([$target_column => $original_media->id()])
         ->condition($target_column, $media->id())
         ->execute();
     }
 
     $this->entityUsage->registerUsage(
-      $original_mid,
+      $original_media->id(),
       'media',
       $content_id,
       $content_type,
@@ -178,9 +179,41 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
 
   protected function processMediaEmbed($update_data) {
 
+    extract($update_data);
+    $table = $content_type . "__" . $usage['field_name'];
+    $field = $usage['field_name'] . "_value";
 
+    $field_value = $this->database->select($table, 't')
+      ->fields('t', [$field])
+      ->condition('entity_id', $content_id)
+      ->condition('revision_id', $usage['source_vid'])
+      ->condition('revision_id', $usage['source_vid'])
+      ->condition('langcode', $usage['source_langcode'])
+      ->execute()->fetchField();
 
-    ksm("processMediaEmbed", $update_data);
+    $media_regex = '/(<drupal-media\b[\s\S]*?)data-entity-uuid=["\'](?:[^"\']*)["\']/i';
+    $updated_media_element = '${1}data-entity-uuid="' . $original_media->uuid() . '"';
+
+    $field_value = preg_replace($media_regex, $updated_media_element, $field_value);
+
+    $this->database->update($table)
+      ->fields([$field => $field_value])
+      ->condition('entity_id', $content_id)
+      ->condition('revision_id', $usage['source_vid'])
+      ->condition('revision_id', $usage['source_vid'])
+      ->condition('langcode', $usage['source_langcode'])
+      ->execute();
+
+    $this->entityUsage->registerUsage(
+      $original_media->id(),
+      'media',
+      $content_id,
+      $content_type,
+      $usage['source_langcode'],
+      $usage['source_vid'],
+      $usage['method'],
+      $usage['field_name'],
+      1);
   }
 
   protected function processLayoutBuilder($update_data) {
