@@ -10,6 +10,8 @@ use Drupal\Core\Form\ConfirmFormHelper;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\dept_fs\ConsolidationStore;
+use Drupal\dept_fs\Table;
 use Drupal\entity_usage\EntityUsageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -107,116 +109,133 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     $original_mid = $form_state->getValue('media_original');
     $mids = explode(',', $form_state->getValue('mids'));
     $mids = array_diff($mids, [$original_mid]);
-    $entities = $media_storage->loadMultiple($mids);
-    $original_media = $media_storage->load($original_mid);
+    $selected_media_entities = $media_storage->loadMultiple($mids);
+    $replacement_media = $media_storage->load($original_mid);
     $cache_tags = [];
-    $sources_map = [];
 
-    foreach ($entities as $media) {
-      $content_sources = $this->entityUsage->listSources($media);
+    foreach ($selected_media_entities as $media_entity) {
+      $host_sources = $this->entityUsage->listSources($media_entity);
 
-      foreach ($content_sources as $content_type => $content_data) {
-        foreach ($content_data as $content_id => $usage_indexes) {
-          foreach ($usage_indexes as $usage_index) {
-            $this->updateUsage([
-              'content_type' => $content_type,
-              'content_id' => $content_id,
-              'usage' => $usage_index,
-              'media' => $media,
-              'original_media' => $original_media,
-            ]);
+      foreach ($host_sources as $host_type => $host_data) {
+        foreach ($host_data as $host_id => $usage) {
+          $media_host = $this->entityTypeManager->getStorage($host_type)->load($host_id);
+          foreach ($usage as $usage_index => $usage_data) {
+            dump($media_entity, $media_host, $replacement_media);
+            $this->updateUsage(new ConsolidationStore($media_host, $usage_data, $media_entity, $replacement_media));
           }
         }
         // TODO: cleanup entity usage records by calling bulkDeleteTargets()
 
       }
 
-      $this->entityUsage->deleteByTargetEntity($media->id(), 'media');
+//      $this->entityUsage->deleteByTargetEntity($media->id(), 'media');
     }
 
     Cache::invalidateTags($cache_tags);
   }
 
-  protected function updateUsage($update_data) {
-    match($update_data['usage']['method']) {
-      'entity_reference' => $this->processEntityReference($update_data),
-      'media_embed' =>  $this->processMediaEmbed($update_data),
-      'layout_builder' =>  $this->processLayoutBuilder($update_data),
-      'block_field' =>  $this->processBlockField($update_data),
+  protected function updateUsage(ConsolidationStore $consolidation) {
+    match($consolidation->relationshipType()) {
+      'entity_reference' => $this->processEntityReference($consolidation),
+      'media_embed' =>  $this->processMediaEmbed($consolidation),
+      'layout_builder' =>  $this->processLayoutBuilder($consolidation),
+      'block_field' =>  $this->processBlockField($consolidation),
     };
   }
 
-  protected function processEntityReference($update_data) {
-    extract($update_data);
-    $table = $content_type . "__" . $usage['field_name'];
-    $target_column = $usage['field_name'] . "_target_id";
+  protected function processEntityReference(ConsolidationStore $consolidation) {
+    // TODO: Provide target method on store, but must take into account the relationship method.
+    $table_target_column = $consolidation->field() . "_target_id";
 
-    $this->database->update($table)
-      ->fields([$target_column => $original_media->id()])
-      ->condition($target_column, $media->id())
-      ->execute();
+    // If the source vid matches the media host entity revision ID then update the base table.
+    if ($consolidation->mediaHost->getLoadedRevisionId() == $consolidation->usageData['source_vid']) {
+      $this->database->update($consolidation->table(Table::Base))
+        ->fields([$table_target_column => $consolidation->replacementMedia->id()])
+        ->condition($table_target_column, $consolidation->currentMedia->id())
+        ->condition('revision_id', $consolidation->usageData['source_vid'])
+        ->execute();
+    }
 
-    $table = $content_type . "_revision__" . $usage['field_name'];
-
-    if ($this->database->schema()->tableExists($table)) {
-      $this->database->update($table)
-        ->fields([$target_column => $original_media->id()])
-        ->condition($target_column, $media->id())
+    // Update target_id in usage revisions if entity is revisionable.
+    if ($this->database->schema()->tableExists($consolidation->table(Table::Revision))) {
+      $this->database->update($consolidation->table(Table::Revision))
+        ->fields([$table_target_column => $consolidation->replacementMedia->id()])
+        ->condition($table_target_column, $consolidation->currentMedia->id())
+        ->condition('revision_id', $consolidation->usageData['source_vid'])
         ->execute();
     }
 
     $this->entityUsage->registerUsage(
-      $original_media->id(),
+      $consolidation->replacementMedia->id(),
       'media',
-      $content_id,
-      $content_type,
-      $usage['source_langcode'],
-      $usage['source_vid'],
-      $usage['method'],
-      $usage['field_name'],
+      $consolidation->mediaHost->id(),
+      $consolidation->mediaHost->getEntityTypeId(),
+      $consolidation->usageData['source_langcode'],
+      $consolidation->usageData['source_vid'],
+      $consolidation->relationshipType(),
+      $consolidation->field(),
       1);
   }
 
-  protected function processMediaEmbed($update_data) {
+  protected function processMediaEmbed(ConsolidationStore $consolidation) {
 
-    extract($update_data);
-    $table = $content_type . "__" . $usage['field_name'];
-    $field = $usage['field_name'] . "_value";
-
-    $field_value = $this->database->select($table, 't')
-      ->fields('t', [$field])
-      ->condition('entity_id', $content_id)
-      ->condition('revision_id', $usage['source_vid'])
-      ->condition('revision_id', $usage['source_vid'])
-      ->condition('langcode', $usage['source_langcode'])
-      ->execute()->fetchField();
-
+    $field = $consolidation->field() . "_value";
     $media_regex = '/(<drupal-media\b[\s\S]*?)data-entity-uuid=["\'](?:[^"\']*)["\']/i';
-    $updated_media_element = '${1}data-entity-uuid="' . $original_media->uuid() . '"';
+    $updated_media_element = '${1}data-entity-uuid="' . $consolidation->replacementMedia->uuid() . '"';
+
+    // If the source vid matches the media host entity revision ID then update the base table.
+    if ($consolidation->mediaHost->getLoadedRevisionId() == $consolidation->usageData['source_vid']) {
+      $field_value = $this->database->select($consolidation->table(Table::Base), 't')
+        ->fields('t', [$field])
+        ->condition('entity_id', $consolidation->mediaHost->id())
+        ->condition('revision_id', $consolidation->usageData['source_vid'])
+        ->condition('langcode', $consolidation->usageData['source_langcode'])
+        ->execute()->fetchField();
+
+      $field_value = preg_replace($media_regex, $updated_media_element, $field_value);
+
+      $this->database->update($consolidation->table(Table::Base))
+        ->fields([$field => $field_value])
+        ->condition('entity_id', $consolidation->mediaHost->id())
+        ->condition('revision_id', $consolidation->usageData['source_vid'])
+        ->condition('langcode', $consolidation->usageData['source_langcode'])
+        ->execute();
+    }
+
+    // Update media embed data in revisions.
+    $field_value = $this->database->select($consolidation->table(Table::Revision), 't')
+      ->fields('t', [$field])
+      ->condition('entity_id', $consolidation->mediaHost->id())
+      ->condition('revision_id', $consolidation->usageData['source_vid'])
+      ->condition('langcode', $consolidation->usageData['source_langcode'])
+      ->execute()
+      ->fetchField();
 
     $field_value = preg_replace($media_regex, $updated_media_element, $field_value);
 
-    $this->database->update($table)
+    $this->database->update($consolidation->table(Table::Revision))
       ->fields([$field => $field_value])
-      ->condition('entity_id', $content_id)
-      ->condition('revision_id', $usage['source_vid'])
-      ->condition('revision_id', $usage['source_vid'])
-      ->condition('langcode', $usage['source_langcode'])
+      ->condition('entity_id', $consolidation->mediaHost->id())
+      ->condition('revision_id', $consolidation->usageData['source_vid'])
+      ->condition('langcode', $consolidation->usageData['source_langcode'])
       ->execute();
 
+
     $this->entityUsage->registerUsage(
-      $original_media->id(),
+      $consolidation->replacementMedia->id(),
       'media',
-      $content_id,
-      $content_type,
-      $usage['source_langcode'],
-      $usage['source_vid'],
-      $usage['method'],
-      $usage['field_name'],
+      $consolidation->mediaHost->id(),
+      $consolidation->mediaHost->getEntityTypeId(),
+      $consolidation->usageData['source_langcode'],
+      $consolidation->usageData['source_vid'],
+      $consolidation->relationshipType(),
+      $consolidation->field(),
       1);
   }
 
   protected function processLayoutBuilder($update_data) {
+
+
     ksm("processLayoutBuilder", $update_data);
   }
 

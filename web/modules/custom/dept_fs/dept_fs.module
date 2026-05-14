@@ -118,3 +118,10 @@ function dept_fs_query_media_duplicates_group_filter_alter(AlterableInterface $q
   $query->condition('media_field_data.duplicates_checksum', $checksum_query, 'IN');
   $query->isNotNull('media_field_data.duplicates_checksum');
 }
+
+/**
+ * Implements hook_preprocess().
+ */
+function dept_fs_preprocess_page() {
+
+}
