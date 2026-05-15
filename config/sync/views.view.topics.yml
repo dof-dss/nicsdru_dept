@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - flag.flag.hide_listing
+    - node.type.subtopic
     - node.type.topic
     - system.menu.main
   module:
@@ -168,7 +169,7 @@ display:
           exposed: false
           draggable_views_reference: 'topics:page_1'
           draggable_views_null_order: after
-          draggable_views_pass_arguments: false
+          draggable_views_pass_arguments: 0
       arguments:
         field_domain_source_target_id:
           id: field_domain_source_target_id
@@ -196,17 +197,24 @@ display:
             sort_order: asc
             number_of_records: 0
             format: default_summary
-          specify_validation: false
+          specify_validation: true
           validate:
-            type: none
+            type: 'entity:node'
             fail: 'not found'
-          validate_options: {  }
+          validate_options:
+            bundles:
+              subtopic: subtopic
+              topic: topic
+            access: false
+            operation: view
+            multiple: 0
           glossary: false
           limit: 0
           case: none
           path_case: none
           transform_dash: false
           break_phrase: false
+          not: 0
       filters:
         type:
           id: type
@@ -263,7 +271,8 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - flag.flag.hide_listing
   block:
     id: block
     display_title: Block
@@ -350,7 +359,8 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - flag.flag.hide_listing
   page_1:
     id: page_1
     display_title: Admin
@@ -841,7 +851,8 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - flag.flag.hide_listing
   topics_page:
     id: topics_page
     display_title: Page
@@ -937,4 +948,5 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - flag.flag.hide_listing
