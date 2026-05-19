@@ -5,11 +5,6 @@ namespace Drupal\dept_fs;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\media\MediaInterface;
 
-enum Table {
-  case Base;
-  case Revision;
-}
-
 readonly class ConsolidationStore {
 
   public function __construct(
@@ -17,10 +12,18 @@ readonly class ConsolidationStore {
     public array $usageData,
     public MediaInterface $currentMedia,
     public MediaInterface $replacementMedia,
-  ){}
+  ) {
 
-  public function table(Table $type) {
-    if ($type == Table::Base) {
+  }
+
+  /**
+   * The table name.
+   *
+   * @param \ConsolidationTable $type
+   *   The table type, base or revision.
+   */
+  public function table(\ConsolidationTable $type):string {
+    if ($type == \ConsolidationTable::Base) {
       return $table = $this->mediaHost->getEntityTypeId() . "__" . $this->field();
     }
     else {
@@ -28,11 +31,17 @@ readonly class ConsolidationStore {
     }
   }
 
-  public function field() {
+  /**
+   * The Entity Usage field.
+   */
+  public function field():string {
     return $this->usageData['field_name'];
   }
 
-  public function relationshipType() {
+  /**
+   * The Entity Usage method.
+   */
+  public function relationshipType(): string {
     return $this->usageData['method'];
   }
 
