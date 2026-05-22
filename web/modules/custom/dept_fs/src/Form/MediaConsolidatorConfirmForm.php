@@ -118,6 +118,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
       foreach ($host_sources as $host_type => $host_data) {
         foreach ($host_data as $host_id => $usage) {
           $media_host = $this->entityTypeManager->getStorage($host_type)->load($host_id);
+          array_merge($cache_tags, $media_host->getCacheTags());
           foreach ($usage as $usage_index => $usage_data) {
             $this->updateUsage(new ConsolidationStore($media_host, $usage_data, $media_entity, $replacement_media));
           }
@@ -127,6 +128,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
       $this->entityUsage->deleteByTargetEntity($media_entity->id(), 'media');
     }
 
+    // TODO: When a media item is consolidated the edit form media item still has an edit link to the old media.
     Cache::invalidateTags($cache_tags);
   }
 
