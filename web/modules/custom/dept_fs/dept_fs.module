@@ -23,17 +23,17 @@ function dept_fs_views_data() {
   $data['media_duplicates']['table']['join'] = [
     'media_field_data' => [
       'left_field' => 'mid',
-      'field'      => 'mid',
-      'type'       => 'INNER',
+      'field' => 'mid',
+      'type' => 'INNER',
     ],
   ];
 
   $data['media_duplicates']['mid'] = [
-    'title'    => t('Media ID'),
-    'help'     => t('The Media entity ID.'),
-    'field'    => ['id' => 'numeric'],
-    'filter'   => ['id' => 'numeric'],
-    'sort'     => ['id' => 'standard'],
+    'title' => t('Media ID'),
+    'help' => t('The Media entity ID.'),
+    'field' => ['id' => 'numeric'],
+    'filter' => ['id' => 'numeric'],
+    'sort' => ['id' => 'standard'],
     'argument' => ['id' => 'numeric'],
   ];
 

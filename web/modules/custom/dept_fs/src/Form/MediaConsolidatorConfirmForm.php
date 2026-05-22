@@ -11,6 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\dept_fs\ConsolidationStore;
+use Drupal\dept_fs\ConsolidationTable;
 use Drupal\entity_usage\EntityUsageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -20,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class MediaConsolidatorConfirmForm extends ConfirmFormBase {
 
   public function __construct(
-    protected readonly PrivateTempStoreFactory $tempStoreFactory,
+    protected readonly PrivateTempStoreFactory $tempStore,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly AccountProxyInterface $currentUser,
     protected readonly Connection $database,
@@ -52,7 +53,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    $store = $this->tempStoreFactory->get('media_consolidator');
+    $store = $this->tempStore->get('media_consolidator');
     $mids = $store->get('selected_media') ?? [];
 
     /** @var \Drupal\media\MediaInterface[] $entities */
@@ -74,9 +75,9 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
       ]);
     }
 
-    $form['media_original'] = [
+    $form['media_replacement'] = [
       '#type' => 'radios',
-      '#title' => $this->t('Select the media origin, this will replace all of the duplicates on this page.'),
+      '#title' => $this->t('Select the media to use in place of the duplicates.'),
       '#options' => $options,
       '#required' => TRUE,
       '#default_value' => key($options),
@@ -94,9 +95,6 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
       ],
     ];
     $form['actions']['cancel'] = ConfirmFormHelper::buildCancelLink($this, \Drupal::request());
-    
-    // TODO: Clean the private temp store when submitted or cancelled.
-    // TODO: Improve display of selected media.
 
     return $form;
   }
@@ -106,8 +104,9 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $media_storage = \Drupal::entityTypeManager()->getStorage('media');
-    $replacement_media_mid = $form_state->getValue('media_original');
+    $replacement_media_mid = $form_state->getValue('media_replacement');
     $mids = explode(',', $form_state->getValue('mids'));
+    // Remove the replacement mid from the list to be processed.
     $mids = array_diff($mids, [$replacement_media_mid]);
     $selected_media_entities = $media_storage->loadMultiple($mids);
     $replacement_media = $media_storage->load($replacement_media_mid);
@@ -120,7 +119,6 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
         foreach ($host_data as $host_id => $usage) {
           $media_host = $this->entityTypeManager->getStorage($host_type)->load($host_id);
           foreach ($usage as $usage_index => $usage_data) {
-            dump($media_entity, $media_host, $replacement_media);
             $this->updateUsage(new ConsolidationStore($media_host, $usage_data, $media_entity, $replacement_media));
           }
         }
@@ -142,8 +140,6 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     match($consolidation->relationshipType()) {
       'entity_reference' => $this->processEntityReference($consolidation),
       'media_embed' =>  $this->processMediaEmbed($consolidation),
-      'block_field' =>  $this->processBlockField($consolidation),
-      'linkit' =>  $this->processLinkIt($consolidation),
     };
   }
 
@@ -159,7 +155,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
 
     // If the source vid matches the media host entity revision ID then update the base table.
     if ($consolidation->mediaHost->getLoadedRevisionId() == $consolidation->usageData['source_vid']) {
-      $this->database->update($consolidation->table(\ConsolidationTable::Base))
+      $this->database->update($consolidation->table(ConsolidationTable::Base))
         ->fields([$table_target_column => $consolidation->replacementMedia->id()])
         ->condition($table_target_column, $consolidation->currentMedia->id())
         ->condition('revision_id', $consolidation->usageData['source_vid'])
@@ -167,24 +163,15 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     }
 
     // Update target_id in usage revisions if entity is revisionable.
-    if ($this->database->schema()->tableExists($consolidation->table(\ConsolidationTable::Revision))) {
-      $this->database->update($consolidation->table(\ConsolidationTable::Revision))
+    if ($this->database->schema()->tableExists($consolidation->table(ConsolidationTable::Revision))) {
+      $this->database->update($consolidation->table(ConsolidationTable::Revision))
         ->fields([$table_target_column => $consolidation->replacementMedia->id()])
         ->condition($table_target_column, $consolidation->currentMedia->id())
         ->condition('revision_id', $consolidation->usageData['source_vid'])
         ->execute();
     }
 
-    $this->entityUsage->registerUsage(
-      $consolidation->replacementMedia->id(),
-      'media',
-      $consolidation->mediaHost->id(),
-      $consolidation->mediaHost->getEntityTypeId(),
-      $consolidation->usageData['source_langcode'],
-      $consolidation->usageData['source_vid'],
-      $consolidation->relationshipType(),
-      $consolidation->field(),
-      1);
+    $this->updateEntityUsage($consolidation);
   }
 
   /**
@@ -201,7 +188,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
 
     // If the source vid matches the media host entity revision ID then update the base table.
     if ($consolidation->mediaHost->getLoadedRevisionId() == $consolidation->usageData['source_vid']) {
-      $field_value = $this->database->select($consolidation->table(\ConsolidationTable::Base), 't')
+      $field_value = $this->database->select($consolidation->table(ConsolidationTable::Base), 't')
         ->fields('t', [$field])
         ->condition('entity_id', $consolidation->mediaHost->id())
         ->condition('revision_id', $consolidation->usageData['source_vid'])
@@ -210,7 +197,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
 
       $field_value = preg_replace($media_regex, $updated_media_element, $field_value);
 
-      $this->database->update($consolidation->table(\ConsolidationTable::Base))
+      $this->database->update($consolidation->table(ConsolidationTable::Base))
         ->fields([$field => $field_value])
         ->condition('entity_id', $consolidation->mediaHost->id())
         ->condition('revision_id', $consolidation->usageData['source_vid'])
@@ -219,7 +206,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     }
 
     // Update media embed data in revisions.
-    $field_value = $this->database->select($consolidation->table(\ConsolidationTable::Revision), 't')
+    $field_value = $this->database->select($consolidation->table(ConsolidationTable::Revision), 't')
       ->fields('t', [$field])
       ->condition('entity_id', $consolidation->mediaHost->id())
       ->condition('revision_id', $consolidation->usageData['source_vid'])
@@ -229,13 +216,23 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
 
     $field_value = preg_replace($media_regex, $updated_media_element, $field_value);
 
-    $this->database->update($consolidation->table(\ConsolidationTable::Revision))
+    $this->database->update($consolidation->table(ConsolidationTable::Revision))
       ->fields([$field => $field_value])
       ->condition('entity_id', $consolidation->mediaHost->id())
       ->condition('revision_id', $consolidation->usageData['source_vid'])
       ->condition('langcode', $consolidation->usageData['source_langcode'])
       ->execute();
 
+    $this->updateEntityUsage($consolidation);
+  }
+
+  /**
+   * Update the Entity Usage data.
+   *
+   * @param \Drupal\dept_fs\ConsolidationStore $consolidation
+   *   The consolodation store to update.
+   */
+  public function updateEntityUsage(ConsolidationStore $consolidation): void {
     $this->entityUsage->registerUsage(
       $consolidation->replacementMedia->id(),
       'media',

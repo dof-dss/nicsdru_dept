@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Action to consolidate duplicate media items.
+ * Action to consolidate duplicate Media items.
  */
 #[Action(
   id: 'media_consolidator_action',

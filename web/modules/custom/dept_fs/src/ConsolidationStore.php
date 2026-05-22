@@ -5,6 +5,9 @@ namespace Drupal\dept_fs;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\media\MediaInterface;
 
+/**
+ * DTO for Media consolidation processes.
+ */
 readonly class ConsolidationStore {
 
   public function __construct(
@@ -19,11 +22,11 @@ readonly class ConsolidationStore {
   /**
    * The table name.
    *
-   * @param \ConsolidationTable $type
+   * @param ConsolidationTable $type
    *   The table type, base or revision.
    */
-  public function table(\ConsolidationTable $type):string {
-    if ($type == \ConsolidationTable::Base) {
+  public function table(ConsolidationTable $type):string {
+    if ($type == ConsolidationTable::Base) {
       return $table = $this->mediaHost->getEntityTypeId() . "__" . $this->field();
     }
     else {

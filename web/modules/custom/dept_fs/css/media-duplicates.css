@@ -1,3 +1,7 @@
+/**
+  Improvements to the layout of the Media Duplicates View.
+ */
+
 #views-exposed-form-media-duplicates-media-duplicates-page {
 
   #edit-name-wrapper {
@@ -19,29 +23,20 @@
 
 .view-media-duplicates {
 
-
   .views-field-field-media-image {
     width: 10%;
   }
 
   .views-field-name {
-    width: 40%;
-  }
-
-  .views-field-bundle {
-    width: 10%;
-  }
-
-  .views-field-nothing {
-    width: 10%;
+    width: 60%;
   }
 
   .views-field-field-domain-source {
-    width: 15%;
+    width: 10%;
   }
 
   .views-field-entity-usage-views-field {
-    width: 5%;
+    width: 10%;
   }
 
   .views-field-operations {
@@ -53,6 +48,4 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
-
 }
