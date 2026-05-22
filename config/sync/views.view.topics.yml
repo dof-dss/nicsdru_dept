@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - flag.flag.hide_listing
-    - node.type.subtopic
     - node.type.topic
     - system.menu.main
   module:
@@ -169,7 +168,7 @@ display:
           exposed: false
           draggable_views_reference: 'topics:page_1'
           draggable_views_null_order: after
-          draggable_views_pass_arguments: 0
+          draggable_views_pass_arguments: false
       arguments:
         field_domain_source_target_id:
           id: field_domain_source_target_id
@@ -208,7 +207,6 @@ display:
           path_case: none
           transform_dash: false
           break_phrase: false
-          not: 0
       filters:
         type:
           id: type
@@ -265,8 +263,7 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags:
-        - flag.flag.hide_listing
+      tags: {  }
   block:
     id: block
     display_title: Block
@@ -353,8 +350,7 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags:
-        - flag.flag.hide_listing
+      tags: {  }
   page_1:
     id: page_1
     display_title: Admin
@@ -845,8 +841,7 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags:
-        - flag.flag.hide_listing
+      tags: {  }
   topics_page:
     id: topics_page
     display_title: Page
@@ -942,5 +937,4 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags:
-        - flag.flag.hide_listing
+      tags: {  }
