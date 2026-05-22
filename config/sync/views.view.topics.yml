@@ -197,17 +197,11 @@ display:
             sort_order: asc
             number_of_records: 0
             format: default_summary
-          specify_validation: true
+          specify_validation: false
           validate:
-            type: 'entity:node'
+            type: none
             fail: 'not found'
-          validate_options:
-            bundles:
-              subtopic: subtopic
-              topic: topic
-            access: false
-            operation: view
-            multiple: 0
+          validate_options: {  }
           glossary: false
           limit: 0
           case: none
