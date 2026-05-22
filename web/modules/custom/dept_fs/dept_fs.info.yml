@@ -1,5 +1,11 @@
-name: 'Departmental File System'
+name: 'Department File System'
 type: module
-description: 'File system utilities'
+description: 'Provides file system utilities such as duplicate listing, media consolidation.'
 package: 'NICS: Departmental'
 core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:views
+  - drupal:media
+  - drupal:media_library
+  - entity_usage:entity_usage
+  - media_duplicates:media_duplicates
