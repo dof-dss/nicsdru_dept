@@ -29,6 +29,7 @@ dependencies:
     - domain_entity
     - easychart
     - media
+    - media_library_favorites
     - node
     - scheduled_transitions
     - view_unpublished
@@ -54,6 +55,7 @@ permissions:
   - 'add scheduled transitions node publication'
   - 'add scheduled transitions node ual'
   - 'administer orphaned content'
+  - 'allow media favorites'
   - 'create application content on assigned domains'
   - 'create article content on assigned domains'
   - 'create audio media content on assigned domains'
