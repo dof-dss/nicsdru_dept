@@ -39,3 +39,43 @@ function dept_core_update_8002() {
 function  dept_core_update_8003() {
   // Intentionally empty. Updates in dept_core.deploy.php.
 }
+
+/**
+ * Update node type from 'landing_page' to 'page' and regenerate path aliases.
+ */
+function dept_core_update_8004(): string {
+  $database = \Drupal::database();
+  $pathauto_generator = \Drupal::service('pathauto.generator');
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  $nids = $database->select('node_field_data', 'n')
+    ->fields('n', ['nid'])
+    ->condition('n.type', 'landing_page')
+    ->distinct()
+    ->execute()
+    ->fetchCol();
+
+  if (empty($nids)) {
+    return t('No landing_page nodes found to update.');
+  }
+
+  // Update node type from 'landing_page' to 'page'.
+  foreach (['node', 'node_field_data'] as $table) {
+    $database->update($table)
+      ->fields(['type' => 'page'])
+      ->condition('type', 'landing_page')
+      ->execute();
+  }
+
+  $node_storage->resetCache($nids);
+  $nodes = $node_storage->loadMultiple($nids);
+
+  // Update path alias for landing pages.
+  foreach ($nodes as $node) {
+    $pathauto_generator->updateEntityAlias($node, 'update');
+  }
+
+  return t('Updated @count \'landing_page\' nodes to bundle type \'page\'', [
+    '@count' => count($nids),
+  ]);
+}
