@@ -598,6 +598,9 @@ display:
         operator: AND
         groups:
           1: AND
+      cache:
+        type: search_api_none
+        options: {  }
       style:
         type: default
         options:
@@ -614,6 +617,7 @@ display:
       defaults:
         empty: false
         css_class: true
+        cache: false
         pager: false
         exposed_form: false
         style: false
