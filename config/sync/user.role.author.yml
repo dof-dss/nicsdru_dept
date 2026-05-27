@@ -31,6 +31,7 @@ dependencies:
     - media
     - media_library_favorites
     - node
+    - revisions_bulk_operations
     - scheduled_transitions
     - view_unpublished
 _core:
@@ -55,6 +56,7 @@ permissions:
   - 'add scheduled transitions node publication'
   - 'add scheduled transitions node ual'
   - 'administer orphaned content'
+  - 'bulk select revisions'
   - 'allow media favorites'
   - 'create application content on assigned domains'
   - 'create article content on assigned domains'

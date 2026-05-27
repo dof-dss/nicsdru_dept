@@ -38,6 +38,7 @@ dependencies:
     - node
     - origins_workflow
     - redirect
+    - revisions_bulk_operations
     - scheduled_transitions
     - view_unpublished
 _core:
@@ -66,6 +67,7 @@ permissions:
   - 'administer redirects'
   - 'allow media favorites'
   - 'audit content'
+  - 'bulk select revisions'
   - 'create application content on assigned domains'
   - 'create article content on assigned domains'
   - 'create audio media content on assigned domains'
