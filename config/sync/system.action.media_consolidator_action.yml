@@ -1,0 +1,13 @@
+uuid: 74a008f8-80ca-492f-803b-2798d95e59ea
+langcode: en
+status: true
+dependencies:
+  module:
+    - dept_fs
+_core:
+  default_config_hash: f72ESHFh5l10Nvw5xzEGYArNoIN8sL3qOh-B84btjPo
+id: media_consolidator_action
+label: 'Consolidate media'
+type: media
+plugin: media_consolidator_action
+configuration: {  }
