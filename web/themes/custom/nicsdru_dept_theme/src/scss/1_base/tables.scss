@@ -25,7 +25,9 @@ table {
   // Prevent cramped-looking tables.
   width: 100%;
 
-  word-break: break-word;
+  a {
+    word-break: break-word;
+  }
 
   caption {
     padding: 0 0 .5em;
