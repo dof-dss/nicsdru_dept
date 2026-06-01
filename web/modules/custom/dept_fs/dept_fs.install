@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the dept_fs module.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+
+/**
+ * Register duplicates_checksum as a Drupal base field on the media entity.
+ *
+ * The column was previously added directly via ALTER TABLE by an external tool,
+ * which means Drupal's entity API could not load it. This update drops the
+ * orphan column and re-installs it through the entity definition update manager
+ * so it is fully visible to the entity system, Views, and Devel.
+ *
+ * Checksums are regenerable by re-running the mediachecksum binary.
+ */
+function dept_fs_update_10001() {
+  $schema = \Drupal::database()->schema();
+
+  if ($schema->fieldExists('media_field_data', 'duplicates_checksum')) {
+    $schema->dropField('media_field_data', 'duplicates_checksum');
+  }
+
+  $definition = BaseFieldDefinition::create('string')
+    ->setLabel(t('Duplicates checksum'))
+    ->setDescription(t('SHA256 hash of the media file, used for duplicate detection.'))
+    ->setRevisionable(FALSE)
+    ->setTranslatable(FALSE)
+    ->setReadOnly(TRUE)
+    ->setSetting('max_length', 64)
+    ->setDisplayOptions('view', ['region' => 'hidden'])
+    ->setDisplayConfigurable('view', FALSE)
+    ->setDisplayConfigurable('form', FALSE);
+
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition(
+    'duplicates_checksum',
+    'media',
+    'dept_fs',
+    $definition
+  );
+}

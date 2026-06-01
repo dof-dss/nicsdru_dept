@@ -265,13 +265,14 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getQuestion() {
+    return $this->t('Select the media to use in place of the duplicates.');
   }
 
   /**
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-
+    return ConfirmFormHelper::buildCancelLink($this, \Drupal::request());
   }
 
 }

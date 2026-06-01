@@ -6,73 +6,29 @@
  */
 
 use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\views\ViewExecutable;
 
 /**
- * Implements hook_views_data().
+ * Implements hook_entity_base_field_info().
  */
-function dept_fs_views_data() {
-  $data = [];
-
-  // We don't define our own data source for Views with a join to media as this
-  // presents an issue when trying to use Views filters against the media entity.
-  $data['media_duplicates']['table']['group'] = t('Media Duplicates');
-  $data['media_duplicates']['table']['provider'] = 'dept_fs';
-
-  // User inner join so we avoid mid mis-matches.
-  $data['media_duplicates']['table']['join'] = [
-    'media_field_data' => [
-      'left_field' => 'mid',
-      'field' => 'mid',
-      'type' => 'INNER',
-    ],
-  ];
-
-  $data['media_duplicates']['mid'] = [
-    'title' => t('Media ID'),
-    'help' => t('The Media entity ID.'),
-    'field' => ['id' => 'numeric'],
-    'filter' => ['id' => 'numeric'],
-    'sort' => ['id' => 'standard'],
-    'argument' => ['id' => 'numeric'],
-  ];
-
-  $data['media_duplicates']['group_id'] = [
-    'title' => t('Group ID'),
-    'help' => t('The duplicate group the media entity belongs to.'),
-    'field' => [
-      'id' => 'numeric',
-    ],
-    'filter' => [
-      'id' => 'numeric',
-    ],
-    'argument' => [
-      'id' => 'numeric',
-    ],
-    'sort' => [
-      'id' => 'standard',
-    ],
-  ];
-
-  $data['media_duplicates']['checksum'] = [
-    'title' => t('Checksum'),
-    'help' => t('The file checksum.'),
-    'field' => [
-      'id' => 'numeric',
-    ],
-    'filter' => [
-      'id' => 'numeric',
-    ],
-    'argument' => [
-      'id' => 'numeric',
-    ],
-    'sort' => [
-      'id' => 'standard',
-    ],
-  ];
-
-  return $data;
+function dept_fs_entity_base_field_info(EntityTypeInterface $entity_type) {
+  if ($entity_type->id() === 'media') {
+    $fields['duplicates_checksum'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Duplicates checksum'))
+      ->setDescription(t('SHA256 hash of the media file, used for duplicate detection.'))
+      ->setRevisionable(FALSE)
+      ->setTranslatable(FALSE)
+      ->setReadOnly(TRUE)
+      ->setSetting('max_length', 64)
+      ->setDisplayOptions('view', ['region' => 'hidden'])
+      ->setDisplayConfigurable('view', FALSE)
+      ->setDisplayConfigurable('form', FALSE);
+    return $fields;
+  }
 }
+
 
 /**
  * Implements hook_views_pre_render().
@@ -105,17 +61,17 @@ function dept_fs_views_query_alter(ViewExecutable $view, $query) {
  * Implements hook_query_TAG_alter().
  */
 function dept_fs_query_media_duplicates_group_filter_alter(AlterableInterface $query) {
-  $database = \Drupal::database();
-
-  // We only want to return rows that have at least more than 1 matching
-  // checksum and ignore rows that don't have a checksum value.
-  $checksum_query = $database->select('media_field_data', 'mfd')
-    ->fields('mfd', ['duplicates_checksum'])
-    ->isNotNull('mfd.duplicates_checksum')
-    ->groupBy('mfd.duplicates_checksum')
-    ->having('COUNT(mfd.mid) > 1');
-
-  $query->condition('media_field_data.duplicates_checksum', $checksum_query, 'IN');
-  $query->isNotNull('media_field_data.duplicates_checksum');
+//  $database = \Drupal::database();
+//
+//  // We only want to return rows that have at least more than 1 matching
+//  // checksum and ignore rows that don't have a checksum value.
+//  $checksum_query = $database->select('media_field_data', 'mfd')
+//    ->fields('mfd', ['duplicates_checksum'])
+//    ->isNotNull('mfd.duplicates_checksum')
+//    ->groupBy('mfd.duplicates_checksum')
+//    ->having('COUNT(mfd.mid) > 1');
+//
+//  $query->condition('media_field_data.duplicates_checksum', $checksum_query, 'IN');
+//  $query->isNotNull('media_field_data.duplicates_checksum');
 
 }
