@@ -110,7 +110,8 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     $mids = array_diff($mids, [$replacement_media_mid]);
     $selected_media_entities = $media_storage->loadMultiple($mids);
     $replacement_media = $media_storage->load($replacement_media_mid);
-    $cache_tags = [];
+    $cache_tags = array_map(fn($mid) => 'media:' . $mid, $mids);;
+    $reset_ids = [];
 
     foreach ($selected_media_entities as $media_entity) {
       $host_sources = $this->entityUsage->listSources($media_entity);
@@ -118,7 +119,8 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
       foreach ($host_sources as $host_type => $host_data) {
         foreach ($host_data as $host_id => $usage) {
           $media_host = $this->entityTypeManager->getStorage($host_type)->load($host_id);
-          array_merge($cache_tags, $media_host->getCacheTags());
+          $reset_ids[] = $host_id;
+          $cache_tags = array_merge($cache_tags, $media_host->getCacheTags());
           foreach ($usage as $usage_index => $usage_data) {
             $this->updateUsage(new ConsolidationStore($media_host, $usage_data, $media_entity, $replacement_media));
           }
@@ -128,8 +130,12 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
       $this->entityUsage->deleteByTargetEntity($media_entity->id(), 'media');
     }
 
-    // TODO: When a media item is consolidated the edit form media item still has an edit link to the old media.
+    // Reset cache for each host node to ensure that any media entity reference
+    // fields get the new consolidated media entity ID.
+    \Drupal::entityTypeManager()->getStorage('node')->resetCache($reset_ids);
+
     Cache::invalidateTags($cache_tags);
+    \Drupal::messenger()->addMessage($this->t('The media has been consolidated.'));
   }
 
   /**
