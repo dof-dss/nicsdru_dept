@@ -14,6 +14,7 @@ use Drupal\views\ViewExecutable;
 function dept_fs_views_data_alter(array &$data) {
   if (isset($data['media_field_data'])) {
 
+    // Provide Views with visability onto the duplciates_checksum column.
     $data['media_field_data']['duplicates_checksum'] = [
       'title' => t('duplicates_checksum'),
       'help' => t('Media entity checksum..'),
@@ -76,9 +77,11 @@ function dept_fs_query_media_duplicates_group_filter_alter(AlterableInterface $q
     ->fields('mfd', ['duplicates_checksum'])
     ->isNotNull('mfd.duplicates_checksum')
     ->groupBy('mfd.duplicates_checksum')
-    ->having('COUNT(mfd.mid) > 1');
+    ->having('COUNT(DISTINCT mfd.mid) > 1');
 
+  // @phpstan-ignore-next-line
   $query->condition('media_field_data.duplicates_checksum', $checksum_query, 'IN');
+  // @phpstan-ignore-next-line
   $query->isNotNull('media_field_data.duplicates_checksum');
 
 }

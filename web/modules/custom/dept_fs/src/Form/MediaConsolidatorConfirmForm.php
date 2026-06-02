@@ -110,7 +110,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     $mids = array_diff($mids, [$replacement_media_mid]);
     $selected_media_entities = $media_storage->loadMultiple($mids);
     $replacement_media = $media_storage->load($replacement_media_mid);
-    $cache_tags = array_map(fn($mid) => 'media:' . $mid, $mids);;
+    $cache_tags = array_map(fn($mid) => 'media:' . $mid, $mids);
     $reset_ids = [];
 
     foreach ($selected_media_entities as $media_entity) {

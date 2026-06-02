@@ -27,6 +27,7 @@ class GoFileProcessor extends MediaDuplicatesChecksumBase {
     $source = $media->getSource();
 
     /** @var \Drupal\file\Entity\File $file */
+    // @phpstan-ignore-next-line
     $file = $media->get($source->configuration['source_field'])->entity;
     return ($file instanceof FileInterface) ? $this->goHash($file->getFileUri()) : NULL;
   }
