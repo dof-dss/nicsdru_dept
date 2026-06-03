@@ -1,3 +1,4 @@
+uuid: 9b80ad9b-10a0-423e-bdeb-a3083a39430f
 langcode: en
 status: true
 dependencies:
@@ -837,11 +838,11 @@ display:
           group_type: group
           admin_label: ''
           entity_type: media
-          entity_field: duplicates_checksum
           plugin_id: standard
           order: ASC
           expose:
             label: ''
+            field_identifier: ''
           exposed: false
       arguments: {  }
       filters:
@@ -990,86 +991,6 @@ display:
               topic_supervisor: '0'
               qa: '0'
             placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        duplicates_checksum:
-          id: duplicates_checksum
-          table: media_field_data
-          field: duplicates_checksum
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: media
-          entity_field: duplicates_checksum
-          plugin_id: string
-          operator: 'not empty'
-          value: ''
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        default_langcode:
-          id: default_langcode
-          table: media_field_data
-          field: default_langcode
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: media
-          entity_field: default_langcode
-          plugin_id: boolean
-          operator: '='
-          value: '1'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
           is_grouped: false
           group_info:
             label: ''
