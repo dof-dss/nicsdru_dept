@@ -348,6 +348,9 @@
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
             },
+            "drupal/fastly": {
+                "Use PURGE instead of POST for url purges": "https://www.drupal.org/files/issues/2026-03-19/fastly-PURGE-instead-of-POST-3580285.patch"
+            },
             "drupal/flood_control": {
                 "Add Redis support": "https://git.drupalcode.org/project/flood_control/-/merge_requests/53.diff"
             },
