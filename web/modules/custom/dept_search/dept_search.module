@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Url;
+use Drupal\dept_search\Cache\BroadSearchCacheTags;
 use Drupal\block\Entity\Block;
 use Drupal\dept_core\Entity\Department;
 use Drupal\facets\FacetInterface;
@@ -152,15 +153,9 @@ function dept_search_views_post_render(ViewExecutable $view, &$output, CachePlug
 
   // The header search only renders a form. Its cached page shell does not need
   // to be invalidated when indexed content or autocomplete suggestions change.
-  $broad_search_tags = [
-    'search_api_autocomplete_search_list:views:search',
-    'search_api_list:default_content',
-  ];
-
-  $output['#cache']['tags'] = array_values(array_diff(
-    $output['#cache']['tags'] ?? [],
-    $broad_search_tags
-  ));
+  $output['#cache']['tags'] = BroadSearchCacheTags::removeBroadTags(
+    $output['#cache']['tags'] ?? []
+  );
 }
 
 /**

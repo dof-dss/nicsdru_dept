@@ -3,6 +3,7 @@
 namespace Drupal\dept_search\EventSubscriber;
 
 use Drupal\Core\Cache\CacheableResponseInterface;
+use Drupal\dept_search\Cache\BroadSearchCacheTags;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -11,14 +12,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
  * Removes content-list cache tags added by the global header search form.
  */
 class HeaderSearchCacheTagsSubscriber implements EventSubscriberInterface {
-
-  /**
-   * Search API tag prefixes that cause whole-index public listing purges.
-   */
-  private const BROAD_SEARCH_TAG_PREFIXES = [
-    'search_api_list:',
-    'search_api_autocomplete_search_list:views:',
-  ];
 
   /**
    * Removes broad Search API list tags from non-search page responses.
@@ -43,7 +36,7 @@ class HeaderSearchCacheTagsSubscriber implements EventSubscriberInterface {
     if ($response->headers->has('X-Drupal-Cache-Tags')) {
       $cache_tags_header = $response->headers->get('X-Drupal-Cache-Tags');
       $cache_tags = explode(' ', $cache_tags_header);
-      $broad_search_tags = $this->getBroadSearchTags($cache_tags);
+      $broad_search_tags = BroadSearchCacheTags::findBroadTags($cache_tags);
 
       // Keep every existing tag except the broad Search API tags.
       $cache_tags_to_keep = array_values(array_diff($cache_tags, $broad_search_tags));
@@ -55,31 +48,9 @@ class HeaderSearchCacheTagsSubscriber implements EventSubscriberInterface {
     }
 
     $metadata = $response->getCacheableMetadata();
-    $metadata->setCacheTags(array_values(array_diff(
-      $metadata->getCacheTags(),
-      $this->getBroadSearchTags($metadata->getCacheTags())
-    )));
-  }
-
-  /**
-   * Finds broad Search API tags that should not bubble to public pages.
-   *
-   * @param string[] $tags
-   *   Cache tags to inspect.
-   *
-   * @return string[]
-   *   Broad Search API tags.
-   */
-  private function getBroadSearchTags(array $tags): array {
-    return array_values(array_filter($tags, static function (string $tag): bool {
-      foreach (self::BROAD_SEARCH_TAG_PREFIXES as $prefix) {
-        if (str_starts_with($tag, $prefix)) {
-          return TRUE;
-        }
-      }
-
-      return FALSE;
-    }));
+    $metadata->setCacheTags(BroadSearchCacheTags::removeBroadTags(
+      $metadata->getCacheTags()
+    ));
   }
 
   /**
