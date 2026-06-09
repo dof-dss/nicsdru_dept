@@ -13,6 +13,14 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class HeaderSearchCacheTagsSubscriber implements EventSubscriberInterface {
 
   /**
+   * Search API tag prefixes that cause whole-index public listing purges.
+   */
+  private const BROAD_SEARCH_TAG_PREFIXES = [
+    'search_api_list:',
+    'search_api_autocomplete_search_list:views:',
+  ];
+
+  /**
    * Removes broad Search API list tags from non-search page responses.
    *
    * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
@@ -23,25 +31,23 @@ class HeaderSearchCacheTagsSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $route_name = \Drupal::routeMatch()->getRouteName();
-    if (in_array($route_name, [
-      'view.search.site_search',
-      'search_api_autocomplete.autocomplete',
-    ], TRUE)) {
+    // Keep autocomplete itself and administration pages fully cache-tagged.
+    // Public pages keep entity-specific tags, but not whole-index tags that
+    // purge unrelated domains when any indexed content changes.
+    if (\Drupal::routeMatch()->getRouteName() === 'search_api_autocomplete.autocomplete'
+      || \Drupal::service('router.admin_context')->isAdminRoute()) {
       return;
     }
 
-    $broad_search_tags = [
-      'search_api_autocomplete_search_list:views:search',
-      'search_api_list:default_content',
-    ];
-
     $response = $event->getResponse();
     if ($response->headers->has('X-Drupal-Cache-Tags')) {
-      $response->headers->set('X-Drupal-Cache-Tags', implode(' ', array_values(array_diff(
-        explode(' ', $response->headers->get('X-Drupal-Cache-Tags')),
-        $broad_search_tags
-      ))));
+      $cache_tags_header = $response->headers->get('X-Drupal-Cache-Tags');
+      $cache_tags = explode(' ', $cache_tags_header);
+      $broad_search_tags = $this->getBroadSearchTags($cache_tags);
+
+      // Keep every existing tag except the broad Search API tags.
+      $cache_tags_to_keep = array_values(array_diff($cache_tags, $broad_search_tags));
+      $response->headers->set('X-Drupal-Cache-Tags', implode(' ', $cache_tags_to_keep));
     }
 
     if (!$response instanceof CacheableResponseInterface) {
@@ -51,8 +57,29 @@ class HeaderSearchCacheTagsSubscriber implements EventSubscriberInterface {
     $metadata = $response->getCacheableMetadata();
     $metadata->setCacheTags(array_values(array_diff(
       $metadata->getCacheTags(),
-      $broad_search_tags
+      $this->getBroadSearchTags($metadata->getCacheTags())
     )));
+  }
+
+  /**
+   * Finds broad Search API tags that should not bubble to public pages.
+   *
+   * @param string[] $tags
+   *   Cache tags to inspect.
+   *
+   * @return string[]
+   *   Broad Search API tags.
+   */
+  private function getBroadSearchTags(array $tags): array {
+    return array_values(array_filter($tags, static function (string $tag): bool {
+      foreach (self::BROAD_SEARCH_TAG_PREFIXES as $prefix) {
+        if (str_starts_with($tag, $prefix)) {
+          return TRUE;
+        }
+      }
+
+      return FALSE;
+    }));
   }
 
   /**
