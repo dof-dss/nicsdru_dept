@@ -657,6 +657,25 @@ function nicsdru_dept_theme_preprocess_responsive_image_formatter(array &$variab
 }
 
 /**
+ * Implements hook_preprocess_photoswipe_responsive_image_formatter().
+ */
+function nicsdru_dept_theme_preprocess_photoswipe_responsive_image_formatter(array &$variables) {
+  if (!empty($variables['attributes']['data-overlay-title'])) {
+    return;
+  }
+
+  $media_image = $variables['item']->entity ?? NULL;
+  if ($media_image instanceof MediaInterface === FALSE || !$media_image->hasField('field_media_image')) {
+    return;
+  }
+
+  $image = $media_image->get('field_media_image')->first();
+  if ($image && !empty($image->title)) {
+    $variables['attributes']['data-overlay-title'] = $image->title;
+  }
+}
+
+/**
  * Implements template_preprocess_container().
  */
 function nicsdru_dept_theme_preprocess_container(&$variables) {
