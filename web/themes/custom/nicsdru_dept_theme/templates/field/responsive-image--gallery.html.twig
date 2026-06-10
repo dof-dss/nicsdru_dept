@@ -14,7 +14,7 @@
  */
 #}
 
-{% set caption = img_element['#attributes']['caption']|default(img_element['#title']|default('')) %}
+{% set caption = img_element['#attributes']['caption']|default('') %}
 
 {% if caption %}
   <figure>
