@@ -1,0 +1,15 @@
+name: playwright
+repository: julienloizelet/ddev-playwright
+version: v2.6.0
+install_date: "2026-06-15T09:16:58+01:00"
+project_files:
+    - commands/playwright/playwright
+    - commands/playwright/playwright-install
+    - commands/playwright/playwright-init
+    - playwright-build/Dockerfile
+    - playwright-build/kasmvnc.yaml
+    - playwright-build/xstartup
+    - playwright-build/entrypoint.sh
+    - docker-compose.playwright.yaml
+global_files: []
+removal_actions: []
