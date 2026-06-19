@@ -91,6 +91,10 @@ $settings['simple_environment_indicator'] = sprintf('%s %s', $env_colour, $env_n
 // https://www.drupal.org/node/3105503.
 $settings['migrate_node_migrate_type_classic'] = TRUE;
 
+// Allow oEmbed URL discovery only for the Matterport host used by remote media.
+$settings['media_oembed_discovery_trusted_host_patterns'] = [
+  '^my\.matterport\.com$',
+];
 
 // Automatically generated include for settings managed by ddev.
 $ddev_settings = dirname(__FILE__) . '/settings.ddev.php';
