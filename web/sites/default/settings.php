@@ -91,7 +91,6 @@ $settings['simple_environment_indicator'] = sprintf('%s %s', $env_colour, $env_n
 // https://www.drupal.org/node/3105503.
 $settings['migrate_node_migrate_type_classic'] = TRUE;
 
-
 // Automatically generated include for settings managed by ddev.
 $ddev_settings = dirname(__FILE__) . '/settings.ddev.php';
 if (getenv('IS_DDEV_PROJECT') == 'true' && is_readable($ddev_settings)) {
