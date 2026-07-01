@@ -35,14 +35,14 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
    *
    * @var string
    */
-  protected string $departmentId;
+  protected string $departmentId = '';
 
   /**
    * The department hostname/url.
    *
    * @var string
    */
-  protected string $departmentHostname;
+  protected string $departmentHostname = '';
 
   /**
    * {@inheritdoc}
@@ -84,6 +84,16 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
    */
   public function setDepartmentId(string $departmentId): void {
     $this->departmentId = trim($departmentId);
+  }
+
+  /**
+   * Department hostname setter.
+   *
+   * @param string $departmentHostname
+   *   The full URL of the Department.
+   */
+  public function setDepartmentHostname(string $departmentHostname): void {
+    $this->departmentHostname = trim($departmentHostname);
   }
 
   /**
@@ -171,8 +181,17 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
    *   Whether there's a match between the two.
    */
   protected function hostnameMatchesKnownDepartment(string $url): bool {
-    // Match the first part of the domain to the department.
-    return (bool) preg_match('#' . $this->departmentHostname . '#', $url);
+    $url_hostname = parse_url($url, PHP_URL_HOST);
+    $department_hostname = parse_url($this->departmentHostname, PHP_URL_HOST);
+
+    if (!is_string($url_hostname) || !is_string($department_hostname)) {
+      return FALSE;
+    }
+
+    return strcasecmp(
+      preg_replace('/^www\./i', '', $url_hostname),
+      preg_replace('/^www\./i', '', $department_hostname),
+    ) === 0;
   }
 
 }
