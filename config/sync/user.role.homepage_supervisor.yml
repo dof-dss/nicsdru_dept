@@ -9,6 +9,7 @@ dependencies:
   module:
     - content_moderation
     - dept_core
+    - dept_node
     - domain_access
     - draggableviews
     - node
@@ -28,6 +29,7 @@ permissions:
   - 'administer department'
   - 'create terms in business_area'
   - 'delete featured_content_list revisions'
+  - 'delete featured_content_list revisions without node delete access'
   - 'edit terms in business_area'
   - 'reorder terms in business_area'
   - 'reset business_area'
