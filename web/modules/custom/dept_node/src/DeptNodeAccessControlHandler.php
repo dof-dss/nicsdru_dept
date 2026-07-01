@@ -3,6 +3,7 @@
 namespace Drupal\dept_node;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -16,7 +17,14 @@ use Drupal\node\NodeGrantDatabaseStorageInterface;
 class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
 
   /**
-   *  The Department Manager service.
+   * Builds the permission used to delete revisions without deleting nodes.
+   */
+  public static function revisionDeletePermission(string $bundle): string {
+    return "delete $bundle revisions without node delete access";
+  }
+
+  /**
+   * The Department Manager service.
    *
    * @var \Drupal\dept_core\DepartmentManager
    */
@@ -42,7 +50,6 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
    * {@inheritdoc}
    */
   public function createAccess($entity_bundle = NULL, ?AccountInterface $account = NULL, array $context = [], $return_as_object = FALSE) {
-
     $node_type = $this->entityTypeManager->getStorage('node_type')->load($entity_bundle);
     $department_restrictions = $node_type->getThirdPartySetting('dept_node', 'department_restrictions', NULL);
 
@@ -57,6 +64,20 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
     }
 
     return parent::createAccess($entity_bundle, $account, $context, TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function checkAccess(EntityInterface $node, $operation, AccountInterface $account) {
+    if ($operation === 'delete revision' && $account->hasPermission(static::revisionDeletePermission($node->bundle()))) {
+      // A default revision is the live node, regardless of whether a newer
+      // pending revision exists. It must only be removable through node delete.
+      $result = $node->isDefaultRevision() ? AccessResult::forbidden() : AccessResult::allowed();
+      return $result->cachePerPermissions()->addCacheableDependency($node);
+    }
+
+    return parent::checkAccess($node, $operation, $account);
   }
 
 }
