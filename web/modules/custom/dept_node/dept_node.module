@@ -295,7 +295,7 @@ function dept_node_views_post_render(ViewExecutable $view, &$output, CachePlugin
   $active_domain = \Drupal::service('domain.negotiator')->getActiveDomain();
 
   // For the latest_news view (on news pages), replace node_list with
-  // dept_latest_news:{domain}
+  // dept_latest_news:{domain}.
   if (dept_node_is_latest_news_view($view)) {
     $output['#cache']['tags'] = Cache::mergeTags(
       array_values(array_diff($tags, ['node_list'])),
@@ -400,6 +400,9 @@ function dept_node_invalidate_domain_list_cache(EntityInterface $entity) {
   Cache::invalidateTags($tags);
 }
 
+/**
+ * Invalidates latest_news cache tags for affected domains.
+ */
 function dept_node_invalidate_latest_news_cache(EntityInterface $entity) {
   if (!$entity instanceof NodeInterface) {
     return;
