@@ -247,6 +247,11 @@ function dept_node_views_pre_render(ViewExecutable $view) {
  * dept_node_invalidate_related_content_cache(), which works out the affected
  * topic(s) from `field_site_topics`.
  *
+ * For the latest_news view, replace node_list with `dept_latest_news:{domain}`.
+ * The matching invalidation happens in dept_node_invalidate_latest_news_cache(), which works
+ * out the affected domain(s) from `field_domain_access` and
+ * `field_domain_source`.
+ *
  * For all other non-admin Views built from `node_field_data`, replace `node_list`
  * with a domain-specific tag such as `dept_node_list:finance`. The matching
  * invalidation happens in dept_node_invalidate_domain_list_cache(), which works
@@ -287,9 +292,21 @@ function dept_node_views_post_render(ViewExecutable $view, &$output, CachePlugin
     }
   }
 
-  // For all other non-admin node views, replace node_list with a
-  // domain-specific tag.
   $active_domain = \Drupal::service('domain.negotiator')->getActiveDomain();
+
+  // For the latest_news view (on news pages), replace node_list with
+  // dept_latest_news:{domain}
+  if (dept_node_is_latest_news_view($view)) {
+    $output['#cache']['tags'] = Cache::mergeTags(
+      array_values(array_diff($tags, ['node_list'])),
+      ['dept_latest_news:' . $active_domain->id()]
+    );
+
+    return;
+  }
+
+  // For all other non-admin node views, replace node_list with a
+  // generic domain-specific tag.
   $output['#cache']['tags'] = Cache::mergeTags(
     array_values(array_diff($tags, ['node_list'])),
     ['dept_node_list:' . $active_domain->id()]
@@ -322,6 +339,7 @@ function dept_node_should_scope_node_list_cache_tag(ViewExecutable $view) {
  */
 function dept_node_entity_insert(EntityInterface $entity) {
   dept_node_invalidate_domain_list_cache($entity);
+  dept_node_invalidate_latest_news_cache($entity);
   dept_node_invalidate_related_content_cache($entity);
 }
 
@@ -330,6 +348,7 @@ function dept_node_entity_insert(EntityInterface $entity) {
  */
 function dept_node_entity_update(EntityInterface $entity) {
   dept_node_invalidate_domain_list_cache($entity);
+  dept_node_invalidate_latest_news_cache($entity);
   dept_node_invalidate_related_content_cache($entity);
 }
 
@@ -338,6 +357,7 @@ function dept_node_entity_update(EntityInterface $entity) {
  */
 function dept_node_entity_delete(EntityInterface $entity) {
   dept_node_invalidate_domain_list_cache($entity);
+  dept_node_invalidate_latest_news_cache($entity);
   dept_node_invalidate_related_content_cache($entity);
 }
 
@@ -380,6 +400,32 @@ function dept_node_invalidate_domain_list_cache(EntityInterface $entity) {
   Cache::invalidateTags($tags);
 }
 
+function dept_node_invalidate_latest_news_cache(EntityInterface $entity) {
+  if (!$entity instanceof NodeInterface) {
+    return;
+  }
+
+  if ($entity->bundle() !== 'news') {
+    return;
+  }
+
+  $domains = dept_node_get_entity_domain_ids($entity);
+  if (!empty($entity->original) && $entity->original instanceof NodeInterface) {
+    $domains = array_merge($domains, dept_node_get_entity_domain_ids($entity->original));
+  }
+
+  $domains = array_values(array_unique(array_filter($domains)));
+  if (empty($domains)) {
+    $domains = array_keys(\Drupal::service('department.manager')->getAllDepartments());
+  }
+
+  $tags = array_map(function ($domain_id) {
+    return 'dept_latest_news:' . $domain_id;
+  }, $domains);
+
+  Cache::invalidateTags($tags);
+}
+
 /**
  * Gets every domain that can be affected by a node list membership change.
  */
@@ -407,6 +453,14 @@ function dept_node_get_entity_domain_ids(NodeInterface $node) {
 function dept_node_is_related_content_view(ViewExecutable $view) {
   return $view->id() === 'content_by_site_subtopic'
     && $view->current_display === 'block_related_content';
+}
+
+/**
+ * Determines whether a view is the latest_news view.
+ */
+function dept_node_is_latest_news_view(ViewExecutable $view) {
+  return $view->id() === 'news'
+    && $view->current_display === 'latest_news';
 }
 
 /**
