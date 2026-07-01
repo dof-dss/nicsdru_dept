@@ -74,3 +74,16 @@ function dept_topics_update_8002() {
       }
     }
 }
+
+function dept_topics_update_8003(): string {
+  $database = \Drupal::database();
+
+  $updated = $database->update('node_field_revision')
+    ->fields([
+      'revision_translation_affected' => 1,
+    ])
+    ->isNull('revision_translation_affected')
+    ->execute();
+
+  return "Updated revision_translation_affected flag on {$updated} node_field_revision rows.";
+}

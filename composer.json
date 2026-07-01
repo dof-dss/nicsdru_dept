@@ -21,18 +21,6 @@
         {
             "type": "package",
             "package": {
-                "name": "highcharts/highcharts",
-                "version": "10.0.0",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://code.highcharts.com/zips/Highcharts-10.0.0.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
                 "name": "deaemth/easychart",
                 "version": "3.1.3",
                 "type": "drupal-library",
@@ -86,7 +74,8 @@
         "deaemth/easychart": "^3.1",
         "dimsemenov/photoswipe": "^5.4",
         "dimsemenov/photoswipe-dynamic-caption-plugin": "^1.2",
-        "dof-dss/nicsdru_origins_modules": "^10.4",
+        "doctrine/annotations": "^2.0",
+        "dof-dss/nicsdru_origins_modules": "^10.7",
         "dof-dss/nicsdru_origins_theme": "^10.1",
         "drupal/a11y_form_helpers": "^2.1",
         "drupal/address": "^2.0",
@@ -103,26 +92,25 @@
         "drupal/ckeditor": "^1.0",
         "drupal/ckeditor5_allowed_html": "^1.2-dev",
         "drupal/ckeditor5_paste_filter": "^1.0",
-        "drupal/ckeditor5_premium_features": "^1.5",
+        "drupal/ckeditor5_premium_features": "^1.6",
         "drupal/clientside_validation": "^4.1",
         "drupal/config_delete": "^2.0",
         "drupal/config_filter": "^2.7",
         "drupal/config_ignore": "^3.2",
-        "drupal/config_override_warn": "^1.4",
+        "drupal/config_override_warn": "^1.5",
         "drupal/config_readonly": "^1.0@beta",
         "drupal/config_split": "^2.0-beta",
         "drupal/content_lock": "^2.3",
-        "drupal/cookie_content_blocker": "^2.0",
-        "drupal/core": "^10.4",
-        "drupal/core-composer-scaffold": "^10.4",
-        "drupal/core-project-message": "^10.4",
-        "drupal/core-recommended": "^10.4",
+        "drupal/core": "^10.5",
+        "drupal/core-composer-scaffold": "^10.5",
+        "drupal/core-project-message": "^10.5",
+        "drupal/core-recommended": "^10.5",
         "drupal/csp": "^2.1",
         "drupal/date_facet_drilldown": "^12.0",
         "drupal/date_filter": "^1.0",
         "drupal/datetime_flatpickr": "^3.0",
         "drupal/diff": "^1.9",
-        "drupal/domain": "^2.0@beta",
+        "drupal/domain": "^2.0@RC",
         "drupal/domain_entity": "^1.0@RC",
         "drupal/domain_path": "^1.5",
         "drupal/domain_path_redirect": "^1.7",
@@ -165,13 +153,13 @@
         "drupal/media_duplicates": "^2.0",
         "drupal/media_file_delete": "^1.3",
         "drupal/media_library_edit": "^3.0",
+        "drupal/media_library_favorites": "^1.0",
         "drupal/media_remote": "^1.10",
         "drupal/media_views_filter": "^1.0@RC",
         "drupal/metatag": "^2.2",
         "drupal/metatag_async_widget": "^1.2",
         "drupal/moderation_sidebar": "^1.8",
         "drupal/noreferrer": "^2.0",
-        "drupal/noreqnewpass": "^1.4",
         "drupal/paragraphs": "^1.15",
         "drupal/pathauto": "^1.14",
         "drupal/photoswipe": "^5.0",
@@ -179,6 +167,8 @@
         "drupal/purge_users": "^4.0",
         "drupal/redirect": "^1.12",
         "drupal/redis": "^1.11",
+        "drupal/revision_manager": "^1.0@beta",
+        "drupal/revisions_bulk_operations": "^1.0",
         "drupal/robotstxt": "^1.6",
         "drupal/scheduled_transitions": "^2.7",
         "drupal/scheduler": "^2.2",
@@ -195,7 +185,7 @@
         "drupal/stable": "^2.0",
         "drupal/taxonomy_access_fix": "^4.0",
         "drupal/taxonomy_manager": "^2.0",
-        "drupal/telephone_plus": "^9.1",
+        "drupal/telephone_plus": "^2.0",
         "drupal/token": "^1.16",
         "drupal/token_filter": "^2.0",
         "drupal/twig_field_value": "^2.0",
@@ -211,17 +201,12 @@
         "drupal/views_data_export": "^1.8",
         "drupal/views_tree": "^3.0",
         "drupal/webform": "^6.2",
-        "drupal/webprofiler": "10.1.x-dev@dev",
         "drupal/whatlinkshere": "^2.1",
         "drush/drush": "^12.5",
         "harvesthq/chosen": "^1.8",
-        "highcharts/highcharts": "^10",
         "noli42/chosen": "3.0.0",
-        "northernco/ckeditor5-anchor-drupal": "^0.5.0",
-        "openai-php/client": "^0.15.0",
         "php-kit/ext-pdo": "^1.1",
         "platformsh/config-reader": "^2.4",
-        "vardot/ckeditor5-anchor-drupal": "^2.0",
         "wikimedia/composer-merge-plugin": "^2.1"
     },
     "require-dev": {
@@ -356,7 +341,9 @@
                 "Layout builder fails to assign inline block access dependencies for the overrides section storage on entities with pending revisions #3047022": "https://www.drupal.org/files/issues/2025-02-19/drupal-core-3047022-115.patch",
                 "DateList and date range inline form errors are repeated": "https://www.drupal.org/files/issues/2020-01-30/2827034-35.patch",
                 "Add error to wrapper on date range when required": "patches/daterangevalidate.patch",
-                "The link on the Image tag is redirecting to an undefined page from the node preview screen #3308432": "https://www.drupal.org/files/issues/2025-06-09/3308432-42.patch"
+                "The link on the Image tag is redirecting to an undefined page from the node preview screen #3308432": "https://www.drupal.org/files/issues/2025-06-09/3308432-42.patch",
+                "Stop off-canvas.js causing stuttering on moderation sidebar": "https://git.drupalcode.org/project/drupal/-/merge_requests/8209.diff",
+                "Toggle icon for toolbar menu missing for all tabs except Manage": "https://git.drupalcode.org/project/drupal/-/merge_requests/3894.diff"
             },
             "drupal/domain_entity": {
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch"
@@ -364,11 +351,13 @@
             "drupal/facets": {
                 "Incompatibilities between facets_pretty_paths and facets 2.0": "https://www.drupal.org/files/issues/2022-03-09/facet_summary_reset-3268360-3.patch"
             },
+            "drupal/fastly": {
+                "Use PURGE instead of POST for url purges": "https://www.drupal.org/files/issues/2026-03-19/fastly-PURGE-instead-of-POST-3580285.patch"
+            },
             "drupal/flood_control": {
                 "Add Redis support": "https://git.drupalcode.org/project/flood_control/-/merge_requests/53.diff"
             },
             "drupal/linkit": {
-                "Show URL alias after autocomplete selection instead of internal route (e.g., /node/123)": "https://www.drupal.org/files/issues/2023-10-03/linkit-2877535-62.patch",
                 "Unpublished nodes not included even when option is selected": "https://www.drupal.org/files/issues/2023-11-09/linkit-unpublished-nodes-not-included-3049946-34.patch"
             },
             "drupal/media_duplicates": {

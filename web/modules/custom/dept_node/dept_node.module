@@ -9,6 +9,9 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RemoveCommand;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -21,6 +24,7 @@ use Drupal\media\Entity\Media;
 use Drupal\media\MediaInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
+use Drupal\views\Plugin\views\cache\CachePluginBase;
 use Drupal\views\ViewExecutable;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -54,9 +58,13 @@ function dept_node_form_views_exposed_form_alter(&$form, FormStateInterface $for
 /**
  * Implements hook_form_ENTITY_form_alter().
  */
-function dept_node_form_node_form_alter(&$form, $form_state) {
+function dept_node_form_node_form_alter(&$form, FormStateInterface $form_state) {
+  $entity = dept_node_get_form_entity($form_state);
+  if ($entity === NULL) {
+    return;
+  }
   // Add handler to process nodes that should have 'nigov' entries.
-  if (in_array($form_state->getFormObject()->getEntity()->bundle(), [
+  if (in_array($entity->bundle(), [
     'consultation',
     'publication',
     'news'
@@ -109,7 +117,7 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
       $form['field_domain_source']['widget']['#default_value'][] = $domain_access_ids[0];
     }
     else {
-      \Drupal::logger('dept_node')->error("Domain access ID's not found for entity: @entity", ['@entity' => $form_state->getFormObject()->getEntity()->getEntityTypeId()]);
+      \Drupal::logger('dept_node')->error("Domain access ID's not found for entity: @entity", ['@entity' => $entity->getEntityTypeId()]);
     }
   }
 
@@ -137,6 +145,21 @@ function dept_node_form_node_form_alter(&$form, $form_state) {
 }
 
 /**
+ * Gets the entity from an entity form state.
+ *
+ *  \Drupal\Core\Entity\EntityInterface|null
+ *   The form entity, or NULL when the callback is used on a non-entity form.
+ */
+function dept_node_get_form_entity(FormStateInterface $form_state): ?EntityInterface {
+  $form_object = $form_state->getFormObject();
+  if (!$form_object instanceof EntityFormInterface) {
+    return NULL;
+  }
+
+  return $form_object->getEntity();
+}
+
+/**
  * Callback for title field ajax call to warn user of existing title.
  */
 function dept_node_title_guardian(array &$form, FormStateInterface $form_state) {
@@ -147,9 +170,11 @@ function dept_node_title_guardian(array &$form, FormStateInterface $form_state) 
   }
 
   $title = trim($form_state->getValue('title')[0]['value']);
-
-  // @phpstan-ignore-next-line
-  $bundle = $form_state->getformObject()->getEntity()->bundle();
+  $entity = dept_node_get_form_entity($form_state);
+  if ($entity === NULL) {
+    return new AjaxResponse();
+  }
+  $bundle = $entity->bundle();
 
   // Check for existing titles within the same department and content type.
   $query = \Drupal::database()->select('node_field_data', 'fd');
@@ -207,6 +232,147 @@ function dept_node_views_pre_render(ViewExecutable $view) {
         ->addWarning('NB: Title altered in dept_node_views_pre_render()');
     }
   }
+}
+
+/**
+ * Implements hook_views_post_render().
+ *
+ * Public node-based Views normally bubble Drupal's generic `node_list` cache
+ * tag. That tag is invalidated whenever any node is created, updated, or
+ * deleted, so one Finance edit can purge cached listing blocks on every other
+ * department site.
+ *
+ * For non-admin Views built from `node_field_data`, replace `node_list` with a
+ * domain-specific tag such as `dept_node_list:finance`. The matching
+ * invalidation happens in dept_node_invalidate_domain_list_cache(), which works
+ * out the affected domain(s) from `field_domain_access` and
+ * `field_domain_source`.
+ *
+ * Admin listings are deliberately left alone. Editors and administrators expect
+ * those listings to reflect all node changes immediately, and they are not part
+ * of the public page-cache/purge problem this hook is addressing.
+ */
+function dept_node_views_post_render(ViewExecutable $view, &$output, CachePluginBase $cache) {
+  if (!dept_node_should_scope_node_list_cache_tag($view)) {
+    return;
+  }
+
+  if (!is_array($output)) {
+    return;
+  }
+
+  $tags = $output['#cache']['tags'] ?? [];
+  if (!in_array('node_list', $tags, TRUE)) {
+    return;
+  }
+
+  $active_domain = \Drupal::service('domain.negotiator')->getActiveDomain();
+  $output['#cache']['tags'] = Cache::mergeTags(
+    array_values(array_diff($tags, ['node_list'])),
+    ['dept_node_list:' . $active_domain->id()]
+  );
+}
+
+/**
+ * Determines whether a view should use domain-scoped public node list tags.
+ */
+function dept_node_should_scope_node_list_cache_tag(ViewExecutable $view) {
+  if ($view->storage->get('base_table') !== 'node_field_data') {
+    return FALSE;
+  }
+
+  if (\Drupal::service('router.admin_context')->isAdminRoute()) {
+    return FALSE;
+  }
+
+  $display = $view->storage->get('display')[$view->current_display] ?? [];
+  $path = $display['display_options']['path'] ?? '';
+  if (str_starts_with($path, 'admin/')) {
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function dept_node_entity_insert(EntityInterface $entity) {
+  dept_node_invalidate_domain_list_cache($entity);
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function dept_node_entity_update(EntityInterface $entity) {
+  dept_node_invalidate_domain_list_cache($entity);
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function dept_node_entity_delete(EntityInterface $entity) {
+  dept_node_invalidate_domain_list_cache($entity);
+}
+
+/**
+ * Invalidates public node-list render cache entries for affected domains.
+ *
+ * Public node listing Views replace Drupal's broad `node_list` cache tag with
+ * `dept_node_list:{domain_id}`. This function invalidates only those scoped
+ * tags when a node changes.
+ *
+ * Examples:
+ * - A Finance-only article invalidates `dept_node_list:finance`.
+ * - A news item shared between Finance and NIGov invalidates
+ *   `dept_node_list:finance` and `dept_node_list:nigov`.
+ * - If a node is moved from Finance to Economy, both the old Finance list and
+ *   the new Economy list are invalidated because `$entity->original` is merged
+ *   with the saved entity values.
+ * - If a node has no domain values, all department list tags are invalidated as
+ *   a conservative fallback.
+ */
+function dept_node_invalidate_domain_list_cache(EntityInterface $entity) {
+  if (!$entity instanceof NodeInterface) {
+    return;
+  }
+
+  $domains = dept_node_get_entity_domain_ids($entity);
+  if (!empty($entity->original) && $entity->original instanceof NodeInterface) {
+    $domains = array_merge($domains, dept_node_get_entity_domain_ids($entity->original));
+  }
+
+  $domains = array_values(array_unique(array_filter($domains)));
+  if (empty($domains)) {
+    $domains = array_keys(\Drupal::service('department.manager')->getAllDepartments());
+  }
+
+  $tags = array_map(function ($domain_id) {
+    return 'dept_node_list:' . $domain_id;
+  }, $domains);
+
+  Cache::invalidateTags($tags);
+}
+
+/**
+ * Gets every domain that can be affected by a node list membership change.
+ */
+function dept_node_get_entity_domain_ids(NodeInterface $node) {
+  $domain_ids = [];
+
+  foreach (['field_domain_access', 'field_domain_source'] as $field_name) {
+    if (!$node->hasField($field_name) || $node->get($field_name)->isEmpty()) {
+      continue;
+    }
+
+    foreach ($node->get($field_name)->getValue() as $value) {
+      if (!empty($value['target_id'])) {
+        $domain_ids[] = $value['target_id'];
+      }
+    }
+  }
+
+  return $domain_ids;
 }
 
 /**
@@ -337,9 +503,12 @@ function dept_node_pathauto_alias_alter(&$alias, array &$context) {
  */
 function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_state) {
   $domain_access = $form_state->getValue('field_domain_access');
+  $entity = dept_node_get_form_entity($form_state);
+  if ($entity === NULL) {
+    return;
+  }
 
-  // @phpstan-ignore-next-line
-  if ($form_state->getFormObject()->getEntity()->bundle() === 'news') {
+  if ($entity->bundle() === 'news') {
     $dept = \Drupal::service('department.manager')->getCurrentDepartment()->id();
     $type = $form_state->getValue('field_news_type')[0]['value'];
     // If News is not a press release created on nigov, remove any existing 'nigov' entry.
@@ -367,8 +536,12 @@ function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_
  * as the nigov domain.
  */
 function dept_node_assign_domain_defaults_media(array $form, FormStateInterface $form_state, array $node_domain_access_values) {
-  // @phpstan-ignore-next-line
-  $bundle = $form_state->getFormObject()->getEntity()->bundle();
+  $entity = dept_node_get_form_entity($form_state);
+  if ($entity === NULL) {
+    return;
+  }
+
+  $bundle = $entity->bundle();
 
   // Replicate the domain access settings on any referenced media entities.
   $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $bundle);

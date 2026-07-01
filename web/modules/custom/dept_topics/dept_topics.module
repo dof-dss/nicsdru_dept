@@ -8,6 +8,9 @@
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
@@ -397,7 +400,6 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
 function dept_topics_preprocess_field(&$variables, $hook) {
   $element = $variables['element'];
 
-  // Display the moderation state of topic content.
   if ($element['#field_name'] === 'field_topic_content') {
     foreach ($variables['items'] as $index => ['content' => $item]) {
       if (!empty($item['#entity']) && !$item['#entity']->isPublished()) {

@@ -1,4 +1,8 @@
 services:
+  dept_search.header_search_cache_tags_subscriber:
+    class: Drupal\dept_search\EventSubscriber\HeaderSearchCacheTagsSubscriber
+    tags:
+      - { name: event_subscriber }
   prettypathstostandardfacets:
     class: Drupal\dept_search\EventSubscriber\PrettyPathsToStandardFacets
     tags:

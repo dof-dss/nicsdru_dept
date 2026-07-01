@@ -104,6 +104,14 @@ function nicsdru_dept_theme_preprocess_page(array &$variables) {
           ->setAttribute('aria-roledescription', t('search events'));
         break;
 
+      case "foi_eir_disclosure_log":
+        $variables['main_content_attr']->addClass(LayoutClasses::SIDE_MAIN);
+        $variables['sidebar_first_attr']
+          ->addClass('ga-aside')
+          ->setAttribute('role', 'search')
+          ->setAttribute('aria-roledescription', t('search FOI/EIR disclosure log publications'));
+        break;
+
       case "publications_search":
         $variables['main_content_attr']->addClass(LayoutClasses::SIDE_MAIN);
         $variables['sidebar_first_attr']
@@ -614,6 +622,7 @@ function nicsdru_dept_theme_preprocess_form(array &$variables) {
     case "views-exposed-form-news-search-news-search":
     case "views-exposed-form-news-search-press-release-search":
     case "views-exposed-form-events-events-search":
+    case "views-exposed-form-foi-eir-disclosure-log-disclosure-log-page":
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('search-form');
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('search-form--page');
       break;
@@ -632,18 +641,41 @@ function nicsdru_dept_theme_preprocess_responsive_image_formatter(array &$variab
     return;
   }
 
-  // If we've got a parent media entity and caption field value
-  // then inject the value into the responsive image attributes collection.
+  // If we've got a parent media entity, inject its caption field value
+  // into the responsive image attributes collection, falling back to title
+  // when no caption is present.
   // We're relying on Drupal input sanitising from the media form as
   // well as safe Twig rendering in responsive-image.html.twig to cover
   // any content that is migrated in from the legacy db and could
   // potentially contain dodgy html.
   $caption = $media_image->get('field_caption')->value;
 
-  if (!empty($caption)) {
-    if ($variables['responsive_image_style_id'] != 'featured_news_thumbnail') {
-      $variables['responsive_image']['#attributes']['caption'] = $caption;
-    }
+  if (empty($caption) && $media_image->hasField('field_media_image')) {
+    $image = $media_image->get('field_media_image')->first();
+    $caption = $image->title ?? '';
+  }
+
+  if (!empty($caption) && $variables['responsive_image_style_id'] != 'featured_news_thumbnail') {
+    $variables['responsive_image']['#attributes']['caption'] = $caption;
+  }
+}
+
+/**
+ * Implements hook_preprocess_photoswipe_responsive_image_formatter().
+ */
+function nicsdru_dept_theme_preprocess_photoswipe_responsive_image_formatter(array &$variables) {
+  if (!empty($variables['attributes']['data-overlay-title'])) {
+    return;
+  }
+
+  $media_image = $variables['item']->entity ?? NULL;
+  if ($media_image instanceof MediaInterface === FALSE || !$media_image->hasField('field_media_image')) {
+    return;
+  }
+
+  $image = $media_image->get('field_media_image')->first();
+  if ($image && !empty($image->title)) {
+    $variables['attributes']['data-overlay-title'] = $image->title;
   }
 }
 

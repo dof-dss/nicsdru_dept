@@ -1,0 +1,39 @@
+uuid: 56eda0bb-7167-4d40-9830-0c03f13e7504
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.publications_index
+    - views.view.foi_eir_disclosure_log
+  module:
+    - search_api
+id: foi_log_summary
+name: foi_log_summary
+facet_source_id: 'search_api:views_page__foi_eir_disclosure_log__disclosure_log_page'
+processor_configs:
+  hide_when_not_rendered:
+    processor_id: hide_when_not_rendered
+    weights:
+      build: '45'
+    settings: {  }
+  show_text_when_empty:
+    processor_id: show_text_when_empty
+    weights:
+      build: '10'
+    settings:
+      text:
+        value: 'No results found.'
+        format: plain_text
+facets:
+  foi_publications_published_date:
+    checked: true
+    label: 'Published date'
+    separator: ', '
+    show_count: false
+    weight: 0
+  foi_publication_topics:
+    checked: true
+    label: 'Publication topics'
+    separator: ', '
+    show_count: false
+    weight: 0

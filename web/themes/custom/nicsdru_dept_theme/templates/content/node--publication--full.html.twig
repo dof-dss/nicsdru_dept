@@ -80,6 +80,9 @@
     {% if aggregated_publications %}
       <h2 class="content-field__label">Documents</h2>
       {{ aggregated_publications }}
+
+      {{ include ('@nicsdru_dept_theme/content/help-viewing-documents.html.twig') }}
+
     {% endif %}
   </div>
 

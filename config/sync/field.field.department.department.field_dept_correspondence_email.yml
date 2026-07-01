@@ -1,0 +1,20 @@
+uuid: 2e7884a8-68c0-4291-811e-b4d88267b94a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.department.field_dept_correspondence_email
+  module:
+    - dept_core
+id: department.department.field_dept_correspondence_email
+field_name: field_dept_correspondence_email
+entity_type: department
+bundle: department
+label: 'Correspondence email address'
+description: 'The email address receiving webform submissions.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email
