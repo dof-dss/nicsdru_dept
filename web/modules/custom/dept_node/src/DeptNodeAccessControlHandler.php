@@ -10,6 +10,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\node\NodeAccessControlHandler;
 use Drupal\node\NodeGrantDatabaseStorageInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Extends the core node access handler for Departmental sites.
@@ -70,6 +71,8 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
    * {@inheritdoc}
    */
   protected function checkAccess(EntityInterface $node, $operation, AccountInterface $account) {
+    assert($node instanceof NodeInterface);
+
     if ($operation === 'delete revision' && $account->hasPermission(static::revisionDeletePermission($node->bundle()))) {
       // A default revision is the live node, regardless of whether a newer
       // pending revision exists. It must only be removable through node delete.

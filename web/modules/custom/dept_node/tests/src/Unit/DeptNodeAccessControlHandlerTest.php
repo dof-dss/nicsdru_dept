@@ -3,6 +3,7 @@
 namespace Drupal\Tests\dept_node\Unit;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\Context\CacheContextsManager;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Session\AccountInterface;
@@ -69,7 +70,8 @@ class DeptNodeAccessControlHandlerTest extends UnitTestCase {
     $result = $handler->checkNodeAccess($node, 'delete revision', $account);
     $this->assertSame($expected, $result->isAllowed());
     $this->assertSame(!$expected, $result->isForbidden());
-    $this->assertContains('user.permissions', $result->getCacheContexts());
+    $cacheability = CacheableMetadata::createFromObject($result);
+    $this->assertContains('user.permissions', $cacheability->getCacheContexts());
   }
 
   /**
