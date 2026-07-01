@@ -56,6 +56,49 @@ function dept_node_form_views_exposed_form_alter(&$form, FormStateInterface $for
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * The diff module doesn't respect the permissions model we establish with the use of
+ * the permissions from DeptNodePermissions.php so we need to preprocess the options
+ * in the operations column to cross-check against whether a user role can delete
+ * non-default revisions if they can't delete entire node instances and reflect the
+ * appropriate options to match what they can or can't do in the underlying access model.
+ */
+function dept_node_form_revision_overview_form_alter(&$form, FormStateInterface $form_state) {
+  $node = $form_state->getBuildInfo()['args'][0] ?? NULL;
+  if (!$node instanceof NodeInterface || empty($form['node_revisions_table'])) {
+    return;
+  }
+
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+  foreach ($form['node_revisions_table'] as &$row) {
+    if (!is_array($row) || !is_array($row['operations'] ?? NULL) ||
+      ($row['operations']['#type'] ?? NULL) !== 'operations') {
+      continue;
+    }
+
+    $select_column = $row['select_column_one'] ?? NULL;
+    $revision_id = is_array($select_column) ? ($select_column['#return_value'] ?? NULL) : NULL;
+    if (!$revision_id || !($revision = $node_storage->loadRevision($revision_id))) {
+      continue;
+    }
+
+    if ($revision->access('delete revision')) {
+      $row['operations']['#links']['delete'] = [
+        'title' => t('Delete'),
+        'url' => Url::fromRoute('node.revision_delete_confirm', [
+          'node' => $node->id(),
+          'node_revision' => $revision_id,
+        ]),
+      ];
+    }
+    else {
+      unset($row['operations']['#links']['delete']);
+    }
+  }
+}
+
+/**
  * Implements hook_form_ENTITY_form_alter().
  */
 function dept_node_form_node_form_alter(&$form, FormStateInterface $form_state) {
