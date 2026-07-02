@@ -2,6 +2,7 @@
 
 namespace Drupal\dept_topics;
 
+use Drupal\book\BookManagerInterface;
 use Drupal\content_moderation\ModerationInformationInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -10,7 +11,6 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\book\BookManagerInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -298,7 +298,7 @@ final class TopicManager {
       ->execute()
       ->fetchCol();
 
-    $existing_site_topics = $this->connection->select('node_revision__field_site_topics', 'st')
+    $existing_site_topics_revisions = $this->connection->select('node_revision__field_site_topics', 'st')
       ->fields('st', ['field_site_topics_target_id'])
       ->condition('entity_id', $child->id())
       ->distinct()
@@ -306,7 +306,7 @@ final class TopicManager {
       ->fetchCol();
 
     // Create a list of all site topic nids (active and revisions) for this child from the results of both the field_site_topics tables.
-    return array_unique(array_merge($existing_site_topics, $existing_site_topics));
+    return array_unique(array_merge($existing_site_topics, $existing_site_topics_revisions));
   }
 
   /**
@@ -384,10 +384,10 @@ final class TopicManager {
         ->condition('revision_id', $revision_id)
         ->orderBy('delta', 'ASC')
         ->execute()
-        ->fetchAll();
+        ->fetchAllKeyed(2, 1);
 
       if (!array_key_exists($child->id(), $revision_children)) {
-        $delta = (empty($revision_children)) ? 0 : end($revision_children)->delta + 1;
+        $delta = (empty($revision_children)) ? 0 : end($revision_children) + 1;
         $this->addChildDatabaseEntry($child, $topic, 'node_revision__field_topic_content', $revision_id, $delta);
       }
     }
@@ -457,7 +457,7 @@ final class TopicManager {
   protected function clearCache(ContentEntityInterface $child, ContentEntityInterface $topic) {
     $tags = ['node:' . $topic->id()];
 
-    if (empty($child->id())) {
+    if (!empty($child->id())) {
       $tags[] = 'node:' . $child->id();
     }
 
