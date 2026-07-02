@@ -6,10 +6,12 @@
  */
 
 use Drupal\Core\Url;
+use Drupal\dept_search\Cache\BroadSearchCacheTags;
 use Drupal\block\Entity\Block;
 use Drupal\dept_core\Entity\Department;
 use Drupal\facets\FacetInterface;
 use Drupal\facets_summary\Entity\FacetsSummary;
+use Drupal\views\Plugin\views\cache\CachePluginBase;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -135,6 +137,25 @@ function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$a
       $args[0] = $active_dept->id();
     }
   }
+}
+
+/**
+ * Implements hook_views_post_render().
+ */
+function dept_search_views_post_render(ViewExecutable $view, &$output, CachePluginBase $cache) {
+  if ($view->id() !== 'search' || $view->current_display !== 'site_search_embed') {
+    return;
+  }
+
+  if (!is_array($output)) {
+    return;
+  }
+
+  // The header search only renders a form. Its cached page shell does not need
+  // to be invalidated when indexed content or autocomplete suggestions change.
+  $output['#cache']['tags'] = BroadSearchCacheTags::removeBroadTags(
+    $output['#cache']['tags'] ?? []
+  );
 }
 
 /**
