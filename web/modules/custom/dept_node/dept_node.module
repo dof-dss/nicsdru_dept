@@ -285,8 +285,18 @@ function dept_node_views_pre_render(ViewExecutable $view) {
  * deleted, so one Finance edit can purge cached listing blocks on every other
  * department site.
  *
- * For non-admin Views built from `node_field_data`, replace `node_list` with a
- * domain-specific tag such as `dept_node_list:finance`. The matching
+ * For the block_related_content view, replace node_list with a tag such as
+ * `related_content:{topic_nid}`. The matching invalidation happens in
+ * dept_node_invalidate_related_content_cache(), which works out the affected
+ * topic(s) from `field_site_topics`.
+ *
+ * For the latest_news view, replace node_list with `dept_latest_news:{domain}`.
+ * The matching invalidation happens in dept_node_invalidate_latest_news_cache(), which works
+ * out the affected domain(s) from `field_domain_access` and
+ * `field_domain_source`.
+ *
+ * For all other non-admin Views built from `node_field_data`, replace `node_list`
+ * with a domain-specific tag such as `dept_node_list:finance`. The matching
  * invalidation happens in dept_node_invalidate_domain_list_cache(), which works
  * out the affected domain(s) from `field_domain_access` and
  * `field_domain_source`.
@@ -309,7 +319,37 @@ function dept_node_views_post_render(ViewExecutable $view, &$output, CachePlugin
     return;
   }
 
+  // The related content view depends on the topics a node is tagged
+  // with. Replace the node_list tag with related_content:{topic_nid}
+  // for each topic referenced by the current node.
+  if (dept_node_is_related_content_view($view)) {
+    $node = \Drupal::routeMatch()->getParameter('node');
+
+    if ($node instanceof NodeInterface) {
+      $output['#cache']['tags'] = Cache::mergeTags(
+        array_values(array_diff($tags, ['node_list'])),
+        dept_node_get_related_content_cache_tags($node)
+      );
+
+      return;
+    }
+  }
+
   $active_domain = \Drupal::service('domain.negotiator')->getActiveDomain();
+
+  // For the latest_news view (on news pages), replace node_list with
+  // dept_latest_news:{domain}.
+  if (dept_node_is_latest_news_view($view)) {
+    $output['#cache']['tags'] = Cache::mergeTags(
+      array_values(array_diff($tags, ['node_list'])),
+      ['dept_latest_news:' . $active_domain->id()]
+    );
+
+    return;
+  }
+
+  // For all other non-admin node views, replace node_list with a
+  // generic domain-specific tag.
   $output['#cache']['tags'] = Cache::mergeTags(
     array_values(array_diff($tags, ['node_list'])),
     ['dept_node_list:' . $active_domain->id()]
@@ -342,6 +382,8 @@ function dept_node_should_scope_node_list_cache_tag(ViewExecutable $view) {
  */
 function dept_node_entity_insert(EntityInterface $entity) {
   dept_node_invalidate_domain_list_cache($entity);
+  dept_node_invalidate_latest_news_cache($entity);
+  dept_node_invalidate_related_content_cache($entity);
 }
 
 /**
@@ -349,6 +391,8 @@ function dept_node_entity_insert(EntityInterface $entity) {
  */
 function dept_node_entity_update(EntityInterface $entity) {
   dept_node_invalidate_domain_list_cache($entity);
+  dept_node_invalidate_latest_news_cache($entity);
+  dept_node_invalidate_related_content_cache($entity);
 }
 
 /**
@@ -356,6 +400,8 @@ function dept_node_entity_update(EntityInterface $entity) {
  */
 function dept_node_entity_delete(EntityInterface $entity) {
   dept_node_invalidate_domain_list_cache($entity);
+  dept_node_invalidate_latest_news_cache($entity);
+  dept_node_invalidate_related_content_cache($entity);
 }
 
 /**
@@ -398,6 +444,35 @@ function dept_node_invalidate_domain_list_cache(EntityInterface $entity) {
 }
 
 /**
+ * Invalidates latest_news cache tags for affected domains.
+ */
+function dept_node_invalidate_latest_news_cache(EntityInterface $entity) {
+  if (!$entity instanceof NodeInterface) {
+    return;
+  }
+
+  if ($entity->bundle() !== 'news') {
+    return;
+  }
+
+  $domains = dept_node_get_entity_domain_ids($entity);
+  if (!empty($entity->original) && $entity->original instanceof NodeInterface) {
+    $domains = array_merge($domains, dept_node_get_entity_domain_ids($entity->original));
+  }
+
+  $domains = array_values(array_unique(array_filter($domains)));
+  if (empty($domains)) {
+    $domains = array_keys(\Drupal::service('department.manager')->getAllDepartments());
+  }
+
+  $tags = array_map(function ($domain_id) {
+    return 'dept_latest_news:' . $domain_id;
+  }, $domains);
+
+  Cache::invalidateTags($tags);
+}
+
+/**
  * Gets every domain that can be affected by a node list membership change.
  */
 function dept_node_get_entity_domain_ids(NodeInterface $node) {
@@ -416,6 +491,93 @@ function dept_node_get_entity_domain_ids(NodeInterface $node) {
   }
 
   return $domain_ids;
+}
+
+/**
+ * Determines whether a view is the block_related_content view.
+ */
+function dept_node_is_related_content_view(ViewExecutable $view) {
+  return $view->id() === 'content_by_site_subtopic'
+    && $view->current_display === 'block_related_content';
+}
+
+/**
+ * Determines whether a view is the latest_news view.
+ */
+function dept_node_is_latest_news_view(ViewExecutable $view) {
+  return $view->id() === 'news'
+    && $view->current_display === 'latest_news';
+}
+
+/**
+ * Gets cache tags for the related-content listings associated with a
+ * node's topics.
+ */
+function dept_node_get_related_content_cache_tags(NodeInterface $node) {
+  return array_map(
+    fn ($id) => 'related_content:' . $id,
+    dept_node_get_topic_node_ids($node)
+  );
+}
+
+/**
+ * Gets the related-content cache tags that may be affected by changes
+ * to a node and will need invalidated.
+ */
+function dept_node_get_related_content_invalidation_tags(NodeInterface $node) {
+  $topic_ids = dept_node_get_topic_node_ids($node);
+
+  if (!empty($node->original) && $node->original instanceof NodeInterface) {
+    $topic_ids = array_merge(
+      $topic_ids,
+      dept_node_get_topic_node_ids($node->original)
+    );
+  }
+
+  $topic_ids = array_values(array_unique($topic_ids));
+
+  return array_map(function ($topic_id) {
+    return 'related_content:' . $topic_id;
+  }, $topic_ids);
+}
+
+/**
+ * Invalidates related-content cache entries for a node's topics.
+ */
+function dept_node_invalidate_related_content_cache(EntityInterface $entity) {
+  if (!$entity instanceof NodeInterface) {
+    return;
+  }
+
+  $tags = dept_node_get_related_content_invalidation_tags($entity);
+
+  if (!$tags) {
+    return;
+  }
+
+  \Drupal::logger('dept_node')->notice(
+    'Invalidating related content tags: @tags',
+    ['@tags' => implode(', ', $tags)]
+  );
+
+  Cache::invalidateTags($tags);
+}
+
+/**
+ * Gets the topic node IDs referenced by a node.
+ */
+function dept_node_get_topic_node_ids(NodeInterface $node) {
+  $ids = [];
+
+  if (!$node->hasField('field_site_topics')) {
+    return $ids;
+  }
+
+  foreach ($node->get('field_site_topics')->referencedEntities() as $topic) {
+    $ids[] = $topic->id();
+  }
+
+  return array_values(array_unique($ids));
 }
 
 /**
