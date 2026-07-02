@@ -14,7 +14,9 @@
  */
 #}
 
-{% if img_element['#title'] %}
+{% set caption = img_element['#attributes']['caption']|default('') %}
+
+{% if caption %}
   <figure>
 {% endif %}
 {% if output_image_tag %}
@@ -30,8 +32,8 @@
       {{ img_element }}
     </picture>
 {% endif %}
-{% if img_element['#title'] %}
-    <figcaption class="field-file-image-caption-text">{{ img_element['#title'] }}</figcaption>
+{% if caption %}
+    <figcaption class="field-file-image-caption-text">{{ caption }}</figcaption>
   </figure>
 {% endif %}
 
