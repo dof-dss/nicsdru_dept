@@ -149,7 +149,7 @@ function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
 
     if ($parents) {
       foreach ($metatag_attachments['#attached']['html_head'] as $index => $tag) {
-        preg_match_all('/article_tag_(\d)/m', $tag[1], $matches, PREG_SET_ORDER, 0);
+        preg_match_all('/article_tag_(\d+)/m', $tag[1], $matches, PREG_SET_ORDER, 0);
 
         if ($matches) {
           $tag_index = $matches[0][1];
