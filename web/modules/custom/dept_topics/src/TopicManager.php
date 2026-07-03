@@ -14,7 +14,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
 
 /**
- * Provides methods for managing Sub/Topic referenced (child) content.
+ * Provides methods for managing Topic/Subtopic referenced (child) content.
  */
 final class TopicManager {
   const int MAX_TRAVERSAL_DEPTH = 20;
@@ -168,6 +168,7 @@ final class TopicManager {
         $this->getChildTopics($parent);
       }
 
+      // TODO: Check if this cache is properly cleared anywhere.
       $this->cache->set('dept_topics_' . $department_id, $this->deptTopics, Cache::PERMANENT, [$department_id . '_topics']);
 
       return $this->deptTopics;
