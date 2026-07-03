@@ -40,6 +40,7 @@ class AbsToRelUrlsFilterTest extends UnitTestCase {
    */
   public function testAbsToRelUrlsFilterProcess($text, $expected) {
     $this->filter->setDepartmentId('finance');
+    $this->filter->setDepartmentHostname('https://finance-ni.gov.uk');
     // Add a newline to the expected result as FilterProcessResult adds this.
     $this->assertSame($expected . "\n", $this->filter->process($text, 'en')->getProcessedText());
   }
