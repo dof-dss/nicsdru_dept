@@ -4,7 +4,6 @@ namespace Drupal\dept_content_processors\Plugin\Filter;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\dept_core\DepartmentManager;
 use Drupal\dept_core\Entity\Department;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
@@ -118,6 +117,15 @@ class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPluginInt
           // then remove the hostname from the attribute and update the
           // dom element.
           $url_portions = parse_url($href);
+
+          // Report any corrupted URL's.
+          if ($url_portions === FALSE) {
+            \Drupal::logger('dept_content_processors')->warning('Could not parse %site url: %url', [
+              '%site' => $this->departmentId,
+              '%url' => $href
+            ]);
+            continue;
+          }
 
           if ($this->shouldRewriteUrl($url_portions) && $this->hostnameMatchesKnownDepartment($href)) {
 
