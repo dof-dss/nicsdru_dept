@@ -24,10 +24,9 @@ They do not prove that Drupal's forms, hooks, or moderation routes call the
 service. That would require kernel or browser tests, which are presently
 out of scope.
 
-The moderation-sidebar form has its own validation callback in
-`dept_book.module`. When an editor presses its Archive button, that callback
-uses this policy before the form's submit handler runs. A protected page stays
-unchanged and Drupal displays a normal form error. The storage-level check is
+The moderation-sidebar form is altered in `dept_book.module`. Archive
+transitions are removed before the sidebar is displayed for a protected page,
+so an editor cannot start the invalid action. The storage-level check is
 retained as a fallback for archive attempts made outside a form.
 
 ## The production class
@@ -36,13 +35,16 @@ The class under test is:
 
 `web/modules/custom/dept_book/src/BookParentPageProtection.php`
 
-It has two public methods:
+It has three public methods:
 
 - `isProtected()` asks whether the user lacks the override permission and the
   node's book-outline record says it has children.
 - `isArchiveBlocked()` applies that protection only to a new transition into
   the `archived` state. It does not prevent an unrelated save when a page was
   already archived.
+- `getBlockedArchiveTransitionIds()` finds every available workflow transition
+  which leads to `archived`, so the moderation sidebar can hide them without
+  relying on a particular transition machine name.
 
 The Drupal Book module supplies the outline record through `BookManagerInterface`.
 The important `has_children` value is `1` when the page is a parent and `0`
@@ -108,6 +110,13 @@ This test uses `archiveProvider()` to separate archiving from other saves:
 
 Deletion does not need a separate policy method: Drupal's delete access hook
 uses `isProtected()` directly.
+
+### Moderation-sidebar transition tests
+
+`testBlockedArchiveTransitionIds()` confirms that all transitions leading to
+`archived` are returned for hiding while unrelated transitions remain
+available. `testArchiveTransitionRemainsForOverridePermission()` confirms that
+an account with the override keeps the archive transition.
 
 ## Running the test
 
