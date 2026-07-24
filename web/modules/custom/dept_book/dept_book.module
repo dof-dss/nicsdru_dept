@@ -70,7 +70,25 @@ function dept_book_form_node_form_alter(array &$form, FormStateInterface $form_s
  * Implements hook_form_FORM_ID_alter().
  */
 function dept_book_form_moderation_sidebar_quick_transition_form_alter(array &$form, FormStateInterface $form_state) {
-  $form['#validate'][] = 'dept_book_validate_moderation_sidebar_archive';
+  $node = $form_state->get('entity');
+  if (!$node instanceof NodeInterface) {
+    return;
+  }
+
+  $account = \Drupal::currentUser();
+  $transitions = \Drupal::service('content_moderation.state_transition_validation')
+    ->getValidTransitions($node, $account);
+  $protection = \Drupal::service('dept_book.parent_page_protection');
+
+  foreach ($protection->getBlockedArchiveTransitionIds($node, $account, $transitions) as $transition_id) {
+    unset($form[$transition_id]);
+  }
+
+  // The moderation sidebar adds these fields whenever it initially finds a
+  // transition. Remove them if hiding Archive leaves no transitions to use.
+  if (!array_intersect_key($transitions, $form)) {
+    unset($form['revision_log_toggle'], $form['revision_log']);
+  }
 }
 
 /**
@@ -91,30 +109,6 @@ function dept_book_validate_parent_page_archive(array &$form, FormStateInterface
   $protection = \Drupal::service('dept_book.parent_page_protection');
   if (is_string($new_state) && $protection->isArchiveBlocked($node, \Drupal::currentUser(), $new_state, $original_state)) {
     $form_state->setErrorByName('moderation_state', t('This book page has child pages and cannot be archived. Move or remove the child pages first.'));
-  }
-}
-
-/**
- * Prevents the moderation sidebar from archiving a protected book parent.
- */
-function dept_book_validate_moderation_sidebar_archive(array &$form, FormStateInterface $form_state) {
-  $node = $form_state->get('entity');
-  $trigger = $form_state->getTriggeringElement();
-  if (!$node instanceof NodeInterface || empty($trigger['#id'])) {
-    return;
-  }
-
-  $transitions = \Drupal::service('content_moderation.state_transition_validation')
-    ->getValidTransitions($node, \Drupal::currentUser());
-  $transition = $transitions[$trigger['#id']] ?? NULL;
-  if ($transition === NULL || $transition->to()->id() !== 'archived') {
-    return;
-  }
-
-  $original_state = $node->get('moderation_state')->getString();
-  $protection = \Drupal::service('dept_book.parent_page_protection');
-  if ($protection->isArchiveBlocked($node, \Drupal::currentUser(), 'archived', $original_state)) {
-    $form_state->setError($trigger, t('This book page has child pages and cannot be archived. Move or remove the child pages first.'));
   }
 }
 

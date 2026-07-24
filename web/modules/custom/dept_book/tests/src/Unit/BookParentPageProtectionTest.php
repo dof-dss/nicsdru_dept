@@ -7,6 +7,8 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\dept_book\BookParentPageProtection;
 use Drupal\node\NodeInterface;
 use Drupal\Tests\UnitTestCase;
+use Drupal\workflows\StateInterface;
+use Drupal\workflows\TransitionInterface;
 
 /**
  * Tests the policy which protects book pages with children.
@@ -132,6 +134,62 @@ class BookParentPageProtectionTest extends UnitTestCase {
       'publish transition' => ['published', 'draft', FALSE],
       'submit for review transition' => ['needs_review', 'draft', FALSE],
     ];
+  }
+
+  /**
+   * Tests that every transition to archived is hidden for a protected parent.
+   */
+  public function testBlockedArchiveTransitionIds(): void {
+    $book_manager = $this->createMock(BookManagerInterface::class);
+    $book_manager->method('loadBookLink')->willReturn(['has_children' => 1]);
+
+    $account = $this->createMock(AccountInterface::class);
+    $account->method('hasPermission')->willReturn(FALSE);
+
+    $node = $this->createMock(NodeInterface::class);
+    $node->method('id')->willReturn(42);
+
+    $archive_state = $this->createMock(StateInterface::class);
+    $archive_state->method('id')->willReturn('archived');
+    $published_state = $this->createMock(StateInterface::class);
+    $published_state->method('id')->willReturn('published');
+
+    $archive_transition = $this->createMock(TransitionInterface::class);
+    $archive_transition->method('to')->willReturn($archive_state);
+    $other_archive_transition = $this->createMock(TransitionInterface::class);
+    $other_archive_transition->method('to')->willReturn($archive_state);
+    $publish_transition = $this->createMock(TransitionInterface::class);
+    $publish_transition->method('to')->willReturn($published_state);
+
+    $protection = new BookParentPageProtection($book_manager);
+    $this->assertSame([
+      'published_archived',
+      'needs_review_archived',
+    ], $protection->getBlockedArchiveTransitionIds($node, $account, [
+      'published_archived' => $archive_transition,
+      'publish' => $publish_transition,
+      'needs_review_archived' => $other_archive_transition,
+    ]));
+  }
+
+  /**
+   * Tests that archive transitions remain available for an exempt account.
+   */
+  public function testArchiveTransitionRemainsForOverridePermission(): void {
+    $book_manager = $this->createMock(BookManagerInterface::class);
+    $book_manager->expects($this->never())->method('loadBookLink');
+
+    $account = $this->createMock(AccountInterface::class);
+    $account->method('hasPermission')->willReturn(TRUE);
+
+    $node = $this->createMock(NodeInterface::class);
+    $transition = $this->createMock(TransitionInterface::class);
+    $transition->expects($this->never())->method('to');
+
+    $protection = new BookParentPageProtection($book_manager);
+    $this->assertSame([], $protection->getBlockedArchiveTransitionIds($node, $account, [
+      'published_archived' => $transition,
+    ]));
   }
 
 }
