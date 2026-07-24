@@ -61,9 +61,24 @@ class BookParentPageProtection {
       return [];
     }
 
-    return array_keys(array_filter($transitions, static function (TransitionInterface $transition): bool {
-      return $transition->to()->id() === 'archived';
-    }));
+    $blocked_transition_ids = [];
+
+    // The array is keyed by transition ID. Examine each transition's
+    // destination state and retain the key only when it archives the page.
+    foreach ($transitions as $transition_id => $transition) {
+      assert($transition instanceof TransitionInterface);
+
+      $destination_state = $transition->to();
+      $destination_state_id = $destination_state->id();
+
+      if ($destination_state_id !== 'archived') {
+        continue;
+      }
+
+      $blocked_transition_ids[] = $transition_id;
+    }
+
+    return $blocked_transition_ids;
   }
 
 }
