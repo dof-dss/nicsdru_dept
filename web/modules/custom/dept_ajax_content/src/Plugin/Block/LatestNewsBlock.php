@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\dept_core\DepartmentManager;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Log\LoggerInterface;
@@ -61,6 +62,13 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
   protected LoggerInterface $logger;
 
   /**
+   * The department manager.
+   *
+   * @var \Drupal\dept_core\DepartmentManager
+   */
+  protected DepartmentManager $departmentManager;
+
+  /**
    * Constructs a LatestNewsBlock instance.
    *
    * @param array $configuration
@@ -75,6 +83,8 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
    *   The cache backend service.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger service.
+   * @param \Drupal\dept_core\DepartmentManager $department_manager
+   *   The department manager service.
    */
   public function __construct(
     array $configuration,
@@ -83,11 +93,13 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
     ClientInterface $http_client,
     CacheBackendInterface $cache,
     LoggerInterface $logger,
+    DepartmentManager $department_manager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->httpClient = $http_client;
     $this->cache = $cache;
     $this->logger = $logger;
+    $this->departmentManager = $department_manager;
   }
 
   /**
@@ -101,6 +113,7 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
       $container->get('http_client'),
       $container->get('cache.default'),
       $container->get('logger.channel.dept_ajax_content'),
+      $container->get('department.manager'),
     );
   }
 
@@ -208,9 +221,9 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
       return [];
     }
 
-    $domain_id = \Drupal::service('department.manager')->getCurrentDepartment()->id();
+    $domain_id = $this->departmentManager->getCurrentDepartment()->id();
     $cache_id = self::CACHE_ID_PREFIX . md5($url);
-    // Cache tag as defined in dept_node for news items. see: dept_node_invalidate_latest_news_cache().
+    // Tag matches dept_node_invalidate_latest_news_cache() in dept_node.
     $cache_tag = 'dept_latest_news:' . $domain_id;
 
     if ($cached = $this->cache->get($cache_id)) {
@@ -253,8 +266,8 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * Resolves a fully-qualified API URL safe to pass to Guzzle.
    *
    * Accepts either a full URL or a root-relative path in configuration.
-   * If no URL is configured, falls back to the current request host.
-   * Returns an empty string when no valid scheme can be determined.
+   * If no URL is configured, falls back to the current department's base URL.
+   * Returns an empty string when no department can be resolved.
    *
    * @return string
    *   An absolute URL with http/https scheme, or empty string on failure.
@@ -266,21 +279,19 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
       $path = static::DEFAULT_API_PATH;
     }
 
-    // Already a fully-qualified URL — validate the scheme and return.
+    // Already a fully-qualified URL — return as-is.
     if (preg_match('#^https?://#i', $path)) {
       return $path;
     }
 
-    // Root-relative path: prepend the current request's scheme + host.
-    $request = \Drupal::request();
-    $scheme = $request->getScheme();
-    $host = $request->getHttpHost();
+    // Root-relative path: prepend the current department's canonical base URL.
+    $department = $this->departmentManager->getCurrentDepartment();
 
-    if (empty($scheme) || empty($host)) {
+    if ($department === NULL) {
       return '';
     }
 
-    return $scheme . '://' . $host . '/' . ltrim($path, '/');
+    return rtrim($department->url(), '/') . '/' . ltrim($path, '/');
   }
 
 }
