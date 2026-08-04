@@ -469,8 +469,6 @@ function dept_node_invalidate_latest_news_cache(EntityInterface $entity) {
     return 'dept_latest_news:' . $domain_id;
   }, $domains);
 
-  $tags[] = 'dept_ajax_content_latest_news';
-
   Cache::invalidateTags($tags);
 }
 

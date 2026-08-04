@@ -208,7 +208,10 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
       return [];
     }
 
+    $domain_id = \Drupal::service('department.manager')->getCurrentDepartment()->id();
     $cache_id = self::CACHE_ID_PREFIX . md5($url);
+    // Cache tag as defined in dept_node for news items. see: dept_node_invalidate_latest_news_cache().
+    $cache_tag = 'dept_latest_news:' . $domain_id;
 
     if ($cached = $this->cache->get($cache_id)) {
       return $cached->data;
@@ -226,7 +229,7 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
 
       $lifetime = (int) $this->configuration['cache_lifetime'];
       $expire = $lifetime > 0 ? time() + $lifetime : CacheBackendInterface::CACHE_PERMANENT;
-      $this->cache->set($cache_id, $items, $expire, ['dept_ajax_content_latest_news']);
+      $this->cache->set($cache_id, $items, $expire, [$cache_tag]);
 
       return $items;
     }
