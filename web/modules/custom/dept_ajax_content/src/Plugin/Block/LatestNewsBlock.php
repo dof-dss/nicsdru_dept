@@ -130,6 +130,7 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
     $form['item_count'] = [
       '#type' => 'number',
       '#title' => $this->t('Number of items to display'),
+      '#description' => $this->t("NOTE: If the block does not display the requested number of items, ensure that the View's pager item limit is set to at least the requested count."),
       '#default_value' => $this->configuration['item_count'],
       '#min' => 1,
       '#max' => 20,
