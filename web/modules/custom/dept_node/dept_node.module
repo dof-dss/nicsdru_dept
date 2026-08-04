@@ -10,8 +10,8 @@ use Drupal\Core\Ajax\AppendCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RemoveCommand;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityFormInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -468,6 +468,8 @@ function dept_node_invalidate_latest_news_cache(EntityInterface $entity) {
   $tags = array_map(function ($domain_id) {
     return 'dept_latest_news:' . $domain_id;
   }, $domains);
+
+  $tags[] = 'dept_ajax_content_latest_news';
 
   Cache::invalidateTags($tags);
 }

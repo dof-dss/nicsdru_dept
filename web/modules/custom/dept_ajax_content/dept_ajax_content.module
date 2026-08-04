@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Department Ajax Content module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function dept_ajax_content_theme(): array {
+  return [
+    'dept_ajax_content_latest_news' => [
+      'variables' => [
+        'news_items' => [],
+        'view_all_url' => NULL,
+      ],
+      'template' => 'latest-news',
+    ],
+  ];
+}

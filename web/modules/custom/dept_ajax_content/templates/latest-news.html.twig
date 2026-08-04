@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Template for the Latest News block.
+ *
+ * Available variables:
+ * - news_items: List of news item arrays, each containing:
+ *   - title: Pre-rendered HTML anchor element for the news item title.
+ *   - date_published: Pre-rendered HTML <time> element for the publish date.
+ * - view_all_url: URL string for the "More news" link, or null if hidden.
+ */
+#}
+{% if news_items %}
+  <ul class="news-list">
+    {% for item in news_items %}
+      <li class="news-list__item">
+        <span class="news-list__title">{{ item.title|raw }}</span>
+        {% if item.date_published %}
+          <span class="news-list__date">{{ item.date_published|raw }}</span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% if view_all_url %}
+    <p class="news-list__more">
+      <a href="{{ view_all_url }}">{{ 'More news...'|t }}</a>
+    </p>
+  {% endif %}
+{% endif %}
