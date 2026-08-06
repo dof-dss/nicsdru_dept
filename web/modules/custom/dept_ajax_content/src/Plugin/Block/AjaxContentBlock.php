@@ -3,49 +3,28 @@
 namespace Drupal\dept_ajax_content\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dept_core\DepartmentManager;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a block that fetches and displays items from a JSON API endpoint.
+ * Provides a placeholder block that loads content from a JSON API via AJAX.
+ *
+ * The block renders a static HTML placeholder containing the API URL and
+ * display options as data attributes. Client-side JavaScript fetches the
+ * data and populates the placeholder, allowing the page itself to be served
+ * from the full page cache regardless of content changes.
  *
  * @Block(
  *   id = "dept_ajax_content",
  *   admin_label = @Translation("Ajax Content"),
- *   category = @Translation("Departmental sites"),
+ *   category = @Translation("Departmental"),
  * )
  */
 class AjaxContentBlock extends BlockBase implements ContainerFactoryPluginInterface {
-
-  /**
-   * Cache ID prefix for API responses.
-   */
-  const CACHE_ID_PREFIX = 'dept_ajax_content:';
-
-  /**
-   * Default cache lifetime in seconds (15 minutes).
-   */
-  const CACHE_LIFETIME = 900;
-
-  /**
-   * The HTTP client.
-   *
-   * @var \GuzzleHttp\ClientInterface
-   */
-  protected ClientInterface $httpClient;
-
-  /**
-   * The cache backend.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected CacheBackendInterface $cache;
 
   /**
    * The logger.
@@ -70,10 +49,6 @@ class AjaxContentBlock extends BlockBase implements ContainerFactoryPluginInterf
    *   The plugin ID.
    * @param mixed $plugin_definition
    *   The plugin definition.
-   * @param \GuzzleHttp\ClientInterface $http_client
-   *   The HTTP client service.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   The cache backend service.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger service.
    * @param \Drupal\dept_core\DepartmentManager $department_manager
@@ -83,14 +58,10 @@ class AjaxContentBlock extends BlockBase implements ContainerFactoryPluginInterf
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    ClientInterface $http_client,
-    CacheBackendInterface $cache,
     LoggerInterface $logger,
     DepartmentManager $department_manager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->httpClient = $http_client;
-    $this->cache = $cache;
     $this->logger = $logger;
     $this->departmentManager = $department_manager;
   }
@@ -103,8 +74,6 @@ class AjaxContentBlock extends BlockBase implements ContainerFactoryPluginInterf
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('http_client'),
-      $container->get('cache.default'),
       $container->get('logger.channel.dept_ajax_content'),
       $container->get('department.manager'),
     );
@@ -118,8 +87,6 @@ class AjaxContentBlock extends BlockBase implements ContainerFactoryPluginInterf
       'api_url' => '',
       'item_count' => 3,
       'view_all_url' => '',
-      'cache_lifetime' => self::CACHE_LIFETIME,
-      'template' => 'ajax-content',
     ] + parent::defaultConfiguration();
   }
 
@@ -156,24 +123,6 @@ class AjaxContentBlock extends BlockBase implements ContainerFactoryPluginInterf
       '#maxlength' => 512,
     ];
 
-    $form['cache_lifetime'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Cache lifetime (seconds)'),
-      '#description' => $this->t('How long to cache API responses. Set to 0 to disable caching.'),
-      '#default_value' => $this->configuration['cache_lifetime'],
-      '#min' => 0,
-      '#required' => TRUE,
-    ];
-
-    $form['template'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Template'),
-      '#description' => $this->t('Twig template used to render the block. Add .html.twig files to the module templates directory and rebuild the cache to add options.'),
-      '#options' => $this->getTemplateOptions(),
-      '#default_value' => $this->configuration['template'],
-      '#required' => TRUE,
-    ];
-
     return $form;
   }
 
@@ -184,41 +133,12 @@ class AjaxContentBlock extends BlockBase implements ContainerFactoryPluginInterf
     $this->configuration['api_url'] = trim($form_state->getValue('api_url'));
     $this->configuration['item_count'] = (int) $form_state->getValue('item_count');
     $this->configuration['view_all_url'] = trim($form_state->getValue('view_all_url'));
-    $this->configuration['cache_lifetime'] = (int) $form_state->getValue('cache_lifetime');
-    $this->configuration['template'] = $form_state->getValue('template');
   }
 
   /**
    * {@inheritdoc}
    */
   public function build(): array {
-    $items = $this->fetchItems();
-
-    if (empty($items)) {
-      return [];
-    }
-
-    $items = array_slice($items, 0, (int) $this->configuration['item_count']);
-
-    return [
-      '#theme' => $this->resolveThemeHook(),
-      '#items' => $items,
-      '#view_all_url' => $this->configuration['view_all_url'] ?: NULL,
-      '#cache' => [
-        'max-age' => (int) $this->configuration['cache_lifetime'],
-        'contexts' => ['url.site'],
-        'tags' => ['dept_ajax_content'],
-      ],
-    ];
-  }
-
-  /**
-   * Fetches items from the API endpoint, with optional caching.
-   *
-   * @return array
-   *   A flat array of item arrays from the JSON response, or empty on failure.
-   */
-  protected function fetchItems(): array {
     $url = $this->resolveApiUrl();
 
     if (empty($url)) {
@@ -228,114 +148,27 @@ class AjaxContentBlock extends BlockBase implements ContainerFactoryPluginInterf
       return [];
     }
 
-    $lifetime = (int) $this->configuration['cache_lifetime'];
-    $domain_id = $this->departmentManager->getCurrentDepartment()->id();
-    // Include domain_id so entries are scoped per-domain even when two domains
-    // share the same api_url configuration value.
-    $cache_id = self::CACHE_ID_PREFIX . $domain_id . ':' . md5($url);
-
-    if ($lifetime > 0 && ($cached = $this->cache->get($cache_id))) {
-      return $cached->data;
-    }
-
-    try {
-      $response = $this->httpClient->request('GET', $url, [
-        'timeout' => 10,
-        'headers' => ['Accept' => 'application/json'],
-      ]);
-
-      $data = json_decode((string) $response->getBody(), TRUE);
-      // The endpoint returns a flat JSON array of item objects.
-      $items = is_array($data) ? $data : [];
-
-      if ($lifetime > 0) {
-        $cache_tag = 'dept_ajax_content:' . $domain_id;
-        $this->cache->set($cache_id, $items, time() + $lifetime, [$cache_tag]);
-      }
-
-      return $items;
-    }
-    catch (RequestException $e) {
-      $this->logger->error(
-        'Failed to fetch content from %url: @message',
-        ['%url' => $url, '@message' => $e->getMessage()]
-      );
-    }
-    catch (\Exception $e) {
-      $this->logger->error(
-        'Unexpected error fetching content from %url: @message',
-        ['%url' => $url, '@message' => $e->getMessage()]
-      );
-    }
-
-    return [];
+    return [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#attributes' => [
+        'class' => ['ajax-content-block'],
+        'data-ajax-url' => $url,
+        'data-count' => (int) $this->configuration['item_count'],
+        'data-view-all-url' => $this->configuration['view_all_url'] ?: '',
+      ],
+      '#attached' => [
+        'library' => ['dept_ajax_content/ajax-content'],
+      ],
+      '#cache' => [
+        'max-age' => Cache::PERMANENT,
+        'contexts' => ['url.site'],
+      ],
+    ];
   }
 
   /**
-   * Returns the theme hook name for the configured template.
-   *
-   * @return string
-   *   Theme hook in the form dept_ajax_content__{template_name}.
-   */
-  protected function resolveThemeHook(): string {
-    $template = $this->configuration['template'] ?: 'ajax-content';
-    return 'dept_ajax_content__' . str_replace('-', '_', $template);
-  }
-
-  /**
-   * Builds select options from .html.twig files in the templates directory.
-   *
-   * The label for each option is taken from the @title annotation in the
-   * template's docblock comment. If no @title is present, the filename is
-   * title-cased and used as a fallback.
-   *
-   * @return array
-   *   An options array suitable for a '#type' => 'select' element.
-   */
-  protected function getTemplateOptions(): array {
-    $options = [];
-    $templates_dir = dirname(__DIR__, 3) . '/templates';
-
-    foreach (glob($templates_dir . '/*.html.twig') as $file) {
-      $template = basename($file, '.html.twig');
-      $options[$template] = $this->extractTemplateTitle($file)
-        ?? ucwords(str_replace('-', ' ', $template));
-    }
-
-    return $options;
-  }
-
-  /**
-   * Parses the @title annotation from a Twig template's docblock.
-   *
-   * Reads only the opening comment block of the file for efficiency.
-   * Supports both quoted (@title "My label") and unquoted (@title My label)
-   * forms.
-   *
-   * @param string $path
-   *   Absolute path to the .html.twig file.
-   *
-   * @return string|null
-   *   The title string, or null if no @title annotation is found.
-   */
-  protected function extractTemplateTitle(string $path): ?string {
-    // 512 bytes covers any realistic opening docblock.
-    $head = file_get_contents($path, length: 512);
-
-    if ($head === FALSE) {
-      return NULL;
-    }
-
-    if (preg_match('/@title\s+"([^"]+)"/', $head, $matches)
-      || preg_match('/@title\s+(\S[^\n\r]+)/', $head, $matches)) {
-      return trim($matches[1]);
-    }
-
-    return NULL;
-  }
-
-  /**
-   * Resolves a fully-qualified API URL safe to pass to Guzzle.
+   * Resolves a fully-qualified API URL for use as a template data attribute.
    *
    * Accepts either a full URL or a root-relative path in configuration.
    * A relative path is prefixed with the current department's canonical URL.
