@@ -1,9 +1,9 @@
 {#
 /**
  * @file
- * Template for Latest News Ajax Content block.
+ * Template for the Ajax Content block.
  *
- * @title "Latest news"
+ * @title "Default content"
  * Available variables:
  * - items: List of item arrays returned from the JSON API endpoint.
  *   Fields vary by endpoint — render what the template needs with |raw
@@ -16,9 +16,6 @@
     {% for item in items %}
       <li class="ajax-content-list__item">
         <span class="ajax-content-list__title">{{ item.title|raw }}</span>
-        {% if item.date_published %}
-          <span class="ajax-content-list__date">{{ item.date_published|raw }}</span>
-        {% endif %}
       </li>
     {% endfor %}
   </ul>

@@ -13,30 +13,23 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a block that displays the latest news items from the API.
+ * Provides a block that fetches and displays items from a JSON API endpoint.
  *
  * @Block(
- *   id = "dept_ajax_content_latest_news",
- *   admin_label = @Translation("Latest News"),
+ *   id = "dept_ajax_content",
+ *   admin_label = @Translation("Ajax Content"),
  *   category = @Translation("Departmental sites"),
  * )
- *
- * @see views/view/news Rest: Latest
  */
-class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class AjaxContentBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The default path for the news API endpoint.
+   * Cache ID prefix for API responses.
    */
-  const DEFAULT_API_PATH = '/api/news/latest';
+  const CACHE_ID_PREFIX = 'dept_ajax_content:';
 
   /**
-   * Cache ID prefix for news API responses.
-   */
-  const CACHE_ID_PREFIX = 'dept_ajax_content_latest_news:';
-
-  /**
-   * Cache lifetime in seconds (15 minutes).
+   * Default cache lifetime in seconds (15 minutes).
    */
   const CACHE_LIFETIME = 900;
 
@@ -69,7 +62,7 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
   protected DepartmentManager $departmentManager;
 
   /**
-   * Constructs a LatestNewsBlock instance.
+   * Constructs an AjaxContentBlock instance.
    *
    * @param array $configuration
    *   The plugin configuration.
@@ -124,8 +117,9 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
     return [
       'api_url' => '',
       'item_count' => 3,
-      'view_all_url' => '/news',
+      'view_all_url' => '',
       'cache_lifetime' => self::CACHE_LIFETIME,
+      'template' => 'ajax-content',
     ] + parent::defaultConfiguration();
   }
 
@@ -135,15 +129,19 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
   public function blockForm($form, FormStateInterface $form_state): array {
     $form['api_url'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('News API URL'),
+      '#title' => $this->t('API URL'),
+      '#description' => $this->t(
+        "Full URL or root-relative path of the JSON endpoint (e.g. /api/news/latest). A root-relative path will be prefixed with the current department's domain."
+      ),
       '#default_value' => $this->configuration['api_url'],
       '#maxlength' => 512,
+      '#required' => TRUE,
     ];
 
     $form['item_count'] = [
       '#type' => 'number',
       '#title' => $this->t('Number of items to display'),
-      '#description' => $this->t("NOTE: If the block does not display the requested number of items, ensure that the View's pager item limit is set to at least the requested count."),
+      '#description' => $this->t("Ensure the endpoint's pager limit is at least this value."),
       '#default_value' => $this->configuration['item_count'],
       '#min' => 1,
       '#max' => 20,
@@ -152,8 +150,8 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
 
     $form['view_all_url'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('"View all news" link URL'),
-      '#description' => $this->t('URL for the "View all news" link shown below the list. Leave empty to hide the link.'),
+      '#title' => $this->t('"More" link URL'),
+      '#description' => $this->t('URL for the link shown below the list. Leave empty to hide it.'),
       '#default_value' => $this->configuration['view_all_url'],
       '#maxlength' => 512,
     ];
@@ -164,6 +162,15 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
       '#description' => $this->t('How long to cache API responses. Set to 0 to disable caching.'),
       '#default_value' => $this->configuration['cache_lifetime'],
       '#min' => 0,
+      '#required' => TRUE,
+    ];
+
+    $form['template'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Template'),
+      '#description' => $this->t('Twig template used to render the block. Add .html.twig files to the module templates directory and rebuild the cache to add options.'),
+      '#options' => $this->getTemplateOptions(),
+      '#default_value' => $this->configuration['template'],
       '#required' => TRUE,
     ];
 
@@ -178,55 +185,56 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
     $this->configuration['item_count'] = (int) $form_state->getValue('item_count');
     $this->configuration['view_all_url'] = trim($form_state->getValue('view_all_url'));
     $this->configuration['cache_lifetime'] = (int) $form_state->getValue('cache_lifetime');
+    $this->configuration['template'] = $form_state->getValue('template');
   }
 
   /**
    * {@inheritdoc}
    */
   public function build(): array {
-    $news_items = $this->fetchNewsItems();
+    $items = $this->fetchItems();
 
-    if (empty($news_items)) {
+    if (empty($items)) {
       return [];
     }
 
-    $item_count = (int) $this->configuration['item_count'];
-    $news_items = array_slice($news_items, 0, $item_count);
+    $items = array_slice($items, 0, (int) $this->configuration['item_count']);
 
     return [
-      '#theme' => 'dept_ajax_content_latest_news',
-      '#news_items' => $news_items,
+      '#theme' => $this->resolveThemeHook(),
+      '#items' => $items,
       '#view_all_url' => $this->configuration['view_all_url'] ?: NULL,
       '#cache' => [
         'max-age' => (int) $this->configuration['cache_lifetime'],
         'contexts' => ['url.site'],
-        'tags' => ['dept_ajax_content_latest_news'],
+        'tags' => ['dept_ajax_content'],
       ],
     ];
   }
 
   /**
-   * Fetches news items from the API endpoint, with caching.
+   * Fetches items from the API endpoint, with optional caching.
    *
    * @return array
-   *   An array of news item arrays, or an empty array on failure.
+   *   A flat array of item arrays from the JSON response, or empty on failure.
    */
-  protected function fetchNewsItems(): array {
+  protected function fetchItems(): array {
     $url = $this->resolveApiUrl();
 
     if (empty($url)) {
       $this->logger->error(
-        'Unable to build a valid API URL for the Latest News block. Configure the API URL in the block settings.'
+        'Ajax Content block has no valid API URL. Configure the API URL in the block settings.'
       );
       return [];
     }
 
+    $lifetime = (int) $this->configuration['cache_lifetime'];
     $domain_id = $this->departmentManager->getCurrentDepartment()->id();
-    $cache_id = self::CACHE_ID_PREFIX . md5($url);
-    // Tag matches dept_node_invalidate_latest_news_cache() in dept_node.
-    $cache_tag = 'dept_latest_news:' . $domain_id;
+    // Include domain_id so entries are scoped per-domain even when two domains
+    // share the same api_url configuration value.
+    $cache_id = self::CACHE_ID_PREFIX . $domain_id . ':' . md5($url);
 
-    if ($cached = $this->cache->get($cache_id)) {
+    if ($lifetime > 0 && ($cached = $this->cache->get($cache_id))) {
       return $cached->data;
     }
 
@@ -240,21 +248,22 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
       // The endpoint returns a flat JSON array of item objects.
       $items = is_array($data) ? $data : [];
 
-      $lifetime = (int) $this->configuration['cache_lifetime'];
-      $expire = $lifetime > 0 ? time() + $lifetime : CacheBackendInterface::CACHE_PERMANENT;
-      $this->cache->set($cache_id, $items, $expire, [$cache_tag]);
+      if ($lifetime > 0) {
+        $cache_tag = 'dept_ajax_content:' . $domain_id;
+        $this->cache->set($cache_id, $items, time() + $lifetime, [$cache_tag]);
+      }
 
       return $items;
     }
     catch (RequestException $e) {
       $this->logger->error(
-        'Failed to fetch news from %url: @message',
+        'Failed to fetch content from %url: @message',
         ['%url' => $url, '@message' => $e->getMessage()]
       );
     }
     catch (\Exception $e) {
       $this->logger->error(
-        'Unexpected error fetching news from %url: @message',
+        'Unexpected error fetching content from %url: @message',
         ['%url' => $url, '@message' => $e->getMessage()]
       );
     }
@@ -263,11 +272,74 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
   }
 
   /**
+   * Returns the theme hook name for the configured template.
+   *
+   * @return string
+   *   Theme hook in the form dept_ajax_content__{template_name}.
+   */
+  protected function resolveThemeHook(): string {
+    $template = $this->configuration['template'] ?: 'ajax-content';
+    return 'dept_ajax_content__' . str_replace('-', '_', $template);
+  }
+
+  /**
+   * Builds select options from .html.twig files in the templates directory.
+   *
+   * The label for each option is taken from the @title annotation in the
+   * template's docblock comment. If no @title is present, the filename is
+   * title-cased and used as a fallback.
+   *
+   * @return array
+   *   An options array suitable for a '#type' => 'select' element.
+   */
+  protected function getTemplateOptions(): array {
+    $options = [];
+    $templates_dir = dirname(__DIR__, 3) . '/templates';
+
+    foreach (glob($templates_dir . '/*.html.twig') as $file) {
+      $template = basename($file, '.html.twig');
+      $options[$template] = $this->extractTemplateTitle($file)
+        ?? ucwords(str_replace('-', ' ', $template));
+    }
+
+    return $options;
+  }
+
+  /**
+   * Parses the @title annotation from a Twig template's docblock.
+   *
+   * Reads only the opening comment block of the file for efficiency.
+   * Supports both quoted (@title "My label") and unquoted (@title My label)
+   * forms.
+   *
+   * @param string $path
+   *   Absolute path to the .html.twig file.
+   *
+   * @return string|null
+   *   The title string, or null if no @title annotation is found.
+   */
+  protected function extractTemplateTitle(string $path): ?string {
+    // 512 bytes covers any realistic opening docblock.
+    $head = file_get_contents($path, length: 512);
+
+    if ($head === FALSE) {
+      return NULL;
+    }
+
+    if (preg_match('/@title\s+"([^"]+)"/', $head, $matches)
+      || preg_match('/@title\s+(\S[^\n\r]+)/', $head, $matches)) {
+      return trim($matches[1]);
+    }
+
+    return NULL;
+  }
+
+  /**
    * Resolves a fully-qualified API URL safe to pass to Guzzle.
    *
    * Accepts either a full URL or a root-relative path in configuration.
-   * If no URL is configured, falls back to the current department's base URL.
-   * Returns an empty string when no department can be resolved.
+   * A relative path is prefixed with the current department's canonical URL.
+   * Returns an empty string when the URL cannot be resolved.
    *
    * @return string
    *   An absolute URL with http/https scheme, or empty string on failure.
@@ -276,7 +348,7 @@ class LatestNewsBlock extends BlockBase implements ContainerFactoryPluginInterfa
     $path = trim($this->configuration['api_url'] ?? '');
 
     if (empty($path)) {
-      $path = static::DEFAULT_API_PATH;
+      return '';
     }
 
     // Already a fully-qualified URL — return as-is.

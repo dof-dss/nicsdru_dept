@@ -7,15 +7,28 @@
 
 /**
  * Implements hook_theme().
+ *
+ * Registers a theme hook for every .html.twig file in the templates directory.
+ * Adding a new template file and rebuilding the cache is all that is needed to
+ * make it available as a block template option.
+ *
+ * Hook names follow the pattern dept_ajax_content__{template_name}, where
+ * hyphens in the filename are replaced with underscores.
  */
 function dept_ajax_content_theme(): array {
-  return [
-    'dept_ajax_content_latest_news' => [
+  $hooks = [];
+
+  foreach (glob(__DIR__ . '/templates/*.html.twig') as $file) {
+    $template = basename($file, '.html.twig');
+    $hook = 'dept_ajax_content__' . str_replace('-', '_', $template);
+    $hooks[$hook] = [
       'variables' => [
-        'news_items' => [],
+        'items' => [],
         'view_all_url' => NULL,
       ],
-      'template' => 'latest-news',
-    ],
-  ];
+      'template' => $template,
+    ];
+  }
+
+  return $hooks;
 }
