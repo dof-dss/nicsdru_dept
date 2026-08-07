@@ -57,6 +57,7 @@ the endpoint with Views:
    - This is necessary because the block writes field values as raw HTML. If
      you skip this step, plain text values are written with no markup, and
      fields such as dates or titles will not be linked or formatted.
+   - Ensure proper precautions have been taken to ensure that content returned is properly sanitised and not a potential security threat.
 6. Under **Pager**, set the item limit to at least the **Number of items**
    value configured in the block.
 7. Save the view and verify the endpoint returns the expected JSON at its path.
