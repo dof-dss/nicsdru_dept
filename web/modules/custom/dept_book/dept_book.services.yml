@@ -1,0 +1,4 @@
+services:
+  dept_book.parent_page_protection:
+    class: Drupal\dept_book\BookParentPageProtection
+    arguments: ['@book.manager']
