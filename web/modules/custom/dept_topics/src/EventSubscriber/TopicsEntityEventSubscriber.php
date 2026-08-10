@@ -66,7 +66,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
     foreach ($children as $child) {
       if ($child->get('moderation_state')->getString() != 'archived') {
-        throw new Exception(t('This @bundle (@id) cannot be deleted because it has active (published or draft) child content',
+        throw new Exception(t('This @bundle (@id) It cannot be deleted until child pages have been reallocated to a different topic or deleted.',
           [
             '@bundle' => $entity->bundle(),
             '@id' => $entity->id(),
