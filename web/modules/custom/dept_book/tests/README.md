@@ -1,4 +1,4 @@
-# Book parent protection unit tests
+# Departmental Book unit tests
 
 This guide explains the unit tests for this module. It is intended for developers
 who are new to PHPUnit, Drupal testing, or this project.
@@ -14,11 +14,17 @@ through the book navigation. The `BookParentPageProtection` service therefore
 protects every book page which has children. Users with the explicit
 `override book parent protection` permission are exempt.
 
+Book outline changes update parent information directly in Book storage rather
+than saving the parent node. `BookCacheInvalidator` expires the affected book,
+node, and old/new parent cache tags so cached navigation and Operations links
+reflect the new hierarchy immediately.
+
 ## What a unit test proves
 
 A unit test checks one small class without installing Drupal or using the
 database. These tests prove that `BookParentPageProtection` makes the expected
-decision for the information it receives.
+decision for the information it receives and that `BookCacheInvalidator`
+calculates and invalidates the expected cache tags.
 
 They do not prove that Drupal's forms, hooks, or moderation routes call the
 service. That would require kernel or browser tests, which are presently
@@ -50,16 +56,25 @@ The Drupal Book module supplies the outline record through `BookManagerInterface
 The important `has_children` value is `1` when the page is a parent and `0`
 when it is not.
 
+`web/modules/custom/dept_book/src/BookCacheInvalidator.php` owns the custom
+cache-tag calculation. It compares persisted before/after book links, ignores
+changes which do not alter book membership or parentage, deduplicates the
+affected tags, and invalidates them as one batch.
+
 ## How the test works
 
 The test file is:
 
 `web/modules/custom/dept_book/tests/src/Unit/BookParentPageProtectionTest.php`
 
+Cache invalidation is tested separately in:
+
+`web/modules/custom/dept_book/tests/src/Unit/BookCacheInvalidatorTest.php`
+
 Each test follows the same basic sequence:
 
 1. **Arrange:** create stand-in objects and describe what they return.
-2. **Act:** call a method on `BookParentPageProtection`.
+2. **Act:** call a method on the production service being tested.
 3. **Assert:** compare the actual answer with the expected answer.
 
 The stand-in objects are called **mocks**. For example, the real book manager
@@ -180,6 +195,12 @@ uses `isProtected()` directly.
 `archived` are returned for hiding while unrelated transitions remain
 available. `testArchiveTransitionRemainsForOverridePermission()` confirms that
 an account with the override keeps the archive transition.
+
+### `BookCacheInvalidatorTest`
+
+These tests cover moves between books and parents, insertions, removals,
+deduplication across a batch, root/new-book tag normalization, and no-op or
+weight-only changes which do not require parent cache invalidation.
 
 ## Running the test
 

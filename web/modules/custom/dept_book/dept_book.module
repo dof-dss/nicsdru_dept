@@ -6,6 +6,9 @@
  */
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\book\Form\BookAdminEditForm;
+use Drupal\book\Form\BookOutlineForm;
+use Drupal\book\Form\BookRemoveForm;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -13,6 +16,7 @@ use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\flag\FlagInterface;
 use Drupal\node\Entity\NodeType;
@@ -210,14 +214,37 @@ function dept_book_entity_type_alter(array &$entity_types) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_update().
+ * Implements hook_entity_insert().
  */
-function dept_book_node_update(EntityInterface $entity) {
-  if ($entity instanceof NodeInterface === FALSE) {
+function dept_book_entity_insert(EntityInterface $entity) {
+  if (!$entity instanceof NodeInterface) {
     return;
   }
 
-  $book = $entity->book ?? NULL;
+  $book = dept_book_load_persisted_book_link($entity);
+  \Drupal::service('dept_book.cache_invalidator')->invalidateChange(NULL, $book);
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function dept_book_entity_update(EntityInterface $entity) {
+  if (!$entity instanceof NodeInterface) {
+    return;
+  }
+
+  $book = dept_book_load_persisted_book_link($entity);
+  $original = $entity->original ?? NULL;
+  $original_book = $original instanceof NodeInterface && is_array($original->book ?? NULL) ? $original->book : NULL;
+  \Drupal::service('dept_book.cache_invalidator')->invalidateChange($original_book, $book);
+
+  dept_book_update_root_toc_flag($entity, $book);
+}
+
+/**
+ * Updates the table-of-contents flag for a book root.
+ */
+function dept_book_update_root_toc_flag(NodeInterface $entity, ?array $book): void {
 
   if (empty($book)) {
     return;
@@ -245,22 +272,54 @@ function dept_book_node_update(EntityInterface $entity) {
 }
 
 /**
+ * Loads a node's persisted book link without node-access filtering.
+ */
+function dept_book_load_persisted_book_link(NodeInterface $node): ?array {
+  $book_link = \Drupal::service('book.manager')->loadBookLink($node->id(), FALSE);
+  return is_array($book_link) ? $book_link : NULL;
+}
+
+/**
+ * Implements hook_entity_predelete().
+ */
+function dept_book_entity_predelete(EntityInterface $entity) {
+  if (!$entity instanceof NodeInterface) {
+    return;
+  }
+
+  $book = is_array($entity->book ?? NULL) ? $entity->book : NULL;
+  \Drupal::service('dept_book.cache_invalidator')->invalidateChange($book, NULL);
+}
+
+/**
  * Implements hook_form_alter().
  */
 function dept_book_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // Interject in the book outline form. Purge cache items
-  // from affected book ids and associated node id cache entries.
-  if (preg_match('/book_(outline|remove)/', $form_id)) {
+  $form_object = $form_state->getFormObject();
+
+  if ($form_object instanceof BookOutlineForm) {
+    $node = $form_object->getEntity();
+    if ($node instanceof NodeInterface) {
+      dept_book_store_original_book_link($form_state, $node);
+    }
 
     if (NestedArray::keyExists($form, ['actions', 'submit', '#submit'])) {
       array_unshift($form['actions']['submit']['#submit'], 'dept_book_process_topics');
+      $form['actions']['submit']['#submit'][] = 'dept_book_book_outline_cache_invalidate';
+    }
+  }
+  elseif ($form_object instanceof BookRemoveForm) {
+    $build_info = $form_state->getBuildInfo();
+    $node = $build_info['args'][0] ?? \Drupal::routeMatch()->getParameter('node');
+    if ($node instanceof NodeInterface) {
+      dept_book_store_original_book_link($form_state, $node);
     }
 
     $form['#submit'][] = 'dept_book_process_topics';
-
-    if (!str_contains($form_id, 'ajax')) {
-      $form['#submit'][] = 'dept_book_structure_change_cache_clear';
-    }
+    $form['#submit'][] = 'dept_book_book_remove_cache_invalidate';
+  }
+  elseif ($form_object instanceof BookAdminEditForm) {
+    $form['#submit'][] = 'dept_book_book_admin_cache_invalidate';
   }
 }
 
@@ -288,7 +347,7 @@ function dept_book_process_topics(array $form, FormStateInterface $form_state) {
   // If the entity is not the parent item of the book, remove it from the child
   // content field for each topic in the entity's site topics values.
   // TL:DR; Hide child pages from topic/subtopic pages.
-  if ($values['book']['nid'] !== $values['book']['bid']) {
+  if (isset($values['book']['nid'], $values['book']['bid']) && $values['book']['nid'] !== $values['book']['bid']) {
     $entity = dept_book_get_form_node($form_state);
     if ($entity instanceof NodeInterface && $entity->hasField('field_site_topics')) {
       $topic_manager = \Drupal::service('topic.manager');
@@ -298,29 +357,86 @@ function dept_book_process_topics(array $form, FormStateInterface $form_state) {
 }
 
 /**
- * Form submit callback used to purge cache items
- * for books and the node being affected.
+ * Stores the persisted book link before a form changes the outline.
  */
-function dept_book_structure_change_cache_clear(&$form, FormStateInterface $form_state) {
-  $book = $form_state->get('book') ?? [];
-  $cache_tags = [];
-
-  if (!empty($book['book'])) {
-    $cache_tags[] = 'bid:' . $book['book']['bid'];
-    $cache_tags[] = 'node:' . $book['book']['nid'];
+function dept_book_store_original_book_link(FormStateInterface $form_state, NodeInterface $node): void {
+  if ($form_state->has('dept_book_original_book_link')) {
+    return;
   }
 
-  Cache::invalidateTags($cache_tags);
+  $form_state->set('dept_book_original_book_link', dept_book_load_persisted_book_link($node));
+}
+
+/**
+ * Invalidates caches after the Book outline form changes a node's membership.
+ */
+function dept_book_book_outline_cache_invalidate(array &$form, FormStateInterface $form_state): void {
+  $form_object = $form_state->getFormObject();
+  if (!$form_object instanceof EntityFormInterface) {
+    return;
+  }
+
+  $entity = $form_object->getEntity();
+  if (!$entity instanceof NodeInterface) {
+    return;
+  }
+
+  $before = $form_state->get('dept_book_original_book_link');
+  $after = dept_book_load_persisted_book_link($entity);
+  \Drupal::service('dept_book.cache_invalidator')->invalidateChange(is_array($before) ? $before : NULL, $after);
+}
+
+/**
+ * Invalidates caches after a node is removed from a book outline.
+ */
+function dept_book_book_remove_cache_invalidate(array &$form, FormStateInterface $form_state): void {
+  $before = $form_state->get('dept_book_original_book_link');
+  \Drupal::service('dept_book.cache_invalidator')->invalidateChange(is_array($before) ? $before : NULL, NULL);
+}
+
+/**
+ * Invalidates parent caches after the book administration tree is reordered.
+ */
+function dept_book_book_admin_cache_invalidate(array &$form, FormStateInterface $form_state): void {
+  $changes = [];
+
+  if (!isset($form['table']) || !is_array($form['table'])) {
+    return;
+  }
+
+  foreach (Element::children($form['table']) as $key) {
+    $before = $form['table'][$key]['#item'] ?? NULL;
+    $values = $form_state->getValue(['table', $key]);
+    if (!is_array($before) || !is_array($values)) {
+      continue;
+    }
+
+    if (($values['pid'] ?? NULL) == ($before['pid'] ?? NULL)) {
+      continue;
+    }
+
+    $node_id = $before['nid'] ?? NULL;
+    if (!is_numeric($node_id)) {
+      continue;
+    }
+
+    $node = \Drupal::entityTypeManager()->getStorage('node')->load($node_id);
+    $after = $node instanceof NodeInterface ? dept_book_load_persisted_book_link($node) : NULL;
+    $changes[] = [
+      'before' => $before,
+      'after' => $after,
+    ];
+  }
+
+  \Drupal::service('dept_book.cache_invalidator')->invalidateChanges($changes);
 }
 
 /**
  * Implements hook_preprocess_book_navigation().
  */
 function dept_book_preprocess_book_navigation(&$variables) {
-  // Set some top level tags we can use to expire whenever
-  // a book outline is changed or a node removed from a book.
-  $variables['#cache']['tags'] = [
-    'bid:' . $variables['book_link']['bid'],
-    'node:' . $variables['book_link']['nid'],
-  ];
+  $existing_tags = $variables['#cache']['tags'] ?? [];
+  $book_link = is_array($variables['book_link'] ?? NULL) ? $variables['book_link'] : [];
+  $book_tags = \Drupal::service('dept_book.cache_invalidator')->getCacheTags([$book_link]);
+  $variables['#cache']['tags'] = Cache::mergeTags($existing_tags, $book_tags);
 }
