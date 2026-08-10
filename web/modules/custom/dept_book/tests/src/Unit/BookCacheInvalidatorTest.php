@@ -74,7 +74,9 @@ class BookCacheInvalidatorTest extends UnitTestCase {
    */
   public function testIgnoresNonMembershipChanges(): void {
     $cache_tags_invalidator = $this->createMock(CacheTagsInvalidatorInterface::class);
-    $cache_tags_invalidator->expects($this->never())->method('invalidateTags');
+    $cache_tags_invalidator
+      ->expects($this->never())
+      ->method('invalidateTags');
 
     $invalidator = new BookCacheInvalidator($cache_tags_invalidator);
     $invalidator->invalidateChanges([
