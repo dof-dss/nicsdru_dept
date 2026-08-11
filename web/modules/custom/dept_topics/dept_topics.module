@@ -208,6 +208,7 @@ function dept_topics_form_node_form_alter(&$form, $form_state, $form_id) {
       // TODO: Prevent selection of Topics when adding or editing
       // 'Heritage sites' nodes. See DEPT-1433.
       $form['field_site_topics']['widget']['#default_value'] = [HISTORIC_ENVIRONMENT_NID];
+      $form['field_site_topics']['#disabled'] = TRUE;
     }
   }
 
