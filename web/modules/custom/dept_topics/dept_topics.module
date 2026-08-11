@@ -196,13 +196,13 @@ function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
 /**
  * Implements hook_form_ENTITY_form_alter().
  */
-function dept_topics_form_node_form_alter(&$form, $form_state) {
+function dept_topics_form_node_form_alter(&$form, $form_state, $form_id) {
   $form_object = $form_state->getFormObject();
-  $bundle = $form_object->getEntity()->bundle();
+  $entity = $form_object->getEntity();
   $topic_id = \Drupal::request()->query->get('topic');
 
   // Set the Site Topic to 'Historic environment' for Heritage sites.
-  if ($bundle === 'heritage_site') {
+  if ($entity->bundle() === 'heritage_site') {
     // Select the site topic passed by the querystring parameter (coming from the moderation sidebar).
     if (array_key_exists('field_site_topics', $form)) {
       // TODO: Prevent selection of Topics when adding or editing
@@ -218,9 +218,35 @@ function dept_topics_form_node_form_alter(&$form, $form_state) {
     }
   }
 
-  if ($bundle === 'topic' || $bundle === 'subtopic') {
+  // Remove the option to schedule a topic archive transition if any of the topic
+  // children are in an active state (published, draft etc).
+  if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
     $form['actions']['submit']['#submit'][] = 'dept_topics_enable_domain_path';
   }
+
+  // Prevent scheduled transition to archive if a topic has active children.
+  if (str_ends_with($form_id, 'scheduled_transitions_add_form')) {
+    if (!$entity instanceof NodeInterface || !in_array($entity->bundle(), ['topic', 'subtopic'])) {
+      return;
+    }
+
+    if (!isset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive'])) {
+      return;
+    }
+
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+    $children = $entity->get('field_topic_content')->referencedEntities();
+
+    foreach ($children as $child) {
+      $latest_revision_id = $node_storage->getLatestRevisionId($child->id());
+      $latest_revision = $node_storage->loadRevision($latest_revision_id);
+      if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
+        unset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive']);
+        break;
+      }
+    }
+  }
+
 }
 
 /**
@@ -317,6 +343,26 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
   if (in_array($form_id, ['node_topic_form', 'node_topic_edit_form', 'node_subtopic_form', 'node_subtopic_edit_form'])) {
     $form['#validate'][] = 'dept_topics_validate_topics';
     $form['#attached']['library'][] = 'dept_topics/topic_admin';
+  }
+
+  // Remove the 'archive' scheduled transition option for topics/subtopics with
+  // non-archived children. The form ID includes the bundle, e.g.
+  // node_topic_scheduled_transitions_add_form_form.
+  if (str_contains($form_id, 'scheduled_transitions_add_form')) {
+    $node = \Drupal::routeMatch()->getParameter('node');
+
+    if ($node instanceof NodeInterface && in_array($node->bundle(), ['topic', 'subtopic']) &&
+      isset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive'])) {
+      $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+      foreach ($node->get('field_topic_content')->referencedEntities() as $child) {
+        $latest_revision = $node_storage->loadRevision($node_storage->getLatestRevisionId($child->id()));
+        if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
+          unset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive']);
+          break;
+        }
+      }
+    }
   }
 
   // Prevent deletion of Topics or Subtopics if they have active child content.
