@@ -8,7 +8,10 @@
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\book\Form\BookOutlineForm;
+use Drupal\book\Form\BookRemoveForm;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -505,6 +508,16 @@ function dept_topics_build_facet_topic_hierarchy(&$variables) {
  * Implements hook_form_alter().
  */
 function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form_object = $form_state->getFormObject();
+
+  if ($form_object instanceof BookOutlineForm
+    && NestedArray::keyExists($form, ['actions', 'submit', '#submit'])) {
+    array_unshift($form['actions']['submit']['#submit'], 'dept_topics_process_book_membership');
+  }
+  elseif ($form_object instanceof BookRemoveForm) {
+    $form['#submit'][] = 'dept_topics_process_book_membership';
+  }
+
   if ($form_id === 'field_config_edit_form' && !empty($form['#entity'])) {
     if ($form['#entity']->bundle() === 'subtopic') {
       $form['actions']['submit']['#submit'][] = 'dept_topics_update_linkit_targets';
@@ -513,6 +526,38 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
 
   if (in_array($form_id, ['node_topic_form', 'node_topic_edit_form', 'node_subtopic_form', 'node_subtopic_edit_form'])) {
     $form['#validate'][] = 'dept_topics_validate_topics';
+  }
+}
+
+/**
+ * Updates topic displays when a node joins or leaves a book hierarchy.
+ */
+function dept_topics_process_book_membership(array $form, FormStateInterface $form_state): void {
+  $values = $form_state->getValues();
+
+  // A node removed from a book becomes eligible for topic display again.
+  if (($form['#form_id'] ?? NULL) === 'book_remove_form') {
+    $entity = \Drupal::routeMatch()->getParameter('node');
+    if ($entity instanceof NodeInterface && $entity->hasField('field_site_topics')) {
+      \Drupal::service('topic.manager')->updateChildDisplayOnTopics($entity);
+    }
+    return;
+  }
+
+  // Child book pages must not also appear as topic landing-page content.
+  if (!isset($values['book']['nid'], $values['book']['bid'])
+    || $values['book']['nid'] === $values['book']['bid']) {
+    return;
+  }
+
+  $form_object = $form_state->getFormObject();
+  if (!$form_object instanceof EntityFormInterface) {
+    return;
+  }
+
+  $entity = $form_object->getEntity();
+  if ($entity instanceof NodeInterface && $entity->hasField('field_site_topics')) {
+    \Drupal::service('topic.manager')->removeChildDisplayFromTopics($entity);
   }
 }
 
