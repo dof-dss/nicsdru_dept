@@ -252,12 +252,10 @@ final class TopicManager {
       return;
     }
 
-    // Fetch the chosen site topics for this child revision.
-    $current_child_topic_nids = array_column($child->get('field_site_topics')->getValue(), 'target_id');
-    // Fetch chosen site topics from all revisions of the child.
-    $existing_child_topic_nids = $this->fetchAllSiteTopicsForChild($child);
-
-    $topic_nids = array_merge($current_child_topic_nids, $existing_child_topic_nids);
+    // Fetch the chosen site topics for this child revision. This is the
+    // desired state: the child should end up referenced only by these
+    // topics, regardless of what it was referenced by in the past.
+    $topic_nids = array_column($child->get('field_site_topics')->getValue(), 'target_id');
 
     $existing_nids = $this->fetchTopicsReferencingChild($child);
 
@@ -280,34 +278,6 @@ final class TopicManager {
         $this->removeChild($child, $topic);
       }
     }
-  }
-
-  /**
-   * Returns all chosen site topics across all revisions of a child node.
-   *
-   * @param \Drupal\node\NodeInterface $child
-   *   The child node to return site topics for.
-   *
-   * @return array
-   *   List of topic node ID's.
-   */
-  protected function fetchAllSiteTopicsForChild(NodeInterface $child) {
-    $existing_site_topics = $this->connection->select('node__field_site_topics', 'st')
-      ->fields('st', ['field_site_topics_target_id'])
-      ->condition('entity_id', $child->id())
-      ->distinct()
-      ->execute()
-      ->fetchCol();
-
-    $existing_site_topics_revisions = $this->connection->select('node_revision__field_site_topics', 'st')
-      ->fields('st', ['field_site_topics_target_id'])
-      ->condition('entity_id', $child->id())
-      ->distinct()
-      ->execute()
-      ->fetchCol();
-
-    // Create a list of all site topic nids (active and revisions) for this child from the results of both the field_site_topics tables.
-    return array_unique(array_merge($existing_site_topics, $existing_site_topics_revisions));
   }
 
   /**
