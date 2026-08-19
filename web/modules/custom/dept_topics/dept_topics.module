@@ -225,29 +225,6 @@ function dept_topics_form_node_form_alter(&$form, $form_state, $form_id) {
     $form['actions']['submit']['#submit'][] = 'dept_topics_enable_domain_path';
   }
 
-  // Prevent scheduled transition to archive if a topic has active children.
-  if (str_ends_with($form_id, 'scheduled_transitions_add_form')) {
-    if (!$entity instanceof NodeInterface || !in_array($entity->bundle(), ['topic', 'subtopic'])) {
-      return;
-    }
-
-    if (!isset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive'])) {
-      return;
-    }
-
-    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-    $children = $entity->get('field_topic_content')->referencedEntities();
-
-    foreach ($children as $child) {
-      $latest_revision_id = $node_storage->getLatestRevisionId($child->id());
-      $latest_revision = $node_storage->loadRevision($latest_revision_id);
-      if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
-        unset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive']);
-        break;
-      }
-    }
-  }
-
 }
 
 /**
@@ -358,6 +335,7 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
 
       foreach ($node->get('field_topic_content')->referencedEntities() as $child) {
         $latest_revision = $node_storage->loadRevision($node_storage->getLatestRevisionId($child->id()));
+        
         if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
           unset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive']);
           break;
