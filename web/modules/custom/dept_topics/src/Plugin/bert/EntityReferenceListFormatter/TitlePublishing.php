@@ -1,11 +1,11 @@
 <?php
 
-namespace Drupal\bert\Plugin\bert\EntityReferenceListFormatter;
+namespace Drupal\dept_topics\Plugin\bert\EntityReferenceListFormatter;
 
+use Drupal\bert\EntityReferenceListFormatterPluginBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\bert\EntityReferenceListFormatterPluginBase;
 
 /**
  * Displays the entity label and publishing status.
