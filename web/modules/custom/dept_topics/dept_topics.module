@@ -335,7 +335,7 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
 
       foreach ($node->get('field_topic_content')->referencedEntities() as $child) {
         $latest_revision = $node_storage->loadRevision($node_storage->getLatestRevisionId($child->id()));
-        
+
         if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
           unset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive']);
           break;

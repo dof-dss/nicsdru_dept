@@ -70,7 +70,7 @@
  *   in different view modes.
  */
 #}
-<article class="card">
+<article {{ attributes.addClass('card') }}>
   <h2{{ title_attributes.addClass('card__title') }}>
     <a href="{{ url }}">{{ label }}</a>
   </h2>
