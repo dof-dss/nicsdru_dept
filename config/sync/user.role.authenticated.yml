@@ -20,6 +20,7 @@ dependencies:
     - system
     - taxonomy_access_fix
     - toolbar
+    - tour
     - whatlinkshere
 _core:
   default_config_hash: btW6TFHajhy7Eo6YUvdFiPh4TcPggo8GBXYctjV6zag
@@ -32,6 +33,7 @@ permissions:
   - 'access content'
   - 'access help pages'
   - 'access toolbar'
+  - 'access tour'
   - 'create gallery content on assigned domains'
   - 'create gallery node content on assigned domains'
   - 'create url aliases'
