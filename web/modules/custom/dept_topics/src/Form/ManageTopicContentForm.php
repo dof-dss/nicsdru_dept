@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\dept_topics\Form;
 
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -91,27 +90,6 @@ final class ManageTopicContentForm extends FormBase {
       '#value' => $form_state->getValue('topic_nid') ?? $nid,
     ];
 
-    // Stores the list of nids that are to be removed when the child content table is recreated.
-    $form['removed_children'] = [
-      '#type' => 'hidden',
-      '#value' => $form_state->getValue('removed_children') ?? '',
-    ];
-
-    $form['form_messages'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'div',
-      '#value' => '',
-      '#attributes' => [
-        'id' => 'manage-topic-content-form-messages',
-      ],
-    ];
-
-    $form['subtopics_info'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'div',
-      '#value' => 'Subtopics can only be removed if they are assigned a new site topic. This can be achieved using the edit link which opens in a new window.',
-    ];
-
     $form['child_content'] = [
       '#type' => 'table',
       '#tree' => TRUE,
@@ -125,27 +103,9 @@ final class ManageTopicContentForm extends FormBase {
       ]
     ];
 
-    // If this is the first instantiation of the form, load the child contents from the field.
-    if (empty($form_state->getValue('child_content'))) {
-      $child_contents = $node->get('field_topic_content')->referencedEntities();
-    }
-    else {
-      // Form state only holds the nids, so we load the nodes to access the title.
-      $child_contents = $form_state->getValue('child_content');
-      if (is_array($child_contents)) {
-        $child_contents = $this->entityTypeManager->getStorage('node')->loadMultiple(array_keys($child_contents));
-      }
-    }
+    $child_contents = $node->get('field_topic_content')->referencedEntities();
 
     foreach ($child_contents as $weight => $child) {
-
-      // Don't add removed child content from the table.
-      if (!empty($form['removed_children']['#value'])) {
-        if (in_array($child->id(), explode(',', $form['removed_children']['#value']))) {
-          continue;
-        }
-      }
-
       $child_nid = $child->id();
       $form['child_content'][$child_nid]['#attributes']['class'][] = 'draggable';
       $form['child_content'][$child_nid]['#weight'] = $weight;
@@ -173,24 +133,22 @@ final class ManageTopicContentForm extends FormBase {
         ],
       ];
 
-      if ($child->bundle() === 'subtopic') {
-        $form['child_content'][$child_nid]['edit'] = [
-          '#type' => 'link',
-          '#title' => t('Edit'),
-          '#url' => Url::fromRoute('entity.node.edit_form', ['node' => $child->id()]),
-          '#attributes' => [
-            'class' => ['button--danger', 'link', 'button'],
-            'title' => t('Edit this subtopic to assign a new parent topic'),
-            'target' => '_blank',
+      $form['child_content'][$child_nid]['edit'] = [
+        '#type' => 'link',
+        '#title' => t('Edit'),
+        '#url' => Url::fromRoute('entity.node.edit_form', ['node' => $child->id()]),
+        '#attributes' => [
+          'class' => ['button--danger', 'link', 'button'],
+          'title' => t('Edit this subtopic to assign a new parent topic'),
+          'target' => '_blank',
+        ],
+        '#wrapper_attributes' => [
+          'class' => [
+            'manage-topic-content-remove-cell',
           ],
-          '#wrapper_attributes' => [
-            'class' => [
-              'manage-topic-content-remove-cell'
-            ],
-            'title' => $this->t('Edit this subtopic to assign a new parent topic.')
-          ],
-        ];
-      }
+          'title' => $this->t('Edit this subtopic to assign a new parent topic.'),
+        ],
+      ];
     }
 
     $form['actions'] = ['#type' => 'actions'];
