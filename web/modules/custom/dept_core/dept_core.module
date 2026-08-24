@@ -858,6 +858,12 @@ function dept_core_tour_tips_alter(array &$tour_tips, EntityInterface $entity) {
         $tour_tips['title']->set('body', $body);
         break;
 
+      case 'link':
+        $body = $tour_tips['title']->get('body');
+        $body = str_replace('title', 'Link text', $body);
+        $tour_tips['title']->set('body', $body);
+        break;
+
       default:
         break;
     }
