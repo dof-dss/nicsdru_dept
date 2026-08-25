@@ -25,6 +25,8 @@ use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
 use Drupal\views\ViewExecutable;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+include_once 'inc/tours.php';
+
 /**
  * Implements hook_entity_access().
  */
@@ -841,31 +843,4 @@ function dept_core_robotstxt() {
   }
 
   return $additional;
-}
-
-/**
- * Implements hook_tour_tips_alter().
- */
-function dept_core_tour_tips_alter(array &$tour_tips, EntityInterface $entity) {
-
-  if ($entity->id() === 'origins_node_create') {
-    $route_params = \Drupal::routeMatch()->getParameters();
-
-    switch ($route_params->get('node_type')->id()) {
-      case 'contact':
-        $body = $tour_tips['title']->get('body');
-        $body = str_replace('title', 'Point of contact', $body);
-        $tour_tips['title']->set('body', $body);
-        break;
-
-      case 'link':
-        $body = $tour_tips['title']->get('body');
-        $body = str_replace('title', 'Link text', $body);
-        $tour_tips['title']->set('body', $body);
-        break;
-
-      default:
-        break;
-    }
-  }
 }
