@@ -7,15 +7,21 @@ dependencies:
     - node.type.article
     - node.type.consultation
     - node.type.contact
+    - node.type.easychart
     - node.type.event
     - node.type.gallery
+    - node.type.global_page
     - node.type.heritage_site
     - node.type.link
     - node.type.news
+    - node.type.page
     - node.type.profile
     - node.type.protected_area
     - node.type.publication
+    - node.type.subtopic
+    - node.type.topic
     - node.type.ual
+    - node.type.webform
   module:
     - domain_access
     - node
@@ -344,7 +350,7 @@ display:
           entity_type: node
           entity_field: revision_uid
           plugin_id: field
-          label: 'Revised by'
+          label: 'Updated by'
           exclude: false
           alter:
             alter_text: false
@@ -857,7 +863,7 @@ display:
             widget: select
             multiple: false
             remember: false
-            default_group: All
+            default_group: '1'
             default_group_multiple: {  }
             group_items:
               1:
@@ -1019,6 +1025,54 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        type_1:
+          id: type_1
+          table: node_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          operator: 'not in'
+          value:
+            easychart: easychart
+            global_page: global_page
+            link: link
+            page: page
+            subtopic: subtopic
+            topic: topic
+            webform: webform
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -1039,7 +1093,7 @@ display:
             name: name
             revision_uid: revision_uid
             operations: operations
-          default: changed
+          default: created
           info:
             node_bulk_form:
               align: ''
@@ -1069,7 +1123,7 @@ display:
               responsive: ''
             created:
               sortable: true
-              default_sort_order: desc
+              default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
