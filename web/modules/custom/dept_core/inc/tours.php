@@ -5,6 +5,8 @@
  * Hooks and functions for altering Tours on departmental sites.
  */
 
+use Drupal\Core\Entity\EntityInterface;
+
 /**
  * Implements hook_tour_tips_alter().
  */
