@@ -359,9 +359,9 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
         $form['description'] = [
           '#type' => 'html_tag',
           '#tag' => 'p',
-          '#value' => t("This @bundle (@id) It cannot be deleted until child pages have been reallocated to a different topic or deleted.", [
+          '#value' => t("This @bundle '%title' cannot be deleted while it contains active child pages. Please reassign or archive/delete them first.", [
             '@bundle' => $node->bundle(),
-            '@id' => $node->id(),
+            '%title' => $node->label(),
           ]),
         ];
 

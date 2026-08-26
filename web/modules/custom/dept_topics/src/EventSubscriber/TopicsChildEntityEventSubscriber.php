@@ -84,6 +84,7 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
           $this->topicManager->processChild($entity);
         }
         break;
+
       default:
         $this->topicManager->processChild($entity);
         break;

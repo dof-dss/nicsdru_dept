@@ -66,10 +66,10 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
 
     foreach ($children as $child) {
       if ($child->get('moderation_state')->getString() != 'archived') {
-        throw new Exception(t('This @bundle (@id) It cannot be deleted until child pages have been reallocated to a different topic or deleted.',
+        throw new Exception(t('This @bundle \'%title\' It cannot be deleted until child pages have been reallocated to a different topic or deleted.',
           [
             '@bundle' => $entity->bundle(),
-            '@id' => $entity->id(),
+            '%title' => $entity->label(),
           ])->render());
       }
     }
