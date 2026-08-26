@@ -232,8 +232,14 @@ function dept_topics_form_node_form_alter(&$form, $form_state, $form_id) {
   if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
     $form['actions']['submit']['#submit'][] = 'dept_topics_enable_domain_path';
 
-    // Disable the delete button if the topic has active child content.
     if ($entity->isNew() === FALSE && \Drupal::service('topic.manager')->topicHasActiveChildren($entity)) {
+
+      // Prevent the selection of 'Archived' if the topic has active child content.
+      if (array_key_exists('archived', $form["moderation_state"]["widget"][0]["state"]["#options"])) {
+        unset($form["moderation_state"]["widget"][0]["state"]["#options"]['archived']);
+      }
+
+      // Replace the delete button with a disabled version when active child content exists.
       $form["actions"]["delete"] = [
         '#type' => 'html_tag',
         '#tag' => 'div',
