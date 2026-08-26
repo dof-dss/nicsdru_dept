@@ -389,6 +389,29 @@ final class TopicManager {
   }
 
   /**
+   * Determines if a given topic has child nodes that are
+   * in 'published', 'draft' or 'needs review' states.
+   *
+   * @param \Drupal\node\NodeInterface $topic
+   *   The topic node o check.
+   *
+   * @return bool
+   */
+  public function topicHasActiveChildren(NodeInterface $topic): bool {
+    $children = $topic->get('field_topic_content')->referencedEntities();
+
+    foreach ($children as $child) {
+      $latest_revision_id = $this->nodeStorage->getLatestRevisionId($child->id());
+      $latest_revision = $this->nodeStorage->loadRevision($latest_revision_id);
+      if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
+        return TRUE;
+      }
+    }
+
+    return FALSE;
+  }
+  
+  /**
    * Inserts an entity reference value for a given child and topic
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $child
