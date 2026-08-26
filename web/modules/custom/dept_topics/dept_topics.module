@@ -229,12 +229,25 @@ function dept_topics_form_node_form_alter(&$form, $form_state, $form_id) {
     }
   }
 
-  // Remove the option to schedule a topic archive transition if any of the topic
-  // children are in an active state (published, draft etc).
   if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
     $form['actions']['submit']['#submit'][] = 'dept_topics_enable_domain_path';
-  }
 
+    // Disable the delete button if the topic has active child content.
+    if ($entity->isNew() === FALSE && \Drupal::service('topic.manager')->topicHasActiveChildren($entity)) {
+      $form["actions"]["delete"] = [
+        '#type' => 'html_tag',
+        '#tag' => 'div',
+        '#value' => t('Delete'),
+        '#weight' => 100,
+        '#attributes' => [
+          'class' => ['action-link', 'action-link--danger', 'action-link--icon-trash'],
+          'disabled' => 'disabled',
+          'style' => "cursor: not-allowed",
+          'title' => t('This content has active child pages. It cannot be deleted until child pages have been reallocated to a different topic, archived or deleted.'),
+        ],
+      ];
+    }
+  }
 }
 
 /**
