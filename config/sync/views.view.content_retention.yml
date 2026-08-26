@@ -22,6 +22,7 @@ dependencies:
     - node.type.topic
     - node.type.ual
     - node.type.webform
+    - system.menu.admin
   module:
     - csv_serialization
     - domain_access
@@ -531,7 +532,7 @@ display:
             placeholder: null
           is_grouped: true
           group_info:
-            label: 'Show content created'
+            label: Created
             description: ''
             identifier: created
             optional: true
@@ -620,7 +621,7 @@ display:
             placeholder: null
           is_grouped: true
           group_info:
-            label: 'Last changed'
+            label: 'Last updated'
             description: ''
             identifier: changed
             optional: true
@@ -673,48 +674,6 @@ display:
                   max: ''
                   value: '-10 years'
           type: date
-        title:
-          id: title
-          table: node_field_data
-          field: title
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: title
-          plugin_id: string
-          operator: contains
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: title_op
-            label: Title
-            description: ''
-            use_operator: false
-            operator: title_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: title
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
         type:
           id: type
           table: node_field_data
@@ -893,8 +852,8 @@ display:
           exposed: true
           expose:
             operator_id: uid_revision_op
-            label: Username
-            description: 'Filters by content revision username'
+            label: 'Created / updated by (username)'
+            description: ''
             use_operator: false
             operator: uid_revision_op
             operator_limit_selection: false
@@ -918,6 +877,48 @@ display:
               topic_supervisor: '0'
               qa: '0'
             reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: string
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: title_op
+            label: Title
+            description: ''
+            use_operator: false
+            operator: title_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: title
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -1184,6 +1185,7 @@ display:
           plugin_id: standard
           required: true
       show_admin_links: false
+      footer: {  }
       display_extenders: {  }
     cache_metadata:
       max-age: 0
@@ -1636,6 +1638,7 @@ display:
     display_options:
       defaults:
         header: false
+        footer: false
       header:
         result:
           id: result
@@ -1646,7 +1649,8 @@ display:
           admin_label: ''
           plugin_id: result
           empty: false
-          content: '<h2>Displaying @start - @end of @total</h2>'
+          content: '<p>Displaying @start - @end of @total</p>'
+      footer:
         display_link:
           id: display_link
           table: views
@@ -1655,19 +1659,19 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: display_link
-          label: 'Download report (CSV format)'
-          empty: true
+          label: 'Download report (CSV format, opens in Excel)'
+          empty: false
           display_id: data_export_1
       display_extenders: {  }
       path: admin/content/retention
       menu:
-        type: none
-        title: Content
+        type: normal
+        title: Retention
         description: ''
-        weight: -10
+        weight: 0
         expanded: false
         menu_name: admin
-        parent: ''
+        parent: system.admin_content
         context: '0'
       tab_options:
         type: normal
