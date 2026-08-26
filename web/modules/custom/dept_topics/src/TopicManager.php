@@ -392,12 +392,13 @@ final class TopicManager {
    * Determines if a given topic has child nodes that are
    * in 'published', 'draft' or 'needs review' states.
    *
-   * @param \Drupal\node\NodeInterface $topic
-   *   The topic node o check.
+   * @param \Drupal\node\NodeInterface|\Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic node to check for active children.
    *
    * @return bool
+   *   True if there are artive children, false otherwise.
    */
-  public function topicHasActiveChildren(NodeInterface $topic): bool {
+  public function topicHasActiveChildren(NodeInterface|ContentEntityInterface $topic): bool {
     $children = $topic->get('field_topic_content')->referencedEntities();
 
     foreach ($children as $child) {
@@ -410,7 +411,7 @@ final class TopicManager {
 
     return FALSE;
   }
-  
+
   /**
    * Inserts an entity reference value for a given child and topic
    *

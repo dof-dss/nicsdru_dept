@@ -62,16 +62,12 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     // Prevent deletion of topics if it has any active child content.
     // Adding this in addition to the frontend warning to provide coverage
     // when using the CLI (drush) etc.
-    $children = $entity->get('field_topic_content')->referencedEntities();
-
-    foreach ($children as $child) {
-      if ($child->get('moderation_state')->getString() != 'archived') {
-        throw new Exception(t('This @bundle \'%title\' It cannot be deleted until child pages have been reallocated to a different topic or deleted.',
-          [
-            '@bundle' => $entity->bundle(),
-            '%title' => $entity->label(),
-          ])->render());
-      }
+    if ($this->topicManager->topicHasActiveChildren($entity)) {
+      throw new Exception(t('This @bundle \'%title\' cannot be deleted until all child pages have been reallocated to a different topic, archived or deleted.',
+        [
+          '@bundle' => $entity->bundle(),
+          '%title' => $entity->label(),
+        ])->render());
     }
   }
 
