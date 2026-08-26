@@ -183,6 +183,42 @@ function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
 }
 
 /**
+ * Implements hook_views_query_alter().
+ */
+function dept_topics_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  if ($view->id() === 'content_by_site_subtopic') {
+    // @phpstan-ignore-next-line
+    foreach ($query->where[0]['conditions'] as $index => $condition) {
+      if (str_starts_with($condition['field'], 'node__field_site_topics')) {
+        // Fetch current topic node id.
+        $topic = \Drupal::routeMatch()->getParameter('node');
+        if ($topic instanceof NodeInterface === FALSE) {
+          return;
+        }
+
+        $args[] = $topic->id();
+
+        // Subtopics to include.
+        /** @var \Drupal\dept_topics\TopicManager $topic_manager */
+        $topic_manager = \Drupal::service('topic.manager');
+        $subtopics = $topic_manager->getTopicChildren($topic);
+
+        if (!empty($subtopics)) {
+          $subtopics = array_keys($subtopics);
+        }
+
+        $args = array_merge($args, $subtopics);
+
+        // @phpstan-ignore-next-line
+        $query->where[0]['conditions'][$index]['field'] = 'node__field_site_topics.field_site_topics_target_id';
+        $query->where[0]['conditions'][$index]['value'] = $args;
+        $query->where[0]['conditions'][$index]['operator'] = 'in';
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_form_ENTITY_form_alter().
  */
 function dept_topics_form_node_form_alter(&$form, $form_state, $form_id) {
@@ -237,6 +273,7 @@ function dept_topics_form_node_form_alter(&$form, $form_state, $form_id) {
  * Implements hook_form_alter().
  */
 function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
   if ($form_id === 'field_config_edit_form' && !empty($form['#entity'])) {
     if ($form['#entity']->bundle() === 'subtopic') {
       $form['actions']['submit']['#submit'][] = 'dept_topics_update_linkit_targets';
@@ -246,6 +283,28 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
   if (in_array($form_id, ['node_topic_form', 'node_topic_edit_form', 'node_subtopic_form', 'node_subtopic_edit_form'])) {
     $form['#validate'][] = 'dept_topics_validate_topics';
     $form['#attached']['library'][] = 'dept_topics/topic_admin';
+  }
+
+  // Prevent users from reverting a topic to an archived revision if it has active
+  // child content.
+  if ($form_id === 'node_revision_revert_confirm') {
+    $node = \Drupal::routeMatch()->getParameter('node_revision');
+
+    if ($node instanceof NodeInterface && in_array($node->bundle(), ['topic', 'subtopic'])) {
+      $has_active_children = \Drupal::service('topic.manager')->topicHasActiveChildren($node);
+
+      if ($has_active_children && $node->get('moderation_state')->value === 'archived') {
+        $form['notice'] = [
+          '#type' => 'html_tag',
+          '#tag' => 'div',
+          '#value' => t('This @bundle has active child pages. It cannot be reverted to an archived state until child pages have been reallocated to a different topic, archived or deleted. ', [
+            '@bundle' => $node->bundle()
+          ]),
+        ];
+        $form['actions']['submit']['#disabled'] = TRUE;
+      }
+
+    }
   }
 
   // Remove the 'archive' scheduled transition option for topics/subtopics with
@@ -279,42 +338,6 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
       ];
 
       $form['actions']['submit']['#disabled'] = TRUE;
-    }
-  }
-}
-
-/**
- * Implements hook_views_query_alter().
- */
-function dept_topics_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
-  if ($view->id() === 'content_by_site_subtopic') {
-    // @phpstan-ignore-next-line
-    foreach ($query->where[0]['conditions'] as $index => $condition) {
-      if (str_starts_with($condition['field'], 'node__field_site_topics')) {
-        // Fetch current topic node id.
-        $topic = \Drupal::routeMatch()->getParameter('node');
-        if ($topic instanceof NodeInterface === FALSE) {
-          return;
-        }
-
-        $args[] = $topic->id();
-
-        // Subtopics to include.
-        /** @var \Drupal\dept_topics\TopicManager $topic_manager */
-        $topic_manager = \Drupal::service('topic.manager');
-        $subtopics = $topic_manager->getTopicChildren($topic);
-
-        if (!empty($subtopics)) {
-          $subtopics = array_keys($subtopics);
-        }
-
-        $args = array_merge($args, $subtopics);
-
-        // @phpstan-ignore-next-line
-        $query->where[0]['conditions'][$index]['field'] = 'node__field_site_topics.field_site_topics_target_id';
-        $query->where[0]['conditions'][$index]['value'] = $args;
-        $query->where[0]['conditions'][$index]['operator'] = 'in';
-      }
     }
   }
 }
