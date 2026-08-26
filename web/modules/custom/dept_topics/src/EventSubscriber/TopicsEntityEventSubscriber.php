@@ -63,7 +63,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     // Adding this in addition to the frontend warning to provide coverage
     // when using the CLI (drush) etc.
     if ($this->topicManager->topicHasActiveChildren($entity)) {
-      throw new Exception(t('This @bundle \'%title\' cannot be deleted until all child pages have been reallocated to a different topic, archived or deleted.',
+      throw new Exception(t("This @bundle '%title' cannot be deleted until all child pages have been reallocated to a different topic, archived or deleted.",
         [
           '@bundle' => $entity->bundle(),
           '%title' => $entity->label(),

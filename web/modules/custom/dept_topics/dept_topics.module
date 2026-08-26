@@ -44,18 +44,11 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
     // If the topic has active child content, disable the archive button.
     if (isset($build["actions"]["primary"]["quick_draft_form"]) &&
       array_key_exists('archive', $build["actions"]["primary"]["quick_draft_form"])) {
-      $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-      $children = $context->get('field_topic_content')->referencedEntities();
 
-      foreach ($children as $child) {
-        $latest_revision_id = $node_storage->getLatestRevisionId($child->id());
-        $latest_revision = $node_storage->loadRevision($latest_revision_id);
-        if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
-          $build["actions"]["primary"]["quick_draft_form"]['archive']['#attributes']['disabled'] = 'disabled';
-          $build["actions"]["primary"]["quick_draft_form"]['archive']['#attributes']['style'] = "cursor: not-allowed";
-          $build["actions"]["primary"]["quick_draft_form"]['archive']['#attributes']['title'] = "This content has associated child pages. It cannot be archived until child pages have been reallocated to a different topic, archived or deleted.";
-          break;
-        }
+      if (\Drupal::service('topic.manager')->topicHasActiveChildren($context)) {
+        $build["actions"]["primary"]["quick_draft_form"]['archive']['#attributes']['disabled'] = 'disabled';
+        $build["actions"]["primary"]["quick_draft_form"]['archive']['#attributes']['style'] = "cursor: not-allowed";
+        $build["actions"]["primary"]["quick_draft_form"]['archive']['#attributes']['title'] = "This content has active child pages. It cannot be archived until child pages have been reallocated to a different topic, archived or deleted.";
       }
     }
 
@@ -331,16 +324,9 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
 
     if ($node instanceof NodeInterface && in_array($node->bundle(), ['topic', 'subtopic']) &&
       isset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive'])) {
-      $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-
-      foreach ($node->get('field_topic_content')->referencedEntities() as $child) {
-        $latest_revision = $node_storage->loadRevision($node_storage->getLatestRevisionId($child->id()));
-
-        if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
+        if (\Drupal::service('topic.manager')->topicHasActiveChildren($node)) {
           unset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive']);
-          break;
         }
-      }
     }
   }
 
@@ -349,24 +335,17 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
     // @phpstan-ignore-next-line.
     $node = $form_state->getFormObject()->getEntity();
 
-    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-    $children = $node->get('field_topic_content')->referencedEntities();
+    if (\Drupal::service('topic.manager')->topicHasActiveChildren($node)) {
+      $form['description'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => t("This @bundle '%title' cannot be deleted until all child pages have been reallocated to a different topic, archived or deleted.", [
+          '@bundle' => $node->bundle(),
+          '%title' => $node->label(),
+        ]),
+      ];
 
-    foreach ($children as $child) {
-      $latest_revision_id = $node_storage->getLatestRevisionId($child->id());
-      $latest_revision = $node_storage->loadRevision($latest_revision_id);
-      if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
-        $form['description'] = [
-          '#type' => 'html_tag',
-          '#tag' => 'p',
-          '#value' => t("This @bundle '%title' cannot be deleted while it contains active child pages. Please reassign or archive/delete them first.", [
-            '@bundle' => $node->bundle(),
-            '%title' => $node->label(),
-          ]),
-        ];
-
-        $form['actions']['submit']['#disabled'] = TRUE;
-      }
+      $form['actions']['submit']['#disabled'] = TRUE;
     }
   }
 }
