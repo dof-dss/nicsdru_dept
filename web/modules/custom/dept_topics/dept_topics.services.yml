@@ -29,7 +29,7 @@ services:
 
   dept_topics.topic_child_entity_event_subscriber:
     class: Drupal\dept_topics\EventSubscriber\TopicsChildEntityEventSubscriber
-    arguments: ['@topic.manager']
+    arguments: ['@topic.manager', '@content_moderation.moderation_information', '@messenger', '@entity_type.manager']
     tags:
       - { name: event_subscriber }
 
