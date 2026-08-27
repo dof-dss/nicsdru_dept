@@ -505,7 +505,160 @@ display:
           plugin_id: text_custom
           empty: true
           content: 'No content available.'
-      sorts: {  }
+      sorts:
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: 'Content type'
+            field_identifier: type
+          exposed: true
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: status
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: Status
+            field_identifier: status
+          exposed: true
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: created
+          plugin_id: date
+          order: ASC
+          expose:
+            label: 'Authored on'
+            field_identifier: created
+          exposed: true
+          granularity: second
+        changed:
+          id: changed
+          table: node_field_data
+          field: changed
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: changed
+          plugin_id: date
+          order: ASC
+          expose:
+            label: 'Last updated'
+            field_identifier: changed
+          exposed: true
+          granularity: second
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: Title
+            field_identifier: title
+          exposed: true
+        name:
+          id: name
+          table: users_field_data
+          field: name
+          relationship: uid
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: name
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: 'Created by'
+            field_identifier: name
+          exposed: true
+        revision_uid:
+          id: revision_uid
+          table: node_revision
+          field: revision_uid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: revision_uid
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: 'Updated by'
+            field_identifier: revision_uid
+          exposed: true
+        type_1:
+          id: type_1
+          table: node_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+        status_1:
+          id: status_1
+          table: node_field_data
+          field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: status
+          plugin_id: standard
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+        created_1:
+          id: created_1
+          table: node_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: created
+          plugin_id: date
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+          granularity: second
       arguments: {  }
       filters:
         created:
@@ -1206,6 +1359,8 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
         - user
         - 'user.node_grants:view'
         - user.permissions
@@ -1214,9 +1369,8 @@ display:
     id: data_export_1
     display_title: 'Data export'
     display_plugin: data_export
-    position: 2
+    position: 3
     display_options:
-      title: 'Content retention report'
       fields:
         title:
           id: title
@@ -1562,38 +1716,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-      sorts:
-        type:
-          id: type
-          table: node_field_data
-          field: type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: type
-          plugin_id: standard
-          order: ASC
-          expose:
-            label: ''
-            field_identifier: ''
-          exposed: false
-        created:
-          id: created
-          table: node_field_data
-          field: created
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: created
-          plugin_id: date
-          order: DESC
-          expose:
-            label: ''
-            field_identifier: ''
-          exposed: false
-          granularity: second
       style:
         type: data_export
         options:
@@ -1615,18 +1737,12 @@ display:
             item_node_name: item
             format_output: false
       defaults:
-        title: false
         fields: false
-        sorts: false
+      display_description: ''
       display_extenders: {  }
       path: admin/content/retention/export
-      auth:
-        - cookie
-      displays:
-        default: '0'
-        page_1: '0'
       filename: 'content-retention-report_[date:html_date]_[date:raw].csv'
-      automatic_download: false
+      automatic_download: true
       store_in_public_file_directory: false
       custom_redirect_path: false
       redirect_to_display: none
@@ -1638,6 +1754,8 @@ display:
         - 'languages:language_interface'
         - request_format
         - url
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
         - user
         - 'user.node_grants:view'
         - user.permissions
@@ -1648,38 +1766,6 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      sorts:
-        type:
-          id: type
-          table: node_field_data
-          field: type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: type
-          plugin_id: standard
-          order: ASC
-          expose:
-            label: ''
-            field_identifier: ''
-          exposed: false
-        created:
-          id: created
-          table: node_field_data
-          field: created
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: created
-          plugin_id: date
-          order: ASC
-          expose:
-            label: ''
-            field_identifier: ''
-          exposed: false
-          granularity: second
       filters:
         created:
           id: created
@@ -1951,16 +2037,18 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
+              admin: '0'
               administrator: '0'
+              anonymous: '0'
               author: '0'
-              stats_author: '0'
               supervisor: '0'
+              homepage_supervisor: '0'
+              rss_supervisor: '0'
+              stats_author: '0'
               stats_supervisor: '0'
               topic_layout_supervisor: '0'
-              homepage_supervisor: '0'
               topic_supervisor: '0'
-              admin: '0'
+              qa: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -1974,6 +2062,7 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: false
         status:
           id: status
           table: node_field_data
@@ -2268,7 +2357,7 @@ display:
         groups:
           1: AND
       defaults:
-        sorts: false
+        sorts: true
         filters: false
         filter_groups: false
         header: false
@@ -2320,6 +2409,8 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
         - user
         - 'user.node_grants:view'
         - user.permissions
