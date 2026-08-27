@@ -592,7 +592,7 @@ display:
           plugin_id: date
           order: ASC
           expose:
-            label: 'Authored on'
+            label: Created
             field_identifier: created
           exposed: true
           granularity: second
