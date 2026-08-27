@@ -389,15 +389,15 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        revision_uid:
-          id: revision_uid
-          table: node_revision
-          field: revision_uid
-          relationship: none
+        name_1:
+          id: name_1
+          table: users_field_data
+          field: name
+          relationship: revision_uid
           group_type: group
           admin_label: ''
-          entity_type: node
-          entity_field: revision_uid
+          entity_type: user
+          entity_field: name
           plugin_id: field
           label: 'Updated by'
           exclude: false
@@ -440,10 +440,11 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: target_id
-          type: author
-          settings: {  }
-          group_column: target_id
+          click_sort_column: value
+          type: user_name
+          settings:
+            link_to_entity: true
+          group_column: value
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -550,36 +551,6 @@ display:
           empty: true
           content: 'No content available.'
       sorts:
-        type:
-          id: type
-          table: node_field_data
-          field: type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: type
-          plugin_id: standard
-          order: ASC
-          expose:
-            label: 'Content type'
-            field_identifier: type
-          exposed: true
-        status:
-          id: status
-          table: node_field_data
-          field: status
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: status
-          plugin_id: standard
-          order: ASC
-          expose:
-            label: Status
-            field_identifier: status
-          exposed: true
         created:
           id: created
           table: node_field_data
@@ -612,6 +583,21 @@ display:
             field_identifier: changed
           exposed: true
           granularity: second
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: standard
+          order: ASC
+          expose:
+            label: 'Content type'
+            field_identifier: type
+          exposed: true
         title:
           id: title
           table: node_field_data
@@ -627,8 +613,8 @@ display:
             label: Title
             field_identifier: title
           exposed: true
-        name:
-          id: name
+        name_2:
+          id: name_2
           table: users_field_data
           field: name
           relationship: uid
@@ -640,69 +626,23 @@ display:
           order: ASC
           expose:
             label: 'Created by'
-            field_identifier: name
+            field_identifier: created_by
           exposed: true
-        revision_uid:
-          id: revision_uid
-          table: node_revision
-          field: revision_uid
-          relationship: none
+        name_1:
+          id: name_1
+          table: users_field_data
+          field: name
+          relationship: revision_uid
           group_type: group
           admin_label: ''
-          entity_type: node
-          entity_field: revision_uid
+          entity_type: user
+          entity_field: name
           plugin_id: standard
           order: ASC
           expose:
             label: 'Updated by'
-            field_identifier: revision_uid
+            field_identifier: updated_by
           exposed: true
-        type_1:
-          id: type_1
-          table: node_field_data
-          field: type
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: type
-          plugin_id: standard
-          order: ASC
-          expose:
-            label: ''
-            field_identifier: ''
-          exposed: false
-        status_1:
-          id: status_1
-          table: node_field_data
-          field: status
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: status
-          plugin_id: standard
-          order: DESC
-          expose:
-            label: ''
-            field_identifier: ''
-          exposed: false
-        created_1:
-          id: created_1
-          table: node_field_data
-          field: created
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: created
-          plugin_id: date
-          order: ASC
-          expose:
-            label: ''
-            field_identifier: ''
-          exposed: false
-          granularity: second
       arguments:
         field_domain_source_target_id:
           id: field_domain_source_target_id
@@ -870,7 +810,7 @@ display:
             widget: select
             multiple: false
             remember: false
-            default_group: '4'
+            default_group: All
             default_group_multiple: {  }
             group_items:
               1:
@@ -1019,7 +959,7 @@ display:
             widget: select
             multiple: false
             remember: false
-            default_group: '1'
+            default_group: All
             default_group_multiple: {  }
             group_items:
               1:
@@ -1299,49 +1239,49 @@ display:
               empty_column: false
               responsive: ''
             title:
-              sortable: true
+              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
             type:
-              sortable: true
+              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
             status:
-              sortable: true
+              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
             created:
-              sortable: true
+              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: ''
             changed:
-              sortable: true
-              default_sort_order: desc
+              sortable: false
+              default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: priority-low
             name:
-              sortable: true
+              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
               responsive: priority-low
             revision_uid:
-              sortable: true
+              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
@@ -1374,7 +1314,20 @@ display:
           id: uid
           table: node_field_data
           field: uid
-          admin_label: author
+          relationship: none
+          group_type: group
+          admin_label: 'Content author'
+          plugin_id: standard
+          required: true
+        revision_uid:
+          id: revision_uid
+          table: node_revision
+          field: revision_uid
+          relationship: none
+          group_type: group
+          admin_label: 'Current revision author'
+          entity_type: node
+          entity_field: revision_uid
           plugin_id: standard
           required: true
       show_admin_links: false
@@ -1394,9 +1347,9 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
-  data_export_1:
-    id: data_export_1
-    display_title: 'Data export'
+  data_export_csv:
+    id: data_export_csv
+    display_title: 'CSV data export'
     display_plugin: data_export
     position: 3
     display_options:
@@ -1770,7 +1723,7 @@ display:
       display_description: ''
       display_extenders: {  }
       path: admin/content/retention/export
-      filename: 'content-retention-report_[date:html_date]_[date:raw].csv'
+      filename: 'retention-and-disposal-report_[date:html_date].csv'
       automatic_download: true
       store_in_public_file_directory: false
       custom_redirect_path: false
@@ -1790,9 +1743,9 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
-  page_1:
-    id: page_1
-    display_title: Page
+  page_dashboard:
+    id: page_dashboard
+    display_title: Dashboard
     display_plugin: page
     position: 1
     display_options:
@@ -1802,6 +1755,7 @@ display:
         filter_groups: true
         header: false
         footer: false
+      display_description: ''
       header:
         result:
           id: result
@@ -1823,7 +1777,7 @@ display:
           plugin_id: display_link
           label: 'Download report (CSV format, opens in Excel)'
           empty: false
-          display_id: data_export_1
+          display_id: data_export_csv
       footer: {  }
       display_extenders: {  }
       path: admin/content/retention
