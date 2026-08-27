@@ -7,6 +7,7 @@
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
@@ -273,14 +274,18 @@ function dept_topics_form_node_form_alter(&$form, $form_state, $form_id) {
  * Implements hook_form_alter().
  */
 function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-
   if ($form_id === 'field_config_edit_form' && !empty($form['#entity'])) {
     if ($form['#entity']->bundle() === 'subtopic') {
       $form['actions']['submit']['#submit'][] = 'dept_topics_update_linkit_targets';
     }
   }
 
-  if (in_array($form_id, ['node_topic_form', 'node_topic_edit_form', 'node_subtopic_form', 'node_subtopic_edit_form'])) {
+  if (in_array($form_id, [
+    'node_topic_form',
+    'node_topic_edit_form',
+    'node_subtopic_form',
+    'node_subtopic_edit_form'
+  ])) {
     $form['#validate'][] = 'dept_topics_validate_topics';
     $form['#attached']['library'][] = 'dept_topics/topic_admin';
   }
@@ -290,8 +295,12 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
   if ($form_id === 'node_revision_revert_confirm') {
     $node = \Drupal::routeMatch()->getParameter('node_revision');
 
-    if ($node instanceof NodeInterface && in_array($node->bundle(), ['topic', 'subtopic'])) {
-      $has_active_children = \Drupal::service('topic.manager')->topicHasActiveChildren($node);
+    if ($node instanceof NodeInterface && in_array($node->bundle(), [
+        'topic',
+        'subtopic'
+      ])) {
+      $has_active_children = \Drupal::service('topic.manager')
+        ->topicHasActiveChildren($node);
 
       if ($has_active_children && $node->get('moderation_state')->value === 'archived') {
         $form['notice'] = [
@@ -303,7 +312,6 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
         ];
         $form['actions']['submit']['#disabled'] = TRUE;
       }
-
     }
   }
 
@@ -313,31 +321,44 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
   if (str_contains($form_id, 'scheduled_transitions_add_form')) {
     $node = \Drupal::routeMatch()->getParameter('node');
 
-    if ($node instanceof NodeInterface && in_array($node->bundle(), ['topic', 'subtopic']) &&
-      isset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive'])) {
-
+    if ($node instanceof NodeInterface && in_array($node->bundle(), [
+        'topic',
+        'subtopic'
+      ]) && isset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive'])) {
       if (\Drupal::service('topic.manager')->topicHasActiveChildren($node)) {
         unset($form['scheduled_transitions']['new_meta']['transition']['#options']['archive']);
       }
     }
-  }
 
-  // Prevent deletion of Topics or Subtopics if they have active child content.
-  if (in_array($form_id, ['node_topic_delete_form', 'node_subtopic_delete_form'])) {
-    // @phpstan-ignore-next-line.
-    $node = $form_state->getFormObject()->getEntity();
+    $selected_revision = $form_state->getValue('revision');
 
-    if (\Drupal::service('topic.manager')->topicHasActiveChildren($node)) {
-      $form['description'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'p',
-        '#value' => t("This @bundle '%title' cannot be deleted until all child pages have been reallocated to a different topic, archived or deleted.", [
-          '@bundle' => $node->bundle(),
-          '%title' => $node->label(),
-        ]),
-      ];
+    if (!empty($selected_revision)) {
+      if ($form["scheduled_transitions"]["revision"]["#options"][$selected_revision]["state"]["data"] === 'Archived') {
+        // Remove the 'Restore' option from the Execute transition dropdown.
+        unset($form['scheduled_transitions']['new_meta']['transition']['#options']['restore']);
+      }
+    }
 
-      $form['actions']['submit']['#disabled'] = TRUE;
+    // Prevent deletion of Topics or Subtopics if they have active child content.
+    if (in_array($form_id, [
+      'node_topic_delete_form',
+      'node_subtopic_delete_form'
+    ])) {
+      // @phpstan-ignore-next-line.
+      $node = $form_state->getFormObject()->getEntity();
+
+      if (\Drupal::service('topic.manager')->topicHasActiveChildren($node)) {
+        $form['description'] = [
+          '#type' => 'html_tag',
+          '#tag' => 'p',
+          '#value' => t("This @bundle '%title' cannot be deleted until all child pages have been reallocated to a different topic, archived or deleted.", [
+            '@bundle' => $node->bundle(),
+            '%title' => $node->label(),
+          ]),
+        ];
+
+        $form['actions']['submit']['#disabled'] = TRUE;
+      }
     }
   }
 }
