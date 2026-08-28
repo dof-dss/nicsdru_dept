@@ -74,7 +74,10 @@ final class TopicsCommands extends DrushCommands {
         $this->io()->writeln('- ' . $child->label());
 
         $child = $this->siteTopicsSanitise($child, $node_storage);
-        if ($child->get('moderation_state')->getString() != 'archived') {
+        if ($child->get('moderation_state')->getString() === 'archived') {
+          $this->topicManager->removeChild($child, $topic);
+        }
+        else {
           $this->topicManager->processChild($child);
         }
       }
@@ -92,7 +95,10 @@ final class TopicsCommands extends DrushCommands {
 
         $child = $this->siteTopicsSanitise($child, $node_storage);
 
-        if ($child->get('moderation_state')->getString() != 'archived') {
+        if ($child->get('moderation_state')->getString() === 'archived') {
+          $this->topicManager->removeChild($child, $subtopic);
+        }
+        else {
           $this->topicManager->processChild($child);
         }
       }
