@@ -40,6 +40,11 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
+    // Update the order of child content on entity save.
+    // TODO: Only update if the child order has changed.
+    $ordered_nids = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
+    $this->topicManager->reorderChildren($entity, $ordered_nids);
+
     // Resolves an issue that prevented the 'Topics' field from including a
     // newly created topic when adding child content via the moderation sidebar.
     $domain_source = $entity->get('field_domain_source')->getValue();
