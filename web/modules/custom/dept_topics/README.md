@@ -6,6 +6,8 @@
 **Child node** - the node that is referenced in a topic/subtopic node.
 Not all nodes are available as a child node to a topic/subtopic
 
+**Active children** - Denotes a topic with child nodes that are not in archived moderation state
+
 Topic / Subtopic both have an entity reference field (field_topic_content)
 for storing links to child content for that topic.
 

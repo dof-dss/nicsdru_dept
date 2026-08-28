@@ -204,21 +204,16 @@ final class ManageTopicContentForm extends FormBase {
 
     $topic = $this->entityTypeManager->getStorage('node')->load($topic_nid);
 
-    // TODO: Do a diff on the arrays and only update the field if different.
-    $field_topic_content_updated = [];
+    $ordered_nids = [];
 
-    // Build our entity reference array and overwrite the existing value.
     if (is_array($child_content)) {
-      foreach (array_keys($child_content) as $nid) {
-        $field_topic_content_updated[] = ['target_id' => $nid];
-      }
+      // Sort by the submitted weighset by table drag.
+      uasort($child_content, static fn (array $a, array $b) => $a['weight'] <=> $b['weight']);
+      $ordered_nids = array_keys($child_content);
     }
 
-    $topic->get('field_topic_content')->setValue($field_topic_content_updated);
-    $topic->setRevisionTranslationAffected(TRUE);
-    $topic->setRevisionCreationTime(\Drupal::time()->getRequestTime());
-    $topic->setRevisionUserId(\Drupal::currentUser()->id());
-    $topic->save();
+    $this->topicManager->reorderChildren($topic, $ordered_nids);
+
     $form_state->setRedirect('entity.node.canonical', ['node' => $topic_nid]);
   }
 

@@ -389,6 +389,64 @@ final class TopicManager {
   }
 
   /**
+   * Stores the display order of child content nids of a topic.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic node whose child order is being updated.
+   * @param array $ordered_child_nids
+   *   The child node IDs, in their new display order.
+   */
+  public function reorderChildren(ContentEntityInterface $topic, array $ordered_child_nids): void {
+    $ordered_child_nids = array_values($ordered_child_nids);
+
+    // Default (current) revision table.
+    $this->connection->delete('node__field_topic_content')
+      ->condition('entity_id', $topic->id())
+      ->execute();
+
+    // Published topic node contents.
+    foreach ($ordered_child_nids as $delta => $child_nid) {
+      $this->connection->insert('node__field_topic_content')
+        ->fields([
+          'bundle' => $topic->bundle(),
+          'deleted' => 0,
+          'entity_id' => $topic->id(),
+          'revision_id' => $topic->getRevisionId(),
+          'langcode' => 'en',
+          'delta' => $delta,
+          'field_topic_content_target_id' => $child_nid,
+        ])
+        ->execute();
+    }
+
+    $topic_revisions = $this->entityTypeManager->getStorage('node')->revisionIds($topic);
+
+    // Topic Revisions.
+    foreach ($topic_revisions as $revision_id) {
+      $this->connection->delete('node_revision__field_topic_content')
+        ->condition('entity_id', $topic->id())
+        ->condition('revision_id', $revision_id)
+        ->execute();
+
+      foreach ($ordered_child_nids as $delta => $child_nid) {
+        $this->connection->insert('node_revision__field_topic_content')
+          ->fields([
+            'bundle' => $topic->bundle(),
+            'deleted' => 0,
+            'entity_id' => $topic->id(),
+            'revision_id' => $revision_id,
+            'langcode' => 'en',
+            'delta' => $delta,
+            'field_topic_content_target_id' => $child_nid,
+          ])
+          ->execute();
+      }
+    }
+
+    $this->clearCache(NULL, $topic);
+  }
+
+  /**
    * Determines if a given topic has child nodes that are
    * in 'published', 'draft' or 'needs review' states.
    *
@@ -413,7 +471,7 @@ final class TopicManager {
   }
 
   /**
-   * Inserts an entity reference value for a given child and topic
+   * Inserts an entity reference value for a given child and topic.
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $child
    *   The child node (target) to add.
@@ -444,15 +502,16 @@ final class TopicManager {
    *
    * Clear the cache for given child and topic nodes.
    *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $child
-   *   The child node to clear cache.
+   * @param \Drupal\Core\Entity\ContentEntityInterface|null $child
+   *   The child node to clear cache, or NULL if the change isn't specific
+   *   to a single child (e.g. reordering).
    * @param \Drupal\Core\Entity\ContentEntityInterface $topic
    *   The topic node to clear cache.
    */
-  protected function clearCache(ContentEntityInterface $child, ContentEntityInterface $topic) {
+  protected function clearCache(?ContentEntityInterface $child, ContentEntityInterface $topic) {
     $tags = ['node:' . $topic->id()];
 
-    if (!empty($child->id())) {
+    if ($child !== NULL && !empty($child->id())) {
       $tags[] = 'node:' . $child->id();
     }
 
