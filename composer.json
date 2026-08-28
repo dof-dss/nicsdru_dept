@@ -344,6 +344,9 @@
                 "Stop off-canvas.js causing stuttering on moderation sidebar": "https://git.drupalcode.org/project/drupal/-/merge_requests/8209.diff",
                 "Toggle icon for toolbar menu missing for all tabs except Manage": "https://git.drupalcode.org/project/drupal/-/merge_requests/3894.diff"
             },
+            "drupal/date_filter": {
+                "TypeError: array_key_exists(): Argument #2 ($array) must be of type array, string given": "https://www.drupal.org/files/issues/2024-02-06/3385419-typeerror-arraykeyexists-argument.patch"
+            },
             "drupal/domain_entity": {
                 "Domain Access field: machine name should match machine name declared on Domain Access module": "https://www.drupal.org/files/issues/2023-07-11/3129265-16.patch"
             },
