@@ -40,8 +40,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // Update the order of child content on entity save.
-    // TODO: Only update if the child order has changed.
+    // Save child order to all Topic revisions (only if the order has changed).
     $ordered_nids = array_column($entity->get('field_topic_content')->getValue(), 'target_id');
     $this->topicManager->reorderChildren($entity, $ordered_nids);
 

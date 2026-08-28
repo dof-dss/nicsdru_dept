@@ -399,6 +399,19 @@ final class TopicManager {
   public function reorderChildren(ContentEntityInterface $topic, array $ordered_child_nids): void {
     $ordered_child_nids = array_values($ordered_child_nids);
 
+    // Fetch the current child content order to see if we need to update.
+    $current_nids = $this->connection->select('node__field_topic_content', 'tc')
+      ->fields('tc', ['field_topic_content_target_id'])
+      ->condition('entity_id', $topic->id())
+      ->orderBy('delta', 'ASC')
+      ->execute()
+      ->fetchCol();
+
+    // Type safe comparison of the current vs provided child content order.
+    if (array_map('strval', $current_nids) === array_map('strval', $ordered_child_nids)) {
+      return;
+    }
+
     // Default (current) revision table.
     $this->connection->delete('node__field_topic_content')
       ->condition('entity_id', $topic->id())
