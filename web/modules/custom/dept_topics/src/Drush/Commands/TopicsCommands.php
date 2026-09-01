@@ -73,11 +73,12 @@ final class TopicsCommands extends DrushCommands {
       foreach ($children as $child) {
         $this->io()->writeln('- ' . $child->label());
 
-        $child = $this->siteTopicsSanitise($child, $node_storage);
+        $child = $this->siteTopicsSanitise($child, $node_storage, $saved);
         if ($child->get('moderation_state')->getString() === 'archived') {
           $this->topicManager->removeChild($child, $topic);
         }
-        else {
+        elseif (!$saved) {
+          // Process the child if it wasn't already done so by siteTopicsSanitise().
           $this->topicManager->processChild($child);
         }
       }
@@ -93,12 +94,12 @@ final class TopicsCommands extends DrushCommands {
       foreach ($children as $child) {
         $this->io()->writeln('- ' . $child->id() . ' : ' . $child->label());
 
-        $child = $this->siteTopicsSanitise($child, $node_storage);
+        $child = $this->siteTopicsSanitise($child, $node_storage, $saved);
 
         if ($child->get('moderation_state')->getString() === 'archived') {
           $this->topicManager->removeChild($child, $subtopic);
         }
-        else {
+        elseif (!$saved) {
           $this->topicManager->processChild($child);
         }
       }
@@ -116,9 +117,11 @@ final class TopicsCommands extends DrushCommands {
    *   The child node to sanitise.
    * @param \Drupal\Core\Entity\EntityStorageInterface $node_storage
    *   Drupal core node storage repository.
-   *
+   * @param bool $saved
+   *   Set by reference to TRUE if this call saved the child.
    */
-  protected function siteTopicsSanitise(NodeInterface $child, EntityStorageInterface $node_storage) {
+  protected function siteTopicsSanitise(NodeInterface $child, EntityStorageInterface $node_storage, bool &$saved = FALSE) {
+    $saved = FALSE;
     $updated_site_topics = FALSE;
 
     $topic_ids = array_column($child->get('field_site_topics')->getValue(), 'target_id');
@@ -139,6 +142,8 @@ final class TopicsCommands extends DrushCommands {
       $child->set('field_site_topics', $topic_ids);
       $child->setRevisionLogMessage('Removed parent site topic, only the lowest topic level should be selected.');
       $child->save();
+      // Flag as saved to prevent duplicate processing of the child via processChild().
+      $saved = TRUE;
     }
 
     return $child;
