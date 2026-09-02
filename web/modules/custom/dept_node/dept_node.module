@@ -381,6 +381,9 @@ function dept_node_should_scope_node_list_cache_tag(ViewExecutable $view) {
  * Implements hook_entity_insert().
  */
 function dept_node_entity_insert(EntityInterface $entity) {
+  if (getenv('BYPASS_CACHE') === "TRUE") {
+    return;
+  }
   dept_node_invalidate_domain_list_cache($entity);
   dept_node_invalidate_latest_news_cache($entity);
   dept_node_invalidate_related_content_cache($entity);
@@ -390,6 +393,9 @@ function dept_node_entity_insert(EntityInterface $entity) {
  * Implements hook_entity_update().
  */
 function dept_node_entity_update(EntityInterface $entity) {
+  if (getenv('BYPASS_CACHE') === "TRUE") {
+    return;
+  }
   dept_node_invalidate_domain_list_cache($entity);
   dept_node_invalidate_latest_news_cache($entity);
   dept_node_invalidate_related_content_cache($entity);
@@ -399,6 +405,9 @@ function dept_node_entity_update(EntityInterface $entity) {
  * Implements hook_entity_delete().
  */
 function dept_node_entity_delete(EntityInterface $entity) {
+  if (getenv('BYPASS_CACHE') === "TRUE") {
+    return;
+  }
   dept_node_invalidate_domain_list_cache($entity);
   dept_node_invalidate_latest_news_cache($entity);
   dept_node_invalidate_related_content_cache($entity);

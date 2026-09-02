@@ -78,6 +78,10 @@ final class TopicsCommands extends DrushCommands {
       'finished' => [self::class, 'batchFinished'],
     ]);
 
+    // Disable custom cache processes while performing the batch to save memory.
+    putenv("BYPASS_CACHE=TRUE");
+    $_SERVER['BYPASS_CACHE'] = 'TRUE';
+    $_ENV['BYPASS_CACHE'] = 'TRUE';
     drush_backend_batch_process();
   }
 
@@ -126,13 +130,17 @@ final class TopicsCommands extends DrushCommands {
    *   Results accumulated via $context['results'] in batchProcessTopic().
    */
   public static function batchFinished(bool $success, array $results): void {
+    // Restore cache processes.
+    putenv("BYPASS_CACHE");
+    unset($_SERVER['BYPASS_CACHE'], $_ENV['BYPASS_CACHE']);
+
     if ($success) {
-      \Drupal::messenger()->addStatus('Processed @count topics/subtopics.', [
-        '@count' => $results['processed'] ?? 0,
-      ]);
+      \Drupal::messenger()->addStatus('###### Transform Finished ######');
+      \Drupal::messenger()->addStatus('Processed ' . $results['processed'] . ' topics/subtopics.');
     }
     else {
-      \Drupal::messenger()->addError('The topics:transform batch did not complete successfully.');
+      \Drupal::messenger()->addStatus('###### Transform Failed ######');
+      \Drupal::messenger()->addError('The batch did not complete successfully.');
     }
   }
 
