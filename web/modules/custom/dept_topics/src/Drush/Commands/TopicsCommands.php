@@ -27,7 +27,6 @@ final class TopicsCommands extends DrushCommands {
    */
   public function __construct(
     private readonly Token $token,
-    private readonly TopicManager $topicManager,
     private readonly Connection $connection,
     private readonly EntityTypeManagerInterface $entityTypeManager,
   ) {
@@ -40,7 +39,6 @@ final class TopicsCommands extends DrushCommands {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('token'),
-      $container->get('topic.manager'),
       $container->get('database'),
       $container->get('entity_type.manager'),
     );
@@ -50,10 +48,9 @@ final class TopicsCommands extends DrushCommands {
    * Update existing topics content to use the new topics system.
    */
   #[CLI\Command(name: 'topics:transform', aliases: ['tt'])]
-  public function transform() {
+  public function transform(): void {
 
-    $log = [];
-
+    // Backup topic content data.
     foreach (self::DB_TOPIC_CONTENT_TABLES as $db_table) {
       $original_table = $db_table . "_original";
       $this->connection->query("DROP TABLE IF EXISTS {$original_table}");
@@ -63,50 +60,79 @@ final class TopicsCommands extends DrushCommands {
 
     $node_storage = $this->entityTypeManager->getStorage('node');
 
-    $topics = $node_storage->loadByProperties(
-      ['type' => 'topic']
-    );
+    $operations = [];
+    foreach (['topic', 'subtopic'] as $bundle) {
+      $nids = $node_storage->getQuery()
+        ->accessCheck(FALSE)
+        ->condition('type', $bundle)
+        ->execute();
 
-    foreach ($topics as $topic) {
-      $this->io()->writeln($topic->id() . ' : ' . $topic->label());
-      $children = $topic->get('field_topic_content')->referencedEntities();
-      foreach ($children as $child) {
-        $this->io()->writeln('- ' . $child->label());
-
-        $child = $this->siteTopicsSanitise($child, $node_storage, $saved);
-        if ($child->get('moderation_state')->getString() === 'archived') {
-          $this->topicManager->removeChild($child, $topic);
-        }
-        elseif (!$saved) {
-          // Process the child if it wasn't already done so by siteTopicsSanitise().
-          $this->topicManager->processChild($child);
-        }
+      foreach ($nids as $nid) {
+        $operations[] = [[self::class, 'batchProcessTopic'], [$nid]];
       }
     }
 
-    $subtopics = $node_storage->loadByProperties(
-      ['type' => 'subtopic']
-    );
+    batch_set([
+      'title' => 'Transforming topics content...',
+      'operations' => $operations,
+      'finished' => [self::class, 'batchFinished'],
+    ]);
 
-    foreach ($subtopics as $subtopic) {
-      $this->io()->writeln($subtopic->id() . ' : ' . $subtopic->label());
-      $children = $subtopic->get('field_topic_content')->referencedEntities();
-      foreach ($children as $child) {
-        $this->io()->writeln('- ' . $child->id() . ' : ' . $child->label());
+    drush_backend_batch_process();
+  }
 
-        $child = $this->siteTopicsSanitise($child, $node_storage, $saved);
+  /**
+   * Processes a topic/subtopic's child content.
+   *
+   * @param int $nid
+   *   The topic/subtopic node ID to process.
+   * @param array $context
+   *   The batch context.
+   */
+  public static function batchProcessTopic(int $nid, array &$context): void {
+    $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+    /** @var \Drupal\dept_topics\TopicManager $topic_manager */
+    $topic_manager = \Drupal::service('topic.manager');
 
-        if ($child->get('moderation_state')->getString() === 'archived') {
-          $this->topicManager->removeChild($child, $subtopic);
-        }
-        elseif (!$saved) {
-          $this->topicManager->processChild($child);
-        }
+    $topic = $node_storage->load($nid);
+    if ($topic === NULL) {
+      return;
+    }
+
+    $context['message'] = $topic->id() . ' : ' . $topic->label();
+
+    $children = $topic->get('field_topic_content')->referencedEntities();
+    $saved = FALSE;
+    foreach ($children as $child) {
+      $child = self::siteTopicsSanitise($child, $node_storage, $topic_manager, $saved);
+      if ($child->get('moderation_state')->getString() === 'archived') {
+        $topic_manager->removeChild($child, $topic);
+      }
+      elseif (!$saved) {
+        // Process the child if it wasn't already done so by siteTopicsSanitise().
+        $topic_manager->processChild($child);
       }
     }
 
-    foreach ($log as $entry) {
-      $this->io()->writeln('Topic: ' . $entry['topic'] . ' -- Child: ' . $entry['child'] . ' -- ' . $entry['action']);
+    $context['results']['processed'] = ($context['results']['processed'] ?? 0) + 1;
+  }
+
+  /**
+   * Batch 'finished' callback.
+   *
+   * @param bool $success
+   *   Whether the batch completed without a fatal error.
+   * @param array $results
+   *   Results accumulated via $context['results'] in batchProcessTopic().
+   */
+  public static function batchFinished(bool $success, array $results): void {
+    if ($success) {
+      \Drupal::messenger()->addStatus('Processed @count topics/subtopics.', [
+        '@count' => $results['processed'] ?? 0,
+      ]);
+    }
+    else {
+      \Drupal::messenger()->addError('The topics:transform batch did not complete successfully.');
     }
   }
 
@@ -117,10 +143,12 @@ final class TopicsCommands extends DrushCommands {
    *   The child node to sanitise.
    * @param \Drupal\Core\Entity\EntityStorageInterface $node_storage
    *   Drupal core node storage repository.
+   * @param \Drupal\dept_topics\TopicManager $topic_manager
+   *   The topic manager service.
    * @param bool $saved
    *   Set by reference to TRUE if this call saved the child.
    */
-  protected function siteTopicsSanitise(NodeInterface $child, EntityStorageInterface $node_storage, bool &$saved = FALSE) {
+  protected static function siteTopicsSanitise(NodeInterface $child, EntityStorageInterface $node_storage, TopicManager $topic_manager, bool &$saved = FALSE): NodeInterface {
     $saved = FALSE;
     $updated_site_topics = FALSE;
 
@@ -128,7 +156,7 @@ final class TopicsCommands extends DrushCommands {
 
     foreach ($topic_ids as $topic_id) {
       $topic_node = $node_storage->load($topic_id);
-      $parents = array_keys($this->topicManager->getParentNodes($topic_node));
+      $parents = array_keys($topic_manager->getParentNodes($topic_node));
 
       foreach ($parents as $parent) {
         if (($index = array_search($parent, $topic_ids)) !== FALSE) {
