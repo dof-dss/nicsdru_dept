@@ -12,7 +12,7 @@ field_name: field_topic_content
 entity_type: node
 bundle: subtopic
 label: 'Subtopic content'
-description: ''
+description: 'List of content to display for this subtopic. Order will be updated across all revisions.'
 required: false
 translatable: true
 default_value: {  }
@@ -27,6 +27,11 @@ settings:
     sort:
       field: _none
       direction: ASC
-    auto_create: false
+    auto_create: 0
     auto_create_bundle: application
+    label_formatter: title
+    result_amount: '0'
+    same_language_only: 0
+    published_only: 0
+    disable_parent_entity_selection: 0
 field_type: entity_reference

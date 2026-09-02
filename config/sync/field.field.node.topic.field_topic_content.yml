@@ -14,7 +14,7 @@ field_name: field_topic_content
 entity_type: node
 bundle: topic
 label: 'Topic content'
-description: 'List of content to display for this topic'
+description: 'List of content to display for this topic. Order will be updated across all revisions.'
 required: false
 translatable: false
 default_value: {  }
@@ -30,6 +30,11 @@ settings:
     sort:
       field: _none
       direction: ASC
-    auto_create: false
+    auto_create: 0
     auto_create_bundle: application
+    label_formatter: title
+    result_amount: '0'
+    same_language_only: 0
+    published_only: 0
+    disable_parent_entity_selection: 0
 field_type: entity_reference
