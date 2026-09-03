@@ -20,35 +20,7 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
   // NOTE: See also dept_postprocess for additional moderation sidebar changes.
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
-
-    $has_active_children = \Drupal::service('topic.manager')->topicHasActiveChildren($context);
-
-    // If the topic has active child content, disable the archive button.
-    if (isset($build["actions"]["primary"]["quick_draft_form"]) &&
-      array_key_exists('archive', $build["actions"]["primary"]["quick_draft_form"]) &&
-      $has_active_children) {
-
-      $build["actions"]["primary"]["quick_draft_form"]['archive']['#attributes']['disabled'] = 'disabled';
-      $build["actions"]["primary"]["quick_draft_form"]['archive']['#attributes']['style'] = "cursor: not-allowed";
-      $build["actions"]["primary"]["quick_draft_form"]['archive']['#attributes']['title'] = "This content has active child pages. It cannot be archived until child pages have been reallocated to a different topic, archived or deleted.";
-    }
-
-    // If the topic has active child content, disable the delete button.
-    if (isset($build["actions"]["primary"]["delete"]) && $has_active_children) {
-      $build["actions"]["primary"]["delete"] = [
-        '#type' => 'html_tag',
-        '#tag' => 'div',
-        '#value' => t('Delete'),
-        '#weight' => 1,
-        '#attributes' => [
-          'class' => ['moderation-sidebar-link', 'button', 'button--danger'],
-          'disabled' => 'disabled',
-          'style' => "cursor: not-allowed",
-          'title' => t('This content has active child pages. It cannot be deleted until child pages have been reallocated to a different topic, archived or deleted.'),
-        ],
-      ];
-    }
-
+    
     $user = Drupal::currentUser();
 
     // See also: dept_postprocess_moderation_sidebar_alter()
