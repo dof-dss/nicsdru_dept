@@ -137,7 +137,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: search_api_none
+        type: search_api_tag
         options: {  }
       empty: {  }
       sorts:
@@ -867,6 +867,7 @@ display:
         - url.site
         - 'user.node_grants:view'
       tags:
+        - 'config:facets.facet.consultation_department'
         - 'config:facets.facet.consultation_publication_date'
         - 'config:facets.facet.consultation_topic'
         - 'config:field.storage.node.body'
