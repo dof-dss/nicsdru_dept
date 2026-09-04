@@ -222,6 +222,9 @@ final class TopicManager {
             'target_id' => $entity->id()
           ]);
           $topic_node->setRevisionLogMessage('Added child: (' . $entity->id() . ') ' . $entity->label());
+          $topic_node->setRevisionTranslationAffected(TRUE);
+          $topic_node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
+          $topic_node->setRevisionUserId(\Drupal::currentUser()->id());
           $topic_node->save();
         }
       }
@@ -248,6 +251,9 @@ final class TopicManager {
 
         if ($child_removed) {
           $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
+          $topic_node->setRevisionTranslationAffected(TRUE);
+          $topic_node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
+          $topic_node->setRevisionUserId(\Drupal::currentUser()->id());
           $topic_node->save();
         }
       }
@@ -278,6 +284,9 @@ final class TopicManager {
         }
 
         $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
+        $topic_node->setRevisionTranslationAffected(TRUE);
+        $topic_node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
+        $topic_node->setRevisionUserId(\Drupal::currentUser()->id());
         $topic_node->save();
       }
     }
