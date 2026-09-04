@@ -24,11 +24,24 @@ class HeaderSearchCacheTagsSubscriber implements EventSubscriberInterface {
       return;
     }
 
+    $route_name = \Drupal::routeMatch()->getRouteName();
+
     // Keep autocomplete itself and administration pages fully cache-tagged.
     // Public pages keep entity-specific tags, but not whole-index tags that
     // purge unrelated domains when any indexed content changes.
-    if (\Drupal::routeMatch()->getRouteName() === 'search_api_autocomplete.autocomplete'
+    if ($route_name === 'search_api_autocomplete.autocomplete'
       || \Drupal::service('router.admin_context')->isAdminRoute()) {
+      return;
+    }
+
+    $search_views = [
+      'view.news_search.news_search',
+      'view.publications_search.publications_search',
+      'view.consultations_search.consultations_search',
+    ];
+
+    if (in_array($route_name, $search_views, TRUE)) {
+      // Do not strip broad search tags from search pages.
       return;
     }
 
