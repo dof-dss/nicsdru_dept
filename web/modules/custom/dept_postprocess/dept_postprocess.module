@@ -54,24 +54,25 @@ function dept_postprocess_moderation_sidebar_alter(&$build, &$context) {
 
     $has_active_children = \Drupal::service('topic.manager')->topicHasActiveChildren($context);
 
-    // If the topic has active child content, disable the archive button. (See also dept_postprocess)
-    if (isset($build["actions"]["primary"]["quick_draft_form"]) &&
-      array_key_exists('archive', $build["actions"]["primary"]["quick_draft_form"]) &&
-      $has_active_children) {
+    // If the topic has active child content, replace (disable) the archive button.
+    if ($has_active_children &&
+      ((isset($build["actions"]["primary"]["quick_draft_form"]) &&
+        array_key_exists('archive', $build["actions"]["primary"]["quick_draft_form"])) ||
+      (isset($build["actions"]["primary"]) &&
+        array_key_exists('archive', $build["actions"]["primary"])))) {
 
-      $build["actions"]["primary"]["quick_draft_form"]['archive']['#attributes']['disabled'] = 'disabled';
-      $build["actions"]["primary"]["quick_draft_form"]['archive']['#attributes']['style'] = "cursor: not-allowed";
-      $build["actions"]["primary"]["quick_draft_form"]['archive']['#attributes']['title'] = "This content has active child pages. It cannot be archived until child pages have been reallocated to a different topic, archived or deleted.";
-    }
-
-    // Handles 'archive' when viewing a 'Draft available' revision.
-    if (isset($build["actions"]["primary"]) &&
-      array_key_exists('archive', $build["actions"]["primary"]) &&
-      $has_active_children) {
-
-      $build["actions"]["primary"]['archive']['#attributes']['disabled'] = 'disabled';
-      $build["actions"]["primary"]['archive']['#attributes']['style'] = "cursor: not-allowed";
-      $build["actions"]["primary"]['archive']['#attributes']['title'] = "This content has active child pages. It cannot be archived until child pages have been reallocated to a different topic, archived or deleted.";
+      $build["actions"]["primary"]["quick_draft_form"]['archive'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'div',
+        '#value' => t('Archive'),
+        '#weight' => 1,
+        '#attributes' => [
+          'class' => ['moderation-sidebar-link', 'button', ''],
+          'disabled' => 'disabled',
+          'style' => "cursor: not-allowed",
+          'title' => t('This content has active child pages. It cannot be archived until child pages have been reallocated to a different topic, archived or deleted.'),
+        ],
+      ];
     }
 
     // If the topic has active child content, disable the delete button.
