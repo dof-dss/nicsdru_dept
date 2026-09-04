@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab7a2ef56f6211be1c40e539863e83c3",
+    "content-hash": "51373e32f942b5b237fd7fce202810ea",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1427,22 +1427,23 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "10.7.3",
+            "version": "dev-10.x-dev",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "a04e64af4e1f2bb19b693915ac9dc641a6d8a004"
+                "reference": "8eb6146f308631c4c319ad975a1dcc48bea41b5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/a04e64af4e1f2bb19b693915ac9dc641a6d8a004",
-                "reference": "a04e64af4e1f2bb19b693915ac9dc641a6d8a004",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/8eb6146f308631c4c319ad975a1dcc48bea41b5f",
+                "reference": "8eb6146f308631c4c319ad975a1dcc48bea41b5f",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "^2.0",
                 "drupal/core": "^10"
             },
+            "default-branch": true,
             "bin": [
                 "bin/dof-dss-filehash",
                 "bin/dof-dss-mediahasher"
@@ -1452,25 +1453,26 @@
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2026-08-05T13:21:53+00:00"
+            "time": "2026-08-28T13:06:57+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
-            "version": "10.1.6",
+            "version": "dev-10.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dof-dss/nicsdru_origins_theme.git",
-                "reference": "5083b09bf503fcff1fd9283fd8d5561798a19e01"
+                "reference": "030e7b7d681ec4c2963f9c37c9015fa7c24f40e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_theme/zipball/5083b09bf503fcff1fd9283fd8d5561798a19e01",
-                "reference": "5083b09bf503fcff1fd9283fd8d5561798a19e01",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_theme/zipball/030e7b7d681ec4c2963f9c37c9015fa7c24f40e0",
+                "reference": "030e7b7d681ec4c2963f9c37c9015fa7c24f40e0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0"
             },
+            "default-branch": true,
             "type": "drupal-custom-theme",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1489,9 +1491,9 @@
                 "theme"
             ],
             "support": {
-                "source": "https://github.com/dof-dss/nicsdru_origins_theme/tree/10.1.6"
+                "source": "https://github.com/dof-dss/nicsdru_origins_theme/tree/10.x-dev"
             },
-            "time": "2025-01-24T12:20:03+00:00"
+            "time": "2026-06-29T14:46:37+00:00"
         },
         {
             "name": "drupal/a11y_form_helpers",
@@ -15253,16 +15255,16 @@
         },
         {
             "name": "vardot/ckeditor5-anchor-drupal",
-            "version": "2.0.4",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Vardot/ckeditor5-anchor-drupal.git",
-                "reference": "00fbfd8d63ca29c1efd9b327ea973f99f78e9f16"
+                "reference": "3da1fa260dd4102635396445dfbd7c37b1b0892f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vardot/ckeditor5-anchor-drupal/zipball/00fbfd8d63ca29c1efd9b327ea973f99f78e9f16",
-                "reference": "00fbfd8d63ca29c1efd9b327ea973f99f78e9f16",
+                "url": "https://api.github.com/repos/Vardot/ckeditor5-anchor-drupal/zipball/3da1fa260dd4102635396445dfbd7c37b1b0892f",
+                "reference": "3da1fa260dd4102635396445dfbd7c37b1b0892f",
                 "shasum": ""
             },
             "require": {
@@ -15291,7 +15293,7 @@
                 "issues": "http://drupal.org/project/issues/anchor_link",
                 "source": "http://cgit.drupalcode.org/anchor_link"
             },
-            "time": "2025-12-09T10:59:53+00:00"
+            "time": "2026-08-25T08:25:36+00:00"
         },
         {
             "name": "webflo/drupal-finder",
@@ -22530,6 +22532,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "dof-dss/nicsdru_origins_modules": 20,
+        "dof-dss/nicsdru_origins_theme": 20,
         "drupal/block_field": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
@@ -22551,5 +22555,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
