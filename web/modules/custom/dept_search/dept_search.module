@@ -12,6 +12,7 @@ use Drupal\block\Entity\Block;
 use Drupal\dept_core\Entity\Department;
 use Drupal\facets\FacetInterface;
 use Drupal\facets_summary\Entity\FacetsSummary;
+use Drupal\search_api\IndexInterface;
 use Drupal\views\Plugin\views\cache\CachePluginBase;
 use Drupal\views\ViewExecutable;
 
@@ -174,7 +175,7 @@ function dept_search_views_post_render(ViewExecutable $view, &$output, CachePlug
 /**
  * Implements hook_search_api_items_indexed().
  */
-function dept_search_search_api_items_indexed(\Drupal\search_api\IndexInterface $index, array $item_ids) {
+function dept_search_search_api_items_indexed(IndexInterface $index, array $item_ids) {
 
   // Invalidate custom dept_search_api_list cache tags added to
   // search_api based views in dept_search_views_post_render().
