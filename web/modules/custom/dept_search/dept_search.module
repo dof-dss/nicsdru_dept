@@ -181,14 +181,27 @@ function dept_search_search_api_items_indexed(IndexInterface $index, array $item
   // search_api based views in dept_search_views_post_render().
   $index_name = $index->id();
   $tags = [];
+  $node_ids = [];
+
+  // Extract node IDs from Search API item IDs (format: "entity:node/{nid}:{langcode}").
+  foreach ($item_ids as $item_id) {
+    // Parse the item ID to extract the node ID
+    if (preg_match('/^entity:node\/(\d+):/', $item_id, $matches)) {
+      $node_ids[] = $matches[1];
+    }
+  }
+
+  if (empty($node_ids)) {
+    return;
+  }
 
   // Load all indexed items to get their domain source.
-  $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($item_ids);
+  $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($node_ids);
 
   foreach ($nodes as $node) {
     // Get the domain source field from the node.
     if ($node->hasField('field_domain_source')) {
-      $domain_id = $node->get('field_domain_source')->getString();
+      $domain_id = $node->get('field_domain_source')->referencedEntities()[0]->id();
       if (!empty($domain_id)) {
         $tags[] = 'dept_search_api_list:' . $domain_id . ':' . $index_name;
       }
