@@ -5,6 +5,7 @@
  * Search related overrides and preprocessing.
  */
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Drupal\dept_search\Cache\BroadSearchCacheTags;
 use Drupal\block\Entity\Block;
@@ -143,9 +144,6 @@ function dept_search_views_pre_view(ViewExecutable $view, $display_id, array &$a
  * Implements hook_views_post_render().
  */
 function dept_search_views_post_render(ViewExecutable $view, &$output, CachePluginBase $cache) {
-  if ($view->id() !== 'search' || $view->current_display !== 'site_search_embed') {
-    return;
-  }
 
   if (!is_array($output)) {
     return;
@@ -153,9 +151,52 @@ function dept_search_views_post_render(ViewExecutable $view, &$output, CachePlug
 
   // The header search only renders a form. Its cached page shell does not need
   // to be invalidated when indexed content or autocomplete suggestions change.
-  $output['#cache']['tags'] = BroadSearchCacheTags::removeBroadTags(
-    $output['#cache']['tags'] ?? []
-  );
+  if ($view->id() === 'search' && $view->current_display === 'site_search_embed') {
+    $output['#cache']['tags'] = BroadSearchCacheTags::removeBroadTags(
+      $output['#cache']['tags'] ?? []
+    );
+    return;
+  }
+
+  // Add a domain-specific search_api_list cache tag to search_api based views.
+  $base_table = $view->storage->get('base_table');
+
+  if (strpos($base_table, 'search_api_index_') === 0) {
+    // Add a domain-specific search_api_list cache tag.
+    $active_domain = \Drupal::service('domain.negotiator')->getActiveDomain();
+
+    // Extract the index name from 'search_api_index_{index_name}'
+    $index_name = substr($base_table, strlen('search_api_index_'));
+    $output['#cache']['tags'][] = 'dept_search_api_list:' . $active_domain->id() . ':' . $index_name;
+  }
+}
+
+/**
+ * Implements hook_search_api_items_indexed().
+ */
+function dept_search_search_api_items_indexed(\Drupal\search_api\IndexInterface $index, array $item_ids) {
+
+  // Invalidate custom dept_search_api_list cache tags added to
+  // search_api based views in dept_search_views_post_render().
+  $index_name = $index->id();
+  $tags = [];
+
+  // Load all indexed items to get their domain source
+  $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($item_ids);
+
+  foreach ($nodes as $node) {
+    // Get the domain source field from the node
+    if ($node->hasField('field_domain_source')) {
+      $domain_id = $node->get('field_domain_source')->getString();
+      if (!empty($domain_id)) {
+        $tags[] = 'dept_search_api_list:' . $domain_id . ':' . $index_name;
+      }
+    }
+  }
+
+  if (!empty($tags)) {
+    \Drupal::cache('default')->invalidateTags(array_unique($tags));
+  }
 }
 
 /**
