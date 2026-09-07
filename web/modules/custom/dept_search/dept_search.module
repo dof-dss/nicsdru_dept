@@ -196,7 +196,7 @@ function dept_search_search_api_items_indexed(IndexInterface $index, array $item
   }
 
   if (!empty($tags)) {
-    \Drupal::cache('default')->invalidateTags(array_unique($tags));
+    Cache::invalidateTags(array_unique($tags));
   }
 }
 
