@@ -6,12 +6,14 @@
  */
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\dept_search\Cache\BroadSearchCacheTags;
 use Drupal\block\Entity\Block;
 use Drupal\dept_core\Entity\Department;
 use Drupal\facets\FacetInterface;
 use Drupal\facets_summary\Entity\FacetsSummary;
+use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\views\Plugin\views\cache\CachePluginBase;
 use Drupal\views\ViewExecutable;
@@ -159,16 +161,17 @@ function dept_search_views_post_render(ViewExecutable $view, &$output, CachePlug
     return;
   }
 
-  // Add a domain-specific search_api_list cache tag to search_api based views.
+  // Add a department-specific search_api_list cache tag to search_api views.
   $base_table = $view->storage->get('base_table');
 
   if (strpos($base_table, 'search_api_index_') === 0) {
-    // Add a domain-specific search_api_list cache tag.
-    $active_domain = \Drupal::service('domain.negotiator')->getActiveDomain();
+    // Add a department-specific search_api_list cache tag.
+    /** @var Drupal\dept_core\Entity\Department $active_dept */
+    $active_dept = \Drupal::service('department.manager')->getCurrentDepartment();
 
     // Extract the index name from 'search_api_index_{index_name}'.
     $index_name = substr($base_table, strlen('search_api_index_'));
-    $output['#cache']['tags'][] = 'dept_search_api_list:' . $active_domain->id() . ':' . $index_name;
+    $output['#cache']['tags'][] = 'dept_search_api_list:' . $active_dept->id() . ':' . $index_name;
   }
 }
 
@@ -176,7 +179,6 @@ function dept_search_views_post_render(ViewExecutable $view, &$output, CachePlug
  * Implements hook_search_api_items_indexed().
  */
 function dept_search_search_api_items_indexed(IndexInterface $index, array $item_ids) {
-
   // Invalidate custom dept_search_api_list cache tags added to
   // search_api based views in dept_search_views_post_render().
   $index_name = $index->id();
@@ -194,21 +196,82 @@ function dept_search_search_api_items_indexed(IndexInterface $index, array $item
     return;
   }
 
-  // Load all indexed items to get their domain source.
+  // Load all indexed items to get referenced domains.
   $nodes = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($node_ids);
 
   foreach ($nodes as $node) {
-    // Get the domain source field from the node.
-    if ($node->hasField('field_domain_source')) {
-      $domain_id = $node->get('field_domain_source')->referencedEntities()[0]->id();
-      if (!empty($domain_id)) {
-        $tags[] = 'dept_search_api_list:' . $domain_id . ':' . $index_name;
+    // A node can be assigned to multiple domains, so we need to invalidate cache for each.
+    $referenced = $node->hasField('field_domain_access') ? $node->get('field_domain_access')->referencedEntities() : [];
+    foreach ($referenced as $domain) {
+      if ($domain instanceof EntityInterface) {
+        $domain_id = $domain->id();
+        if (!empty($domain_id)) {
+          $tags[] = 'dept_search_api_list:' . $domain_id . ':' . $index_name;
+        }
       }
     }
   }
 
   if (!empty($tags)) {
     Cache::invalidateTags(array_unique($tags));
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete() for node entities.
+ */
+function dept_search_node_predelete(NodeInterface $node) {
+  // Determine the search api indexes that this node bundle is tracked in and
+  // invalidate the cache tags for those indexes.
+  static $bundle_index_cache = [];
+  static $tags_to_invalidate = [];
+
+  $bundle = $node->bundle();
+
+  // Determine the search indexes that track this node bundle.
+  if (!isset($bundle_index_cache[$bundle])) {
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $tracking_manager */
+    $tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $bundle_index_cache[$bundle] = $tracking_manager->getIndexesForEntity($node);
+  }
+
+  $tracked_indexes = $bundle_index_cache[$bundle];
+
+  if (empty($tracked_indexes)) {
+    return;
+  }
+
+  // Determine the dept_search_api_list cache tags to invalidate.
+  if ($node->hasField('field_domain_access')) {
+    $domains = $node->get('field_domain_access')->referencedEntities() ? $node->get('field_domain_access')->referencedEntities() : [];
+    foreach ($domains as $domain) {
+      $domain_id = $domain->id();
+      if (!empty($domain_id)) {
+        foreach ($tracked_indexes as $index) {
+          $tags_to_invalidate[] = 'dept_search_api_list:' . $domain_id . ':' . $index->id();
+        }
+      }
+    }
+  }
+
+  // For bulk deletions via cli, delay cache tag invalidation
+  // to run at script shutdown.
+  if (PHP_SAPI === 'cli') {
+    static $shutdown_registered = FALSE;
+    if (!$shutdown_registered) {
+      register_shutdown_function(function() use (&$tags_to_invalidate) {
+        if (!empty($tags_to_invalidate)) {
+          Cache::invalidateTags(array_unique($tags_to_invalidate));
+        }
+      });
+      $shutdown_registered = TRUE;
+    }
+  }
+  // Otherwise, invalidate immediately.
+  elseif (!empty($tags_to_invalidate)) {
+    Cache::invalidateTags(array_unique($tags_to_invalidate));
+    // Reset static tag cache for next bulk deletion.
+    $tags_to_invalidate = [];
   }
 }
 
