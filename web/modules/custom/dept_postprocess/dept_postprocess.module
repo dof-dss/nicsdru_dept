@@ -53,15 +53,22 @@ function dept_postprocess_moderation_sidebar_alter(&$build, &$context) {
     in_array($context->bundle(), ['topic', 'subtopic'])) {
 
     $has_active_children = \Drupal::service('topic.manager')->topicHasActiveChildren($context);
+    $archive_path = NULL;
+
+    // Determine the path to the 'Archive' button.
+    if ($has_active_children) {
+      if (isset($build['actions']['primary']['quick_draft_form']) && array_key_exists('archive', $build['actions']['primary']['quick_draft_form'])) {
+        $archive_path = &$build['actions']['primary']['quick_draft_form']['archive'];
+      }
+      elseif (isset($build['actions']['primary']) && array_key_exists('archive', $build['actions']['primary'])) {
+        $archive_path = &$build['actions']['primary']['archive'];
+      }
+    }
 
     // If the topic has active child content, replace (disable) the archive button.
-    if ($has_active_children &&
-      ((isset($build["actions"]["primary"]["quick_draft_form"]) &&
-        array_key_exists('archive', $build["actions"]["primary"]["quick_draft_form"])) ||
-      (isset($build["actions"]["primary"]) &&
-        array_key_exists('archive', $build["actions"]["primary"])))) {
+    if ($archive_path) {
 
-      $build["actions"]["primary"]["quick_draft_form"]['archive'] = [
+      $archive_path = [
         '#type' => 'html_tag',
         '#tag' => 'div',
         '#value' => t('Archive'),
