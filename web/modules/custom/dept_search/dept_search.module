@@ -259,7 +259,7 @@ function dept_search_node_predelete(NodeInterface $node) {
   if (PHP_SAPI === 'cli') {
     static $shutdown_registered = FALSE;
     if (!$shutdown_registered) {
-      register_shutdown_function(function() use (&$tags_to_invalidate) {
+      register_shutdown_function(function () use (&$tags_to_invalidate) {
         if (!empty($tags_to_invalidate)) {
           Cache::invalidateTags(array_unique($tags_to_invalidate));
         }
