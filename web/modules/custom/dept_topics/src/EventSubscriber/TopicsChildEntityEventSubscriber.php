@@ -8,6 +8,7 @@ use Drupal\content_moderation\ModerationInformationInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_topics\TopicManager;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
@@ -17,6 +18,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Entity event subscriber for processing topic child entities.
  */
 final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface {
+
+  use StringTranslationTrait;
+
+  const string UNPUBLISHED_TOPIC_NOTICE = "This content is associated with an unpublished topic (%topic), so visitors have no way to reach it through that topic on the site.";
 
   /**
    * Constructs a TopicsChildEntityEventSubscriber object.
@@ -43,6 +48,11 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
       $topics = $entity->get('field_site_topics')->referencedEntities();
       foreach ($topics as $topic) {
         $this->topicManager->addChild($entity, $topic);
+
+        if (!$topic->isPublished()) {
+          \Drupal::messenger()->addWarning($this->t(self::UNPUBLISHED_TOPIC_NOTICE,
+            ['%topic' => $topic->label()]));
+        }
       }
     }
   }
@@ -58,6 +68,15 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
       return;
     }
 
+    foreach ($entity->get('field_site_topics')->referencedEntities() as $topic) {
+      $current_topics_ids[] = $topic->id();
+
+      if (!$topic->isPublished()) {
+        \Drupal::messenger()->addWarning($this->t(self::UNPUBLISHED_TOPIC_NOTICE,
+          ['%topic' => $topic->label()]));
+      }
+    }
+
     $is_published = $this->moderationInformation->isDefaultRevisionPublished($entity);
     $moderation_state = $entity->get('moderation_state')->getString();
 
@@ -70,13 +89,11 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
       case 'needs_review':
         if ($is_published) {
           $published_entity = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->load($entity->id());
+          $published_topics_ids = array_column($published_entity->get('field_site_topics')->getValue(), 'target_id');
+          sort($current_topics_ids);
+          sort($published_topics_ids);
 
-          $current_topics = array_column($entity->get('field_site_topics')->getValue(), 'target_id');
-          $published_topics = array_column($published_entity->get('field_site_topics')->getValue(), 'target_id');
-          sort($current_topics);
-          sort($published_topics);
-
-          if ($current_topics !== $published_topics) {
+          if ($current_topics_ids !== $published_topics_ids) {
             $this->messenger->addMessage("This content already has a published revision, and the Topics you've selected differ from that published version. The new Topics will not take effect until this revision is published.");
           }
         }
