@@ -17,7 +17,9 @@ use Drupal\node\NodeInterface;
  * Provides methods for managing Topic/Subtopic referenced (child) content.
  */
 final class TopicManager {
+
   const int MAX_TRAVERSAL_DEPTH = 20;
+
 
   /**
    * @var \Drupal\node\NodeStorageInterface
@@ -281,48 +283,6 @@ final class TopicManager {
   }
 
   /**
-   * Returns a list of topics/subtopic that reference the given child node.
-   *
-   * @param \Drupal\node\NodeInterface $child
-   *   The child node to fetch the references for.
-   *
-   * @return array
-   *   List of entity ID's.
-   */
-  protected function fetchTopicsReferencingChild(NodeInterface $child) {
-    $existing_topics = $this->connection->select('node__field_topic_content', 'tc')
-      ->fields('tc', ['entity_id'])
-      ->condition('field_topic_content_target_id', $child->id())
-      ->distinct()
-      ->execute()
-      ->fetchCol();
-
-    $existing_topics_revisions = $this->connection->select('node_revision__field_topic_content', 'tc')
-      ->fields('tc', ['entity_id'])
-      ->condition('field_topic_content_target_id', $child->id())
-      ->distinct()
-      ->execute()
-      ->fetchCol();
-
-    // Create a list of all topic nids (active and revisions) for this child from the results of both the topic_contents tables.
-    return array_unique(array_merge($existing_topics, $existing_topics_revisions));
-  }
-
-  /**
-   * Removes all topic contents reference records for the given child.
-   *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $child
-   *   The child to archive.
-   */
-  public function archiveChild(ContentEntityInterface $child) {
-    $topics = $child->get('field_site_topics')->referencedEntities();
-
-    foreach ($topics as $topic) {
-      $this->removeChild($child, $topic);
-    }
-  }
-
-  /**
    * Adds a child node to the topic contents field of a topic.
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $child
@@ -364,6 +324,48 @@ final class TopicManager {
     }
 
     $this->clearCache($child, $topic);
+  }
+
+  /**
+   * Returns a list of topics/subtopic that reference the given child node.
+   *
+   * @param \Drupal\node\NodeInterface $child
+   *   The child node to fetch the references for.
+   *
+   * @return array
+   *   List of entity ID's.
+   */
+  protected function fetchTopicsReferencingChild(NodeInterface $child) {
+    $existing_topics = $this->connection->select('node__field_topic_content', 'tc')
+      ->fields('tc', ['entity_id'])
+      ->condition('field_topic_content_target_id', $child->id())
+      ->distinct()
+      ->execute()
+      ->fetchCol();
+
+    $existing_topics_revisions = $this->connection->select('node_revision__field_topic_content', 'tc')
+      ->fields('tc', ['entity_id'])
+      ->condition('field_topic_content_target_id', $child->id())
+      ->distinct()
+      ->execute()
+      ->fetchCol();
+
+    // Create a list of all topic nids (active and revisions) for this child from the results of both the topic_contents tables.
+    return array_unique(array_merge($existing_topics, $existing_topics_revisions));
+  }
+
+  /**
+   * Removes all topic contents reference records for the given child.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
+   *   The child to archive.
+   */
+  public function archiveChild(ContentEntityInterface $child) {
+    $topics = $child->get('field_site_topics')->referencedEntities();
+
+    foreach ($topics as $topic) {
+      $this->removeChild($child, $topic);
+    }
   }
 
   /**

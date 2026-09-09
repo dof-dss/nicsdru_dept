@@ -20,7 +20,7 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
   // NOTE: See also dept_postprocess for additional moderation sidebar changes.
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
-    
+
     $user = Drupal::currentUser();
 
     // See also: dept_postprocess_moderation_sidebar_alter()
