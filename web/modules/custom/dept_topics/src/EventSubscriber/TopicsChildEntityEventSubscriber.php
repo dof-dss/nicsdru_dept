@@ -21,7 +21,11 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
 
   use StringTranslationTrait;
 
-  const string UNPUBLISHED_TOPIC_NOTICE = "This content is associated with an unpublished topic (%topic), so visitors have no way to reach it through that topic on the site.";
+  // Message for when adding/updating a child node and a chosen topic is unpublished.
+  const string MESSAGE_ASSIGNED_TO_UNPUBLISHED_TOPIC = "This content is associated with an unpublished topic (%topic), so visitors have no way to reach it through that topic on the site.";
+
+  // Message for when published child content has the topics changed but the child revision is in a non-published state.
+  const string MESSAGE_PUBLISHED_CONTENT_TOPICS = "This content already has a published revision, and the Topics you've selected differ from that published version. The new Topics will not take effect until this revision is published.";
 
   /**
    * Constructs a TopicsChildEntityEventSubscriber object.
@@ -50,7 +54,7 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
         $this->topicManager->addChild($entity, $topic);
 
         if (!$topic->isPublished()) {
-          \Drupal::messenger()->addWarning($this->t(self::UNPUBLISHED_TOPIC_NOTICE,
+          \Drupal::messenger()->addWarning($this->t(self::MESSAGE_ASSIGNED_TO_UNPUBLISHED_TOPIC,
             ['%topic' => $topic->label()]));
         }
       }
@@ -72,7 +76,7 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
       $current_topics_ids[] = $topic->id();
 
       if (!$topic->isPublished()) {
-        \Drupal::messenger()->addWarning($this->t(self::UNPUBLISHED_TOPIC_NOTICE,
+        \Drupal::messenger()->addWarning($this->t(self::MESSAGE_ASSIGNED_TO_UNPUBLISHED_TOPIC,
           ['%topic' => $topic->label()]));
       }
     }
@@ -94,7 +98,7 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
           sort($published_topics_ids);
 
           if ($current_topics_ids !== $published_topics_ids) {
-            $this->messenger->addMessage("This content already has a published revision, and the Topics you've selected differ from that published version. The new Topics will not take effect until this revision is published.");
+            $this->messenger->addMessage(self::MESSAGE_ASSIGNED_TO_UNPUBLISHED_TOPIC);
           }
         }
         else {
