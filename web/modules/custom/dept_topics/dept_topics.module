@@ -6,19 +6,14 @@
  * of topics, subtopics and related content.
  */
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\dept_topics\UiMessages;
 use Drupal\node\Entity\Node;
-use Drupal\node\Entity\NodeType;
-use Drupal\node\NodeInterface;
-use Drupal\views\Plugin\views\query\QueryPluginBase;
-use Drupal\views\ViewExecutable;
+
+include_once "inc/hook_alter.php";
 
 const HISTORIC_ENVIRONMENT_NID = 409882;
 
@@ -37,300 +32,6 @@ function dept_topics_help($route_name, RouteMatchInterface $route_match) {
 }
 
 /**
- * Implements hook_moderation_sidebar_alter().
- */
-function dept_topics_moderation_sidebar_alter(&$build, &$context) {
-  if ($context instanceof NodeInterface &&
-    in_array($context->bundle(), ['topic', 'subtopic'])) {
-
-    $user = Drupal::currentUser();
-
-    // See also: dept_postprocess_moderation_sidebar_alter()
-    if ($user->hasPermission('manage order of topic content')) {
-
-      $build['actions']['secondary']['info_topic_content'] = [
-        '#theme' => 'moderation_sidebar_info_section',
-        '#text' => 'Manage topic content',
-        '#tag' => 'h2'
-      ];
-
-      $build['actions']['secondary']['manage_existing'] = [
-        '#title' => t('Manage existing content'),
-        '#type' => 'link',
-        '#url' => Url::fromRoute('dept_topics.manage_topic_content.form', ['nid' => $context->id()]),
-        '#attributes' => [
-          'class' => [
-            'moderation-sidebar-link',
-            'button',
-            'button--tertiary',
-            'use-ajax'
-          ],
-          'data-dialog-type' => 'modal',
-          'data-dialog-options' => Json::encode([
-            'title' => t('Manage topic content'),
-            'width' => '1000',
-            'minHeight' => 500,
-            'position' => ['my' => 'center top', 'at' => 'center top'],
-            'draggable' => TRUE,
-            'autoResize' => TRUE,
-          ]),
-        ],
-      ];
-
-      // Links to create new content for topics, generated from target bundles of the field .
-      $bundle_fields = \Drupal::getContainer()
-        ->get('entity_field.manager')
-        ->getFieldDefinitions('node', 'topic');
-      $field_definition = $bundle_fields['field_topic_content'];
-      $target_bundles = $field_definition->getSetting('handler_settings')['target_bundles'];
-
-      $build['actions']['secondary']['info_add_new'] = [
-        '#theme' => 'moderation_sidebar_info_section',
-        '#text' => 'Quickly add new...',
-        '#tag' => 'p'
-      ];
-
-      $current_dept = \Drupal::service('department.manager')
-        ->getCurrentDepartment();
-
-      foreach ($target_bundles as $bundle => $label) {
-        // Replace hard-coded rule with permissions?
-        if ($current_dept->id() != 'daera' && $bundle === 'protected_area') {
-          continue;
-        }
-
-        $type = NodeType::load($bundle);
-
-        $build['actions']['secondary']['add_' . $bundle] = [
-          '#title' => ucfirst($type->label()),
-          '#type' => 'link',
-          '#url' => Url::fromRoute('node.add', ['node_type' => $bundle], ['query' => ['topic' => $context->id()]]),
-          '#attributes' => [
-            'class' => [
-              'moderation-sidebar-link',
-              'button',
-              'button--secondary'
-            ],
-          ],
-        ];
-      }
-
-      $build['#attached']['library'][] = 'dept_topics/moderation_sidebar';
-    }
-
-    if ($user->hasPermission('view topics structure report')) {
-      $build['actions']['primary']['topic_structure_report'] = [
-        '#title' => t('Topic structure report'),
-        '#type' => 'link',
-        '#url' => Url::fromRoute('dept_topics.topic_structure_report', ['node' => $context->id()]),
-        '#attributes' => [
-          'class' => [
-            'moderation-sidebar-link',
-            'button',
-          ],
-        ],
-      ];
-    }
-
-  }
-}
-
-/**
- * Implements hook_cron().
- */
-function dept_topics_cron() {
-  $dbConn = \Drupal::database();
-
-  // Fetch the parent node ID's of referenced topic content nodes that no
-  // longer exist.
-  $nids = $dbConn->query("
-    SELECT nftc.entity_id FROM node__field_topic_content nftc
-    LEFT JOIN node n
-    ON nftc.field_topic_content_target_id = n.nid
-    WHERE n.nid IS NULL;
-  ")->fetchCol(0);
-
-  if (empty($nids)) {
-    return;
-  }
-
-  // Remove duplicate parent nids and create a list of node cache tags.
-  $cids = array_map(function ($nid) {
-    return 'values:node:' . $nid;
-  }, array_unique($nids));
-  // Remove any topic content reference field entries that point to deleted
-  // nodes.
-  $dbConn->query("
-    DELETE nftc FROM node__field_topic_content nftc
-    LEFT JOIN node n
-    ON nftc.field_topic_content_target_id = n.nid
-    WHERE n.nid IS NULL;
-  ")->execute();
-
-  $dbConn->query("
-    DELETE nrftc FROM node_revision__field_topic_content nrftc
-    LEFT JOIN node n
-    ON nrftc.field_topic_content_target_id = n.nid
-    WHERE n.nid IS NULL;
-  ")->execute();
-
-  // Check the caching of the entity info to update the topic content reference
-  // field on the node edit form.
-  $cache_entity = \Drupal::service('cache.entity');
-  $cache_entity->deleteMultiple($cids);
-}
-
-/**
- * Implements hook_metatags_attachments_alter().
- */
-function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
-  $topicManager = \Drupal::service('topic.manager');
-  $node = \Drupal::routeMatch()->getParameter('node');
-
-  if ($node instanceof NodeInterface && in_array($node->bundle(), $topicManager->getTopicChildNodeTypes())) {
-    $topicManager = \Drupal::service('topic.manager');
-    $parents = $topicManager->getParentNodes($node->id());
-    $tag_index = -1;
-
-    if ($parents) {
-      foreach ($metatag_attachments['#attached']['html_head'] as $index => $tag) {
-        preg_match_all('/article_tag_(\d)/m', $tag[1], $matches, PREG_SET_ORDER, 0);
-
-        if ($matches) {
-          $tag_index = $matches[0][1];
-        }
-      }
-
-      // Create a new article tag for each parent node.
-      $tag_index++;
-      foreach ($parents as $parent) {
-        $metatag_attachments['#attached']['html_head'][] =
-          [
-            [
-              '#tag' => 'meta',
-              '#attributes' => [
-                'property' => "article:tag",
-                'content' => $parent->title
-              ]
-            ],
-            'article_tag_' . $tag_index,
-          ];
-        $tag_index++;
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_form_ENTITY_form_alter().
- */
-function dept_topics_form_node_form_alter(&$form, $form_state) {
-  $form_object = $form_state->getFormObject();
-  $bundle = $form_object->getEntity()->bundle();
-  $topic_id = \Drupal::request()->query->get('topic');
-
-  // Set the Site Topic to 'Historic environment' for Heritage sites.
-  if ($bundle === 'heritage_site') {
-    // Select the site topic passed by the querystring parameter (coming from the moderation sidebar).
-    if (array_key_exists('field_site_topics', $form)) {
-      $form['field_site_topics']['widget']['#default_value'] = [HISTORIC_ENVIRONMENT_NID];
-    }
-  }
-
-  if (!empty($topic_id)) {
-    // Select the site topic passed by the querystring parameter (coming from the moderation sidebar).
-    if (array_key_exists('field_site_topics', $form)) {
-      $form['field_site_topics']['widget']['#default_value'] = [$topic_id];
-    }
-  }
-
-  if (\Drupal::service('topic.manager')->isValidTopicChild($bundle)) {
-    $form['actions']['submit']['#submit'][] = 'dept_topics_process_topic_child_contents';
-  }
-
-  if ($bundle === 'topic' || $bundle === 'subtopic') {
-    $form['actions']['submit']['#submit'][] = 'dept_topics_enable_domain_path';
-  }
-}
-
-/**
- * Implements hook_entity_delete().
- */
-function dept_topics_entity_delete(EntityInterface $entity) {
-
-  // Removes the node from a topic/subtopic child content entity reference
-  // list when that node is deleted.
-  if ($entity instanceof NodeInterface) {
-    /** @var \Drupal\dept_topics\TopicManager $topic_manager */
-    $topic_manager = \Drupal::service('topic.manager');
-
-    $bundle = $entity->bundle();
-    $child_bundles = $topic_manager->getTopicChildNodeTypes();
-
-    if (in_array($bundle, $child_bundles)) {
-      $parents = $topic_manager->getParentNodes($entity->id());
-      $node_manager = \Drupal::entityTypeManager()->getStorage('node');
-
-      // Remove all topic content references for this node in topic/subtopic nodes.
-      foreach ($parents as $parent => $data) {
-        $topic_node = $node_manager->load($parent);
-        $child_refs = $topic_node->get('field_topic_content');
-
-        // Allows us to only save Topic nodes that have an entry for this content.
-        $has_child_entry = FALSE;
-
-        for ($i = 0; $i < $child_refs->count(); $i++) {
-          if ($child_refs->get($i)->target_id == $entity->id()) {
-            $child_refs->removeItem($i);
-            $has_child_entry = TRUE;
-            $i--;
-          }
-        }
-
-        if ($has_child_entry) {
-          $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
-          $topic_node->setRevisionTranslationAffected(TRUE);
-          $topic_node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
-          $topic_node->setRevisionUserId(\Drupal::currentUser()->id());
-          $topic_node->save();
-        }
-      }
-    }
-  }
-
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function dept_topics_form_moderation_sidebar_quick_transition_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $entity = $form_state->get('entity');
-
-  if ($entity instanceof NodeInterface) {
-    if (\Drupal::service('topic.manager')->isValidTopicChild($entity->bundle())) {
-      $form['#submit'][] = 'dept_topics_process_topic_child_contents';
-    }
-  }
-}
-
-/**
- * Submit callback for Moderation Sidebar Quick Transition form.
- */
-function dept_topics_process_topic_child_contents($form, FormStateInterface $form_state) {
-  $entity = $form_state->get('entity');
-  $op = $form_state->getValue('op');
-  $mod_state = $form_state->getValue('moderation_state');
-
-  if (empty($entity)) {
-    $nid = $form_state->getValue('nid');
-    $entity = Node::load($nid);
-  }
-
-  // Update topic entries from Node form or Moderation sidebar.
-  \Drupal::service('topic.manager')->updateChildDisplayOnTopics($entity);
-}
-
-/**
  * Submit callback for automatic enabling of Domain Path.
  */
 function dept_topics_enable_domain_path($form, FormStateInterface $form_state) {
@@ -338,94 +39,6 @@ function dept_topics_enable_domain_path($form, FormStateInterface $form_state) {
   if (!empty($dept)) {
     $form_state->setValue(['domain_path', $dept, 'pathauto'], 1);
   }
-}
-
-/**
- * Implements hook_node_presave().
- */
-function dept_topics_node_presave(EntityInterface $node) {
-  if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
-
-    if ($node->isNew()) {
-      // Ignore new as we don't have a node ID for the topic.
-      return;
-    }
-
-    if ($node->get('moderation_state')->getString() !== 'published') {
-      return;
-    }
-
-    dept_topics_clear_topic_tree_cache($node);
-
-    // Clear the cache of the child content nodes (for cases when the thin banner etc. is updated).
-    dept_topics_clear_child_caches($node);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function dept_topics_node_insert(NodeInterface $node) {
-  // For new Topics add as a site topic to the child nodes.
-  if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
-    $child_contents = array_column($node->get('field_topic_content')->getValue(), 'target_id');
-
-    foreach ($child_contents as $nid) {
-      $child_node = Node::load($nid);
-      $child_node->get('field_site_topics')->appendItem([
-        'target_id' => $node->id()
-      ]);
-      $child_node->setRevisionTranslationAffected(TRUE);
-      $child_node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
-      $child_node->setRevisionUserId(\Drupal::currentUser()->id());
-      $child_node->save();
-    }
-
-    // Clear the cache of the child content nodes (for cases when the thin banner etc. is added).
-    dept_topics_clear_child_caches($node);
-    dept_topics_clear_topic_tree_cache($node);
-  }
-}
-
-/**
- * Implements hook_node_delete().
- */
-function dept_topics_node_delete(NodeInterface $node) {
-  if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
-    dept_topics_clear_topic_tree_cache($node);
-  }
-}
-
-/**
- * Clears the node cache for all the child nodes belonging to a node.
- *
- * @param \Drupal\node\NodeInterface $node
- *   A Topic/Subtopic node to clear child content caches.
- */
-function dept_topics_clear_child_caches($node) {
-  if ($node->bundle() === 'topic' || $node->bundle() === 'subtopic') {
-    $child_cache_tags = array_column($node->get('field_topic_content')->getValue(), 'target_id');
-    array_walk($child_cache_tags, function (&$value, $key) {
-      $value = 'node:' . $value;
-    });
-
-    Cache::invalidateTags($child_cache_tags);
-  }
-}
-
-/**
- * Function to invalidate the topic tree cache structure
- * whenever a topic or subtopic node is changed, removed or created.
- */
-function dept_topics_clear_topic_tree_cache(NodeInterface $node) {
-  if (!in_array($node->bundle(), ['topic', 'subtopic'])) {
-    return;
-  }
-
-  // Clear topic manager stored cache entries for the topic hierarchy.
-  $domain_source = $node->get('field_domain_source')->getValue();
-  $dept_id = $domain_source[0]['target_id'];
-  Cache::invalidateTags([$dept_id . '_topics']);
 }
 
 /**
@@ -500,17 +113,25 @@ function dept_topics_build_facet_topic_hierarchy(&$variables) {
 }
 
 /**
- * Implements hook_form_alter().
+ * Update the Linkit profile for topic content.
  */
-function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form_id === 'field_config_edit_form' && !empty($form['#entity'])) {
-    if ($form['#entity']->bundle() === 'subtopic') {
-      $form['actions']['submit']['#submit'][] = 'dept_topics_update_linkit_targets';
-    }
-  }
+function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_state) {
+  $values = $form_state->getValues();
+  $field_bundles = NestedArray::getValue($values, ['settings', 'handler_settings', 'target_bundles'], $key_exists);
 
-  if (in_array($form_id, ['node_topic_form', 'node_topic_edit_form', 'node_subtopic_form', 'node_subtopic_edit_form'])) {
-    $form['#validate'][] = 'dept_topics_validate_topics';
+  if ($key_exists) {
+    $file_storage = \Drupal::service('config.storage.sync');
+    $active_storage = \Drupal::service('config.storage');
+
+    $linkit_data = $active_storage->read('linkit.linkit_profile.topic_child_content');
+    // Update the Linkit profile matcher bundles to that of the topic content field target bundles.
+    $linkit_data['matchers'][array_key_first($linkit_data['matchers'])]['settings']['bundles'] = $field_bundles;
+
+    // Save to both active and file config stores.
+    $active_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
+    $file_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
+
+    \Drupal::messenger()->addMessage(UiMessages::linkitUpdate());
   }
 }
 
@@ -525,7 +146,7 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
     $selected_topic = current(array_filter($form_state->getValue('field_site_topics')));
 
     if ($selected_topic == $entity->id()) {
-      $form_state->setErrorByName('field_site_topics', t('A subtopic cannot reference itself. Please select a different topic or subtopic.'));
+      $form_state->setErrorByName('field_site_topics', UiMessages::subtopicCannotReferenceItself());
     }
   }
 
@@ -545,6 +166,15 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
       continue;
     }
 
+    // Prevent a topic node from having 'archived' state if it has any child
+    // content that is not in an archived state.
+    if (($form_state->getValue('moderation_state')[0]['value'] ?? NULL) === 'archived') {
+      if ($node->get('moderation_state')->value !== 'archived') {
+        $element = $form["moderation_state"]["widget"][0];
+        $form_state->setError($element, UiMessages::archiveBlockedActiveChildren());
+      }
+    }
+
     if ($node->bundle() === 'subtopic') {
       $parent_nodes = $topic_manager->getParentNodes($node->id());
       // Warn the user if the subtopic has an assigned parent topic.
@@ -552,73 +182,7 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
         // If the child node parent ID doesn't match this node, warn the user.
         if (current($parent_nodes)->nid !== $parent_node->id()) {
           $element = $form['field_topic_content']['widget'][$index];
-          $form_state->setError($element, t('This subtopic is already assigned to a parent topic and cannot be linked to multiple parent topics.'));
-        }
-      }
-    }
-  }
-}
-
-/**
- * Update the Linkit profile for topic content.
- */
-function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_state) {
-  $values = $form_state->getValues();
-  $field_bundles = NestedArray::getValue($values, ['settings', 'handler_settings', 'target_bundles'], $key_exists);
-
-  if ($key_exists) {
-    $file_storage = \Drupal::service('config.storage.sync');
-    $active_storage = \Drupal::service('config.storage');
-
-    $linkit_data = $active_storage->read('linkit.linkit_profile.topic_child_content');
-    // Update the Linkit profile matcher bundles to that of the topic content field target bundles.
-    $linkit_data['matchers'][array_key_first($linkit_data['matchers'])]['settings']['bundles'] = $field_bundles;
-
-    // Save to both active and file config stores.
-    $active_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
-    $file_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
-
-    \Drupal::messenger()->addMessage('Linkit profile (topic_child_content) updated, please ensure you export this configuration. ');
-  }
-}
-
-/**
- * Implements hook_preprocess_field().
- */
-function dept_topics_preprocess_field(&$variables, $hook) {
-  $element = $variables['element'];
-
-  if ($element['#field_name'] === 'field_topic_content') {
-    foreach ($variables['items'] as $index => ['content' => $item]) {
-      if (!empty($item['#entity']) && !$item['#entity']->isPublished()) {
-        $state = $item['#entity']->get('moderation_state')->getString();
-        $variables['items'][$index]['content']['#suffix'] = ' <span title="Moderation status" class="moderation-state--' . str_replace('_', '-', $state) . '">' . ucfirst(str_replace('_', ' ', $state)) . '</span>';
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_preprocess_field_multiple_value_form().
- */
-function dept_topics_preprocess_field_multiple_value_form(&$variables) {
-  if (!\Drupal::request()->isXmlHttpRequest()) {
-    if ($variables["element"]["#field_name"] === 'field_topic_content') {
-      // Add a moderation state label to each node in the entity reference form list.
-      foreach ($variables["table"]["#rows"] as $delta => $row) {
-        if (!empty($variables["element"][$delta]["target_id"]["#default_value"])) {
-          if ($variables["element"][$delta]["target_id"]["#default_value"] instanceof NodeInterface) {
-            $node = $variables["element"][$delta]["target_id"]["#default_value"];
-          }
-          else {
-            $node = $variables["element"][$delta]["target_id"]["#default_value"][0];
-          }
-
-          $state = $node->get('moderation_state')->getString();
-
-          if (!$node->isPublished()) {
-            $variables["table"]["#rows"][$delta]['data'][1]['data']['#suffix'] = ' <span title="Moderation status" class="moderation-state moderation-state--' . str_replace('_', '-', $state) . '">' . ucfirst(str_replace('_', ' ', $state)) . '</span>';
-          }
+          $form_state->setError($element, UiMessages::subtopicHasParent());
         }
       }
     }
@@ -640,57 +204,14 @@ function dept_topics_theme() {
 }
 
 /**
- * Implements hook_views_query_alter().
- */
-function dept_topics_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
-  if ($view->id() === 'content_by_site_subtopic') {
-    foreach ($query->where[0]['conditions'] as $index => $condition) {
-      if (str_starts_with($condition['field'], 'node__field_site_topics')) {
-        // Fetch current topic node id.
-        $topic = \Drupal::routeMatch()->getParameter('node');
-        if ($topic instanceof NodeInterface === FALSE) {
-          return;
-        }
-
-        $args[] = $topic->id();
-
-        // Subtopics to include.
-        /** @var \Drupal\dept_topics\TopicManager $topic_manager */
-        $topic_manager = \Drupal::service('topic.manager');
-        $subtopics = $topic_manager->getTopicChildren($topic);
-
-        if (!empty($subtopics)) {
-          $subtopics = array_keys($subtopics);
-        }
-
-        $args = array_merge($args, $subtopics);
-
-        $query->where[0]['conditions'][$index]['field'] = 'node__field_site_topics.field_site_topics_target_id';
-        $query->where[0]['conditions'][$index]['value'] = $args;
-        $query->where[0]['conditions'][$index]['operator'] = 'in';
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_entity_bundle_field_info_alter().
- */
-function dept_topics_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
-  if ($bundle === 'topic' || $bundle === 'subtopic') {
-    if (isset($fields['field_topic_content'])) {
-      $fields['field_topic_content']->addConstraint('unique_list_items');
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_views_view_field().
  */
 function dept_topics_preprocess_views_view_field(&$variables) {
   $view = $variables['view'];
   $field = $variables['field'];
 
+  // Display a link using the parent title, or if the parent was deleted,
+  // the old node ID for the parent.
   if ($view->storage->id() == 'orphaned_content' && $field->field == 'former_parent') {
     $parent_id = $variables["row"]->_entity->get('former_parent')->getString();
     $parent = Node::load($parent_id);
@@ -705,8 +226,8 @@ function dept_topics_preprocess_views_view_field(&$variables) {
     $variables['output'] = $output;
   }
 
+  // Add operations button to orphaned content display.
   if ($view->storage->id() == 'orphaned_content' && $field->field == 'dropbutton') {
-
     $variables['output'] = [
       '#type' => 'operations',
       '#links' => [

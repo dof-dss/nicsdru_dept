@@ -50,6 +50,53 @@ function dept_postprocess_form_node_form_alter(&$form, FormStateInterface $form_
 function dept_postprocess_moderation_sidebar_alter(&$build, &$context) {
   if ($context instanceof NodeInterface &&
     in_array($context->bundle(), ['topic', 'subtopic'])) {
+
+    $has_active_children = \Drupal::service('topic.manager')->topicHasActiveChildren($context);
+    $archive_path = NULL;
+
+    // Determine the path to the 'Archive' button.
+    if ($has_active_children) {
+      if (isset($build['actions']['primary']['quick_draft_form']) && array_key_exists('archive', $build['actions']['primary']['quick_draft_form'])) {
+        $archive_path = &$build['actions']['primary']['quick_draft_form']['archive'];
+      }
+      elseif (isset($build['actions']['primary']) && array_key_exists('archive', $build['actions']['primary'])) {
+        $archive_path = &$build['actions']['primary']['archive'];
+      }
+    }
+
+    // If the topic has active child content, replace (disable) the archive button.
+    if ($archive_path) {
+
+      $archive_path = [
+        '#type' => 'html_tag',
+        '#tag' => 'div',
+        '#value' => t('Archive'),
+        '#weight' => 1,
+        '#attributes' => [
+          'class' => ['moderation-sidebar-link', 'button', ''],
+          'disabled' => 'disabled',
+          'style' => "cursor: not-allowed",
+          'title' => t('This content has active child pages. It cannot be archived until child pages have been reallocated to a different topic, archived or deleted.'),
+        ],
+      ];
+    }
+
+    // If the topic has active child content, disable the delete button.
+    if (isset($build["actions"]["primary"]["delete"]) && $has_active_children) {
+      $build["actions"]["primary"]["delete"] = [
+        '#type' => 'html_tag',
+        '#tag' => 'div',
+        '#value' => t('Delete'),
+        '#weight' => 1,
+        '#attributes' => [
+          'class' => ['moderation-sidebar-link', 'button', 'button--danger'],
+          'disabled' => 'disabled',
+          'style' => "cursor: not-allowed",
+          'title' => t('This content has active child pages. It cannot be deleted until child pages have been reallocated to a different topic, archived or deleted.'),
+        ],
+      ];
+    }
+
     if (!\Drupal::currentUser()->hasPermission('edit any subtopic content')) {
       // Remove sidebar actions for topics/subtopic if the user does not have
       // the edit subtopic permission.

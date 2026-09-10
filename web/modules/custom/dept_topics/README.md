@@ -6,6 +6,8 @@
 **Child node** - the node that is referenced in a topic/subtopic node.
 Not all nodes are available as a child node to a topic/subtopic
 
+**Active children** - Denotes a topic with child nodes that are not in archived moderation state
+
 Topic / Subtopic both have an entity reference field (field_topic_content)
 for storing links to child content for that topic.
 
@@ -28,9 +30,7 @@ With a child node the selected values for topics/subtopics (field_site_topics) w
 
 The mechanisms to update or remove child references are from 2 methods within the Topic Manager class
 * updateChildOnTopics() - Adds or removes a child from topics.
-* removeChildFromTopics() - Removes all references of the child from topics.
-
-# WiP
+* archiveChild() - Removes all references of the child from topics.
 
 
 
