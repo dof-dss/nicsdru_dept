@@ -133,10 +133,11 @@ filters:
   linkit:
     id: linkit
     provider: linkit
-    status: false
+    status: true
     weight: -43
     settings:
-      title: true
+      title: false
+      media_substitution: metadata
   media_embed:
     id: media_embed
     provider: media

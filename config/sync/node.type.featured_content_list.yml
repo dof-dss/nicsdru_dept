@@ -3,11 +3,67 @@ langcode: en
 status: true
 dependencies:
   module:
+    - dept_node
     - menu_ui
+    - origins_toc
+    - revision_manager
+    - scheduler
 third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
+  dept_node:
+    department_restrictions:
+      communities: communities
+      daera: daera
+      economy: economy
+      education: education
+      executiveoffice: executiveoffice
+      finance: finance
+      health: health
+      infrastructure: infrastructure
+      justice: justice
+      nigov: nigov
+  origins_toc:
+    toc_enable: 0
+    toc_title: 'Table of contents'
+    toc_location: ''
+    toc_insert: after
+    toc_source_container: ''
+    toc_element: h2
+    toc_exclusions: ''
+    toc_screen_depth: '1'
+    toc_debug: 0
+  revision_manager:
+    age:
+      id: age
+      status: false
+      settings:
+        age: 6
+    amount:
+      id: amount
+      status: true
+      settings:
+        amount: 100
+    origins_default:
+      id: origins_default
+      status: false
+      settings:
+        age: '6'
+        all_revisions_nodes: '371922 377448 403159 203754 203742 203737 417237'
+  scheduler:
+    expand_fieldset: null
+    fields_display_mode: null
+    publish_enable: false
+    publish_past_date: null
+    publish_past_date_created: false
+    publish_required: false
+    publish_revision: false
+    publish_touch: false
+    show_message_after_update: false
+    unpublish_enable: false
+    unpublish_required: false
+    unpublish_revision: false
 name: 'Featured content list'
 type: featured_content_list
 description: null

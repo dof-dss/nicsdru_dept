@@ -13,6 +13,8 @@ dependencies:
     - flag
     - node
     - user
+    - handy_cache_tags
+    - views_custom_cache_tag
 id: topics
 label: Topics
 module: views
@@ -149,8 +151,13 @@ display:
         options:
           perm: 'access content'
       cache:
-        type: tag
-        options: {  }
+        type: custom_tag
+        options:
+          custom_tag: |-
+            handy_cache_tags:node:topic
+            handy_cache_tags:node:subtopic
+          custom_tag_output_lifespan: '-1'
+          custom_tag_output_lifespan_expression: ''
       empty: {  }
       sorts:
         weight:

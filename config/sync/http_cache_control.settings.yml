@@ -15,5 +15,7 @@ cache:
     5xx_max_age: 0
     cookieextra: null
   surrogate:
-    maxage: 86400
+    maxage: 31536000
     nostore: false
+  targeted:
+    items: {  }

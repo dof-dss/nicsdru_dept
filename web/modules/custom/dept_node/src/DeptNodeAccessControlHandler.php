@@ -45,7 +45,6 @@ final class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
    * {@inheritdoc}
    */
   public function createAccess($entity_bundle = NULL, ?AccountInterface $account = NULL, array $context = [], $return_as_object = FALSE) {
-
     $node_type = $this->entityTypeManager->getStorage('node_type')->load($entity_bundle);
     $department_restrictions = $node_type->getThirdPartySetting('dept_node', 'department_restrictions', NULL);
 
@@ -60,6 +59,22 @@ final class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
     }
 
     return parent::createAccess($entity_bundle, $account, $context, TRUE);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function checkAccess(EntityInterface $node, $operation, AccountInterface $account) {
+    assert($node instanceof NodeInterface);
+
+    if ($operation === 'delete revision' && $account->hasPermission(static::revisionDeletePermission($node->bundle()))) {
+      // A default revision is the live node, regardless of whether a newer
+      // pending revision exists. It must only be removable through node delete.
+      $result = $node->isDefaultRevision() ? AccessResult::forbidden() : AccessResult::allowed();
+      return $result->cachePerPermissions()->addCacheableDependency($node);
+    }
+
+    return parent::checkAccess($node, $operation, $account);
   }
 
 }

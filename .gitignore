@@ -10,7 +10,9 @@
 /web/profiles/contrib/
 /web/profiles/custom/
 /web/profiles/origins/
-/web/libraries/
+/web/libraries/*
+# Exception for local version of highcharts
+!/web/libraries/highcharts
 console/
 
 # Ignore sensitive information or local config.
