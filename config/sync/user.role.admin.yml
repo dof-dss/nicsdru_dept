@@ -64,6 +64,7 @@ weight: -10
 is_admin: null
 permissions:
   - 'access administration pages'
+  - 'access book list'
   - 'access content'
   - 'access content overview'
   - 'access draggableviews'
@@ -96,6 +97,7 @@ permissions:
   - 'administer block_content fields'
   - 'administer blocks'
   - 'administer book outlines'
+  - 'administer book settings'
   - 'administer content types'
   - 'administer domains'
   - 'administer filters'
@@ -189,6 +191,8 @@ permissions:
   - 'flag hide_listing'
   - 'publish to any assigned domain'
   - 'publish to any domain'
+  - 'rebuild node access permissions'
+  - 'reorder book pages'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
   - 'reschedule scheduled transitions node consultation'

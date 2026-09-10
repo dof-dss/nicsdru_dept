@@ -5,6 +5,7 @@ dependencies:
   config:
     - search_api_autocomplete.search.search
   module:
+    - book
     - domain
     - eu_cookie_compliance
     - media
@@ -17,6 +18,7 @@ label: 'Anonymous user'
 weight: -8
 is_admin: false
 permissions:
+  - 'access book list'
   - 'access content'
   - 'display eu cookie compliance popup'
   - 'use search_api_autocomplete for search'

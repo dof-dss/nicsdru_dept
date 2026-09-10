@@ -7,12 +7,11 @@ dependencies:
 id: chart_types
 label: 'Chart types'
 type: 'canonical_entities:taxonomy_term'
-pattern: '[term:vocabulary]/[term:name]'
+pattern: '/[term:vocabulary]/[term:name]'
 selection_criteria:
   e68120a0-0c5b-4714-b3d8-a8cee3d07ab7:
     id: 'entity_bundle:taxonomy_term'
     negate: false
-    uuid: e68120a0-0c5b-4714-b3d8-a8cee3d07ab7
     context_mapping:
       taxonomy_term: taxonomy_term
     bundles:

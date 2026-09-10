@@ -1,9 +1,13 @@
 _core:
   default_config_hash: i-_2TVi6FUEAqBgNRJkt6aaYmiw1k_LTrXzJS6wlZ4U
 allowed_types:
-  - article
-  - publication
-child_type: article
-block:
-  navigation:
-    mode: 'all pages'
+  -
+    content_type: article
+    child_type: article
+  -
+    content_type: publication
+    child_type: article
+book_sort: weight
+truncate_label: true
+use_parent_selector: false
+use_alternative_form: false
