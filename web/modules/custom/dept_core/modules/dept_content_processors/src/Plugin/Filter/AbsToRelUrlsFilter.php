@@ -7,6 +7,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dept_core\Entity\Department;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -28,6 +29,11 @@ final class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPlu
    * @var \Drupal\dept_core\DepartmentManager
    */
   protected $departmentManager;
+
+  /**
+   * The module logger.
+   */
+  protected LoggerInterface $logger;
 
   /**
    * The Department ID.
@@ -54,6 +60,7 @@ final class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPlu
     );
 
     $instance->departmentManager = $container->get('department.manager');
+    $instance->logger = $container->get('logger.factory')->get('dept_content_processors');
 
     // Check we are on a Departmental site we recognise.
     $department = $instance->departmentManager->getCurrentDepartment();
@@ -120,7 +127,7 @@ final class AbsToRelUrlsFilter extends FilterBase implements ContainerFactoryPlu
 
           // Report any corrupted URL's.
           if ($url_portions === FALSE) {
-            \Drupal::logger('dept_content_processors')->warning('Could not parse %site url: %url', [
+            $this->logger->warning('Could not parse %site url: %url', [
               '%site' => $this->departmentId,
               '%url' => $href
             ]);

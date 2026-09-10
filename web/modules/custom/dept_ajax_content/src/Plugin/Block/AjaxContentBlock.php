@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   category = @Translation("Departmental"),
  * )
  */
-class AjaxContentBlock extends BlockBase implements ContainerFactoryPluginInterface {
+final class AjaxContentBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * The logger.

@@ -3,19 +3,27 @@
 namespace Drupal\dept_node;
 
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\dept_core\DepartmentManager;
 use Drupal\node\NodeAccessControlHandler;
 use Drupal\node\NodeGrantDatabaseStorageInterface;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Extends the core node access handler for Departmental sites.
  */
-final class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
+class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
+
+  /**
+   * Builds the permission used to delete revisions without deleting nodes.
+   */
+  public static function revisionDeletePermission(string $bundle): string {
+    return "delete $bundle revisions without node delete access";
+  }
 
   /**
    * {@inheritdoc}
@@ -33,6 +41,8 @@ final class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
    * Entity handler factory used by EntityTypeManager.
    */
   public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type): static {
+    // Entity handlers may be subclassed by tests or downstream projects.
+    // @phpstan-ignore-next-line
     return new static(
       $entity_type,
       $container->get('node.grant_storage'),

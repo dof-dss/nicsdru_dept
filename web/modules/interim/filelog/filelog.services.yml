@@ -1,13 +1,6 @@
 services:
   logger.filelog:
     class: Drupal\filelog\Logger\FileLog
-    arguments:
-      - '@config.factory'
-      - '@state'
-      - '@datetime.time'
-      - '@logger.log_message_parser'
-      - '@filelog.file_manager'
-      - '@event_dispatcher'
     tags:
       - { name: logger }
   filelog.file_manager:

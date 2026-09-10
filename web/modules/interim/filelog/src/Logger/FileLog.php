@@ -6,7 +6,6 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\DependencyInjection\ContainerInterface;
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Config\Config;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Logger\LogMessageParserInterface;
 use Drupal\Core\Logger\RfcLoggerTrait;
@@ -19,7 +18,6 @@ use Drupal\filelog\FileLogException;
 use Drupal\filelog\LogFileManagerInterface;
 use Drupal\filelog\LogMessage;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use function file_exists;
 use function fopen;
 use function fwrite;
@@ -97,36 +95,6 @@ class FileLog implements LoggerInterface {
   protected LogFileManagerInterface $fileManager;
 
   /**
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $eventDispatcher;
-
-  /**
-   * FileLog constructor.
-   *
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   The config.factory service.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The datetime.time service.
-   * @param \Drupal\Core\Logger\LogMessageParserInterface $parser
-   *   The logger.log_message_parser service.
-   * @param \Drupal\filelog\LogFileManagerInterface $fileManager
-   *   The filelog.file_manager service.
-   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
-   *   Allows providing hooks on domain-specific lifecycles by dispatching events.
-   */
-  public function __construct(ConfigFactoryInterface $configFactory, StateInterface $state, TimeInterface $time, LogMessageParserInterface $parser, LogFileManagerInterface $fileManager, EventDispatcherInterface $event_dispatcher) {
-    $this->config = $configFactory->get('filelog.settings');
-    $this->state = $state;
-    $this->time = $time;
-    $this->parser = $parser;
-    $this->fileManager = $fileManager;
-    $this->eventDispatcher = $event_dispatcher;
-  }
-
-  /**
    * Open the logfile for writing.
    *
    * @return bool
@@ -163,6 +131,7 @@ class FileLog implements LoggerInterface {
    * {@inheritdoc}
    */
   public function log($level, $message, array $context = []): void {
+    $this->initializeDependencies();
     if (!$this->shouldLog($level, $message, $context)) {
       return;
     }
@@ -213,7 +182,7 @@ class FileLog implements LoggerInterface {
         === in_array($context['channel'], $this->config->get('channels'), TRUE)) {
         $event->setDecision(TRUE);
       }
-      $this->eventDispatcher->dispatch($event, FileLogEvents::FILE_LOG_SHOULD_LOG);
+      $this->getContainer()->get('event_dispatcher')->dispatch($event, FileLogEvents::FILE_LOG_SHOULD_LOG);
       return $event->getDecision();
     }
     return FALSE;
@@ -290,6 +259,25 @@ class FileLog implements LoggerInterface {
       $this->container = \Drupal::getContainer();
     }
     return $this->container;
+  }
+
+  /**
+   * Initializes services after the logger factory has finished constructing.
+   *
+   * Drupal 11 creates hook services while compiling some Drush commands. A
+   * logger with eager container dependencies therefore creates a circular
+   * dependency through the logger factory. Resolve them only when a message is
+   * actually logged.
+   */
+  protected function initializeDependencies(): void {
+    if (!isset($this->config)) {
+      $container = $this->getContainer();
+      $this->config = $container->get('config.factory')->get('filelog.settings');
+      $this->state = $container->get('state');
+      $this->time = $container->get('datetime.time');
+      $this->parser = $container->get('logger.log_message_parser');
+      $this->fileManager = $container->get('filelog.file_manager');
+    }
   }
 
   /**

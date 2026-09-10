@@ -480,7 +480,7 @@ function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) 
 
       if (!$current_user->hasRole('administrator')) {
         $form['dept']['#value'] = $current_dept->id();
-        hide($form['dept']);
+        $form['dept']['#access'] = FALSE;
         return;
       }
 
@@ -490,7 +490,7 @@ function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) 
       // If the user doesn't have top level domain permissions or no assigned domains, hide this filter option.
       if (empty($user_domains)) {
         $form['dept']['#value'] = $current_dept->id();
-        hide($form['dept']);
+        $form['dept']['#access'] = FALSE;
         return;
       }
 
