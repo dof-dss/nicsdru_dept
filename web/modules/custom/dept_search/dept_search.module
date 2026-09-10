@@ -161,17 +161,20 @@ function dept_search_views_post_render(ViewExecutable $view, &$output, CachePlug
     return;
   }
 
-  // Add a department-specific search_api_list cache tag to search_api views.
+  // Replace search_api_list cache tags with a department-specific version.
   $base_table = $view->storage->get('base_table');
+  $tags = $output['#cache']['tags'] ?? [];
 
-  if (strpos($base_table, 'search_api_index_') === 0) {
-    // Add a department-specific search_api_list cache tag.
+  if (str_starts_with($base_table, 'search_api_index_')) {
     /** @var Drupal\dept_core\Entity\Department $active_dept */
     $active_dept = \Drupal::service('department.manager')->getCurrentDepartment();
 
     // Extract the index name from 'search_api_index_{index_name}'.
     $index_name = substr($base_table, strlen('search_api_index_'));
-    $output['#cache']['tags'][] = 'dept_search_api_list:' . $active_dept->id() . ':' . $index_name;
+    $output['#cache']['tags'] = Cache::mergeTags(
+      array_values(array_diff($tags, ['search_api_list:' . $index_name])),
+      ['dept_search_api_list:' . $active_dept->id() . ':' . $index_name]
+    );
   }
 }
 
