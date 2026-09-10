@@ -8,8 +8,8 @@ use Drupal\content_moderation\ModerationInformationInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dept_topics\TopicManager;
+use Drupal\dept_topics\UiMessages;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -18,14 +18,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Entity event subscriber for processing topic child entities.
  */
 final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
-
-  // Message for when adding/updating a child node and a chosen topic is unpublished.
-  const string MESSAGE_ASSIGNED_TO_UNPUBLISHED_TOPIC = "This content is associated with an unpublished topic (%topic), so visitors have no way to reach it through that topic on the site.";
-
-  // Message for when published child content has the topics changed but the child revision is in a non-published state.
-  const string MESSAGE_PUBLISHED_CONTENT_TOPICS = "This content already has a published revision, and the Topics you've selected differ from that published version. The new Topics will not take effect until this revision is published.";
 
   /**
    * Constructs a TopicsChildEntityEventSubscriber object.
@@ -54,8 +46,7 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
         $this->topicManager->addChild($entity, $topic);
 
         if (!$topic->isPublished()) {
-          \Drupal::messenger()->addWarning($this->t(self::MESSAGE_ASSIGNED_TO_UNPUBLISHED_TOPIC,
-            ['%topic' => $topic->label()]));
+          \Drupal::messenger()->addWarning(UiMessages::assignedToUnpublishedTopic($topic->label()));
         }
       }
     }
@@ -67,6 +58,7 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
   public function onEntityUpdate(EntityEvent $event): void {
     /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
     $entity = $event->getEntity();
+    $current_topics_ids = [];
 
     if (!$this->topicManager->isValidTopicChild($entity)) {
       return;
@@ -76,8 +68,7 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
       $current_topics_ids[] = $topic->id();
 
       if (!$topic->isPublished()) {
-        \Drupal::messenger()->addWarning($this->t(self::MESSAGE_ASSIGNED_TO_UNPUBLISHED_TOPIC,
-          ['%topic' => $topic->label()]));
+        \Drupal::messenger()->addWarning(UiMessages::assignedToUnpublishedTopic($topic->label()));
       }
     }
 
@@ -93,12 +84,13 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
       case 'needs_review':
         if ($is_published) {
           $published_entity = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->load($entity->id());
+          // @phpstan-ignore-next-line
           $published_topics_ids = array_column($published_entity->get('field_site_topics')->getValue(), 'target_id');
           sort($current_topics_ids);
           sort($published_topics_ids);
 
           if ($current_topics_ids !== $published_topics_ids) {
-            $this->messenger->addMessage(self::MESSAGE_ASSIGNED_TO_UNPUBLISHED_TOPIC);
+            $this->messenger->addMessage(UiMessages::topicChangesPendingPublish());
           }
         }
         else {

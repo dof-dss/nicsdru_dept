@@ -477,6 +477,7 @@ final class TopicManager {
     foreach ($children as $child) {
       $latest_revision_id = $this->nodeStorage->getLatestRevisionId($child->id());
       $latest_revision = $this->nodeStorage->loadRevision($latest_revision_id);
+      // @phpstan-ignore-next-line.
       if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
         return TRUE;
       }

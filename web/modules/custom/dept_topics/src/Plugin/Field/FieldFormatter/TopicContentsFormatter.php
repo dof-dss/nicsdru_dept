@@ -207,7 +207,7 @@ final class TopicContentsFormatter extends EntityReferenceEntityFormatter implem
 
       if ($this->currentUser->isAuthenticated()) {
         $revision_id = $this->moderationInformation->getDefaultRevisionId('node', $entity->id());
-
+        // @phpstan-ignore-next-line
         $moderation_state = $entity->get('moderation_state')->getString();
 
         if (empty($moderation_state)) {

@@ -10,6 +10,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
+use Drupal\dept_topics\UiMessages;
 use Drupal\node\Entity\Node;
 
 include_once "inc/hook_alter.php";
@@ -130,7 +131,7 @@ function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_stat
     $active_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
     $file_storage->write('linkit.linkit_profile.topic_child_content', $linkit_data);
 
-    \Drupal::messenger()->addMessage('Linkit profile (topic_child_content) updated, please ensure you export this configuration. ');
+    \Drupal::messenger()->addMessage(UiMessages::linkitUpdate());
   }
 }
 
@@ -146,7 +147,7 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
     $selected_topic = current(array_filter($form_state->getValue('field_site_topics')));
 
     if ($selected_topic == $entity->id()) {
-      $form_state->setErrorByName('field_site_topics', t('A subtopic cannot reference itself. Please select a different topic or subtopic.'));
+      $form_state->setErrorByName('field_site_topics', UiMessages::subtopicCannotReferenceItself());
     }
   }
 
@@ -172,7 +173,7 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
     if (($form_state->getValue('moderation_state')[0]['value'] ?? NULL) === 'archived') {
       if ($node->get('moderation_state')->value !== 'archived') {
         $element = $form["moderation_state"]["widget"][0];
-        $form_state->setError($element, t('This content associated child pages. It cannot be archived until child pages have been reallocated to a different topic, archived or deleted.'));
+        $form_state->setError($element, UiMessages::archiveBlockedActiveChildren());
       }
     }
 
@@ -183,7 +184,7 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
         // If the child node parent ID doesn't match this node, warn the user.
         if (current($parent_nodes)->nid !== $parent_node->id()) {
           $element = $form['field_topic_content']['widget'][$index];
-          $form_state->setError($element, t('This subtopic is already assigned to a parent topic and cannot be linked to multiple parent topics.'));
+          $form_state->setError($element, UiMessages::subtopicHasParent());
         }
       }
     }

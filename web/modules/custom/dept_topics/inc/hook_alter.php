@@ -8,6 +8,7 @@
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\dept_topics\UiMessages;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
@@ -235,7 +236,7 @@ function dept_topics_form_node_form_alter(&$form, $form_state, $form_id) {
           'class' => ['action-link', 'action-link--danger', 'action-link--icon-trash'],
           'disabled' => 'disabled',
           'style' => "cursor: not-allowed",
-          'title' => t('This content has active child pages. It cannot be deleted until child pages have been reallocated to a different topic, archived or deleted.'),
+          'title' => UiMessages::deleteButtonBlockedActiveChildren(),
         ],
       ];
     }
@@ -278,9 +279,7 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
         $form['notice'] = [
           '#type' => 'html_tag',
           '#tag' => 'div',
-          '#value' => t('This @bundle has active child pages. It cannot be reverted to an archived state until child pages have been reallocated to a different topic, archived or deleted. ', [
-            '@bundle' => $node->bundle()
-          ]),
+          '#value' => UiMessages::revertBlockedActiveChildren($node->bundle()),
         ];
         $form['actions']['submit']['#disabled'] = TRUE;
       }
