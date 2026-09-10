@@ -75,7 +75,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: search_api_tag
+        type: search_api_none
         options: {  }
       empty: {  }
       sorts:
@@ -1054,7 +1054,7 @@ display:
       display_extenders: {  }
       path: news
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_interface'
         - url
@@ -1064,8 +1064,6 @@ display:
         - url.site
         - 'user.node_grants:view'
       tags:
-        - 'config:facets.facet.news_publication_date'
-        - 'config:facets.facet.news_topic'
         - 'config:search_api.index.news_index'
         - 'search_api_list:news_index'
   press_release_search:
@@ -1273,7 +1271,7 @@ display:
       display_extenders: {  }
       path: press-releases
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_interface'
         - url
@@ -1283,9 +1281,6 @@ display:
         - url.site
         - 'user.node_grants:view'
       tags:
-        - 'config:facets.facet.pr_department'
-        - 'config:facets.facet.pr_publication_date'
-        - 'config:facets.facet.pr_topics'
         - 'config:search_api.index.news_index'
         - 'search_api_list:news_index'
   press_releases_feed:

@@ -137,7 +137,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: search_api_tag
+        type: search_api_none
         options: {  }
       empty: {  }
       sorts:
@@ -846,7 +846,7 @@ display:
       display_extenders: {  }
       path: consultations
     cache_metadata:
-      max-age: 0
+      max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -857,9 +857,6 @@ display:
         - url.site
         - 'user.node_grants:view'
       tags:
-        - 'config:facets.facet.consultation_department'
-        - 'config:facets.facet.consultation_publication_date'
-        - 'config:facets.facet.consultation_topic'
         - 'config:field.storage.node.body'
         - 'config:search_api.index.consultations_index'
         - 'search_api_list:consultations_index'
