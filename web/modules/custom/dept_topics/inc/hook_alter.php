@@ -310,27 +310,24 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
         unset($form['scheduled_transitions']['new_meta']['transition']['#options']['restore']);
       }
     }
+  }
 
-    // Prevent deletion of Topics or Subtopics if they have active child content.
-    if (in_array($form_id, [
-      'node_topic_delete_form',
-      'node_subtopic_delete_form'
-    ])) {
-      // @phpstan-ignore-next-line.
-      $node = $form_state->getFormObject()->getEntity();
+  // Prevent deletion of Topics or Subtopics if they have active child content.
+  if (in_array($form_id, [
+    'node_topic_delete_form',
+    'node_subtopic_delete_form',
+  ])) {
+    // @phpstan-ignore-next-line.
+    $node = $form_state->getFormObject()->getEntity();
 
-      if (\Drupal::service('topic.manager')->topicHasActiveChildren($node)) {
-        $form['description'] = [
-          '#type' => 'html_tag',
-          '#tag' => 'p',
-          '#value' => t("This @bundle '%title' cannot be deleted until all child pages have been reallocated to a different topic, archived or deleted.", [
-            '@bundle' => $node->bundle(),
-            '%title' => $node->label(),
-          ]),
-        ];
+    if (\Drupal::service('topic.manager')->topicHasActiveChildren($node)) {
+      $form['description'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => UiMessages::deleteBlockedActiveChildren($node->bundle(), $node->label()),
+      ];
 
-        $form['actions']['submit']['#disabled'] = TRUE;
-      }
+      $form['actions']['submit']['#disabled'] = TRUE;
     }
   }
 }
