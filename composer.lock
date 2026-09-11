@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "944c9c5a767de602ea6d4dec11fa855d",
+    "content-hash": "6a7ae69d4049293f317b33cc7986ea6f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1427,22 +1427,23 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "dev-DEPT-1365",
+            "version": "dev-10.x-dev",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "d5a14b45ccdc2d73caf09b1b597ce554bc66dcf0"
+                "reference": "5cff1b4242a16ac997021445666aa043a014f746"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/d5a14b45ccdc2d73caf09b1b597ce554bc66dcf0",
-                "reference": "d5a14b45ccdc2d73caf09b1b597ce554bc66dcf0",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/5cff1b4242a16ac997021445666aa043a014f746",
+                "reference": "5cff1b4242a16ac997021445666aa043a014f746",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "^2.0",
                 "drupal/core": "^10"
             },
+            "default-branch": true,
             "bin": [
                 "bin/dof-dss-filehash",
                 "bin/dof-dss-mediahasher"
@@ -1452,7 +1453,7 @@
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2026-06-03T08:54:39+00:00"
+            "time": "2026-09-11T09:09:54+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
@@ -22575,5 +22576,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
