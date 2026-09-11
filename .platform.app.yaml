@@ -100,12 +100,8 @@ hooks:
     php ./drush/platformsh_generate_drush_yml.php
     cd web
     # Rebuild caches, run db-updates and import config.
-    ../vendor/bin/drush -y cache-rebuild
-    ../vendor/bin/drush -y updatedb
-    # General config import
-    ../vendor/bin/drush -y config-import
-    # Final cache rebuild.
-    ../vendor/bin/drush -y cache-rebuild
+    # Drush deploy docs: https://www.drush.org/12.x/deploycommand
+    ../vendor/bin/drush -y deploy
   post_deploy: |
     set -e
     echo "***** Creating QA accounts ******"
@@ -194,7 +190,7 @@ web:
 
       rules:
         # Allow a longer Fastly TTL for publication files
-        '^/sites/default/files/publications/':
+        '^/sites/default/files/([0-9]{4}-[0-9]{2}|publications)/':
           headers:
             Surrogate-Control: max-age=31536000
         # Provide a longer TTL (2 weeks) for aggregated CSS and JS files.

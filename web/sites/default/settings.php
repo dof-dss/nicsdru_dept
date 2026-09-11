@@ -91,7 +91,6 @@ $settings['simple_environment_indicator'] = sprintf('%s %s', $env_colour, $env_n
 // https://www.drupal.org/node/3105503.
 $settings['migrate_node_migrate_type_classic'] = TRUE;
 
-
 // Automatically generated include for settings managed by ddev.
 $ddev_settings = dirname(__FILE__) . '/settings.ddev.php';
 if (getenv('IS_DDEV_PROJECT') == 'true' && is_readable($ddev_settings)) {
@@ -106,4 +105,9 @@ if ((file_exists(__DIR__ . '/settings.ddev.redis.php') && getenv('IS_DDEV_PROJEC
 // Local settings. These come last so that they can override anything.
 if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
   include $app_root . '/' . $site_path . '/settings.local.php';
+}
+
+// QA Jenkins settings applied on top of DDev split.
+if (getenv('QA_HTTPS_PORT') == '8433') {
+  $config['config_split.config_split.jenkins']['status'] = TRUE;
 }

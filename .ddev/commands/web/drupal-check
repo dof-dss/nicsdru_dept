@@ -6,4 +6,4 @@
 ## Example: "ddev <drupal-check|drck> web/modules/custom"
 ## HostWorkingDir: true
 
-/var/www/html/vendor/bin/drupal-check ./
+/var/www/html/vendor/bin/drupal-check $1

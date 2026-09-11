@@ -34,9 +34,11 @@ dependencies:
     - easychart
     - file
     - media
+    - media_library_favorites
     - node
     - origins_workflow
     - redirect
+    - revisions_bulk_operations
     - scheduled_transitions
     - view_unpublished
 _core:
@@ -63,7 +65,9 @@ permissions:
   - 'add scheduled transitions node ual'
   - 'administer book outlines'
   - 'administer redirects'
+  - 'allow media favorites'
   - 'audit content'
+  - 'bulk select revisions'
   - 'create application content on assigned domains'
   - 'create article content on assigned domains'
   - 'create audio media content on assigned domains'
