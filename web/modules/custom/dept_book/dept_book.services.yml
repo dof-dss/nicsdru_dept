@@ -2,3 +2,6 @@ services:
   dept_book.parent_page_protection:
     class: Drupal\dept_book\BookParentPageProtection
     arguments: ['@book.manager']
+  dept_book.cache_invalidator:
+    class: Drupal\dept_book\BookCacheInvalidator
+    arguments: ['@cache_tags.invalidator']

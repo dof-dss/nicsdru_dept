@@ -4,6 +4,7 @@ description: 'Provides topics/subtopics functionality and enhancements for depar
 package: 'NICS: Departmental'
 core_version_requirement: ^8 || ^9 || ^10 || ^10
 dependencies:
+  - drupal:book
   - drupal:node
   - drupal:user
   - dept_core
