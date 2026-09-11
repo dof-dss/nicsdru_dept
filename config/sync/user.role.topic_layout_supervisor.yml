@@ -18,6 +18,7 @@ dependencies:
     - core.entity_view_display.node.subtopic.full
     - core.entity_view_display.node.topic.full
     - filter.format.layout_builder_html
+    - node.type.subtopic
   module:
     - block_content
     - contextual
@@ -26,6 +27,7 @@ dependencies:
     - domain_entity
     - filter
     - layout_builder
+    - node
 id: topic_layout_supervisor
 label: 'Topic layout supervisor (Add-on role)'
 weight: 0
@@ -71,6 +73,7 @@ permissions:
   - 'edit any card_wide block content'
   - 'edit any image_and_caption block content'
   - 'edit any plain_cards block content'
+  - 'edit any subtopic content'
   - 'edit any text block content'
   - 'edit any video block content'
   - 'edit any video_and_caption block content'

@@ -57,9 +57,14 @@
     <!-- Example for changing the driver args to webdriver tests MINK_DRIVER_ARGS_WEBDRIVER value: '["chrome", { "chromeOptions": { "w3c": false } }, "http://localhost:4444/wd/hub"]' For using the Firefox browser, replace "chrome" with "firefox" -->
     <env name="MINK_DRIVER_ARGS_WEBDRIVER" value=""/>
   </php>
-<!--  <testsuites>-->
+  <testsuites>
     <testsuite name="unit">
-      <file>./web/core/tests/TestSuites/UnitTestSuite.php</file>
+      <directory>web/modules/custom/*/tests/src/Unit</directory>
+      <directory>web/modules/custom/*/*/tests/src/Unit</directory>
+      <directory>web/modules/custom/*/*/*/tests/src/Unit</directory>
+      <directory>web/modules/origins/*/tests/src/Unit</directory>
+      <directory>web/modules/origins/*/*/tests/src/Unit</directory>
+      <directory>web/modules/origins/*/*/*/tests/src/Unit</directory>
     </testsuite>
     <!-- Commenting out until contrib modules get support for tests in 10.2 -->
 <!--    <testsuite name="kernel">-->
@@ -74,7 +79,7 @@
 <!--    <testsuite name="build">-->
 <!--      <file>./web/core/tests/TestSuites/BuildTestSuite.php</file>-->
 <!--    </testsuite>-->
-<!--  </testsuites>-->
+  </testsuites>
   <listeners>
     <listener class="\Drupal\Tests\Listeners\DrupalListener">
     </listener>

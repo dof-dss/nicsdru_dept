@@ -6,12 +6,160 @@
  */
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\flag\FlagInterface;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_entity_access().
+ */
+function dept_book_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ($operation !== 'delete' || !$entity instanceof NodeInterface) {
+    return AccessResult::neutral();
+  }
+
+  if (\Drupal::service('dept_book.parent_page_protection')->isProtected($entity, $account)) {
+    return AccessResult::forbidden('Book pages with children must not be deleted.')
+      ->cachePerPermissions()
+      ->addCacheableDependency($entity);
+  }
+
+  return AccessResult::neutral()->cachePerPermissions()->addCacheableDependency($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function dept_book_node_presave(NodeInterface $node) {
+  if ($node->isNew() || !$node->hasField('moderation_state')) {
+    return;
+  }
+
+  $original_state = NULL;
+  if (!empty($node->original) && $node->original instanceof NodeInterface && $node->original->hasField('moderation_state')) {
+    $original_state = $node->original->get('moderation_state')->getString();
+  }
+
+  $protection = \Drupal::service('dept_book.parent_page_protection');
+  if ($protection->isArchiveBlocked($node, \Drupal::currentUser(), $node->get('moderation_state')->getString(), $original_state)) {
+    throw new EntityStorageException('Book pages with children must not be archived. Move or remove the child pages first.');
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter() for node forms.
+ */
+function dept_book_form_node_form_alter(array &$form, FormStateInterface $form_state) {
+  $node = dept_book_get_form_node($form_state);
+  if ($node instanceof NodeInterface && \Drupal::service('dept_book.parent_page_protection')->isProtected($node, \Drupal::currentUser())) {
+    unset($form['moderation_state']['widget'][0]['state']['#options']['archived']);
+  }
+
+  $form['#validate'][] = 'dept_book_validate_parent_page_archive';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function dept_book_form_moderation_sidebar_quick_transition_form_alter(array &$form, FormStateInterface $form_state) {
+  $node = $form_state->get('entity');
+  if (!$node instanceof NodeInterface) {
+    return;
+  }
+
+  $account = \Drupal::currentUser();
+  $transitions = \Drupal::service('content_moderation.state_transition_validation')
+    ->getValidTransitions($node, $account);
+  $protection = \Drupal::service('dept_book.parent_page_protection');
+
+  foreach ($protection->getBlockedArchiveTransitionIds($node, $account, $transitions) as $transition_id) {
+    unset($form[$transition_id]);
+  }
+
+  // The moderation sidebar adds these fields whenever it initially finds a
+  // transition. Remove them if hiding Archive leaves no transitions to use.
+  if (!array_intersect_key($transitions, $form)) {
+    unset($form['revision_log_toggle'], $form['revision_log']);
+  }
+}
+
+/**
+ * Prevents a node form from archiving a protected book parent page.
+ */
+function dept_book_validate_parent_page_archive(array &$form, FormStateInterface $form_state) {
+  $node = dept_book_get_form_node($form_state);
+  if (!$node instanceof NodeInterface || !$node->hasField('moderation_state')) {
+    return;
+  }
+
+  $new_state = $form_state->getValue('moderation_state');
+  if (is_array($new_state)) {
+    $new_state = $new_state[0]['value'] ?? NULL;
+  }
+  $original_state = $node->get('moderation_state')->getString();
+
+  $protection = \Drupal::service('dept_book.parent_page_protection');
+  if (is_string($new_state) && $protection->isArchiveBlocked($node, \Drupal::currentUser(), $new_state, $original_state)) {
+    $form_state->setErrorByName('moderation_state', t('This book page has child pages and cannot be archived. Move or remove the child pages first.'));
+  }
+}
+
+/**
+ * Gets the node entity from an entity form.
+ */
+function dept_book_get_form_node(FormStateInterface $form_state): ?NodeInterface {
+  $form_object = $form_state->getFormObject();
+  if (!$form_object instanceof EntityFormInterface) {
+    return NULL;
+  }
+
+  $entity = $form_object->getEntity();
+  return $entity instanceof NodeInterface ? $entity : NULL;
+}
+
+/**
+ * Implements hook_entity_operation_alter().
+ */
+function dept_book_entity_operation_alter(array &$operations, EntityInterface $entity) {
+  if (!$entity instanceof NodeInterface || !\Drupal::service('dept_book.parent_page_protection')->isProtected($entity, \Drupal::currentUser())) {
+    return;
+  }
+
+  unset($operations['delete'], $operations['change_to_archived']);
+}
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function dept_book_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  if (!$entity instanceof NodeInterface || !\Drupal::service('dept_book.parent_page_protection')->isProtected($entity, \Drupal::currentUser())) {
+    return;
+  }
+
+  unset($build['actions']['primary']['archive']);
+  $build['#cache']['contexts'][] = 'user.permissions';
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function dept_book_module_implements_alter(array &$implementations, $hook) {
+  // The archive action is added by origins_workflow_entity_view_alter(), so
+  // this module must run afterwards to remove it for protected book parents.
+  if ($hook === 'entity_view_alter' && isset($implementations['dept_book'])) {
+    $group = $implementations['dept_book'];
+    unset($implementations['dept_book']);
+    $implementations['dept_book'] = $group;
+  }
+}
 
 /**
  * Implements hook_entity_presave().
@@ -141,9 +289,8 @@ function dept_book_process_topics(array $form, FormStateInterface $form_state) {
   // content field for each topic in the entity's site topics values.
   // TL:DR; Hide child pages from topic/subtopic pages.
   if ($values['book']['nid'] !== $values['book']['bid']) {
-    // @phpstan-ignore-next-line
-    $entity = $form_state->getFormObject()->getEntity();
-    if ($entity->hasField('field_site_topics')) {
+    $entity = dept_book_get_form_node($form_state);
+    if ($entity instanceof NodeInterface && $entity->hasField('field_site_topics')) {
       $topic_manager = \Drupal::service('topic.manager');
       $topic_manager->removeChildDisplayFromTopics($entity);
     }
