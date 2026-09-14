@@ -1,0 +1,17 @@
+uuid: 6e88eacf-513f-4e89-b566-a4c1e9630b7a
+langcode: en
+status: false
+dependencies: {  }
+id: jenkins
+label: 'Jenkins QA'
+description: 'Provides additional config changes on top of DDev for the QA Jenkins environment.'
+weight: 100
+stackable: false
+no_patching: false
+storage: folder
+folder: ../config/jenkins
+module: {  }
+theme: {  }
+complete_list: {  }
+partial_list:
+  - 'domain.record.*'
