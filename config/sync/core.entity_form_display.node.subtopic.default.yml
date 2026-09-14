@@ -73,7 +73,7 @@ content:
       media_types: {  }
     third_party_settings:
       media_library_edit:
-        show_edit: '1'
+        show_edit: true
   field_banner_image_overlay:
     type: media_library_widget
     weight: 3
@@ -82,7 +82,7 @@ content:
       media_types: {  }
     third_party_settings:
       media_library_edit:
-        show_edit: '1'
+        show_edit: true
   field_banner_image_thin:
     type: media_library_widget
     weight: 4
@@ -91,7 +91,7 @@ content:
       media_types: {  }
     third_party_settings:
       media_library_edit:
-        show_edit: '1'
+        show_edit: true
   field_domain_access:
     type: options_buttons
     weight: 20
