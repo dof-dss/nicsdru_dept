@@ -8,8 +8,6 @@ dependencies:
     module:
       - tour
       - tour_extras_wysiwyg
-_core:
-  default_config_hash: vrAuDksGYrTVJl5cTDboSNfnGuKUJeJef_RL4RHNFh0
 id: origins_revisions
 label: Revisions
 routes:
@@ -23,7 +21,7 @@ tips:
     weight: -100
     position: top-start
     selector: '#edit-node-revisions-table > thead:nth-child(2) > tr:nth-child(1) > th:nth-child(1)'
-    body: 'This column shows the revision number.'
+    body: 'This column shows the unique revision number for this content.'
   revision_information:
     id: revision_information
     plugin: text
