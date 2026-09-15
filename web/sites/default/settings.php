@@ -108,6 +108,6 @@ if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
 }
 
 // QA Jenkins settings applied on top of DDev split.
-if (getenv('QA_HTTPS_PORT') == '8433') {
+if (getenv('QA_HTTPS_PORT') == '8443') {
   $config['config_split.config_split.jenkins']['status'] = TRUE;
 }
