@@ -7,7 +7,7 @@ db:
   # the CLI will return an error.
   type: mariadb:12.3
   # The disk attribute is the size of the persistent disk (in MB) allocated to the service.
-  disk: 8704
+  disk: 9728
   configuration:
     schemas:
       - main
