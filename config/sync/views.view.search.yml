@@ -499,6 +499,9 @@ display:
           expose_sort_order: false
           sort_asc_label: Asc
           sort_desc_label: Desc
+      cache:
+        type: search_api_none
+        options: {  }
       empty: {  }
       sorts:
         search_api_relevance:
@@ -613,6 +616,7 @@ display:
           hide_empty: false
       defaults:
         empty: false
+        cache: false
         css_class: true
         pager: false
         exposed_form: false

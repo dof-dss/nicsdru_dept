@@ -22,3 +22,9 @@ services:
     arguments: ['@topic.manager', '@orphan.manager', '@entity_type.manager', '@book.manager']
     tags:
       - { name: event_subscriber }
+
+  dept_topics.topics_view_route_subscriber:
+    class: Drupal\dept_topics\Routing\TopicsViewRouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
