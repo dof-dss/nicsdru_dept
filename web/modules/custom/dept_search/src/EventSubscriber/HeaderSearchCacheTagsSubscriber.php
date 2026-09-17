@@ -15,6 +15,8 @@ class HeaderSearchCacheTagsSubscriber implements EventSubscriberInterface {
 
   /**
    * Removes broad Search API list tags from non-search page responses.
+   * Search api-based view page responses use custom domain-specific
+   * cache tags and are not affected by this subscriber.
    *
    * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The response event object.

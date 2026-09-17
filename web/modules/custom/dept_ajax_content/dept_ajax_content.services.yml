@@ -1,0 +1,4 @@
+services:
+  logger.channel.dept_ajax_content:
+    parent: logger.channel_base
+    arguments: ['dept_ajax_content']

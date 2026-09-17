@@ -25,6 +25,8 @@ use Drupal\simple_sitemap\Entity\SimpleSitemapInterface;
 use Drupal\views\ViewExecutable;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+include_once 'inc/tours.php';
+
 /**
  * Implements hook_entity_access().
  */
