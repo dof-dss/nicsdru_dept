@@ -1,4 +1,3 @@
-uuid: d09694e8-d531-4a29-bb66-b447ecc1996f
 langcode: en
 status: true
 dependencies:
@@ -8,8 +7,6 @@ dependencies:
     module:
       - tour
       - tour_extras_wysiwyg
-_core:
-  default_config_hash: vrAuDksGYrTVJl5cTDboSNfnGuKUJeJef_RL4RHNFh0
 id: origins_revisions
 label: Revisions
 routes:
@@ -23,7 +20,7 @@ tips:
     weight: -100
     position: top-start
     selector: '#edit-node-revisions-table > thead:nth-child(2) > tr:nth-child(1) > th:nth-child(1)'
-    body: 'This column shows the revision number.'
+    body: 'This column shows the unique revision number for this content.'
   revision_information:
     id: revision_information
     plugin: text
@@ -35,7 +32,7 @@ tips:
   compare_column_1:
     id: compare_column_1
     plugin: text_formatted
-    label: 'Compare column 1'
+    label: 'Compare revision 1'
     weight: -98
     position: top-start
     selector: '#edit-node-revisions-table > thead:nth-child(2) > tr:nth-child(1) > th:nth-child(3)'
@@ -45,7 +42,7 @@ tips:
   compare_column_2:
     id: compare_column_2
     plugin: text_formatted
-    label: 'Compare column 2'
+    label: 'Compare revision 2'
     weight: -97
     position: top-start
     selector: '#edit-node-revisions-table > thead:nth-child(2) > tr:nth-child(1) > th:nth-child(4)'

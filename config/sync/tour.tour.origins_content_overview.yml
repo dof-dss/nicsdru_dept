@@ -1,4 +1,3 @@
-uuid: e2695cea-0bb8-40ce-9d56-d4f1afca7d9d
 langcode: en
 status: true
 dependencies:
@@ -8,8 +7,6 @@ dependencies:
     module:
       - tour
       - tour_extras_wysiwyg
-_core:
-  default_config_hash: wxn2ldkyVDGEyoiJkt3f21TbFig_QDHy5dhVap1nWLs
 id: origins_content_overview
 label: 'Content overview'
 routes:
@@ -24,7 +21,7 @@ tips:
     position: right
     selector: .button--primary
     body:
-      value: '<p>Click this button to add content to the site.</p>'
+      value: '<p>Click this button to add new content to the site.</p>'
       format: basic_html
   search:
     id: search

@@ -298,63 +298,56 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Management and Structure details.
-   *
-   * @DepartmentField(label="Management and structure")
    */
+  #[DepartmentField(label: 'Management and structure')]
   public function managementAndStructure() {
     return $this->get('field_dept_management_structure')->view();
   }
 
   /**
    * Access to information details.
-   *
-   * @DepartmentField(label="Access to information")
    */
+  #[DepartmentField(label: 'Access to information')]
   public function accessToInformation() {
     return $this->get('field_dept_access_to_info')->view();
   }
 
   /**
    * Contact Information details.
-   *
-   * @DepartmentField(label="Contact information")
    */
+  #[DepartmentField(label: 'Contact information')]
   public function contactInformation() {
     return $this->get('field_dept_contact_info')->view();
   }
 
   /**
    * Social media links.
-   *
-   * @DepartmentField(label="Social media links")
    */
+  #[DepartmentField(label: 'Social media links')]
   public function socialMediaLinks() {
     return $this->get('field_dept_social_media_links')->view();
   }
 
   /**
    * Point of contact map location.
-   *
-   * @DepartmentField(label="Location (map)")
    */
+  #[DepartmentField(label: 'Location (map)')]
   public function location() {
     return $this->get('field_dept_location')->view();
   }
 
   /**
    * Accessibility statement.
-   *
-   * @DepartmentField(label="Accessibility statement")
    */
+  #[DepartmentField(label: 'Accessibility statement')]
   public function accessibilityStatement() {
     return (empty($this->get('field_dept_accessibility')->referencedEntities())) ? NULL : $this->get('field_dept_accessibility')->referencedEntities()[0];
   }
 
   /**
    * Page footer links.
-   *
-   * @DepartmentField(label="Page footer links")
    */
+  #[DepartmentField(label: 'Page footer links')]
   public function footerLinks() {
     return $this->get('field_dept_footer_links')->view();
   }
@@ -362,11 +355,10 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
   /**
    * Contact email address.
    *
-   * @DepartmentField(label="Contact email address")
-   *
    * @return string
    *   The correspondence email address.
    */
+  #[DepartmentField(label: 'Contact email address')]
   public function contactEmail():  string {
     return $this->get('field_dept_correspondence_email')->value;
   }
