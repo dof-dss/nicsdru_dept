@@ -103,7 +103,7 @@
         "drupal/core": "^10.5",
         "drupal/core-composer-scaffold": "10.6.14",
         "drupal/core-project-message": "10.6.14",
-        "drupal/core-recommended": "10.6.14",
+        "drupal/core-recommended": "10.6.17",
         "drupal/csp": "^2.1",
         "drupal/date_facet_drilldown": "^12.0",
         "drupal/date_filter": "^1.0",
@@ -315,9 +315,6 @@
             "drupal/admin_toolbar": {
                 "Add multi column menu dropdown": "https://www.drupal.org/files/issues/2025-08-05/2917168-mr150.patch"
             },
-            "drupal/block_visibility_groups": {
-                "Visibility incorrectly returns false on OR logic when context missing from a different condition #3503194": "https://www.drupal.org/files/issues/2025-02-07/or-logic-when-context-missing--3503194-5.patch"
-            },
             "drupal/cookie_content_blocker": {
                 "Disable XSS for tag settings to allow HTML output": "https://gist.githubusercontent.com/omahm/eb99bc8278b57798a7d82bf06c27b8d1/raw/d9d75e06300a102b072dd8166f82ec381f211b9d/cookie_content_blocker_disable_xss"
             },
@@ -359,9 +356,6 @@
             "drupal/linkit": {
                 "Unpublished nodes not included even when option is selected": "https://www.drupal.org/files/issues/2023-11-09/linkit-unpublished-nodes-not-included-3049946-34.patch"
             },
-            "drupal/media_duplicates": {
-                "Add error handling/logging for missing files #3521185": "https://git.drupalcode.org/project/media_duplicates/-/merge_requests/18.diff"
-            },
             "drupal/migrate_plus": {
                 "Source plugin to only pull in certain URL aliases": "https://www.drupal.org/files/issues/2022-02-18/migrate_plus-n3063778-15.patch"
             },
@@ -374,13 +368,13 @@
                 "Allow uninstall of obsolete module": "https://gist.githubusercontent.com/johangant/6b493abcacdafe437e68638f7bb6e845/raw/1e74d6830ead9e0410a754db040738892b995da4/fdgfdg.patch"
             },
             "drupal/redirect": {
-                "Add a 'URL Redirects' tab to ALL applicable content entity edit forms (only nodes supported yet) #3245137": "https://www.drupal.org/files/issues/2025-09-23/3245137-34.patch"
+                "Add a 'URL Redirects' tab to ALL applicable content entity edit forms (only nodes supported yet) #3245137": "https://git.drupalcode.org/project/redirect/-/merge_requests/120.patch"
             },
             "drupal/robotstxt": {
                 "Add cache context url.site to robots.txt response": "https://www.drupal.org/files/issues/2022-06-02/3283753-3.patch"
             },
             "drupal/simple_gmap": {
-                "Add support for address module": "https://www.drupal.org/files/issues/2025-03-19/simple_gmap-add-support-for-address-module-2863979-68.patch"
+                "Add support for address module": "https://www.drupal.org/files/issues/2026-08-25/simple_gmap-address-formatter-2863979-70.patch"
             },
             "drupal/whatlinkshere": {
                 "Fix disappearing 'Scheduled transitions' link #": "patches/what_links_here_3481289.patch"
