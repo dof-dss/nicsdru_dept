@@ -2,17 +2,19 @@ uuid: a6d0e5cb-8a48-4776-9125-154c47ba28c7
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.subtopic
+    - node.type.topic
   module:
     - node
 id: topics
 label: Topics
 type: 'canonical_entities:node'
-pattern: 'topics/[node:title]'
+pattern: '/topics/[node:title]'
 selection_criteria:
   c4640a4c-dd82-4ad4-8e30-40f3c4a4b88c:
     id: 'entity_bundle:node'
     negate: false
-    uuid: c4640a4c-dd82-4ad4-8e30-40f3c4a4b88c
     context_mapping:
       node: node
     bundles:

@@ -3,6 +3,8 @@
 namespace Drupal\dept_search\EventSubscriber;
 
 use Drupal\Core\Cache\CacheableResponseInterface;
+use Drupal\Core\Routing\AdminContext;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\dept_search\Cache\BroadSearchCacheTags;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -14,9 +16,18 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class HeaderSearchCacheTagsSubscriber implements EventSubscriberInterface {
 
   /**
+   * Constructs the response subscriber.
+   */
+  public function __construct(
+    private readonly RouteMatchInterface $routeMatch,
+    private readonly AdminContext $adminContext,
+  ) {}
+
+  /**
    * Removes broad Search API list tags from non-search page responses.
-   * Search api-based view page responses use custom domain-specific
-   * cache tags and are not affected by this subscriber.
+   *
+   * Search API-based view page responses use custom domain-specific cache tags
+   * and are not affected by this subscriber.
    *
    * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The response event object.
@@ -29,8 +40,8 @@ class HeaderSearchCacheTagsSubscriber implements EventSubscriberInterface {
     // Keep autocomplete itself and administration pages fully cache-tagged.
     // Public pages keep entity-specific tags, but not whole-index tags that
     // purge unrelated domains when any indexed content changes.
-    if (\Drupal::routeMatch()->getRouteName() === 'search_api_autocomplete.autocomplete'
-      || \Drupal::service('router.admin_context')->isAdminRoute()) {
+    if ($this->routeMatch->getRouteName() === 'search_api_autocomplete.autocomplete'
+      || $this->adminContext->isAdminRoute()) {
       return;
     }
 

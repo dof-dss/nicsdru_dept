@@ -2,14 +2,36 @@
 
 namespace Drupal\dept_core\Form;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityForm;
-use Drupal\Core\Form\FormState;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form controller for the department entity edit forms.
  */
-class DepartmentForm extends ContentEntityForm {
+final class DepartmentForm extends ContentEntityForm {
+
+  public function __construct(
+    EntityTypeManagerInterface $entity_type_manager,
+    private readonly Connection $database,
+  ) {
+    // ContentEntityForm expects entity_type.manager on the parent.
+    $this->entityTypeManager = $entity_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): static {
+    /** @var static $instance */
+    $instance = parent::create($container);
+    // Parent::create() sets a bunch of required stuff; then we set our deps.
+    $instance->entityTypeManager = $container->get('entity_type.manager');
+    $instance->database = $container->get('database');
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -17,39 +39,47 @@ class DepartmentForm extends ContentEntityForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    $domains = \Drupal::entityTypeManager()->getStorage('domain')->loadMultiple();
-    $departments = \Drupal::database()->query("SELECT id, label FROM {department}")->fetchAllKeyed();
-    $domain_options = [];
+    $domains = $this->entityTypeManager->getStorage('domain')->loadMultiple();
 
+    // Load existing department IDs => labels.
+    $departments = $this->database
+      ->select('department', 'd')
+      ->fields('d', ['id', 'label'])
+      ->execute()
+      ->fetchAllKeyed();
+
+    $domain_options = [];
     foreach ($domains as $domain) {
       if ($domain->id() !== 'dept_admin') {
         $domain_options[$domain->id()] = $domain->label();
       }
     }
 
-    $id_options = array_diff_assoc($domain_options, $departments);
+    // Only allow domain IDs not already used by a department.
+    $id_options = array_diff_key($domain_options, $departments);
 
-    if (count($id_options) < 1 && $this->entity->isNew()) {
-      \Drupal::messenger()->addWarning('All Domains have a Department assigned.');
+    if ($this->entity->isNew() && count($id_options) < 1) {
+      $this->messenger()->addWarning($this->t('All Domains have a Department assigned.'));
     }
 
     if ($this->entity->isNew()) {
       $form['id'] = [
         '#type' => 'select',
-        '#title' => 'Department',
+        '#title' => $this->t('Department'),
         '#options' => $id_options,
         '#required' => TRUE,
-        '#access' => $this->entity->isNew(),
+        '#access' => TRUE,
         '#weight' => -50,
       ];
     }
     else {
       $form['id'] = [
         '#type' => 'hidden',
-        '#value' => $this->entity->id()
+        '#value' => $this->entity->id(),
       ];
     }
 
+    // Hide label field (it is set from the chosen domain).
     $form['label']['widget'][0]['#required'] = FALSE;
     $form['label']['#access'] = FALSE;
     $form['label']['widget'][0]['value']['#required'] = FALSE;
@@ -57,7 +87,7 @@ class DepartmentForm extends ContentEntityForm {
     $form['author'] = [
       '#type' => 'details',
       '#group' => 'advanced',
-      '#title' => 'Authoring Information'
+      '#title' => $this->t('Authoring information'),
     ];
 
     $form['status']['#group'] = 'footer';
@@ -71,11 +101,16 @@ class DepartmentForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    $domain = \Drupal::entityTypeManager()->getStorage('domain')->load($form_state->getValue('id'));
-    $form_state->setValue('label', ['0' => ['value' => $domain->label()]]);
+    // On edit, 'id' is hidden, but still present in form state.
+    $domain_id = $form_state->getValue('id') ?: $this->entity->id();
+
+    $domain = $this->entityTypeManager->getStorage('domain')->load($domain_id);
+    if ($domain) {
+      $form_state->setValue('label', ['0' => ['value' => $domain->label()]]);
+    }
 
     parent::validateForm($form, $form_state);
-    return $this->entity;
+    return $form;
   }
 
   /**
@@ -105,7 +140,6 @@ class DepartmentForm extends ContentEntityForm {
     }
 
     $form_state->setRedirect('entity.department.canonical', ['department' => $entity->id()]);
-
     return $result;
   }
 

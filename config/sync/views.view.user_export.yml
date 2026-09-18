@@ -815,7 +815,7 @@ display:
       path: admin/people/export/csv
       filename: 'user export.csv'
       automatic_download: true
-      store_in_public_file_directory: null
+      export_filesystem: public
       custom_redirect_path: false
       redirect_to_display: none
       include_query_params: false
@@ -886,7 +886,7 @@ display:
       path: admin/people/export/json
       filename: 'user export.json'
       automatic_download: true
-      store_in_public_file_directory: null
+      export_filesystem: public
       custom_redirect_path: false
       redirect_to_display: none
       include_query_params: false
@@ -959,7 +959,7 @@ display:
       path: admin/people/export/xml
       filename: 'user export.xml'
       automatic_download: true
-      store_in_public_file_directory: null
+      export_filesystem: public
       custom_redirect_path: false
       redirect_to_display: none
       include_query_params: false

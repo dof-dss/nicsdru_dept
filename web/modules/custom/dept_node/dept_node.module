@@ -213,11 +213,8 @@ function dept_node_title_guardian(array &$form, FormStateInterface $form_state) 
   }
 
   $title = trim($form_state->getValue('title')[0]['value']);
-  $entity = dept_node_get_form_entity($form_state);
-  if ($entity === NULL) {
-    return new AjaxResponse();
-  }
-  $bundle = $entity->bundle();
+
+  $bundle = $form_state->getformObject()->getEntity()->bundle();
 
   // Check for existing titles within the same department and content type.
   $query = \Drupal::database()->select('node_field_data', 'fd');
@@ -381,6 +378,9 @@ function dept_node_should_scope_node_list_cache_tag(ViewExecutable $view) {
  * Implements hook_entity_insert().
  */
 function dept_node_entity_insert(EntityInterface $entity) {
+  if (getenv('BYPASS_CACHE') === "TRUE") {
+    return;
+  }
   dept_node_invalidate_domain_list_cache($entity);
   dept_node_invalidate_latest_news_cache($entity);
   dept_node_invalidate_related_content_cache($entity);
@@ -390,6 +390,9 @@ function dept_node_entity_insert(EntityInterface $entity) {
  * Implements hook_entity_update().
  */
 function dept_node_entity_update(EntityInterface $entity) {
+  if (getenv('BYPASS_CACHE') === "TRUE") {
+    return;
+  }
   dept_node_invalidate_domain_list_cache($entity);
   dept_node_invalidate_latest_news_cache($entity);
   dept_node_invalidate_related_content_cache($entity);
@@ -399,6 +402,9 @@ function dept_node_entity_update(EntityInterface $entity) {
  * Implements hook_entity_delete().
  */
 function dept_node_entity_delete(EntityInterface $entity) {
+  if (getenv('BYPASS_CACHE') === "TRUE") {
+    return;
+  }
   dept_node_invalidate_domain_list_cache($entity);
   dept_node_invalidate_latest_news_cache($entity);
   dept_node_invalidate_related_content_cache($entity);
@@ -713,7 +719,7 @@ function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_
     return;
   }
 
-  if ($entity->bundle() === 'news') {
+  if ($form_state->getFormObject()->getEntity()->bundle() === 'news') {
     $dept = \Drupal::service('department.manager')->getCurrentDepartment()->id();
     $type = $form_state->getValue('field_news_type')[0]['value'];
     // If News is not a press release created on nigov, remove any existing 'nigov' entry.
@@ -741,12 +747,7 @@ function dept_node_assign_domain_defaults(array $form, FormStateInterface $form_
  * as the nigov domain.
  */
 function dept_node_assign_domain_defaults_media(array $form, FormStateInterface $form_state, array $node_domain_access_values) {
-  $entity = dept_node_get_form_entity($form_state);
-  if ($entity === NULL) {
-    return;
-  }
-
-  $bundle = $entity->bundle();
+  $bundle = $form_state->getFormObject()->getEntity()->bundle();
 
   // Replicate the domain access settings on any referenced media entities.
   $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $bundle);
