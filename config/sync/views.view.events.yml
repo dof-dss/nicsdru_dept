@@ -133,7 +133,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: search_api_tag
+        type: search_api_none
         options: {  }
       empty:
         area:
@@ -466,6 +466,7 @@ display:
     display_options:
       cache:
         type: search_api_none
+        options: {  }
       defaults:
         cache: false
         css_class: false
