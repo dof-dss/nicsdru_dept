@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   }
  * )
  */
-class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterface {
+final class NodeBannerBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * The Topic Manager service.

@@ -11,6 +11,7 @@ module:
   antibot: 0
   autoban: 0
   autoban_advban: 0
+  bert: 0
   block: 0
   block_content: 0
   block_field: 0
@@ -35,7 +36,6 @@ module:
   config_readonly: 0
   config_split: 0
   content_lock: 0
-  content_lock_timeout: 0
   content_moderation: 0
   contextual: 0
   csp: 0
@@ -64,8 +64,6 @@ module:
   domain_alias: 0
   domain_config: 0
   domain_entity: 0
-  domain_path: 0
-  domain_path_pathauto: 0
   domain_path_redirect: 0
   domain_simple_sitemap: 0
   draggableviews: 0
@@ -87,7 +85,6 @@ module:
   field_group: 0
   field_ui: 0
   file: 0
-  file_delete_ui: 0
   filelog: 0
   filter: 0
   flag: 0
@@ -169,7 +166,6 @@ module:
   search_api_spellcheck: 0
   serialization: 0
   shortcut: 0
-  simple_gmap: 0
   simple_sitemap: 0
   simplei: 0
   smart_trim: 0
@@ -208,7 +204,9 @@ module:
   pathauto: 1
   origins_cache_control: 2
   origins_workflow: 2
+  domain_path: 10
   views: 10
+  domain_path_pathauto: 11
   paragraphs: 11
   domain_access: 20
   domain_source: 30
@@ -216,7 +214,6 @@ module:
   eu_cookie_compliance: 1001
   dept_postprocess: 1111
 theme:
-  seven: 0
   stable: 0
   nicsdru_origins_theme: 0
   nicsdru_dept_theme: 0

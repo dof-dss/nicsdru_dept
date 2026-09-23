@@ -11,6 +11,7 @@ use Drupal\dept_core\DepartmentManager;
 use Drupal\node\NodeAccessControlHandler;
 use Drupal\node\NodeGrantDatabaseStorageInterface;
 use Drupal\node\NodeInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Extends the core node access handler for Departmental sites.
@@ -25,26 +26,29 @@ class DeptNodeAccessControlHandler extends NodeAccessControlHandler {
   }
 
   /**
-   * The Department Manager service.
-   *
-   * @var \Drupal\dept_core\DepartmentManager
+   * {@inheritdoc}
    */
-  protected DepartmentManager $departmentManager;
+  public function __construct(
+    EntityTypeInterface $entity_type,
+    NodeGrantDatabaseStorageInterface $grant_storage,
+    EntityTypeManagerInterface $entity_type_manager,
+    protected DepartmentManager $departmentManager,
+  ) {
+    parent::__construct($entity_type, $grant_storage, $entity_type_manager);
+  }
 
   /**
-   * Constructs a NodeAccessControlHandler object.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
-   *   The entity type definition.
-   * @param \Drupal\node\NodeGrantDatabaseStorageInterface $grant_storage
-   *   The node grant storage.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
+   * Entity handler factory used by EntityTypeManager.
    */
-  public function __construct(EntityTypeInterface $entity_type, NodeGrantDatabaseStorageInterface $grant_storage, EntityTypeManagerInterface $entity_type_manager) {
-    parent::__construct($entity_type, $grant_storage, $entity_type_manager);
-
-    $this->departmentManager = \Drupal::service('department.manager');
+  public static function createInstance(ContainerInterface $container, EntityTypeInterface $entity_type): static {
+    // Entity handlers may be subclassed by tests or downstream projects.
+    // @phpstan-ignore-next-line
+    return new static(
+      $entity_type,
+      $container->get('node.grant_storage'),
+      $container->get('entity_type.manager'),
+      $container->get('department.manager'),
+    );
   }
 
   /**

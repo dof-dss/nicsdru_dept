@@ -1,12 +1,16 @@
 services:
   topic.manager:
     class: Drupal\dept_topics\TopicManager
-    arguments: ['@entity_type.manager', '@database', '@entity_field.manager', '@entity_display.repository', '@book.manager']
-#  topic.moderation_state_change_subscriber:
-#    class: Drupal\dept_topics\EventSubscriber\ModerationStateChangeSubscriber
-#    arguments: ['@topic.manager']
-#    tags:
-#      - { name: event_subscriber }
+    arguments: [
+      '@entity_type.manager',
+      '@database',
+      '@entity_field.manager',
+      '@entity_display.repository',
+      '@book.manager',
+      '@content_moderation.moderation_information',
+      '@cache.default'
+    ]
+
   topic.solr_query_alter:
     class: Drupal\dept_topics\EventSubscriber\SolrQueryAlterEventSubscriber
     arguments: ['@topic.manager']
@@ -17,9 +21,15 @@ services:
     class: Drupal\dept_topics\OrphanManager
     arguments: ['@entity_type.manager', '@topic.manager']
 
-  dept_topics.entity_event_subscriber:
+  dept_topics.topic_entity_event_subscriber:
     class: Drupal\dept_topics\EventSubscriber\TopicsEntityEventSubscriber
-    arguments: ['@topic.manager', '@orphan.manager', '@entity_type.manager', '@book.manager']
+    arguments: ['@topic.manager', '@entity_type.manager', '@book.manager']
+    tags:
+      - { name: event_subscriber }
+
+  dept_topics.topic_child_entity_event_subscriber:
+    class: Drupal\dept_topics\EventSubscriber\TopicsChildEntityEventSubscriber
+    arguments: ['@topic.manager', '@content_moderation.moderation_information', '@messenger', '@entity_type.manager']
     tags:
       - { name: event_subscriber }
 

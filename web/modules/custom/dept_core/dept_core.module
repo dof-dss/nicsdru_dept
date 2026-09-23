@@ -145,7 +145,6 @@ function dept_core_preprocess_menu(&$variables) {
     // accessibility statement defined in the group field value.
     $dept = \Drupal::service('department.manager')->getCurrentDepartment();
 
-    // @phpstan-ignore-next-line
     if (empty($dept)) {
       return;
     }
@@ -296,7 +295,6 @@ function dept_core_entity_update(EntityInterface $entity) {
     $department = \Drupal::entityTypeManager()->getStorage('department')->load($entity->id());
 
     if (!empty($department) && $department->label() !== $entity->label()) {
-      // @phpstan-ignore-next-line
       $department->set('label', $entity->label());
       $department->save();
     }
@@ -451,7 +449,6 @@ function dept_core_department_links(): array {
 
     $links[] = [
       '#wrapper_attributes' => ['class' => implode(' ', $classes)],
-      // @phpstan-ignore-next-line
       Link::fromTextAndUrl($department->label(), Url::fromUri($department->url()))->toRenderable()
     ];
     $classes = [];
@@ -483,7 +480,7 @@ function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) 
 
       if (!$current_user->hasRole('administrator')) {
         $form['dept']['#value'] = $current_dept->id();
-        hide($form['dept']);
+        $form['dept']['#access'] = FALSE;
         return;
       }
 
@@ -493,7 +490,7 @@ function dept_core_form_alter(&$form, FormStateInterface $form_state, $form_id) 
       // If the user doesn't have top level domain permissions or no assigned domains, hide this filter option.
       if (empty($user_domains)) {
         $form['dept']['#value'] = $current_dept->id();
-        hide($form['dept']);
+        $form['dept']['#access'] = FALSE;
         return;
       }
 

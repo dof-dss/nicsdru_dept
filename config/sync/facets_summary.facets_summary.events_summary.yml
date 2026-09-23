@@ -3,6 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
+    - facets.facet.business_area
+    - facets.facet.event_datetime
     - search_api.index.default_content
     - views.view.events
   module:
@@ -10,12 +12,8 @@ dependencies:
 id: events_summary
 name: 'Events summary'
 facet_source_id: 'search_api:views_page__events__events_search'
-processor_configs:
-  hide_when_not_rendered:
-    processor_id: hide_when_not_rendered
-    weights:
-      build: '45'
-    settings: {  }
+only_visible_when_facet_source_is_visible: true
+processor_configs: {  }
 facets:
   business_area:
     checked: true
