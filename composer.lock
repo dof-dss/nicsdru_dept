@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "97372d5aed878ed780a540f1d23aae84",
+    "content-hash": "0ee039662eb655648ea21fc7e45925d4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1324,22 +1324,20 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
-            "version": "dev-11.x-dev",
+            "version": "11.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dof-dss/nicsdru_origins_theme.git",
-                "reference": "eb6746231f76ba05503db1929c236a9847912523"
+                "reference": "5083b09bf503fcff1fd9283fd8d5561798a19e01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_theme/zipball/eb6746231f76ba05503db1929c236a9847912523",
-                "reference": "eb6746231f76ba05503db1929c236a9847912523",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_theme/zipball/5083b09bf503fcff1fd9283fd8d5561798a19e01",
+                "reference": "5083b09bf503fcff1fd9283fd8d5561798a19e01",
                 "shasum": ""
             },
             "require": {
-                "drupal/core": "^10 || ^11",
-                "drupal/stable": "^2.0",
-                "php": ">=8.1"
+                "php": ">=8.0"
             },
             "type": "drupal-custom-theme",
             "notification-url": "https://packagist.org/downloads/",
@@ -1359,9 +1357,9 @@
                 "theme"
             ],
             "support": {
-                "source": "https://github.com/dof-dss/nicsdru_origins_theme/tree/11.x-dev"
+                "source": "https://github.com/dof-dss/nicsdru_origins_theme/tree/11.1.1"
             },
-            "time": "2026-09-10T15:24:02+00:00"
+            "time": "2025-01-24T12:20:03+00:00"
         },
         {
             "name": "drupal/a11y_form_helpers",
@@ -22259,7 +22257,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "dof-dss/nicsdru_origins_theme": 20,
         "drupal/block_field": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
