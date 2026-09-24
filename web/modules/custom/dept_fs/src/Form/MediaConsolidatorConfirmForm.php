@@ -191,7 +191,8 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
   protected function processMediaEmbed(ConsolidationStore $consolidation) {
 
     $field = $consolidation->field() . "_value";
-    $media_regex = '/(<drupal-media\b[\s\S]*?)data-entity-uuid=["\'](?:[^"\']*)["\']/i';
+    // Only match embeds of the media being consolidated.
+    $media_regex = '/(<drupal-media\b[^>]*?)data-entity-uuid=["\']' . preg_quote($consolidation->currentMedia->uuid(), '/') . '["\']/i';
     $updated_media_element = '${1}data-entity-uuid="' . $consolidation->replacementMedia->uuid() . '"';
 
     // If the source vid matches the media host entity revision ID then update the base table.
