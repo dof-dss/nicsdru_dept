@@ -112,30 +112,63 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     $replacement_media = $media_storage->load($replacement_media_mid);
     $cache_tags = array_map(fn($mid) => 'media:' . $mid, $mids);
     $reset_ids = [];
+    $skipped = [];
 
-    foreach ($selected_media_entities as $media_entity) {
-      $host_sources = $this->entityUsage->listSources($media_entity);
+    // Run all updates in a transaction so a failure part way through does not
+    // leave hosts referencing a mix of old and new media.
+    $transaction = $this->database->startTransaction();
 
-      foreach ($host_sources as $host_type => $host_data) {
-        foreach ($host_data as $host_id => $usage) {
-          $media_host = $this->entityTypeManager->getStorage($host_type)->load($host_id);
-          $reset_ids[] = $host_id;
-          $cache_tags = array_merge($cache_tags, $media_host->getCacheTags());
-          foreach ($usage as $usage_index => $usage_data) {
-            $this->updateUsage(new ConsolidationStore($media_host, $usage_data, $media_entity, $replacement_media));
+    try {
+      foreach ($selected_media_entities as $media_entity) {
+        $host_sources = $this->entityUsage->listSources($media_entity);
+
+        foreach ($host_sources as $host_type => $host_data) {
+          foreach ($host_data as $host_id => $usage) {
+            $media_host = $this->entityTypeManager->getStorage($host_type)->load($host_id);
+            $reset_ids[] = $host_id;
+            $cache_tags = array_merge($cache_tags, $media_host->getCacheTags());
+            foreach ($usage as $usage_data) {
+              $consolidation = new ConsolidationStore($media_host, $usage_data, $media_entity, $replacement_media);
+              if (!$this->updateUsage($consolidation)) {
+                $skipped[] = $this->t('@media used by @type @id (@method on @field)', [
+                  '@media' => $media_entity->label(),
+                  '@type' => $host_type,
+                  '@id' => $host_id,
+                  '@method' => $consolidation->relationshipType(),
+                  '@field' => $consolidation->field(),
+                ]);
+              }
+            }
           }
         }
       }
-
-      $this->entityUsage->deleteByTargetEntity($media_entity->id(), 'media');
     }
+    catch (\Exception $e) {
+      $transaction->rollBack();
+      $this->logger('dept_fs')->error('Media consolidation failed and was rolled back: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+      $this->messenger()->addError($this->t('The media could not be consolidated. No changes have been made.'));
+      return;
+    }
+
+    // Commit the transaction before invalidating caches.
+    unset($transaction);
 
     // Reset cache for each host node to ensure that any media entity reference
     // fields get the new consolidated media entity ID.
     \Drupal::entityTypeManager()->getStorage('node')->resetCache($reset_ids);
 
     Cache::invalidateTags($cache_tags);
-    \Drupal::messenger()->addMessage($this->t('The media has been consolidated.'));
+
+    if (!empty($skipped)) {
+      $this->messenger()->addWarning($this->t('The media has been partially consolidated. The following usages could not be updated automatically and still reference the duplicate media: @skipped', [
+        '@skipped' => implode('; ', $skipped),
+      ]));
+    }
+    else {
+      $this->messenger()->addStatus($this->t('The media has been consolidated.'));
+    }
   }
 
   /**
@@ -143,12 +176,24 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
    *
    * @param \Drupal\dept_fs\ConsolidationStore $consolidation
    *   The store to process.
+   *
+   * @return bool
+   *   TRUE if the usage was updated, FALSE if the relationship type is not
+   *   supported and the usage was left unchanged.
    */
-  protected function updateUsage(ConsolidationStore $consolidation) {
-    match($consolidation->relationshipType()) {
-      'entity_reference' => $this->processEntityReference($consolidation),
-      'media_embed' =>  $this->processMediaEmbed($consolidation),
-    };
+  protected function updateUsage(ConsolidationStore $consolidation): bool {
+    switch ($consolidation->relationshipType()) {
+      case 'entity_reference':
+        $this->processEntityReference($consolidation);
+        return TRUE;
+
+      case 'media_embed':
+        $this->processMediaEmbed($consolidation);
+        return TRUE;
+
+      default:
+        return FALSE;
+    }
   }
 
   /**
@@ -252,6 +297,19 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
       $consolidation->relationshipType(),
       $consolidation->field(),
       1);
+
+    // Remove only this usage record for the duplicate, so any usages that were
+    // not processed remain tracked against it.
+    $this->entityUsage->registerUsage(
+      $consolidation->currentMedia->id(),
+      'media',
+      $consolidation->mediaHost->id(),
+      $consolidation->mediaHost->getEntityTypeId(),
+      $consolidation->usageData['source_langcode'],
+      $consolidation->usageData['source_vid'],
+      $consolidation->relationshipType(),
+      $consolidation->field(),
+      0);
   }
 
   /**
