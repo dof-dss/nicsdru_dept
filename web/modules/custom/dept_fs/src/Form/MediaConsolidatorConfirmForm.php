@@ -260,22 +260,24 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     }
 
     // Update media embed data in revisions.
-    $field_value = $this->database->select($consolidation->table(ConsolidationTable::Revision), 't')
-      ->fields('t', [$field])
-      ->condition('entity_id', $consolidation->mediaHost->id())
-      ->condition('revision_id', $consolidation->usageData['source_vid'])
-      ->condition('langcode', $consolidation->usageData['source_langcode'])
-      ->execute()
-      ->fetchField();
+    if ($this->database->schema()->tableExists($consolidation->table(ConsolidationTable::Revision))) {
+      $field_value = $this->database->select($consolidation->table(ConsolidationTable::Revision), 't')
+        ->fields('t', [$field])
+        ->condition('entity_id', $consolidation->mediaHost->id())
+        ->condition('revision_id', $consolidation->usageData['source_vid'])
+        ->condition('langcode', $consolidation->usageData['source_langcode'])
+        ->execute()
+        ->fetchField();
 
-    $field_value = preg_replace($media_regex, $updated_media_element, $field_value);
+      $field_value = preg_replace($media_regex, $updated_media_element, $field_value);
 
-    $this->database->update($consolidation->table(ConsolidationTable::Revision))
-      ->fields([$field => $field_value])
-      ->condition('entity_id', $consolidation->mediaHost->id())
-      ->condition('revision_id', $consolidation->usageData['source_vid'])
-      ->condition('langcode', $consolidation->usageData['source_langcode'])
-      ->execute();
+      $this->database->update($consolidation->table(ConsolidationTable::Revision))
+        ->fields([$field => $field_value])
+        ->condition('entity_id', $consolidation->mediaHost->id())
+        ->condition('revision_id', $consolidation->usageData['source_vid'])
+        ->condition('langcode', $consolidation->usageData['source_langcode'])
+        ->execute();
+    }
 
     $this->updateEntityUsage($consolidation);
   }
