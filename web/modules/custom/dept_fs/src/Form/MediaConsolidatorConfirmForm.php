@@ -10,6 +10,7 @@ use Drupal\Core\Form\ConfirmFormHelper;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\Core\Url;
 use Drupal\dept_fs\ConsolidationStore;
 use Drupal\dept_fs\ConsolidationTable;
 use Drupal\entity_usage\EntityUsageInterface;
@@ -338,8 +339,8 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getCancelUrl() {
-    return ConfirmFormHelper::buildCancelLink($this, \Drupal::request());
+  public function getCancelUrl(): Url {
+    return Url::fromRoute('view.media_duplicates.media_duplicates_page');
   }
 
 }
