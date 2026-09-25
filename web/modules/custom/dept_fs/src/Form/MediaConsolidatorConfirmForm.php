@@ -97,7 +97,76 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     ];
     $form['actions']['cancel'] = ConfirmFormHelper::buildCancelLink($this, \Drupal::request());
 
+    // Show why the selection cannot be consolidated before the user submits.
+    $errors = $this->getSelectionErrors($entities);
+    if (!empty($errors)) {
+      foreach ($errors as $error) {
+        $this->messenger()->addError($error);
+      }
+      $form['media_replacement']['#access'] = FALSE;
+      $form['actions']['submit']['#disabled'] = TRUE;
+    }
+
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
+    $mids = array_filter(explode(',', (string) $form_state->getValue('mids')));
+    $entities = $this->entityTypeManager->getStorage('media')->loadMultiple($mids);
+
+    foreach ($this->getSelectionErrors($entities) as $error) {
+      $form_state->setErrorByName('media_replacement', $error);
+    }
+  }
+
+  /**
+   * Check the selected media can be safely consolidated.
+   *
+   * Media can only be consolidated when there are at least two items, all of
+   * the same media type, with identical non-empty file checksums.
+   *
+   * @param \Drupal\media\MediaInterface[] $entities
+   *   The selected media entities.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup[]
+   *   A list of error messages, empty if the selection is valid.
+   */
+  protected function getSelectionErrors(array $entities): array {
+    if (count($entities) < 2) {
+      return [$this->t('Select at least two media items to consolidate.')];
+    }
+
+    $errors = [];
+    $bundles = [];
+    $checksums = [];
+
+    foreach ($entities as $media) {
+      $bundles[$media->bundle()] = TRUE;
+      $checksum = $media->get('duplicates_checksum')->value;
+
+      if (empty($checksum)) {
+        $errors[] = $this->t('%name (ID: @id) has no file checksum, so it cannot be confirmed as a duplicate.', [
+          '%name' => $media->label(),
+          '@id' => $media->id(),
+        ]);
+      }
+      else {
+        $checksums[$checksum] = TRUE;
+      }
+    }
+
+    if (count($bundles) > 1) {
+      $errors[] = $this->t('The selected media items must all be the same media type.');
+    }
+
+    if (count($checksums) > 1) {
+      $errors[] = $this->t('The selected media items are not duplicates of the same file.');
+    }
+
+    return $errors;
   }
 
   /**
