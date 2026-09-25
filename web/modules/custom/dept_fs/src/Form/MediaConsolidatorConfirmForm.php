@@ -180,8 +180,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     $mids = array_diff($mids, [$replacement_media_mid]);
     $selected_media_entities = $media_storage->loadMultiple($mids);
     $replacement_media = $media_storage->load($replacement_media_mid);
-    $cache_tags = array_map(fn($mid) => 'media:' . $mid, $mids);
-    $reset_ids = [];
+    $hosts = [];
     $skipped = [];
 
     // Run all updates in a transaction so a failure part way through does not
@@ -195,8 +194,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
         foreach ($host_sources as $host_type => $host_data) {
           foreach ($host_data as $host_id => $usage) {
             $media_host = $this->entityTypeManager->getStorage($host_type)->load($host_id);
-            $reset_ids[] = $host_id;
-            $cache_tags = array_merge($cache_tags, $media_host->getCacheTags());
+            $hosts[$host_type][$host_id] = $media_host;
             foreach ($usage as $usage_data) {
               $consolidation = new ConsolidationStore($media_host, $usage_data, $media_entity, $replacement_media);
               if (!$this->updateUsage($consolidation)) {
@@ -225,11 +223,7 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     // Commit the transaction before invalidating caches.
     unset($transaction);
 
-    // Reset cache for each host node to ensure that any media entity reference
-    // fields get the new consolidated media entity ID.
-    \Drupal::entityTypeManager()->getStorage('node')->resetCache($reset_ids);
-
-    Cache::invalidateTags($cache_tags);
+    $this->invalidateCaches($hosts, [...$selected_media_entities, $replacement_media]);
 
     if (!empty($skipped)) {
       $this->messenger()->addWarning($this->t('The media has been partially consolidated. The following usages could not be updated automatically and still reference the duplicate media: @skipped', [
@@ -239,6 +233,45 @@ class MediaConsolidatorConfirmForm extends ConfirmFormBase {
     else {
       $this->messenger()->addStatus($this->t('The media has been consolidated.'));
     }
+  }
+
+  /**
+   * Clear caches for the host entities and media affected by consolidation.
+   *
+   * Field values are written directly to the database, bypassing entity saves,
+   * so the entity caches and cache tags a save would clear must be cleared
+   * here.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface[][] $hosts
+   *   Host entities keyed by entity type ID and entity ID.
+   * @param \Drupal\media\MediaInterface[] $media
+   *   The duplicate and replacement media entities.
+   */
+  protected function invalidateCaches(array $hosts, array $media): void {
+    $tags = [];
+
+    foreach ($media as $media_entity) {
+      $tags = array_merge($tags, $media_entity->getCacheTagsToInvalidate());
+    }
+
+    foreach ($hosts as $host_type => $entities) {
+      // Reset the static and persistent entity caches so the host entities are
+      // reloaded with the updated field values, e.g. on edit forms.
+      $this->entityTypeManager->getStorage($host_type)->resetCache(array_keys($entities));
+
+      foreach ($entities as $host) {
+        // Invalidate the same tags as an entity save, covering rendered output
+        // and listings (e.g. Views) that include the host entity.
+        $tags = array_merge(
+          $tags,
+          $host->getCacheTagsToInvalidate(),
+          $host->getEntityType()->getListCacheTags(),
+          [$host_type . '_list:' . $host->bundle()],
+        );
+      }
+    }
+
+    Cache::invalidateTags(array_values(array_unique($tags)));
   }
 
   /**
