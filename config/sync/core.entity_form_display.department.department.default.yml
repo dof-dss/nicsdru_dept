@@ -6,6 +6,7 @@ dependencies:
     - field.field.department.department.field_dept_access_to_info
     - field.field.department.department.field_dept_accessibility
     - field.field.department.department.field_dept_contact_info
+    - field.field.department.department.field_dept_correspondence_email
     - field.field.department.department.field_dept_footer_links
     - field.field.department.department.field_dept_location
     - field.field.department.department.field_dept_management_structure
@@ -59,6 +60,14 @@ content:
     settings:
       rows: 5
       placeholder: ''
+    third_party_settings: {  }
+  field_dept_correspondence_email:
+    type: email_default
+    weight: 8
+    region: content
+    settings:
+      placeholder: ''
+      size: 60
     third_party_settings: {  }
   field_dept_footer_links:
     type: link_default
@@ -116,5 +125,10 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  url_redirects:
+    weight: 50
+    region: content
+    settings: {  }
     third_party_settings: {  }
 hidden: {  }
