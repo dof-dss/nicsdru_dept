@@ -45,6 +45,10 @@ form {
     }
   }
 
+  .fieldset__error-message {
+    @extend %error-bubble;
+  }
+
   // Nested fieldsets.
   fieldset fieldset,
   section fieldset {
