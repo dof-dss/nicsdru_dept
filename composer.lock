@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e6362ac3846da8ec8393b37e556e879b",
+    "content-hash": "35f7821e2bd2f7280a5d51e019d0d0ab",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -16680,6 +16680,25 @@
             "time": "2025-10-16T20:13:18+00:00"
         },
         {
+            "name": "dof-dss/playwright-dept",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:dof-dss/playwright-dept.git",
+                "reference": "4b40397b2266f82fb0dbefb0e4b3c4b32daab40f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dof-dss/playwright-dept/zipball/4b40397b2266f82fb0dbefb0e4b3c4b32daab40f",
+                "reference": "4b40397b2266f82fb0dbefb0e4b3c4b32daab40f",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "drupal-library",
+            "description": "Playwright tests for Departmental sites",
+            "time": "2026-09-28T16:49:02+00:00"
+        },
+        {
             "name": "drupal/coder",
             "version": "8.3.31",
             "source": {
@@ -22554,6 +22573,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "dof-dss/playwright-dept": 20,
         "drupal/block_field": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,

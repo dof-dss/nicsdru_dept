@@ -65,6 +65,11 @@
                     "type": "zip"
                 }
             }
+        },
+        {
+            "type": "github",
+            "url": "git@github.com:dof-dss/playwright-dept.git",
+            "no-api": true
         }
     ],
     "require": {
@@ -209,6 +214,7 @@
         "wikimedia/composer-merge-plugin": "^2.1"
     },
     "require-dev": {
+        "dof-dss/playwright-dept": "dev-main",
         "drupal/coder": "^8.3",
         "drupal/core-dev": "^10",
         "drupal/devel": "^5.4",
@@ -276,6 +282,9 @@
         "installer-paths": {
             "web/core": [
                 "type:drupal-core"
+            ],
+            "playwright": [
+                "dof-dss/playwright-dept"
             ],
             "web/libraries/{$name}": [
                 "type:drupal-library"
