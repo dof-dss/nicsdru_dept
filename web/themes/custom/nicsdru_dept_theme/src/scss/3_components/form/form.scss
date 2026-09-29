@@ -12,8 +12,111 @@ main form {
   max-width: 800px;
 }
 
-.form-actions {
+form {
 
+  > fieldset,
+  > section {
+    margin: 0 0 1.5em;
+    padding: 0;
+    border: 0;
+
+    > legend,
+    > .webform-section-title {
+      @include responsive-typo-map($form-legend-large);
+      color: $headings;
+    }
+  }
+
+  h2 {
+    @include responsive-typo-map($h3-text);
+  }
+
+  h3 {
+    @include responsive-typo-map($h4-text);
+  }
+
+  .description,
+  .fieldset__description {
+    @include responsive-typo-map($small-text);
+    margin: .6rem 0 .9rem;
+
+    .fieldset-wrapper & {
+      margin: 0 0 1em;
+    }
+  }
+
+  .fieldset__error-message {
+    @extend %error-bubble;
+  }
+
+  // Nested fieldsets.
+  fieldset fieldset,
+  section fieldset {
+
+    &:focus {
+      outline-color: $brand-primary-medium;
+      outline-offset: .5em;
+      border: 0;
+    }
+
+    legend {
+      @include responsive-typo-map($form-legend-small);
+      font-weight: bold;
+      color: $text;
+
+      &:has(span.fieldset-legend.visually-hidden) {
+        padding: 0;
+        margin: 0;
+      }
+
+      &:has(+ .fieldset-wrapper > .description, + .fieldset-wrapper > .field-prefix > .description) {
+        margin-bottom: 0;
+      }
+
+      &:has(+ .fieldset__wrapper > .fieldset__description, + .fieldset__wrapper > .field__prefix > .fieldset__description) {
+        margin-bottom: 0;
+      }
+    }
+
+    &.important {
+      margin: 2em 0;
+
+      legend {
+        @include responsive-typo-map($form-legend);
+        color: $prussian-blue;
+        font-weight: normal;
+      }
+    }
+
+    &.form-item--card {
+      padding: 0;
+      background-color: #fff;
+      max-width: 100%;
+
+      &.compact {
+        max-width: 30em;
+      }
+
+
+      .fieldset__wrapper,
+      .fieldset-wrapper {
+        padding: 1em;
+        background-color: $grey-lightest;
+
+        > *:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+.form-wrapper,
+.form-textarea-wrapper {
+  margin: 0 0 1.5em;
+}
+
+.form-actions {
   position: relative;
   margin: 2.5em 0;
 
@@ -23,11 +126,35 @@ main form {
 
   .ajax-spinner {
     position: absolute;
-    line-height: 3em;
+    line-height: 54px;
     margin-left: 2px;
 
     .ajax-spinner__label {
       @include visually-hidden;
+    }
+  }
+}
+
+.form-item:not(.form-wrapper) {
+  padding: 0;
+  margin: 0 0 1em;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.webform-select-other,
+.webform-radios-other,
+.webform-checkboxes-other {
+
+  .form-item {
+    margin-bottom: 0;
+
+    &.webform-select-other-input,
+    &.webform-radios-other-input,
+    &.webform-checkboxes-other-input {
+      margin-top: 1em;
     }
   }
 }
@@ -39,112 +166,73 @@ main form {
     margin: 0;
   }
 
-  &--error-message .error {
-    @extend %error-bubble;
-
-    @at-root .container-inline & {
-      @extend %error-bubble--floating-below;
-    }
+  &.form-type-checkbox,
+  &.form-type-radio {
+    margin-bottom: .5em;
   }
-}
-
-form > .form-item,
-.form-wrapper > .form-item {
-  padding: 0;
-  margin: 2em 0;
 
   &.form-type-processed-text {
     margin: 0;
   }
-}
 
-.description {
-  @include responsive-typo-map($small-text);
-  margin: .5em 0;
-
-  .fieldset-wrapper .field-prefix &,
-  .fieldset-wrapper .field-suffix & {
-    @include responsive-typo-map($normal-text-no-margins);
-    margin: 1em 0 0;
-  }
-}
-
-// Fieldsets and sections act as containers for groups of related form controls.
-//
-// Using a fieldset is the preferred way to group form controls where the legend of the fieldset helps to uniquely
-// identify each control in the group.
-//
-// In some cases, it may be better to use a section instead of a fieldset in these situations:
-// # The grouping is primarily visual and the controls in the group have labels that adequately differentiate them from
-// other similar controls in the form as a whole.
-// # The group of controls includes nested fieldsets. Fieldsets can be nested if desired, although this can lead to
-// confusion if overdone.
-// @see https://www.w3.org/TR/2008/WD-WCAG20-TECHS-20080430/H82.html.
-//
-// Style fieldsets and legends, and sections and H2s in same manner.
-
-fieldset,
-.fieldset,
-form > section,
-form > .form-wrapper > section {
-  border: 0;
-  padding: 0;
-
-  &:first-child {
+  .info-notice:first-child {
     margin-top: 0;
   }
 
-  &:focus {
-    outline-color: $brand-primary-medium;
-    border: 0;
+  &--card {
+    padding: .5em;
+    background-color: $grey-lightest;
   }
 
-  & > .form-item,
-  & > .fieldset-wrapper > .form-item,
-  fieldset {
-    margin: 1em 0 0;
+  &--important {
+    margin-top: 2em;
+
+    label {
+      @include responsive-typo-map($h4-text);
+      font-weight: normal;
+    }
   }
 
-  > legend,
-  > .legend,
-  > h2 {
-    @include responsive-typo-map($form-legend);
-    color: $brand-primary-dark;
-    font-weight: normal;
+  &--error-message {
+    @extend %error-bubble;
+
+    @at-root {
+      .container-inline &,
+      .webform-options-display-side-by-side & {
+        @extend %error-bubble--floating-below;
+      }
+    }
   }
 
-  // Plain and nested fieldset legends / section titles.
- .legend--plain,
-  fieldset legend,
-  section h2 {
-    @include responsive-typo-map($form-legend-plain);
-    color: $text;
-  }
+  @at-root .compact & {
+    margin: 0 0 .5em;
 
-  .form-type-processed-text > * {
-    margin: 1em 0;
+    * {
+      margin: 0;
+    }
   }
 }
 
 label,
 .label {
-  @include responsive-typo-map($normal-text-no-margins);
+  @include responsive-typo-map($form-label);
   display: block;
-  margin: 0;
   padding: 0;
+  font-weight: bold;
   color: color(text);
-  font-weight: normal;
+
+  &:has(+ .description) {
+    margin: 0;
+  }
 
   &--small {
-    @include responsive-typo-map($small-text);
-    margin: 0 0 .8rem;
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    margin: 0 0 8px;
 
     @include breakpoint($tab) {
-      margin: 0 0 .9rem;
-    }
-
-    @include breakpoint($desk-plus) {
-      margin: 0 0 1rem;
+      line-height: 2.7rem;
+      margin: 0 0 9px;
     }
   }
 
@@ -158,7 +246,7 @@ label,
   &.visually-hidden {
 
     & + .form-radios {
-      margin-top: -.3rem;
+      margin-top: -.4rem;
       @include breakpoint($phab, $no-query: true) {
         margin-top: -.6rem;
       }
@@ -191,11 +279,20 @@ label,
   }
 }
 
+[type='tel'],
+[type='date'],
+[type='time'],
+[type='number'],
+[inputmode='numeric'] {
+  font-family: var(--font-monospace);
+}
+
 [size='30'],
 [size='40'],
 [size='50'],
 [size='60'] {
-  max-width: 56rem;
+  width: 100%;
+  max-width: fit-content;
 }
 
 select,
@@ -214,12 +311,12 @@ textarea {
   border: 1px solid #333;
   border-radius: 0;
   color: color(text);
-  margin: .5em 0;
-  padding: .5em;
+  margin: 0 0 .5em;
+  padding: .6rem;
   min-height: 2.5em;
 
   &:hover {
-    border: 1px solid $brand-primary-medium;
+    border-color: $brand-primary-medium;
   }
 
   &:focus {
@@ -234,8 +331,28 @@ textarea {
     border: 1px solid $error;
     outline-color: $error;
     background-color: $error-bg; // lightpink
+    box-shadow: none;
     color: color(text);
   }
+
+  &:disabled {
+    opacity: .8;
+    background-color: $grey-light;
+    color: $ash-grey;
+  }
+
+  &[readonly] {
+    background-color: $grey-light;
+    color: $grey-dark;
+  }
+}
+
+[type='date'] {
+  min-width: 7em;
+}
+
+[type='time'] {
+  min-width: 4em;
 }
 
 [type='file'] {
@@ -258,24 +375,24 @@ textarea {
   font-weight: normal;
   color: color(text);
   line-height: 1.3;
-  padding: .6em 1.4em .5em .8em;
+  height: 2.75em;
+  padding: .5em 1.5em .5em 1em;
   box-sizing: border-box;
-  margin: .5em 0;
-  border: 1px solid $grey-dark;
+  margin: 0 0 .5em;
+  box-shadow: 0 0 0 1px $grey-dark;
+  border: 0;
   border-radius: 0;
-  -moz-appearance: none;
-  -webkit-appearance: none;
+  appearance: none;
   background-color: #fff;
   background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'),
   linear-gradient(to bottom, #fff 0%, #e5e5e5 100%);
   background-repeat: no-repeat, repeat;
-  background-position: right .7em top 50%, 0 0;
+  background-position: right .5em top 50%, 0 0;
   background-size: .65em auto, 100%;
 
-  @include breakpoint($phab, $no-query: true) {
+  @include breakpoint($tab, $no-query: true) {
     line-height: 1.5;
     height: 2.5em;
-    padding: .5em 1.3334em .5em .6667em;
   }
 }
 
@@ -293,6 +410,11 @@ textarea,
   line-height: 1.5;
 }
 
+*:has( > .form-type-radio, > .form-type-checkbox) {
+  width: fit-content;
+  max-width: 66%;
+}
+
 .form-type-radio,
 .form-type-checkbox {
   position: relative;
@@ -300,10 +422,12 @@ textarea,
   margin: .5em .5em .5em 0;
   padding: 0 33% 0 0; // Right padding makes room for error bubbles.
 
-  .container-inline & {
+  .container-inline &,
+  .webform-options-display-side-by-side & {
     display: inline-block;
     width: auto;
     padding: 0;
+    max-width: 100%;
 
     .form-item--error-message {
       @extend %error-bubble--floating-below;
@@ -325,31 +449,98 @@ input[type='checkbox'],
 
   // Position to look like it's inside it's associated label
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 0;
+  transform: translate(0, -50%);
   z-index: 1;
   appearance: none;
   border: 2px solid $charcoal;
   background-color: #fff;
   width: 1.8rem;
   height: 1.8rem;
-  margin: .75em .5em;
+  margin: 0 .5em;
   padding: 0;
   vertical-align: baseline;
   box-shadow: none;
   outline: none;
   color: inherit;
 
-  @include breakpoint($tab, $no-query: true) {
-    margin: .6667em .5em;
+  &:checked::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border: 2px solid #fff;
+    background-color: $brand-primary-medium;
+
+    @at-root
+    input[type='radio']:checked::before,
+    .form-radio:checked::before {
+      border-radius: 1em;
+    }
   }
 
-  @include breakpoint($tab, $no-query: true) {
-    margin: .75em .5em;
+  &:checked:disabled,
+  &:disabled,
+  &:checked[readonly],
+  &[readonly] {
+    opacity: .6;
+
+    & ~ label {
+      background-color: $grey-light;
+      color: $grey-dark;
+    }
   }
 
-  &:checked {
-    background-color: #2daff7;
+  &[role='switch'] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    color: inherit;
+    font-size: inherit;
+    width: 2.3334em;
+    height: 1.3334em;
+    margin: .6667em .6667em 0;
+    box-sizing: content-box;
+    border: 1px solid;
+    border-radius: 1em;
+    vertical-align: text-bottom;
+
+    @include breakpoint($tab, $no-query: true) {
+      margin: .5em .5em 0;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translate(0, -50%);
+      box-sizing: border-box;
+      width: 1.3334em;
+      height: 1.3334em;
+      margin: 0;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      background: currentcolor;
+    }
+
+    &:checked {
+      color: $brand-primary-medium;
+      background-color: #fff;
+
+      &::before {
+        left: 1em;
+      }
+    }
+
+    & ~ label {
+      padding-left: 3.5em;
+    }
   }
 
   // sibling labels
@@ -358,21 +549,42 @@ input[type='checkbox'],
     position: relative;
     left: 0;
     margin: 0;
-    padding: .625em 1em .625em 3.2rem; // Right padding makes space for the input to sit in.
+    padding: 1.1rem 1em 1.1rem 3.6rem; // Right padding makes space for the input to sit in.
     width: 100%;
-    min-width: 4.5em;
-    min-height: 2.75em;
+    min-width: 4.4rem;
+    min-height: 4.4rem;
     box-shadow: inset 0 0 0 1px $charcoal; // Using box shadow to make thin border as it doesn't affect the overall size.
-    font-size: 1em;
+    font-size: 1.5rem;
     font-weight: normal;
-    line-height: 1.5;
+    line-height: 2.2rem;
     vertical-align: baseline;
     color: color(text);
     background-color: $white;
 
     @include breakpoint($tab, $no-query: true) {
-      min-height: 2.5em;
-      padding: .5em 1em .5em 3.6rem;
+      min-height: 4.5rem;
+      padding: 1.1rem 1em 1rem 3.6rem;
+      font-size: 1.6rem;
+      line-height: 2.4rem;
+    }
+
+    .rank {
+      position: absolute;
+      font-size: 1.4rem;
+      line-height: 2.4rem;
+      width: 2em;
+      height: 2em;
+      right: -.5em;
+      top: -.75em;
+      text-align: center;
+      border: .2rem solid #fff;
+      border-radius: 50%;
+      background-color: $charcoal;
+      color: #fff;
+
+      &:empty {
+        display: none;
+      }
     }
   }
 
@@ -382,6 +594,15 @@ input[type='checkbox'],
     background-color: $error-bg;
     color: color(text);
   }
+
+  // sass-lint:disable space-after-colon
+  @at-root .form-checkboxes:has(.error) [type='checkbox']:not(:checked) ~ label {
+    box-shadow: inset 0 0 0 1px $error;
+    outline-color: $error;
+    background-color: $error-bg;
+    color: color(text);
+  }
+  // sass-lint:enable space-after-colon
 
   &:checked ~ label {
     background-color: $brand-primary-lightest;
@@ -402,10 +623,51 @@ input[type='radio'],
 input[type='checkbox'],
 .form-checkbox {
   border-radius: 0;
+}
 
-  &:checked {
-    border-style: inset;
+details {
+
+  &:open {
+    padding: 0 0 1em;
+  }
+
+  summary {
+    @include btn--block;
+    @include btn-color($btn-secondary, #fff, #fff);
+    appearance: none;
+    position: relative;
+    margin-bottom: 1em;
+    padding: .5em .5em .5em 3em;
+    text-align: left;
+
+    &::after {
+      content: '';
+      display: inline-block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3em;
+      height: 100%;
+      background: transparent resolve('arrow_forward_white.svg') center center / 1.5em no-repeat;
+      transition: transform .2s ease;
+    }
+
+    &:focus {
+      outline: 3px solid #000;
+    }
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  &[open] summary::after {
+    transform: rotate(90deg);
   }
 }
 
+form [data-drupal-messages] {
+  margin: 1em 0;
+  padding: 0;
+}
 
