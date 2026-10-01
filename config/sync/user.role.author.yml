@@ -6,7 +6,6 @@ dependencies:
     - media.type.audio
     - media.type.document
     - media.type.image
-    - media.type.remote_document
     - media.type.remote_video
     - node.type.application
     - node.type.article
@@ -56,8 +55,8 @@ permissions:
   - 'add scheduled transitions node publication'
   - 'add scheduled transitions node ual'
   - 'administer orphaned content'
-  - 'bulk select revisions'
   - 'allow media favorites'
+  - 'bulk select revisions'
   - 'create application content on assigned domains'
   - 'create article content on assigned domains'
   - 'create audio media content on assigned domains'
@@ -105,7 +104,6 @@ permissions:
   - 'delete own profile content'
   - 'delete own protected_area content'
   - 'delete own publication content'
-  - 'delete own remote_document media'
   - 'delete own ual content'
   - 'delete profile revisions'
   - 'delete protected_area revisions'
@@ -115,7 +113,6 @@ permissions:
   - 'edit own document media'
   - 'edit own gallery content'
   - 'edit own image media'
-  - 'edit own remote_document media'
   - 'edit own remote_video media'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
