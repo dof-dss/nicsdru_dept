@@ -309,7 +309,7 @@ function dept_publications_preprocess_node(&$variables) {
 
   $items = [];
 
-  // 1. field_external_publication (Link field)
+  // 1. field_external_publication (Link field).
   if (!$node->get('field_external_publication')->isEmpty()) {
     foreach ($node->get('field_external_publication') as $link_item) {
       $title = $link_item->title ?? $link_item->uri;
@@ -323,7 +323,7 @@ function dept_publications_preprocess_node(&$variables) {
     }
   }
 
-  // 2. field_publication_files (Media reference)
+  // 2. field_publication_files (Media reference).
   if (!$node->get('field_publication_files')->isEmpty()) {
     foreach ($node->get('field_publication_files')->referencedEntities() as $media) {
       $title = $media->label();
@@ -341,7 +341,7 @@ function dept_publications_preprocess_node(&$variables) {
     }
   }
 
-  // 3. field_publication_secure_files (Media reference)
+  // 3. field_publication_secure_files (Media reference).
   if (!$node->get('field_publication_secure_files')->isEmpty()) {
     foreach ($node->get('field_publication_secure_files')->referencedEntities() as $media) {
       $title = $media->label();
