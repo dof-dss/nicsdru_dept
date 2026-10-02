@@ -30,6 +30,7 @@ dependencies:
     - block_content
     - book
     - content_moderation
+    - dept_book
     - dept_topics
     - domain
     - domain_access
@@ -76,6 +77,7 @@ permissions:
   - 'access site reports'
   - 'access toolbar'
   - 'access user profiles'
+  - 'override book parent protection'
   - 'add content to books'
   - 'add scheduled transitions node application'
   - 'add scheduled transitions node article'

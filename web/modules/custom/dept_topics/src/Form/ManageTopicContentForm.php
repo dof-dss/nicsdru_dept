@@ -423,7 +423,9 @@ final class ManageTopicContentForm extends FormBase {
     }
 
     $topic->get('field_topic_content')->setValue($field_topic_content_updated);
-
+    $topic->setRevisionTranslationAffected(TRUE);
+    $topic->setRevisionCreationTime(\Drupal::time()->getRequestTime());
+    $topic->setRevisionUserId(\Drupal::currentUser()->id());
     $topic->save();
     $form_state->setRedirect('entity.node.canonical', ['node' => $topic_nid]);
   }

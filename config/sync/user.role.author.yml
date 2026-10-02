@@ -6,7 +6,6 @@ dependencies:
     - media.type.audio
     - media.type.document
     - media.type.image
-    - media.type.remote_document
     - media.type.remote_video
     - node.type.application
     - node.type.article
@@ -29,7 +28,9 @@ dependencies:
     - domain_entity
     - easychart
     - media
+    - media_library_favorites
     - node
+    - revisions_bulk_operations
     - scheduled_transitions
     - view_unpublished
 _core:
@@ -54,6 +55,8 @@ permissions:
   - 'add scheduled transitions node publication'
   - 'add scheduled transitions node ual'
   - 'administer orphaned content'
+  - 'allow media favorites'
+  - 'bulk select revisions'
   - 'create application content on assigned domains'
   - 'create article content on assigned domains'
   - 'create audio media content on assigned domains'
@@ -72,7 +75,6 @@ permissions:
   - 'create protected_area content on assigned domains'
   - 'create publication content on assigned domains'
   - 'create publication node content on assigned domains'
-  - 'create remote_document media content on assigned domains'
   - 'create remote_video media content on assigned domains'
   - 'create secure_file media content on assigned domains'
   - 'create ual content on assigned domains'
@@ -101,7 +103,6 @@ permissions:
   - 'delete own profile content'
   - 'delete own protected_area content'
   - 'delete own publication content'
-  - 'delete own remote_document media'
   - 'delete own ual content'
   - 'delete profile revisions'
   - 'delete protected_area revisions'
@@ -111,7 +112,6 @@ permissions:
   - 'edit own document media'
   - 'edit own gallery content'
   - 'edit own image media'
-  - 'edit own remote_document media'
   - 'edit own remote_video media'
   - 'reschedule scheduled transitions node application'
   - 'reschedule scheduled transitions node article'
@@ -155,7 +155,6 @@ permissions:
   - 'update profile content on assigned domains'
   - 'update protected_area content on assigned domains'
   - 'update publication content on assigned domains'
-  - 'update remote_document media content on assigned domains'
   - 'update secure_file media content on assigned domains'
   - 'update ual content on assigned domains'
   - 'use nics_editorial_workflow transition create_new_draft'

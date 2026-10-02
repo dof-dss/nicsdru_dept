@@ -101,33 +101,30 @@
       }
     }
 
-    .tel {
+    .p-tel {
       display: flex;
       flex-flow: column;
 
-      .title {
+      .p-name {
         @include responsive-typo-map($large-text);
         order: 0;
       }
 
-      .value {
+      .u-url {
         font-size: 2em;
         line-height: 1.5;
         order: 1;
-      }
-
-      a.value {
         @include link-state-style($link-card--contact);
       }
 
-      .supplementary {
+      .p-note {
         @include responsive-typo-map($smallish-text);
         order: 2;
       }
     }
 
     p,
-    .tel > * {
+    .p-tel > * {
       .card-deck & {
         @include breakpoint($tab) {
           text-align: center;

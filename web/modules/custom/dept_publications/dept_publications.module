@@ -155,9 +155,27 @@ function dept_publications_entity_operation_alter(array &$operations, EntityInte
  * Implements hook_file_download().
  */
 function dept_publications_file_download($uri) {
-  // Return -1 which is then later converted to AccessDeniedHttpException response.
-  if (\Drupal::service('secure_publications_file_access')->canAccessSecureFileAttachment($uri) === FALSE) {
-    return -1;
+
+  $access_service = \Drupal::service('secure_publications_file_access');
+
+  // Only apply to secure publication files in private storage.
+  if (str_starts_with($uri, 'private://') && $access_service->isSecurePublicationFile($uri)) {
+
+    // Prevent download if file embargoed.
+    if (!$access_service->canAccessSecureFileAttachment($uri)) {
+      // Return -1 which is then later converted to
+      // AccessDeniedHttpException response.
+      return -1;
+    }
+
+    // Ensure secure file download is cacheable by Fastly. This is
+    // necessary because files served from private:// are usually
+    // not cacheable.
+    return [
+      'Surrogate-Control' => 'public, max-age=604800, stale-while-revalidate=86400',
+      'Surrogate-Key' => 'secure-publication-file',
+    ];
+
   }
 }
 
@@ -264,138 +282,6 @@ function dept_publications_preprocess_views_view_field(&$variables) {
       }
     }
   }
-
-  // Fill in any remote-docs metadata if they're listed.
-  if ($view->id() === 'media_library' && in_array($view->current_display, ['default_page', 'widget_table'])) {
-    if ($field_id === 'filemime' && empty($variables['output'])) {
-      // If empty, try checking mime type for an image.
-      $media = $variables['row']->_entity;
-
-      if ($media instanceof MediaInterface && $media->bundle() === 'remote_document') {
-        $mime_type_key = '';
-        $pretty_mimes = \Drupal::service('origins_media.pretty_mime_types')->getMimeTypes();
-        $file_url = $media->get('field_media_media_remote')->getString();
-        $file_headers = dept_publications_get_remote_file_metadata($file_url);
-
-        if ($file_headers) {
-          $file_mimetype = '';
-
-          // Get file mimetype if available.
-          if (!empty($file_headers['Content-Type'])) {
-            $file_mimetype = $file_headers['Content-Type'][0] ?? '';
-          }
-
-          // Map file mimetypes to user friendly document types.
-          if ($file_mimetype && !empty($pretty_mimes[$file_mimetype])) {
-            $mime_type_key = $pretty_mimes[$file_mimetype];
-
-            // Replace with prettier version.
-            $variables['output'] = ViewsRenderPipelineMarkup::create($mime_type_key);
-          }
-        }
-      }
-    }
-  }
-}
-
-/**
- * Implements hook_preprocess_media().
- */
-function dept_publications_preprocess_media(&$variables) {
-  if ($variables['media']->bundle() === 'remote_document' && $variables['view_mode'] === 'embed') {
-    /* @var \Drupal\Core\Url $url */
-    $url = $variables['content']['field_media_media_remote'][0]['#url'];
-
-    if ($url instanceof Url) {
-      $file_url = $url->getUri();
-    }
-    else {
-      // No URL to work with for whatever reason so return early.
-      return;
-    }
-
-    // Full URL string for use in later preprocessing.
-    $variables['file_url'] = $file_url;
-
-    $file_headers = dept_publications_get_remote_file_metadata($file_url);
-
-    // Initialize metadata variables.
-    $file_size = 0;
-    $file_mimetype = '';
-    $file_extension = '';
-    $file_type = '';
-
-    if ($file_headers) {
-      // Get file size if available.
-      if (!empty($file_headers['Content-Length'])) {
-        $file_size = $file_headers['Content-Length'][0] ?? 0;
-      }
-
-      // Get file mimetype if available.
-      if (!empty($file_headers['content-type'])) {
-        $file_mimetype = $file_headers['content-type'][0] ?? '';
-      }
-
-      // Get file extension.
-      $path_info = pathinfo(parse_url($file_url, PHP_URL_PATH));
-      if (!empty($path_info['extension'])) {
-        $file_extension = $path_info['extension'] ?? '';
-      }
-    }
-
-    // Example: Add these values to the $variables array for later use in the template.
-    $variables['file_size_raw'] = $file_size;
-    $variables['file_size'] = ByteSizeMarkup::create($file_size);
-    $variables['file_mimetype'] = $file_mimetype;
-    $variables['file_extension'] = $file_extension;
-
-    // Map file mimetypes to user friendly document types.
-    $pretty_mimes = \Drupal::service('origins_media.pretty_mime_types')->getMimeTypes();
-    if ($file_mimetype && !empty($pretty_mimes[$file_mimetype])) {
-      $variables['pretty_mimetype'] = $pretty_mimes[$file_mimetype];
-    }
-
-    if (array_key_exists($file_mimetype, $pretty_mimes)) {
-      $variables['file_type'] = $pretty_mimes[$file_mimetype];
-    }
-    else {
-      $variables['file_type'] = strtoupper(preg_replace('/^application\/(\w+)$/', '\1', $file_mimetype));
-    }
-
-    // Add an extra 'is external' preprocess variable so we can distinguish it
-    // when rendering markup in the template.
-    $variables['file_is_external'] = (bool) preg_match('/^http/', $file_url);
-
-    $variables['media_langcode'] = $variables['media']->language()->getId();
-    // Do not output the langcode if is undefined.
-    if ($variables['media_langcode'] === 'und') {
-      unset($variables['media_langcode']);
-    }
-  }
-}
-
-/**
- * Function to fetch HTTP headers from a remote file URL.
- */
-function dept_publications_get_remote_file_metadata(string $file_url) {
-  // Fetch metadata about the file.
-  $http_client = \Drupal::httpClient();
-
-  $file_headers = [];
-
-  try {
-    $file_headers = $http_client->request('HEAD', $file_url)->getHeaders();
-  }
-  catch (GuzzleRequestException $reqex) {
-    $message = t('Could not retrieve headers from :file_url', [':file_url' => $file_url]);
-    if (\Drupal::currentUser()->isAuthenticated()) {
-      \Drupal::messenger()->addWarning($message);
-    }
-
-    \Drupal::logger('warning')->warning($message);
-  }
-
-  return $file_headers;
 }
 
 /**
@@ -423,20 +309,21 @@ function dept_publications_preprocess_node(&$variables) {
 
   $items = [];
 
-  // 1. field_external_publication (Link field)
+  // 1. field_external_publication (Link field).
   if (!$node->get('field_external_publication')->isEmpty()) {
     foreach ($node->get('field_external_publication') as $link_item) {
       $title = $link_item->title ?? $link_item->uri;
       $url = Url::fromUri($link_item->uri);
 
+      $external_path = parse_url($link_item->uri, PHP_URL_PATH) ?? '';
+      $file_extension = strtolower(pathinfo($external_path, PATHINFO_EXTENSION) ?: 'file');
       $items[] = dept_publications_build_publication_link($url, $title, [
-        'file_extension' => 'html',
-        'file_type' => 'html',
+        'file_extension' => $file_extension,
       ]);
     }
   }
 
-  // 2. field_publication_files (Media reference)
+  // 2. field_publication_files (Media reference).
   if (!$node->get('field_publication_files')->isEmpty()) {
     foreach ($node->get('field_publication_files')->referencedEntities() as $media) {
       $title = $media->label();
@@ -454,7 +341,7 @@ function dept_publications_preprocess_node(&$variables) {
     }
   }
 
-  // 3. field_publication_secure_files (Media reference)
+  // 3. field_publication_secure_files (Media reference).
   if (!$node->get('field_publication_secure_files')->isEmpty()) {
     foreach ($node->get('field_publication_secure_files')->referencedEntities() as $media) {
       $title = $media->label();
@@ -521,7 +408,6 @@ function dept_publications_build_publication_link(Url $url, string $title, array
       ],
       'rel' => ['noopener', 'noreferrer'],
       'target' => '_blank',
-      'data-once' => 'elink',
     ],
   ];
 }

@@ -6,7 +6,6 @@ dependencies:
     - media.type.audio
     - media.type.document
     - media.type.image
-    - media.type.remote_document
     - media.type.remote_video
     - node.type.application
     - node.type.article
@@ -34,9 +33,11 @@ dependencies:
     - easychart
     - file
     - media
+    - media_library_favorites
     - node
     - origins_workflow
     - redirect
+    - revisions_bulk_operations
     - scheduled_transitions
     - view_unpublished
 _core:
@@ -63,7 +64,9 @@ permissions:
   - 'add scheduled transitions node ual'
   - 'administer book outlines'
   - 'administer redirects'
+  - 'allow media favorites'
   - 'audit content'
+  - 'bulk select revisions'
   - 'create application content on assigned domains'
   - 'create article content on assigned domains'
   - 'create audio media content on assigned domains'
@@ -82,7 +85,6 @@ permissions:
   - 'create protected_area content on assigned domains'
   - 'create publication content on assigned domains'
   - 'create publication node content on assigned domains'
-  - 'create remote_document media content on assigned domains'
   - 'create remote_video media'
   - 'create remote_video media content on assigned domains'
   - 'create secure_file media content on assigned domains'
@@ -117,7 +119,6 @@ permissions:
   - 'delete own audio media'
   - 'delete own document media'
   - 'delete own image media'
-  - 'delete own remote_document media'
   - 'delete own remote_video media'
   - 'delete profile content on assigned domains'
   - 'delete profile revisions'
@@ -126,13 +127,11 @@ permissions:
   - 'delete publication content on assigned domains'
   - 'delete publication node content on assigned domains'
   - 'delete publication revisions'
-  - 'delete remote_document media content on assigned domains'
   - 'delete remote_video media content on assigned domains'
   - 'delete ual content on assigned domains'
   - 'delete ual revisions'
   - 'edit any document media'
   - 'edit any image media'
-  - 'edit any remote_document media'
   - 'edit own audio media'
   - 'edit own image media'
   - 'edit own remote_video media'
@@ -182,7 +181,6 @@ permissions:
   - 'update protected_area content on assigned domains'
   - 'update publication content on assigned domains'
   - 'update publication node content on assigned domains'
-  - 'update remote_document media content on assigned domains'
   - 'update remote_video media content on assigned domains'
   - 'update ual content on assigned domains'
   - 'use nics_editorial_workflow transition archive'
