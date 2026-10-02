@@ -14,7 +14,22 @@ matchers:
     uuid: 2df3d241-76a2-4692-be54-4bc8881abbe1
     settings:
       metadata: ''
-      bundles: {  }
+      bundles:
+        application: application
+        article: article
+        consultation: consultation
+        contact: contact
+        event: event
+        gallery: gallery
+        heritage_site: heritage_site
+        news: news
+        profile: profile
+        protected_area: protected_area
+        publication: publication
+        subtopic: subtopic
+        topic: topic
+        ual: ual
+        webform: webform
       group_by_bundle: true
       substitution_type: canonical
       limit: 100
