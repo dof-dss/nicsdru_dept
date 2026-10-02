@@ -315,9 +315,10 @@ function dept_publications_preprocess_node(&$variables) {
       $title = $link_item->title ?? $link_item->uri;
       $url = Url::fromUri($link_item->uri);
 
+      $external_path = parse_url($link_item->uri, PHP_URL_PATH) ?? '';
+      $file_extension = strtolower(pathinfo($external_path, PATHINFO_EXTENSION) ?: 'file');
       $items[] = dept_publications_build_publication_link($url, $title, [
-        'file_extension' => 'html',
-        'file_type' => 'html',
+        'file_extension' => $file_extension,
       ]);
     }
   }
@@ -407,7 +408,6 @@ function dept_publications_build_publication_link(Url $url, string $title, array
       ],
       'rel' => ['noopener', 'noreferrer'],
       'target' => '_blank',
-      'data-once' => 'elink',
     ],
   ];
 }
