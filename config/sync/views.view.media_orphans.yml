@@ -7,7 +7,6 @@ dependencies:
     - media.type.audio
     - media.type.document
     - media.type.image
-    - media.type.remote_document
     - media.type.video
     - user.role.administrator
   module:
@@ -2322,7 +2321,6 @@ display:
           operator: in
           value:
             document: document
-            remote_document: remote_document
           group: 1
           exposed: false
           expose:
