@@ -13,9 +13,9 @@ use Drupal\Core\Url;
  * Implements hook_user_logout().
  */
 function dept_user_user_logout(AccountInterface $account) {
-  // Remove all sessions for the user.
-  // Fixes the issue of users remaining logged in on
-  // multiple departmental sites.
+  // Remove all sessions for the users that are not QA test accounts.
+  // Fixes the issue of users remaining logged in on multiple departmental sites.
+  // See DEPT-703 & DEPT-1310.
   if (!in_array('qa', $account->getRoles())) {
     \Drupal::database()
       ->delete('sessions')
