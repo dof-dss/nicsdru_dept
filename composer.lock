@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "35f7821e2bd2f7280a5d51e019d0d0ab",
+    "content-hash": "ab95c9cdbbabdc2ec9477d3ae7bd804e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -16680,23 +16680,23 @@
             "time": "2025-10-16T20:13:18+00:00"
         },
         {
-            "name": "dof-dss/playwright-dept",
+            "name": "dof-dss/playwright-departmental",
             "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "git@github.com:dof-dss/playwright-dept.git",
-                "reference": "4b40397b2266f82fb0dbefb0e4b3c4b32daab40f"
+                "url": "https://github.com/dof-dss/Playwright-Departmental.git",
+                "reference": "98119cfa9d121f3ed5d8ae3800bd5ff036d93fb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/playwright-dept/zipball/4b40397b2266f82fb0dbefb0e4b3c4b32daab40f",
-                "reference": "4b40397b2266f82fb0dbefb0e4b3c4b32daab40f",
+                "url": "https://api.github.com/repos/dof-dss/Playwright-Departmental/zipball/98119cfa9d121f3ed5d8ae3800bd5ff036d93fb7",
+                "reference": "98119cfa9d121f3ed5d8ae3800bd5ff036d93fb7",
                 "shasum": ""
             },
             "default-branch": true,
             "type": "drupal-library",
             "description": "Playwright tests for Departmental sites",
-            "time": "2026-09-28T16:49:02+00:00"
+            "time": "2026-10-07T15:28:05+00:00"
         },
         {
             "name": "drupal/coder",
@@ -22573,7 +22573,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "dof-dss/playwright-dept": 20,
+        "dof-dss/playwright-departmental": 20,
         "drupal/block_field": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,
