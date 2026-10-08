@@ -10,7 +10,6 @@ dependencies:
     - media.type.audio
     - media.type.document
     - media.type.image
-    - media.type.remote_document
     - media.type.remote_video
     - media.type.secure_file
     - media.type.video
@@ -397,7 +396,6 @@ display:
             audio: audio
             document: document
             image: image
-            remote_document: remote_document
             remote_video: remote_video
             video: video
           group: 1
@@ -416,6 +414,18 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+              admin: '0'
+              administrator: '0'
+              anonymous: '0'
+              author: '0'
+              supervisor: '0'
+              homepage_supervisor: '0'
+              rss_supervisor: '0'
+              stats_author: '0'
+              stats_supervisor: '0'
+              topic_layout_supervisor: '0'
+              topic_supervisor: '0'
+              qa: '0'
             reduce: true
           is_grouped: false
           group_info:
@@ -1311,7 +1321,6 @@ display:
             audio: audio
             document: document
             image: image
-            remote_document: remote_document
             remote_video: remote_video
             video: video
           group: 1
@@ -1330,6 +1339,18 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+              admin: '0'
+              administrator: '0'
+              anonymous: '0'
+              author: '0'
+              supervisor: '0'
+              homepage_supervisor: '0'
+              rss_supervisor: '0'
+              stats_author: '0'
+              stats_supervisor: '0'
+              topic_layout_supervisor: '0'
+              topic_supervisor: '0'
+              qa: '0'
             reduce: true
           is_grouped: false
           group_info:
@@ -2287,7 +2308,6 @@ display:
             audio: audio
             document: document
             image: image
-            remote_document: remote_document
             remote_video: remote_video
             video: video
           group: 1
@@ -2306,6 +2326,18 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+              admin: '0'
+              administrator: '0'
+              anonymous: '0'
+              author: '0'
+              supervisor: '0'
+              homepage_supervisor: '0'
+              rss_supervisor: '0'
+              stats_author: '0'
+              stats_supervisor: '0'
+              topic_layout_supervisor: '0'
+              topic_supervisor: '0'
+              qa: '0'
             reduce: true
           is_grouped: false
           group_info:
@@ -2900,7 +2932,6 @@ display:
             audio: audio
             document: document
             image: image
-            remote_document: remote_document
             remote_video: remote_video
             video: video
           group: 1
@@ -2919,6 +2950,18 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
+              admin: '0'
+              administrator: '0'
+              anonymous: '0'
+              author: '0'
+              supervisor: '0'
+              homepage_supervisor: '0'
+              rss_supervisor: '0'
+              stats_author: '0'
+              stats_supervisor: '0'
+              topic_layout_supervisor: '0'
+              topic_supervisor: '0'
+              qa: '0'
             reduce: true
           is_grouped: false
           group_info:

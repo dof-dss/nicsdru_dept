@@ -64,6 +64,11 @@ function dept_book_form_node_form_alter(array &$form, FormStateInterface $form_s
   }
 
   $form['#validate'][] = 'dept_book_validate_parent_page_archive';
+
+  // Only allow the creation of new books using the article content type.
+  if ($node->bundle() != 'article') {
+    unset($form['book']["bid"]["#options"][$node->isNew() ? 'new' : $node->id()]);
+  }
 }
 
 /**
