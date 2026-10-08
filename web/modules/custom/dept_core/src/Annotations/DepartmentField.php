@@ -3,11 +3,9 @@
 namespace Drupal\dept_core\Annotations;
 
 /**
- * Provides an annotation to Department entity field helper methods.
- *
- * @Annotation
- * @Target({"METHOD"})
+ * Marks Department entity field helper methods for block configuration.
  */
+#[\Attribute(\Attribute::TARGET_METHOD)]
 class DepartmentField {
 
   /**
@@ -15,18 +13,13 @@ class DepartmentField {
    *
    * @var string
    */
-  private string $label;
+  private readonly string $label;
 
   /**
-   * Annotation contructor.
-   *
-   * @param array $values
-   *   Annotation values.
+   * Constructs a DepartmentField attribute.
    */
-  public function __construct(array $values) {
-    if (array_key_exists('label', $values)) {
-      $this->label = $values['label'];
-    }
+  public function __construct(string $label) {
+    $this->label = $label;
   }
 
   /**

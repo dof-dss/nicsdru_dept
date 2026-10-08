@@ -2,7 +2,6 @@
 
 namespace Drupal\dept_core\Plugin\Block;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\dept_core\Annotations\DepartmentField;
@@ -38,20 +37,16 @@ class DepartmentalDetailsBlock extends BlockBase {
    */
   public function blockForm($form, FormStateInterface $form_state) {
 
-    // Extract the DepartmentField annotations to create select list.
-    $reader = new AnnotationReader();
+    // Extract the DepartmentField attributes to create the select list.
     $reflection = new \ReflectionClass(Department::class);
 
     $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
     $options = [];
 
     foreach ($methods as $method) {
-      $annotations = $reader->getMethodAnnotations(new \ReflectionMethod(Department::class, $method->name));
-
-      foreach ($annotations as $annotation) {
-        if ($annotation instanceof DepartmentField) {
-          $options[$method->name] = $annotation->label();
-        }
+      $attributes = $method->getAttributes(DepartmentField::class);
+      foreach ($attributes as $attribute) {
+        $options[$method->name] = $attribute->newInstance()->label();
       }
     }
 
@@ -92,7 +87,6 @@ class DepartmentalDetailsBlock extends BlockBase {
       ]);
 
       if (array_key_exists("#field_name", $field_data)) {
-        // @phpstan-ignore-next-line  Doesn't like magic methods.
         $build['content'] = $dept->get($field_data['#field_name'])->view('default');
       }
     }

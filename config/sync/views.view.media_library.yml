@@ -279,19 +279,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              gp_author_user: '0'
-              author_user: '0'
-              gp_supervisor_user: '0'
-              news_supervisor: '0'
-              supervisor_user: '0'
-              editor_user: '0'
-              admin_user: '0'
-              apps_user: '0'
-              health_condition_author_user: '0'
-              health_condition_supervisor_user: '0'
-              driving_instructor_supervisor_user: '0'
             placeholder: 'Contains text...'
           is_grouped: false
           group_info:
@@ -331,18 +318,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              admin: '0'
-              administrator: '0'
-              anonymous: '0'
-              author: '0'
-              supervisor: '0'
-              homepage_supervisor: '0'
-              rss_supervisor: '0'
-              stats_author: '0'
-              stats_supervisor: '0'
-              topic_layout_supervisor: '0'
-              topic_supervisor: '0'
-              qa: '0'
             placeholder: ''
             reduce: 0
           is_grouped: false
@@ -1189,19 +1164,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              gp_author_user: '0'
-              author_user: '0'
-              gp_supervisor_user: '0'
-              news_supervisor: '0'
-              supervisor_user: '0'
-              editor_user: '0'
-              admin_user: '0'
-              apps_user: '0'
-              health_condition_author_user: '0'
-              health_condition_supervisor_user: '0'
-              driving_instructor_supervisor_user: '0'
             placeholder: 'Contains text...'
           is_grouped: false
           group_info:
@@ -1242,18 +1204,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              admin: '0'
-              administrator: '0'
-              anonymous: '0'
-              author: '0'
-              supervisor: '0'
-              homepage_supervisor: '0'
-              rss_supervisor: '0'
-              stats_author: '0'
-              stats_supervisor: '0'
-              topic_layout_supervisor: '0'
-              topic_supervisor: '0'
-              qa: '0'
             placeholder: 'e.g.: .xlsx or .pdf or .docx'
           is_grouped: false
           group_info:
@@ -1293,18 +1243,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              admin: '0'
-              administrator: '0'
-              anonymous: '0'
-              author: '0'
-              supervisor: '0'
-              homepage_supervisor: '0'
-              rss_supervisor: '0'
-              stats_author: '0'
-              stats_supervisor: '0'
-              topic_layout_supervisor: '0'
-              topic_supervisor: '0'
-              qa: '0'
             placeholder: ''
             reduce: 0
           is_grouped: false
@@ -1591,7 +1529,7 @@ display:
       export_method: standard
       export_batch_size: 1000
       export_limit: 0
-      store_in_public_file_directory: false
+      export_filesystem: private
       custom_redirect_path: false
       redirect_to_display: default_page
       include_query_params: true
@@ -2213,19 +2151,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              gp_author_user: '0'
-              author_user: '0'
-              gp_supervisor_user: '0'
-              news_supervisor: '0'
-              supervisor_user: '0'
-              editor_user: '0'
-              admin_user: '0'
-              apps_user: '0'
-              health_condition_author_user: '0'
-              health_condition_supervisor_user: '0'
-              driving_instructor_supervisor_user: '0'
             placeholder: 'Contains text...'
           is_grouped: false
           group_info:
@@ -2266,18 +2191,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              admin: '0'
-              administrator: '0'
-              anonymous: '0'
-              author: '0'
-              supervisor: '0'
-              homepage_supervisor: '0'
-              rss_supervisor: '0'
-              stats_author: '0'
-              stats_supervisor: '0'
-              topic_layout_supervisor: '0'
-              topic_supervisor: '0'
-              qa: '0'
             placeholder: 'e.g.: .xlsx or .pdf or .docx'
           is_grouped: false
           group_info:
@@ -2317,18 +2230,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              admin: '0'
-              administrator: '0'
-              anonymous: '0'
-              author: '0'
-              supervisor: '0'
-              homepage_supervisor: '0'
-              rss_supervisor: '0'
-              stats_author: '0'
-              stats_supervisor: '0'
-              topic_layout_supervisor: '0'
-              topic_supervisor: '0'
-              qa: '0'
             placeholder: ''
             reduce: 0
           is_grouped: false
@@ -2591,6 +2492,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
         options:
@@ -2913,19 +2815,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              gp_author_user: '0'
-              author_user: '0'
-              gp_supervisor_user: '0'
-              news_supervisor: '0'
-              supervisor_user: '0'
-              editor_user: '0'
-              admin_user: '0'
-              apps_user: '0'
-              health_condition_author_user: '0'
-              health_condition_supervisor_user: '0'
-              driving_instructor_supervisor_user: '0'
             placeholder: 'Contains text...'
           is_grouped: false
           group_info:
@@ -2965,18 +2854,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              admin: '0'
-              administrator: '0'
-              anonymous: '0'
-              author: '0'
-              supervisor: '0'
-              homepage_supervisor: '0'
-              rss_supervisor: '0'
-              stats_author: '0'
-              stats_supervisor: '0'
-              topic_layout_supervisor: '0'
-              topic_supervisor: '0'
-              qa: '0'
             placeholder: ''
             reduce: 0
           is_grouped: false
@@ -3815,19 +3692,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              gp_author_user: '0'
-              author_user: '0'
-              gp_supervisor_user: '0'
-              news_supervisor: '0'
-              supervisor_user: '0'
-              editor_user: '0'
-              admin_user: '0'
-              apps_user: '0'
-              health_condition_author_user: '0'
-              health_condition_supervisor_user: '0'
-              driving_instructor_supervisor_user: '0'
             placeholder: 'Contains text...'
           is_grouped: false
           group_info:
@@ -3907,18 +3771,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              admin: '0'
-              administrator: '0'
-              anonymous: '0'
-              author: '0'
-              supervisor: '0'
-              homepage_supervisor: '0'
-              rss_supervisor: '0'
-              stats_author: '0'
-              stats_supervisor: '0'
-              topic_layout_supervisor: '0'
-              topic_supervisor: '0'
-              qa: '0'
             placeholder: ''
             reduce: 0
           is_grouped: false
@@ -4213,19 +4065,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              gp_author_user: '0'
-              author_user: '0'
-              gp_supervisor_user: '0'
-              news_supervisor: '0'
-              supervisor_user: '0'
-              editor_user: '0'
-              admin_user: '0'
-              apps_user: '0'
-              health_condition_author_user: '0'
-              health_condition_supervisor_user: '0'
-              driving_instructor_supervisor_user: '0'
             placeholder: 'Contains text...'
           is_grouped: false
           group_info:
@@ -4305,18 +4144,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              admin: '0'
-              administrator: '0'
-              anonymous: '0'
-              author: '0'
-              supervisor: '0'
-              homepage_supervisor: '0'
-              rss_supervisor: '0'
-              stats_author: '0'
-              stats_supervisor: '0'
-              topic_layout_supervisor: '0'
-              topic_supervisor: '0'
-              qa: '0'
             placeholder: ''
             reduce: 0
           is_grouped: false
@@ -4666,8 +4493,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -4746,18 +4571,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              admin: '0'
-              administrator: '0'
-              anonymous: '0'
-              author: '0'
-              supervisor: '0'
-              homepage_supervisor: '0'
-              rss_supervisor: '0'
-              stats_author: '0'
-              stats_supervisor: '0'
-              topic_layout_supervisor: '0'
-              topic_supervisor: '0'
-              qa: '0'
             placeholder: ''
             reduce: 0
           is_grouped: false
@@ -4782,6 +4595,7 @@ display:
         options:
           row_class: 'media-library-item media-library-item--table js-media-library-item js-click-to-select'
           default_row_class: true
+          class: ''
       row:
         type: fields
       defaults:

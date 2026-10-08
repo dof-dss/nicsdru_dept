@@ -1,7 +1,7 @@
 name: 'Department Redirects'
 type: module
 description: 'Checks redirects for non-200 or non-300 response codes.'
-core_version_requirement: ^10
+core_version_requirement: ^10 || ^11
 package: 'NICS: Departmental'
 dependencies:
   - redirect:redirect

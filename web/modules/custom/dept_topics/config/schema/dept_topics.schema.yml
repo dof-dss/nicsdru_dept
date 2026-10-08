@@ -1,0 +1,9 @@
+field.formatter.settings.dept_topics_topic_contents:
+  type: mapping
+  mapping:
+    display_type:
+      type: string
+      label: 'Display type'
+    view_mode:
+      type: string
+      label: 'View mode'

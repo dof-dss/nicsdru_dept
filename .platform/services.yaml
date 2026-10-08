@@ -5,9 +5,9 @@ db:
   # (https://docs.platform.sh/configuration/services/mysql.html#supported-versions)
   # when choosing a version. If you specify a version number which is not available,
   # the CLI will return an error.
-  type: mariadb:10.4
+  type: mariadb:10.6
   # The disk attribute is the size of the persistent disk (in MB) allocated to the service.
-  disk: 8448
+  disk: 10752
   configuration:
     schemas:
       - main
@@ -20,7 +20,7 @@ db:
 # Fudging the service name forces a full rebuild with any new config.
 solr_9_6:
   type: solr:9.6
-  disk: 768
+  disk: 512
   configuration:
     cores:
       default:
