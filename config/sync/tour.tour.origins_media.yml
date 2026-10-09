@@ -1,4 +1,3 @@
-uuid: c68321ea-fe6b-49da-876d-230a38b85a3a
 langcode: en
 status: true
 dependencies:
@@ -8,8 +7,6 @@ dependencies:
     module:
       - tour
       - tour_extras_wysiwyg
-_core:
-  default_config_hash: LV0a4__MD3ilhiva_I4th1g4uUdUA5hqYs7SWgn6mGY
 id: origins_media
 label: 'Media overview'
 routes:
@@ -72,7 +69,7 @@ tips:
     label: Edit
     weight: -10
     position: top
-    selector: .views-field-edit-media
+    selector: 'table:has(tbody td.views-field-edit-media a) thead th.views-field-edit-media'
     body:
       value: '<p>Use the <strong>edit</strong> feature to edit individual media items.</p>'
       format: basic_html
@@ -84,7 +81,7 @@ tips:
     position: right
     selector: '#edit-name-0-value'
     body:
-      value: '<p>Add a name for the media item.</p>'
+      value: '<p>Provide a name for the media item.</p>'
       format: basic_html
   add_file:
     id: add_file
@@ -94,5 +91,5 @@ tips:
     position: right
     selector: '#edit-field-media-audio-file-0-upload'
     body:
-      value: '<p>Click the grey <strong data-start="15" data-end="28">“Browse…”</strong> button to select a file from your computer, then click <strong data-start="84" data-end="94">“Open”</strong> to upload it.</p>'
+      value: '<p>Click the <strong data-start="15" data-end="28">“Choose file/Browse”</strong> button to select a file from your computer, then click <strong data-start="84" data-end="94">“Open”</strong> to upload it.</p>'
       format: basic_html
