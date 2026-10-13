@@ -1350,16 +1350,16 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "10.7.7",
+            "version": "10.7.8",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "8a1973cb7607aa8d63e273c9cc48e9bcc916f575"
+                "reference": "2e6175de0ace541db66c2a8727cce4160a06c7f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/8a1973cb7607aa8d63e273c9cc48e9bcc916f575",
-                "reference": "8a1973cb7607aa8d63e273c9cc48e9bcc916f575",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/2e6175de0ace541db66c2a8727cce4160a06c7f4",
+                "reference": "2e6175de0ace541db66c2a8727cce4160a06c7f4",
                 "shasum": ""
             },
             "require": {
@@ -1368,14 +1368,14 @@
             },
             "bin": [
                 "bin/dof-dss-filehash",
-                "bin/dof-dss-mediahasher"
+                "bin/dof-dss-mediachecksum"
             ],
             "type": "drupal-module",
             "license": [
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2026-09-16T16:37:12+00:00"
+            "time": "2026-10-13T09:57:49+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
