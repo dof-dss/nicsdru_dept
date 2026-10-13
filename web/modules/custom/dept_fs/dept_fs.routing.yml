@@ -1,0 +1,7 @@
+dept_fs.media_consolidator_confirm:
+  path: '/admin/media/consolidate'
+  defaults:
+    _form: '\Drupal\dept_fs\Form\MediaConsolidatorConfirmForm'
+    _title: 'Consolidate Media'
+  requirements:
+    _role: 'administrator'

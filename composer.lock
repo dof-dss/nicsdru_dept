@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5317dda4ebbc60696babb6733f80ad53",
+    "content-hash": "fca93fe57ff78e380279ccd214cffb5f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1427,23 +1427,22 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "dev-10.x-dev",
+            "version": "10.7.8",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "ef670779b29c2f13fdb1d936c6ddb5cf06060ecd"
+                "reference": "2e6175de0ace541db66c2a8727cce4160a06c7f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/ef670779b29c2f13fdb1d936c6ddb5cf06060ecd",
-                "reference": "ef670779b29c2f13fdb1d936c6ddb5cf06060ecd",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/2e6175de0ace541db66c2a8727cce4160a06c7f4",
+                "reference": "2e6175de0ace541db66c2a8727cce4160a06c7f4",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "^2.0",
                 "drupal/core": "^10"
             },
-            "default-branch": true,
             "bin": [
                 "bin/dof-dss-filehash",
                 "bin/dof-dss-mediachecksum"
@@ -1453,7 +1452,7 @@
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2026-10-12T13:11:48+00:00"
+            "time": "2026-10-13T09:57:49+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
@@ -22555,7 +22554,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "dof-dss/nicsdru_origins_modules": 20,
         "drupal/block_field": 5,
         "drupal/ckeditor5_allowed_html": 20,
         "drupal/config_readonly": 10,

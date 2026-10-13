@@ -1,0 +1,110 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Origins File System module.
+ */
+
+use Drupal\Core\Database\Query\AlterableInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+use Drupal\views\ViewExecutable;
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function dept_fs_views_data_alter(array &$data) {
+  if (isset($data['media_field_data'])) {
+
+    // Provide Views with visability onto the duplciates_checksum column.
+    $data['media_field_data']['duplicates_checksum'] = [
+      'title' => t('duplicates_checksum'),
+      'help' => t('Media entity checksum..'),
+
+      'field' => [
+        'id' => 'standard',
+        'click sortable' => TRUE,
+      ],
+
+      'filter' => [
+        'id' => 'string',
+      ],
+
+      'sort' => [
+        'id' => 'standard',
+      ],
+
+      'argument' => [
+        'id' => 'string',
+      ],
+    ];
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function dept_fs_views_pre_render(ViewExecutable $view) {
+  if ($view->id() === 'media_duplicates') {
+    $view->element['#attached']['library'][] = 'dept_fs/media-duplicates';
+  }
+}
+
+/**
+ * Implements hook_media_duplicates_checksum_info_alter().
+ */
+function dept_fs_media_duplicates_checksum_info_alter(array &$providers) {
+  // Remove the default file processor as we replace it with our GoFileProcessor.
+  unset($providers['file']);
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function dept_fs_views_query_alter(ViewExecutable $view, $query) {
+  if ($view->id() === 'media_duplicates') {
+    $query->addTag('media_duplicates_group_filter');
+  }
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function dept_fs_query_media_duplicates_group_filter_alter(AlterableInterface $query) {
+  $database = \Drupal::database();
+
+  // We only want to return rows that have at least more than 1 matching
+  // checksum and ignore rows that don't have a checksum value.
+  $checksum_query = $database->select('media_field_data', 'mfd')
+    ->fields('mfd', ['duplicates_checksum'])
+    ->isNotNull('mfd.duplicates_checksum')
+    ->groupBy('mfd.duplicates_checksum')
+    ->having('COUNT(DISTINCT mfd.mid) > 1');
+
+  // @phpstan-ignore-next-line
+  $query->condition('media_field_data.duplicates_checksum', $checksum_query, 'IN');
+  // @phpstan-ignore-next-line
+  $query->isNotNull('media_field_data.duplicates_checksum');
+
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function dept_fs_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Views bulk forms have IDs in the format views_form_{view}_{display}.
+  if (!str_starts_with($form_id, 'views_form_') || empty($form['header'])) {
+    return;
+  }
+
+  $form['#cache']['contexts'][] = 'user.roles';
+  // @phpstan-ignore-next-line
+  if (\Drupal::currentUser()->hasRole('administrator')) {
+    return;
+  }
+
+  // Remove the 'Consolidate media' option for non-admin roles.
+  foreach (Element::children($form['header']) as $field) {
+    unset($form['header'][$field]['action']['#options']['media_consolidator_action']);
+  }
+}
