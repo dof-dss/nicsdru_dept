@@ -9,7 +9,6 @@ dependencies:
     - core.entity_view_mode.media.article_full_expandable
   module:
     - ckeditor5_allowed_html
-    - ckeditor5_premium_features
     - dept_content_processors
     - editor
     - entity_embed
@@ -24,12 +23,6 @@ name: 'Basic HTML'
 format: basic_html
 weight: 0
 filters:
-  ckeditor5_premium_features_collaboration_filter:
-    id: ckeditor5_premium_features_collaboration_filter
-    provider: ckeditor5_premium_features
-    status: false
-    weight: -42
-    settings: {  }
   dept_abs2rel_url:
     id: dept_abs2rel_url
     provider: dept_content_processors
