@@ -4,8 +4,6 @@
  * Platform.sh settings.
  */
 
-use Drupal\Core\Installer\InstallerKernel;
-
 $platformsh = new \Platformsh\ConfigReader\Config();
 
 // Configure the database.
@@ -183,4 +181,12 @@ foreach ($platformsh->variables() as $name => $value) {
       }
       break;
   }
+}
+
+
+if ($platformsh->onProduction() === FALSE) {
+  $config['user.flood']['ip_limit'] = 100000;
+  $config['user.flood']['ip_window'] = 1;
+  $config['user.flood']['user_limit'] = 100000;
+  $config['user.flood']['user_window'] = 1;
 }
