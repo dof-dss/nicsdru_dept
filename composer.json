@@ -100,9 +100,10 @@
         "drupal/config_split": "^2.0-beta",
         "drupal/content_lock": "^3.0",
         "drupal/core": "^10.5",
-        "drupal/core-composer-scaffold": "10.6.17",
-        "drupal/core-project-message": "10.6.17",
-        "drupal/core-recommended": "10.6.17",
+        "drupal/core-composer-scaffold": "10.6.19",
+        "drupal/core-project-message": "10.6.19",
+        "drupal/core-recommended": "10.6.19",
+
         "drupal/csp": "^2.1",
         "drupal/date_facet_drilldown": "^12.0",
         "drupal/date_filter": "^1.0",
@@ -206,6 +207,8 @@
         "php-kit/ext-pdo": "^1.1",
         "platformsh/config-reader": "^2.4",
         "twig/twig": "^3.29.0, !=3.30.0",
+        "vardot/ckeditor5-anchor-drupal": "^2.0",
+
         "wikimedia/composer-merge-plugin": "^2.1"
     },
     "require-dev": {
