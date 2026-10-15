@@ -28,7 +28,7 @@ class DepartmentField {
    * @return string
    *   Returns a formatted field label.
    */
-  public function label() {
+  public function label(): string {
     return ucfirst(trim($this->label));
   }
 

@@ -1533,6 +1533,7 @@ display:
       custom_redirect_path: false
       redirect_to_display: default_page
       include_query_params: true
+      export_filesystem: private
     cache_metadata:
       max-age: -1
       contexts:
