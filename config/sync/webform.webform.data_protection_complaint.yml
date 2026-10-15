@@ -75,8 +75,8 @@ elements: |-
         'information not kept secure': 'Information has not been kept secure'
         'received no response to previous request': 'No response has been received to previous request'
       '#other__option_label': 'Something else (please specify) …'
-      '#other__placeholder': 'please specify'
-      '#other__description': "Briefly specify what your complaint is about. You'll be able to provide full details later."
+      '#other__title': 'Please briefly specify what your complaint is about'
+      '#other__placeholder': ''
       '#required': true
       '#required_error': 'You must tell us what your complaint is about'
     radios_previous_reference_number:
@@ -148,7 +148,8 @@ elements: |-
         'Former employee': 'Former employee'
         Supplier: Supplier
       '#other__option_label': 'Other relationship…'
-      '#other__placeholder': 'Enter other relationship…'
+      '#other__title': 'Enter other relationship'
+      '#other__placeholder': ''
       '#required': true
       '#required_error': 'You must tell us what your relationship is to The Executive Office'
       '#states':
@@ -183,7 +184,8 @@ elements: |-
         'Executor / Administrator of Estate': 'Executor / Administrator of Estate'
         'Authorized Agent / Third-Party Representative': 'Authorized Agent / Third-Party Representative'
       '#other__option_label': 'Other relationship…'
-      '#other__placeholder': 'Enter other relationship to this person…'
+      '#other__title': 'Enter your relationship to this person'
+      '#other__placeholder': ''
       '#required': true
       '#required_error': "You must tell us what your relationship is to the person you're making a complaint for"
     textarea_authorisation:
@@ -203,7 +205,8 @@ elements: |-
         'Former employee': 'Former employee'
         Supplier: Supplier
       '#other__option_label': 'Other relationship…'
-      '#other__placeholder': 'Enter other relationship…'
+      '#other__title': 'Enter their relationship to The Executive Office'
+      '#other__placeholder': ''
       '#required': true
       '#required_error': 'You must tell us what your relationship is to The Executive Office'
   page_complaint_details_1:
@@ -271,9 +274,36 @@ elements: |-
       '#markup': |-
         <div role="status">
         <h2>Privacy Notice</h2>
-        <p>(A brief statement explaining that the information will only be used to investigate the   
-        complaint, with a link to the full TEO Privacy Notice.)  </p>
+        <p>The information you have provided will only be used to investigate the   
+        complaint.  Find out more about how the The Executive Office handles your information in our <a href="/articles/teo-privacy-notice">Privacy Notice</a>. </p>
         </div>
+  page_additional_information:
+    '#type': webform_wizard_page
+    '#title': 'Additional information'
+    textarea_additional_information:
+      '#type': textarea
+      '#title': "Is there anything else you'd like us to know? (Optional)"
+      '#counter_type': word
+      '#counter_minimum': 1
+      '#counter_maximum': 1000
+    checkboxes_what_would_you_like_us_to_do:
+      '#type': webform_checkboxes_other
+      '#title': 'What would you like us to do?'
+      '#options':
+        'explain what happened': 'explain what happened'
+        'correct my personal information': 'correct my personal information'
+        'complete my request': 'complete my request'
+        'improve how my information is handled': 'improve how my information is handled'
+        apologise: apologise
+      '#other__type': textarea
+      '#other__option_label': other…
+      '#other__title': 'Enter what you would like us to do'
+      '#other__placeholder': ''
+      '#other__counter_type': word
+      '#other__counter_minimum': '1'
+      '#other__counter_maximum': '500'
+      '#required': true
+      '#required_error': 'You must tell us what you would like us to do'
   actions:
     '#type': webform_actions
     '#title': 'Submit button(s)'
@@ -530,13 +560,13 @@ handlers:
     settings:
       states:
         - completed
-      to_mail: neil.blair@finance-ni.gov.uk
+      to_mail: '[webform_submission:values:text_your_email:raw]'
       to_options: {  }
       bcc_mail: ''
       bcc_options: {  }
       cc_mail: ''
       cc_options: {  }
-      from_mail: _default
+      from_mail: noreply@www.executiveoffice-ni.uat-nvcvooy-dnvkwx4xjhiza.uk-1.platformsh.site
       from_options: {  }
       from_name: _default
       reply_to: ''
