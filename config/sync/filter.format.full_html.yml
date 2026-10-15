@@ -24,7 +24,6 @@ dependencies:
     - core.entity_view_mode.media.portrait_full
   module:
     - ckeditor5_allowed_html
-    - ckeditor5_premium_features
     - dept_content_processors
     - editor
     - entity_embed
@@ -39,12 +38,6 @@ name: 'Full HTML'
 format: full_html
 weight: 2
 filters:
-  ckeditor5_premium_features_collaboration_filter:
-    id: ckeditor5_premium_features_collaboration_filter
-    provider: ckeditor5_premium_features
-    status: false
-    weight: -44
-    settings: {  }
   dept_abs2rel_url:
     id: dept_abs2rel_url
     provider: dept_content_processors
