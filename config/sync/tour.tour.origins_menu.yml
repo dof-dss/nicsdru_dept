@@ -1,4 +1,3 @@
-uuid: a7774185-46cd-4f77-90bb-f23dbab75013
 langcode: en
 status: true
 dependencies:
@@ -8,8 +7,6 @@ dependencies:
     module:
       - tour
       - tour_extras_wysiwyg
-_core:
-  default_config_hash: IQRgIHspQdmTwTLqgZU50zxOb2C8aWjTIfa82bSftBo
 id: origins_menu
 label: Menu
 routes:
@@ -41,7 +38,7 @@ tips:
     weight: -98
     position: right-start
     selector: '#edit-description'
-    body: 'An administrative summary of the menu you are currently viewing.'
+    body: 'An administrative summary of the menu you are currently viewing, this will not be publicly visible.'
   menu_links:
     id: menu_links
     plugin: text
@@ -84,5 +81,5 @@ tips:
     position: right
     selector: '#edit-submit'
     body:
-      value: '<p>When you are happy with your link titles, sort order and enabled status of the links, click the blue "<strong>Save</strong>" button to save your menu.</p>'
+      value: '<p>If you have changed the sort order or the <strong>Enabled</strong> option, click the blue "<strong>Save</strong>" button to save your changes.</p>'
       format: basic_html
