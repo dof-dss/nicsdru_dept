@@ -32,6 +32,5 @@ solr_9_6:
 
 redis:
   type: "redis:8.0"
-  disk: 256
   configuration:
     maxmemory_policy: allkeys-lfu
