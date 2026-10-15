@@ -24,7 +24,7 @@ elements: |-
       <div role="status">
       <h2>Check the information you have provided below</h2>
       <p class="info-notice">
-      By selecting <strong>Make complaint</strong> you are declaring the information you have provided is accurate. 
+      By selecting <strong>Make complaint</strong> you are declaring the information you have provided is accurate.
       </p>
       <p>
       Select <strong>Previous</strong> to go back and make changes.
@@ -41,7 +41,7 @@ elements: |-
       <div role="status">
       <h2>Check the information you have provided below</h2>
       <p class="info-notice">
-      By selecting <strong>Make complaint</strong> you are declaring the information you have provided is accurate and that you are entitled to act on behalf of <strong>[webform_submission:values:text_data_subject_name]</strong>. 
+      By selecting <strong>Make complaint</strong> you are declaring the information you have provided is accurate and that you are entitled to act on behalf of <strong>[webform_submission:values:text_data_subject_name]</strong>.
       </p>
       <p>
       Select <strong>Previous</strong> to go back and make changes.
@@ -274,12 +274,12 @@ elements: |-
       '#markup': |-
         <div role="status">
         <h2>Privacy Notice</h2>
-        <p>The information you have provided will only be used to investigate the   
+        <p>The information you have provided will only be used to investigate the
         complaint.  Find out more about how the The Executive Office handles your information in our <a href="/articles/teo-privacy-notice">Privacy Notice</a>. </p>
         </div>
   page_additional_information:
     '#type': webform_wizard_page
-    '#title': 'Additional information'
+    '#title': 'Supporting information'
     textarea_additional_information:
       '#type': textarea
       '#title': "Is there anything else you'd like us to know? (Optional)"
@@ -330,13 +330,13 @@ javascript: |-
 
           input.setAttribute('min', minDate);
           input.setAttribute('max', maxDate);
-          
+
           const minMessage = "Enter a date that is not more than 100 years ago.";
           const maxMessage = "The date cannot be in the future.";
 
           input.addEventListener('input', function () {
             input.setCustomValidity('');
-            
+
             if (input.validity.rangeUnderflow) {
               input.setCustomValidity(minMessage);
             } else if (input.validity.rangeOverflow) {
