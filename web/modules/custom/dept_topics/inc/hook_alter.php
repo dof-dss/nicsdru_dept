@@ -91,6 +91,9 @@ function dept_topics_moderation_sidebar_alter(&$build, &$context) {
               'button',
               'button--secondary'
             ],
+            'data-testid' => [
+              'moderation-sidebar-add-new-' . $type->id(),
+            ]
           ],
         ];
       }
