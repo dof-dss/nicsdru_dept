@@ -67,6 +67,12 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  domain_path:
+    type: domain_path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_banner_image:
     type: media_library_widget
     weight: 2
