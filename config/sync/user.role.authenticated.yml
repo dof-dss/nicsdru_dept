@@ -7,6 +7,7 @@ dependencies:
     - search_api_autocomplete.search.search
     - taxonomy.vocabulary.global_topics
   module:
+    - book
     - domain
     - domain_access
     - domain_entity
@@ -30,6 +31,7 @@ weight: -7
 is_admin: false
 permissions:
   - 'access administration pages'
+  - 'access book list'
   - 'access content'
   - 'access help pages'
   - 'access toolbar'

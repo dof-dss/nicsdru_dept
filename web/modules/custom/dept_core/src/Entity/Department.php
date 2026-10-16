@@ -298,6 +298,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Management and Structure details.
+   *
    */
   #[DepartmentField(label: 'Management and structure')]
   public function managementAndStructure() {
@@ -306,6 +307,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Access to information details.
+   *
    */
   #[DepartmentField(label: 'Access to information')]
   public function accessToInformation() {
@@ -314,6 +316,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Contact Information details.
+   *
    */
   #[DepartmentField(label: 'Contact information')]
   public function contactInformation() {
@@ -322,6 +325,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Social media links.
+   *
    */
   #[DepartmentField(label: 'Social media links')]
   public function socialMediaLinks() {
@@ -330,6 +334,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Point of contact map location.
+   *
    */
   #[DepartmentField(label: 'Location (map)')]
   public function location() {
@@ -338,6 +343,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Accessibility statement.
+   *
    */
   #[DepartmentField(label: 'Accessibility statement')]
   public function accessibilityStatement() {
@@ -346,6 +352,7 @@ class Department extends RevisionableContentEntityBase implements DepartmentInte
 
   /**
    * Page footer links.
+   *
    */
   #[DepartmentField(label: 'Page footer links')]
   public function footerLinks() {

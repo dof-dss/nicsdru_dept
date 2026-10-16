@@ -13,7 +13,6 @@ dependencies:
     - flag
     - node
     - user
-    - handy_cache_tags
     - views_custom_cache_tag
 id: topics
 label: Topics
@@ -270,7 +269,8 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - flag.flag.hide_listing
   block:
     id: block
     display_title: Block
@@ -357,7 +357,8 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - flag.flag.hide_listing
   page_1:
     id: page_1
     display_title: Admin
@@ -816,6 +817,7 @@ display:
           empty_table: false
           caption: ''
           description: ''
+          class: ''
       row:
         type: 'entity:node'
         options:
@@ -848,7 +850,8 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - flag.flag.hide_listing
   topics_page:
     id: topics_page
     display_title: Page
@@ -944,4 +947,5 @@ display:
         - url.site
         - 'user.node_grants:view'
         - user.permissions
-      tags: {  }
+      tags:
+        - flag.flag.hide_listing

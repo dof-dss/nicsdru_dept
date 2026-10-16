@@ -51,7 +51,7 @@ class AbsToRelUrlsFilterTest extends UnitTestCase {
    * @return array
    *   An array of test data.
    */
-  public function providerAbsToRelUrls(): array {
+  public static function providerAbsToRelUrls(): array {
     return [
       [
         '<a href="https://valuationservices.finance-ni.gov.uk/Property/Search">Valuation services</a>',

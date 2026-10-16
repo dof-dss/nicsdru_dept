@@ -2,21 +2,24 @@
 
 namespace Drupal\dept_topics;
 
+use Drupal\book\BookManagerInterface;
+use Drupal\content_moderation\ModerationInformationInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\book\BookManagerInterface;
 use Drupal\node\NodeInterface;
 
 /**
- * Provides methods for managing Sub/Topic referenced (child) content.
+ * Provides methods for managing Topic/Subtopic referenced (child) content.
  */
 final class TopicManager {
+
   const int MAX_TRAVERSAL_DEPTH = 20;
+
 
   /**
    * @var \Drupal\node\NodeStorageInterface
@@ -36,6 +39,10 @@ final class TopicManager {
    *   The Entity Display Repository service.
    * @param \Drupal\book\BookManagerInterface $bookManager
    *   The Book manager service.
+   * @param \Drupal\content_moderation\ModerationInformationInterface $moderationInformation
+   *   The Book manager service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   The Book manager service.
    * @param array $targetBundles
    *   Array of target bundles.
    * @param array $deptTopics
@@ -48,6 +55,8 @@ final class TopicManager {
     protected EntityFieldManagerInterface $entityFieldManager,
     protected EntityDisplayRepository $entityDisplayRepository,
     protected BookManagerInterface $bookManager,
+    protected ModerationInformationInterface $moderationInformation,
+    protected CacheBackendInterface $cache,
     protected array $targetBundles = [],
     protected array $deptTopics = [],
   ) {
@@ -144,8 +153,7 @@ final class TopicManager {
    *   Array of Topic/Subtopic nodes, indexed by node ID.
    */
   public function getTopicsForDepartment(string $department_id) {
-    // TODO: replace with injected property.
-    $dept_topics = \Drupal::cache()->get('dept_topics_' . $department_id);
+    $dept_topics = $this->cache->get('dept_topics_' . $department_id);
 
     if (!empty($dept_topics)) {
       return $dept_topics->data;
@@ -162,133 +170,10 @@ final class TopicManager {
         $this->getChildTopics($parent);
       }
 
-      // TODO: replace with injected property.
-      \Drupal::cache()
-        ->set('dept_topics_' . $department_id, $this->deptTopics, Cache::PERMANENT, [$department_id . '_topics']);
+      // TODO: Check if this cache is properly cleared anywhere.
+      $this->cache->set('dept_topics_' . $department_id, $this->deptTopics, Cache::PERMANENT, [$department_id . '_topics']);
 
       return $this->deptTopics;
-    }
-  }
-
-  /**
-   * Add and remove an entity to topic child content lists based on the Site Topic field values.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity to use as a child reference.
-   */
-  public function updateChildDisplayOnTopics(EntityInterface $entity) {
-    // @phpstan-ignore-next-line
-    if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
-      // If an entity is a child entry to a book, don't update the
-      // 'topic child contents' field to the topics in its site_topics field.
-      if ($book_data = $this->bookManager->loadBookLink($entity->id())) {
-        // Is this node the actual book node.
-        $is_book = $book_data['bid'] === $entity->id();
-
-        if (($book_data['pid'] !== $entity->id()) && $is_book === FALSE) {
-          return;
-        }
-      }
-
-      $parent_nids = array_keys($this->getParentNodes($entity->id()));
-      // @phpstan-ignore-next-line
-      $site_topics = array_column($entity->get('field_site_topics')
-        ->getValue(), 'target_id');
-
-      $site_topics_removed = array_diff($parent_nids, $site_topics);
-      $site_topics_new = array_diff($site_topics, $parent_nids);
-
-      // Add topic content references.
-      foreach ($site_topics_new as $new) {
-        $topic_node = $this->nodeStorage->load($new);
-
-        if (empty($topic_node)) {
-          continue;
-        }
-
-        $child_refs = $topic_node->get('field_topic_content');
-        $ref_exists = FALSE;
-
-        // Check if an entry exists to prevent duplicates.
-        foreach ($child_refs as $ref) {
-          // @phpstan-ignore-next-line
-          if ($ref->target_id == $entity->id()) {
-            $ref_exists = TRUE;
-          }
-        }
-
-        if (!$ref_exists) {
-          $topic_node->get('field_topic_content')->appendItem([
-            'target_id' => $entity->id()
-          ]);
-          $topic_node->setRevisionLogMessage('Added child: (' . $entity->id() . ') ' . $entity->label());
-          $topic_node->setRevisionTranslationAffected(TRUE);
-          $topic_node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
-          $topic_node->setRevisionUserId(\Drupal::currentUser()->id());
-          $topic_node->save();
-        }
-      }
-
-      // Remove any topic content references.
-      foreach ($site_topics_removed as $remove) {
-        $topic_node = $this->nodeStorage->load($remove);
-        $child_removed = FALSE;
-
-        if (empty($topic_node)) {
-          continue;
-        }
-
-        $child_refs = $topic_node->get('field_topic_content');
-
-        for ($i = 0; $i < $child_refs->count(); $i++) {
-          // @phpstan-ignore-next-line
-          if ($child_refs->get($i)->target_id == $entity->id()) {
-            $child_refs->removeItem($i);
-            $child_removed = TRUE;
-            $i--;
-          }
-        }
-
-        if ($child_removed) {
-          $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
-          $topic_node->setRevisionTranslationAffected(TRUE);
-          $topic_node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
-          $topic_node->setRevisionUserId(\Drupal::currentUser()->id());
-          $topic_node->save();
-        }
-      }
-    }
-  }
-
-  /**
-   * Remove all topic child references for the given entity.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity to remove all references for.
-   */
-  public function removeChildDisplayFromTopics(EntityInterface $entity) {
-    // @phpstan-ignore-next-line
-    if ($entity->hasField('field_site_topics') && $this->isValidTopicChild($entity)) {
-      $parent_nids = array_keys($this->getParentNodes($entity->id()));
-
-      foreach ($parent_nids as $parent) {
-        $topic_node = $this->nodeStorage->load($parent);
-        $child_refs = $topic_node->get('field_topic_content');
-
-        for ($i = 0; $i < $child_refs->count(); $i++) {
-          // @phpstan-ignore-next-line
-          if ($child_refs->get($i)->target_id == $entity->id()) {
-            $child_refs->removeItem($i);
-            $i--;
-          }
-        }
-
-        $topic_node->setRevisionLogMessage('Removed child: (' . $entity->id() . ') ' . $entity->label());
-        $topic_node->setRevisionTranslationAffected(TRUE);
-        $topic_node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
-        $topic_node->setRevisionUserId(\Drupal::currentUser()->id());
-        $topic_node->save();
-      }
     }
   }
 
@@ -356,6 +241,307 @@ final class TopicManager {
       'subtopic' => 1,
       default =>  3,
     };
+  }
+
+  /**
+   * Adds or removes a child node from a topic node child content list.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
+   *   The child node to add to a topic.
+   */
+  public function processChild(ContentEntityInterface $child) {
+    if (!$this->isValidTopicChild($child)) {
+      return;
+    }
+
+    // Fetch the chosen site topics for this child revision. This is the
+    // desired state: the child should end up referenced only by these
+    // topics, regardless of what it was referenced by in the past.
+    $topic_nids = array_column($child->get('field_site_topics')->getValue(), 'target_id');
+
+    $existing_nids = $this->fetchTopicsReferencingChild($child);
+
+    // Compare the child's selected topics to our list of topic_content nids.
+    $topics_added_ids = array_unique(array_diff($topic_nids, $existing_nids));
+    $topics_removed_ids = array_unique(array_diff($existing_nids, $topic_nids));
+
+    foreach ($topics_added_ids as $topic_id) {
+      $topic = $this->entityTypeManager->getStorage('node')->load($topic_id);
+
+      if (!empty($topic)) {
+        $this->addChild($child, $topic);
+      }
+    }
+
+    foreach ($topics_removed_ids as $topic_id) {
+      $topic = $this->entityTypeManager->getStorage('node')->load($topic_id);
+
+      if (!empty($topic)) {
+        $this->removeChild($child, $topic);
+      }
+    }
+  }
+
+  /**
+   * Adds a child node to the topic contents field of a topic.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
+   *   The child to add to the topic.
+   * @param \Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic the child will be added to.
+   */
+  public function addChild(ContentEntityInterface $child, ContentEntityInterface $topic) {
+
+    // Published topic node contents.
+    $children = $this->connection->select('node__field_topic_content', 'tc')
+      ->fields('tc', ['delta', 'field_topic_content_target_id'])
+      ->condition('entity_id', $topic->id())
+      ->orderBy('delta', 'ASC')
+      ->execute()
+      ->fetchAllKeyed(1, 0);
+
+    if (!array_key_exists($child->id(), $children)) {
+      $delta = (empty($children)) ? 0 : end($children) + 1;
+      $this->addChildDatabaseEntry($child, $topic, 'node__field_topic_content', $topic->getRevisionId(), $delta);
+    }
+
+    $topic_revisions = array_keys($this->nodeStorage->getQuery()
+      ->accessCheck(FALSE)
+      ->allRevisions()
+      ->condition('nid', $topic->id())
+      ->execute());
+
+    // Topic Revisions.
+    foreach ($topic_revisions as $revision_id) {
+      $revision_children = $this->connection->select('node_revision__field_topic_content', 'rtc')
+        ->fields('rtc', ['revision_id', 'delta', 'field_topic_content_target_id'])
+        ->condition('entity_id', $topic->id())
+        ->condition('revision_id', $revision_id)
+        ->orderBy('delta', 'ASC')
+        ->execute()
+        ->fetchAllKeyed(2, 1);
+
+      if (!array_key_exists($child->id(), $revision_children)) {
+        $delta = (empty($revision_children)) ? 0 : end($revision_children) + 1;
+        $this->addChildDatabaseEntry($child, $topic, 'node_revision__field_topic_content', $revision_id, $delta);
+      }
+    }
+
+    $this->clearCache($child, $topic);
+  }
+
+  /**
+   * Returns a list of topics/subtopic that reference the given child node.
+   *
+   * @param \Drupal\node\NodeInterface $child
+   *   The child node to fetch the references for.
+   *
+   * @return array
+   *   List of entity ID's.
+   */
+  protected function fetchTopicsReferencingChild(NodeInterface $child) {
+    $existing_topics = $this->connection->select('node__field_topic_content', 'tc')
+      ->fields('tc', ['entity_id'])
+      ->condition('field_topic_content_target_id', $child->id())
+      ->distinct()
+      ->execute()
+      ->fetchCol();
+
+    $existing_topics_revisions = $this->connection->select('node_revision__field_topic_content', 'tc')
+      ->fields('tc', ['entity_id'])
+      ->condition('field_topic_content_target_id', $child->id())
+      ->distinct()
+      ->execute()
+      ->fetchCol();
+
+    // Create a list of all topic nids (active and revisions) for this child from the results of both the topic_contents tables.
+    return array_unique(array_merge($existing_topics, $existing_topics_revisions));
+  }
+
+  /**
+   * Removes all topic contents reference records for the given child.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
+   *   The child to archive.
+   */
+  public function archiveChild(ContentEntityInterface $child) {
+    $topics = $child->get('field_site_topics')->referencedEntities();
+
+    foreach ($topics as $topic) {
+      $this->removeChild($child, $topic);
+    }
+  }
+
+  /**
+   * Remove a child node from the topic contents field of a topic.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
+   *   The child to remove.
+   * @param \Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic the child is removed from.
+   */
+  public function removeChild(ContentEntityInterface $child, ContentEntityInterface $topic) {
+    $this->connection->delete('node__field_topic_content')
+      ->condition('field_topic_content_target_id', $child->id())
+      ->condition('entity_id', $topic->id())
+      ->execute();
+
+    $this->connection->delete('node_revision__field_topic_content')
+      ->condition('field_topic_content_target_id', $child->id())
+      ->condition('entity_id', $topic->id())
+      ->execute();
+
+    $this->clearCache($child, $topic);
+  }
+
+  /**
+   * Stores the display order of child content nids of a topic.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic node whose child order is being updated.
+   * @param array $ordered_child_nids
+   *   The child node IDs, in their new display order.
+   */
+  public function reorderChildren(ContentEntityInterface $topic, array $ordered_child_nids): void {
+    $ordered_child_nids = array_values($ordered_child_nids);
+
+    // Fetch the current child content order to see if we need to update.
+    $current_nids = $this->connection->select('node__field_topic_content', 'tc')
+      ->fields('tc', ['field_topic_content_target_id'])
+      ->condition('entity_id', $topic->id())
+      ->orderBy('delta', 'ASC')
+      ->execute()
+      ->fetchCol();
+
+    // Type safe comparison of the current vs provided child content order.
+    if (array_map('strval', $current_nids) === array_map('strval', $ordered_child_nids)) {
+      return;
+    }
+
+    // Default (current) revision table.
+    $this->connection->delete('node__field_topic_content')
+      ->condition('entity_id', $topic->id())
+      ->execute();
+
+    // Published topic node contents.
+    foreach ($ordered_child_nids as $delta => $child_nid) {
+      $this->connection->insert('node__field_topic_content')
+        ->fields([
+          'bundle' => $topic->bundle(),
+          'deleted' => 0,
+          'entity_id' => $topic->id(),
+          'revision_id' => $topic->getRevisionId(),
+          'langcode' => 'en',
+          'delta' => $delta,
+          'field_topic_content_target_id' => $child_nid,
+        ])
+        ->execute();
+    }
+
+    $topic_revisions = array_keys($this->nodeStorage->getQuery()
+      ->accessCheck(FALSE)
+      ->allRevisions()
+      ->condition('nid', $topic->id())
+      ->execute());
+
+    // Topic Revisions.
+    foreach ($topic_revisions as $revision_id) {
+      $this->connection->delete('node_revision__field_topic_content')
+        ->condition('entity_id', $topic->id())
+        ->condition('revision_id', $revision_id)
+        ->execute();
+
+      foreach ($ordered_child_nids as $delta => $child_nid) {
+        $this->connection->insert('node_revision__field_topic_content')
+          ->fields([
+            'bundle' => $topic->bundle(),
+            'deleted' => 0,
+            'entity_id' => $topic->id(),
+            'revision_id' => $revision_id,
+            'langcode' => 'en',
+            'delta' => $delta,
+            'field_topic_content_target_id' => $child_nid,
+          ])
+          ->execute();
+      }
+    }
+
+    $this->clearCache(NULL, $topic);
+  }
+
+  /**
+   * Determines if a given topic has child nodes that are
+   * in 'published', 'draft' or 'needs review' states.
+   *
+   * @param \Drupal\node\NodeInterface|\Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic node to check for active children.
+   *
+   * @return bool
+   *   True if there are artive children, false otherwise.
+   */
+  public function topicHasActiveChildren(NodeInterface|ContentEntityInterface $topic): bool {
+    $children = $topic->get('field_topic_content')->referencedEntities();
+
+    foreach ($children as $child) {
+      $latest_revision_id = $this->nodeStorage->getLatestRevisionId($child->id());
+      $latest_revision = $this->nodeStorage->loadRevision($latest_revision_id);
+      if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
+        return TRUE;
+      }
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Inserts an entity reference value for a given child and topic.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
+   *   The child node (target) to add.
+   * @param \Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic node to add the entity reference to.
+   * @param string $table
+   *   The entity reference database table.
+   * @param string|int $revision_id
+   *   The revision ID to inert the reference for.
+   * @param int $delta
+   *   The position in the entity reference list.
+   */
+  protected function addChildDatabaseEntry(ContentEntityInterface $child, ContentEntityInterface $topic, string $table, string|int $revision_id, int $delta = 0) {
+    $this->connection->insert($table)
+      ->fields([
+        'bundle' => $topic->bundle(),
+        'deleted' => 0,
+        'entity_id' => $topic->id(),
+        'revision_id' => $revision_id,
+        'langcode' => 'en',
+        'delta' => $delta,
+        'field_topic_content_target_id' => $child->id(),
+      ])
+      ->execute();
+  }
+
+  /**
+   *
+   * Clear the cache for given child and topic nodes.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface|null $child
+   *   The child node to clear cache, or NULL if the change isn't specific
+   *   to a single child (e.g. reordering).
+   * @param \Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic node to clear cache.
+   */
+  protected function clearCache(?ContentEntityInterface $child, ContentEntityInterface $topic) {
+    $tags = ['node:' . $topic->id()];
+
+    if ($child !== NULL && !empty($child->id())) {
+      $tags[] = 'node:' . $child->id();
+    }
+
+    // We need to reset the cache for new child content to display on cached topics.
+    // It is not enough to just invalidate the topic node tag.
+    $this->entityTypeManager->getStorage('node')->resetCache([$topic->id()]);
+    Cache::invalidateTags($tags);
   }
 
 }
