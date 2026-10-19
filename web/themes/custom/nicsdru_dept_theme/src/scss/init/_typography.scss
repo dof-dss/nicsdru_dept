@@ -221,16 +221,34 @@ $btn-large: (
 );
 
 // Forms.
-$form-legend: (
-  null: (21px, 28px, 0),
-  xl: (24px, 33px, 0),
-  xxxl: (26px, 35px, 0)
+$form-label: (
+  null: (16px, 24px, 0 0 10px),
+  xl: (18px, 27px, 0 0 12px),
+  xxxl: (20px, 30px, 0 0 15px),
 );
 
-$form-legend-plain: (
-  null: (16px, 1.5, 0),
-  xl: (18px, 1.5, 0),
-  xxxl: (20px, 1.5, 0),
+$form-option-label: (
+  null: (15px, 24px),
+  xl: (16px, 27px),
+  xxxl: (17px, 30px),
+);
+
+$form-legend-large: (
+  null: (24px, 32px, 8px 0 1em),
+  xl: (27px, 36px, 9px 0 1em),
+  xxxl: (27px, 4rem, 10px 0 1em)
+);
+
+$form-legend: (
+  null: (20px, 24px, 0 0 16px),
+  xl: (22px, 30px, 0 0 18px),
+  xxxl: (24px, 35px, 0 0 20px)
+);
+
+$form-legend-small: (
+  null: (16px, 1.5, 0 0 10px),
+  xl: (18px, 1.5, 0 0 12px),
+  xxxl: (20px, 1.5, 0 0 15px),
 );
 
 // Landing pages.
