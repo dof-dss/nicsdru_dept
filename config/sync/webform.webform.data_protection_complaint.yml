@@ -111,33 +111,69 @@ elements: |-
       '#autocomplete': 'off'
       '#required': true
       '#required_error': 'You must enter your name'
+    radios_preferred_method_of_contact:
+      '#type': radios
+      '#title': 'How would you prefer to be contacted?'
+      '#options':
+        email: Email
+        phone: Phone
+      '#options_display': side_by_side
+      '#required': true
     text_your_email:
       '#type': webform_email_confirm
       '#title': Email
+      '#required': true
+      '#required_error': 'You must enter your email address'
       '#pattern': '[^@\s]+@[^@\s]+\.[^@\s]+'
       '#pattern_error': 'Enter a valid email address'
-      '#required': true
+      '#states':
+        visible:
+          ':input[name="radios_preferred_method_of_contact"]':
+            value: email
+      '#flexbox': '0'
+    text_phone_optional:
+      '#type': textfield
+      '#title': 'Phone (optional)'
+      '#maxlength': 20
+      '#size': 22
+      '#autocomplete': tel
+      '#pattern': '^[\+0-9\s\-\(\)]+$'
+      '#pattern_error': 'Enter a valid phone number'
+      '#states':
+        visible:
+          ':input[name="radios_preferred_method_of_contact"]':
+            value: email
+      '#attributes':
+        class:
+          - monospace-text
     text_phone:
       '#type': textfield
       '#title': Phone
       '#maxlength': 20
       '#size': 22
       '#autocomplete': tel
-      '#required': true
       '#required_error': 'You must provide a phone number'
       '#pattern': '^[\+0-9\s\-\(\)]+$'
       '#pattern_error': 'Enter a valid phone number'
+      '#states':
+        visible:
+          ':input[name="radios_preferred_method_of_contact"]':
+            value: phone
+        required:
+          ':input[name="radios_preferred_method_of_contact"]':
+            value: phone
       '#attributes':
         class:
           - monospace-text
-    radios_preferred_method_of_contact:
-      '#type': radios
-      '#title': 'How would you prefer to be contacted?'
-      '#options':
-        Email: Email
-        Phone: Phone
-      '#options_display': side_by_side
-      '#required': true
+    text_your_email_optional:
+      '#type': email
+      '#title': 'Email (optional)'
+      '#pattern': '[^@\s]+@[^@\s]+\.[^@\s]+'
+      '#pattern_error': 'Enter a valid email address'
+      '#states':
+        visible:
+          ':input[name="radios_preferred_method_of_contact"]':
+            value: phone
     select_teo_relationship:
       '#type': webform_select_other
       '#title': 'What is your relationship to The Executive Office?'
@@ -313,8 +349,9 @@ elements: |-
     '#preview_prev__label': Previous
     '#preview_next__label': Next
 css: ''
-javascript: |-
-  (function ($, Drupal) {
+javascript: |
+  (function (Drupal, once) {
+    'use strict';
     // Add better HTML5 native date validation to the complaint date field.
     // Webform's only works server-side.
     Drupal.behaviors.dataProtectionComplaintDateFix = {
@@ -354,7 +391,7 @@ javascript: |-
         });
       }
     };
-  })(jQuery, Drupal);
+  })(Drupal, once);
 settings:
   ajax: false
   ajax_scroll_top: form
