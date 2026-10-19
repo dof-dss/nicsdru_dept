@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7dd9f7d7954794a87bf449a92d6696e2",
+    "content-hash": "a0eafd5916aedba84e16cdffcdebdc71",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5054,57 +5054,6 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/field_group",
                 "issues": "https://www.drupal.org/project/issues/field_group"
-            }
-        },
-        {
-            "name": "drupal/file_delete_ui",
-            "version": "dev-1.x",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/file_delete_ui.git",
-                "reference": "56a1b3ac1676b2df5812f9d65911344b2dc7d75a"
-            },
-            "require": {
-                "drupal/core": "^8.8 || ^9 || ^10 || ^11"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "1.0.0-beta3+4-dev",
-                    "datestamp": "1711109469",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Doug Green (douggreen)",
-                    "homepage": "https://www.drupal.org/u/douggreen",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Viktor Holovachek (AstonVictor)",
-                    "homepage": "https://www.drupal.org/u/astonvictor",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "This module adds the capability to delete files from the file admin view (UI).",
-            "homepage": "https://www.drupal.org/project/file_delete_ui",
-            "keywords": [
-                "Drupal"
-            ],
-            "support": {
-                "source": "https://git.drupalcode.org/project/file_delete_ui",
-                "issues": "https://www.drupal.org/project/issues/file_delete_ui"
             }
         },
         {
@@ -22575,7 +22524,6 @@
         "drupal/domain_path": 10,
         "drupal/domain_simple_sitemap": 10,
         "drupal/entity_usage": 20,
-        "drupal/file_delete_ui": 20,
         "drupal/masquerade": 10,
         "drupal/media_views_filter": 5,
         "drupal/revision_manager": 10,
