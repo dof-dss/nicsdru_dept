@@ -122,12 +122,14 @@ elements: |-
     text_your_email:
       '#type': webform_email_confirm
       '#title': Email
-      '#required': true
       '#required_error': 'You must enter your email address'
       '#pattern': '[^@\s]+@[^@\s]+\.[^@\s]+'
       '#pattern_error': 'Enter a valid email address'
       '#states':
         visible:
+          ':input[name="radios_preferred_method_of_contact"]':
+            value: email
+        required:
           ':input[name="radios_preferred_method_of_contact"]':
             value: email
       '#flexbox': '0'
