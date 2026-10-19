@@ -14,6 +14,7 @@ use Drupal\Core\Url;
 use Drupal\layout_builder\Context\LayoutBuilderContextTrait;
 use Drupal\layout_builder\LayoutBuilderHighlightTrait;
 use Drupal\layout_builder\SectionStorageInterface;
+use Drupal\layout_builder_restrictions\Plugin\LayoutBuilderRestrictionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -39,6 +40,8 @@ final class LandingPagesChooseBlockController implements ContainerInjectionInter
    *   Module handler service object.
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   File system service object.
+   * @param \Drupal\layout_builder_restrictions\Plugin\LayoutBuilderRestrictionInterface $builderRestriction
+   *   The layout builder restriction service object.
    */
   public function __construct(
     protected BlockManagerInterface $blockManager,
@@ -46,6 +49,7 @@ final class LandingPagesChooseBlockController implements ContainerInjectionInter
     protected AccountInterface $currentUser,
     protected ModuleHandlerInterface $moduleHandler,
     protected FileSystemInterface $fileSystem,
+    protected LayoutBuilderRestrictionInterface $builderRestriction,
   ) {
   }
 
@@ -58,7 +62,8 @@ final class LandingPagesChooseBlockController implements ContainerInjectionInter
       $container->get('entity_type.manager'),
       $container->get('current_user'),
       $container->get('module_handler'),
-      $container->get('file_system')
+      $container->get('file_system'),
+      $container->get('plugin.manager.layout_builder_restriction'),
     );
   }
 
@@ -198,7 +203,7 @@ final class LandingPagesChooseBlockController implements ContainerInjectionInter
 
     // Support for Layout Builder Restrictions.
     if ($this->moduleHandler->moduleExists('layout_builder_restrictions')) {
-      $layout_builder_restrictions_manager = \Drupal::service('plugin.manager.layout_builder_restriction');
+      $layout_builder_restrictions_manager = $this->builderRestriction;
       $restriction_plugins = $layout_builder_restrictions_manager->getSortedPlugins();
       foreach (array_keys($restriction_plugins) as $id) {
         $plugin = $layout_builder_restrictions_manager->createInstance($id);

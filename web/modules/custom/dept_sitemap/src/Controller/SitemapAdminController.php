@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Returns responses for Departmental sites: Sitemaps routes.
  */
-class SitemapAdminController extends ControllerBase implements ContainerInjectionInterface {
+final class SitemapAdminController extends ControllerBase implements ContainerInjectionInterface {
 
   /**
    * The date formatter service.

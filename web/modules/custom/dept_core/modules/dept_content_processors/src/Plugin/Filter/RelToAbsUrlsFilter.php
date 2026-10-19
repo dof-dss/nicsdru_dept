@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   weight = 100,
  * )
  */
-class RelToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInterface {
+final class RelToAbsUrlsFilter extends FilterBase implements ContainerFactoryPluginInterface {
 
   /**
    * The Entity Type Manager service.

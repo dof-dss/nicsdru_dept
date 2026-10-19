@@ -510,12 +510,12 @@ function nicsdru_dept_theme_preprocess_page_title(&$variables) {
     // Preprocess search page title.
     case "view.search.search_page":
       // Modify title if a search query is present.
-      $query = $request->get('query');
+      $query = $request->request->get('query');
       if (!empty($query)) {
         $variables['title'] = t('Search results');
       }
       // Add a subtitle to indicate the current page selected from the pager.
-      $page = $request->get('page');
+      $page = $request->request->get('page');
       if (!empty($page) && $page > 0) {
         $page = ++$page;
         $variables['title_subtitle'] = t('page :page', [':page' => $page]);
@@ -525,7 +525,7 @@ function nicsdru_dept_theme_preprocess_page_title(&$variables) {
     // Preprocess news listing page title.
     case "dept_news.news_listing":
       // Add a subtitle to indicate the current page selected from the pager.
-      $page = $request->get('page');
+      $page = $request->request->get('page');
       if (!empty($page) && $page > 0) {
         $page = ++$page;
         $variables['title_subtitle'] = t('page :page', [':page' => $page]);

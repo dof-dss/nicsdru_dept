@@ -44,7 +44,8 @@ class DepartmentalDetailsBlock extends BlockBase {
     $options = [];
 
     foreach ($methods as $method) {
-      foreach ($method->getAttributes(DepartmentField::class) as $attribute) {
+      $attributes = $method->getAttributes(DepartmentField::class);
+      foreach ($attributes as $attribute) {
         $options[$method->name] = $attribute->newInstance()->label();
       }
     }
@@ -86,7 +87,6 @@ class DepartmentalDetailsBlock extends BlockBase {
       ]);
 
       if (array_key_exists("#field_name", $field_data)) {
-        // @phpstan-ignore-next-line  Doesn't like magic methods.
         $build['content'] = $dept->get($field_data['#field_name'])->view('default');
       }
     }

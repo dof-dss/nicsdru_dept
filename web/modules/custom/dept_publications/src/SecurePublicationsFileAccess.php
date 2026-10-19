@@ -128,7 +128,7 @@ class SecurePublicationsFileAccess {
       return $static[$uri] = (bool) $cache->data;
     }
 
-    $query = \Drupal::database()->select('file_managed', 'f');
+    $query = $this->connection->select('file_managed', 'f');
     $query->join('media__field_media_file_1', 'm', 'm.field_media_file_1_target_id = f.fid');
     $query->condition('f.uri', $uri);
     $query->range(0, 1);
