@@ -23,7 +23,7 @@ services:
 
   dept_topics.topic_entity_event_subscriber:
     class: Drupal\dept_topics\EventSubscriber\TopicsEntityEventSubscriber
-    arguments: ['@topic.manager', '@entity_type.manager', '@book.manager']
+    arguments: ['@topic.manager', '@entity_type.manager', '@domain_path_pathauto.generator', '@current_route_match']
     tags:
       - { name: event_subscriber }
 
