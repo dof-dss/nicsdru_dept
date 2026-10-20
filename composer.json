@@ -160,11 +160,11 @@
         "drupal/moderation_sidebar": "^1.8",
         "drupal/noreferrer": "^2.0",
         "drupal/paragraphs": "^1.15",
-        "drupal/pathauto": "^1.14",
+        "drupal/pathauto": "1.x-dev@dev",
         "drupal/photoswipe": "^5.0",
         "drupal/published_state_indicator": "^1.0",
         "drupal/purge_users": "^4.0",
-        "drupal/redirect": "1.12",
+        "drupal/redirect": "^1.12",
         "drupal/redis": "^1.11",
         "drupal/revision_manager": "^1.0@beta",
         "drupal/revisions_bulk_operations": "^1.0",
@@ -374,7 +374,7 @@
                 "Allow uninstall of obsolete module": "https://gist.githubusercontent.com/johangant/6b493abcacdafe437e68638f7bb6e845/raw/1e74d6830ead9e0410a754db040738892b995da4/fdgfdg.patch"
             },
             "drupal/redirect": {
-                "Add a 'URL Redirects' tab to ALL applicable content entity edit forms (only nodes supported yet) #3245137": "https://git.drupalcode.org/project/redirect/-/merge_requests/120.patch"
+                "Add a 'URL Redirects' tab to ALL applicable content entity edit forms (only nodes supported yet) #3245137": "https://www.drupal.org/files/issues/2026-10-14/redirect-n3245137-8x113.patch"
             },
             "drupal/robotstxt": {
                 "Add cache context url.site to robots.txt response": "https://www.drupal.org/files/issues/2022-06-02/3283753-3.patch"
