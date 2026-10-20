@@ -72,14 +72,20 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     }
 
     // Fetch all of the Domain aliases for this entity.
-    $domain_paths = $this->entityTypeManager->getStorage('domain_path')->loadByProperties(['source' => '/node/' . $entity->id()]);
+    $domain_aliases = $this->entityTypeManager->getStorage('domain_path')->loadByProperties(['source' => '/node/' . $entity->id()]);
 
     // Iterate each alias, generate the new alias and save.
-    foreach ($domain_paths as $domain_path) {
-      $domain_id = $domain_path->getDomainId();
-      $alias = $this->domainPathautoGenerator->createEntityAlias($entity, 'return', $domain_id);
-      if (!empty($alias) && $alias !== $domain_path->getAlias()) {
-        $domain_path->set('alias', $alias)->save();
+    foreach ($domain_aliases as $domain_alias) {
+      $domain_id = $domain_alias->getDomainId();
+
+      // Skip if Domain pathauto is not enabled for this domain.
+      if (!$this->domainPathautoGenerator->domainPathPathautoGenerationIsEnabled($entity, $domain_id)) {
+        continue;
+      }
+
+      $new_alias = $this->domainPathautoGenerator->createEntityAlias($entity, 'return', $domain_id);
+      if (!empty($new_alias) && $new_alias !== $domain_alias->getAlias()) {
+        $domain_alias->set('alias', $new_alias)->save();
       }
     }
   }
