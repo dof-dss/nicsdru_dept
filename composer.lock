@@ -7722,17 +7722,17 @@
         },
         {
             "name": "drupal/revisions_bulk_operations",
-            "version": "1.0.0",
+            "version": "2.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/revisions_bulk_operations.git",
-                "reference": "1.0.0"
+                "reference": "2.0.0-alpha2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/revisions_bulk_operations-1.0.0.zip",
-                "reference": "1.0.0",
-                "shasum": "e3df5f03918cc89f1f1ae2950fa8559331f7dd20"
+                "url": "https://ftp.drupal.org/files/projects/revisions_bulk_operations-2.0.0-alpha2.zip",
+                "reference": "2.0.0-alpha2",
+                "shasum": "205647ccabb080c080d5c427c0f12f75e34bd3b8"
             },
             "require": {
                 "drupal/core": "^10.3 || ^11"
@@ -7740,11 +7740,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0",
-                    "datestamp": "1776364952",
+                    "version": "2.0.0-alpha2",
+                    "datestamp": "1790852770",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -22824,6 +22824,7 @@
         "drupal/media_views_filter": 5,
         "drupal/pathauto": 20,
         "drupal/revision_manager": 10,
+        "drupal/revisions_bulk_operations": 15,
         "drupal/ultimate_cron": 10
     },
     "prefer-stable": true,
