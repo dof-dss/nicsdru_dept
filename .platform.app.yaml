@@ -129,8 +129,8 @@ hooks:
     # Temp fix as the config is not always updated on Edge.
     ../vendor/bin/drush cim -y
 
-# The configuration of app when it is exposed to the web.
-web:
+# Retain both web configurations; only the selected alias below is active.
+.drupal-web: &drupal-web
   # Specific parameters for different URL prefixes.
   locations:
     '/':
@@ -199,6 +199,25 @@ web:
         # Provide a longer TTL (2 weeks) for Drupal image files.
         '^/sites/default/files/styles/[^\.]+\.(jpe?g|png|gif|svgz?)$':
           expires: 2w
+
+# Serve the temporary static page while backend PHP stays available.
+.static-web: &static-web
+  locations:
+    '/':
+      # Keep Drupal code and uploaded files outside the served directory.
+      root: 'static'
+      index: ['index.html']
+      scripts: false
+      allow: true
+      # Missing paths must resolve to HTML, never Drupal's PHP front controller.
+      passthru: '/index.html'
+      expires: -1
+      headers:
+        Cache-Control: 'no-store, max-age=0'
+
+# Routing mode: use *static-web for the landing page or *drupal-web for Drupal.
+# Changing this selector requires a deployment.
+web: *static-web
 
 # Cron jobs.
 crons:
