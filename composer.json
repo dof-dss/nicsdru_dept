@@ -324,6 +324,9 @@
             "drupal/clientside_validation": {
                 "Allow specific form ids for clientside validation": "https://www.drupal.org/files/issues/2025-01-15/2949540-42.patch"
             },
+            "drupal/content_lock": {
+                "Unable to save settings form #3612845": "https://git.drupalcode.org/project/content_lock/-/merge_requests/125.diff"
+            },
             "drupal/core": {
                 "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch",
                 "Illegal mix of collations leads to error 500 #3188740": "https://www.drupal.org/files/issues/2020-12-21/3188740-3.patch",
