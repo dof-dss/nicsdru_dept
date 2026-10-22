@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e380b804aa0fdf2e65da1a8ceca30929",
+    "content-hash": "375d04d98546d3f2c708326d07ae31d9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7079,14 +7079,20 @@
         },
         {
             "name": "drupal/pathauto",
-            "version": "dev-1.x",
+            "version": "1.15.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/pathauto.git",
-                "reference": "fb071b9fbc4049e64b9da35e6263e6edd45a886b"
+                "reference": "8.x-1.15"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/pathauto-8.x-1.15.zip",
+                "reference": "8.x-1.15",
+                "shasum": "de86fb2c00bb78a449ea5ae2249a5eb96367f05c"
             },
             "require": {
-                "drupal/core": "^10.2 || ^11 || ^12",
+                "drupal/core": "^10.2 || ^11",
                 "drupal/ctools": "*",
                 "drupal/token": "*"
             },
@@ -7101,15 +7107,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-1.15+4-dev",
-                    "datestamp": "1792423842",
+                    "version": "8.x-1.15",
+                    "datestamp": "1778049296",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -22609,7 +22612,6 @@
         "drupal/filelog": 20,
         "drupal/masquerade": 10,
         "drupal/media_views_filter": 5,
-        "drupal/pathauto": 20,
         "drupal/revision_manager": 10,
         "drupal/revisions_bulk_operations": 15,
         "drupal/ultimate_cron": 10
