@@ -15,11 +15,11 @@
     {% else %}
       <p><strong class="label">When</strong>
       {# If the start date and end date day/month match then show the start day, month, year and start/end time. #}
-      {% if event_start_date | date('U') | format_date('custom', 'd M') == event_end_date | date('U') | format_date('custom', 'd M') %}
-        {{ event_start_date | date('U') | format_date('custom', 'd M Y g:i a') }} — {{ event_end_date | date('U') | format_date('custom', 'g:i a') }}
+      {% if event_start_date | date('U') | format_date('custom', 'd F') == event_end_date | date('U') | format_date('custom', 'd F') %}
+        {{ event_start_date | date('U') | format_date('custom', 'd F Y g:i a') }} — {{ event_end_date | date('U') | format_date('custom', 'g:i a') }}
       {% else %}
         {# If not matching print out the extra end date info on top of the time. #}
-        {{ event_start_date | date('U') | format_date('custom', 'd M Y g:i a') }} — {{ event_end_date | date('U') | format_date('custom', 'd M Y g:i a') }}
+        {{ event_start_date | date('U') | format_date('custom', 'd F Y g:i a') }} — {{ event_end_date | date('U') | format_date('custom', 'd F Y g:i a') }}
       {% endif %}
     </p>
       {% if content.field_venue %}
