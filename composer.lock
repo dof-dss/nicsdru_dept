@@ -1350,16 +1350,16 @@
         },
         {
             "name": "dof-dss/nicsdru_origins_modules",
-            "version": "10.7.3",
+            "version": "10.7.8",
             "source": {
                 "type": "git",
                 "url": "git@github.com:dof-dss/nicsdru_origins_modules.git",
-                "reference": "a04e64af4e1f2bb19b693915ac9dc641a6d8a004"
+                "reference": "2e6175de0ace541db66c2a8727cce4160a06c7f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/a04e64af4e1f2bb19b693915ac9dc641a6d8a004",
-                "reference": "a04e64af4e1f2bb19b693915ac9dc641a6d8a004",
+                "url": "https://api.github.com/repos/dof-dss/nicsdru_origins_modules/zipball/2e6175de0ace541db66c2a8727cce4160a06c7f4",
+                "reference": "2e6175de0ace541db66c2a8727cce4160a06c7f4",
                 "shasum": ""
             },
             "require": {
@@ -1375,7 +1375,7 @@
                 "MIT"
             ],
             "description": "Generic modules for DOF-DSS Drupal sites",
-            "time": "2026-08-05T13:21:53+00:00"
+            "time": "2026-10-13T09:57:49+00:00"
         },
         {
             "name": "dof-dss/nicsdru_origins_theme",
@@ -1885,58 +1885,6 @@
             "homepage": "https://www.drupal.org/project/autoban",
             "support": {
                 "source": "https://git.drupalcode.org/project/autoban"
-            }
-        },
-        {
-            "name": "drupal/bert",
-            "version": "2.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/bert.git",
-                "reference": "2.0.3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/bert-2.0.3.zip",
-                "reference": "2.0.3",
-                "shasum": "07d95b2a450aad66adc3897aeab7d69c6e356a45"
-            },
-            "require": {
-                "drupal/core": "^8.6 || ^9.0 || ^10 || ^11",
-                "php": ">=7.1.0"
-            },
-            "require-dev": {
-                "composer-runtime-api": "^2.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.0.3",
-                    "datestamp": "1756996825",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "dieterholvoet",
-                    "homepage": "https://www.drupal.org/user/3567222"
-                },
-                {
-                    "name": "robin.houtevelts",
-                    "homepage": "https://www.drupal.org/user/3500121"
-                }
-            ],
-            "description": "A user friendly and customizable entity reference list field widget.",
-            "homepage": "https://www.drupal.org/project/bert",
-            "support": {
-                "source": "https://git.drupalcode.org/project/bert"
             }
         },
         {
@@ -4837,50 +4785,6 @@
             }
         },
         {
-            "name": "drupal/entity_reference_tree",
-            "version": "2.4.2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/entity_reference_tree.git",
-                "reference": "2.4.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity_reference_tree-2.4.2.zip",
-                "reference": "2.4.2",
-                "shasum": "330ed010bc36f30bef30c71452a5010d97392b44"
-            },
-            "require": {
-                "drupal/core": "^10 || ^11"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.4.2",
-                    "datestamp": "1770786004",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "mingsong",
-                    "homepage": "https://www.drupal.org/user/2986445"
-                }
-            ],
-            "description": "A field widget for entity reference tree",
-            "homepage": "https://www.drupal.org/project/entity_reference_tree",
-            "support": {
-                "source": "https://git.drupalcode.org/project/entity_reference_tree"
-            }
-        },
-        {
             "name": "drupal/entity_usage",
             "version": "dev-2.x",
             "source": {
@@ -5678,67 +5582,6 @@
             }
         },
         {
-            "name": "drupal/fpa",
-            "version": "4.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/fpa.git",
-                "reference": "4.0.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/fpa-4.0.2.zip",
-                "reference": "4.0.2",
-                "shasum": "11f36f467a6dff25de0d0670518ec1249bc03aad"
-            },
-            "require": {
-                "drupal/core": "^9.4 | ^10.3 | ^11",
-                "drupal/js_cookie": "^1.0 | ^2.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "4.0.2",
-                    "datestamp": "1782908491",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "astonvictor",
-                    "homepage": "https://www.drupal.org/user/3466615"
-                },
-                {
-                    "name": "azovsky",
-                    "homepage": "https://www.drupal.org/user/330533"
-                },
-                {
-                    "name": "corey.aufang",
-                    "homepage": "https://www.drupal.org/user/163737"
-                },
-                {
-                    "name": "HakS",
-                    "homepage": "https://www.drupal.org/user/1815198"
-                },
-                {
-                    "name": "vladimiraus",
-                    "homepage": "https://www.drupal.org/user/673120"
-                }
-            ],
-            "description": "Fast filtering on permissions administration form.",
-            "homepage": "https://www.drupal.org/project/fpa",
-            "support": {
-                "source": "https://git.drupalcode.org/project/fpa"
-            }
-        },
-        {
             "name": "drupal/google_map_field",
             "version": "dev-1.x",
             "source": {
@@ -6250,62 +6093,6 @@
             "homepage": "https://www.drupal.org/project/jquery_ui_menu",
             "support": {
                 "source": "https://git.drupalcode.org/project/jquery_ui_menu"
-            }
-        },
-        {
-            "name": "drupal/js_cookie",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/js_cookie.git",
-                "reference": "1.0.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/js_cookie-1.0.2.zip",
-                "reference": "1.0.2",
-                "shasum": "effcbee68083efc866aca2a1bfa3fc6e14fe0c2f"
-            },
-            "require": {
-                "drupal/core": "^9 || ^10 || ^11"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.2",
-                    "datestamp": "1762168962",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "anybody",
-                    "homepage": "https://www.drupal.org/user/291091"
-                },
-                {
-                    "name": "dave reid",
-                    "homepage": "https://www.drupal.org/user/53892"
-                },
-                {
-                    "name": "grevil",
-                    "homepage": "https://www.drupal.org/user/3668491"
-                },
-                {
-                    "name": "jan kellermann",
-                    "homepage": "https://www.drupal.org/user/371731"
-                }
-            ],
-            "description": "Provides the js-cookie library as a dependency.",
-            "homepage": "https://www.drupal.org/project/js_cookie",
-            "support": {
-                "source": "https://git.drupalcode.org/project/js_cookie"
             }
         },
         {
@@ -15765,7 +15552,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/math/issues",
-                "source": "https://github.com/brick/math/tree/0.18.0"
+                "source": "https://github.com/brick/math/tree/1.0.0"
             },
             "funding": [
                 {
@@ -16061,7 +15848,7 @@
                     ]
                 },
                 "branch-alias": {
-                    "dev-main": "2.9-dev"
+                    "dev-main": "2.10-dev"
                 }
             },
             "autoload": {
@@ -21656,16 +21443,16 @@
         },
         {
             "name": "seld/jsonlint",
-            "version": "1.11.0",
+            "version": "1.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/jsonlint.git",
-                "reference": "1748aaf847fc731cfad7725aec413ee46f0cc3a2"
+                "reference": "9a90eb5d32d5a500296bf43f946d60246444d5f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/1748aaf847fc731cfad7725aec413ee46f0cc3a2",
-                "reference": "1748aaf847fc731cfad7725aec413ee46f0cc3a2",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/9a90eb5d32d5a500296bf43f946d60246444d5f7",
+                "reference": "9a90eb5d32d5a500296bf43f946d60246444d5f7",
                 "shasum": ""
             },
             "require": {
@@ -21704,7 +21491,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/jsonlint/issues",
-                "source": "https://github.com/Seldaek/jsonlint/tree/1.11.0"
+                "source": "https://github.com/Seldaek/jsonlint/tree/1.12.1"
             },
             "funding": [
                 {
@@ -21716,7 +21503,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-07-11T14:55:45+00:00"
+            "time": "2026-06-12T11:32:29+00:00"
         },
         {
             "name": "seld/phar-utils",
