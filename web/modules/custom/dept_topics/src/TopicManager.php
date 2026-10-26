@@ -487,6 +487,28 @@ final class TopicManager {
   }
 
   /**
+   * Returns the number of nodes referencing a topic, excluding topic child types.
+   *
+   * @param \Drupal\node\NodeInterface|\Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic or subtopic node.
+   *
+   * @return int
+   *   The number of nodes referencing the given topic in field_site_topics.
+   *
+   * @see \Drupal\dept_topics\TopicManager::getTopicChildNodeTypes()
+   */
+  public function countReferencingNodes(NodeInterface|ContentEntityInterface $topic): int {
+    $topic_child_types = array_keys($this->getTopicChildNodeTypes());
+
+    $query = $this->nodeStorage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('field_site_topics', $topic->id())
+      ->condition('type', $topic_child_types, 'NOT IN');
+
+    return (int) $query->count()->execute();
+  }
+
+  /**
    * Inserts an entity reference value for a given child and topic.
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $child
