@@ -322,6 +322,17 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
     // @phpstan-ignore-next-line.
     $node = $form_state->getFormObject()->getEntity();
 
+    // Display the number of nodes (that are not topic child content types) referencing this topic.
+    $referencing_count = \Drupal::service('topic.manager')->countReferencingNodes($node);
+    if ($referencing_count > 0) {
+      $form['node_references'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => UiMessages::deleteTopicReferencedByNodes($referencing_count),
+        '#weight' => -1,
+      ];
+    }
+
     if (\Drupal::service('topic.manager')->topicHasActiveChildren($node)) {
       $form['description'] = [
         '#type' => 'html_tag',

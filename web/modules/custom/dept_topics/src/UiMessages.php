@@ -76,6 +76,20 @@ class UiMessages {
   }
 
   /**
+   * Notice shown on the delete form for the nodes using a topic.
+   *
+   * @param int $count
+   *   The number of nodes referencing the topic.
+   */
+  public static function deleteTopicReferencedByNodes(int $count): TranslatableMarkup {
+    return \Drupal::translation()->formatPlural(
+      $count,
+      '1 content item uses this topic in its Site topics field. Deleting this topic will remove it from that content item.',
+      '@count content items use this topic in their Site topics field. Deleting this topic will remove it from those content items.',
+    );
+  }
+
+  /**
    * Notice/exception shown when deletion is blocked by active children.
    *
    * @param string $bundle
