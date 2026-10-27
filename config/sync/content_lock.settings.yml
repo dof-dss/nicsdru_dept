@@ -7,6 +7,9 @@ types:
 types_translation_lock: {  }
 form_op_lock:
   node:
-    mode: 0
-    values: {  }
+    mode: 1
+    values:
+      edit: edit
+      book_outline: book_outline
+      layout_builder: layout_builder
 timeout: 1800
