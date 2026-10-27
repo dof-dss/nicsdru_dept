@@ -489,23 +489,46 @@ final class TopicManager {
   /**
    * Returns the number of nodes referencing a topic, excluding topic child types.
    *
+   * Archived nodes are not counted. A node without a moderation state has
+   * never been through the workflow, so cannot have been archived.
+   *
    * @param \Drupal\node\NodeInterface|\Drupal\Core\Entity\ContentEntityInterface $topic
    *   The topic or subtopic node.
    *
    * @return int
-   *   The number of nodes referencing the given topic in field_site_topics.
+   *   The number of non-archived nodes referencing the given topic in
+   *   field_site_topics.
    *
    * @see \Drupal\dept_topics\TopicManager::getTopicChildNodeTypes()
    */
   public function countReferencingNodes(NodeInterface|ContentEntityInterface $topic): int {
     $topic_child_types = array_keys($this->getTopicChildNodeTypes());
 
-    $query = $this->nodeStorage->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('field_site_topics', $topic->id())
-      ->condition('type', $topic_child_types, 'NOT IN');
+    // The moderation state cannot be used in a node entity query, so join to
+    // the moderation state of the default revision of each node.
+    $query = $this->connection->select('node__field_site_topics', 'topics');
+    $query->join('node_field_data', 'node', 'node.nid = topics.entity_id AND node.vid = topics.revision_id');
+    $query->leftJoin(
+      'content_moderation_state_field_data',
+      'moderation',
+      'moderation.content_entity_type_id = :entity_type AND moderation.content_entity_id = node.nid AND moderation.content_entity_revision_id = node.vid AND moderation.langcode = node.langcode',
+      [':entity_type' => 'node'],
+    );
+    $query->condition('topics.field_site_topics_target_id', $topic->id());
+    $query->condition('topics.deleted', 0);
 
-    return (int) $query->count()->execute();
+    if (!empty($topic_child_types)) {
+      $query->condition('node.type', $topic_child_types, 'NOT IN');
+    }
+
+    $archived = $query->orConditionGroup()
+      ->isNull('moderation.moderation_state')
+      ->condition('moderation.moderation_state', 'archived', '<>');
+    $query->condition($archived);
+
+    $query->addExpression('COUNT(DISTINCT node.nid)', 'total');
+
+    return (int) $query->execute()->fetchField();
   }
 
   /**
