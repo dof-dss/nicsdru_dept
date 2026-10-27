@@ -89,9 +89,9 @@ class UiMessages {
   public static function deleteTopicReferencedByNodes(int $count, NodeInterface $node): TranslatableMarkup {
     return \Drupal::translation()->formatPlural(
       $count,
-      '1 content item uses this topic in its Site topics field. Deleting this topic will remove it from that content item. @usage_link.',
+      '1 content item uses this topic in its Site topics field. Deleting this topic will remove it from that content item. @usage_link',
       '@count content items use this topic in their Site topics field. Deleting this topic will remove it from those content items. @usage_link.',
-      ['@usage_link' => Link::createFromRoute('View content referencing this topic', 'entity.node.entity_usage', ['node' => $node->id()])->toString()]
+      ['@usage_link' => \Drupal::currentUser()->hasPermission('access entity usage statistics') ? Link::createFromRoute('View content referencing this topic.', 'entity.node.entity_usage', ['node' => $node->id()])->toString() : '']
     );
   }
 
