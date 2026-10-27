@@ -157,14 +157,14 @@
         "drupal/moderation_sidebar": "^1.8",
         "drupal/noreferrer": "^2.0",
         "drupal/paragraphs": "^1.15",
-        "drupal/pathauto": "1.x-dev@dev",
+        "drupal/pathauto": "^1.1",
         "drupal/photoswipe": "^5.0",
         "drupal/published_state_indicator": "^1.0",
         "drupal/purge_users": "^4.0",
         "drupal/redirect": "^1.12",
         "drupal/redis": "^1.11",
         "drupal/revision_manager": "^1.0@beta",
-        "drupal/revisions_bulk_operations": "^1.0",
+        "drupal/revisions_bulk_operations": "^2.0@alpha",
         "drupal/robotstxt": "^1.6",
         "drupal/scheduled_transitions": "^2.7",
         "drupal/scheduler": "^2.2",
@@ -191,7 +191,7 @@
         "drupal/ultimate_cron": "^2.0@beta",
         "drupal/users_export": "^3.0",
         "drupal/variationcache": "^1.2",
-        "drupal/view_unpublished": "^1.1",
+        "drupal/view_unpublished": "^1.5",
         "drupal/views_arg_entity_field": "^2.0",
         "drupal/views_conditional": "^1.4",
         "drupal/views_contextual_filters_or": "^1.5",
@@ -324,6 +324,9 @@
             "drupal/clientside_validation": {
                 "Allow specific form ids for clientside validation": "https://www.drupal.org/files/issues/2025-01-15/2949540-42.patch"
             },
+            "drupal/content_lock": {
+                "Unable to save settings form #3612845": "https://git.drupalcode.org/project/content_lock/-/merge_requests/125.diff"
+            },
             "drupal/core": {
                 "Render blocks in preview page": "https://www.drupal.org/files/issues/2019-10-03/3085364_2.patch",
                 "Illegal mix of collations leads to error 500 #3188740": "https://www.drupal.org/files/issues/2020-12-21/3188740-3.patch",
@@ -366,6 +369,9 @@
                 "Can't preview a new node #3264639": "https://www.drupal.org/files/issues/2022-02-16/preview-new-node-3264639-2.patch",
                 "'Draft available' text still appears after deleting a forward revision": "https://www.drupal.org/files/issues/2020-02-24/3115474-3.patch",
                 "Clicking \"Tasks | Published\" to close the sidebar tray redirects to AJAX page": "https://git.drupalcode.org/project/moderation_sidebar/-/merge_requests/25.diff"
+            },
+            "drupal/pathauto": {
+                "Saving new content leads to a 404 page and silent TypeError log entries #3608478": "https://git.drupalcode.org/project/pathauto/-/merge_requests/183.diff"
             },
             "drupal/permissions_filter": {
                 "Allow uninstall of obsolete module": "https://gist.githubusercontent.com/johangant/6b493abcacdafe437e68638f7bb6e845/raw/1e74d6830ead9e0410a754db040738892b995da4/fdgfdg.patch"
