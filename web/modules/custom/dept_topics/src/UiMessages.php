@@ -2,7 +2,9 @@
 
 namespace Drupal\dept_topics;
 
+use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\node\NodeInterface;
 
 /**
  * Centralised UI message helpers for consistent messaging across Topics.
@@ -80,12 +82,16 @@ class UiMessages {
    *
    * @param int $count
    *   The number of nodes referencing the topic.
+   * @param \Drupal\node\NodeInterface $node
+   *   The topic/subtopic referenced by the nodes.
+   *
    */
-  public static function deleteTopicReferencedByNodes(int $count): TranslatableMarkup {
+  public static function deleteTopicReferencedByNodes(int $count, NodeInterface $node): TranslatableMarkup {
     return \Drupal::translation()->formatPlural(
       $count,
-      '1 content item uses this topic in its Site topics field. Deleting this topic will remove it from that content item.',
-      '@count content items use this topic in their Site topics field. Deleting this topic will remove it from those content items.',
+      '1 content item uses this topic in its Site topics field. Deleting this topic will remove it from that content item. @usage_link.',
+      '@count content items use this topic in their Site topics field. Deleting this topic will remove it from those content items. @usage_link.',
+      ['@usage_link' => Link::createFromRoute('View content referencing this topic', 'entity.node.entity_usage', ['node' => $node->id()])->toString()]
     );
   }
 

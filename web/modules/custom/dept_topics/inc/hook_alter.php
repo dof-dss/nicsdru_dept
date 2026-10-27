@@ -325,7 +325,7 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
     // Display the number of nodes (that are not topic child content types) referencing this topic.
     $referencing_count = \Drupal::service('topic.manager')->countReferencingNodes($node);
     if ($referencing_count > 0) {
-      \Drupal::messenger()->addWarning(UiMessages::deleteTopicReferencedByNodes($referencing_count));
+      \Drupal::messenger()->addWarning(UiMessages::deleteTopicReferencedByNodes($referencing_count, $node));
     }
 
     if (\Drupal::service('topic.manager')->topicHasActiveChildren($node)) {
