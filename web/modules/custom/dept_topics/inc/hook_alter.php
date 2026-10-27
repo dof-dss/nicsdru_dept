@@ -330,6 +330,7 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
         '#tag' => 'p',
         '#value' => UiMessages::deleteTopicReferencedByNodes($referencing_count),
         '#weight' => -1,
+        '#cache' => ['tags' => ['node_list']],
       ];
     }
 
