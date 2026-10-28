@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - revisions_bulk_operations
+id: revisions_bulk_operations_delete_action
+label: 'Delete (old) revisions'
+type: node
+plugin: 'entity:revisions_bulk_operations_delete_action'
+configuration: {  }
