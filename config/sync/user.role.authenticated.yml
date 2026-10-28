@@ -10,6 +10,7 @@ dependencies:
     - domain
     - domain_access
     - domain_entity
+    - entity_usage
     - filter
     - help
     - media
@@ -31,6 +32,7 @@ is_admin: false
 permissions:
   - 'access administration pages'
   - 'access content'
+  - 'access entity usage statistics'
   - 'access help pages'
   - 'access toolbar'
   - 'access tour'
