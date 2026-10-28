@@ -753,8 +753,7 @@ function nicsdru_dept_theme_preprocess_media_oembed_iframe(array &$variables): v
 
   // Early return if not a YouTube video embed.
   $iframe = (string) $variables['media'];
-  if (stripos($iframe, 'youtube.com') === FALSE &&
-      stripos($iframe, 'youtube-nocookie.com') === FALSE) {
+  if (stripos($iframe, 'youtube.com') === FALSE && stripos($iframe, 'youtube-nocookie.com') === FALSE) {
       return;
   }
 
