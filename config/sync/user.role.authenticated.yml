@@ -11,6 +11,7 @@ dependencies:
     - domain
     - domain_access
     - domain_entity
+    - entity_usage
     - filter
     - help
     - media
@@ -33,6 +34,7 @@ permissions:
   - 'access administration pages'
   - 'access book list'
   - 'access content'
+  - 'access entity usage statistics'
   - 'access help pages'
   - 'access toolbar'
   - 'access tour'
