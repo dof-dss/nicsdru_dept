@@ -122,14 +122,12 @@ elements: |-
     text_your_email:
       '#type': webform_email_confirm
       '#title': Email
+      '#description': 'We will use this email address to send you confirmation of your complaint.'
+      '#description_display': before
+      '#required': true
       '#required_error': 'You must enter your email address'
       '#pattern': '[^@\s]+@[^@\s]+\.[^@\s]+'
       '#pattern_error': 'Enter a valid email address'
-      '#states':
-        visible:
-          ':input[name="radios_preferred_method_of_contact"]':
-            value: email
-      '#required': true
       '#flexbox': '0'
     text_phone_optional:
       '#type': textfield
@@ -165,15 +163,6 @@ elements: |-
       '#attributes':
         class:
           - monospace-text
-    text_your_email_optional:
-      '#type': email
-      '#title': 'Email (optional)'
-      '#pattern': '[^@\s]+@[^@\s]+\.[^@\s]+'
-      '#pattern_error': 'Enter a valid email address'
-      '#states':
-        visible:
-          ':input[name="radios_preferred_method_of_contact"]':
-            value: phone
     select_teo_relationship:
       '#type': webform_select_other
       '#title': 'What is your relationship to The Executive Office?'
@@ -619,6 +608,58 @@ handlers:
         </p>
         <p>Submitted values are:</p>
         [webform_submission:values]
+      excluded_elements:
+        markup_declaration_accuracy: markup_declaration_accuracy
+        markup_declaration_accuracy_on_behalf_of: markup_declaration_accuracy_on_behalf_of
+        text_your_name: text_your_name
+      ignore_access: false
+      exclude_empty: true
+      exclude_empty_checkbox: false
+      exclude_attachments: false
+      html: true
+      attachments: false
+      twig: false
+      theme_name: ''
+      parameters: {  }
+      debug: false
+  email_1:
+    id: email
+    handler_id: email_1
+    label: 'Email confirmation'
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 1
+    settings:
+      states:
+        - completed
+      to_mail: '[webform_submission:values:text_your_email:raw]'
+      to_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      from_mail: noreply@www.executiveoffice-ni.uat-nvcvooy-dnvkwx4xjhiza.uk-1.platformsh.site
+      from_options: {  }
+      from_name: _default
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      subject: 'Data protection complaint confirmation'
+      body: |-
+        <p>Dear [webform_submission:values:text_your_name],</p>
+        <p>Your data protection complaint submitted  [webform_submission:created:medium_date_time] has been sent to the Data Protection Officer in The Executive Office.</p>
+        <p>The information you have provided in your complaint is shown below.</p>
+
+        <hr>
+        [webform_submission:values]
+        <hr>
+
+        <p><strong>Do not reply to this email.</strong> This email was sent from an email address that cannot accept replies.</p>
+
+        <p>Regards,<br>
+        The Executive Office</p>
       excluded_elements:
         markup_declaration_accuracy: markup_declaration_accuracy
         markup_declaration_accuracy_on_behalf_of: markup_declaration_accuracy_on_behalf_of
