@@ -751,23 +751,23 @@ function nicsdru_dept_theme_preprocess_media_oembed_iframe(array &$variables): v
     return;
   }
 
-  // Get the correct GTM container.
-  $default_entity_id = \Drupal::config('google_tag.settings')->get('default_google_tag_entity');
-  $tag_container = \Drupal::service('google_tag.tag_container_resolver')->resolve();
-  if ($tag_container === NULL && $default_entity_id) {
-    $tag_container = \Drupal::entityTypeManager()
-      ->getStorage('google_tag_container')
-      ->load($default_entity_id);
+  // Early return if not a YouTube video embed.
+  $iframe = (string) $variables['media'];
+  if (stripos($iframe, 'youtube.com') === FALSE &&
+      stripos($iframe, 'youtube-nocookie.com') === FALSE) {
+      return;
   }
+
+  // Get the GTM container.
+  $tag_container = \Drupal::service('google_tag.tag_container_resolver')->resolve();
 
   if ($tag_container !== NULL) {
     $variables['gtm_id'] = $tag_container->getGtmId();
-  }
 
-  // Modify the iframe src URL to include the enablejsapi=1 parameter.
-  $iframe = $variables['media'];
-  if (stripos($iframe, 'youtube.com') !== false && stripos($iframe, 'enablejsapi') === false) {
-    $altered_iframe = str_replace('feature=oembed', 'feature=oembed&enablejsapi=1', $iframe);
-    $variables['media'] = Markup::create($altered_iframe);
+    // Modify the iframe src URL to include the enablejsapi=1 parameter.
+    if (stripos($iframe, 'feature=oembed') !== FALSE && stripos($iframe, 'enablejsapi') === false) {
+      $altered_iframe = str_replace('feature=oembed', 'feature=oembed&enablejsapi=1', $iframe);
+      $variables['media'] = Markup::create($altered_iframe);
+    }
   }
 }
