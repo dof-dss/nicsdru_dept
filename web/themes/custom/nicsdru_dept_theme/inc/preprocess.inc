@@ -764,7 +764,7 @@ function nicsdru_dept_theme_preprocess_media_oembed_iframe(array &$variables): v
     $variables['gtm_id'] = $tag_container->getGtmId();
 
     // Modify the iframe src URL to include the enablejsapi=1 parameter.
-    if (stripos($iframe, 'feature=oembed') !== FALSE && stripos($iframe, 'enablejsapi') === false) {
+    if (stripos($iframe, 'feature=oembed') !== FALSE && stripos($iframe, 'enablejsapi') === FALSE) {
       $altered_iframe = str_replace('feature=oembed', 'feature=oembed&enablejsapi=1', $iframe);
       $variables['media'] = Markup::create($altered_iframe);
     }
