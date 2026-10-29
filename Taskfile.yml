@@ -21,3 +21,12 @@ tasks:
     cmds:
       - npx playwright test --list --reporter=json {{.CLI_ARGS}} | jq -r '[.. | .tags? // empty | .[]] | unique | .[]'
     silent: true
+
+  playwright-help:
+    desc: Display the README from the playwright directory
+    preconditions:
+      - sh: test -f playwright/README.md
+        msg: playwright/README.md not found. Run 'task playwright-install' first.
+    cmds:
+      - bat playwright/README.md
+    silent: true
