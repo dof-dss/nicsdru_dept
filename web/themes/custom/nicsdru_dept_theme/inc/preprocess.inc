@@ -12,6 +12,7 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
 use Drupal\dept_core\Department;
+use Drupal\media\IFrameMarkup;
 use Drupal\media\MediaInterface;
 use Drupal\nicsdru_dept_theme\Helpers;
 use Drupal\nicsdru_dept_theme\LayoutClasses;
@@ -746,27 +747,39 @@ function nicsdru_dept_theme_preprocess_region(&$variables) {
  */
 function nicsdru_dept_theme_preprocess_media_oembed_iframe(array &$variables): void {
 
-  // Enable Google Analytics to track embedded YouTube videos.
-  if (\Drupal::moduleHandler()->moduleExists('google_tag') === FALSE) {
+  // Enable the YouTube JS API for oEmbed media if the
+  // Google Tag module is enabled and a GTM ID is present.
+  $provider = $variables['resource']->getProvider();
+
+  if (!$provider || strcasecmp($provider->getName(), 'YouTube') !== 0) {
     return;
   }
 
-  // Early return if not a YouTube video embed.
-  $iframe = (string) $variables['media'];
-  if (stripos($iframe, 'youtube.com') === FALSE && stripos($iframe, 'youtube-nocookie.com') === FALSE) {
+  if (!\Drupal::moduleHandler()->moduleExists('google_tag')) {
     return;
   }
 
-  // Get the GTM container.
+  /** @var \Drupal\google_tag\Entity\TagContainer|null $tag_container */
   $tag_container = \Drupal::service('google_tag.tag_container_resolver')->resolve();
 
-  if ($tag_container !== NULL) {
-    $variables['gtm_id'] = $tag_container->getGtmId();
-
-    // Modify the iframe src URL to include the enablejsapi=1 parameter.
-    if (stripos($iframe, 'feature=oembed') !== FALSE && stripos($iframe, 'enablejsapi') === FALSE) {
-      $altered_iframe = str_replace('feature=oembed', 'feature=oembed&enablejsapi=1', $iframe);
-      $variables['media'] = Markup::create($altered_iframe);
-    }
+  if ($tag_container === NULL || ($gtm_id = $tag_container->getGtmId()) === '') {
+    return;
   }
+
+  $media = (string) $variables['media'];
+
+  // YouTube's oEmbed response normally includes feature=oembed. So
+  // tack on enablejsapi=1 if it's not already present.
+  if (stripos($media, 'enablejsapi=') === FALSE) {
+
+    $media = str_ireplace(
+      'feature=oembed',
+      'feature=oembed&amp;enablejsapi=1',
+      $media,
+    );
+
+    $variables['media'] = IFrameMarkup::create($media);
+  }
+
+  $variables['gtm_id'] = $gtm_id;
 }
