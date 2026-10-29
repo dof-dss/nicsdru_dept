@@ -3,7 +3,7 @@
 version: '3'
 
 vars:
-  GREETING: Hello, world!
+  THEME_PATH: web/themes/custom/nicsdru_dept_theme
 
 tasks:
   playwright-install:
@@ -12,7 +12,8 @@ tasks:
       - test -d playwright
     cmds:
       - git clone https://github.com/dof-dss/Playwright-Departmental playwright
-      -
+      - cd playwright && npm install
+      - cd playwright && npx playwright install
     silent: true
 
   playwright-tags:
@@ -30,3 +31,23 @@ tasks:
     cmds:
       - bat playwright/README.md
     silent: true
+
+  theme-install:
+    desc: Install the theme npm dependencies
+    dir: '{{.THEME_PATH}}'
+    cmds:
+      - ddev npm install
+
+  theme-css-compile:
+    desc: Compile the theme SCSS
+    aliases: [tcc]
+    dir: '{{.THEME_PATH}}'
+    cmds:
+      - ddev npm run css
+
+  theme-css-watch:
+    desc: Watch and compile the theme SCSS
+    aliases: [tcw]
+    dir: '{{.THEME_PATH}}'
+    cmds:
+      - ddev npm run watch-scss
