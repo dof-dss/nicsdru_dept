@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+vars:
+  GREETING: Hello, world!
+
+tasks:
+  playwright-install:
+    desc: Install playwright tests
+    status:
+      - test -d playwright
+    cmds:
+      - git clone https://github.com/dof-dss/Playwright-Departmental playwright
+      -
+    silent: true
+
+  playwright-tags:
+    desc: List all tags used in the playwright tests (optionally pass a directory, e.g. task playwright-tags -- tests/smoke)
+    dir: playwright
+    cmds:
+      - npx playwright test --list --reporter=json {{.CLI_ARGS}} | jq -r '[.. | .tags? // empty | .[]] | unique | .[]'
+    silent: true
