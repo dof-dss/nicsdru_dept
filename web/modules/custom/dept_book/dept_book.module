@@ -64,6 +64,11 @@ function dept_book_form_node_form_alter(array &$form, FormStateInterface $form_s
   }
 
   $form['#validate'][] = 'dept_book_validate_parent_page_archive';
+
+  // Only allow the creation of new books using the article content type.
+  if ($node->bundle() != 'article') {
+    unset($form['book']["bid"]["#options"][$node->isNew() ? 'new' : $node->id()]);
+  }
 }
 
 /**
@@ -248,6 +253,18 @@ function dept_book_node_update(EntityInterface $entity) {
  * Implements hook_form_alter().
  */
 function dept_book_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Remove the create new book option for all nodes except articles.
+  if (str_ends_with($form_id, 'book_outline_form')) {
+    $node = dept_book_get_form_node($form_state);
+
+    if ($node instanceof NodeInterface && $node->bundle() !== 'article') {
+      // Ensure we only remove the option if this content isn't part of a book.
+      if (($node->book['original_bid'] ?? 0) != $node->id()) {
+        unset($form['book']['bid']['#options'][$node->id()]);
+      }
+    }
+  }
+
   // Interject in the book outline form. Purge cache items
   // from affected book ids and associated node id cache entries.
   if (preg_match('/book_(outline|remove)/', $form_id)) {

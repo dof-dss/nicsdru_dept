@@ -8,6 +8,7 @@ db:
   type: mariadb:10.4
   # The disk attribute is the size of the persistent disk (in MB) allocated to the service.
   disk: 15360
+
   configuration:
     schemas:
       - main
