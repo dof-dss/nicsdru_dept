@@ -59,6 +59,10 @@ form {
       border: 0;
     }
 
+    &.webform-composite-hidden-title {
+      margin: 0;
+    }
+
     legend {
       @include responsive-typo-map($form-legend-small);
       font-weight: bold;
@@ -67,6 +71,10 @@ form {
       &:has(span.fieldset-legend.visually-hidden) {
         padding: 0;
         margin: 0;
+      }
+
+      &.fieldset__legend--invisible {
+        @include visually-hidden;
       }
 
       &:has(+ .fieldset-wrapper > .description, + .fieldset-wrapper > .field-prefix > .description) {
@@ -113,7 +121,11 @@ form {
 
 .form-wrapper,
 .form-textarea-wrapper {
-  margin: 0 0 1.5em;
+  margin: 0 0 1em;
+}
+
+.form-textarea-wrapper:has(.webform-counter) {
+  margin-bottom: 1.5em;
 }
 
 .form-actions {
@@ -138,10 +150,6 @@ form {
 .form-item:not(.form-wrapper) {
   padding: 0;
   margin: 0 0 1em;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
 }
 
 .webform-select-other,
