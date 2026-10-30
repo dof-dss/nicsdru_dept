@@ -10,8 +10,27 @@ vars:
   BRANCH_ORIGINS_MODULES: 10.x-dev
 
 tasks:
+
+  default:
+    desc: Check that gum is installed and list the available tasks
+    preconditions:
+      - sh: command -v gum
+        msg: gum is not installed. Install it with 'brew install gum' on mac, for other platforms visit https://github.com/charmbracelet/gum#installation.
+    cmds:
+      - |
+        task --list-all --json \
+          | jq -r '(["Task","Description","Aliases"] | @csv), (.tasks[] | [.name, .desc, (.aliases | join(", "))] | @csv)' \
+          | gum table --print
+    silent: true
+
+
+  ##################
+  # - Playwright - #
+  ##################
+
   playwright-install:
-    desc: Install playwright tests
+    desc: Install playwright tests and dependencies
+    aliases: [ply-install]
     status:
       - test -d playwright
     cmds:
@@ -55,7 +74,6 @@ tasks:
         GREP=$(echo "$SELECTED" | paste -sd'|' -)
         npx playwright test --grep "$GREP"
 
-
   playwright-report:
     desc: Display the playwright report
     aliases: [ply-report]
@@ -65,33 +83,43 @@ tasks:
     silent: true
 
   playwright-help:
-    desc: Display the README from the playwright directory
+    desc: Display playwright help and guidance
+    aliases: [ply-help]
     preconditions:
       - sh: test -f playwright/README.md
         msg: playwright/README.md not found. Run 'task playwright-install' first.
     cmds:
-      - bat playwright/README.md
+      - gum pager < playwright/README.md
     silent: true
 
+  #############
+  # - Theme - #
+  #############
+
   theme-install:
-    desc: Install the theme npm dependencies
+    desc: Install the theme dependencies
+    aliases: [thm-install]
     dir: '{{.PATH_THEME}}'
     cmds:
       - ddev npm install
 
   theme-css-compile:
     desc: Compile the theme SCSS
-    aliases: [tcc]
+    aliases: [thm-cc]
     dir: '{{.PATH_THEME}}'
     cmds:
       - ddev npm run css
 
   theme-css-watch:
     desc: Watch and compile the theme SCSS
-    aliases: [tcw]
+    aliases: [thm-cw]
     dir: '{{.PATH_THEME}}'
     cmds:
       - ddev npm run watch-scss
+
+  ###################
+  # - Development - #
+  ###################
 
   dev-origins-modules:
     desc: Clone the Origins modules and check out the development branch
