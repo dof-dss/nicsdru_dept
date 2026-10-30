@@ -49,6 +49,19 @@ tasks:
       - cd playwright && npx playwright install
     silent: true
 
+  playwright-update:
+    desc: Update the playwright tests and dependencies
+    aliases: [ply-update]
+    dir: playwright
+    preconditions:
+      - sh: test -d .git
+        msg: playwright not found. Run 'task playwright-install' first.
+    cmds:
+      - git pull
+      - npm install
+      - npx playwright install
+    silent: true
+
   playwright-list-tags:
     desc: List all tags used in the playwright tests (optionally pass a directory, e.g. task playwright-tags -- tests/smoke)
     aliases: [ply-list-tags]
