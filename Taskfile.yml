@@ -1,5 +1,15 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 
+# ----------------------------------------------------------------------------------------
+# REQUIREMENTS
+# For tasks to run please install Task and Gum:
+#
+# - Task https://taskfile.dev/docs/installation
+# - Gum - https://github.com/charmbracelet/gum#installation
+#
+# Once installed run 'Task' to display a list of available commands.
+# ----------------------------------------------------------------------------------------
+
 version: '3'
 
 vars:
@@ -94,7 +104,7 @@ tasks:
 
   playwright-sites:
     desc: Display site URL's tests will run against
-    aliases: [ ply-sites ]
+    aliases: [ply-sites]
     preconditions:
       - sh: test -f .ddev/.env
         msg: .ddev/.env not found.
