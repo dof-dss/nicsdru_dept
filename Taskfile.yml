@@ -168,9 +168,9 @@ tasks:
     aliases: [ dout ]
     cmds:
       - ddev composer outdated 'drupal/*'
-     
+
   drupal-xdebug:
-    desc: Display outdated packages
+    desc: Toggle XDebug
     aliases: [ dex ]
     cmds:
       - |
