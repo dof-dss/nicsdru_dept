@@ -92,6 +92,20 @@ tasks:
       - gum pager < playwright/README.md
     silent: true
 
+  playwright-sites:
+    desc: Display site URL's tests will run against
+    aliases: [ ply-sites ]
+    preconditions:
+      - sh: test -f .ddev/.env
+        msg: .ddev/.env not found.
+    cmds:
+      - |
+        (echo "Variable,URL"; sed -n "/# valid test urls --start/,/# valid test urls --end/p" .ddev/.env \
+          | grep -E "^[A-Za-z_][A-Za-z0-9_]*=" \
+          | sed -E "s/^([^=]+)=['\"]?([^'\"]*)['\"]?.*/\1,\2/") \
+          | gum table --print
+    silent: true
+
   #############
   # - Theme - #
   #############
