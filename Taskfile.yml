@@ -134,3 +134,52 @@ tasks:
     aliases: [unt-custom]
     cmds:
       - ddev phpunit web/modules/custom {{.CLI_ARGS}}
+
+  ####################
+  # - Drupal/Drush - #
+  ####################
+
+  drupal-config-import:
+    desc: Import Drupal config
+    aliases: [dcim]
+    cmds:
+      - ddev drush config:import -y
+
+  drupal-config-export:
+    desc: Export Drupal config
+    aliases: [ dcex ]
+    cmds:
+      - ddev drush config:export -y
+      -
+  drupal-cache-clear:
+    desc: Clear all Drupal caches
+    aliases: [ dcc ]
+    cmds:
+      - ddev drush cache:clear
+
+  drupal-cron:
+    desc: Execute the Drupal cron
+    aliases: [ dcr ]
+    cmds:
+      - ddev drush cron
+
+  drupal-outdated:
+    desc: Display outdated packages
+    aliases: [ dout ]
+    cmds:
+      - ddev composer outdated 'drupal/*'
+     
+  drupal-xdebug:
+    desc: Display outdated packages
+    aliases: [ dex ]
+    cmds:
+      - |
+        OUTPUT=$(ddev xdebug toggle 2>&1)
+        case "$OUTPUT" in
+          *"Enabled xdebug"*) COLOUR=2; TEXT="✅ $OUTPUT" ;;
+          *"Disabled xdebug"*) COLOUR=1; TEXT="❌ $OUTPUT" ;;
+          *) COLOUR=7; TEXT="$OUTPUT" ;;
+        esac
+        gum style --border rounded --border-foreground "$COLOUR" --foreground "$COLOUR" --padding "0 2" "$TEXT"
+    silent: true
+
