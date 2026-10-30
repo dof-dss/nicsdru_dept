@@ -128,3 +128,9 @@ tasks:
       - rm -rf {{.PATH_ORIGINS_MODULES}}
       - git clone {{.REPO_ORIGINS_MODULES}} {{.PATH_ORIGINS_MODULES}}
       - git -C {{.PATH_ORIGINS_MODULES}} checkout {{.BRANCH_ORIGINS_MODULES}}
+
+  phpunit-custom:
+    desc: Run phpunit against the custom modules
+    aliases: [unt-custom]
+    cmds:
+      - ddev phpunit web/modules/custom {{.CLI_ARGS}}
