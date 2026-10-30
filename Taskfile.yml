@@ -147,31 +147,32 @@ tasks:
 
   drupal-config-export:
     desc: Export Drupal config
-    aliases: [ dcex ]
+    aliases: [dcex]
     cmds:
       - ddev drush config:export -y
       -
   drupal-cache-clear:
     desc: Clear all Drupal caches
-    aliases: [ dcc ]
+    aliases: [dcc]
     cmds:
       - ddev drush cache:clear
 
   drupal-cron:
     desc: Execute the Drupal cron
-    aliases: [ dcr ]
+    aliases: [dcr]
     cmds:
       - ddev drush cron
 
   drupal-outdated:
     desc: Display outdated packages
-    aliases: [ dout ]
+    aliases: [dout]
+    silent: true
     cmds:
-      - ddev composer outdated 'drupal/*'
+      - gum spin --spinner points --title "Calculating outdated Drupal packages..." --show-output -- ddev composer outdated 'drupal/*'
 
   drupal-xdebug:
     desc: Toggle XDebug
-    aliases: [ dex ]
+    aliases: [dex]
     cmds:
       - |
         OUTPUT=$(ddev xdebug toggle 2>&1)
