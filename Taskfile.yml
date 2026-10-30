@@ -18,6 +18,7 @@ vars:
   REPO_PLAYWRIGHT: https://github.com/dof-dss/Playwright-Departmental playwright
   REPO_ORIGINS_MODULES: https://github.com/dof-dss/nicsdru_origins_modules.git
   BRANCH_ORIGINS_MODULES: 10.x-dev
+  UPSUN_PROJECT_ID: dnvkwx4xjhiza
 
 tasks:
 
@@ -33,6 +34,16 @@ tasks:
           | gum table --print
     silent: true
 
+  ################################
+  # - Internal (private tasks) - #
+  ################################
+
+  upsun-environments:
+    desc: Fetch active environments on upsun
+    silent: true
+    interactive: false
+    cmds:
+      - upsun environment:list --status active --format csv --no-header -p {{.UPSUN_PROJECT_ID}} -c id
 
   ##################
   # - Playwright - #
@@ -221,3 +232,30 @@ tasks:
         gum style --border rounded --border-foreground "$COLOUR" --foreground "$COLOUR" --padding "0 2" "$TEXT"
     silent: true
 
+  #############
+  # - Upsun - #
+  #############
+
+  upsun-db-dump:
+    desc: Fetch a database dump from Upsun, optionally importing it to ddev
+    aliases: [upn-db-dump]
+    interactive: true
+    silent: true
+    cmds:
+      - |
+        ENVIRONMENT=$(task upsun-environments | gum choose --header "Select an Upsun environment")
+        [ -n "$ENVIRONMENT" ] || exit 0
+
+        DUMP_DIR=.ddev/.downloads
+        mkdir -p "$DUMP_DIR"
+        DUMP_FILE="$DUMP_DIR/upsun-$ENVIRONMENT.sql.gz"
+
+        upsun db:dump -p {{.UPSUN_PROJECT_ID}} -e "$ENVIRONMENT" --gzip --file "$DUMP_FILE" --yes || exit 1
+        gum style --foreground 2 "Database dump downloaded to $DUMP_FILE"
+
+        if gum confirm "Import the dump into ddev?"; then
+          # No gum spin here: it buffers output and strips the TTY, which
+          # corrupts the formatting of the post-import-db hooks (drush cim).
+          gum style --foreground 4 "Importing $ENVIRONMENT database to ddev..."
+          ddev import-db --file "$DUMP_FILE"
+        fi
