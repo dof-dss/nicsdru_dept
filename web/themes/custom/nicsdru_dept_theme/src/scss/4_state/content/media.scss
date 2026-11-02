@@ -1,0 +1,29 @@
+/*
+ * @file
+ * Overlays an 'UNPUBLISHED' label on images belonging to unpublished media.
+ */
+@import '../../init';
+
+// Pseudo elements can't be applied to <img>, so the label is added to the
+// media wrapper that contains an image flagged by the preprocess hook.
+.media-image:has(.media-unpublished) {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+
+  &::after {
+    content: 'UNPUBLISHED';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: .25em .75em;
+    background: rgba(255, 255, 255, 0.85);
+    color: red;
+    font-size: 1.25rem;
+    font-weight: bold;
+    letter-spacing: .1em;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+}
