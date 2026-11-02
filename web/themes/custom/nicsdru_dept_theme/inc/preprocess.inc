@@ -7,7 +7,7 @@
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\Core\Link;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
@@ -782,4 +782,27 @@ function nicsdru_dept_theme_preprocess_media_oembed_iframe(array &$variables): v
   }
 
   $variables['gtm_id'] = $gtm_id;
+}
+
+/**
+ * Implements hook_preprocess_media().
+ */
+function nicsdru_dept_theme_preprocess_media(array &$variables): void {
+  /** @var \Drupal\media\MediaInterface $media */
+  $media = $variables['media'];
+
+  if ($media->isPublished()) {
+    return;
+  }
+
+  // Add 'unpublished' class to child media elements of unpublished media.
+  foreach (Element::children($variables['content']) as $field_id) {
+    if (($variables['content'][$field_id]['#field_type'] ?? NULL) !== 'image') {
+      continue;
+    }
+
+    foreach (Element::children($variables['content'][$field_id]) as $delta) {
+      $variables['content'][$field_id][$delta]['#item_attributes']['class'][] = 'media-unpublished';
+    }
+  }
 }
