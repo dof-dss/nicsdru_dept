@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2165b5ebafc07f0cb20171c5e87b7dd4",
+    "content-hash": "21897086288271090ea45baebc34d7ee",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6075,6 +6075,129 @@
             }
         },
         {
+            "name": "drupal/media_duplicate_check",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/media_duplicate_check.git",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/media_duplicate_check-1.0.0.zip",
+                "reference": "1.0.0",
+                "shasum": "1f8490086e3df807582d2941aab594068e171d84"
+            },
+            "require": {
+                "drupal/core": "^10 || ^11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0",
+                    "datestamp": "1758008921",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "hosisam",
+                    "homepage": "https://www.drupal.org/user/3449435"
+                }
+            ],
+            "description": "Prevents duplicate media uploads by checking filenames and showing existing media for user confirmation.",
+            "homepage": "https://www.drupal.org/project/media_duplicate_check",
+            "keywords": [
+                "drupal",
+                "duplicate",
+                "file",
+                "media",
+                "upload"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/media_duplicate_check",
+                "issues": "https://www.drupal.org/project/issues/media_duplicate_check"
+            }
+        },
+        {
+            "name": "drupal/media_duplicates",
+            "version": "2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/media_duplicates.git",
+                "reference": "2.0.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/media_duplicates-2.0.4.zip",
+                "reference": "2.0.4",
+                "shasum": "5d119ccb53979e4f6707a7b8a967b9620d45ff54"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10 || ^11",
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "drupal/coder": "^8.3.3"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.4",
+                    "datestamp": "1773917821",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Nathan ter Bogt",
+                    "homepage": "https://www.drupal.org/u/nterbogt",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "grevil",
+                    "homepage": "https://www.drupal.org/user/3668491"
+                },
+                {
+                    "name": "lrwebks",
+                    "homepage": "https://www.drupal.org/user/3771806"
+                },
+                {
+                    "name": "nterbogt",
+                    "homepage": "https://www.drupal.org/user/102218"
+                },
+                {
+                    "name": "thomas.frobieter",
+                    "homepage": "https://www.drupal.org/user/409335"
+                }
+            ],
+            "description": "Detect duplicate media entities.",
+            "homepage": "https://drupal.org/project/media_duplicates",
+            "support": {
+                "source": "http://cgit.drupalcode.org/media_duplicates",
+                "issues": "https://www.drupal.org/project/issues/media_duplicates"
+            }
+        },
+        {
             "name": "drupal/media_file_delete",
             "version": "1.3.2",
             "source": {
@@ -7067,17 +7190,17 @@
         },
         {
             "name": "drupal/revisions_bulk_operations",
-            "version": "1.0.0",
+            "version": "2.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/revisions_bulk_operations.git",
-                "reference": "1.0.0"
+                "reference": "2.0.0-alpha2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/revisions_bulk_operations-1.0.0.zip",
-                "reference": "1.0.0",
-                "shasum": "e3df5f03918cc89f1f1ae2950fa8559331f7dd20"
+                "url": "https://ftp.drupal.org/files/projects/revisions_bulk_operations-2.0.0-alpha2.zip",
+                "reference": "2.0.0-alpha2",
+                "shasum": "205647ccabb080c080d5c427c0f12f75e34bd3b8"
             },
             "require": {
                 "drupal/core": "^10.3 || ^11"
@@ -7085,11 +7208,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0",
-                    "datestamp": "1776364952",
+                    "version": "2.0.0-alpha2",
+                    "datestamp": "1790852770",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -7336,6 +7459,89 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/scheduler",
                 "issues": "https://www.drupal.org/project/issues/scheduler"
+            }
+        },
+        {
+            "name": "drupal/schema_metatag",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/schema_metatag.git",
+                "reference": "3.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/schema_metatag-3.1.0.zip",
+                "reference": "3.1.0",
+                "shasum": "d701592dace0f59cc5a5dc12345ce4220f1dfbb8"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10 || ^11",
+                "drupal/metatag": "^2.0",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "drupal/coder": "^8.3",
+                "drupal/metatag_views": "*",
+                "drupal/schema_article": "*",
+                "drupal/schema_organization": "*",
+                "ergebnis/composer-normalize": "*",
+                "mpyw/phpunit-patch-serializable-comparison": "*",
+                "phpcompatibility/php-compatibility": "^9.3"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "3.1.0",
+                    "datestamp": "1791294250",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "composer-normalize": {
+                    "indent-size": 2,
+                    "indent-style": "space"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "anybody",
+                    "homepage": "https://www.drupal.org/user/291091"
+                },
+                {
+                    "name": "damienmckenna",
+                    "homepage": "https://www.drupal.org/user/108450"
+                },
+                {
+                    "name": "grevil",
+                    "homepage": "https://www.drupal.org/user/3668491"
+                },
+                {
+                    "name": "karens",
+                    "homepage": "https://www.drupal.org/user/45874"
+                },
+                {
+                    "name": "thejimbirch",
+                    "homepage": "https://www.drupal.org/user/2507260"
+                },
+                {
+                    "name": "wells",
+                    "homepage": "https://www.drupal.org/user/2452278"
+                }
+            ],
+            "description": "Metatag implementation of Schema.org structured data (JSON-LD)",
+            "homepage": "https://www.drupal.org/project/schema_metatag",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://git.drupalcode.org/project/schema_metatag",
+                "issues": "https://www.drupal.org/project/issues/schema_metatag"
             }
         },
         {
@@ -22527,6 +22733,7 @@
         "drupal/masquerade": 10,
         "drupal/media_views_filter": 5,
         "drupal/revision_manager": 10,
+        "drupal/revisions_bulk_operations": 15,
         "drupal/ultimate_cron": 10
     },
     "prefer-stable": true,
@@ -22535,5 +22742,5 @@
         "ext-pdo": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
