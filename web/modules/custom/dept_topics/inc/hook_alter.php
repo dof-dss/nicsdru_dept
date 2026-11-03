@@ -164,7 +164,6 @@ function dept_topics_metatags_attachments_alter(array &$metatag_attachments) {
  */
 function dept_topics_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
   if ($view->id() === 'content_by_site_subtopic') {
-    // @phpstan-ignore-next-line
     foreach ($query->where[0]['conditions'] as $index => $condition) {
       if (str_starts_with($condition['field'], 'node__field_site_topics')) {
         // Fetch current topic node id.
@@ -186,7 +185,6 @@ function dept_topics_views_query_alter(ViewExecutable $view, QueryPluginBase $qu
 
         $args = array_merge($args, $subtopics);
 
-        // @phpstan-ignore-next-line
         $query->where[0]['conditions'][$index]['field'] = 'node__field_site_topics.field_site_topics_target_id';
         $query->where[0]['conditions'][$index]['value'] = $args;
         $query->where[0]['conditions'][$index]['operator'] = 'in';
@@ -319,7 +317,6 @@ function dept_topics_form_alter(&$form, FormStateInterface $form_state, $form_id
     'node_topic_delete_form',
     'node_subtopic_delete_form',
   ])) {
-    // @phpstan-ignore-next-line.
     $node = $form_state->getFormObject()->getEntity();
 
     // Display the number of nodes (that are not topic child content types) referencing this topic.

@@ -6,7 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class RedirectCheckerController extends ControllerBase {
+final class RedirectCheckerController extends ControllerBase {
 
   /**
    * The form builder.

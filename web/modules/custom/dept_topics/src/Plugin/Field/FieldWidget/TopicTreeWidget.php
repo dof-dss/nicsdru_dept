@@ -3,12 +3,12 @@
 namespace Drupal\dept_topics\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\dept_topics\TopicManager;
 use Drupal\domain\DomainNegotiatorInterface;
@@ -30,13 +30,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFactoryPluginInterface {
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
    * The Topic manager service.
    *
    * @var \Drupal\dept_topics\TopicManager
@@ -51,6 +44,11 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
   protected DomainNegotiatorInterface $domainNegotiator;
 
   /**
+   * Current route match.
+   */
+  protected RouteMatchInterface $routeMatch;
+
+  /**
    * The bundle displaying this field widget.
    *
    * @var string
@@ -60,7 +58,16 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
   /**
    * {@inheritdoc}
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings) {
+  public function __construct(
+    $plugin_id,
+    $plugin_definition,
+    FieldDefinitionInterface $field_definition,
+    array $settings,
+    array $third_party_settings,
+    TopicManager $topic_manager,
+    DomainNegotiatorInterface $domain_negotiator,
+    RouteMatchInterface $route_match,
+  ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
     // Set default values for dynamic properties used by parent classes.
     // See https://www.drupal.org/project/drupal/issues/3046863.
@@ -68,25 +75,25 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $this->multiple = FALSE;
     $this->has_value = FALSE;
     $this->bundle = $field_definition->getTargetBundle();
+    $this->topicManager = $topic_manager;
+    $this->domainNegotiator = $domain_negotiator;
+    $this->routeMatch = $route_match;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $instance = new static(
+    return new static(
       $plugin_id,
       $plugin_definition,
       $configuration['field_definition'],
       $configuration['settings'],
-      $configuration['third_party_settings']
+      $configuration['third_party_settings'],
+      $container->get('topic.manager'),
+      $container->get('domain.negotiator'),
+      $container->get('current_route_match'),
     );
-
-    $instance->entityTypeManager = $container->get('entity_type.manager');
-    $instance->topicManager = $container->get('topic.manager');
-    $instance->domainNegotiator = $container->get('domain.negotiator');
-
-    return $instance;
   }
 
   /**
@@ -134,10 +141,9 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $current_nid = 0;
     $options = [];
 
-    $node = \Drupal::routeMatch()->getParameter('node');
+    $node = $this->routeMatch->getParameter('node');
 
     if (empty($node)) {
-      // @phpstan-ignore-next-line
       $node = $form_state->getFormObject()->getEntity();
     }
 

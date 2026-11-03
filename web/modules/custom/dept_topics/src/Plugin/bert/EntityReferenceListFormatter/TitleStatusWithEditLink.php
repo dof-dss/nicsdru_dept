@@ -22,7 +22,6 @@ class TitleStatusWithEditLink extends EntityReferenceListFormatterPluginBase {
    */
   public function getCells(EntityInterface $entity): array {
     $entity = $this->entityRepository->getTranslationFromContext($entity);
-    // @phpstan-ignore-next-line
     $state = $entity->get('moderation_state')->getString();
     $state_markup = ($state === 'published') ? '' : ucfirst($state);
 

@@ -3,6 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
+    - facets.facet.publication_date
+    - facets.facet.publication_department
+    - facets.facet.publication_topics
+    - facets.facet.publication_type
     - search_api.index.publications_index
     - views.view.publications_search
   module:
@@ -10,12 +14,8 @@ dependencies:
 id: publications_summary
 name: 'Publications summary'
 facet_source_id: 'search_api:views_page__publications_search__publications_search'
-processor_configs:
-  hide_when_not_rendered:
-    processor_id: hide_when_not_rendered
-    weights:
-      build: '45'
-    settings: {  }
+only_visible_when_facet_source_is_visible: true
+processor_configs: {  }
 facets:
   publication_date:
     checked: true

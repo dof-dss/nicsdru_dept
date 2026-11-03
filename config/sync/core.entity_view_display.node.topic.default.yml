@@ -21,6 +21,7 @@ dependencies:
     - layout_builder
     - layout_builder_restrictions
     - metatag
+    - published_state_indicator
     - smart_trim
     - text
     - user
@@ -140,7 +141,8 @@ content:
     type: dept_topics_topic_contents
     label: hidden
     settings:
-      foo: bar
+      display_type: link_label
+      view_mode: default
     third_party_settings: {  }
     weight: 7
     region: content
