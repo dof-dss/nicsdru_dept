@@ -75,10 +75,11 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: entity_reference_label
+                type: dept_topics_topic_contents
                 label: hidden
                 settings:
-                  link: true
+                  display_type: link_label
+                  view_mode: teaser
                 third_party_settings: {  }
             weight: 4
             additional: {  }

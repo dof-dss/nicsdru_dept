@@ -1,0 +1,267 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+# ----------------------------------------------------------------------------------------
+# REQUIREMENTS
+# For tasks to run please install Task and Gum:
+#
+# - Task https://taskfile.dev/docs/installation
+# - Gum - https://github.com/charmbracelet/gum#installation
+#
+# Once installed run 'Task' to display a list of available commands.
+# ----------------------------------------------------------------------------------------
+
+version: '3'
+
+vars:
+  PATH_THEME: web/themes/custom/nicsdru_dept_theme
+  PATH_ORIGINS_MODULES: web/modules/origins
+  REPO_PLAYWRIGHT: https://github.com/dof-dss/Playwright-Departmental playwright
+  REPO_ORIGINS_MODULES: https://github.com/dof-dss/nicsdru_origins_modules.git
+  BRANCH_ORIGINS_MODULES: 10.x-dev
+  UPSUN_PROJECT_ID: dnvkwx4xjhiza
+
+tasks:
+
+  default:
+    desc: Check that gum is installed and list the available tasks
+    preconditions:
+      - sh: command -v gum
+        msg: gum is not installed. Install it with 'brew install gum' on mac, for other platforms visit https://github.com/charmbracelet/gum#installation.
+    cmds:
+      - |
+        task --list-all --json \
+          | jq -r '(["Task","Description","Aliases"] | @csv), (.tasks[] | [.name, .desc, (.aliases | join(", "))] | @csv)' \
+          | gum table --print
+    silent: true
+
+  ##################
+  # - Playwright - #
+  ##################
+
+  playwright-install:
+    desc: Install playwright tests and dependencies
+    aliases: [p-install]
+    status:
+      - test -d playwright
+    cmds:
+      - git clone {{.REPO_PLAYWRIGHT}}
+      - cd playwright && npm install
+      - cd playwright && npx playwright install
+    silent: true
+
+  playwright-update:
+    desc: Update the playwright tests and dependencies
+    aliases: [p-update]
+    dir: playwright
+    preconditions:
+      - sh: test -d .git
+        msg: playwright not found. Run 'task playwright-install' first.
+    cmds:
+      - git pull
+      - npm install
+      - npx playwright install
+    silent: true
+
+  playwright-list-tags:
+    desc: List all tags used in the playwright tests (optionally pass a directory, e.g. task playwright-tags -- tests/smoke)
+    aliases: [p-list-tags]
+    dir: playwright
+    cmds:
+      - npx playwright test --list --reporter=json {{.CLI_ARGS}} | jq -r '[.. | .tags? // empty | .[]] | unique | .[]'
+    silent: true
+
+  playwright-test-tags:
+    desc: Choose tags from a checkbox list and run the matching playwright tests
+    aliases: [p-tags]
+    dir: playwright
+    interactive: true
+    silent: true
+    preconditions:
+      - sh: command -v gum
+        msg: gum is required. Install it with 'brew install gum'.
+    cmds:
+      - |
+        TAGS=$(npx playwright test --list --reporter=json | jq -r '[.. | .tags? // empty | .[]] | unique | .[]')
+        if [ -z "$TAGS" ]; then
+          echo "No tags found."
+          exit 0
+        fi
+        SELECTED=$(echo "$TAGS" | gum choose --no-limit --header "Select tags (space to toggle, enter to confirm)")
+        if [ -z "$SELECTED" ]; then
+          echo "No tags selected."
+          exit 0
+        fi
+        echo "Selected tags:"
+        echo "$SELECTED" | sed 's/^/  /'
+        gum confirm "Run tests with these tags?" || exit 0
+        GREP=$(echo "$SELECTED" | paste -sd'|' -)
+        npx playwright test --grep "$GREP"
+
+  playwright-report:
+    desc: Display the playwright report
+    aliases: [p-report]
+    dir: playwright
+    cmds:
+      - npx playwright show-report
+    silent: true
+
+  playwright-help:
+    desc: Display playwright help and guidance
+    aliases: [p-help]
+    preconditions:
+      - sh: test -f playwright/README.md
+        msg: playwright/README.md not found. Run 'task playwright-install' first.
+    cmds:
+      - gum pager < playwright/README.md
+    silent: true
+
+  playwright-sites:
+    desc: Display site URL's tests will run against
+    aliases: [p-sites]
+    preconditions:
+      - sh: test -f .ddev/.env
+        msg: .ddev/.env not found.
+    cmds:
+      - |
+        (echo "Variable,URL"; sed -n "/# valid test urls --start/,/# valid test urls --end/p" .ddev/.env \
+          | grep -E "^[A-Za-z_][A-Za-z0-9_]*=" \
+          | sed -E "s/^([^=]+)=['\"]?([^'\"]*)['\"]?.*/\1,\2/") \
+          | gum table --print
+    silent: true
+
+  #############
+  # - Theme - #
+  #############
+
+  theme-install:
+    desc: Install the theme dependencies
+    aliases: [t-install]
+    dir: '{{.PATH_THEME}}'
+    cmds:
+      - ddev npm install
+
+  theme-css-compile:
+    desc: Compile the theme SCSS
+    aliases: [t-cc]
+    dir: '{{.PATH_THEME}}'
+    cmds:
+      - ddev npm run css
+
+  theme-css-watch:
+    desc: Watch and compile the theme SCSS
+    aliases: [t-cw]
+    dir: '{{.PATH_THEME}}'
+    cmds:
+      - ddev npm run watch-scss
+
+  ###################
+  # - Development - #
+  ###################
+
+  dev-origins-modules:
+    desc: Clone the Origins modules and check out the development branch
+    aliases: [dev-origins]
+    cmds:
+      - rm -rf {{.PATH_ORIGINS_MODULES}}
+      - git clone {{.REPO_ORIGINS_MODULES}} {{.PATH_ORIGINS_MODULES}}
+      - git -C {{.PATH_ORIGINS_MODULES}} checkout {{.BRANCH_ORIGINS_MODULES}}
+
+  dev-lint:
+    desc: Run PHPCS and Drupal checks against the current directory
+    aliases: [lint]
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - ddev phpcs ./
+      - ddev drck ./
+
+  dev-xdebug:
+    desc: Toggle XDebug
+    aliases: [xdb]
+    cmds:
+      - |
+        OUTPUT=$(ddev xdebug toggle 2>&1)
+        case "$OUTPUT" in
+          *"Enabled xdebug"*) COLOUR=2; TEXT="✅ $OUTPUT" ;;
+          *"Disabled xdebug"*) COLOUR=1; TEXT="❌ $OUTPUT" ;;
+          *) COLOUR=7; TEXT="$OUTPUT" ;;
+        esac
+        gum style --border rounded --border-foreground "$COLOUR" --foreground "$COLOUR" --padding "0 2" "$TEXT"
+    silent: true
+
+  phpunit-custom:
+    desc: Run phpunit against the custom modules
+    aliases: [punit]
+    cmds:
+      - ddev phpunit web/modules/custom {{.CLI_ARGS}}
+
+
+  ####################
+  # - Drupal/Drush - #
+  ####################
+
+  drupal-config-import:
+    desc: Import Drupal config
+    aliases: [dcim]
+    cmds:
+      - ddev drush config:import -y
+
+  drupal-config-export:
+    desc: Export Drupal config
+    aliases: [dcex]
+    cmds:
+      - ddev drush config:export -y
+      -
+  drupal-cache-clear:
+    desc: Clear all Drupal caches
+    aliases: [dcc]
+    cmds:
+      - ddev drush cache:clear
+
+  drupal-cron:
+    desc: Execute the Drupal cron
+    aliases: [dcr]
+    cmds:
+      - ddev drush cron
+
+  drupal-outdated:
+    desc: Display outdated packages
+    aliases: [dout]
+    silent: true
+    cmds:
+      - gum spin --spinner points --title "Calculating outdated Drupal packages..." --show-output -- ddev composer outdated 'drupal/*'
+
+  #############
+  # - Upsun - #
+  #############
+
+  upsun-environments:
+    desc: Fetch active environments on upsun
+    aliases: [u-env]
+    silent: true
+    interactive: false
+    cmds:
+      - upsun environment:list --status active --format csv --no-header -p {{.UPSUN_PROJECT_ID}} -c id
+
+  upsun-db-dump:
+    desc: Fetch a database dump from Upsun, optionally importing it to ddev
+    aliases: [u-dump]
+    interactive: true
+    silent: true
+    cmds:
+      - |
+        ENVIRONMENT=$(task upsun-environments | gum choose --header "Select an Upsun environment")
+        [ -n "$ENVIRONMENT" ] || exit 0
+
+        DUMP_DIR=.ddev/.downloads
+        mkdir -p "$DUMP_DIR"
+        DUMP_FILE="$DUMP_DIR/upsun-$ENVIRONMENT.sql.gz"
+
+        upsun db:dump -p {{.UPSUN_PROJECT_ID}} -e "$ENVIRONMENT" --gzip --file "$DUMP_FILE" --yes || exit 1
+        gum style --foreground 2 "Database dump downloaded to $DUMP_FILE"
+
+        if gum confirm "Import the dump into ddev?"; then
+          # No gum spin here: it buffers output and strips the TTY, which
+          # corrupts the formatting of the post-import-db hooks (drush cim).
+          gum style --foreground 4 "Importing $ENVIRONMENT database to ddev..."
+          ddev import-db --file "$DUMP_FILE"
+        fi

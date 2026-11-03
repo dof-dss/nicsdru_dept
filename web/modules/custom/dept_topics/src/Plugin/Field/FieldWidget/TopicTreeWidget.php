@@ -131,7 +131,7 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
     $field_id = Html::getUniqueId($field);
     $default_values = $this->getSelectedOptions($items);
     $current_dept = '';
-    $current_nid = '';
+    $current_nid = 0;
     $options = [];
 
     $node = \Drupal::routeMatch()->getParameter('node');
@@ -199,30 +199,35 @@ final class TopicTreeWidget extends OptionsSelectWidget implements ContainerFact
       ],
     ];
 
-    $modal_url = Url::fromRoute('dept_topics.topic_tree.form', [
-      'department' => $current_dept,
-      'field' => $field_id,
-      'limit' => $selection_limit,
-      'selected' => is_array($default_values) ? implode('+', $default_values) : '',
-      'nid' => $current_nid,
-    ])->toString();
+    // To prevent users from selecting topics for Heritage Site nodes, hide the
+    // button to open the Topics Tree modal.
+    if ($this->bundle != 'heritage_site') {
+      $modal_url = Url::fromRoute('dept_topics.topic_tree.form', [
+        'department' => $current_dept,
+        'field' => $field_id,
+        'limit' => $selection_limit,
+        'selected' => is_array($default_values) ? implode('+', $default_values) : '',
+        'nid' => $current_nid,
+      ])->toString();
 
-    $element['#field_prefix'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'div',
-      '#value' => $this->t('Select @label', ['@label' => $this->fieldDefinition->getLabel()]),
-      '#attributes' => [
-        'id' => 'site-topics-tree-open-button',
-        'data-topic-modal-url' => $modal_url,
-        'data-topic-modal-title' => $this->t('Select @label', ['@label' => $this->fieldDefinition->getLabel()]),
-        'class' => ['button', 'topic-tree-button', 'link-button-disable'],
-      ]
-    ];
+      $element['#field_prefix'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'div',
+        '#value' => $this->t('Select @label', ['@label' => $this->fieldDefinition->getLabel()]),
+        '#attributes' => [
+          'id' => 'site-topics-tree-open-button',
+          'data-topic-modal-url' => $modal_url,
+          'data-topic-modal-title' => $this->t('Select @label', ['@label' => $this->fieldDefinition->getLabel()]),
+          'class' => ['button', 'topic-tree-button', 'link-button-disable'],
+        ]
+      ];
 
-    $element['#attached']['library'][] = 'dept_topics/topic_tree_widget';
+      $element['#attached']['library'][] = 'dept_topics/topic_tree_widget';
+    }
+
     $element['#cache'] = [
       'contexts' => ['url.site'],
-      'tags' => ['dept_topics:' . $current_dept],
+      'tags' => ['topics_field:' . $current_dept],
     ];
 
     return $element;

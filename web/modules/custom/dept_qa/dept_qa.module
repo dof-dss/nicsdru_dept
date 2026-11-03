@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Departmental QA module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_views_exposed_form().
+ */
+function dept_qa_form_views_exposed_form_alter(&$form, FormStateInterface $form_state) {
+
+  $test_id = match((string) $form['#id']) {
+    'views-exposed-form-news-search-news-search' => 'news-search',
+    'views-exposed-form-publications-search-publications-search' => 'publications-search',
+    'views-exposed-form-consultations-search-consultations-search' => 'consultations-search',
+    default => NULL,
+  };
+
+  if (!empty($test_id)) {
+    if (isset($form['search'])) {
+      $form['search']['#attributes']['data-testid'] = $test_id . '--keywords';
+    }
+
+    if (isset($form['actions']['submit'])) {
+      $form['actions']['submit']['#attributes']['data-testid'] = $test_id . '--search';
+    }
+  }
+}
