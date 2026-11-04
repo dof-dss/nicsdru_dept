@@ -49,7 +49,7 @@ function dept_core_update_8004(): string {
   $column = $connection->query(
     'SELECT COLUMN_TYPE, EXTRA FROM information_schema.COLUMNS
      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = :table AND COLUMN_NAME = :column',
-    [':table' => $connection->prefixTables('{batch}'), ':column' => 'bid']
+    [':table' => 'batch', ':column' => 'bid']
   )->fetchObject();
 
   if ($column && str_contains(strtolower((string) $column->EXTRA), 'auto_increment')) {
@@ -60,7 +60,7 @@ function dept_core_update_8004(): string {
   $primary_key = $connection->query(
     'SELECT COUNT(*) FROM information_schema.STATISTICS
      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = :table AND INDEX_NAME = :index',
-    [':table' => $connection->prefixTables('{batch}'), ':index' => 'PRIMARY']
+    [':table' => 'batch', ':index' => 'PRIMARY']
   )->fetchField();
 
   if (!$primary_key) {
