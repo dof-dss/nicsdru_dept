@@ -73,3 +73,17 @@ function dept_core_update_8004(): string {
 
   return (string) t('The bid column of the batch table now uses auto-increment.');
 }
+
+/**
+ * Update storage schema for fields that are missing definitions.
+ */
+function dept_core_update_8005(): void {
+  $update_manager = \Drupal::entityDefinitionUpdateManager();
+  $definitions = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('node');
+
+  foreach (['field_map_location', 'field_next_audit_due'] as $field_name) {
+    if (isset($definitions[$field_name])) {
+      $update_manager->updateFieldStorageDefinition($definitions[$field_name]);
+    }
+  }
+}
