@@ -84,7 +84,6 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
       case 'needs_review':
         if ($is_published) {
           $published_entity = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->load($entity->id());
-          // @phpstan-ignore-next-line
           $published_topics_ids = array_column($published_entity->get('field_site_topics')->getValue(), 'target_id');
           sort($current_topics_ids);
           sort($published_topics_ids);

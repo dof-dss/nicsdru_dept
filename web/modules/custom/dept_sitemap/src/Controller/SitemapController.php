@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Returns responses for Departmental sites: Sitemaps routes.
  */
-class SitemapController extends ControllerBase {
+final class SitemapController extends ControllerBase {
 
   /**
    * @var \Drupal\domain\DomainNegotiator

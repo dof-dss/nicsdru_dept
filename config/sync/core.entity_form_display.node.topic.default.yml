@@ -65,6 +65,12 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  domain_path:
+    type: domain_path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_banner_image:
     type: media_library_widget
     weight: 4
@@ -73,7 +79,7 @@ content:
       media_types: {  }
     third_party_settings:
       media_library_edit:
-        show_edit: '1'
+        show_edit: true
   field_banner_image_overlay:
     type: media_library_widget
     weight: 5
@@ -82,7 +88,7 @@ content:
       media_types: {  }
     third_party_settings:
       media_library_edit:
-        show_edit: '1'
+        show_edit: true
   field_banner_image_thin:
     type: media_library_widget
     weight: 6
@@ -91,7 +97,7 @@ content:
       media_types: {  }
     third_party_settings:
       media_library_edit:
-        show_edit: '1'
+        show_edit: true
   field_domain_access:
     type: options_select
     weight: 20

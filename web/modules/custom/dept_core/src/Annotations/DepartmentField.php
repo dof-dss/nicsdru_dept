@@ -3,7 +3,7 @@
 namespace Drupal\dept_core\Annotations;
 
 /**
- * Marks Department entity field helper methods.
+ * Marks Department entity field helper methods for block configuration.
  */
 #[\Attribute(\Attribute::TARGET_METHOD)]
 class DepartmentField {
@@ -13,13 +13,10 @@ class DepartmentField {
    *
    * @var string
    */
-  private string $label;
+  private readonly string $label;
 
   /**
    * Constructs a DepartmentField attribute.
-   *
-   * @param string $label
-   *   Field label.
    */
   public function __construct(string $label) {
     $this->label = $label;

@@ -139,7 +139,6 @@ function dept_topics_update_linkit_targets(&$form, FormStateInterface $form_stat
  * Topic/Subtopic node edit form validation callback.
  */
 function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
-  // @phpstan-ignore-next-line.
   $entity = $form_state->getFormObject()->getEntity();
 
   // Warn the user if they self reference a subtopic.
@@ -153,7 +152,6 @@ function dept_topics_validate_topics(&$form, FormStateInterface $form_state) {
 
   $topic_contents = $form_state->getValue('field_topic_content');
   $topic_manager = \Drupal::service('topic.manager');
-  // @phpstan-ignore-next-line.
   $parent_node = $form_state->getFormObject()->getEntity();
 
   foreach ($topic_contents as $index => $topic_content) {
