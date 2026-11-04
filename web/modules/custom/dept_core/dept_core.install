@@ -39,3 +39,37 @@ function dept_core_update_8002() {
 function  dept_core_update_8003() {
   // Intentionally empty. Updates in dept_core.deploy.php.
 }
+
+/**
+ * Ensure the bid column of the batch table uses auto-increment.
+ */
+function dept_core_update_8004(): string {
+  $connection = Database::getConnection();
+
+  $column = $connection->query(
+    'SELECT COLUMN_TYPE, EXTRA FROM information_schema.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = :table AND COLUMN_NAME = :column',
+    [':table' => $connection->prefixTables('{batch}'), ':column' => 'bid']
+  )->fetchObject();
+
+  if ($column && str_contains(strtolower((string) $column->EXTRA), 'auto_increment')) {
+    return (string) t('The bid column of the batch table already uses auto-increment.');
+  }
+
+  // Auto-increment columns must be a key, so make sure bid is the primary key.
+  $primary_key = $connection->query(
+    'SELECT COUNT(*) FROM information_schema.STATISTICS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = :table AND INDEX_NAME = :index',
+    [':table' => $connection->prefixTables('{batch}'), ':index' => 'PRIMARY']
+  )->fetchField();
+
+  if (!$primary_key) {
+    $connection->query('ALTER TABLE {batch} ADD PRIMARY KEY (bid)');
+  }
+
+  // Keep the existing column type (e.g. int unsigned), only add the flag.
+  $type = $column ? $column->COLUMN_TYPE : 'int unsigned';
+  $connection->query("ALTER TABLE {batch} MODIFY bid $type NOT NULL AUTO_INCREMENT");
+
+  return (string) t('The bid column of the batch table now uses auto-increment.');
+}
