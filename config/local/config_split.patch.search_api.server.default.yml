@@ -12,6 +12,7 @@ adding:
       context: solr
       username: solr
       password: SolrRocks
+    index_items_with_warnings: true
 removing:
   backend_config:
     connector: standard
