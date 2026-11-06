@@ -61,20 +61,19 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   public function onEntityUpdate(EntityEvent $event): void {
     /* @var ContentEntityInterface $entity */
     $entity = $event->getEntity();
-    $original = $entity->original ?? NULL;
 
     if (!$this->isTopic($entity) || !$entity->isDefaultRevision()) {
       return;
     }
 
-    // Update banner for child content.
-    if ($original && $entity->get('field_banner_image_thin')->getValue() !== $original->get('field_banner_image_thin')->getValue()) {
+    // Clear child node caches when a topic with a thin banner image is
+    // published, as children inherit the banner.
+    $original = $entity->original ?? NULL;
+    if (!$entity->get('field_banner_image_thin')->isEmpty() && $entity->isPublished()
+      && (!$original || !$original->isPublished())
+    ) {
       $children = $this->topicManager->getTopicChildren($entity);
-      $cache_tags = [];
-      foreach (array_keys($children) as $nid) {
-        $cache_tags[] = 'node:' . $nid;
-      }
-
+      $cache_tags = array_map(static fn ($nid): string => 'node:' . $nid, array_keys($children));
       Cache::invalidateTags($cache_tags);
     }
 
