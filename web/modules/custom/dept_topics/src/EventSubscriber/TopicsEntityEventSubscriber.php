@@ -61,9 +61,21 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   public function onEntityUpdate(EntityEvent $event): void {
     /* @var ContentEntityInterface $entity */
     $entity = $event->getEntity();
+    $original = $entity->original ?? NULL;
 
     if (!$this->isTopic($entity) || !$entity->isDefaultRevision()) {
       return;
+    }
+
+    // Update banner for child content.
+    if ($original && $entity->get('field_banner_image_thin')->getValue() !== $original->get('field_banner_image_thin')->getValue()) {
+      $children = $this->topicManager->getTopicChildren($entity);
+      $cache_tags = [];
+      foreach (array_keys($children) as $nid) {
+        $cache_tags[] = 'node:' . $nid;
+      }
+
+      Cache::invalidateTags($cache_tags);
     }
 
     // Ignore the node edit form as submit handles path alias.
@@ -88,6 +100,8 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
         $domain_alias->set('alias', $new_alias)->save();
       }
     }
+
+
   }
 
   /**
