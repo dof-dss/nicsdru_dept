@@ -197,6 +197,8 @@ final class TopicManager {
       if ($child->bundle() === 'subtopic') {
         $this->deptTopics[$child->id()] = $child;
         $this->getChildTopics($child, ++$depth);
+      } else {
+        $this->deptTopics[$child->id()] = $child;
       }
     }
   }
