@@ -13,8 +13,6 @@ use Drupal\Core\Url;
 use Drupal\dept_topics\UiMessages;
 use Drupal\node\Entity\Node;
 
-include_once "inc/hook_alter.php";
-
 const HISTORIC_ENVIRONMENT_NID = 409882;
 
 /**

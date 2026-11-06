@@ -83,17 +83,12 @@ function dept_node_form_revision_overview_form_alter(&$form, FormStateInterface 
       continue;
     }
 
-    if ($revision->access('delete revision')) {
-      $row['operations']['#links']['delete'] = [
-        'title' => t('Delete'),
-        'url' => Url::fromRoute('node.revision_delete_confirm', [
-          'node' => $node->id(),
-          'node_revision' => $revision_id,
-        ]),
-      ];
-    }
-    else {
-      unset($row['operations']['#links']['delete']);
+    if (!$revision->access('delete revision')) {
+      foreach ($row['operations']['#links'] as $index => $operation) {
+        if ($operation['url']->getRouteName() !== 'node.revision_delete_confirm') {
+          unset($row['operations']['#links'][$index]);
+        }
+      }
     }
   }
 }
