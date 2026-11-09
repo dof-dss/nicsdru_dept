@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\node\NodeInterface;
 
 /**
@@ -40,7 +41,15 @@ function dept_postprocess_form_node_form_alter(&$form, FormStateInterface $form_
   // Checks the Domain Path by default when logged in with Domain Path
   // permissions on a node form.
   if ($bundle === 'topic' || $bundle === 'subtopic') {
-    $form['domain_path'][$current_dept->id()]['pathauto']['#default_value'] = 1;
+
+    if (isset($form['domain_path']['widget'])) {
+      foreach (Element::children($form['domain_path']['widget']) as $index => $domain) {
+        if ($domain !== $current_dept->id()) {
+          $form['domain_path']['widget'][$domain]['#attributes']['class'][] = 'hidden';
+          $form['domain_path']['widget'][$domain]['pathauto']['#default_value'] = 0;
+        }
+      }
+    }
   }
 }
 
