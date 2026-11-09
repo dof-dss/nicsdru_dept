@@ -10,6 +10,8 @@ name: 'dept'
 type: 'php:8.3'
 
 variables:
+  env:
+    N_PREFIX: /app/.global
   php:
     memory_limit: "256M"
     apc.shm_size: "64M"
@@ -23,6 +25,8 @@ variables:
     date.timezone: "Europe/Dublin"
     realpath_cache_ttl: 3600
 dependencies:
+  nodejs:
+    n: '11.0.0'
   php:
     composer/composer: '^2'
 
@@ -87,6 +91,14 @@ build:
 hooks:
   build: |
     set -e
+    echo ">>> Install the pinned, patched Node.js version"
+    n auto
+    export PATH="$N_PREFIX/bin:$PATH"
+    hash -r
+    command -v node
+    node --version
+    test "$(node --version)" = "v$(cat .nvmrc)"
+    npm --version
     echo ">>> Replace vanilla CKEditor config with a custom one to fix the click/drag bug with embedded entities"
     git clone https://github.com/dof-dss/ckeditor4-fix-widget-dnd.git
     rm -rf web/core/assets/vendor/ckeditor
