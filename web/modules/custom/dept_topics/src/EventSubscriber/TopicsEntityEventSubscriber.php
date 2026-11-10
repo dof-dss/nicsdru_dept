@@ -11,7 +11,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\dept_topics\TopicManager;
 use Drupal\dept_topics\UiMessages;
-use Drupal\domain_path_pathauto\DomainPathautoGenerator;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
 use Drupal\facets\Exception\Exception;
@@ -28,7 +27,6 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
   public function __construct(
     private readonly TopicManager $topicManager,
     private readonly EntityTypeManagerInterface $entityTypeManager,
-    private readonly DomainPathautoGenerator $domainPathautoGenerator,
     private readonly RouteMatchInterface $routeMatch,
   ) {}
 
@@ -76,31 +74,6 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
       $cache_tags = array_map(static fn ($nid): string => 'node:' . $nid, array_keys($children));
       Cache::invalidateTags($cache_tags);
     }
-
-    // Ignore the node edit form as submit handles path alias.
-    if ($this->routeMatch->getRouteName() === 'entity.node.edit_form') {
-      return;
-    }
-
-    // Fetch all of the Domain aliases for this entity.
-    $domain_aliases = $this->entityTypeManager->getStorage('domain_path')->loadByProperties(['source' => '/node/' . $entity->id()]);
-
-    // Iterate each alias, generate the new alias and save.
-    foreach ($domain_aliases as $domain_alias) {
-      $domain_id = $domain_alias->getDomainId();
-
-      // Skip if Domain pathauto is not enabled for this domain.
-      if (!$this->domainPathautoGenerator->domainPathPathautoGenerationIsEnabled($entity, $domain_id)) {
-        continue;
-      }
-
-      $new_alias = $this->domainPathautoGenerator->createEntityAlias($entity, 'return', $domain_id);
-      if (!empty($new_alias) && $new_alias !== $domain_alias->getAlias()) {
-        $domain_alias->set('alias', $new_alias)->save();
-      }
-    }
-
-
   }
 
   /**

@@ -30,16 +30,6 @@ function dept_topics_help($route_name, RouteMatchInterface $route_match) {
 }
 
 /**
- * Submit callback for automatic enabling of Domain Path.
- */
-function dept_topics_enable_domain_path($form, FormStateInterface $form_state) {
-  $dept = $form_state->getValue(['field_domain_access', '0', 'target_id']);
-  if (!empty($dept)) {
-    $form_state->setValue(['domain_path', $dept, 'pathauto'], 1);
-  }
-}
-
-/**
  * Implements hook_entity_type_build().
  */
 function dept_topics_entity_type_build(array &$entity_types) {

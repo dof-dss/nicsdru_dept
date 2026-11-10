@@ -218,8 +218,6 @@ function dept_topics_form_node_form_alter(&$form, $form_state, $form_id) {
   }
 
   if ($entity->bundle() === 'topic' || $entity->bundle() === 'subtopic') {
-    $form['actions']['submit']['#submit'][] = 'dept_topics_enable_domain_path';
-
     if ($entity->isNew() === FALSE && \Drupal::service('topic.manager')->topicHasActiveChildren($entity)) {
 
       // Prevent the selection of 'Archived' if the topic has active child content.
