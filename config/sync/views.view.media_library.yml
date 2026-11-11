@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.media.media_library
     - field.storage.media.field_domain_access
     - image.style.media_library
+    - image.style.thumbnail
     - media.type.audio
     - media.type.document
     - media.type.image
@@ -1969,16 +1970,16 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        operations:
-          id: operations
+        edit_media:
+          id: edit_media
           table: media
-          field: operations
+          field: edit_media
           relationship: none
           group_type: group
           admin_label: ''
           entity_type: media
-          plugin_id: entity_operations
-          label: Operations
+          plugin_id: entity_link_edit
+          label: ''
           exclude: false
           alter:
             alter_text: false
@@ -2011,7 +2012,7 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: true
+          element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -2019,7 +2020,9 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          destination: true
+          text: Edit
+          output_url_as_text: false
+          absolute: false
       pager:
         type: full
         options:
