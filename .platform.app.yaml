@@ -92,7 +92,7 @@ hooks:
   build: |
     set -e
     echo ">>> Install the pinned, patched Node.js version"
-    # installs the pinned version from .nvmrc
+    # Installs the pinned version from .nvmrc
     n auto
     export PATH="$N_PREFIX/bin:$PATH"
     # clears cached command locations so the shell finds the new copy.
