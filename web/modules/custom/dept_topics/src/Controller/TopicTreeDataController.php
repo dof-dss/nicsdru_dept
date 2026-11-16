@@ -57,7 +57,7 @@ final class TopicTreeDataController implements ContainerInjectionInterface {
    */
   public function parentTopics(string $department): array {
     $root_query = $this->database->select('node_field_data', 'n');
-    $root_query->join('node__field_domain_source', 'da', 'da.entity_id = n.nid AND da.revision_id = n.vid');
+    $root_query->join('node__field_domain_source', 'ds', 'ds.entity_id = n.nid AND ds.revision_id = n.vid');
     $root_query->leftJoin(
       'content_moderation_state_field_data',
       'cms',
@@ -67,8 +67,8 @@ final class TopicTreeDataController implements ContainerInjectionInterface {
     $root_query->fields('n', ['nid', 'title']);
     $root_query->condition('n.type', 'topic');
     $root_query->condition('n.default_langcode', 1);
-    $root_query->condition('da.deleted', 0);
-    $root_query->condition('da.field_domain_source_target_id', $department);
+    $root_query->condition('ds.deleted', 0);
+    $root_query->condition('ds.field_domain_source_target_id', $department);
     $root_query->condition($this->notArchived($root_query));
     $root_query->orderBy('n.nid');
     $roots = $root_query->execute()->fetchAllKeyed();
