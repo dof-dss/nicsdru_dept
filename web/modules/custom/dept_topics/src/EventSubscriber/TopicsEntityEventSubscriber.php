@@ -13,7 +13,6 @@ use Drupal\dept_topics\TopicManager;
 use Drupal\dept_topics\UiMessages;
 use Drupal\entity_events\EntityEventType;
 use Drupal\entity_events\Event\EntityEvent;
-use Drupal\facets\Exception\Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -91,7 +90,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     // Adding this in addition to the frontend warning to provide coverage
     // when using the CLI (drush) etc.
     if ($this->topicManager->topicHasActiveChildren($entity)) {
-      throw new Exception(UiMessages::deleteBlockedActiveChildren($entity->bundle(), $entity->label())->render());
+      throw new \Exception(UiMessages::deleteBlockedActiveChildren($entity->bundle(), $entity->label())->render());
     }
   }
 
