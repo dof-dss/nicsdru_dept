@@ -22,15 +22,8 @@ topic/subtopic choices to those associated to the current domain (department).
 
 Child content for topics/Subtopics is restricted by the allowed types set within the field_topic_content settings.
 
-With a child node the selected values for topics/subtopics (field_site_topics) will be:
-- added or removed when published/Quick published.
-- removed when archived.
-
-### Child
-
-The mechanisms to update or remove child references are from 2 methods within the Topic Manager class
-* updateChildOnTopics() - Adds or removes a child from topics.
-* archiveChild() - Removes all references of the child from topics.
-
+### Revisions
+When child content is added to a topic or subtopic the child ID will be added to the field_topic_content entity
+reference list for the current and all revisions of that topic/subtopic node.
 
 
