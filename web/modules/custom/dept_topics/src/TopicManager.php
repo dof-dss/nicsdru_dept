@@ -331,13 +331,13 @@ final class TopicManager {
   /**
    * Returns a list of topics/subtopic that reference the given child node.
    *
-   * @param \Drupal\node\NodeInterface $child
+   * @param \Drupal\Core\Entity\ContentEntityInterface $child
    *   The child node to fetch the references for.
    *
    * @return array
    *   List of entity ID's.
    */
-  protected function fetchTopicsReferencingChild(NodeInterface $child) {
+  protected function fetchTopicsReferencingChild(ContentEntityInterface $child) {
     $existing_topics = $this->connection->select('node__field_topic_content', 'tc')
       ->fields('tc', ['entity_id'])
       ->condition('field_topic_content_target_id', $child->id())
@@ -359,13 +359,18 @@ final class TopicManager {
   /**
    * Removes all topic contents reference records for the given child.
    *
+   * Uses both the topics currently selected on the child and any topics that
+   * still reference it, so a topic deselected in the same save as the archive
+   * does not keep a stale reference.
+   *
    * @param \Drupal\Core\Entity\ContentEntityInterface $child
    *   The child to archive.
    */
   public function archiveChild(ContentEntityInterface $child) {
-    $topics = $child->get('field_site_topics')->referencedEntities();
+    $selected_nids = array_column($child->get('field_site_topics')->getValue(), 'target_id');
+    $topic_nids = array_unique(array_merge($selected_nids, $this->fetchTopicsReferencingChild($child)));
 
-    foreach ($topics as $topic) {
+    foreach ($this->nodeStorage->loadMultiple($topic_nids) as $topic) {
       $this->removeChild($child, $topic);
     }
   }
