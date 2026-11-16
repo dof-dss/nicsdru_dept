@@ -45,8 +45,6 @@ final class TopicManager {
    *   The Book manager service.
    * @param array $targetBundles
    *   Array of target bundles.
-   * @param array $deptTopics
-   *   Array of department topics used around this class.
    *
    */
   public function __construct(
@@ -58,7 +56,6 @@ final class TopicManager {
     protected ModerationInformationInterface $moderationInformation,
     protected CacheBackendInterface $cache,
     protected array $targetBundles = [],
-    protected array $deptTopics = [],
   ) {
     $this->nodeStorage = $this->entityTypeManager->getStorage('node');
   }
@@ -66,7 +63,7 @@ final class TopicManager {
   /**
    * Returns parent nodes for the given node ID.
    *
-   * @param \Drupal\node\NodeInterface|int $node
+   * @param \Drupal\node\NodeInterface|int $child_node
    *   Node or Node ID to return the parents for.
    *
    * @param array $parents
@@ -77,20 +74,20 @@ final class TopicManager {
    * @return array|mixed
    *   Node ID indexed array comprising id, title and type.
    */
-  public function getParentNodes($node, &$parents = [], int $depth = 0) {
+  public function getParentNodes($child_node, &$parents = [], int $depth = 0) {
 
     if ($depth >= self::MAX_TRAVERSAL_DEPTH) {
       return $parents;
     }
 
-    if ($node instanceof NodeInterface) {
-      $nid = $node->id();
+    if ($child_node instanceof NodeInterface) {
+      $nid = $child_node->id();
     }
     else {
-      $nid = $node;
+      $nid = $child_node;
     }
 
-    $nodes = $this->connection->query("SELECT n.nid, nfd.title, nfd.type FROM node n
+    $child_nodes = $this->connection->query("SELECT n.nid, nfd.title, nfd.type FROM node n
         LEFT JOIN node_field_data nfd
         ON nfd.nid = n.nid
         LEFT JOIN node__field_topic_content ftc
@@ -98,13 +95,13 @@ final class TopicManager {
         WHERE ftc.field_topic_content_target_id = :nid", [':nid' => $nid])
       ->fetchAllAssoc('nid');
 
-    if ($nodes === NULL) {
-      return $parents;
-    }
-
-    foreach ($nodes as $node) {
-      $parents[$node->nid] = $node;
-      $this->getParentNodes($node->nid, $parents, ++$depth);
+    foreach ($child_nodes as $parent) {
+      // Skip already processed visited parents to avoid repeated queries.
+      if (isset($parents[$parent->nid])) {
+        continue;
+      }
+      $parents[$parent->nid] = $parent;
+      $this->getParentNodes($parent->nid, $parents, $depth + 1);
     }
 
     return $parents;
@@ -165,28 +162,31 @@ final class TopicManager {
           'field_domain_source' => $department_id,
         ]);
 
-      foreach ($parent_topics as $nid => $parent) {
-        $this->deptTopics[$parent->id()] = $parent;
-        $this->getChildTopics($parent);
+      $dept_topics = [];
+      foreach ($parent_topics as $parent) {
+        $dept_topics[$parent->id()] = $parent;
+        $this->getChildTopics($parent, $dept_topics);
       }
 
       // TODO: Check if this cache is properly cleared anywhere.
-      $this->cache->set('dept_topics_' . $department_id, $this->deptTopics, Cache::PERMANENT, [$department_id . '_topics']);
+      $this->cache->set('dept_topics_' . $department_id, $dept_topics, Cache::PERMANENT, [$department_id . '_topics']);
 
-      return $this->deptTopics;
+      return $dept_topics;
     }
   }
 
   /**
-   * Update the topics property with a list of child nodes.
+   * Collects the child content of a topic, recursing into subtopics.
    *
    * @param \Drupal\node\NodeInterface $topic
-   *   The topic/subtopic node to extract child subtopics from.
+   *   The topic/subtopic node to extract child content from.
+   * @param array $topics
+   *   Accumulator of child nodes, indexed by node ID.
    * @param int $depth
    *   The current traversal depth.
    *
    */
-  private function getChildTopics(NodeInterface $topic, int $depth = 0) {
+  private function getChildTopics(NodeInterface $topic, array &$topics, int $depth = 0): void {
     if ($depth >= self::MAX_TRAVERSAL_DEPTH) {
       return;
     }
@@ -194,11 +194,10 @@ final class TopicManager {
     $child_content = $topic->get('field_topic_content')->referencedEntities();
 
     foreach ($child_content as $child) {
+      $topics[$child->id()] = $child;
+
       if ($child->bundle() === 'subtopic') {
-        $this->deptTopics[$child->id()] = $child;
-        $this->getChildTopics($child, ++$depth);
-      } else {
-        $this->deptTopics[$child->id()] = $child;
+        $this->getChildTopics($child, $topics, $depth + 1);
       }
     }
   }
@@ -218,8 +217,9 @@ final class TopicManager {
    *   the parent topic passed in as an input parameter.
    */
   public function getTopicChildren(NodeInterface $topic) {
-    $this->getChildTopics($topic);
-    return $this->deptTopics;
+    $topics = [];
+    $this->getChildTopics($topic, $topics);
+    return $topics;
   }
 
   /**

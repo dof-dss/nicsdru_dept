@@ -15,6 +15,8 @@ use Drupal\node\Entity\Node;
 
 const HISTORIC_ENVIRONMENT_NID = 409882;
 
+include 'inc/hooks.inc';
+
 /**
  * Implements hook_help().
  */
