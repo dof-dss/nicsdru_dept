@@ -421,49 +421,61 @@ final class TopicManager {
       return;
     }
 
-    // Default (current) revision table.
-    $this->connection->delete('node__field_topic_content')
-      ->condition('entity_id', $topic->id())
-      ->execute();
-
-    // Published topic node contents.
-    foreach ($ordered_child_nids as $delta => $child_nid) {
-      $this->connection->insert('node__field_topic_content')
-        ->fields([
-          'bundle' => $topic->bundle(),
-          'deleted' => 0,
-          'entity_id' => $topic->id(),
-          'revision_id' => $topic->getRevisionId(),
-          'langcode' => 'en',
-          'delta' => $delta,
-          'field_topic_content_target_id' => $child_nid,
-        ])
-        ->execute();
-    }
-
-    $topic_revisions = $this->entityTypeManager->getStorage('node')->revisionIds($topic);
-
-    // Topic Revisions.
-    foreach ($topic_revisions as $revision_id) {
-      $this->connection->delete('node_revision__field_topic_content')
+    // Replace the rows atomically so a failure cannot leave the topic with
+    // no (or partial) child content.
+    $transaction = $this->connection->startTransaction();
+    try {
+      // Default (current) revision table.
+      $this->connection->delete('node__field_topic_content')
         ->condition('entity_id', $topic->id())
-        ->condition('revision_id', $revision_id)
         ->execute();
 
+      // Published topic node contents.
       foreach ($ordered_child_nids as $delta => $child_nid) {
-        $this->connection->insert('node_revision__field_topic_content')
+        $this->connection->insert('node__field_topic_content')
           ->fields([
             'bundle' => $topic->bundle(),
             'deleted' => 0,
             'entity_id' => $topic->id(),
-            'revision_id' => $revision_id,
+            'revision_id' => $topic->getRevisionId(),
             'langcode' => 'en',
             'delta' => $delta,
             'field_topic_content_target_id' => $child_nid,
           ])
           ->execute();
       }
+
+      $topic_revisions = $this->entityTypeManager->getStorage('node')->revisionIds($topic);
+
+      // Topic Revisions.
+      foreach ($topic_revisions as $revision_id) {
+        $this->connection->delete('node_revision__field_topic_content')
+          ->condition('entity_id', $topic->id())
+          ->condition('revision_id', $revision_id)
+          ->execute();
+
+        foreach ($ordered_child_nids as $delta => $child_nid) {
+          $this->connection->insert('node_revision__field_topic_content')
+            ->fields([
+              'bundle' => $topic->bundle(),
+              'deleted' => 0,
+              'entity_id' => $topic->id(),
+              'revision_id' => $revision_id,
+              'langcode' => 'en',
+              'delta' => $delta,
+              'field_topic_content_target_id' => $child_nid,
+            ])
+            ->execute();
+        }
+      }
     }
+    catch (\Exception $e) {
+      $transaction->rollBack();
+      throw $e;
+    }
+
+    // Commit the transaction.
+    unset($transaction);
 
     $this->clearCache(NULL, $topic);
   }
