@@ -69,7 +69,7 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     if (!$entity->get('field_banner_image_thin')->isEmpty() && $entity->isPublished()
       && (!$original || !$original->isPublished())
     ) {
-      $children = $this->topicManager->getTopicChildren($entity);
+      $children = $this->topicManager->getTopicChildren($entity, FALSE);
       $cache_tags = array_map(static fn ($nid): string => 'node:' . $nid, array_keys($children));
       Cache::invalidateTags($cache_tags);
     }

@@ -165,7 +165,7 @@ final class TopicManager {
       $dept_topics = [];
       foreach ($parent_topics as $parent) {
         $dept_topics[$parent->id()] = $parent;
-        $this->getChildTopics($parent, $dept_topics);
+        $this->getChildContentForTopic($parent, $dept_topics);
       }
 
       // TODO: Check if this cache is properly cleared anywhere.
@@ -182,11 +182,13 @@ final class TopicManager {
    *   The topic/subtopic node to extract child content from.
    * @param array $topics
    *   Accumulator of child nodes, indexed by node ID.
+   * @param bool $subtopics_only
+   *   TRUE to only collect subtopics, FALSE to also collect non-subtopic
+   *   child content.
    * @param int $depth
    *   The current traversal depth.
-   *
    */
-  private function getChildTopics(NodeInterface $topic, array &$topics, int $depth = 0): void {
+  private function getChildContentForTopic(NodeInterface $topic, array &$topics, bool $subtopics_only = TRUE, int $depth = 0): void {
     if ($depth >= self::MAX_TRAVERSAL_DEPTH) {
       return;
     }
@@ -194,10 +196,12 @@ final class TopicManager {
     $child_content = $topic->get('field_topic_content')->referencedEntities();
 
     foreach ($child_content as $child) {
-      $topics[$child->id()] = $child;
-
       if ($child->bundle() === 'subtopic') {
-        $this->getChildTopics($child, $topics, $depth + 1);
+        $topics[$child->id()] = $child;
+        $this->getChildContentForTopic($child, $topics, $subtopics_only, $depth + 1);
+      }
+      elseif (!$subtopics_only) {
+        $topics[$child->id()] = $child;
       }
     }
   }
@@ -211,14 +215,16 @@ final class TopicManager {
    *
    * @param \Drupal\node\NodeInterface $topic
    *   The topic node.
+   * @param bool $subtopics_only
+   *   TRUE to only return the subtopics below the topic, FALSE to also
+   *   return non-subtopic child content.
    *
    * @return array
-   *   Structured array with the hierarchy of topic ids below
-   *   the parent topic passed in as an input parameter.
+   *   Child nodes below the given topic, indexed by node ID.
    */
-  public function getTopicChildren(NodeInterface $topic) {
+  public function getTopicChildren(NodeInterface $topic, bool $subtopics_only = TRUE) {
     $topics = [];
-    $this->getChildTopics($topic, $topics);
+    $this->getChildContentForTopic($topic, $topics, $subtopics_only);
     return $topics;
   }
 
