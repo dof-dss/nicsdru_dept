@@ -164,6 +164,8 @@ final class TopicManager {
 
     $subtopic_nids = $this->collectChildContentIds($parent_nids);
     $dept_topics = $this->nodeStorage->loadMultiple($parent_nids + $subtopic_nids);
+
+    // This cache will be cleared by TopicsEntityEventSubscriber when a topic is added, updated or deleted.
     $this->cache->set('dept_topics_' . $department_id, $dept_topics, Cache::PERMANENT, [$department_id . '_topics']);
 
     return $dept_topics;
@@ -516,7 +518,7 @@ final class TopicManager {
     foreach ($children as $child) {
       $latest_revision_id = $this->nodeStorage->getLatestRevisionId($child->id());
       $latest_revision = $this->nodeStorage->loadRevision($latest_revision_id);
-      // @phpstan-ignore-next-line.
+
       if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
         return TRUE;
       }
