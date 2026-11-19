@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-## Description: Run drupal-check locally to detect deprecated code and ensure future compliance.
-## Usage: drupal-check
+## Description: Run phpstan against the current directory and all subdirectories.
+## Usage: drupal-check [phpstan options]
 ## Aliases: drck
-## Example: "ddev <drupal-check|drck> web/modules/custom"
+## Example: "cd web/modules/custom/dept_topics && ddev drupal-check" or "ddev drupal-check --error-format=raw"
 ## HostWorkingDir: true
 
-/var/www/html/vendor/bin/drupal-check $1
+# HostWorkingDir puts us in the container path matching the host directory.
+/var/www/html/vendor/bin/phpstan analyse --memory-limit=2G "$@" "$PWD"
