@@ -92,6 +92,11 @@ final class TopicsEntityEventSubscriber implements EventSubscriberInterface {
     if ($this->topicManager->topicHasActiveChildren($entity)) {
       throw new \Exception(UiMessages::deleteBlockedActiveChildren($entity->bundle(), $entity->label())->render());
     }
+
+    // Ensure the deleted topic is removed from the department topics cache
+    // and the topics widget.
+    $dept_id = $entity->get('field_domain_source')->target_id;
+    Cache::invalidateTags(['topics_field:' . $dept_id, $dept_id . '_topics']);
   }
 
   /**
