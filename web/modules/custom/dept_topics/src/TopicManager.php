@@ -155,63 +155,78 @@ final class TopicManager {
     if (!empty($dept_topics)) {
       return $dept_topics->data;
     }
-    else {
-      $parent_topics = $this->entityTypeManager->getStorage('node')
-        ->loadByProperties([
-          'type' => 'topic',
-          'field_domain_source' => $department_id,
-        ]);
 
-      $dept_topics = [];
-      foreach ($parent_topics as $parent) {
-        $dept_topics[$parent->id()] = $parent;
-        $this->getChildContentForTopic($parent, $dept_topics);
-      }
+    $parent_nids = $this->nodeStorage->getQuery()
+      ->condition('type', 'topic')
+      ->condition('field_domain_source', $department_id)
+      ->accessCheck(FALSE)
+      ->execute();
 
-      // TODO: Check if this cache is properly cleared anywhere.
-      $this->cache->set('dept_topics_' . $department_id, $dept_topics, Cache::PERMANENT, [$department_id . '_topics']);
+    $subtopic_nids = $this->collectChildContentIds($parent_nids);
+    $dept_topics = $this->nodeStorage->loadMultiple($parent_nids + $subtopic_nids);
+    $this->cache->set('dept_topics_' . $department_id, $dept_topics, Cache::PERMANENT, [$department_id . '_topics']);
 
-      return $dept_topics;
-    }
+    return $dept_topics;
   }
 
   /**
-   * Collects the child content of a topic, recursing into subtopics.
+   * Collects descendant child content node IDs below the given topic IDs.
    *
-   * @param \Drupal\node\NodeInterface $topic
-   *   The topic/subtopic node to extract child content from.
-   * @param array $topics
-   *   Accumulator of child nodes, indexed by node ID.
+   * Traverses field_topic_content one level at a time with a direct query
+   * against the field storage table, classifying each child by bundle in
+   * SQL. Only subtopics are recursed into. This avoids loading every
+   * referenced child entity (including non-subtopic content such as
+   * articles) just to check its bundle, which is what a recursive
+   * referencedEntities() walk would otherwise do.
+   *
+   * @param array $root_nids
+   *   Topic/subtopic node IDs to collect child content below.
    * @param bool $subtopics_only
-   *   TRUE to only collect subtopics, FALSE to also collect non-subtopic
-   *   child content.
-   * @param int $depth
-   *   The current traversal depth.
+   *   TRUE to only collect subtopic descendants, FALSE to also collect
+   *   non-subtopic content directly referenced by the given topics or any
+   *   of their subtopic descendants.
+   *
+   * @return array
+   *   Child content node IDs, keyed by node ID.
    */
-  private function getChildContentForTopic(NodeInterface $topic, array &$topics, bool $subtopics_only = TRUE, int $depth = 0): void {
-    if ($depth >= self::MAX_TRAVERSAL_DEPTH) {
-      return;
+  private function collectChildContentIds(array $root_nids, bool $subtopics_only = TRUE): array {
+    $collected = [];
+    $current_level = $root_nids;
+    $depth = 0;
+
+    while (!empty($current_level) && $depth < self::MAX_TRAVERSAL_DEPTH) {
+      $query = $this->connection->select('node__field_topic_content', 'ftc');
+      $query->join('node_field_data', 'nfd', 'nfd.nid = ftc.field_topic_content_target_id');
+      $query->addField('ftc', 'field_topic_content_target_id', 'nid');
+      $query->addField('nfd', 'type', 'bundle');
+      $query->condition('ftc.entity_id', $current_level, 'IN');
+      $query->distinct();
+
+      $next_level = [];
+
+      foreach ($query->execute() as $row) {
+        $nid = (int) $row->nid;
+
+        if ($row->bundle === 'subtopic') {
+          if (!isset($collected[$nid])) {
+            $next_level[] = $nid;
+          }
+          $collected[$nid] = $nid;
+        }
+        elseif (!$subtopics_only) {
+          $collected[$nid] = $nid;
+        }
+      }
+
+      $current_level = $next_level;
+      $depth++;
     }
 
-    $child_content = $topic->get('field_topic_content')->referencedEntities();
-
-    foreach ($child_content as $child) {
-      if ($child->bundle() === 'subtopic') {
-        $topics[$child->id()] = $child;
-        $this->getChildContentForTopic($child, $topics, $subtopics_only, $depth + 1);
-      }
-      elseif (!$subtopics_only) {
-        $topics[$child->id()] = $child;
-      }
-    }
+    return $collected;
   }
 
   /**
-   * Public service function to return an array of topic ids
-   * from a parent topic node.
-   *
-   * More or less a convenience wrapper around the private
-   * function getChildTopics().
+   * Returns an array of child nodes below a parent topic node.
    *
    * @param \Drupal\node\NodeInterface $topic
    *   The topic node.
@@ -223,9 +238,8 @@ final class TopicManager {
    *   Child nodes below the given topic, indexed by node ID.
    */
   public function getTopicChildren(NodeInterface $topic, bool $subtopics_only = TRUE) {
-    $topics = [];
-    $this->getChildContentForTopic($topic, $topics, $subtopics_only);
-    return $topics;
+    $child_nids = $this->collectChildContentIds([$topic->id()], $subtopics_only);
+    return $child_nids ? $this->nodeStorage->loadMultiple($child_nids) : [];
   }
 
   /**
