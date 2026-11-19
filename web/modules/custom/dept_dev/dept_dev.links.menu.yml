@@ -3,8 +3,3 @@ dept_dev.settings.toolbar.sites:
   description: Configuration settings for Sites toolbar menu
   route_name: dept_dev.settings.toolbar.sites
   weight: 10
-dept_dev.settings:
-  title: 'Departmental devtools settings'
-  description: 'Configuration settings for Departmental devtools.'
-  route_name: dept_dev.settings
-  parent: system.admin_config_development
