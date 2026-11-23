@@ -186,17 +186,11 @@
     > *:last-child {
       margin-bottom: 0;
     }
-  }
 
-  // field-topic-content is a list of links to a subtopic's
-  // child content.
-
-  // If the subtopic has a summary or page body, add extra styling to
-  // field-topic-content link list to help it stand out.
-  .page-summary + .field-topic-content .field-topic-content__list,
-  .article-content + .field-topic-content .field-topic-content__list {
-    border-left: var(--rhythm-spacing-sm) solid var(--brand-primary-color);
-    padding-left: var(--rhythm-spacing-lg);
+    &__list {
+      border-left: var(--rhythm-spacing-sm) solid var(--brand-primary-color);
+      padding-left: var(--rhythm-spacing-lg);
+    }
   }
 
   // By default, do not display the field-topic-content heading.
