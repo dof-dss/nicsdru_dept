@@ -315,6 +315,9 @@
             ]
         },
         "patches": {
+            "drupal/address": {
+                "AddressFieldBuilder::build is not compatible with diff 2.0.x's CoreFieldBuilder::build #3460590": "https://www.drupal.org/files/issues/2026-10-07/address-diff-2.patch"
+            },
             "drupal/admin_toolbar": {
                 "Add multi column menu dropdown": "https://www.drupal.org/files/issues/2025-08-05/2917168-mr150.patch"
             },
