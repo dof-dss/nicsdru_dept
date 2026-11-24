@@ -7,7 +7,7 @@ use Drupal\block\Entity\Block;
 /**
  * Theme helper functions.
  *
- * @package Drupal\nicsdru_nidirect_theme
+ * @package Drupal\nicsdru_dept_theme
  */
 class Helpers {
 

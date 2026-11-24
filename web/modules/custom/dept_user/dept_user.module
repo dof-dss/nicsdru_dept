@@ -8,6 +8,7 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\domain\DomainInterface;
 
 /**
  * Implements hook_user_logout().
@@ -58,5 +59,18 @@ function dept_user_form_alter(&$form, FormStateInterface $form_state, $form_id) 
       ],
       '#value' => t('Forgotten your password?'),
     ];
+  }
+}
+
+/**
+ * Implements hook_domain_source_alter().
+ */
+function dept_user_domain_source_alter(?DomainInterface &$source, &$path, array $options): void {
+  // Fix issue with users redirected to Finance domain regardless of the
+  // department they login to.
+  if (array_key_exists('entity_type', $options) && $options['entity_type'] === 'user') {
+    $dept_manager = \Drupal::service('department.manager');
+    $current_dept = $dept_manager->getCurrentDepartment();
+    $source = $current_dept->domain();
   }
 }
