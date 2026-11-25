@@ -46,7 +46,7 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
         $this->topicManager->addChild($entity, $topic);
 
         if (!$topic->isPublished()) {
-          \Drupal::messenger()->addWarning(UiMessages::assignedToUnpublishedTopic($topic->label()));
+          $this->messenger->addWarning(UiMessages::assignedToUnpublishedTopic($topic->label()));
         }
       }
     }
@@ -68,7 +68,7 @@ final class TopicsChildEntityEventSubscriber implements EventSubscriberInterface
       $current_topics_ids[] = $topic->id();
 
       if (!$topic->isPublished()) {
-        \Drupal::messenger()->addWarning(UiMessages::assignedToUnpublishedTopic($topic->label()));
+        $this->messenger->addWarning(UiMessages::assignedToUnpublishedTopic($topic->label()));
       }
     }
 
