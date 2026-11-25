@@ -20,12 +20,6 @@ final class TopicManager {
 
   const int MAX_TRAVERSAL_DEPTH = 20;
 
-
-  /**
-   * @var \Drupal\node\NodeStorageInterface
-   */
-  protected $nodeStorage;
-
   /**
    * Constructs a TopicManager object.
    *
@@ -56,9 +50,7 @@ final class TopicManager {
     protected ModerationInformationInterface $moderationInformation,
     protected CacheBackendInterface $cache,
     protected array $targetBundles = [],
-  ) {
-    $this->nodeStorage = $this->entityTypeManager->getStorage('node');
-  }
+  ) {}
 
   /**
    * Returns parent nodes for the given node ID.
@@ -151,19 +143,20 @@ final class TopicManager {
    */
   public function getTopicsForDepartment(string $department_id) {
     $dept_topics = $this->cache->get('dept_topics_' . $department_id);
+    $node_storage = $this->entityTypeManager->getStorage('node');
 
     if (!empty($dept_topics)) {
       return $dept_topics->data;
     }
 
-    $parent_nids = $this->nodeStorage->getQuery()
+    $parent_nids = $node_storage->getQuery()
       ->condition('type', 'topic')
       ->condition('field_domain_source', $department_id)
       ->accessCheck(FALSE)
       ->execute();
 
     $subtopic_nids = $this->collectChildContentIds($parent_nids);
-    $dept_topics = $this->nodeStorage->loadMultiple($parent_nids + $subtopic_nids);
+    $dept_topics = $node_storage->loadMultiple($parent_nids + $subtopic_nids);
 
     // This cache will be cleared by TopicsEntityEventSubscriber when a topic is added, updated or deleted.
     $this->cache->set('dept_topics_' . $department_id, $dept_topics, Cache::PERMANENT, [$department_id . '_topics']);
@@ -241,7 +234,7 @@ final class TopicManager {
    */
   public function getTopicChildren(NodeInterface $topic, bool $subtopics_only = TRUE) {
     $child_nids = $this->collectChildContentIds([$topic->id()], $subtopics_only);
-    return $child_nids ? $this->nodeStorage->loadMultiple($child_nids) : [];
+    return $child_nids ? $this->entityTypeManager->getStorage('node')->loadMultiple($child_nids) : [];
   }
 
   /**
@@ -392,7 +385,7 @@ final class TopicManager {
     $selected_nids = array_column($child->get('field_site_topics')->getValue(), 'target_id');
     $topic_nids = array_unique(array_merge($selected_nids, $this->fetchTopicsReferencingChild($child)));
 
-    foreach ($this->nodeStorage->loadMultiple($topic_nids) as $topic) {
+    foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($topic_nids) as $topic) {
       $this->removeChild($child, $topic);
     }
   }
@@ -514,10 +507,11 @@ final class TopicManager {
    */
   public function topicHasActiveChildren(NodeInterface|ContentEntityInterface $topic): bool {
     $children = $topic->get('field_topic_content')->referencedEntities();
+    $node_storage = $this->entityTypeManager->getStorage('node');
 
     foreach ($children as $child) {
-      $latest_revision_id = $this->nodeStorage->getLatestRevisionId($child->id());
-      $latest_revision = $this->nodeStorage->loadRevision($latest_revision_id);
+      $latest_revision_id = $node_storage->getLatestRevisionId($child->id());
+      $latest_revision = $node_storage->loadRevision($latest_revision_id);
 
       if ($latest_revision->get('moderation_state')->getString() !== 'archived') {
         return TRUE;

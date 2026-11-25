@@ -26,9 +26,9 @@ final class TopicTagsFormatter extends FormatterBase implements ContainerFactory
   /**
    * Node storage.
    *
-   * @var \Drupal\node\NodeStorageInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $nodeStorage;
+  protected $entityTypeManager;
 
   public function __construct(
     $plugin_id,
@@ -42,7 +42,7 @@ final class TopicTagsFormatter extends FormatterBase implements ContainerFactory
     EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
-    $this->nodeStorage = $entityTypeManager->getStorage('node');
+    $this->entityTypeManager = $entityTypeManager;
   }
 
   /**
@@ -71,6 +71,7 @@ final class TopicTagsFormatter extends FormatterBase implements ContainerFactory
     $element = [];
     $parent_topics = [];
     $sub_topics = [];
+    $node_storage = $this->entityTypeManager->getStorage('node');
 
     $entities = $items->referencedEntities();
 
@@ -85,7 +86,7 @@ final class TopicTagsFormatter extends FormatterBase implements ContainerFactory
 
         foreach ($parents as $parent) {
           if (($parent->type ?? NULL) === 'topic') {
-            $parent_node = $this->nodeStorage->load($parent->nid);
+            $parent_node = $node_storage->load($parent->nid);
             if ($parent_node) {
               $parent_topics[] = $parent_node;
             }

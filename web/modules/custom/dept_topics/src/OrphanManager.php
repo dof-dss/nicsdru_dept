@@ -20,11 +20,6 @@ final class OrphanManager {
   private EntityStorageInterface $orphanEntityStorage;
 
   /**
-   * Node storage.
-   */
-  private EntityStorageInterface $nodeStorage;
-
-  /**
    * Constructs an OrphanManager object.
    */
   public function __construct(
@@ -32,8 +27,6 @@ final class OrphanManager {
     private readonly TopicManager $topicManager,
     private readonly AccountProxyInterface $currentUser,
   ) {
-    $this->orphanEntityStorage = $this->entityTypeManager->getStorage('topics_orphaned_content');
-    $this->nodeStorage = $this->entityTypeManager->getStorage('node');
   }
 
   /**
@@ -46,7 +39,7 @@ final class OrphanManager {
    */
   public function processTopicContents(array $nids, ?NodeInterface $parent = NULL): void {
     /** @var \Drupal\node\NodeInterface[] $nodes */
-    $nodes = $this->nodeStorage->loadMultiple($nids);
+    $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
 
     foreach ($nodes as $node) {
       if (count($this->topicManager->getParentNodes($node)) < 1) {
@@ -62,12 +55,13 @@ final class OrphanManager {
    * Creates an orphan entity record for a given node.
    */
   public function addOrphan(NodeInterface $node, ?NodeInterface $parent = NULL): void {
-    $existing = $this->orphanEntityStorage->loadByProperties(['orphan' => $node->id()]);
+    $orphan_storage = $this->entityTypeManager->getStorage('topics_orphaned_content');
+    $existing = $orphan_storage->loadByProperties(['orphan' => $node->id()]);
     if (!empty($existing)) {
       return;
     }
 
-    $orphan = $this->orphanEntityStorage->create([
+    $orphan = $orphan_storage->create([
       'label' => $node->label(),
       'orphan' => $node->id(),
       'orphan_type' => $node->bundle(),
@@ -77,20 +71,20 @@ final class OrphanManager {
       'created' => time(),
     ]);
 
-    $this->orphanEntityStorage->save($orphan);
+    $orphan_storage->save($orphan);
   }
 
   /**
    * Removes the orphan entity record for a given node.
    */
   public function removeOrphan(NodeInterface $node): void {
-    $orphans = $this->orphanEntityStorage->loadByProperties(['orphan' => $node->id()]);
+    $orphan_storage = $this->entityTypeManager->getStorage('topics_orphaned_content');
+    $orphans = $orphan_storage->loadByProperties(['orphan' => $node->id()]);
     if (empty($orphans)) {
       return;
     }
 
-    // loadByProperties() returns an array of entities.
-    $this->orphanEntityStorage->delete($orphans);
+    $orphan_storage->delete($orphans);
   }
 
 }
