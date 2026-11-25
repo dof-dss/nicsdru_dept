@@ -7,6 +7,7 @@
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -132,7 +133,7 @@ function dept_book_get_form_node(FormStateInterface $form_state): ?NodeInterface
 /**
  * Implements hook_entity_operation_alter().
  */
-function dept_book_entity_operation_alter(array &$operations, EntityInterface $entity) {
+function dept_book_entity_operation_alter(array &$operations, EntityInterface $entity, CacheableMetadata $cacheability) {
   if (!$entity instanceof NodeInterface || !\Drupal::service('dept_book.parent_page_protection')->isProtected($entity, \Drupal::currentUser())) {
     return;
   }
