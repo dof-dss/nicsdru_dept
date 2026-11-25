@@ -219,40 +219,8 @@ final class TopicContentsFormatter extends EntityReferenceEntityFormatter implem
         // END 1/2: Departmental custom code.
         // START CORE EntityReferenceEntityFormatter code.
 
-        // Due to render caching and delayed calls, the viewElements() method
-        // will be called later in the rendering process through a '#pre_render'
-        // callback, so we need to generate a counter that takes into account
-        // all the relevant information about this field and the referenced
-        // entity that is being rendered.
-        $recursive_render_id = $items->getFieldDefinition()->getTargetEntityTypeId()
-          . $items->getFieldDefinition()->getTargetBundle()
-          . $items->getName()
-          // We include the referencing entity, so we can render default images
-          // without hitting recursive protections.
-          . $items->getEntity()->id()
-          . $entity->getEntityTypeId()
-          . $entity->id();
-
-        if (isset(static::$recursiveRenderDepth[$recursive_render_id])) {
-          static::$recursiveRenderDepth[$recursive_render_id]++;
-        }
-        else {
-          static::$recursiveRenderDepth[$recursive_render_id] = 1;
-        }
-
-        // Protect ourselves from recursive rendering.
-        if (static::$recursiveRenderDepth[$recursive_render_id] > static::RECURSIVE_RENDER_LIMIT) {
-          $this->loggerFactory->get('entity')->error('Recursive rendering detected when rendering entity %entity_type: %entity_id, using the %field_name field on the %parent_entity_type:%parent_bundle %parent_entity_id entity. Aborting rendering.', [
-            '%entity_type' => $entity->getEntityTypeId(),
-            '%entity_id' => $entity->id(),
-            '%field_name' => $items->getName(),
-            '%parent_entity_type' => $items->getFieldDefinition()->getTargetEntityTypeId(),
-            '%parent_bundle' => $items->getFieldDefinition()->getTargetBundle(),
-            '%parent_entity_id' => $items->getEntity()->id(),
-          ]);
-          return $elements;
-        }
-
+        // Recursive rendering protection is handled by the #pre_render and
+        // #post_render callbacks added in EntityViewBuilder::view().
         $view_builder = $this->entityTypeManager->getViewBuilder($entity->getEntityTypeId());
         $elements[$delta] = $view_builder->view($entity, $view_mode, $entity->language()->getId());
 
