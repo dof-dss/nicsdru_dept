@@ -42,8 +42,8 @@ final class SearchSortBy extends AreaPluginBase {
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    private readonly RouteMatchInterface $routeMatch,
-    private readonly RequestStack $requestStack,
+    protected readonly RouteMatchInterface $routeMatch,
+    protected readonly RequestStack $requestStack,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

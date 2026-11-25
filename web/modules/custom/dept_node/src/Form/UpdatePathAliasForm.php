@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class UpdatePathAliasForm extends FormBase {
 
   public function __construct(
-    private readonly Connection $database,
+    protected readonly Connection $database,
   ) {}
 
   /**
