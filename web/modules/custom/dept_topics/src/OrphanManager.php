@@ -6,6 +6,7 @@ namespace Drupal\dept_topics;
 
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\node\NodeInterface;
 
 /**
@@ -14,9 +15,9 @@ use Drupal\node\NodeInterface;
 final class OrphanManager {
 
   /**
-   * @var \Drupal\Core\Entity\EntityStorageInterface
+   * Storage for orphan entities.
    */
-  protected EntityStorageInterface $orphanEntityStorage;
+  private EntityStorageInterface $orphanEntityStorage;
 
   /**
    * Constructs an OrphanManager object.
@@ -24,20 +25,20 @@ final class OrphanManager {
   public function __construct(
     private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly TopicManager $topicManager,
+    private readonly AccountProxyInterface $currentUser,
   ) {
-    $this->orphanEntityStorage = $this->entityTypeManager->getStorage('topics_orphaned_content');
   }
 
   /**
    * Process a list of nids that have been added or removed from a topic.
    *
-   * @param array $nids
+   * @param int[] $nids
    *   Array of topic child content nids to process.
-   *
    * @param \Drupal\node\NodeInterface|null $parent
    *   Optional parent node that the nids are associated with.
    */
-  public function processTopicContents(array $nids, NodeInterface|Null $parent = NULL): void {
+  public function processTopicContents(array $nids, ?NodeInterface $parent = NULL): void {
+    /** @var \Drupal\node\NodeInterface[] $nodes */
     $nodes = $this->entityTypeManager->getStorage('node')->loadMultiple($nids);
 
     foreach ($nodes as $node) {
@@ -52,50 +53,38 @@ final class OrphanManager {
 
   /**
    * Creates an orphan entity record for a given node.
-   *
-   * @param \Drupal\node\NodeInterface $node
-   *   The node for which the orphan record should be created.
-   * @param \Drupal\node\NodeInterface|null $parent
-   *   The parent node of the orphaned node.
    */
-  public function addOrphan(NodeInterface $node, NodeInterface|null $parent = NULL): void {
-    $orphan = $this->orphanEntityStorage->loadByProperties(
-      ['orphan' => $node->id()]
-    );
-
-    if (!empty($orphan)) {
+  public function addOrphan(NodeInterface $node, ?NodeInterface $parent = NULL): void {
+    $orphan_storage = $this->entityTypeManager->getStorage('topics_orphaned_content');
+    $existing = $orphan_storage->loadByProperties(['orphan' => $node->id()]);
+    if (!empty($existing)) {
       return;
     }
 
-    $orphan = $this->orphanEntityStorage->create([
+    $orphan = $orphan_storage->create([
       'label' => $node->label(),
       'orphan' => $node->id(),
       'orphan_type' => $node->bundle(),
-      'former_parent' => empty($parent) ? 'unknown' : $parent->id(),
+      'former_parent' => $parent?->id() ?? 'unknown',
       'department' => $node->get('field_domain_source')->getValue(),
-      'uid' => \Drupal::currentUser()->id(),
+      'uid' => $this->currentUser->id(),
       'created' => time(),
     ]);
 
-    $this->orphanEntityStorage->save($orphan);
+    $orphan_storage->save($orphan);
   }
 
   /**
    * Removes the orphan entity record for a given node.
-   *
-   * @param \Drupal\node\NodeInterface $node
-   *   The node for which the orphan record should be removed.
    */
   public function removeOrphan(NodeInterface $node): void {
-    $orphan = $this->orphanEntityStorage->loadByProperties(
-      ['orphan' => $node->id()]
-    );
-
-    if (empty($orphan)) {
+    $orphan_storage = $this->entityTypeManager->getStorage('topics_orphaned_content');
+    $orphans = $orphan_storage->loadByProperties(['orphan' => $node->id()]);
+    if (empty($orphans)) {
       return;
     }
 
-    $this->orphanEntityStorage->delete($orphan);
+    $orphan_storage->delete($orphans);
   }
 
 }

@@ -11,6 +11,7 @@ module:
   antibot: 0
   autoban: 0
   autoban_advban: 0
+  bert: 0
   block: 0
   block_content: 0
   block_field: 0
@@ -24,7 +25,9 @@ module:
   ckeditor5: 0
   ckeditor5_allowed_html: 0
   ckeditor5_paste_filter: 0
-  ckeditor5_premium_features_fullscreen: 0
+  ckeditor5_plugin_pack: 0
+  ckeditor5_plugin_pack_fullscreen: 0
+  ckeditor5_premium_features: 0
   clientside_validation: 0
   clientside_validation_jquery: 0
   config: 0
@@ -61,8 +64,6 @@ module:
   domain_alias: 0
   domain_config: 0
   domain_entity: 0
-  domain_path: 0
-  domain_path_pathauto: 0
   domain_path_redirect: 0
   domain_simple_sitemap: 0
   draggableviews: 0
@@ -101,7 +102,6 @@ module:
   jquery_ui_menu: 0
   language: 0
   layout_builder: 0
-  layout_builder_expose_all_field_blocks: 0
   layout_builder_modal: 0
   layout_builder_restrictions: 0
   layout_builder_restrictions_by_region: 0
@@ -205,7 +205,9 @@ module:
   pathauto: 1
   origins_cache_control: 2
   origins_workflow: 2
+  domain_path: 10
   views: 10
+  domain_path_pathauto: 11
   paragraphs: 11
   domain_access: 20
   domain_source: 30
@@ -213,7 +215,6 @@ module:
   eu_cookie_compliance: 1001
   dept_postprocess: 1111
 theme:
-  seven: 0
   stable: 0
   nicsdru_origins_theme: 0
   nicsdru_dept_theme: 0
