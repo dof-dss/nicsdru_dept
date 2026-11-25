@@ -322,7 +322,7 @@ final class TopicManager {
       $this->addChildDatabaseEntry($child, $topic, 'node__field_topic_content', $topic->getRevisionId(), $delta);
     }
 
-    $topic_revisions = $this->entityTypeManager->getStorage('node')->revisionIds($topic);
+    $topic_revisions = $this->getRevisionIds($topic);
 
     // Topic Revisions.
     foreach ($topic_revisions as $revision_id) {
@@ -460,7 +460,7 @@ final class TopicManager {
           ->execute();
       }
 
-      $topic_revisions = $this->entityTypeManager->getStorage('node')->revisionIds($topic);
+      $topic_revisions = $this->getRevisionIds($topic);
 
       // Topic Revisions.
       foreach ($topic_revisions as $revision_id) {
@@ -615,6 +615,27 @@ final class TopicManager {
     // It is not enough to just invalidate the topic node tag.
     $this->entityTypeManager->getStorage('node')->resetCache([$topic->id()]);
     Cache::invalidateTags($tags);
+  }
+
+  /**
+   * Gets all revision IDs for the given topic node.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic node.
+   *
+   * @return int[]
+   *   The revision IDs, in ascending order.
+   */
+  protected function getRevisionIds(ContentEntityInterface $topic): array {
+    $revision_ids = $this->entityTypeManager->getStorage('node')
+      ->getQuery()
+      ->allRevisions()
+      ->accessCheck(FALSE)
+      ->condition('nid', $topic->id())
+      ->sort('vid')
+      ->execute();
+
+    return array_map('intval', array_keys($revision_ids));
   }
 
 }
