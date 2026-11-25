@@ -15,7 +15,7 @@ final class DepartmentForm extends ContentEntityForm {
 
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
-    protected readonly Connection $database,
+    protected Connection $database,
   ) {
     // ContentEntityForm expects entity_type.manager on the parent.
     $this->entityTypeManager = $entity_type_manager;
