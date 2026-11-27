@@ -308,39 +308,75 @@ final class TopicManager {
    *   The topic the child will be added to.
    */
   public function addChild(ContentEntityInterface $child, ContentEntityInterface $topic) {
+    // Reading the last delta and inserting the next one must not interleave
+    // with another request adding a child to the same topic, otherwise both
+    // compute the same delta and the second insert fails on the primary key.
+    $transaction = $this->connection->startTransaction();
+    try {
+      $this->lockTopic($topic);
 
-    // Published topic node contents.
-    $children = $this->connection->select('node__field_topic_content', 'tc')
-      ->fields('tc', ['delta', 'field_topic_content_target_id'])
-      ->condition('entity_id', $topic->id())
-      ->orderBy('delta', 'ASC')
-      ->execute()
-      ->fetchAllKeyed(1, 0);
-
-    if (!array_key_exists($child->id(), $children)) {
-      $delta = (empty($children)) ? 0 : end($children) + 1;
-      $this->addChildDatabaseEntry($child, $topic, 'node__field_topic_content', $topic->getRevisionId(), $delta);
-    }
-
-    $topic_revisions = $this->getRevisionIds($topic);
-
-    // Topic Revisions.
-    foreach ($topic_revisions as $revision_id) {
-      $revision_children = $this->connection->select('node_revision__field_topic_content', 'rtc')
-        ->fields('rtc', ['revision_id', 'delta', 'field_topic_content_target_id'])
+      // Published topic node contents.
+      $children = $this->connection->select('node__field_topic_content', 'tc')
+        ->fields('tc', ['delta', 'field_topic_content_target_id'])
         ->condition('entity_id', $topic->id())
-        ->condition('revision_id', $revision_id)
         ->orderBy('delta', 'ASC')
         ->execute()
-        ->fetchAllKeyed(2, 1);
+        ->fetchAllKeyed(1, 0);
 
-      if (!array_key_exists($child->id(), $revision_children)) {
-        $delta = (empty($revision_children)) ? 0 : end($revision_children) + 1;
-        $this->addChildDatabaseEntry($child, $topic, 'node_revision__field_topic_content', $revision_id, $delta);
+      if (!array_key_exists($child->id(), $children)) {
+        $delta = (empty($children)) ? 0 : end($children) + 1;
+        $this->addChildDatabaseEntry($child, $topic, 'node__field_topic_content', $topic->getRevisionId(), $delta);
+      }
+
+      $topic_revisions = $this->getRevisionIds($topic);
+
+      // Topic Revisions.
+      foreach ($topic_revisions as $revision_id) {
+        $revision_children = $this->connection->select('node_revision__field_topic_content', 'rtc')
+          ->fields('rtc', ['revision_id', 'delta', 'field_topic_content_target_id'])
+          ->condition('entity_id', $topic->id())
+          ->condition('revision_id', $revision_id)
+          ->orderBy('delta', 'ASC')
+          ->execute()
+          ->fetchAllKeyed(2, 1);
+
+        if (!array_key_exists($child->id(), $revision_children)) {
+          $delta = (empty($revision_children)) ? 0 : end($revision_children) + 1;
+          $this->addChildDatabaseEntry($child, $topic, 'node_revision__field_topic_content', $revision_id, $delta);
+        }
       }
     }
+    catch (\Exception $e) {
+      $transaction->rollBack();
+      throw $e;
+    }
+
+    // Commit the transaction (or release the savepoint when nested).
+    unset($transaction);
 
     $this->clearCache($child, $topic);
+  }
+
+  /**
+   * Takes an exclusive row lock on the topic for the current transaction.
+   *
+   * Locks the topic's row in the node base table with SELECT ... FOR UPDATE.
+   * That row always exists, so the lock works even for a topic with no
+   * children yet, where locking the topic content rows would lock nothing
+   * under READ COMMITTED. A concurrent request taking the same lock blocks
+   * until the holding transaction commits or rolls back.
+   *
+   * Must be called inside a transaction.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $topic
+   *   The topic node to lock.
+   */
+  protected function lockTopic(ContentEntityInterface $topic): void {
+    $this->connection->select('node', 'n')
+      ->fields('n', ['nid'])
+      ->condition('nid', $topic->id())
+      ->forUpdate()
+      ->execute();
   }
 
   /**
@@ -440,6 +476,9 @@ final class TopicManager {
     // no (or partial) child content.
     $transaction = $this->connection->startTransaction();
     try {
+      // Serialise with addChild() so a child added mid-reorder is not lost.
+      $this->lockTopic($topic);
+
       // Default (current) revision table.
       $this->connection->delete('node__field_topic_content')
         ->condition('entity_id', $topic->id())
